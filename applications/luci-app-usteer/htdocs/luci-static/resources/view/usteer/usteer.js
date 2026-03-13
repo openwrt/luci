@@ -10,7 +10,7 @@
 'require network';
 'require tools.widgets as widgets';
 
-let Hosts, Remotehosts, Remoteinfo, Localinfo, Clients, WifiNetworks;
+let Hosts, Remotehosts, Remoteinfo, Localinfo, Clients, WifiNetworks, Initscript;
 
 const dns_cache = [];
 const hostapdClientData = [];
@@ -412,7 +412,8 @@ return view.extend({
 			this.callGetRemoteinfo().catch (function (){return null;}),
 			this.callGetLocalinfo().catch (function (){return null;}),
 			this.callGetClients().catch (function (){return null;}),
-			network.getWifiNetworks().catch (function (){return null;})
+			network.getWifiNetworks().catch (function (){return null;}),
+			fs.read('/etc/init.d/usteer').catch (function (){return null;})			
 		]);
 	},
 
@@ -470,6 +471,7 @@ return view.extend({
 		Localinfo = data[4];
 		Clients = data[5];
 		WifiNetworks = data[6];
+		Initscript = data[7];
 
 		getCipherAKM();
 		
@@ -674,7 +676,7 @@ return view.extend({
 
 		o = s.taboption('settings', form.Value, 'band_steering_interval', _('Band steering interval'), _('Attempting to steer clients to a higher frequency-band every n ms. A value of 0 disables band-steering.'));
 		o.optional = true;
-		o.placeholder = 120000;
+		o.placeholder = (Initscript.includes('aggressiveness')) ? 30000: 120000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'band_steering_min_snr', _('Band steering min SNR'), _('Minimal SNR or absolute signal a device has to maintain over band_steering_interval to be steered to a higher frequency band.'));
@@ -720,6 +722,49 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'list(string)';
 
+		if (Initscript.includes('aggressiveness')) {
+			o = s.taboption('settings', form.ListValue, 'aggressiveness', _('Aggressiveness'), 
+				_('Aggressiveness of BSS-transition-request to push a station to another node (AP or band).')
+			);
+			o.value('0', _('0 No active transition'));
+			o.value('1', _('1 Passive BSS-transition-request'));
+			o.value('2', _('2 BSS-transition-request with disassociation imminent'));
+			o.value('3', _('3 BSS-transition-request with disassociation imminent and timer'));
+			o.value('4', _('4 Network packet info'));
+			o.value('5', _('5 BSS-transition-request with disassociation imminent, timer and forced disassociation'));
+			o.optional = true;
+			o.datatype = 'uinteger';
+		}
+		
+		if (Initscript.includes('aggressiveness_mac_list')) {
+			o = s.taboption('settings', form.DynamicList, 'aggressiveness_mac_list', _('Aggressiveness mac list'), 
+				_('List of MACs (lower case) to set aggressiveness per station, e.g. ff:ff:ff:ff:ff:ff,2')+' '+
+				_('See option above for a list of numberical values')
+			);
+			o.optional = true;
+			o.datatype = 'list(string)';
+		}
+
+		if (Initscript.includes('reassociation_delay')) {
+			o = s.taboption('settings', form.Value, 'reassociation_delay', _('Reassociation delay'), 
+				_('Timeout (s in "1024ms") a station is requested to avoid reassociation after bss transition')
+			);
+			o.optional = true;
+			o.placeholder = 30;
+			o.datatype = 'uinteger';
+		}
+
+		if (Initscript.includes('band_steering_signal_threshold')) {
+			o = s.taboption('settings', form.Value, 'band_steering_signal_threshold ', _('Band steering signal threshold'), 
+				_('SNR difference that the signal must be better compared to signal was on connection to node.')+' '+
+				_('Avoids conflicts between roaming and band-steering policies.')+' '+
+				_('A value of 0 disables threshold.')
+			);
+			o.optional = true;
+			o.placeholder = 0;
+			o.datatype = 'uinteger';		
+		}
+
 		footerdata = this.super('addFooter', []);
 		o = s.taboption('settings', Settingsfooter);
 		o.readonly = true;
@@ -738,9 +783,15 @@ return view.extend({
 			return nodes;
 		}, this, m));
 	},
-
-
-	addFooter() {
+	handleReset(ev) {
+		footerdata = this.super('addFooter', []);
+		return this.super('handleReset',ev);
+	},	
+	handleSave(ev) {
+		footerdata = this.super('addFooter', []);
+		return this.super('handleSave',ev);
+	},
+	addFooter() { 
 		return null;
 	},
 });
