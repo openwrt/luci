@@ -87,10 +87,10 @@ return view.extend({
 		o = s.option(form.Value, 'fsdmsg', _('Forced shutdown message'));
 		o.optional = true;
 
-		o = s.option(form.Value, 'comokmsg', _('Communications restored message'));
+		o = s.option(form.Value, 'commokmsg', _('Communications restored message'));
 		o.optional = true;
 
-		o = s.option(form.Value, 'combadmsg', _('Communications lost message'));
+		o = s.option(form.Value, 'commbadmsg', _('Communications lost message'));
 		o.optional = true;
 
 		o = s.option(form.Value, 'shutdownmsg', _('Shutdown message'));
@@ -99,7 +99,7 @@ return view.extend({
 		o = s.option(form.Value, 'replbattmsg', _('Replace battery message'));
 		o.optional = true;
 
-		o = s.option(form.Value, 'nocommsg', _('No communications message'));
+		o = s.option(form.Value, 'nocommmsg', _('No communications message'));
 		o.optional = true;
 
 		o = s.option(form.Value, 'noparentmsg', _('No parent message'));
@@ -114,19 +114,19 @@ return view.extend({
 		o = s.option(form.MultiValue, 'onbattnotify', _('Notify when on battery'));
 		ESIFlags(o);
 
-		o = s.option(form.MultiValue, 'lowbattnotify', _('Notify when low battery'));
+		o = s.option(form.MultiValue, 'lowbatnotify', _('Notify when low battery'));
 		ESIFlags(o);
 
 		o = s.option(form.MultiValue, 'fsdnotify', _('Notify when force shutdown'));
 		ESIFlags(o);
 
-		o = s.option(form.MultiValue, 'comoknotify', _('Notify when communications restored'));
+		o = s.option(form.MultiValue, 'commoknotify', _('Notify when communications restored'));
 		ESIFlags(o);
 
-		o = s.option(form.MultiValue, 'combadnotify', _('Notify when communications lost'));
+		o = s.option(form.MultiValue, 'commbadnotify', _('Notify when communications lost'));
 		ESIFlags(o);
 
-		o = s.option(form.MultiValue, 'shutdownotify', _('Notify when shutting down'));
+		o = s.option(form.MultiValue, 'shutdownnotify', _('Notify when shutting down'));
 		ESIFlags(o);
 
 		o = s.option(form.MultiValue, 'replbattnotify', _('Notify when battery needs replacing'));
