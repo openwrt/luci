@@ -180,7 +180,7 @@ return view.extend({
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin - bottom:- 5px; color:#37c; ' }, ' - ')
+					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:- 5px; color:#37c; ' }, ' - ')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('System Info')),

@@ -4,7 +4,8 @@
 'require ui';
 
 const localFile = '/etc/banip/banip.blocklist';
-let notMsg = false, errMsg = false;
+const maxSize = 100000;
+let notMsg = false;
 
 const resetScroll = () => {
 	document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -12,19 +13,24 @@ const resetScroll = () => {
 
 return view.extend({
 	load: function () {
-		return L.resolveDefault(fs.stat(localFile), "")
+		return L.resolveDefault(fs.stat(localFile), null)
 			.then(function (stat) {
-			if (!stat) {
-				return fs.write(localFile, "");
-			}
-			return Promise.all([
-				L.resolveDefault(fs.stat(localFile), ""),
-				L.resolveDefault(fs.read_direct(localFile), "")
-			]);
-		});
+				if (!stat) {
+					return fs.write(localFile, "").then(() => [{ size: 0 }, ""]);
+				}
+				return Promise.all([
+					Promise.resolve(stat),
+					L.resolveDefault(fs.read_direct(localFile), "")
+				]);
+			});
 	},
+
 	render: function (blocklist) {
-		if (blocklist[0] && blocklist[0].size >= 100000) {
+		const size = blocklist[0] ? blocklist[0].size : 0;
+		const content = blocklist[1] != null ? blocklist[1] : '';
+		const tooBig = size >= maxSize;
+
+		if (tooBig) {
 			resetScroll();
 			ui.addNotification(null, E('p', _('The blocklist is too big, unable to save modifications.')), 'error');
 		}
@@ -35,28 +41,29 @@ return view.extend({
 				'style': 'width: 100% !important; padding: 5px; font-family: monospace; margin-top: .4em',
 				'spellcheck': 'false',
 				'wrap': 'off',
-				'rows': 25
-			}, [blocklist[1] != null ? blocklist[1] : ''])
+				'rows': 25,
+				'readonly': tooBig ? 'readonly' : null,
+				'input': function () { notMsg = false; }
+			}, [content])
 		]);
 	},
-	handleSave: function (ev) {
-		let value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n?/g, '\n'));
+
+	handleSave: function (_ev) {
+		const value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n?/g, '\n'));
 		return fs.write(localFile, value + "\n")
-		.then(function () {
-			document.querySelector('textarea').value = value;
-			resetScroll();
-			if (!notMsg) {
-				ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload banIP that changes take effect.')), 'info');
-				notMsg = true;
-			}
-		}).catch(function (e) {
-			resetScroll();
-			if (!errMsg) {
+			.then(function () {
+				document.querySelector('textarea').value = value + "\n";
+				resetScroll();
+				if (!notMsg) {
+					notMsg = true;
+					ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload banIP that changes take effect.')), 'info');
+				}
+			}).catch(function (e) {
+				resetScroll();
 				ui.addNotification(null, E('p', _('Unable to save modifications: %s').format(e.message)), 'error');
-				errMsg = true;
-			}
-		});
+			});
 	},
+
 	handleSaveApply: null,
 	handleReset: null
 });

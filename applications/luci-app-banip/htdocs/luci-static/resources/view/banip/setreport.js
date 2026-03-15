@@ -7,6 +7,8 @@
 /*
 	button handling
 */
+let errMsg = false;
+
 function handleAction(report, ev) {
 	if (ev === 'search') {
 		ui.showModal(_('IP Search'), [
@@ -60,7 +62,7 @@ function handleAction(report, ev) {
 		document.getElementById('search').focus();
 	}
 	if (ev === 'content') {
-		let content, selectOption, errMsg;
+		let content, selectOption;
 
 		if (report[1]) {
 			try {
@@ -77,11 +79,11 @@ function handleAction(report, ev) {
 		}
 		selectOption = [E('option', { value: '' }, [_('-- Set Selection --')])];
 		Object.keys(content.nftables)
-		.filter(key => content.nftables[key].set?.name && content.nftables[key].set.table === 'banIP')
-		.sort((a, b) => content.nftables[a].set.name.localeCompare(content.nftables[b].set.name))
-		.forEach(key => {
-			selectOption.push(E('option', { 'value': content.nftables[key].set.name }, content.nftables[key].set.name));
-		})
+			.filter(key => content.nftables[key].set?.name && content.nftables[key].set.table === 'banIP')
+			.sort((a, b) => content.nftables[a].set.name.localeCompare(content.nftables[b].set.name))
+			.forEach(key => {
+				selectOption.push(E('option', { 'value': content.nftables[key].set.name }, content.nftables[key].set.name));
+			})
 		ui.showModal(_('Set Content'), [
 			E('p', _('List the elements of a specific banIP-related Set.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
@@ -126,7 +128,7 @@ function handleAction(report, ev) {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
 						const checkbox = document.getElementById('chkFilter');
-						const isChecked = checkbox.checked;
+						const isChecked = checkbox.checked ? 'true' : 'false';
 						let set = document.getElementById('set').value;
 						if (set) {
 							document.getElementById('result').textContent = 'Collecting Set content, please wait...';
@@ -151,8 +153,10 @@ function handleAction(report, ev) {
 	}
 	if (ev === 'map') {
 		const modal = ui.showModal(null, [
-			E('div', { id: 'mapModal',
-						style: 'position: relative;' }, [
+			E('div', {
+				id: 'mapModal',
+				style: 'position: relative;'
+			}, [
 				E('iframe', {
 					id: 'mapFrame',
 					src: L.resource('view/banip/map.html'),
@@ -193,7 +197,7 @@ return view.extend({
 	},
 
 	render: function (report) {
-		let content=[], rowSets, tblSets, notMsg, errMsg;
+		let content = [], rowSets, tblSets, notMsg;
 
 		if (report) {
 			try {
@@ -228,7 +232,7 @@ return view.extend({
 					E('em', content[0].sets[key].inbound + cnt1),
 					E('em', content[0].sets[key].outbound + cnt2),
 					E('em', content[0].sets[key].port),
-					E('em', content[0].sets[key].set_elements.join(", "))	
+					E('em', content[0].sets[key].set_elements.join(", "))
 				]);
 			});
 			rowSets.push([
@@ -249,41 +253,41 @@ return view.extend({
 					You can also display the specific content of Sets, search for suspicious IPs and finally, these IPs can also be displayed on a map.')),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;width:230px;font-weight:bold;' }, _('Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.timestamp || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.timestamp || '-')
 				]),
 				E('hr'),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked syn-flood packets')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_synflood || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_synflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked udp-flood packets')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_udpflood || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_udpflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked icmp-flood packets')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_icmpflood || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_icmpflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid ct packets')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_ctinvalid || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_ctinvalid || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid tcp packets')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_tcpinvalid || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_tcpinvalid || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked bcp38 packets')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_bcp38 || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_bcp38 || '-')
 				]),
 				E('hr'),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to allowlist')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.autoadd_allow || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.autoadd_allow || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to blocklist')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.autoadd_block || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.autoadd_block || '-')
 				])
 			]),
 			E('br'),
@@ -300,11 +304,10 @@ return view.extend({
 					'id': 'btnMap',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
-						if (content[1] && content[1].length > 1) {
+						if (Array.isArray(content[1]) && content[1].length > 1) {
 							sessionStorage.setItem('mapData', JSON.stringify(content[1]));
 							return handleAction(report, 'map');
-						}
-						else {
+						} else {
 							if (!notMsg) {
 								notMsg = true;
 								return ui.addNotification(null, E('p', _('No GeoIP Map data!')), 'info');
@@ -330,15 +333,24 @@ return view.extend({
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none',
 					'click': function () {
-						document.querySelectorAll('.cbi-page-actions button').forEach(function(btn) {
-							btn.disabled = true;
-						})
-						this.blur();
-						this.classList.add('spinning');
+						const btn = this;
+						document.querySelectorAll('.cbi-page-actions button').forEach(function (b) {
+							b.disabled = true;
+						});
+						btn.blur();
+						btn.classList.add('spinning');
 						L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['report', 'gen']))
-							.then(function () {
-								location.reload();
-							})
+							.then(function (res) {
+								if (res !== null) {
+									location.reload();
+								} else {
+									btn.classList.remove('spinning');
+									document.querySelectorAll('.cbi-page-actions button').forEach(function (b) {
+										b.disabled = false;
+									});
+									ui.addNotification(null, E('p', _('Failed to generate banIP report!')), 'error');
+								}
+							});
 					}
 				}, [_('Refresh')])
 			])
