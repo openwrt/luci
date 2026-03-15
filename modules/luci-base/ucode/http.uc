@@ -13,6 +13,12 @@ import {
 	stdin, stdout, mkstemp
 } from 'fs';
 
+import {
+	openlog, syslog, closelog, LOG_NOTICE, LOG_LOCAL0
+} from 'log';
+
+import { run_plugins } from 'luciplugins';
+
 // luci.http module scope
 export let HTTP_MAX_CONTENT = 1024*100;		// 100 kB maximum content size
 
@@ -503,6 +509,37 @@ const Class = {
 
 		if (!this.headers?.['x-content-type-options'])
 			this.header('X-Content-Type-Options', 'nosniff');
+
+		/* http header plugins */
+		let log_class = 'http.uc';
+		openlog(log_class);
+		for (let plugin_id, p_output in run_plugins('/luci/plugins/http/headers', 'http_headers_enabled')) {
+
+			/* header plugins shall return e.g.: ['X-Header', 'foo'] */
+			if (type(p_output) !== 'array' || length(p_output) !== 2)
+				continue;
+
+			if (type(p_output[0]) !== 'string' || type(p_output[1]) !== 'string')
+				continue;
+
+			if (!match(p_output[0], /^[A-Za-z0-9-]+$/)) {
+				syslog(LOG_NOTICE|LOG_LOCAL0,
+					sprintf("Invalid header name from plugin %s output: %s", plugin_id, p_output[0]));
+				continue;
+			}
+
+			/* header plugin values shall not contain line-feeds */
+			if (match(p_output[1], /[\r\n]/)) {
+				syslog(LOG_NOTICE|LOG_LOCAL0,
+					sprintf("\\r and/or \\n in plugin %s output", plugin_id));
+				continue;
+			}
+
+			if(!this.headers?.[p_output[0]])
+				this.header(p_output[0], p_output[1]);
+
+		}
+		closelog();
 
 		this.output('Status: ');
 		this.output(this.status_code);
