@@ -14,6 +14,26 @@ document.querySelector('head').appendChild(E('link', {
 }));
 
 /*
+	module-level file size set during render, read by observer
+*/
+let fileSize = 0;
+
+/*
+	button state helper
+*/
+function updateButtons() {
+	const buttons = document.querySelectorAll('#btnClear, #btnCreate, #btnSave, #btnUpload, #btnDownload');
+	if (fileSize === 0) {
+		if (buttons[1]) buttons[1].removeAttribute('disabled');
+		if (buttons[2]) buttons[2].removeAttribute('disabled');
+	} else {
+		if (buttons[0]) buttons[0].removeAttribute('disabled');
+		if (buttons[3]) buttons[3].removeAttribute('disabled');
+		if (buttons[4]) buttons[4].removeAttribute('disabled');
+	}
+}
+
+/*
 	observe DOM changes
 */
 const observer = new MutationObserver(function (mutations) {
@@ -29,17 +49,7 @@ const observer = new MutationObserver(function (mutations) {
 		labels.forEach(function (label) {
 			label.setAttribute("style", "font-weight: bold !important; color: #595 !important;");
 		})
-		L.resolveDefault(fs.stat('/etc/adblock/adblock.custom.feeds'), '').then(function (stat) {
-			const buttons = document.querySelectorAll('#btnClear, #btnCreate, #btnSave, #btnUpload, #btnDownload');
-			if (buttons[1] && buttons[2] && stat.size === 0) {
-				buttons[1].removeAttribute('disabled');
-				buttons[2].removeAttribute('disabled');
-			} else if (buttons[0] && buttons[3] && buttons[4] && stat.size > 0) {
-				buttons[0].removeAttribute('disabled');
-				buttons[3].removeAttribute('disabled');
-				buttons[4].removeAttribute('disabled');
-			}
-		});
+		updateButtons();
 	}
 });
 
@@ -59,28 +69,21 @@ function handleEdit(ev) {
 	if (ev === 'upload') {
 		return ui.uploadFile('/etc/adblock/adblock.custom.feeds').then(function () {
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.custom.feeds', 'json'), "").then(function (data) {
-				if (data) {
-					let dataLength = Object.keys(data).length || 0;
-					if (dataLength > 0) {
-						for (let i = 0; i < dataLength; i++) {
-							let feed = Object.keys(data)[i];
-							let descr = data[feed].descr;
-							if (feed && descr) {
-								continue;
-							}
-							fs.write('/etc/adblock/adblock.custom.feeds', null).then(function () {
-								return ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
-							});
+				if (data && Object.keys(data).length > 0) {
+					for (let i = 0; i < Object.keys(data).length; i++) {
+						let feed = Object.keys(data)[i];
+						let descr = data[feed].descr;
+						if (feed && descr) {
+							continue;
 						}
-					} else {
-						fs.write('/etc/adblock/adblock.custom.feeds', null).then(function () {
-							return ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+						return fs.write('/etc/adblock/adblock.custom.feeds', null).then(function () {
+							ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
 						});
 					}
 					location.reload();
 				} else {
-					fs.write('/etc/adblock/adblock.custom.feeds', null).then(function () {
-						return ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+					return fs.write('/etc/adblock/adblock.custom.feeds', null).then(function () {
+						ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
 					});
 				}
 			});
@@ -118,9 +121,9 @@ function handleEdit(ev) {
 		}
 	}
 	/*
-		gather all input data
+		gather all input data and fall through from 'save'
 	*/
-	let sumSubElements = [];
+	const exportObj = {};
 	const nodeKeys = document.querySelectorAll('[id^="widget.cbid.json"][id$="name"]');
 	for (const keyNode of nodeKeys) {
 		const keyValue = keyNode.value?.trim();
@@ -142,40 +145,39 @@ function handleEdit(ev) {
 				sub[key] = value;
 			}
 		}
-		if (sub.descr) {
-			sumSubElements.push(keyValue, sub);
+		/* require at least descr and url to produce a valid feed entry */
+		if (sub.descr && sub.url) {
+			exportObj[keyValue] = sub;
 		}
 	}
 	/*
-		construct json object
-	*/
-	let exportObj = {};
-	for (let i = 0; i < sumSubElements.length; i += 2) {
-		const key = sumSubElements[i];
-		const value = sumSubElements[i + 1];
-		exportObj[key] = value;
-	}
-	const exportJson = JSON.stringify(exportObj, null, 4);
-	/*
 		save to file and reload
 	*/
+	const exportJson = JSON.stringify(exportObj, null, 4);
 	return fs.write('/etc/adblock/adblock.custom.feeds', exportJson)
 		.then(() => location.reload());
 }
 
 return view.extend({
 	load: function () {
-		return L.resolveDefault(fs.stat('/etc/adblock/adblock.custom.feeds'), "")
+		return L.resolveDefault(fs.stat('/etc/adblock/adblock.custom.feeds'), null)
 			.then(function (stat) {
-			if (!stat) {
-				return fs.write('/etc/adblock/adblock.custom.feeds', "");
-			}
-			return L.resolveDefault(fs.read_direct('/etc/adblock/adblock.custom.feeds', 'json'), "");
-		});
+				if (!stat) {
+					return fs.write('/etc/adblock/adblock.custom.feeds', "").then(function () {
+						return { size: 0, data: null };
+					});
+				}
+				return L.resolveDefault(fs.read_direct('/etc/adblock/adblock.custom.feeds', 'json'), "")
+					.then(function (data) {
+						return { size: stat.size, data: data };
+					});
+			});
 	},
 
-	render: function (data) {
+	render: function (result) {
 		let m, s, o, feed, url, rule, size, descr;
+		const data = result.data;
+		fileSize = result.size;
 
 		m = new form.JSONMap(data, null, _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
 			The file is located at \'/etc/adblock/adblock.custom.feeds\'. \
@@ -209,7 +211,7 @@ return view.extend({
 				if (!value) {
 					return true;
 				}
-				if (!value.match(/^(http:\/\/|https:\/\/)[A-Za-z0-9\/\.\-\?\&\+_@%=:~#]+$/)) {
+				if (!value.match(/^https?:\/\/[A-Za-z0-9\[\]\/.\-?&+_@%=:~#]+$/)) {
 					return _('Protocol/URL format not supported');
 				}
 				return true;
@@ -219,7 +221,7 @@ return view.extend({
 			o.value('feed 1', _('<Domain>'));
 			o.value('feed 127.0.0.1 2', _('127.0.0.1 <Domain>'));
 			o.value('feed 0.0.0.0 2', _('0.0.0.0 <Domain>'));
-			o.value('feed 3 [|^]', _('<Adblock Plus Syntax>'));
+			o.value('feed || 3 [|^]', _('<Adblock Plus Syntax>'));
 			o.optional = true;
 			o.rmempty = true;
 
@@ -294,7 +296,7 @@ return view.extend({
 						return handleEdit('save');
 					})
 				}, [_('Save')]),
-			])
+			]);
 		});
 		return m.render();
 	},

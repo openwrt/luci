@@ -4,7 +4,9 @@
 'require ui';
 'require uci';
 
-var notMsg = false, errMsg = false;
+/* separate flags per notification context */
+let listNotMsg = false;
+let mapNotMsg = false;
 
 /*
 	button handling
@@ -29,13 +31,13 @@ function handleAction(ev) {
 					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blocklist'), '')
 							.then(function (res) {
-								var domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
-								var pattern = new RegExp('^' + domain.replace(/[\.]/g, '\\.') + '$', 'm');
+								const domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+								const pattern = new RegExp('^' + domain.replace(/[.]/g, '\\.') + '$', 'm');
 								if (res.search(pattern) === -1) {
-									var blocklist = res + domain + '\n';
+									const blocklist = res + domain + '\n';
 									fs.write('/etc/adblock/adblock.blocklist', blocklist);
-									if (!notMsg) {
-										notMsg = true;
+									if (!listNotMsg) {
+										listNotMsg = true;
 										ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
 									}
 								}
@@ -67,13 +69,13 @@ function handleAction(ev) {
 					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.allowlist'), '')
 							.then(function (res) {
-								var domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
-								var pattern = new RegExp('^' + domain.replace(/[\.]/g, '\\.') + '$', 'm');
+								const domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+								const pattern = new RegExp('^' + domain.replace(/[.]/g, '\\.') + '$', 'm');
 								if (res.search(pattern) === -1) {
-									var allowlist = res + domain + '\n';
+									const allowlist = res + domain + '\n';
 									fs.write('/etc/adblock/adblock.allowlist', allowlist);
-									if (!notMsg) {
-										notMsg = true;
+									if (!listNotMsg) {
+										listNotMsg = true;
 										ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
 									}
 								}
@@ -120,7 +122,7 @@ function handleAction(ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
-						const domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+						const domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9.\-]/g, '');
 						if (domain) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = domain;
@@ -134,7 +136,7 @@ function handleAction(ev) {
 								}
 								document.getElementById('run').classList.remove("spinning");
 								document.getElementById('search').value = '';
-							})
+							});
 						}
 						document.getElementById('search').focus();
 					})
@@ -173,8 +175,7 @@ function handleAction(ev) {
 				])
 			]),
 			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'search' }, [
-				]),
+				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'search' }, []),
 				'\xa0\xa0\xa0',
 				_('Filter criteria like date, domain or client (optional)')
 			]),
@@ -190,16 +191,16 @@ function handleAction(ev) {
 					'click': function () {
 						document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
 							btn.disabled = true;
-						})
+						});
 						this.blur();
 						this.classList.add('spinning');
 						const top_count = document.getElementById('top_count').value;
 						const res_count = document.getElementById('res_count').value;
-						const search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g, '') || '+';
+						const search = document.getElementById('search').value.trim().replace(/[^\w.\-:]/g, '') || '+';
 						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '')
 							.then(function () {
 								location.reload();
-							})
+							});
 					}
 				}, _('Refresh'))
 			])
@@ -284,30 +285,17 @@ return view.extend({
 			let a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
 			if (content[0].top_clients[i]) {
 				a_cnt = content[0].top_clients[i].count;
-			}
-			if (content[0].top_clients[i]) {
 				a_addr = content[0].top_clients[i].address;
 			}
 			if (content[0].top_domains[i]) {
 				b_cnt = content[0].top_domains[i].count;
-			}
-			if (content[0].top_domains[i]) {
 				b_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_domains[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_domains[i].address + '</a>';
 			}
 			if (content[0].top_blocked[i]) {
 				c_cnt = content[0].top_blocked[i].count;
-			}
-			if (content[0].top_blocked[i]) {
 				c_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_blocked[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_blocked[i].address + '</a>';
 			}
-			rows_top.push([
-				a_cnt,
-				a_addr,
-				b_cnt,
-				b_addr,
-				c_cnt,
-				c_addr
-			]);
+			rows_top.push([a_cnt, a_addr, b_cnt, b_addr, c_cnt, c_addr]);
 		}
 		cbi_update_table(tbl_top, rows_top);
 
@@ -325,11 +313,10 @@ return view.extend({
 			])
 		]);
 
-		max = 0;
 		if (content[0].requests) {
-			let button;
 			max = content[0].requests.length;
 			for (let i = 0; i < max; i++) {
+				let button;
 				if (content[0].requests[i].rc === 'NX') {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
@@ -365,7 +352,7 @@ return view.extend({
 
 		const page = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('div', { 'class': 'cbi-section' }, [
-				E('p', _('This tab displays the most recently generated DNS report. Use the \‘Refresh\’ button to update it.')),
+				E('p', _('This tab displays the most recently generated DNS report. Use the \'Refresh\' button to update it.')),
 				E('div', { 'class': 'cbi-value', 'style': 'position:relative;min-height:220px' }, [
 					E('div', {
 						'style': 'position:absolute; top:0; right:0; text-align:center'
@@ -408,7 +395,7 @@ return view.extend({
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnTest',
 					'title': 'Adblock Test',
-					'click': function() {
+					'click': function () {
 						window.open('https://adblock.turtlecute.org/', '_blank', 'noopener,noreferrer');
 					}
 				}, [_('Adblock Test')]),
@@ -419,13 +406,12 @@ return view.extend({
 					'title': 'Map',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
-						if (content[1] && content[1].length > 1) {
+						if (Array.isArray(content[1]) && content[1].length > 1) {
 							sessionStorage.setItem('mapData', JSON.stringify(content[1]));
 							return handleAction('map');
-						}
-						else {
-							if (!notMsg) {
-								notMsg = true;
+						} else {
+							if (!mapNotMsg) {
+								mapNotMsg = true;
 								return ui.addNotification(null, E('p', _('No GeoIP Map data!')), 'info');
 							}
 						}
@@ -449,40 +435,38 @@ return view.extend({
 				}, [_('Refresh...')])
 			])
 		]);
+
 		if (uci.get('adblock', 'global', 'adb_map') === '1') {
 			const btn = page.querySelector('#btnMap');
 			if (btn) {
 				btn.removeAttribute('disabled');
 			}
 		}
+
 		/* Draw Pie Chart with Tooltip */
-		const tooltip = E('div', {
+		const tooltipEl = E('div', {
 			id: 'dnsPieTooltip',
 			style: 'position:absolute; padding:6px 10px; background:#333; color:#fff; border-radius:4px; font-size:12px; pointer-events:none; opacity:0; transition:opacity .15s; z-index:9999'
 		});
-		document.body.appendChild(tooltip);
-		setTimeout(function() {
+		document.body.appendChild(tooltipEl);
+
+		setTimeout(function () {
 			const total = Number(content[0].total || 0);
 			const blocked = Number(content[0].blocked || 0);
 			const allowed = Math.max(total - blocked, 0);
 
 			const canvas = document.getElementById('dnsPie');
-			if (!canvas || total <= 0)
-				return;
+			if (!canvas || total <= 0) return;
 
 			const ctx = canvas.getContext('2d');
-			const colors = {
-				blocked: '#b04a4a',
-				allowed: '#6a8f6a'
-			};
+			const colors = { blocked: '#b04a4a', allowed: '#6a8f6a' };
+			let finalRot = 0;
 
-			function drawPie(rotation = 0) {
+			function drawPie(rotation) {
 				const w = canvas.clientWidth;
 				canvas.width = w;
 				canvas.height = w;
-				const cx = w / 2;
-				const cy = w / 2;
-				const r  = (w / 2) - 4;
+				const cx = w / 2, cy = w / 2, r = (w / 2) - 4;
 				const blockedAngle = (blocked / total) * 2 * Math.PI;
 				const allowedAngle = (allowed / total) * 2 * Math.PI;
 
@@ -505,43 +489,48 @@ return view.extend({
 				ctx.lineWidth = 2;
 				ctx.stroke();
 			}
+
 			let rot = 0;
 			function animate() {
 				rot += 0.10;
 				drawPie(rot);
-				if (rot < Math.PI * 2)
+				if (rot < Math.PI * 2) {
 					requestAnimationFrame(animate);
+				} else {
+					finalRot = rot % (2 * Math.PI);
+					drawPie(finalRot);
+				}
 			}
 			animate();
-			window.addEventListener('resize', function() {
-				drawPie(rot);
+
+			window.addEventListener('resize', function () {
+				drawPie(finalRot);
 			});
+
 			const tooltip = document.getElementById('dnsPieTooltip');
-			canvas.addEventListener('mousemove', function(ev) {
+			const blockedAngle = (blocked / total) * 2 * Math.PI;
+
+			canvas.addEventListener('mousemove', function (ev) {
 				const rect = canvas.getBoundingClientRect();
 				const x = ev.clientX - rect.left;
 				const y = ev.clientY - rect.top;
-				const cx = canvas.width / 2;
-				const cy = canvas.height / 2;
-				const dx = x - cx;
-				const dy = y - cy;
-				const dist = Math.sqrt(dx*dx + dy*dy);
-				if (dist > canvas.width/2 - 4) {
+				const cx = canvas.width / 2, cy = canvas.height / 2;
+				const dx = x - cx, dy = y - cy;
+				const dist = Math.sqrt(dx * dx + dy * dy);
+				if (dist > canvas.width / 2 - 4) {
 					tooltip.style.opacity = 0;
 					return;
 				}
-				let angle = Math.atan2(dy, dx);
+				/* normalise angle relative to finalRot so it matches the drawn slices */
+				let angle = Math.atan2(dy, dx) - finalRot;
 				if (angle < 0) angle += 2 * Math.PI;
 
-				const blockedAngle = (blocked / total) * 2 * Math.PI;
 				let label, abs, pct;
 				if (angle < blockedAngle) {
-					label = 'Blocked';
-					abs = blocked;
+					label = 'Blocked'; abs = blocked;
 					pct = ((blocked / total) * 100).toFixed(1) + '%';
 				} else {
-					label = 'Allowed';
-					abs = allowed;
+					label = 'Allowed'; abs = allowed;
 					pct = ((allowed / total) * 100).toFixed(1) + '%';
 				}
 				tooltip.textContent = `${label}: ${abs} (${pct})`;
@@ -549,10 +538,12 @@ return view.extend({
 				tooltip.style.top = ev.pageY + 12 + 'px';
 				tooltip.style.opacity = 1;
 			});
-			canvas.addEventListener('mouseleave', function() {
+
+			canvas.addEventListener('mouseleave', function () {
 				tooltip.style.opacity = 0;
 			});
 		}, 0);
+
 		return page;
 	},
 	handleSaveApply: null,
