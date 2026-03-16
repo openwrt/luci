@@ -3,7 +3,7 @@
 
 'use strict';
 
-import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, readlink, error } from 'fs';
+import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, readlink, realpath, error } from 'fs';
 import { cursor } from 'uci';
 
 import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
@@ -636,7 +636,7 @@ const methods = {
 			/* Workaround for targets that do not enumerate  all netdevs in board.json */
 			if (uname().machine in [ 'x86_64' ] &&
 			    match(ports[0]?.device, /^eth\d+$/)) {
-				let bus = readlink(`/sys/class/net/${ports[0].device}/device/subsystem`);
+				let bus = realpath(`/sys/class/net/${ports[0].device}/device/subsystem`);
 
 				for (let netdev in lsdir('/sys/class/net')) {
 					if (!match(netdev, /^eth\d+$/))
@@ -645,7 +645,7 @@ const methods = {
 					if (length(filter(ports, port => port.device == netdev)))
 						continue;
 
-					if (readlink(`/sys/class/net/${netdev}/device/subsystem`) != bus)
+					if (realpath(`/sys/class/net/${netdev}/device/subsystem`) != bus)
 						continue;
 
 					push(ports, { role: 'unknown', device: netdev });
