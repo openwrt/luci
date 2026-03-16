@@ -211,7 +211,7 @@ return view.extend({
 				if (!value) {
 					return true;
 				}
-				if (!value.match(/^https?:\/\/[A-Za-z0-9\[\]\/.\-?&+_@%=:~#]+$/)) {
+				if (!value.match(/^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$/)) {
 					return _('Protocol/URL format not supported');
 				}
 				return true;

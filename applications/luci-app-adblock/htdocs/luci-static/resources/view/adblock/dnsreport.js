@@ -31,7 +31,7 @@ function handleAction(ev) {
 					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blocklist'), '')
 							.then(function (res) {
-								const domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+								const domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9.-]/g, '');
 								const pattern = new RegExp('^' + domain.replace(/[.]/g, '\\.') + '$', 'm');
 								if (res.search(pattern) === -1) {
 									const blocklist = res + domain + '\n';
@@ -69,7 +69,7 @@ function handleAction(ev) {
 					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.allowlist'), '')
 							.then(function (res) {
-								const domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+								const domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9.-]/g, '');
 								const pattern = new RegExp('^' + domain.replace(/[.]/g, '\\.') + '$', 'm');
 								if (res.search(pattern) === -1) {
 									const allowlist = res + domain + '\n';
@@ -122,7 +122,7 @@ function handleAction(ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
-						const domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9.\-]/g, '');
+						const domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9.-]/g, '');
 						if (domain) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = domain;
