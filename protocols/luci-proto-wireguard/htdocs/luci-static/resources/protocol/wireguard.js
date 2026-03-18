@@ -157,6 +157,14 @@ return network.registerProtocol('wireguard', {
 		o.datatype = 'ipaddr';
 		o.optional = true;
 
+		o = s.taboption('general', form.DynamicList, 'ip6prefix', _('IPv6 routed prefix'), _('This is the prefix routed to you by your provider for use by clients'));
+		o.datatype = 'cidr6';
+		o.optional = true;
+
+		o = s.taboption('general', form.DynamicList, 'pd_prefix', _('PD Prefix'), _('IPv6 prefix obtained via Prefix Delegation for use by clients'));
+		o.datatype = 'cidr6';
+		o.optional = true;
+
 		o = s.taboption('general', form.Flag, 'nohostroute', _('No Host Routes'), _('Optional. Do not create host routes to peers.'));
 		o.optional = true;
 
