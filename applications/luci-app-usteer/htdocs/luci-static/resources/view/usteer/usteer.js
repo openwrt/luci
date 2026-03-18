@@ -730,8 +730,7 @@ return view.extend({
 			o.value('1', _('1 Passive BSS-transition-request'));
 			o.value('2', _('2 BSS-transition-request with disassociation imminent'));
 			o.value('3', _('3 BSS-transition-request with disassociation imminent and timer'));
-			o.value('4', _('4 Network packet info'));
-			o.value('5', _('5 BSS-transition-request with disassociation imminent, timer and forced disassociation'));
+			o.value('4', _('4 BSS-transition-request with disassociation imminent, timer and forced disassociation'));
 			o.optional = true;
 			o.datatype = 'uinteger';
 		}
