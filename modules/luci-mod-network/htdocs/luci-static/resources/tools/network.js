@@ -1030,17 +1030,17 @@ return baseclass.extend({
 		o.depends('type', 'bridge');
 
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'hello_time', _('Hello interval'), _('Interval in seconds for STP hello packets'));
-		o.placeholder = '2';
+		o.placeholder = '1';
 		o.datatype = 'range(1, 10)';
 		o.depends({ type: 'bridge', stp: '1' });
 
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'forward_delay', _('Forward delay'), _('Time in seconds to spend in listening and learning states'));
-		o.placeholder = '15';
+		o.placeholder = '8';
 		o.datatype = 'range(2, 30)';
 		o.depends({ type: 'bridge', stp: '1' });
 
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'max_age', _('Maximum age'), _('Timeout in seconds until topology updates on link loss'));
-		o.placeholder = '20';
+		o.placeholder = '10';
 		o.datatype = 'range(6, 40)';
 		o.depends({ type: 'bridge', stp: '1' });
 
