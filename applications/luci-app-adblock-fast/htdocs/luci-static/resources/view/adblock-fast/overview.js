@@ -803,6 +803,27 @@ return view.extend({
 		o.value("1", _("Enable Debugging"));
 		o.default = "0";
 
+		o = s1.taboption(
+			"tab_advanced",
+			form.Value,
+			"rpcd_token",
+			_("Remote Access Token"),
+			_(
+				"Token for <a href=\"" + pkg.URL + "#chrome-extension\" target=\"_blank\">Google Chrome extension</a> or other remote API access. " +
+				"Copy this value into the extension settings as the password. " +
+				"Changing it here will update the API user password on save.",
+			),
+		);
+		o.default = "";
+		o.rmempty = true;
+		o.write = function (section_id, formvalue) {
+			var currentValue = L.uci.get(pkg.Name, section_id, "rpcd_token");
+			if (formvalue && formvalue !== currentValue) {
+				RPC.setRpcdToken(pkg.Name, formvalue);
+			}
+			return L.uci.set(pkg.Name, section_id, "rpcd_token", formvalue);
+		};
+
 		s2 = m.section(
 			form.NamedSection,
 			"config",
