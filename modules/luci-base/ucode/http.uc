@@ -9,9 +9,12 @@ import {
 } from 'lucihttp';
 
 import {
+	lsdir,
 	error as fserror,
 	stdin, stdout, mkstemp
 } from 'fs';
+
+import { cursor } from 'uci';
 
 // luci.http module scope
 export let HTTP_MAX_CONTENT = 1024*100;		// 100 kB maximum content size
@@ -503,6 +506,26 @@ const Class = {
 
 		if (!this.headers?.['x-content-type-options'])
 			this.header('X-Content-Type-Options', 'nosniff');
+
+		/* http header plugins */
+		let uci = cursor();
+		if (uci.get('luci_plugins', 'global', 'enabled') &&
+			uci.get('luci_plugins', 'global', 'http_headers_enabled')) {
+			const PLUGINS_PATH = '/usr/share/ucode/luci/plugins/http/headers';
+			for (let fn in lsdir(PLUGINS_PATH)) {
+				let plugin = replace(fn, /.uc$/, '');
+				if (uci.get('luci_plugins', plugin, 'enabled')) {
+					const mod = require(`luci.plugins.http.headers.${plugin}`);
+					if (type(mod) === 'function') {
+						try {
+							const result = mod(plugin);
+							if (type(result) === 'array' && !this.headers?.[result[0]])
+								this.header(result[0], result[1]);							
+						} catch {};
+					}
+				}
+			}
+		}
 
 		this.output('Status: ');
 		this.output(this.status_code);
