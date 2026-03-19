@@ -1,0 +1,35 @@
+{
+	"device": {
+		"vendor": "D-Link",
+		"model": "DGS-1210-28",
+		"board": [
+			"d-link,dgs-1210-28"
+		]
+	},
+	"commands": {
+		"params": [
+			"bootcmd",
+			"image"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [],
+			"mtd": "mtd5",
+			"labelOffsetBytes": null
+		},
+		{
+			"number": 2,
+			"param_values": [
+				"run addargs\\; bootm 0xb4e80000",
+				"/dev/mtdblock7"
+			],
+			"mtd": "mtd9",
+			"labelOffsetBytes": null
+		}
+	]
+}

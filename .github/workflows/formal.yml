@@ -1,0 +1,17 @@
+name: Test Formalities
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  formalities:
+    name: Test Formalities
+    uses: openwrt/actions-shared-workflows/.github/workflows/formal.yml@main
+    with:
+      exclude_weblate: true
+      post_comment: true
+      warn_on_no_modify: true

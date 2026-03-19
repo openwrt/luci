@@ -1,0 +1,20 @@
+{
+	"luci-app-squid": {
+		"description": "Grant UCI access for luci-app-squid",
+		"read": {
+			"file": {
+				"/etc/squid/*": [ "read" ]
+			},
+			"ubus": {
+				"luci.squid": [ "getCompileTimeOptions" ]
+			},
+			"uci": [ "squid" ]
+		},
+		"write": {
+			"file": {
+				"/etc/squid/*": [ "write" ]
+			},
+			"uci": [ "squid" ]
+		}
+	}
+}

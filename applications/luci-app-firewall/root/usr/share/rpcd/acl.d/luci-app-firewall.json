@@ -1,0 +1,24 @@
+{
+	"luci-app-firewall": {
+		"description": "Grant access to firewall configuration",
+		"read": {
+			"file": {
+				"/etc/firewall.user": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ],
+				"luci": [ "getConntrackHelpers" ]
+			},
+			"uci": [ "firewall" ]
+		},
+		"write": {
+			"file": {
+				"/etc/firewall.user": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ]
+			},
+			"uci": [ "firewall" ]
+		}
+	}
+}

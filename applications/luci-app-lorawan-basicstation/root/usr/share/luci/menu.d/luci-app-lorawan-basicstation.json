@@ -1,0 +1,39 @@
+{
+	"admin/network/lorawan-basicstation": {
+		"title": "LoRaWAN Basicstation",
+		"order": "600",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-lorawan-basicstation" ]
+		}
+	},
+
+	"admin/network/lorawan-basicstation/general": {
+		"title": "General Settings",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "lorawan-basicstation/general"
+		}
+	},
+
+	"admin/network/lorawan-basicstation/advanced": {
+		"title": "Advanced Settings",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "lorawan-basicstation/advanced"
+		}
+	},
+
+	"admin/network/lorawan-basicstation/log": {
+		"title": "Log Messages",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "lorawan-basicstation/log"
+		}
+	}
+}

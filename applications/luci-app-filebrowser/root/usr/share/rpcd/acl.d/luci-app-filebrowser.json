@@ -1,0 +1,14 @@
+{
+	"luci-app-filebrowser": {
+		"description": "Grant access to File Browser",
+		"write": {
+			"cgi-io": [ "upload", "download" ],
+			"ubus": {
+				"file": [ "*" ]
+			},
+			"file": {
+				"/*": [  "list", "read", "write" ]
+			}
+		}
+	}
+}

@@ -1,0 +1,19 @@
+{
+	"luci-app-wol": {
+		"description": "Grant access to wake-on-lan executables",
+		"read": {
+			"ubus": {
+				"luci.wol": [ "stat" ],
+				"luci-rpc": [ "getHostHints", "getNetworkDevices" ]
+			},
+			"uci": [ "luci-wol" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.wol": [ "exec" ],
+				"uci": [ "add", "set", "delete", "order" ]
+			},
+			"uci": [ "luci-wol" ]
+		}
+	}
+}

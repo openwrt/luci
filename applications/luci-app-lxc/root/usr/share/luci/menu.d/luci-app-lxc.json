@@ -1,0 +1,86 @@
+{
+	"admin/services/lxccm": {
+		"title": "LXC Container mgr",
+		"order": 80,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"uci": {
+				"lxc": true
+			}
+		}
+	},
+
+	"admin/services/lxccm/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "lxc/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-lxc" ]
+		}
+	},
+
+	"admin/services/lxc/lxc_create/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.lxc",
+			"function": "lxc_create"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/lxc/lxc_action/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.lxc",
+			"function": "lxc_action"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/lxc/lxc_get_downloadable/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.lxc",
+			"function": "lxc_get_downloadable"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/lxc/lxc_configuration_get/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.lxc",
+			"function": "lxc_configuration_get"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/lxc/lxc_configuration_set/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.lxc",
+			"function": "lxc_configuration_set"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	}
+}

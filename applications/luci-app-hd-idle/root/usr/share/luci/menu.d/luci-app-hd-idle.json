@@ -1,0 +1,14 @@
+{
+	"admin/services/hd_idle": {
+		"title": "HDD Idle",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "hd_idle"
+		},
+		"depends": {
+			"acl": [ "luci-app-hd-idle" ],
+			"uci": { "hd-idle": true }
+		}
+	}
+}

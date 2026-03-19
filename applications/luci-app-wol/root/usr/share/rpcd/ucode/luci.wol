@@ -1,0 +1,57 @@
+#!/usr/bin/ucode
+
+'use strict';
+
+import { access, stat, popen } from 'fs';
+
+const etherwake = '/usr/bin/etherwake';
+const wakeonlan = '/usr/bin/wakeonlan';
+
+
+function shellquote(s) {
+    return "'" + replace(s, "'", "'\\''") + "'";
+}
+
+
+const methods = {
+	stat: {
+		call: function(request) {
+			const result = {};
+
+			result.etherwake = false;
+			result.wakeonlan = false;
+
+			if (access(etherwake, "x")) {
+				result.etherwake = true;
+			}
+
+			if (access(wakeonlan, "x")) {
+				result.wakeonlan = true;
+			}
+
+			return result;
+		}
+	},
+
+	exec: {
+		args: { name: 'string', args: [] },
+		call: function(request) {
+			const result = {};
+			if (request.args.name == etherwake || request.args.name == wakeonlan) {
+				parts = map(request.args.args, shellquote);
+				const fd = popen(request.args.name + ' ' + join(' ', parts));
+
+				result.stdout = fd.read('all');
+				result.stderr = '';
+				result.code = fd.close();
+			} else {
+				result.stdout = '';
+				result.stderr = 'disallowed';
+				result.code = 1;
+			}
+			return result;
+		}
+	}
+};
+
+return { "luci.wol": methods };

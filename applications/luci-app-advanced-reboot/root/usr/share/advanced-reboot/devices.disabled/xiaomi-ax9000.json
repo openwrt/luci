@@ -1,0 +1,38 @@
+{
+	"device": {
+		"vendor": "Xiaomi",
+		"model": "AX9000",
+		"board": [
+			"xiaomi,ax9000"
+		]
+	},
+	"commands": {
+		"params": [
+			"flag_boot_rootfs",
+			"flag_last_success"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				0,
+				0
+			],
+			"mtd": "mtd20",
+			"labelOffsetBytes": 266432
+		},
+		{
+			"number": 2,
+			"param_values": [
+				1,
+				1
+			],
+			"mtd": "mtd21",
+			"labelOffsetBytes": 266432
+		}
+	]
+}

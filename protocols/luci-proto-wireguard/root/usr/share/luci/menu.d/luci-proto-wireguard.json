@@ -1,0 +1,14 @@
+{
+	"admin/status/wireguard": {
+		"title": "WireGuard",
+		"order": 92,
+		"action": {
+			"type": "view",
+			"path": "wireguard/status"
+		},
+		"depends": {
+			"acl": [ "luci-proto-wireguard" ],
+			"uci": { "network": true }
+		}
+	}
+}

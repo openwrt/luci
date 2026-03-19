@@ -1,0 +1,37 @@
+{
+	"admin/vpn/cloudflared": {
+		"title": "Cloudflare Zero Trust Tunnel",
+		"order": 80,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-cloudflared" ],
+			"uci": { "cloudflared": true }
+		}
+	},
+	"admin/vpn/cloudflared/config": {
+		"title": "Configuration",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "cloudflared/config"
+		}
+	},
+	"admin/vpn/cloudflared/tunnels": {
+		"title": "Tunnels",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "cloudflared/tunnels"
+		}
+	},
+	"admin/vpn/cloudflared/log": {
+		"title": "Log",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "cloudflared/log"
+		}
+	}
+}

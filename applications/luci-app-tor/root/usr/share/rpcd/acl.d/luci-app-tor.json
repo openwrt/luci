@@ -1,0 +1,25 @@
+{
+	"luci-app-tor": {
+		"description": "Grant UCI access for luci-app-tor",
+		"read": {
+			"ubus": {
+				"tor-hs-rpc": [
+					"list-hs"
+				]
+			},
+			"uci": [
+				"tor",
+				"tor-hs"
+			]
+		},
+		"write": {
+			"uci": [
+				"tor",
+				"tor-hs"
+			],
+			"file": {
+				"/etc/tor/*": [ "write" ]
+			}
+		}
+	}
+}

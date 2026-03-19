@@ -1,0 +1,24 @@
+{
+	"luci-app-ddns": {
+		"description": "Grant access to ddns procedures",
+		"read": {
+			"ubus": {
+				"luci.ddns": [ "get_services_status", "get_ddns_state", "get_env", "get_services_log" ],
+				"luci": [ "setInitAction" ]
+			},
+			"file": {
+				"/usr/share/ddns/default": [ "list" ],
+				"/usr/share/ddns/default/*": [ "read" ],
+				"/usr/share/ddns/custom": [ "list" ],
+				"/usr/share/ddns/custom/*": [ "read" ],
+				"/usr/share/ddns/list": [ "read" ],
+				"/usr/bin/ddns": [ "exec" ],
+				"/usr/lib/ddns/dynamic_dns_lucihelper.sh": [ "exec" ]
+			},
+			"uci": [ "ddns" ]
+		},
+		"write": {
+			"uci": [ "ddns" ]
+		}
+	}
+}

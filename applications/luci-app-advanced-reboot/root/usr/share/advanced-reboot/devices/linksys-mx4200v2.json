@@ -1,0 +1,35 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "MX4200v2",
+		"board": [
+			"linksys,mx4200v2"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd21",
+			"labelOffsetBytes": 192
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"mtd": "mtd23",
+			"labelOffsetBytes": 192
+		}
+	]
+}

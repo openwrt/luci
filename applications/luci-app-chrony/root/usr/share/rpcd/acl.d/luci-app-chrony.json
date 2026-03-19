@@ -1,0 +1,14 @@
+{
+	"luci-app-chrony": {
+		"description": "Grant UCI access for luci-app-chrony",
+		"read": {
+			"file": {
+				"/usr/sbin/chronyd -v" : [ "exec" ]
+			 },
+			"uci": [ "chrony" ]
+		},
+		"write": {
+			"uci": [ "chrony" ]
+		}
+	}
+}

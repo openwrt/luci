@@ -1,0 +1,274 @@
+#!/bin/sh
+# Copyright 2022 Stan Grishin (stangri@melmac.ca)
+# shellcheck disable=SC2018,SC2019,SC2039,SC3043,SC3057,SC3060
+
+# TechRef: https://openwrt.org/docs/techref/rpcd
+# TESTS
+# ubus -v list luci.pbr
+# ubus -S call luci.pbr getInitList '{"name": "pbr" }'
+# ubus -S call luci.pbr getInitStatus '{"name": "pbr" }'
+# ubus -S call luci.pbr getPlatformSupport '{"name": "pbr" }'
+# ubus -S call luci.pbr getInterfaces '{"name": "pbr" }'
+
+readonly rpcdCompat='25'
+readonly pbrFunctionsFile="${IPKG_INSTROOT}/etc/init.d/pbr"
+if [ -s "$pbrFunctionsFile" ]; then
+# shellcheck source=../../../../../pbr/files/etc/init.d/pbr
+	. "$pbrFunctionsFile"
+else
+	print_json_string 'error' "pbr init.d file ($pbrFunctionsFile) not found!"
+	logger -t pbr 'error' "pbr init.d file ($pbrFunctionsFile) not found!"
+fi
+
+# compatibility with old luci app versions
+is_running_iptables() { iptables -t mangle -n -L | grep -q PBR_PREROUTING >/dev/null 2>&1; }
+is_running() { exists_lockfile && { is_running_iptables || is_running_nft; }; }
+check_ipset() { { [ -n "$ipset" ] && "$ipset" help hash:net; } >/dev/null 2>&1; }
+check_agh_ipset() {
+	check_ipset || return 1
+	check_agh || return 1
+	is_greater_or_equal "$($agh --version | sed 's|AdGuard Home, version v\(.*\)|\1|' | sed 's|-.*||')" '0.107.13'
+}
+check_dnsmasq_ipset() {
+	local o;
+	check_ipset || return 1
+	check_dnsmasq || return 1
+	o="$(dnsmasq -v 2>/dev/null)"
+	! echo "$o" | grep -q 'no-ipset' && echo "$o" | grep -q 'ipset'
+}
+
+get_init_list() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$packageName"
+	json_add_boolean 'enabled' "$(is_enabled "$packageName")"
+	if is_running "$packageName"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+set_init_action() {
+	local action="$2" cmd
+	[ "$(basename "$1")" = "$packageName" ] || { print_json_bool 'result' '0'; return 1; }
+	if [ ! -f "/etc/init.d/$packageName" ]; then
+		print_json_string 'error' 'Init script not found!'
+		return
+	fi
+	case $action in
+		enable)
+			cmd="/etc/init.d/${packageName} ${action}"
+			cmd="${cmd} && uci_set ${packageName} config enabled 1 && uci_commit $packageName"
+		;;
+		disable)
+			cmd="/etc/init.d/${packageName} ${action}"
+			cmd="${cmd} && uci_set ${packageName} config enabled 0 && uci_commit $packageName"
+		;;
+		start|stop|reload|restart)
+			cmd="/etc/init.d/${packageName} ${action}"
+		;;
+	esac
+	if [ -n "$cmd" ] && eval "$cmd" 1>/dev/null 2>&1; then
+		print_json_bool 'result' '1'
+	else
+		print_json_bool 'result' '0'
+	fi
+}
+
+get_init_status() {
+	local name gateways
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	gateways="$(ubus_get_status gateways | sed "s|\\\n|<br />|g;s|\(\\\033[^<]*\)|✓|g;")"
+	json_init
+	json_add_object  "$packageName"
+	json_add_boolean 'enabled' "$(is_enabled "$packageName")"
+	if is_running "$packageName"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	if is_running_iptables "$packageName"; then
+		json_add_boolean 'running_iptables' '1'
+	else
+		json_add_boolean 'running_iptables' '0'
+	fi
+	if is_running_nft "$packageName"; then
+		json_add_boolean 'running_nft' '1'
+	else
+		json_add_boolean 'running_nft' '0'
+	fi
+	if is_running_nft_file "$packageName"; then
+		json_add_boolean 'running_nft_file' '1'
+	else
+		json_add_boolean 'running_nft_file' '0'
+	fi
+	json_add_string 'version' "$PKG_VERSION"
+	json_add_int		'packageCompat'	"${packageCompat:-0}"
+	json_add_int		'rpcdCompat'		"${rpcdCompat:-0}"
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+get_platform_support() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$packageName"
+	if check_ipset; then
+		json_add_boolean 'ipset_installed' '1'
+	else
+		json_add_boolean 'ipset_installed' '0'
+	fi
+	if check_nft; then
+		json_add_boolean 'nft_installed' '1'
+	else
+		json_add_boolean 'nft_installed' '0'
+	fi
+	if check_agh; then
+		json_add_boolean 'adguardhome_installed' '1'
+	else
+		json_add_boolean 'adguardhome_installed' '0'
+	fi
+	if check_dnsmasq; then
+		json_add_boolean 'dnsmasq_installed' '1'
+	else
+		json_add_boolean 'dnsmasq_installed' '0'
+	fi
+	if check_unbound; then
+		json_add_boolean 'unbound_installed' '1'
+	else
+		json_add_boolean 'unbound_installed' '0'
+	fi
+	if check_agh_ipset; then
+		json_add_boolean 'adguardhome_ipset_support' '1'
+	else
+		json_add_boolean 'adguardhome_ipset_support' '0'
+	fi
+	if check_dnsmasq_ipset; then
+		json_add_boolean 'dnsmasq_ipset_support' '1'
+	else
+		json_add_boolean 'dnsmasq_ipset_support' '0'
+	fi
+	if check_dnsmasq_nftset; then
+		json_add_boolean 'dnsmasq_nftset_support' '1'
+	else
+		json_add_boolean 'dnsmasq_nftset_support' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+get_supported_interfaces() {
+	_build_ifaces_supported() { 
+		# Skip wan6 interface in split WAN scenarios as it shouldn't be a target for policies
+		if is_split_uplink && is_uplink6 "$1"; then
+			return
+		fi
+		is_supported_interface "$1" && ! str_contains "$ifacesSupported" "$1" && ifacesSupported="${ifacesSupported}${1} "
+	}
+	_find_firewall_wan_zone() { [ "$(uci_get 'firewall' "$1" 'name')" = 'wan' ] && firewallWanZone="$1"; }
+	local i
+	local firewallWanZone
+	local ifacesSupported
+	load_package_config 'rpcd'
+	config_load 'firewall'
+	config_foreach _find_firewall_wan_zone 'zone'
+	for i in $(uci_get 'firewall' "$firewallWanZone" 'network'); do
+		# Skip wan6 interface in split WAN scenarios as it shouldn't be a target for policies
+		if is_split_uplink && is_uplink6 "$i"; then
+			continue
+		fi
+		is_supported_interface "$i" && ! str_contains "$ifacesSupported" "$i" && ifacesSupported="${ifacesSupported}${i} "
+	done
+	config_load 'network'
+	config_foreach _build_ifaces_supported 'interface'
+	is_tor_running && ifacesSupported="$ifacesSupported tor"
+	for i in $supported_interface; do
+		is_xray "$i" && ifacesSupported="$ifacesSupported $i"
+	done
+	[ "${webui_show_ignore_target:-0}" -eq '1' ] && ifacesSupported="$ifacesSupported ignore"
+	json_init
+	json_add_object "$packageName"
+	json_add_array 'interfaces'
+	for i in $ifacesSupported; do
+		json_add_string '' "$i"
+	done
+	json_close_array
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "getInitList"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getInitStatus"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getInterfaces"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getPlatformSupport"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "setInitAction"
+			json_add_string 'name' 'name'
+			json_add_string 'action' 'action'
+		json_close_object
+		json_dump
+		json_cleanup
+		;;
+	call)
+		case "$2" in
+			getInitList)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_list "$packageName"
+				;;
+			getInitStatus)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_status "$packageName"
+				;;
+			getInterfaces)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_supported_interfaces "$packageName"
+				;;
+			getPlatformSupport)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_platform_support "$packageName"
+				;;
+			setInitAction)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_get_var action 'action'
+				json_cleanup
+				set_init_action "$packageName" "$action"
+				;;
+		esac
+	;;
+esac

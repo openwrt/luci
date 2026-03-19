@@ -1,0 +1,38 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA7300v1",
+		"board": [
+			"linksys,ea7300-v1"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part",
+			"bootcmd"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1,
+				"run nandboot"
+			],
+			"mtd": "mtd5",
+			"labelOffsetBytes": 32
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2,
+				"run altnandboot"
+			],
+			"mtd": "mtd7",
+			"labelOffsetBytes": 32
+		}
+	]
+}

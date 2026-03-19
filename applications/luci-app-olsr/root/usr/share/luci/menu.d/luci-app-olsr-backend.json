@@ -1,0 +1,86 @@
+{
+	"admin/services/olsrd": {
+		"title": "OLSR IPv4",
+		"order": 5,
+		"depends": {
+			"acl": ["luci-app-olsr"]
+		},
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrd"
+		}
+	},
+	"admin/services/olsrd/display": {
+		"title": "Display",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrddisplay"
+		}
+	},
+	"admin/services/olsrd/iface": {
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrdiface"
+		}
+	},
+	"admin/services/olsrd/hna": {
+		"title": "HNA Announcements",
+		"order": 15,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrdhna"
+		}
+	},
+	"admin/services/olsrd/plugins": {
+		"title": "Plugins",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrdplugins"
+		}
+	},
+	"admin/services/olsrd6": {
+		"title": "OLSR IPv6",
+		"order": 5,
+		"depends": {
+			"acl": ["luci-app-olsr"]
+		},
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrd6"
+		}
+	},
+	"admin/services/olsrd6/display": {
+		"title": "Display",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrddisplay"
+		}
+	},
+	"admin/services/olsrd6/iface": {
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrdiface6"
+		}
+	},
+	"admin/services/olsrd6/hna": {
+		"title": "HNA Announcements",
+		"order": 15,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrdhna6"
+		}
+	},
+	"admin/services/olsrd6/plugins": {
+		"title": "Plugins",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "olsr/frontend/olsrdplugins6"
+		}
+	}
+}

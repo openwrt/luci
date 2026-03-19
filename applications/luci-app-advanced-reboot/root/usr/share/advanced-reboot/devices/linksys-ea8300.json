@@ -1,0 +1,36 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA8300",
+		"board": [
+			"linksys-ea8300",
+			"linksys,ea8300"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd10",
+			"labelOffsetBytes": 192
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"mtd": "mtd12",
+			"labelOffsetBytes": 192
+		}
+	]
+}

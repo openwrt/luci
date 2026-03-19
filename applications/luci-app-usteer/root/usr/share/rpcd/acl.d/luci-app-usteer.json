@@ -1,0 +1,29 @@
+{
+  "luci-app-usteer": {
+    "description": "Grant UCI access to LuCI app usteer",
+    "read": {
+      "ubus": {
+        "uci": [ "get" ],
+        "usteer": [ "remote_info","remote_hosts", "local_info", "get_clients"],
+        "luci-rpc": [ "getHostHints" ],
+        "network.rrdns": [ "lookup" ]
+      },
+      "uci": [
+        "usteer"
+      ],
+	  "file": {
+        "/etc/init.d/usteer": [ "read" ]
+      }
+    },
+    "write": {
+      "ubus": {
+        "uci": [ "set", "commit"  ]
+      },
+      "uci": [ "usteer" ],
+      "file": {
+        "/usr/sbin/hostapd_cli -i * all_sta": [ "exec" ]
+      }
+    }
+  }
+}
+

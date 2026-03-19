@@ -1,0 +1,40 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "WRT1900ACS",
+		"board": [
+			"linksys-shelby",
+			"linksys,shelby",
+			"linksys,wrt1900acs"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part",
+			"bootcmd"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1,
+				"run nandboot"
+			],
+			"mtd": "mtd4",
+			"labelOffsetBytes": 32
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2,
+				"run altnandboot"
+			],
+			"mtd": "mtd6",
+			"labelOffsetBytes": 32
+		}
+	]
+}

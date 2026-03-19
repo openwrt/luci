@@ -1,0 +1,14 @@
+{
+	"luci-app-libreswan" : {
+		"description" : "Grant access to LuCI app Libreswan IPSec",
+		"read" : {
+			"ubus" : {
+				"libreswan" : [ "*" ]
+			},
+			"uci": [ "libreswan" ]
+		},
+		"write" : {
+			"uci": [ "libreswan" ]
+		}
+	}
+}

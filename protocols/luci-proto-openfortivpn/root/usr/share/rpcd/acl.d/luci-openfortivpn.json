@@ -1,0 +1,15 @@
+{
+	"luci-proto-openfortivpn": {
+		"description": "Grant access to LuCI openfortivpn procedures",
+		"read": {
+			"ubus": {
+				"luci.openfortivpn": [ "getCertificates" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.openfortivpn": [ "setCertificates" ]
+			}
+		}
+	}
+}

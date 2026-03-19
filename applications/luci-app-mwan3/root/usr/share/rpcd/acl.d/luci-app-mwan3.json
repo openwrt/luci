@@ -1,0 +1,94 @@
+{
+	"luci-app-mwan3-status": {
+		"description": "Grant access for luci-app-mwan3 status information",
+		"read": {
+			"cgi-io": [
+				"exec"
+			],
+			"file": {
+				"/usr/sbin/mwan3 status": [
+					"exec"
+				]
+			},
+			"ubus": {
+				"mwan3": [
+					"status"
+				]
+			}
+		},
+		"write": {
+			"file": {
+				"/usr/libexec/luci-mwan3 diag gateway *": [
+					"exec"
+				],
+				"/usr/libexec/luci-mwan3 diag tracking *": [
+					"exec"
+				],
+				"/usr/libexec/luci-mwan3 diag rules *": [
+					"exec"
+				],
+				"/usr/libexec/luci-mwan3 diag routes *": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 internal ipv4": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 ifup *": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 ifdown *": [
+					"exec"
+				]
+			},
+			"ubus": {
+				"file": [
+					"exec"
+				]
+			}
+		}
+	},
+	"luci-app-mwan3": {
+		"description": "Grant access for luci-app-mwan3 configuration",
+		"read": {
+			"cgi-io": [
+				"exec"
+			],
+			"file": {
+				"/etc/mwan3.user": [
+					"read"
+				],
+				"/usr/bin/httping": [
+					"list"
+				],
+				"/usr/bin/nping": [
+					"list"
+				],
+				"/usr/bin/arping": [
+					"list"
+				],
+				"/usr/libexec/luci-mwan3 ipset dump": [
+					"exec"
+				]
+			},
+			"ubus": {
+				"mwan3": [
+					"status"
+				]
+			},
+			"uci": [
+				"mwan3",
+				"network"
+			]
+		},
+		"write": {
+			"file": {
+				"/etc/mwan3.user": [
+					"write"
+				]
+			},
+			"uci": [
+				"mwan3"
+			]
+		}
+	}
+}

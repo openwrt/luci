@@ -1,0 +1,105 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: LuCI: bcp38\n"
+"POT-Creation-Date: 2017-12-01 14:00+0300\n"
+"PO-Revision-Date: 2026-02-12 22:14+0000\n"
+"Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsbcp38/ru/>\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.16-dev\n"
+"Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
+"интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:40
+msgid "Allowed IP ranges"
+msgstr "Разрешённые диапазоны IP"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:24
+msgid "Auto-detect upstream IP"
+msgstr "Автоопределение IP-адреса провайдера"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
+msgid ""
+"Automatically attempt to detect whether the upstream IP will be blocked by "
+"the configuration, adding an exception if so. If this does not work "
+"correctly, you can add exceptions manually below."
+msgstr ""
+"Автоматически проверять, будет ли IP-адрес провайдера заблокирован "
+"настройками, и при необходимости добавлять его в исключения. Если функция "
+"работает некорректно, исключения можно задать вручную ниже."
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
+#: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
+msgid "BCP38"
+msgstr "BCP 38"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:17
+msgid "BCP38 config"
+msgstr "Настройки BCP 38"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:37
+msgid "Blocked IP ranges"
+msgstr "Блокируемые диапазоны IP"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:20
+msgid "Enable"
+msgstr "Включить"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:13
+msgid ""
+"For IPv6, only source specific default routes are installed, so no BCP38 "
+"firewall routes are needed."
+msgstr ""
+"Для IPv6 по умолчанию используются маршруты с привязкой к источнику, поэтому "
+"правила BCP 38 не требуются."
+
+#: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
+msgid "Grant UCI access for luci-app-bcp38"
+msgstr "Предоставить UCI доступ для luci-app-bcp38"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:30
+msgid "Interface name"
+msgstr "Имя интерфейса"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
+msgid ""
+"Interface to apply the blocking to should be the upstream WAN interface)."
+msgstr ""
+"Интерфейс для применения блокировки (должен быть <abbr title=\"Wide Area "
+"Network\">WAN</abbr>-интерфейсом)."
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
+msgid ""
+"Takes precedence over blocked ranges. Use to whitelist your upstream network "
+"if you're behind a double NAT and the auto-detection doesn't work."
+msgstr ""
+"Имеет приоритет над блокируемыми диапазонами. Используйте для добавления "
+"доверенной сети провайдера в белый список, если вы находитесь за двойным "
+"<abbr title=\"Network Address Translation\">NAT</abbr>, а автоматическое "
+"определение не работает."
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
+msgid ""
+"This function blocks packets with private address destinations from going "
+"out onto the internet as per %s"
+msgstr ""
+"Эта функция блокирует пакеты с частными адресами назначения, предотвращая их "
+"выход в Интернет, согласно %s"
+
+#~ msgid ""
+#~ "This function blocks packets with private address destinations from going "
+#~ "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
+#~ "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
+#~ "installed, so no BCP38 firewall routes are needed."
+#~ msgstr ""
+#~ "Эта функция блокирует пакеты с частными адресами назначения, предотвращая "
+#~ "их выход в Интернет, согласно <a href=\"http://tools.ietf.org/html/"
+#~ "bcp38\">BCP 38</a>. Для IPv6 по умолчанию используются маршруты с "
+#~ "привязкой к источнику, поэтому правила BCP 38 не требуются."

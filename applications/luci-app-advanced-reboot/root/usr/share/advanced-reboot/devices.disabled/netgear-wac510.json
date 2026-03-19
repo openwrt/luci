@@ -1,0 +1,32 @@
+{
+	"device": {
+		"vendor": "Netgear",
+		"model": "WAC510",
+		"board": [
+			"netgear,wac510"
+		]
+	},
+	"commands": {
+		"params": [
+			"primary",
+			"secondary"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [0, 3800000],
+			"mtd": "mtd9",
+			"labelOffsetBytes": null
+		},
+		{
+			"number": 2,
+			"param_values": [3800000, 0],
+			"mtd": "mtd10",
+			"labelOffsetBytes": null
+		}
+	]
+}

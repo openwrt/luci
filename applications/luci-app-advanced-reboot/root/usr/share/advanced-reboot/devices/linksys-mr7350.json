@@ -1,0 +1,35 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "MR7350",
+		"board": [
+			"linksys,mr7350"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd14",
+			"labelOffsetBytes": 192
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"mtd": "mtd16",
+			"labelOffsetBytes": 192
+		}
+	]
+}

@@ -1,0 +1,35 @@
+{
+	"luci-app-statistics": {
+		"description": "Grant access to statistics resources",
+		"read": {
+			"cgi-io": [ "read", "exec" ],
+			"file": {
+				"/etc/filesystems": [ "read" ],
+				"/etc/group": [ "read" ],
+				"/etc/passwd": [ "read" ],
+				"/proc/filesystems": [ "read" ],
+				"/proc/interrupts": [ "read" ],
+				"/proc/mounts": [ "read" ],
+				"/proc/partitions": [ "read" ],
+				"/proc/sys/kernel/hostname": [ "read" ],
+				"/tmp/rrd": [ "list" ],
+				"/usr/bin/rrdtool graph - -a PNG -s *": [ "exec" ],
+				"/usr/lib/collectd": [ "list" ],
+				"/usr/sbin/iptables-save": [ "exec" ],
+				"/usr/sbin/ip6tables-save": [ "exec" ],
+				"/usr/sbin/sensors -j": [ "exec" ],
+				"/usr/share/luci/statistics/plugins": [ "list" ],
+				"/usr/share/luci/statistics/plugins/*.json": [ "read" ],
+				"/var/run": [ "list" ],
+				"/www/luci-static/resources/statistics/rrdtool/definitions": [ "list" ]
+			},
+			"ubus": {
+				"file": [ "list", "read" ]
+			},
+			"uci": [ "luci_statistics" ]
+		},
+		"write": {
+			"uci": [ "luci_statistics" ]
+		}
+	}
+}
