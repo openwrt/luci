@@ -12,7 +12,7 @@ var pkg = {
 		return "adblock-fast";
 	},
 	get LuciCompat() {
-		return 13;
+		return 14;
 	},
 	get ReadmeCompat() {
 		return "";
@@ -227,6 +227,13 @@ var _setInitAction = rpc.declare({
 	expect: { result: false },
 });
 
+var _setRpcdToken = rpc.declare({
+	object: "luci." + pkg.Name,
+	method: "setRpcdToken",
+	params: ["name", "token"],
+	expect: { result: false },
+});
+
 var RPC = {
 	listeners: [],
 	on: function (event, callback) {
@@ -259,6 +266,9 @@ var RPC = {
 					this.emit("setInitAction", { timeout: true });
 				}.bind(this),
 			);
+	},
+	setRpcdToken: function (name, token) {
+		return _setRpcdToken(name, token);
 	},
 };
 
