@@ -1,0 +1,32 @@
+#!/bin/sh
+# Create adblock-fast-api system user if it doesn't exist
+if ! grep -q '^adblock-fast-api:' /etc/passwd; then
+	echo 'adblock-fast-api:x:501:501:adblock-fast API user:/dev/null:/bin/false' >> /etc/passwd
+	echo 'adblock-fast-api:!:0:0:99999:7:::' >> /etc/shadow
+fi
+
+# Add rpcd login config if not present
+if ! uci -q get rpcd.adblock_fast_api >/dev/null 2>&1; then
+	uci set rpcd.adblock_fast_api='login'
+	uci set rpcd.adblock_fast_api.username='adblock-fast-api'
+	uci set rpcd.adblock_fast_api.password='$p$adblock-fast-api'
+	uci add_list rpcd.adblock_fast_api.read='adblock-fast-api'
+	uci add_list rpcd.adblock_fast_api.write='adblock-fast-api'
+	uci commit rpcd
+fi
+
+# Generate random rpcd_token if not already set
+_token="$(uci -q get adblock-fast.config.rpcd_token)"
+if [ -z "$_token" ]; then
+	_token="$(head -c 24 /dev/urandom | base64 | tr -d '/+=' | head -c 24)"
+	uci set adblock-fast.config.rpcd_token="$_token"
+	uci commit adblock-fast
+fi
+
+# Sync rpcd_token to system password for adblock-fast-api user
+if grep -q '^adblock-fast-api:' /etc/passwd; then
+	printf '%s\n%s\n' "$_token" "$_token" | passwd adblock-fast-api >/dev/null 2>&1
+fi
+
+[ -x /etc/init.d/rpcd ] && /etc/init.d/rpcd reload
+exit 0

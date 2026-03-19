@@ -14,6 +14,7 @@ ubus call luci.adblock-fast getFileUrlFilesizes '{"name":"adblock-fast"}'
 ubus call luci.adblock-fast setCronEntry '{"name":"adblock-fast","entry":"0 4 * * * /etc/init.d/adblock-fast dl"}'
 ubus call luci.adblock-fast setInitAction '{"name":"adblock-fast","action":"start"}'
 ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","action":"start"}'
+ubus call luci.adblock-fast setRpcdToken '{"name":"adblock-fast","token":"newtoken"}'
 */
 
 import adb from '/lib/adblock-fast/adblock-fast.uc';
@@ -21,7 +22,7 @@ import { readfile, writefile, stat, rename, unlink, chmod, mkdir, access } from 
 import { cursor } from 'uci';
 
 const packageName = 'adblock-fast';
-const rpcdCompat = 13; // ucode-lsp disable
+const rpcdCompat = 14; // ucode-lsp disable
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -440,6 +441,30 @@ const methods = {
 	syncCron: {
 		args: { name: 'name', action: 'action' },
 		call: sync_cron,
+	},
+	setRpcdToken: {
+		args: { name: 'name', token: 'token' },
+		call: function(req) {
+			let name = req.args.name || packageName;
+			let token = req.args.token;
+			if (name != packageName || !token || token == '')
+				return { result: false };
+
+			// Update UCI config
+			let uci_ctx = cursor();
+			uci_ctx.load(packageName);
+			uci_ctx.set(packageName, 'config', 'rpcd_token', token);
+			uci_ctx.commit(packageName);
+
+			// Sync to system password
+			if (system(sprintf("grep -q '^adblock-fast-api:' /etc/passwd")) == 0) {
+				system(sprintf("printf '%%s\\n%%s\\n' '%s' '%s' | passwd adblock-fast-api >/dev/null 2>&1",
+					replace(token, "'", "'\\''"),
+					replace(token, "'", "'\\''")));
+			}
+
+			return { result: true };
+		}
 	},
 };
 
