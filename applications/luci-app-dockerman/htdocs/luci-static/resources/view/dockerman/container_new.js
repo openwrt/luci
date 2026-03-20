@@ -73,7 +73,8 @@ return dm2.dv.extend({
 			const hostConfig = c.HostConfig || {};
 			const resolvedImage = resolveImageId(c.Image) || resolveImageId(c.Config?.Image) || c.Image || c.Config?.Image || '';
 			const builtInNetworks = new Set(['none', 'bridge', 'host']);
-			const [netnames, nets] = Object.entries(c.NetworkSettings?.Networks || {});
+			// Object.entries returns [[name, obj], ...] — pick the first network
+			const [[firstName, firstNet] = []] = Object.entries(c.NetworkSettings?.Networks || {});
 
 			containerData.container = {
 				name: c.Name?.substring(1) || '',
@@ -82,20 +83,18 @@ return dm2.dv.extend({
 				image: resolvedImage,
 				privileged: hostConfig.Privileged ? 1 : 0,
 				restart_policy: hostConfig.RestartPolicy?.Name || 'unless-stopped',
-				network: (() => {
-					return (netnames && (netnames.length > 0)) ? netnames[0] : '';
-				})(),
+				network: firstName || '',
 				ipv4: (() => {
-					if (builtInNetworks.has(netnames[0])) return '';
-					return (nets && (nets.length > 0)) ? nets[0]?.IPAddress || '' : '';
+					if (!firstName || builtInNetworks.has(firstName)) return '';
+					return firstNet?.IPAddress || '';
 				})(),
 				ipv6: (() => {
-					if (builtInNetworks.has(netnames[0])) return '';
-					return (nets && (nets.length > 0)) ? nets[0]?.GlobalIPv6Address || '' : '';
+					if (!firstName || builtInNetworks.has(firstName)) return '';
+					return firstNet?.GlobalIPv6Address || '';
 				})(),
 				ipv6_lla: (() => {
-					if (builtInNetworks.has(netnames[0])) return '';
-					return (nets && (nets.length > 0)) ? nets[0]?.LinkLocalIPv6Address || '' : '';
+					if (!firstName || builtInNetworks.has(firstName)) return '';
+					return firstNet?.LinkLocalIPv6Address || '';
 				})(),
 				link: hostConfig.Links || [],
 				dns: hostConfig.Dns || [],
@@ -135,9 +134,12 @@ return dm2.dv.extend({
 				publish: (() => {
 					const ports = [];
 					for (const [containerPort, bindings] of Object.entries(hostConfig.PortBindings || {})) {
-						if (Array.isArray(bindings) && bindings.length > 0 && bindings[0]?.HostPort) {
-							const hostPort = bindings[0].HostPort;
-							ports.push(hostPort + ':' + containerPort);
+						if (Array.isArray(bindings) && bindings.length > 0) {
+							for (const b of bindings) {
+								if (!b?.HostPort) continue;
+								const ip = b.HostIp || '';
+								ports.push((ip ? ip + ':' : '') + b.HostPort + ':' + containerPort);
+							}
 						}
 					}
 					return ports;
@@ -801,9 +803,15 @@ return dm2.dv.extend({
 							(Array.isArray(publish) ? publish : [publish])
 							.filter(p => p && typeof p === 'string' && p.trim().length > 0)
 							.map(p => {
-								const m = p.match(/^(\d+):(\d+)\/(tcp|udp)$/);
-								if (m) return [`${m[2]}/${m[3]}`, [{ HostPort: m[1] }]];
-								return null;
+								// formats: hostPort:cPort/proto  or  hostIp:hostPort:cPort/proto
+								const m = p.match(/^(?:([^:]+):(\d+)|(\d+)):(\d+)\/(tcp|udp)$/);
+								if (!m) return null;
+								const hostIp   = m[1] || '';
+								const hostPort = m[2] || m[3];
+								const cPort    = m[4];
+								const proto    = m[5];
+								const binding  = hostIp ? { HostIp: hostIp, HostPort: hostPort } : { HostPort: hostPort };
+								return [`${cPort}/${proto}`, [binding]];
 							}).filter(Boolean)
 						) : undefined,
 						Mounts: undefined,
