@@ -15,6 +15,8 @@ ubus call luci.adblock-fast setCronEntry '{"name":"adblock-fast","entry":"0 4 * 
 ubus call luci.adblock-fast setInitAction '{"name":"adblock-fast","action":"start"}'
 ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","action":"start"}'
 ubus call luci.adblock-fast setRpcdToken '{"name":"adblock-fast","token":"newtoken"}'
+ubus call luci.adblock-fast getQueryLogStatus '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast setQueryLog '{"name":"adblock-fast","action":"enable"}'
 */
 
 import adb from '/lib/adblock-fast/adblock-fast.uc';
@@ -34,6 +36,31 @@ function uci_bool(val) {
 	default:
 		return false;
 	}
+}
+
+// Return resolved list of selected instance section names.
+// null = all instances, [] = none, [...] = specific names.
+function get_selected_instances(uci_ctx, config, section_type, instance_option) {
+	let instances = uci_ctx.get(packageName, 'config', instance_option);
+
+	if (!instances || !length(instances))
+		return null;
+
+	if (type(instances) == 'string')
+		instances = [instances];
+
+	if (instances[0] == '*')
+		return null;
+	if (instances[0] == '-')
+		return [];
+
+	let result = [];
+	for (let inst in instances) {
+		if (!inst) continue;
+		let s = uci_ctx.get_all(config, '@' + section_type + '[' + inst + ']');
+		push(result, s?.['.name'] || inst);
+	}
+	return result;
 }
 
 // ── Cron Management ─────────────────────────────────────────────────
@@ -461,6 +488,164 @@ const methods = {
 				system(sprintf("printf '%%s\\n%%s\\n' '%s' '%s' | passwd adblock-fast-api >/dev/null 2>&1",
 					replace(token, "'", "'\\''"),
 					replace(token, "'", "'\\''")));
+			}
+
+			return { result: true };
+		}
+	},
+	getQueryLogStatus: {
+		args: { name: 'name' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let uci_ctx = cursor();
+
+			uci_ctx.load(packageName);
+			let dns = uci_ctx.get(packageName, 'config', 'dns') || 'dnsmasq.servers';
+			let resolver = split(dns, '.')[0];
+			let logging_enabled = false;
+
+			switch (resolver) {
+			case 'dnsmasq': {
+				uci_ctx.load('dhcp');
+				let sel = get_selected_instances(uci_ctx, 'dhcp', 'dnsmasq', 'dnsmasq_instance');
+				uci_ctx.foreach('dhcp', 'dnsmasq', function(s) {
+					if (sel != null && index(sel, s['.name']) < 0) return;
+					if (uci_bool(s.logqueries))
+						logging_enabled = true;
+				});
+				break;
+			}
+			case 'smartdns': {
+				uci_ctx.load('smartdns');
+				let sel = get_selected_instances(uci_ctx, 'smartdns', 'smartdns', 'smartdns_instance');
+				uci_ctx.foreach('smartdns', 'smartdns', function(s) {
+					if (sel != null && index(sel, s['.name']) < 0) return;
+					let lvl = s.log_level;
+					if (lvl == 'info' || lvl == 'debug')
+						logging_enabled = true;
+				});
+				break;
+			}
+			case 'unbound':
+				uci_ctx.load('unbound');
+				uci_ctx.foreach('unbound', 'unbound', function(s) {
+					if (+s.verbosity >= 2)
+						logging_enabled = true;
+				});
+				break;
+			}
+
+			let result = {};
+			result[name] = {
+				resolver: resolver,
+				dns: dns,
+				logging_enabled: logging_enabled,
+			};
+			return result;
+		}
+	},
+	setQueryLog: {
+		args: { name: 'name', action: 'action' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let action = req.args?.action;
+			if (action != 'enable' && action != 'disable')
+				return { result: false };
+
+			let uci_ctx = cursor();
+			uci_ctx.load(packageName);
+			let dns = uci_ctx.get(packageName, 'config', 'dns') || 'dnsmasq.servers';
+			let resolver = split(dns, '.')[0];
+			let enable = (action == 'enable');
+
+			switch (resolver) {
+			case 'dnsmasq': {
+				uci_ctx.load('dhcp');
+				let dsel = get_selected_instances(uci_ctx, 'dhcp', 'dnsmasq', 'dnsmasq_instance');
+				uci_ctx.foreach('dhcp', 'dnsmasq', function(s) {
+					if (dsel != null && index(dsel, s['.name']) < 0) return;
+					let sect = s['.name'];
+					if (enable) {
+						if (!uci_bool(s.logqueries))
+							uci_ctx.set('dhcp', sect, 'adbf_backup_logqueries', s.logqueries || '0');
+						uci_ctx.set('dhcp', sect, 'logqueries', '1');
+						if (s.logfacility) {
+							uci_ctx.set('dhcp', sect, 'adbf_backup_logfacility', s.logfacility);
+							uci_ctx.delete('dhcp', sect, 'logfacility');
+						}
+					} else {
+						let saved = s.adbf_backup_logqueries;
+						if (saved != null) {
+							if (uci_bool(saved))
+								uci_ctx.set('dhcp', sect, 'logqueries', saved);
+							else
+								uci_ctx.delete('dhcp', sect, 'logqueries');
+							uci_ctx.delete('dhcp', sect, 'adbf_backup_logqueries');
+						} else {
+							uci_ctx.delete('dhcp', sect, 'logqueries');
+						}
+						let saved_fac = s.adbf_backup_logfacility;
+						if (saved_fac != null) {
+							uci_ctx.set('dhcp', sect, 'logfacility', saved_fac);
+							uci_ctx.delete('dhcp', sect, 'adbf_backup_logfacility');
+						}
+					}
+				});
+				uci_ctx.commit('dhcp');
+				system('/etc/init.d/dnsmasq restart >/dev/null 2>&1');
+				break;
+			}
+			case 'smartdns': {
+				uci_ctx.load('smartdns');
+				let ssel = get_selected_instances(uci_ctx, 'smartdns', 'smartdns', 'smartdns_instance');
+				uci_ctx.foreach('smartdns', 'smartdns', function(s) {
+					if (ssel != null && index(ssel, s['.name']) < 0) return;
+					let sect = s['.name'];
+					if (enable) {
+						let lvl = s.log_level;
+						if (lvl != 'info' && lvl != 'debug')
+							uci_ctx.set('smartdns', sect, 'adbf_backup_log_level', lvl || 'error');
+						uci_ctx.set('smartdns', sect, 'log_level', 'info');
+					} else {
+						let saved = s.adbf_backup_log_level;
+						if (saved != null) {
+							uci_ctx.set('smartdns', sect, 'log_level', saved);
+							uci_ctx.delete('smartdns', sect, 'adbf_backup_log_level');
+						} else {
+							uci_ctx.set('smartdns', sect, 'log_level', 'error');
+						}
+					}
+					return false;
+				});
+				uci_ctx.commit('smartdns');
+				system('/etc/init.d/smartdns restart >/dev/null 2>&1');
+				break;
+			}
+			case 'unbound':
+				uci_ctx.load('unbound');
+				uci_ctx.foreach('unbound', 'unbound', function(s) {
+					let sect = s['.name'];
+					if (enable) {
+						let verb = s.verbosity;
+						if (+verb < 2)
+							uci_ctx.set('unbound', sect, 'adbf_backup_verbosity', verb || '1');
+						uci_ctx.set('unbound', sect, 'verbosity', '2');
+					} else {
+						let saved = s.adbf_backup_verbosity;
+						if (saved != null) {
+							uci_ctx.set('unbound', sect, 'verbosity', saved);
+							uci_ctx.delete('unbound', sect, 'adbf_backup_verbosity');
+						} else {
+							uci_ctx.set('unbound', sect, 'verbosity', '1');
+						}
+					}
+					return false;
+				});
+				uci_ctx.commit('unbound');
+				system('/etc/init.d/unbound restart >/dev/null 2>&1');
+				break;
+			default:
+				return { result: false };
 			}
 
 			return { result: true };
