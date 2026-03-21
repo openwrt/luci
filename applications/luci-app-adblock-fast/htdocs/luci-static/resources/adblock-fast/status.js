@@ -234,6 +234,26 @@ var _setRpcdToken = rpc.declare({
 	expect: { result: false },
 });
 
+var getQueryLogStatus = rpc.declare({
+	object: "luci." + pkg.Name,
+	method: "getQueryLogStatus",
+	params: ["name"],
+});
+
+var setQueryLog = rpc.declare({
+	object: "luci." + pkg.Name,
+	method: "setQueryLog",
+	params: ["name", "action"],
+	expect: { result: false },
+});
+
+var callLogRead = rpc.declare({
+	object: "log",
+	method: "read",
+	params: ["lines", "stream", "oneshot"],
+	expect: { log: [] },
+});
+
 var RPC = {
 	listeners: [],
 	on: function (event, callback) {
@@ -814,4 +834,7 @@ return L.Class.extend({
 	setCronEntry: setCronEntry,
 	getPlatformSupport: getPlatformSupport,
 	getServiceInfo: getServiceInfo,
+	getQueryLogStatus: getQueryLogStatus,
+	setQueryLog: setQueryLog,
+	callLogRead: callLogRead,
 });
