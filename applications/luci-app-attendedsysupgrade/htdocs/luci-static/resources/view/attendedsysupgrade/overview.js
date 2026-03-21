@@ -283,6 +283,9 @@ return view.extend({
 			...firmware
 		};
 		const request_str = JSON.stringify(request_data, null, 4);
+		if (typeof response.detail != "string") {
+			response.detail = JSON.stringify(response.detail, null, 4);
+		}
 		let body = [
 			E('p', {}, [
 				_('First, check'), ' ',
