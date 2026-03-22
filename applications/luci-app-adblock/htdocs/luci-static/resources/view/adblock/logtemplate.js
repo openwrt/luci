@@ -17,25 +17,15 @@ function Logview(logtag, name) {
 				return callLogRead(1000, false, true).then(res => {
 					const logEl = document.getElementById('logfile');
 					if (!logEl) return;
-
 					const filtered = (res?.log ?? [])
 						.filter(entry => !logtag || entry.msg.includes(logtag))
 						.map(entry => {
-							const d = new Date(entry.time * 1000);
-							const date = d.toLocaleDateString([], {
-								year: 'numeric',
-								month: '2-digit',
-								day: '2-digit'
-							});
-							const time = d.toLocaleTimeString([], {
-								hour: '2-digit',
-								minute: '2-digit',
-								second: '2-digit',
-								hour12: false
-							});
+							const d = new Date(entry.time);
+							const pad = n => String(n).padStart(2, '0');
+							const date = `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+							const time = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 							return `[${date}-${time}] ${entry.msg}`;
 						});
-
 					logEl.value = filtered.length > 0
 						? filtered.join('\n')
 						: _('No %s related logs yet!').format(name);

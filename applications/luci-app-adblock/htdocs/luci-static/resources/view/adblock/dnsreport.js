@@ -88,9 +88,9 @@ function handleAction(ev) {
 		document.getElementById('allowlist').focus();
 	}
 
-	if (ev === 'query') {
-		ui.showModal(_('Blocklist Query'), [
-			E('p', _('Query active blocklists and backups for a specific domain.')),
+	if (ev === 'search') {
+		ui.showModal(_('Blocklist Search'), [
+			E('p', _('Search active blocklists and backups for a specific domain.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'style': 'padding-top:.5em', 'id': 'run' }, [
 					E('input', {
@@ -126,21 +126,37 @@ function handleAction(ev) {
 						if (domain) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = domain;
-							document.getElementById('result').textContent = 'The query is running, please wait...';
-							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['query', domain])).then(function (res) {
-								const result = document.getElementById('result');
-								if (res) {
-									result.textContent = res.trim();
-								} else {
-									result.textContent = _('No Query results!');
-								}
-								document.getElementById('run').classList.remove("spinning");
-								document.getElementById('search').value = '';
+							document.getElementById('result').textContent = _('The search is running, please wait...');
+
+							if (window._adbSearchPoller) {
+								clearInterval(window._adbSearchPoller);
+								window._adbSearchPoller = null;
+							}
+							L.resolveDefault(fs.write('/var/run/adblock.search', ''), '').then(function () {
+								L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['search', domain]), '');
+								let attempts = 0;
+								window._adbSearchPoller = setInterval(function () {
+									attempts++;
+									L.resolveDefault(fs.read('/var/run/adblock.search'), '').then(function (res) {
+										if (res && res.trim()) {
+											clearInterval(window._adbSearchPoller);
+											window._adbSearchPoller = null;
+											document.getElementById('result').textContent = res.trim();
+											document.getElementById('run').classList.remove("spinning");
+											document.getElementById('search').value = '';
+										} else if (attempts >= 40) {
+											clearInterval(window._adbSearchPoller);
+											window._adbSearchPoller = null;
+											document.getElementById('result').textContent = _('No Search results!');
+											document.getElementById('run').classList.remove("spinning");
+										}
+									});
+								}, 3000);
 							});
 						}
 						document.getElementById('search').focus();
 					})
-				}, _('Query'))
+				}, _('Search'))
 			])
 		]);
 		document.getElementById('search').focus();
@@ -197,10 +213,27 @@ function handleAction(ev) {
 						const top_count = document.getElementById('top_count').value;
 						const res_count = document.getElementById('res_count').value;
 						const search = document.getElementById('search').value.trim().replace(/[^\w.\-:]/g, '') || '+';
-						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '')
-							.then(function () {
-								location.reload();
-							});
+						L.resolveDefault(fs.write('/var/run/adblock.report', ''), '').then(function () {
+							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '');
+							let attempts = 0;
+							let poller = setInterval(function () {
+								attempts++;
+								L.resolveDefault(fs.read('/var/run/adblock.report'), '').then(function (res) {
+									if (res && res.trim()) {
+										clearInterval(poller);
+										ui.hideModal();
+										location.reload();
+									} else if (attempts >= 40) {
+										clearInterval(poller);
+										document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
+											btn.disabled = false;
+										});
+										document.getElementById('refresh').classList.remove('spinning');
+										ui.addNotification(null, E('p', _('Failed to generate adblock report!')), 'error');
+									}
+								});
+							}, 3000);
+						});
 					}
 				}, _('Refresh'))
 			])
@@ -420,11 +453,11 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Blocklist Query',
+					'title': 'Blocklist Search',
 					'click': ui.createHandlerFn(this, function () {
-						return handleAction('query');
+						return handleAction('search');
 					})
-				}, [_('Blocklist Query...')]),
+				}, [_('Blocklist Search...')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
