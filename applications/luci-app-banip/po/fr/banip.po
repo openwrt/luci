@@ -18,7 +18,7 @@ msgstr ""
 msgid "-- Please choose (optional) --"
 msgstr "-- Veuillez choisir (facultatif) --"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:80
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:100
 msgid "-- Set Selection --"
 msgstr "-- Définir la sélection --"
 
@@ -50,12 +50,12 @@ msgstr "-- par défaut --"
 msgid "<IP-Address>"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:236
-msgid "<IP-Address> <Netmask>"
-msgstr ""
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:235
 msgid "<IP-Address><CSV-Seperator>"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:236
+msgid "<IP-Address><Space><Netmask>"
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:237
@@ -228,8 +228,8 @@ msgid "CPU Cores"
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:42
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:125
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:174
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:145
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:194
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -269,7 +269,7 @@ msgid ""
 "named nftables Sets. For further information please check the %s."
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:215
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:235
 msgid "Count"
 msgstr ""
 
@@ -376,7 +376,7 @@ msgstr ""
 msgid "Element Count"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:219
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:239
 msgid "Elements (max. 50)"
 msgstr ""
 
@@ -448,8 +448,8 @@ msgstr ""
 msgid "External Blocklist Feeds"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:351
-msgid "Failed to generate banIP report!"
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:377
+msgid "Failed to generate a banIP report!"
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:531
@@ -522,7 +522,7 @@ msgstr ""
 msgid "IP Search"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:331
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:351
 msgid "IP Search..."
 msgstr ""
 
@@ -562,7 +562,7 @@ msgstr ""
 msgid "Inbound Feed"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:216
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:236
 msgid "Inbound&#160;(packets)"
 msgstr ""
 
@@ -625,7 +625,7 @@ msgstr ""
 "Liste des interfaces réseau disponibles pour déclencher le démarrage du "
 "banIP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:88
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:108
 msgid "List the elements of a specific banIP-related Set."
 msgstr ""
 
@@ -687,11 +687,11 @@ msgstr ""
 msgid "LuCI failed login"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:182
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:202
 msgid "Map Reset"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:317
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:337
 msgid "Map..."
 msgstr ""
 
@@ -711,15 +711,19 @@ msgstr ""
 msgid "Network Devices"
 msgstr ""
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:157
+msgid "Network error"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:286
 msgid "Nice Level"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/logtemplate.js:41
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/logtemplate.js:31
 msgid "No %s related logs yet!"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:313
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:333
 msgid "No GeoIP Map data!"
 msgstr ""
 
@@ -762,7 +766,7 @@ msgstr ""
 msgid "Outbound Feed"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:217
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:237
 msgid "Outbound&#160;(packets)"
 msgstr ""
 
@@ -811,7 +815,7 @@ msgstr ""
 "déceler des événements suspects. Pour désactiver le moniteur de journaux, "
 "réglez-le à \"0\"."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:218
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:238
 msgid "Port&#160;/&#160;Protocol"
 msgstr ""
 
@@ -824,11 +828,6 @@ msgid "Profile used by 'msmtp' for banIP notification E-Mails."
 msgstr ""
 "Profil utilisé par 'msmtp' pour les courriel de notification de bannissement "
 "IP."
-
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:217
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:228
-msgid "Protocol/URL format not supported"
-msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:711
 msgid "RIPE - serving Europe, Middle East and Central Asia"
@@ -846,7 +845,7 @@ msgstr ""
 "Adresse de réception pour les e-mails de notification banIP, ces "
 "informations sont nécessaires pour activer la fonctionnalité E-Mail."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:355
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:383
 msgid "Refresh"
 msgstr "Actualiser"
 
@@ -873,7 +872,7 @@ msgstr ""
 "sécurisées."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:28
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:111
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:131
 msgid "Result"
 msgstr "Résultat"
 
@@ -911,12 +910,20 @@ msgstr ""
 msgid "Save & Restart"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:59
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:79
 msgid "Search IP"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:51
+msgid "Search is running, please wait..."
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:15
 msgid "Search the banIP-related Sets for a specific IP."
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:70
+msgid "Search timed out."
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:240
@@ -940,16 +947,16 @@ msgid "Sender address for banIP notification E-Mails."
 msgstr ""
 "Adresse de l'expéditeur des courriels de notification de bannissement IP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:91
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:214
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:111
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:234
 msgid "Set"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:87
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:107
 msgid "Set Content"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:324
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:344
 msgid "Set Content..."
 msgstr ""
 
@@ -973,7 +980,7 @@ msgstr ""
 msgid "Set Split Size"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:296
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:316
 msgid "Set details"
 msgstr ""
 
@@ -995,11 +1002,11 @@ msgstr ""
 msgid "Settings"
 msgstr "Paramètres"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:143
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:163
 msgid "Show Content"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:107
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:127
 msgid "Show only Set elements with hits"
 msgstr ""
 
@@ -1079,7 +1086,7 @@ msgstr ""
 "La priorité sélectionnée sera utilisée pour le traitement en arrière-plan "
 "banIP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/logtemplate.js:52
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/logtemplate.js:42
 msgid "The syslog output, pre-filtered for messages related to: %s"
 msgstr ""
 
@@ -1099,14 +1106,14 @@ msgid ""
 "notation and MAC/IP-bindings are allowed."
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:252
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:272
 msgid ""
 "This report shows the latest NFT Set statistics, press the 'Refresh' button "
 "to get a new one. You can also display the specific content of Sets, search "
 "for suspicious IPs and finally, these IPs can also be displayed on a map."
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:255
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:275
 msgid "Timestamp"
 msgstr "Horodatage"
 
@@ -1162,7 +1169,7 @@ msgstr ""
 msgid "Unable to parse the default feed file!"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:74
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:94
 msgid "Unable to parse the ruleset file!"
 msgstr ""
 
@@ -1201,11 +1208,11 @@ msgstr ""
 msgid "asterisk invalid account"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:285
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:305
 msgid "auto-added IPs to allowlist"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:289
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:309
 msgid "auto-added IPs to blocklist"
 msgstr ""
 
@@ -1213,27 +1220,27 @@ msgstr ""
 msgid "banIP"
 msgstr "bannissement IP"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:280
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:300
 msgid "blocked bcp38 packets"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:268
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:288
 msgid "blocked icmp-flood packets"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:272
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:292
 msgid "blocked invalid ct packets"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:276
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:296
 msgid "blocked invalid tcp packets"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:260
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:280
 msgid "blocked syn-flood packets"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:264
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:284
 msgid "blocked udp-flood packets"
 msgstr ""
 
