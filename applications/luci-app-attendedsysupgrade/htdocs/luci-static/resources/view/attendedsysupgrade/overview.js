@@ -700,7 +700,7 @@ return view.extend({
 			url: uci.get_first('attendedsysupgrade', 'server', 'url').replace(/\/+$/, ''),
 			branch: get_branch(promises[1].release.version),
 			revision: promises[1].release.revision,
-			efi: promises[2],
+			efi: promises[2] != null,
 			rebuilder: uci.get_first('attendedsysupgrade', 'server', 'rebuilder'),
 		};
 		const firmware = {
