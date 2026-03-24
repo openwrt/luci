@@ -277,13 +277,15 @@ const methods = {
 			let fd = popen('dnsmasq --version 2>/dev/null');
 
 			if (fd) {
-				const m = match(fd.read('all'), /^Compile time options: (.+)$/s);
+				for (let line = fd.read('line'); length(line); line = fd.read('line')) {
+					const m = match(line, /^Compile time options: (.+)\n$/);
 
-				for (let opt in split(m?.[1], ' ')) {
-					let f = replace(opt, 'no-', '', 1);
+					for (let opt in split(m?.[1], ' ')) {
+						let f = replace(opt, 'no-', '', 1);
 
-					result.dnsmasq ??= {};
-					result.dnsmasq[lc(f)] = (f == opt);
+						result.dnsmasq ??= {};
+						result.dnsmasq[lc(f)] = (f == opt);
+					}
 				}
 
 				fd.close();
@@ -293,11 +295,10 @@ const methods = {
 			fd = popen('odhcpd -h 2>/dev/null');
 
 			if (fd) {
-				const output = fd.read('all');
+				for (let line = fd.read('line'); length(line); line = fd.read('line')) {
+					result.odhcpd ??= {};
 
-				if (output) {
-					result.odhcpd = {};
-					const m = match(output, /^Features: (.+)$/s);
+					const m = match(line, /^Features: (.+)\n$/);
 
 					for (let opt in split(m?.[1], ' ')) {
 						let f = replace(opt, 'no-', '', 1);
