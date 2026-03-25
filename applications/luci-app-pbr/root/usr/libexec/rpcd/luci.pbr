@@ -194,7 +194,7 @@ get_supported_interfaces() {
 	config_foreach _build_ifaces_supported 'interface'
 	is_tor_running && ifacesSupported="$ifacesSupported tor"
 	for i in $supported_interface; do
-		is_xray "$i" && ifacesSupported="$ifacesSupported $i"
+		str_contains_word "$ifacesSupported" "$i" || ifacesSupported="${ifacesSupported}${i} "
 	done
 	[ "${webui_show_ignore_target:-0}" -eq '1' ] && ifacesSupported="$ifacesSupported ignore"
 	json_init
