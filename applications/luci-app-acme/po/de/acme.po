@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-03-16 23:10+0000\n"
-"Last-Translator: Werner Schleifer <werner.schleifer@gmail.com>\n"
+"PO-Revision-Date: 2026-03-23 18:10+0000\n"
+"Last-Translator: HerbJul <19JulianHerbst95@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/de/>\n"
 "Language: de\n"
@@ -166,7 +166,7 @@ msgstr "Aktiviert"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:68
 msgid "Found DDNS domains"
-msgstr ""
+msgstr "Gefundene DDNS-Domains"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:81
 msgid "General Settings"
@@ -199,6 +199,8 @@ msgstr "Importieren"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:167
 msgid "In DNS mode, the domain name does not have to resolve to the router IP."
 msgstr ""
+"Im DNS-Modus muss der Domainname nicht auf die IP-Adresse des Routers "
+"aufgelöst werden."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:107
 msgid "Install package %s"
@@ -218,6 +220,8 @@ msgid ""
 "It may be needed to change if your web server is behind reverse proxy and "
 "uses a different port."
 msgstr ""
+"Möglicherweise müssen Sie die Einstellung ändern, wenn sich Ihr Webserver "
+"hinter einem Reverse-Proxy befindet und einen anderen Port verwendet."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:250
 msgid "Key size (and type) for the generated certificate."
@@ -229,15 +233,15 @@ msgstr "Schlüsselgröße"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:229
 msgid "LUCI only supports one challenge alias per certificate."
-msgstr ""
+msgstr "LUCI unterstützt nur einen Challenge-Alias pro Zertifikat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:237
 msgid "LUCI only supports one challenge domain per certificate."
-msgstr ""
+msgstr "LUCI unterstützt nur eine Challenge-Domäne pro Zertifikat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:115
 msgid "Listen port"
-msgstr ""
+msgstr "Empfangsport"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:22
 msgid "Log View"
@@ -272,10 +276,12 @@ msgid ""
 "Port where to listen for ACME challenge requests. The port will be "
 "temporarily open during validation."
 msgstr ""
+"Port, auf dem nach ACME-Challenge-Anfragen abgehört wird. Der Port wird "
+"während der Validierung vorübergehend geöffnet sein."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:525
 msgid "Private Key"
-msgstr "Private Key"
+msgstr "Privater Schlüssel"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:526
 msgid "Public Certificate"
@@ -337,11 +343,11 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:226
 msgid "The challenge alias to use for ALL domains."
-msgstr ""
+msgstr "Der Challenge-Alias, der für ALLE Domains verwendet werden soll."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:217
 msgid "The credentials for the DNS API mode selected above."
-msgstr ""
+msgstr "Die Anmeldedaten für den oben ausgewählten DNS-API-Modus."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:407
 msgid ""
@@ -353,7 +359,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:234
 msgid "The domain alias to use for ALL domains."
-msgstr ""
+msgstr "Der Domain-Alias, der für ALLE Domains verwendet werden soll."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:41
 msgid ""
@@ -361,16 +367,24 @@ msgid ""
 "Simply fill out this to have the router configured with Letsencrypt-issued "
 "certificates for the web interface."
 msgstr ""
+"Hiermit wird die automatische Zertifikatsinstallation für ACME (Let’s "
+"Encrypt) konfiguriert. Füllen Sie einfach dieses Formular aus, damit der "
+"Router mit von Let’s Encrypt ausgestellten Zertifikaten für die "
+"Weboberfläche konfiguriert wird."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:119
 msgid "To temporary open port you can specify your web server port e.g. 80."
 msgstr ""
+"Um einen Port vorübergehend zu öffnen, können Sie den Port Ihres Webservers "
+"angeben, z. B. 80."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:164
 msgid ""
 "To use DNS mode to issue certificates, set this to the name of a DNS API "
 "supported by acme.sh."
 msgstr ""
+"Um Zertifikate im DNS-Modus auszustellen, geben Sie hier den Namen einer von "
+"acme.sh unterstützten DNS-API ein."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:282
 msgid "Use a custom CA instead of Let's Encrypt."
@@ -383,10 +397,12 @@ msgstr "Staging-Server verwenden"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:169
 msgid "Using this mode requires the acme-dnsapi package to be installed."
 msgstr ""
+"Für die Verwendung dieses Modus muss das Paket „acme-dnsapi“ installiert "
+"sein."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:93
 msgid "Validate via TLS port 443."
-msgstr ""
+msgstr "Über den TLS-Port 443 authentifizieren."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:89
 msgid "Validation method"
@@ -396,11 +412,11 @@ msgstr "Überprüfungsmethode"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:99
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:120
 msgid "Validation via TLS ALPN"
-msgstr ""
+msgstr "Authentifizierung über TLS ALPN"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:241
 msgid "Wait for DNS update"
-msgstr ""
+msgstr "Warten Sie, bis die DNS-Einträge aktualisiert sind"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:82
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:97
@@ -424,7 +440,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:147
 msgid "wildcards * require Validation method: DNS"
-msgstr ""
+msgstr "Platzhalter * erfordern Validierungsmethode: DNS"
 
 #~ msgid ""
 #~ "The challenge alias to use for ALL domains. See https://github.com/acmesh-"
