@@ -16,7 +16,7 @@ case "$1" in
 				json_add_object "$model"
 
 				case "$board" in
-					hootoo,ht-tm05)
+					hootoo,ht-tm05|ravpower,rp-wd009)
 						if [ -f /usr/sbin/i2cset ] && [ -f /usr/sbin/i2cget ]; then
 							json_add_boolean valid 1
 							if [ $(i2cset -y 0 0x0a 0x0a 0x01 && i2cget -y 0 0x0a 0x0a) = 0x40 ]; then
