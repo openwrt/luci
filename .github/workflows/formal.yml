@@ -10,8 +10,19 @@ permissions:
 jobs:
   formalities:
     name: Test Formalities
-    uses: openwrt/actions-shared-workflows/.github/workflows/formal.yml@main
-    with:
-      exclude_weblate: true
-      post_comment: true
-      warn_on_no_modify: true
+    runs-on: ubuntu-slim
+
+    steps:
+      - name: Run HyperStickler
+        uses: georgesapkin/hyperstickler@v1
+        with:
+          check_branch: false
+          check_signoff: true
+          exclude_weblate: true
+          feedback_url: 'https://github.com/openwrt/actions-shared-workflows/issues'
+          guideline_url: 'https://openwrt.org/submitting-patches#submission_guidelines'
+          job_step: 2
+          max_subject_len_soft: 60
+          max_subject_len_hard: 80
+          post_comment: true
+          warn_on_no_modify: true
