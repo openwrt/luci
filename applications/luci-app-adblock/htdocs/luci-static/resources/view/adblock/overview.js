@@ -45,8 +45,7 @@ return view.extend({
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.custom.feeds'), ''),
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.feeds'), ''),
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.categories'), ''),
-			uci.load('adblock').catch(() => 0),
-			`https://${window.location.hostname}/cgi-bin/adblock`
+			uci.load('adblock').catch(() => 0)
 		]);
 	},
 
@@ -92,6 +91,9 @@ return view.extend({
 					try {
 						info = JSON.parse(res);
 						parseErrCount = 0;
+						if (!poll.active()) {
+							poll.start();
+						}
 					} catch (e) {
 						info = null;
 						parseErrCount++;
@@ -101,7 +103,7 @@ return view.extend({
 								btn.disabled = false;
 							});
 							status.classList.remove('spinning');
-							if (parseErrCount >= 3) {
+							if (parseErrCount >= 5) {
 								ui.addNotification(null, E('p', _('Unable to parse the adblock runtime information!')), 'error');
 								poll.stop();
 							}
@@ -475,20 +477,18 @@ return view.extend({
 		o.default = '2a13:1001::86:54:11:100';
 		o.rmempty = true;
 
-		const url = result[4];
-		if (url) {
-			const options = {
-				pixelSize: 2,
-				margin: 1,
-				ecLevel: 'M',
-				whiteColor: 'white',
-				blackColor: 'black'
-			};
-			const svg = uqr.renderSVG(url, options);
-			o = s.taboption('firewall', form.DummyValue, '_fw_qr', _('QRCode for Remote Access'));
-			o.rawhtml = true;
-			o.default = svg;
-		}
+		const url = `https://${window.location.hostname}/cgi-bin/adblock`;
+		const options = {
+			pixelSize: 2,
+			margin: 1,
+			ecLevel: 'M',
+			whiteColor: 'white',
+			blackColor: 'black'
+		};
+		const svg = uqr.renderSVG(url, options);
+		o = s.taboption('firewall', form.DummyValue, '_fw_qr', _('QRCode for Remote Access'));
+		o.rawhtml = true;
+		o.default = svg;
 
 		o = s.taboption('firewall', form.DummyValue, '_fw_sub4');
 		o.rawhtml = true;
@@ -593,6 +593,15 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_dns', form.Value, 'adb_dnsinstance', _('DNS Instance'), _('Set the dns backend instance used by adblock.'));
+		o.depends('adb_dns', 'dnsmasq');
+		o.depends('adb_dns', 'smartdns');
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.default = '0';
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('adv_dns', form.Flag, 'adb_dnsshift', _('Shift DNS Blocklist'), _('Shift the final DNS blocklist to the backup directory and only set a soft link to this file in memory. \
 			As long as your backup directory resides on an external drive, enable this option to save memory.'));
 		o.rmempty = true;
@@ -605,14 +614,6 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Value, 'adb_dnsdir', _('DNS Directory'), _('Overwrite the default target directory for the generated blocklist.'));
-		o.rmempty = true;
-
-		o = s.taboption('adv_dns', form.Value, 'adb_dnsinstance', _('DNS Instance'), _('Set the dns backend instance used by adblock.'));
-		o.depends('adb_dns', 'dnsmasq');
-		o.value('0', _('First instance'));
-		o.value('1', _('Second instance'));
-		o.default = '0';
-		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Value, 'adb_dnstimeout', _('DNS Restart Timeout'), _('Timeout to wait for a successful DNS backend restart.'));
@@ -686,7 +687,7 @@ return view.extend({
 		/*
 			feed selection tab
 		*/
-		let feed, chain, descr;
+		let chain, descr;
 		let feeds = null;
 
 		if (result[0] && result[0].trim() !== "") {
@@ -712,11 +713,11 @@ return view.extend({
 
 		if (feeds && Object.keys(feeds).length) {
 			o = s.taboption('feeds', form.MultiValue, 'adb_feed', _('Blocklist Feed'));
-			for (let i = 0; i < Object.keys(feeds).length; i++) {
-				feed = Object.keys(feeds)[i].trim();
+			const feedKeys = Object.keys(feeds);
+			for (const feed of feedKeys) {
 				chain = feeds[feed].size?.trim() || 'in';
 				descr = feeds[feed].descr?.trim() || '-';
-				o.value(feed, feed + ' (' + chain + ', ' + descr + ')');
+				o.value(feed.trim(), feed.trim() + ' (' + chain + ', ' + descr + ')');
 			}
 			o.optional = true;
 			o.rmempty = true;
@@ -727,18 +728,22 @@ return view.extend({
 		*/
 		const categories = result[2] ? result[2].trim().split('\n') : [];
 
+		function addCategoryOptions(option, prefix) {
+			for (const line of categories) {
+				const cat = line.match(/^(\w+);(.*?)(?:;(.*))?$/);
+				if (!cat || cat[1].trim() !== prefix) continue;
+				cat[3] !== undefined
+					? option.value(cat[3].trim(), cat[2].trim())
+					: option.value(cat[2].trim());
+			}
+		}
+
 		o = s.taboption('feeds', form.DummyValue, '_feeds1');
 		o.rawhtml = true;
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('1Hosts List Selection') + '</em>';
 
 		o = s.taboption('feeds', form.DynamicList, 'adb_hst_feed', _('Categories'));
-		for (let i = 0; i < categories.length; i++) {
-			const cat = categories[i].match(/^(\w+);(.*?);(.*)$/);
-			if (!cat) continue;
-			if (cat[1].trim() === 'hst') {
-				o.value(cat[3].trim(), cat[2].trim());
-			}
-		}
+		addCategoryOptions(o, 'hst');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -747,13 +752,7 @@ return view.extend({
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('Hagezi List Selection') + '</em>';
 
 		o = s.taboption('feeds', form.DynamicList, 'adb_hag_feed', _('Categories'));
-		for (let i = 0; i < categories.length; i++) {
-			const cat = categories[i].match(/^(\w+);(.*?);(.*)$/);
-			if (!cat) continue;
-			if (cat[1].trim() === 'hag') {
-				o.value(cat[3].trim(), cat[2].trim());
-			}
-		}
+		addCategoryOptions(o, 'hag');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -762,13 +761,7 @@ return view.extend({
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('IPFire List Selection') + '</em>';
 
 		o = s.taboption('feeds', form.DynamicList, 'adb_ipf_feed', _('Categories'));
-		for (let i = 0; i < categories.length; i++) {
-			const cat = categories[i].match(/^(\w+);(.*?);(.*)$/);
-			if (!cat) continue;
-			if (cat[1].trim() === 'ipf') {
-				o.value(cat[3].trim(), cat[2].trim());
-			}
-		}
+		addCategoryOptions(o, 'ipf');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -777,13 +770,7 @@ return view.extend({
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('StevenBlack List Selection') + '</em>';
 
 		o = s.taboption('feeds', form.DynamicList, 'adb_stb_feed', _('Categories'));
-		for (let i = 0; i < categories.length; i++) {
-			const cat = categories[i].match(/^(\w+);(.*?);(.*)$/);
-			if (!cat) continue;
-			if (cat[1].trim() === 'stb') {
-				o.value(cat[3].trim(), cat[2].trim());
-			}
-		}
+		addCategoryOptions(o, 'stb');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -792,13 +779,7 @@ return view.extend({
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('UTCapitole Archive Selection') + '</em>';
 
 		o = s.taboption('feeds', form.DynamicList, 'adb_utc_feed', _('Categories'));
-		for (let i = 0; i < categories.length; i++) {
-			const cat = categories[i].match(/^(\w+);(.*)$/);
-			if (!cat) continue;
-			if (cat[1].trim() === 'utc') {
-				o.value(cat[2].trim());
-			}
-		}
+		addCategoryOptions(o, 'utc');
 		o.optional = true;
 		o.rmempty = true;
 
