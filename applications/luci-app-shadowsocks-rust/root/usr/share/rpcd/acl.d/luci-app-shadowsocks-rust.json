@@ -1,0 +1,17 @@
+{
+	"luci-app-shadowsocks-rust": {
+		"description": "Grant access to shadowsocks-rust configuration",
+		"read": {
+			"ubus": {
+				"service": ["list"]
+			},
+			"uci": ["shadowsocks-rust"]
+		},
+		"write": {
+			"ubus": {
+				"service": ["reload", "restart", "stop"]
+			},
+			"uci": ["shadowsocks-rust"]
+		}
+	}
+}
