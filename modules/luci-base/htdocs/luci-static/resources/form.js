@@ -186,7 +186,19 @@ const CBIJSONConfig = baseclass.extend({
 	},
 
 	move(config, section_id1, section_id2, after) {
-		return uci.move.apply(this, [config, section_id1, section_id2, after]);
+		const dataArray = Object.values(this.data).sort((a, b) => a['.index'] - b['.index']);
+		
+		const fromIndex = dataArray.findIndex(section => section['.name'] === section_id1);
+		const toIndex = dataArray.findIndex(section => section['.name'] === section_id2);
+		
+		const [itemToMove] = dataArray.splice(fromIndex, 1);
+		dataArray.splice(toIndex, 0, itemToMove);
+		
+		dataArray.forEach((item, index) => {
+			item['.index'] = index;
+		});
+
+		this.data = Object.fromEntries(dataArray.map(item => [item['.name'], item]));
 	}
 });
 
