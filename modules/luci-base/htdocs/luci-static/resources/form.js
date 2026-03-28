@@ -4451,7 +4451,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 					'for': 'widget.cbid.%s.%s.%s'.format(config_name, section_id, this.option),
 					'click': (ev) => {
 						const node = ev.currentTarget;
-						const elem = node.nextElementSibling.querySelector(`#${node.getAttribute('for')}`) ?? node.nextElementSibling.querySelector(`[data-widget-id="${node.getAttribute('for')}"]`);
+						const elem = node.nextElementSibling.querySelector(`[data-widget-id="${node.getAttribute('for')}"]`) ?? node.nextElementSibling.querySelector(`#${node.getAttribute('for')}`);
 
 						if (elem) {
 							elem.click();
