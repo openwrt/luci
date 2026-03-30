@@ -68,7 +68,9 @@ return L.view.extend({
 			device: entry?.device,
 			time: entry?.time || entry['connected-at'],
 			cipher: entry?.cipher,
-			status: entry?.status
+			status: entry?.status,
+			tx: entry?._TX || entry?.TX || entry?.tx,
+			rx: entry?._RX || entry?.RX || entry?.rx
 		};
 	},
 
@@ -151,7 +153,7 @@ return L.view.extend({
 			if (users.length === 0) {
 				table.appendChild(
 					E('div', { 'class': 'tr placeholder' }, [
-						E('div', { 'class': 'td', 'colspan': 10 }, 
+						E('div', { 'class': 'td', 'colspan': 13 },
 							E('em', _('Collecting data...')))
 					])
 				);
