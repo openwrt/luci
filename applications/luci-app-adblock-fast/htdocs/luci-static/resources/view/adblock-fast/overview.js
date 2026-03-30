@@ -157,6 +157,7 @@ return view.extend({
 			L.resolveDefault(L.uci.load(pkg.Name), {}),
 			L.resolveDefault(L.uci.load("dhcp"), {}),
 			L.resolveDefault(L.uci.load("smartdns"), {}),
+			L.resolveDefault(adb.getQueryLogStatus(pkg.Name), {}),
 		]);
 	},
 
@@ -187,6 +188,9 @@ return view.extend({
 		// Parse cron entry into virtual config values
 		var cronConfig = this.parseCronEntry(reply.cronEntry);
 
+		var queryLogData =
+			(data[5] && data[5][pkg.Name]) || {};
+
 		var status, m, s1, s2, s3, o;
 
 		status = new adb.status();
@@ -209,8 +213,9 @@ return view.extend({
 
 		s1 = m.section(form.NamedSection, "config", pkg.Name);
 		s1.tab("tab_basic", _("Basic Configuration"));
-		s1.tab("tab_schedule", _("List Updates Schedule"));
 		s1.tab("tab_advanced", _("Advanced Configuration"));
+		s1.tab("tab_schedule", _("List Updates Schedule"));
+		s1.tab("tab_log", _("DNS Query Log"));
 
 		var text = _(
 			"DNS resolution option, see the %sREADME%s for details.",
@@ -824,6 +829,108 @@ return view.extend({
 			return L.uci.set(pkg.Name, section_id, "rpcd_token", formvalue);
 		};
 
+		o = s1.taboption("tab_log", form.DummyValue, "_log_viewer");
+		o.rawhtml = true;
+		o.cfgvalue = function () {
+			return "";
+		};
+		o.renderWidget = function () {
+			var resolver = queryLogData.resolver || "dnsmasq";
+			var isLogging = queryLogData.logging_enabled || false;
+
+			var logTag;
+			switch (resolver) {
+				case "smartdns":
+					logTag = "smartdns";
+					break;
+				case "unbound":
+					logTag = "unbound";
+					break;
+				default:
+					logTag = "dnsmasq";
+					break;
+			}
+
+			var statusLabel = E(
+				"span",
+				{
+					id: "query-log-status",
+					style: "font-weight: bold; color: " + (isLogging ? "green" : "inherit"),
+				},
+				isLogging ? _("Enabled") : _("Disabled"),
+			);
+
+			var btn_enable_log = E(
+				"button",
+				{
+					class: "btn cbi-button cbi-button-apply",
+					disabled: isLogging ? true : null,
+					click: function (ev) {
+						ev.target.disabled = true;
+						ev.target.classList.add("spinning");
+						return adb
+							.setQueryLog(pkg.Name, "enable")
+							.then(function () {
+								location.reload();
+							});
+					},
+				},
+				_("Enable Logging"),
+			);
+
+			var btn_disable_log = E(
+				"button",
+				{
+					class: "btn cbi-button cbi-button-reset",
+					disabled: !isLogging ? true : null,
+					click: function (ev) {
+						ev.target.disabled = true;
+						ev.target.classList.add("spinning");
+						return adb
+							.setQueryLog(pkg.Name, "disable")
+							.then(function () {
+								location.reload();
+							});
+					},
+				},
+				_("Disable Logging"),
+			);
+
+			var logTextarea = E("textarea", {
+				id: "dns-query-log",
+				style:
+					"min-height: 800px; max-height: 85vh; width: 100%; padding: 5px;" +
+					" font-family: monospace; font-size: 12px; resize: vertical;",
+				readonly: "readonly",
+				wrap: "off",
+			});
+
+			return E("div", { id: "adblock-fast-log-container" }, [
+				E("div", { style: "margin-bottom: 10px;" }, [
+					E("span", {}, [
+						_("Query logging for %s: ").format(resolver),
+						statusLabel,
+					]),
+				]),
+				E("div", { style: "margin-bottom: 10px;" }, [
+					btn_enable_log,
+					E("span", {}, "\u00a0\u00a0"),
+					btn_disable_log,
+				]),
+				E(
+					"div",
+					{
+						class: "cbi-section-descr",
+						style: "margin-bottom: 5px;",
+					},
+					_(
+						"Showing syslog entries for %s. Log refreshes automatically.",
+					).format(logTag),
+				),
+				logTextarea,
+			]);
+		};
+
 		s2 = m.section(
 			form.NamedSection,
 			"config",
@@ -903,7 +1010,70 @@ return view.extend({
 		o.modalonly = true;
 		o.optional = false;
 
-		return Promise.all([status.render(), m.render()]);
+		return Promise.all([status.render(), m.render()]).then(function (nodes) {
+			var mapNode = nodes[1];
+
+			// Defer DOM modifications until after browser inserts nodes
+			requestAnimationFrame(function () {
+				var dns = queryLogData.resolver || "dnsmasq";
+				var logTag = dns === "smartdns" ? "smartdns" : dns === "unbound" ? "unbound" : "dnsmasq";
+
+				// Log fetcher
+				var fetchLog = function () {
+					var el = document.getElementById("dns-query-log");
+					if (!el) return;
+					adb.callLogRead(1000, false, true).then(function (logEntries) {
+						var filtered = (logEntries || [])
+							.filter(function (e) { return e.msg && e.msg.indexOf(logTag) >= 0; })
+							.map(function (e) {
+								var d = new Date(e.time);
+								return "[" + d.toLocaleDateString([], { year: "numeric", month: "2-digit", day: "2-digit" })
+									+ "-" + d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })
+									+ "] " + e.msg;
+							});
+						el.value = filtered.length > 0 ? filtered.join("\n")
+							: _("No %s query log entries found.").format(dns);
+						el.scrollTop = el.scrollHeight;
+					});
+				};
+				L.Poll.add(fetchLog, 5);
+				L.Poll.start();
+
+				// Make the log viewer full-width
+				var style = document.createElement("style");
+				style.textContent =
+					"#cbi-adblock-fast-config-_log_viewer { display: block !important; }";
+				document.head.appendChild(style);
+
+				// Hide s2/s3 sections when the log tab is active
+				var logContainer = document.getElementById("adblock-fast-log-container");
+				var cbiMap = logContainer && logContainer.closest(".cbi-map");
+				if (cbiMap) {
+					var sections = cbiMap.querySelectorAll(":scope > .cbi-section");
+					var extraSections = [];
+					for (var i = 1; i < sections.length; i++)
+						extraSections.push(sections[i]);
+
+					var updateSections = function () {
+						var activeTab = cbiMap.querySelector(".cbi-tabmenu li.cbi-tab");
+						var isLogTab = activeTab && activeTab.getAttribute("data-tab") === "tab_log";
+						extraSections.forEach(function (s) {
+							s.style.display = isLogTab ? "none" : "";
+						});
+					};
+
+					// Handle tab clicks and initial state
+					cbiMap.querySelectorAll(".cbi-tabmenu li[data-tab] a").forEach(function (link) {
+						link.addEventListener("click", function () {
+							requestAnimationFrame(updateSections);
+						});
+					});
+					updateSections();
+				}
+			});
+
+			return nodes;
+		});
 	},
 
 	handleSave: function (ev) {

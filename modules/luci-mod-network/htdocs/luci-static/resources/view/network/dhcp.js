@@ -201,7 +201,7 @@ function isValidMAC(sid, s) {
 	if (!s) return true;
 
 	for (const mac of L.toArray(s))
-		if (!mac.match(/^(([0-9a-f]{1,2}|\*)[:-]){5}([0-9a-f]{1,2}|\*)$/i))
+		if (!mac.match(/^(([0-9a-f]{2}|\*):){5}([0-9a-f]{2}|\*)$/i))
 			return _('Expecting a valid MAC address, optionally including wildcards') + _('; invalid MAC: ') + mac;
 
 	return true;

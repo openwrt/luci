@@ -233,7 +233,7 @@ return view.extend({
 			o = s.option(form.Value, 'rule', _('Rule'));
 			o.value('feed 1', _('<IP-Address>'));
 			o.value('feed 1 ,', _('<IP-Address><CSV-Seperator>'));
-			o.value('feed 13', _('<IP-Address> <Netmask>'));
+			o.value('feed 13', _('<IP-Address><Space><Netmask>'));
 			o.value('suricata 1', _('<Suricata Syntax>'));
 			o.optional = true;
 			o.rmempty = true;

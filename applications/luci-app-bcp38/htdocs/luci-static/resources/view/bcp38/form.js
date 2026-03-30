@@ -28,7 +28,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(widgets.DeviceSelect, 'interface', _('Interface name'),
-			_('Interface to apply the blocking to should be the upstream WAN interface).'));
+			_('Interface to apply the blocking to (should be the upstream WAN interface).'));
 		o.modalonly = true;
 		o.noaliases = true;
 		o.multiple = false;
