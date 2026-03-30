@@ -2117,3 +2117,608 @@ select + .cbi-button {
 		display: none;
 	}
 }
+
+/* ===== Dark Mode Support ===== */
+
+/* CSS Variables - Light Theme (default) */
+:root {
+	--bg-primary: #4a6b7c;
+	--bg-content: #f5f5f5;
+	--bg-menubar: #000000;
+	--bg-sidebar: #f5f5f5;
+	--bg-section: #ffffff;
+	--bg-input: #eeeeee;
+	--bg-input-focus: #ffffff;
+	--bg-modal: #f5f5f5;
+	--bg-dropdown: #f6f6f5;
+	--bg-tab: linear-gradient(#ddd 90%, #aaa 100%);
+	--bg-tab-active: #f5f5f5;
+	--bg-progressbar: #ddd;
+	--bg-progressbar-fill: #90c0e0;
+	--bg-indicator: #90c0e0;
+	--bg-indicator-inactive: #000;
+	--bg-row-odd: #eeeeff;
+	--bg-row-hover: #f8f8f8;
+	--bg-selected: #b0d0f0;
+	--bg-hover-dropdown: linear-gradient(90deg, #a3c2e8 0%, #84aad9 100%);
+
+	--text-primary: #000000;
+	--text-secondary: #444444;
+	--text-muted: #666666;
+	--text-light: #ffffff;
+	--text-link: #37c;
+	--text-indicator: #000;
+	--text-indicator-inactive: #90c0e0;
+
+	--border-color: #444444;
+	--border-light: #bbbbbb;
+	--border-medium: #cccccc;
+	--border-section: #555555;
+
+	--accent-color: #37c;
+	--accent-positive: #595;
+	--accent-negative: #a22;
+	--accent-warning: #ed5;
+	--accent-warning-bg: #fe9;
+	--accent-notice: #15a;
+	--accent-notice-bg: #e6f6ff;
+
+	--shadow-color: rgba(0, 0, 0, 0.7);
+	--tooltip-shadow: #444;
+}
+
+/* Dark Theme - Grayscale */
+[data-darkmode="true"] {
+	--bg-primary: #1a1a1a;
+	--bg-content: #202020;
+	--bg-menubar: #0a0a0a;
+	--bg-sidebar: #1a1a1a;
+	--bg-section: #2a2a2a;
+	--bg-input: #333333;
+	--bg-input-focus: #404040;
+	--bg-modal: #252525;
+	--bg-dropdown: #2a2a2a;
+	--bg-tab: linear-gradient(#383838 90%, #282828 100%);
+	--bg-tab-active: #2a2a2a;
+	--bg-progressbar: #333333;
+	--bg-progressbar-fill: #5a9fd4;
+	--bg-indicator: #5a9fd4;
+	--bg-indicator-inactive: #1a1a1a;
+	--bg-row-odd: #2a2a2a;
+	--bg-row-hover: #383838;
+	--bg-selected: #404040;
+	--bg-hover-dropdown: linear-gradient(90deg, #484848 0%, #505050 100%);
+
+	--text-primary: #e0e0e0;
+	--text-secondary: #b0b0b0;
+	--text-muted: #808080;
+	--text-light: #ffffff;
+	--text-link: #6ab0f0;
+	--text-indicator: #fff;
+	--text-indicator-inactive: #6ab0f0;
+
+	--border-color: #404040;
+	--border-light: #505050;
+	--border-medium: #606060;
+	--border-section: #484848;
+
+	--accent-color: #6ab0f0;
+	--accent-positive: #5cb85c;
+	--accent-negative: #d9534f;
+	--accent-warning: #f0ad4e;
+	--accent-warning-bg: #3a3020;
+	--accent-notice: #5bc0de;
+	--accent-notice-bg: #203038;
+
+	--shadow-color: rgba(0, 0, 0, 0.9);
+	--tooltip-shadow: #000;
+}
+
+/* Auto detect system preference */
+@media (prefers-color-scheme: dark) {
+	:root:not([data-darkmode="false"]) {
+		--bg-primary: #1a1a1a;
+		--bg-content: #202020;
+		--bg-menubar: #0a0a0a;
+		--bg-sidebar: #1a1a1a;
+		--bg-section: #2a2a2a;
+		--bg-input: #333333;
+		--bg-input-focus: #404040;
+		--bg-modal: #252525;
+		--bg-dropdown: #2a2a2a;
+		--bg-tab: linear-gradient(#383838 90%, #282828 100%);
+		--bg-tab-active: #2a2a2a;
+		--bg-progressbar: #333333;
+		--bg-progressbar-fill: #5a9fd4;
+		--bg-indicator: #5a9fd4;
+		--bg-indicator-inactive: #1a1a1a;
+		--bg-row-odd: #2a2a2a;
+		--bg-row-hover: #383838;
+		--bg-selected: #404040;
+		--bg-hover-dropdown: linear-gradient(90deg, #484848 0%, #505050 100%);
+
+		--text-primary: #e0e0e0;
+		--text-secondary: #b0b0b0;
+		--text-muted: #808080;
+		--text-light: #ffffff;
+		--text-link: #6ab0f0;
+		--text-indicator: #fff;
+		--text-indicator-inactive: #6ab0f0;
+
+		--border-color: #404040;
+		--border-light: #505050;
+		--border-medium: #606060;
+		--border-section: #484848;
+
+		--accent-color: #6ab0f0;
+		--accent-positive: #5cb85c;
+		--accent-negative: #d9534f;
+		--accent-warning: #f0ad4e;
+		--accent-warning-bg: #3a3020;
+		--accent-notice: #5bc0de;
+		--accent-notice-bg: #203038;
+
+		--shadow-color: rgba(0, 0, 0, 0.9);
+		--tooltip-shadow: #000;
+	}
+}
+
+/* Dark Mode Style Overrides - Manual Toggle */
+[data-darkmode="true"] body {
+	background-color: var(--bg-primary);
+	color: var(--text-light);
+}
+
+[data-darkmode="true"] #maincontent {
+	background: var(--bg-content);
+	color: var(--text-primary);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] #mainmenu {
+	background: var(--bg-sidebar);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] #mainmenu ul li > a {
+	color: var(--text-secondary);
+}
+
+[data-darkmode="true"] #mainmenu ul li.selected > a {
+	background: var(--bg-section);
+	color: var(--text-link);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] #menubar {
+	background: var(--bg-menubar);
+}
+
+[data-darkmode="true"] .modal {
+	background: var(--bg-modal);
+	border-color: var(--border-color);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .cbi-section-node {
+	background: var(--bg-section);
+	border-color: var(--border-section);
+}
+
+[data-darkmode="true"] .table.cbi-section-table {
+	background: var(--bg-section);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] .table .td,
+[data-darkmode="true"] .table .th,
+[data-darkmode="true"] table td,
+[data-darkmode="true"] table th {
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .cbi-value {
+	border-color: var(--border-light);
+}
+
+[data-darkmode="true"] .cbi-value:hover {
+	background: var(--bg-row-hover);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .cbi-rowstyle-1 {
+	background-color: var(--bg-row-odd);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .cbi-rowstyle-2 {
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] select,
+[data-darkmode="true"] input,
+[data-darkmode="true"] textarea {
+	background: var(--bg-input);
+	color: var(--text-primary);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] input:focus,
+[data-darkmode="true"] input:not(.btn):not(.cbi-button):hover,
+[data-darkmode="true"] select:focus,
+[data-darkmode="true"] select:hover {
+	background-color: var(--bg-input-focus);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .btn,
+[data-darkmode="true"] .cbi-button {
+	background: var(--bg-section);
+	color: var(--text-primary);
+	border-color: var(--border-light);
+}
+
+[data-darkmode="true"] .cbi-button-positive,
+[data-darkmode="true"] .cbi-button-fieldadd,
+[data-darkmode="true"] .cbi-button-add,
+[data-darkmode="true"] .cbi-button-save {
+	border-color: var(--accent-positive);
+	color: var(--accent-positive);
+}
+
+[data-darkmode="true"] .cbi-button-action,
+[data-darkmode="true"] .cbi-button-apply,
+[data-darkmode="true"] .cbi-button-reload,
+[data-darkmode="true"] .cbi-button-edit {
+	border-color: var(--accent-color);
+	color: var(--accent-color);
+}
+
+[data-darkmode="true"] .cbi-button-negative,
+[data-darkmode="true"] .cbi-section-remove .cbi-button,
+[data-darkmode="true"] .cbi-button-remove {
+	border-color: var(--accent-negative);
+	color: var(--accent-negative);
+}
+
+[data-darkmode="true"] .cbi-button-action.important,
+[data-darkmode="true"] .cbi-page-actions .cbi-button-apply,
+[data-darkmode="true"] .cbi-section-actions .cbi-button-edit {
+	background: var(--accent-color);
+	color: var(--text-light);
+}
+
+[data-darkmode="true"] .cbi-button-positive.important,
+[data-darkmode="true"] .cbi-page-actions .cbi-button-save {
+	background: var(--accent-positive);
+	color: var(--text-light);
+}
+
+[data-darkmode="true"] .cbi-dropdown {
+	background: var(--bg-input);
+	border-color: var(--border-color);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .cbi-dropdown:not(.btn):not(.cbi-button):hover {
+	background: var(--bg-input-focus);
+}
+
+[data-darkmode="true"] .cbi-dropdown[open] > ul.dropdown {
+	background: var(--bg-dropdown);
+	border-color: var(--border-color);
+	box-shadow: 0 0 4px var(--shadow-color);
+}
+
+[data-darkmode="true"] .cbi-dropdown[open] > ul.dropdown > li {
+	color: var(--text-secondary);
+	border-color: var(--border-medium);
+}
+
+[data-darkmode="true"] .cbi-dropdown[open] > ul.dropdown > li[selected] {
+	background: var(--bg-selected);
+}
+
+[data-darkmode="true"] .cbi-dropdown[open] > ul.dropdown > li.focus,
+[data-darkmode="true"] .cbi-dropdown[open] > ul.dropdown > li:hover {
+	background: var(--bg-hover-dropdown);
+}
+
+[data-darkmode="true"] ul.cbi-tabmenu li {
+	background: var(--bg-tab);
+	border-color: var(--border-light);
+}
+
+[data-darkmode="true"] ul.cbi-tabmenu li.cbi-tab {
+	background: var(--bg-tab-active);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] ul.cbi-tabmenu {
+	border-color: var(--border-light);
+}
+
+[data-darkmode="true"] #tabmenu {
+	background: var(--bg-sidebar);
+}
+
+[data-darkmode="true"] #tabmenu ul {
+	border-color: var(--border-color);
+	background: repeating-linear-gradient(var(--bg-sidebar), var(--bg-content) 2.4em, var(--bg-sidebar) 2.4em, var(--bg-content));
+}
+
+[data-darkmode="true"] #tabmenu ul li.cbi-tab {
+	background: var(--bg-sidebar);
+}
+
+[data-darkmode="true"] .cbi-tooltip {
+	background: var(--bg-section);
+	box-shadow: 0 0 2px var(--tooltip-shadow);
+	color: var(--text-secondary);
+}
+
+[data-darkmode="true"] .cbi-progressbar {
+	background: var(--bg-progressbar);
+	border-color: var(--border-light);
+}
+
+[data-darkmode="true"] .cbi-progressbar > div {
+	background: var(--bg-progressbar-fill);
+}
+
+[data-darkmode="true"] .cbi-progressbar::after {
+	text-shadow: 0 0 2px var(--bg-section);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .ifacebadge,
+[data-darkmode="true"] .ifacebox {
+	background: var(--bg-section);
+	border-color: var(--border-medium);
+}
+
+[data-darkmode="true"] .ifacebox-head {
+	background: var(--bg-input);
+}
+
+[data-darkmode="true"] .ifacebox-head.active {
+	background: var(--bg-progressbar-fill);
+}
+
+[data-darkmode="true"] .cbi-dynlist > .item {
+	background: var(--bg-input);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] .cbi-dynlist > .item::after {
+	background: var(--bg-section);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] .alert-message {
+	background: var(--bg-section);
+	border-color: var(--accent-negative);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .alert-message.notice {
+	background: var(--accent-notice-bg);
+	border-color: var(--accent-notice);
+	color: var(--accent-notice);
+}
+
+[data-darkmode="true"] .alert-message.warning {
+	background: var(--accent-warning-bg);
+	border-color: var(--accent-warning);
+	color: var(--accent-warning);
+}
+
+[data-darkmode="true"] .alert-message.success {
+	background: #1a3a2a;
+	border-color: var(--accent-positive);
+	color: var(--accent-positive);
+}
+
+[data-darkmode="true"] h2,
+[data-darkmode="true"] h3,
+[data-darkmode="true"] h4,
+[data-darkmode="true"] h5,
+[data-darkmode="true"] legend {
+	color: var(--text-primary);
+	border-color: var(--border-light);
+}
+
+[data-darkmode="true"] .cbi-title-ref {
+	color: var(--text-link);
+}
+
+[data-darkmode="true"] hr {
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] #indicators > :not([id="xhr_poll_status"]),
+[data-darkmode="true"] #indicators > #xhr_poll_status > * {
+	background: var(--bg-indicator) !important;
+	color: var(--text-indicator) !important;
+}
+
+[data-darkmode="true"] #indicators > [data-style="inactive"],
+[data-darkmode="true"] #indicators > * > #xhr_poll_status_off {
+	background: var(--bg-indicator-inactive) !important;
+	color: var(--text-indicator-inactive) !important;
+	border-color: var(--bg-indicator);
+}
+
+[data-darkmode="true"] .luci a:link,
+[data-darkmode="true"] .luci a:visited {
+	color: var(--text-muted);
+}
+
+/* Dark mode for all links */
+[data-darkmode="true"] a,
+[data-darkmode="true"] a:link,
+[data-darkmode="true"] a:visited {
+	color: #6ab0f0;
+}
+
+[data-darkmode="true"] a:hover,
+[data-darkmode="true"] a:active {
+	color: #8cc8ff;
+}
+
+[data-darkmode="true"] #mainmenu ul li.selected > a {
+	color: #6ab0f0;
+}
+
+[data-darkmode="true"] .cbi-title-ref {
+	color: #6ab0f0;
+}
+
+/* Dark mode for code/monospace elements */
+[data-darkmode="true"] code,
+[data-darkmode="true"] pre {
+	background: #333;
+	color: #e0e0e0;
+}
+
+[data-darkmode="true"] #modal_overlay {
+	background: var(--shadow-color);
+}
+
+[data-darkmode="true"] .table.smalltext {
+	background: var(--bg-section);
+	border-color: var(--border-color);
+}
+
+[data-darkmode="true"] .table.smalltext .tr:hover .td {
+	background-color: var(--bg-row-hover);
+	color: var(--text-primary);
+}
+
+[data-darkmode="true"] .uci-change-list del,
+[data-darkmode="true"] .uci-change-list ins,
+[data-darkmode="true"] .uci-change-list var,
+[data-darkmode="true"] .uci-change-legend-label del,
+[data-darkmode="true"] .uci-change-legend-label ins,
+[data-darkmode="true"] .uci-change-legend-label var {
+	border-color: var(--border-medium);
+	background: var(--bg-input);
+}
+
+[data-darkmode="true"] .uci-change-list ins,
+[data-darkmode="true"] .uci-change-legend-label ins {
+	border-color: var(--accent-positive);
+	background: #1a3a2a;
+}
+
+[data-darkmode="true"] .uci-change-list del,
+[data-darkmode="true"] .uci-change-legend-label del {
+	border-color: var(--accent-negative);
+	background: #3a1a1a;
+}
+
+/* Dark mode toggle button styles - matches indicator style exactly */
+#indicators > .darkmode-toggle {
+	cursor: pointer;
+	padding: .125em .35em;
+}
+
+/* Dark mode for SVG graph containers (load, bandwidth, wireless, connections, channel_analysis) */
+[data-darkmode="true"] .cbi-section > div > svg {
+	background: #2a2a2a !important;
+}
+
+[data-darkmode="true"] .cbi-section > div[style*="background"],
+[data-darkmode="true"] #channel_graph,
+[data-darkmode="true"] div[id="channel_graph"] {
+	background: #2a2a2a !important;
+	border-color: #404040 !important;
+}
+
+[data-darkmode="true"] .cbi-section > div[style*="background"] svg text,
+[data-darkmode="true"] #channel_graph svg text {
+	fill: #e0e0e0;
+}
+
+[data-darkmode="true"] .cbi-section > div[style*="background"] svg line,
+[data-darkmode="true"] #channel_graph svg line {
+	stroke: #606060;
+}
+
+/* Dark mode for loading view / spinning indicator */
+[data-darkmode="true"] .spinning::before {
+	filter: invert(0.85);
+}
+
+/* Dark mode for page loading overlay - "Loading view..." */
+[data-darkmode="true"] #view,
+[data-darkmode="true"] #maincontent #view,
+[data-darkmode="true"] #maincontent > #view {
+	background: #202020 !important;
+	color: #e0e0e0 !important;
+}
+
+[data-darkmode="true"] .spinning,
+[data-darkmode="true"] #view > .spinning,
+[data-darkmode="true"] #maincontent .spinning,
+[data-darkmode="true"] .cbi-map .spinning,
+[data-darkmode="true"] em.spinning {
+	background: transparent !important;
+	color: #e0e0e0 !important;
+}
+
+/* Ensure entire page uses dark background during transitions */
+[data-darkmode="true"],
+[data-darkmode="true"] html,
+[data-darkmode="true"] body {
+	background-color: #1a1a1a !important;
+}
+
+/* Dark mode for data-tab content areas */
+[data-darkmode="true"] [data-tab] {
+	background: transparent;
+}
+
+[data-darkmode="true"] [data-tab] > .table {
+	background: var(--bg-section);
+}
+
+[data-darkmode="true"] #indicators > .darkmode-toggle {
+	background: var(--bg-indicator) !important;
+	color: var(--text-indicator) !important;
+}
+
+/* Mobile responsive adjustments for dark mode */
+@media screen and (max-width: 992px) {
+	[data-darkmode="true"] #mainmenu {
+		background: var(--bg-menubar);
+		box-shadow: 0 0 2px var(--tooltip-shadow);
+	}
+
+	[data-darkmode="true"] #mainmenu ul > li.selected > a {
+		background: var(--bg-section);
+	}
+
+	[data-darkmode="true"] #mainmenu ul > li > a {
+		color: var(--text-light);
+		border-color: var(--border-color);
+	}
+
+	[data-darkmode="true"] #mainmenu ul.l1 ul.l2 {
+		background: var(--bg-menubar);
+		box-shadow: 0 0 2px var(--tooltip-shadow);
+	}
+
+	[data-darkmode="true"] .cbi-section-table-row {
+		background: var(--bg-section);
+		border-color: var(--border-color);
+	}
+
+	[data-darkmode="true"] .cbi-section-table-row:hover {
+		border-color: var(--accent-color);
+	}
+
+	[data-darkmode="true"] .tr[data-title]::before {
+		background: var(--bg-row-odd);
+	}
+}
