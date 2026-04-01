@@ -232,7 +232,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
 	cursor: pointer;
-	-webkit-appearance: button;
+	appearance: button;
 	word-break: break-all;
 }
 
@@ -244,12 +244,12 @@ input[type="submit"][disabled] {
 }
 
 input[type="search"] {
-	-webkit-appearance: textfield;
+	appearance: textfield;
 	box-sizing: content-box;
 }
 
 input[type="search"]::-webkit-search-decoration {
-	-webkit-appearance: none;
+	appearance: none;
 }
 
 textarea {
@@ -709,7 +709,6 @@ select,
 
 .cbi-select select,
 .cbi-select select:focus {
-	-webkit-appearance: none;
 	appearance: none;
 	outline: none;
 	border: none;
@@ -775,7 +774,6 @@ input[type="radio"] {
 	--fg-color: var(--text-color-high);
 
 	appearance: none;
-	-webkit-appearance: none;
 	width: 14px;
 	height: 14px;
 	color: var(--fg-color);
@@ -1371,8 +1369,9 @@ footer {
 	font-size: 12px;
 	color: var(--text-color-medium);
 	/* the redundant properties below work around a csstidy bug */
-	padding-left: calc((100% - 940px) / 2);
-	padding-right: calc((100% - 940px) / 2);
+	/* Match footer with header padding left and right so they are aligned (header uses 1180px, but footer was using 940px) */
+	padding-left: calc((100% - 1180px) / 2);
+	padding-right: calc((100% - 1180px) / 2);
 }
 
 footer a {
@@ -2009,6 +2008,33 @@ header [data-indicator][data-style="active"] {
 	color: var(--on-primary-color);
 	background-color: var(--primary-color-high);
 }
+
+/* === SHOW/HIDE BUTTON === */
+
+/* (Show/Hide Button) Change mouse icon from text cursor to pointer */
+.cbi-title .label {
+	cursor: pointer;
+}
+
+/* (Show/Hide Button) Smaller buttons on larger screens */
+@media screen and (min-width : 481px) {
+	.cbi-title .label {
+		line-height: 1em;
+		margin: 0.7em 0;
+	}
+}
+
+/* (Show/Hide Button) Slightly fade "show" button */
+.cbi-title .label.notice {
+	opacity: var(--disabled-opacity);
+}
+
+/* (Show/Hide Button) Remove fade when hovered */
+.cbi-title .label.notice:hover {
+	opacity: initial;
+}
+
+/* === END SHOW/HIDE BUTTON === */
 
 /* LuCI specific items */
 .hidden { display: none }
