@@ -291,7 +291,6 @@ const methods = {
 				fd.close();
 			}
 
-			result.odhcpd = false;
 			fd = popen('odhcpd -h 2>/dev/null');
 
 			if (fd) {
