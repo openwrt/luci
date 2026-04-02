@@ -2015,3 +2015,12 @@ ul.errors {
 		display: none;
 	}
 }
+
+/* === STATUS OVERVIEW: MATCH IFACEBOX COLOUR WITH HEADER === */
+
+/* Set text to var(--secondary-bright-color) when using var(--main-bright-color) for background to match same behaviour as the header of the page, e.g. IPv4 Upstream and IPv6 Upstream boxes */
+body[data-page='admin-status-overview'] .ifacebox-head {
+  color: var(--secondary-bright-color);
+}
+
+/* === END STATUS OVERVIEW: MATCH IFACEBOX COLOUR WITH HEADER === */
