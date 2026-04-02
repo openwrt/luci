@@ -2623,3 +2623,30 @@ div.cbi-value var.cbi-tooltip-container,
 #view div[style] > svg line[style] {
 	stroke: var(--text-color-highest)!important;
 }
+
+/* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* Change mouse icon from text cursor to pointer */
+body[data-page='admin-status-overview'] .cbi-title .label {
+  cursor: pointer;
+}
+
+/* Smaller buttons on larger screens */
+@media screen and (min-width : 481px) {
+  body[data-page='admin-status-overview'] .cbi-title .label {
+    line-height: 1em;
+    margin: 0.7em 0;
+  }
+}
+
+/* Slightly fade "show" button */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+  opacity: var(--disabled-opacity);
+}
+
+/* Remove fade when hovered */
+body[data-page='admin-status-overview'] .cbi-title .label.notice:hover {
+  opacity: initial;
+}
+
+/* === END STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
