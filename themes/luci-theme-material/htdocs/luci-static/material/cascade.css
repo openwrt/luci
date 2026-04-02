@@ -3179,3 +3179,30 @@ input[name="nslookup"] {
 		background: #424242;
 	}*/
 }
+
+/* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* Change mouse icon from text cursor to pointer, and fix buttons not being same min-width */
+body[data-page='admin-status-overview'] .cbi-title .label {
+  cursor: pointer;
+  min-width: 5.2em !important;
+}
+
+/* Create larger buttons for smaller screens (same behaviour as luci-theme-bootstrap) */
+@media screen and (max-width: 480px) {
+  body[data-page='admin-status-overview'] .cbi-title .label {
+    line-height: 3em;
+  }
+}
+
+/* Slightly fade "show" button: no variable for disabled opacity like luci-theme-bootstrap, assuming 0.7 */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+  opacity: 0.7;
+}
+
+/* Remove fade when hovered */
+body[data-page='admin-status-overview'] .cbi-title .label.notice:hover {
+  opacity: initial;
+}
+
+/* === END STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
