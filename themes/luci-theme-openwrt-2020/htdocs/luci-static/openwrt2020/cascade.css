@@ -35,7 +35,8 @@
 	font-size: 100%;
 	background: none;
 	outline: none;
-	-webkit-appearance: none;
+	-webkit-appearance: none; /* nonstandard, should remove in future */
+	appearance: none;
 }
 
 html {
@@ -981,9 +982,8 @@ input[type="checkbox"],
 input[type="radio"] {
 	--bd-color: var(--main-dark-color);
 	--fg-color: var(--main-dark-color);
-
+	-webkit-appearance: none; /* nonstandard, should remove in future */
 	appearance: none;
-	-webkit-appearance: none;
 	width: 1em;
 	height: 1em;
 	color: var(--fg-color);
@@ -1096,7 +1096,8 @@ input[type="password"] + .btn, input[type="password"] + button {
 
 select {
 	padding: .1rem 0;
-	-webkit-appearance: menulist;
+	-webkit-appearance: menulist; /* nonstandard, should remove in future */
+	appearance: menulist;
 }
 
 textarea {
