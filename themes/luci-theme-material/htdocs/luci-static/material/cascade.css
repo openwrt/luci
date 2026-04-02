@@ -966,7 +966,8 @@ td > table > tbody > tr > td,
 	border-radius: .2rem;
 	background-color: #f0f0f0;
 	background-image: none;
-	-webkit-appearance: none;
+	-webkit-appearance: none;  /* nonstandard, should remove in future */
+	appearance: none;
 	-ms-touch-action: manipulation;
 	touch-action: manipulation;
 }
@@ -987,7 +988,8 @@ td > table > tbody > tr > td,
 }
 
 .cbi-button:not(select) {
-	-webkit-appearance: none !important;
+	-webkit-appearance: none !important;  /* nonstandard, should remove in future */
+	appearance: none !important;
 }
 
 .cbi-button + .cbi-button {
