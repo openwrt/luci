@@ -107,20 +107,22 @@ abbr[title], acronym[title] {
 	color: var(--main-bright-color);
 	display: inline-block;
 	font-size: .85em;
-	line-height: 1.5em;
-	padding: 0 .5em;
 	margin: .125em;
-	border-radius: 1em;
 	cursor: pointer;
 	white-space: nowrap;
+	/* Match rounded indicators to same style as "hide" and "show" buttons for design consistency (site wide) */
+	line-height: 1.8em;
+	border-radius: .5rem;
+	padding: 0 .7em;
 }
 
 #indicators > [data-style="inactive"] {
 	background: var(--main-bright-color);
 	color: var(--secondary-bright-color);
 	border: 2px solid var(--secondary-bright-color);
-	line-height: calc(1.5em - 4px);
-	padding: 0 calc(.5em - 2px);
+	/* Update existing calculations with same new adjustments as above */
+	line-height: calc(1.8em - 4px);
+	padding:0 calc(.7em - 2px);
 }
 
 #menubar h2,
