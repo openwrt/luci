@@ -2117,3 +2117,38 @@ select + .cbi-button {
 		display: none;
 	}
 }
+
+/* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* Match "show" button style to IP table, change border colour to match font colour; fade it slightly: no variable for disabled opacity like luci-theme-bootstrap, assuming 0.7 */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+  background: #90c0e0;
+  color: #000;
+  border: 1px #000 solid;
+  opacity: 0.7;
+}
+
+/* Remove fade when hovered */
+body[data-page='admin-status-overview'] .cbi-title .label.notice:hover {
+ opacity: initial;
+}
+
+/* Change mouse icon from text cursor to pointer, restore button text weight and font similar to indicators, add subtle border to compliment both states of button */
+body[data-page='admin-status-overview'] .cbi-title .label {
+  cursor: pointer;
+  font-weight: normal;
+  font-family: Arial,Verdana,sans-serif;
+  border: 1px #888 solid;
+}
+
+/* Work with existing mobile styling for 480px and below, make bigger buttons and fix heading alignment */
+@media screen and (max-width: 480px) {
+  body[data-page='admin-status-overview'] .cbi-title .label {
+    line-height: 3em;
+  }
+  body[data-page='admin-status-overview'] .cbi-title h3 {
+    align-items: center;
+  }
+}
+
+/* === END STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
