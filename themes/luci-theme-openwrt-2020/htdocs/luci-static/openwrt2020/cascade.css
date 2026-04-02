@@ -2015,3 +2015,38 @@ ul.errors {
 		display: none;
 	}
 }
+
+/* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* Create larger buttons for smaller screens (same behaviour as luci-theme-bootstrap) */
+@media screen and (max-width: 480px) {
+  body[data-page='admin-status-overview'] h3, .cbi-section > legend:first-child {
+    line-height: 2em;
+  }
+}
+
+/* Swap the "hide" and "show" button styles to match all other luci-theme, as "hide" is currently using primary style and "show" is currently using secondary style. Also, change mouse icon from text cursor to pointer */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+  background: var(--main-bright-color);
+  color: var(--secondary-bright-color);
+  border: 0;
+}
+body[data-page='admin-status-overview'] .cbi-title .label {
+  background: var(--secondary-bright-color);
+  color: var(--main-bright-color);
+  border: 1px solid var(--main-bright-color);
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Slightly fade "show" button: no variable for disabled opacity like luci-theme-bootstrap, assuming 0.7 */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+ opacity: 0.7;
+}
+
+/* Remove fade when hovered */
+body[data-page='admin-status-overview'] .cbi-title .label.notice:hover {
+ opacity: initial;
+}
+
+/* === END STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
