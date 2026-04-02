@@ -232,7 +232,8 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
 	cursor: pointer;
-	-webkit-appearance: button;
+	-webkit-appearance: button; /* nonstandard, should remove in future */
+	appearance: button;
 	word-break: break-all;
 }
 
@@ -244,12 +245,14 @@ input[type="submit"][disabled] {
 }
 
 input[type="search"] {
-	-webkit-appearance: textfield;
+	-webkit-appearance: textfield; /* nonstandard, should remove in future */
+	appearance: textfield;
 	box-sizing: content-box;
 }
 
 input[type="search"]::-webkit-search-decoration {
-	-webkit-appearance: none;
+	-webkit-appearance: none; /* nonstandard, should remove in future */
+	appearance: none;
 }
 
 textarea {
@@ -709,7 +712,7 @@ select,
 
 .cbi-select select,
 .cbi-select select:focus {
-	-webkit-appearance: none;
+	-webkit-appearance: none; /* nonstandard, should remove in future */
 	appearance: none;
 	outline: none;
 	border: none;
@@ -773,9 +776,8 @@ input[type="checkbox"],
 input[type="radio"] {
 	--bd-color: var(--border-color-high);
 	--fg-color: var(--text-color-high);
-
+	-webkit-appearance: none; /* nonstandard, should remove in future */
 	appearance: none;
-	-webkit-appearance: none;
 	width: 14px;
 	height: 14px;
 	color: var(--fg-color);
