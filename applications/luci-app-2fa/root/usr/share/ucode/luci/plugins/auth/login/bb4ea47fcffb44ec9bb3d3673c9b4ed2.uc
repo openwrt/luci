@@ -25,6 +25,17 @@ const DEFAULT_MIN_VALID_TIME = 1767225600;
 // Rate limit state file
 const RATE_LIMIT_FILE = '/tmp/2fa_rate_limit.json';
 const RATE_LIMIT_LOCK_FILE = '/tmp/2fa_rate_limit.lock';
+const DEFAULT_PRIORITY = 15;
+
+function get_priority() {
+	let ctx = cursor();
+	let value = ctx.get('luci_plugins', PLUGIN_UUID, 'priority');
+
+	if (!value || !match(value, /^-?[0-9]+$/))
+		return DEFAULT_PRIORITY;
+
+	return int(value);
+}
 
 // Check if system time is calibrated (not earlier than minimum valid time)
 function check_time_calibration() {
@@ -509,7 +520,7 @@ function get_client_ip(http) {
 }
 
 return {
-	priority: 10,
+	priority: get_priority(),
 
 		check: function(http, user) {
 			let client_ip = get_client_ip(http);

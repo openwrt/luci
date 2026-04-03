@@ -3,6 +3,42 @@
 'require form';
 'require uci';
 'require rpc';
+'require uqr';
+
+var CBIQRCode = form.DummyValue.extend({
+	renderWidget(section_id) {
+		var key = uci.get('luci_plugins', section_id, 'key_root') || '';
+		var type = uci.get('luci_plugins', section_id, 'type_root') || 'totp';
+
+		if (!key)
+			return E('em', {}, _('Set and save the secret key first to display a QR code.'));
+
+		var issuer = 'OpenWrt';
+		var label = 'root';
+		var option;
+
+		if (type == 'hotp') {
+			var counter = uci.get('luci_plugins', section_id, 'counter_root') || '0';
+			option = 'counter=' + counter;
+		}
+		else {
+			var step = uci.get('luci_plugins', section_id, 'step_root') || '30';
+			option = 'period=' + step;
+		}
+
+		var otpAuth = 'otpauth://' + type + '/' + encodeURIComponent(issuer) + ':' + encodeURIComponent(label) +
+			'?secret=' + key + '&issuer=' + encodeURIComponent(issuer) + '&' + option;
+		var svg = uqr.renderSVG(otpAuth, { pixelSize: 4 });
+
+		return E('div', {}, [
+			E('div', { 'style': 'max-width:260px' }, [ E(svg) ]),
+			E('br'),
+			E('em', {}, _('Scan this QR code with your authenticator app.')),
+			E('br'),
+			E('code', { 'style': 'word-break:break-all;font-size:10px;' }, otpAuth)
+		]);
+	}
+});
 
 return baseclass.extend({
 	class: 'auth',
@@ -26,6 +62,13 @@ return baseclass.extend({
 			_('Enable two-factor authentication for LuCI login.'));
 		o.default = o.disabled;
 		o.rmempty = false;
+
+		o = s.taboption('basic', form.Value, 'priority', _('Priority'),
+			_('Execution order for this plugin. Lower values run earlier.'));
+		o.depends('enabled', '1');
+		o.datatype = 'integer';
+		o.placeholder = '15';
+		o.rmempty = true;
 
 		// User configuration section
 		o = s.taboption('basic', form.SectionValue, '_users', form.TableSection, 'luci_plugins', _('User Configuration'),
@@ -65,6 +108,9 @@ return baseclass.extend({
 		o.placeholder = '30';
 		o.datatype = 'uinteger';
 		o.rmempty = true;
+
+		o = s.taboption('basic', CBIQRCode, '_qrcode', _('Authenticator QR Code'));
+		o.depends('enabled', '1');
 
 		// Tab: Security
 		s.tab('security', _('Security'));
