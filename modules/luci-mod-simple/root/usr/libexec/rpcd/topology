@@ -1,0 +1,239 @@
+#!/usr/bin/env lua
+
+local json = require "luci.jsonc"
+local fs   = require "nixio.fs"
+local ubus = require "ubus"
+local uci  = require "luci.model.uci"
+
+local brforward = {}
+local ifstatuses = {}
+
+local function to_array(s)
+	if type(s) == "string" then
+		local l = {}
+		for i in s:gmatch("%S+") do
+			l[#l+1] = i
+		end
+		return l
+	elseif type(s) == "table" and #s > 0 then
+		return s
+	else
+		return {}
+	end
+end
+
+local function readfile(path)
+	local s = fs.readfile(path)
+	return s and (s:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function to_master(dev)
+	local master = fs.readlink("/sys/class/net/" .. dev .. "/master")
+	return master and fs.basename(master) or dev
+end
+
+local function to_port(dev, mac)
+	local br = to_master(dev)
+	if not br then
+		return nil
+	end
+
+	if not brforward[br] then
+		brforward[br] = {}
+
+		local f = io.open("/sys/class/net/" .. br .. "/brforward", "rb")
+		if f then
+			local ports = {}
+			for port in (fs.dir("/sys/class/net/" .. br .. "/brif") or function() end) do
+				local port_no = tonumber(readfile("/sys/class/net/" .. dev .. "/brif/" .. port .. "/port_no"), 16)
+				if port_no then
+					ports[port_no] = port
+				end
+			end
+
+			local fwd = {}
+			local fdb = f:read("*all")
+			for i = 1, fdb and #fdb or 0, 16 do
+				local mac = string.format("%02X:%02X:%02X:%02X:%02X:%02X",
+					fdb:byte(i + 0), fdb:byte(i + 1), fdb:byte(i + 2),
+					fdb:byte(i + 3), fdb:byte(i + 4), fdb:byte(i + 5))
+
+				brforward[br][mac] = ports[fdb:byte(i + 6) + fdb:byte(i + 12) * 256]
+			end
+
+			f:close()
+		end
+	end
+
+	return brforward[br][mac]
+end
+
+local function getTopology()
+	local ok, iw = pcall(require, "iwinfo")
+
+	local ipaddrs = {}
+	local hosts = {}
+
+	if ok then
+		for dev in (fs.dir("/sys/class/net") or function() end) do
+			local iwtype = iw.type(dev)
+			if iwtype then
+				for mac, assoc in pairs(iw[iwtype].assoclist(dev)) do
+					local host = hosts[mac]
+					if not host then
+						host = {}
+						hosts[mac] = host
+					end
+
+					assoc.phy = iw[iwtype].phyname(dev) or dev
+
+					host.dev = to_master(dev)
+					host.port = dev
+					host.assoc = assoc
+					host.active = true
+
+					if dev ~= host.dev then
+						brforward[host.dev] = brforward[host.dev] or {}
+						brforward[host.dev][mac] = dev
+					end
+				end
+			end
+		end
+	end
+
+	local n = io.popen("/bin/busybox ip neigh")
+	if n then
+		while true do
+			local ln = n:read("*l")
+			if not ln then
+				break
+			end
+
+			local words = {}
+			for m in ln:gmatch("%S+") do
+				words[#words + 1] = m
+				if m == "router" then
+					words[#words + 1] = true
+				end
+			end
+
+			local rec = {
+				addr = words[1],
+				state = words[#words]
+			}
+
+			for i = 2, #words - 1, 2 do
+				rec[words[i]] = words[i + 1]
+			end
+
+			if rec.lladdr then
+				local host = hosts[rec.lladdr:upper()]
+				if not host then
+					host = {}
+					hosts[rec.lladdr:upper()] = host
+				end
+
+				if rec.addr:match(":") then
+					host.neigh6 = host.neigh6 or {}
+					host.neigh6[#host.neigh6 + 1] = rec
+				else
+					host.neigh4 = host.neigh4 or {}
+					host.neigh4[#host.neigh4 + 1] = rec
+				end
+
+				ipaddrs[rec.addr] = host
+
+				host.dev = host.dev or rec.dev
+				host.port = to_port(to_master(rec.dev), rec.lladdr:upper())
+			end
+		end
+
+		n:close()
+	end
+
+	local ok, conn = pcall(ubus.connect)
+	if ok and conn then
+		local addrs = {}
+		for ipaddr in pairs(ipaddrs) do
+			addrs[#addrs + 1] = ipaddr
+		end
+
+		for ipaddr, name in pairs(conn:call("network.rrdns", "lookup", { addrs = addrs, timeout = 250 }) or {}) do
+			ipaddrs[ipaddr].name = name
+		end
+
+		local leases = conn:call("luci-rpc", "getDHCPLeases", {}) or {}
+		for _, lease in ipairs(leases.dhcp_leases or {}) do
+			local host = ipaddrs[lease.ipaddr]
+			if host then
+				host.dhcp = lease
+				host.name = host.name or lease.hostname
+			end
+		end
+
+		for _, lease in ipairs(leases.dhcp6_leases or {}) do
+			for _, ip6addr in ipairs(lease.ip6addrs or {}) do
+				local host = ipaddrs[ip6addr]
+				if host then
+					host.dhcp6 = lease
+					host.name = host.name or lease.hostname
+				end
+			end
+		end
+	end
+
+	local zones = {}
+	local devs = conn and conn:call("luci-rpc", "getNetworkDevices", {}) or {}
+
+	for _, dev in pairs(devs) do
+		if dev.wireless then
+			dev.iwinfo = conn and conn:call("iwinfo", "info", { device = _ })
+		end
+	end
+
+	uci:foreach("firewall", "zone", function(z)
+		local s = {}
+
+		if not z.name then
+			return
+		end
+
+		for _, net in ipairs(to_array(z.network)) do
+			local ifstatus = ifstatuses[net]
+			if not ifstatus then
+				ifstatus = conn and conn:call("network.interface", "status", { interface = net })
+				ifstatuses[net] = ifstatus
+			end
+
+			local dev = ifstatus and (ifstatus.l3_device or ifstatus.device)
+			if dev then
+				s[dev] = devs[dev]
+			end
+		end
+
+		for _, dev in ipairs(to_array(z.device)) do
+			s[dev] = devs[dev]
+		end
+
+		zones[z.name] = s
+	end)
+
+	for _, dev in pairs(devs) do
+		if type(dev.ports) == "table" then
+			local t = {}
+			for _, name in ipairs(dev.ports) do
+				t[name] = devs[name]
+			end
+			dev.ports = t
+		end
+	end
+
+	return { hosts = hosts, zones = zones }
+end
+
+if arg[1] == "list" then
+	print('{"getTopology":{}}')
+elseif arg[1] == "call" then
+	print(json.stringify(getTopology()))
+	os.exit(0)
+end
