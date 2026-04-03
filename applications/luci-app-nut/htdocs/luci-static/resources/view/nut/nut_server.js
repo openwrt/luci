@@ -56,8 +56,10 @@ return view.extend({
 		o.optional = true;
 
 		o = s.option(form.ListValue, 'upsmon', _('Role'));
-		o.value('slave', _('Auxiliary'));
-		o.value('master', _('Primary'));
+		o.value('secondary', _('Auxiliary'));
+		o.value('primary', _('Primary'));
+		o.value('slave', _('Auxiliary (deprecated)'));
+		o.value('master', _('Primary (deprecated)'));
 		o.optional = false;
 
 		// Listen settings

@@ -148,7 +148,7 @@ return view.extend({
 			o.default = false;
 		}
 
-		s = m.section(form.TypedSection, 'master', _('UPS Primary'));
+		s = m.section(form.TypedSection, 'primary', _('UPS Primary'));
 		s.optional = true;
 		s.addremove = true;
 		s.anonymous = true;
@@ -177,7 +177,65 @@ return view.extend({
 		o.optional = false;
 		o.password = true;
 
-		s = m.section(form.TypedSection, 'slave', _('UPS Auxiliary'));
+		s = m.section(form.TypedSection, 'secondary', _('UPS Auxiliary'));
+		s.optional = true;
+		s.addremove = true;
+		s.anonymous = true;
+
+		o = s.option(form.Value, 'upsname', _('Name of UPS'), _('As configured by NUT'));
+		o.optional = false;
+
+		o = s.option(form.Value, 'hostname', _('Hostname or address of UPS'));
+		o.optional = false;
+		o.datatype = 'or(host,ipaddr)';
+
+		o = s.option(form.Value, 'port', _('Port'));
+		o.optional = true;
+		o.placeholder = 3493;
+		o.datatype = 'port';
+
+		o = s.option(form.Value, 'powervalue', _('Power value'));
+		o.optional = false;
+		o.datatype = 'uinteger';
+		o.default = 1;
+
+		o = s.option(form.Value, 'username', _('Username'));
+		o.optional = false;
+
+		o = s.option(form.Value, 'password', _('Password'));
+		o.optional = false;
+		o.password = true;
+
+		s = m.section(form.TypedSection, 'master', _('UPS Primary (deprecated)'), _('Uses deprecated section name. Please convert to "UPS Primary"'));
+		s.optional = true;
+		s.addremove = true;
+		s.anonymous = true;
+
+		o = s.option(form.Value, 'upsname', _('Name of UPS'), _('As configured by NUT'));
+		o.optional = false;
+
+		o = s.option(form.Value, 'hostname', _('Hostname or address of UPS'));
+		o.optional = false;
+		o.datatype = 'or(host,ipaddr)';
+
+		o = s.option(form.Value, 'port', _('Port'));
+		o.optional = true;
+		o.placeholder = 3493;
+		o.datatype = 'port';
+
+		o = s.option(form.Value, 'powervalue', _('Power value'));
+		o.optional = false;
+		o.datatype = 'uinteger';
+		o.default = 1;
+
+		o = s.option(form.Value, 'username', _('Username'));
+		o.optional = false;
+
+		o = s.option(form.Value, 'password', _('Password'));
+		o.optional = false;
+		o.password = true;
+
+		s = m.section(form.TypedSection, 'slave', _('UPS Auxiliary (deprecated)'), _('Uses deprecated section name. Please convert to "UPS Auxilary"'));
 		s.optional = true;
 		s.addremove = true;
 		s.anonymous = true;
