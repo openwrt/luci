@@ -1038,6 +1038,24 @@ return view.extend({
 					o = ss.taboption('advanced', form.Flag, 'ldpc', _('Tx LDPC'));
 					o.depends({'rxldpc': '1'});
 					o.default = '1';
+
+					o = ss.taboption('advanced', form.Flag, 'disable_eht', _('Disable EHT (802.11be)'), _('Disable IEEE 802.11be (WiFi 7 / EHT) operation and fall back to 802.11ax (WiFi 6 / HE).'));
+					o.rmempty = true;
+
+					o = ss.taboption('advanced', form.Value, 'punct_bitmap', _('Punctured Channel Bitmap'), _('Bitmask of 20 MHz sub-channels to exclude (puncture) in the operating channel. Each bit represents one 20 MHz sub-channel; setting a bit to 1 disables that sub-channel. Applies only to EHT160 and EHT320 modes.'));
+					o.datatype = 'range(0,65535)';
+					o.placeholder = '0';
+					o.rmempty = true;
+					o.depends('htmode', 'EHT160');
+					o.depends('htmode', 'EHT320');
+
+					o = ss.taboption('advanced', form.Flag, 'eht_su_beamformer', _('EHT SU Beamformer'), _('Enable IEEE 802.11be (WiFi 7) Single-User Transmit Beamformer capability.'));
+					o.default = '1';
+					o.rmempty = true;
+
+					o = ss.taboption('advanced', form.Flag, 'eht_mu_beamformer', _('EHT MU Beamformer'), _('Enable IEEE 802.11be (WiFi 7) Multi-User Transmit Beamformer capability.'));
+					o.default = '1';
+					o.rmempty = true;
 				}
 
 
@@ -2146,6 +2164,15 @@ return view.extend({
 								return true;
 							};
 						}
+
+						o = ss.taboption('encryption', form.ListValue, 'sae_pwe', _('SAE Password Element'), _('Defines the mechanism(s) allowed for SAE password element derivation. Hash-to-Element (H2E) is required for WiFi 7 (802.11be) on 6 GHz and provides improved resistance to timing side-channel attacks.'));
+						o.value('0', _('Hunting-and-Pecking (H&P) only'));
+						o.value('1', _('Hash-to-Element (H2E) only'));
+						o.value('2', _('H&P and H2E (recommended for WiFi 7 / 6 GHz)'));
+						o.default = '2';
+						o.rmempty = true;
+						o.depends('encryption', 'sae');
+						o.depends('encryption', 'sae-mixed');
 
 						o = ss.taboption('encryption', form.Flag, 'wpa_disable_eapol_key_retries', _('Enable key reinstallation (KRACK) countermeasures'), _('Complicates key reinstallation attacks on the client side by disabling retransmission of EAPOL-Key frames that are used to install keys. This workaround might cause interoperability issues and reduced robustness of key negotiation especially in environments with heavy traffic load.'));
 						add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
