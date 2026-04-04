@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-02-18 15:44+0000\n"
-"Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
+"PO-Revision-Date: 2026-04-03 13:36+0000\n"
+"Last-Translator: Peng Liu <littlenewton6@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationstinyproxy/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:291
 msgid ""
@@ -80,7 +80,7 @@ msgstr "默认拒绝"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:100
 msgid "Enable Tinyproxy server"
-msgstr "启用Tinyproxy"
+msgstr "启用 Tinyproxy"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:127
 msgid "Error page"
@@ -92,7 +92,7 @@ msgstr "正则表达式过滤器"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:216
 msgid "Filter by URLs"
-msgstr "基于URL的过滤器"
+msgstr "基于 URL 的过滤器"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:224
 msgid "Filter case-sensitive"
@@ -112,7 +112,7 @@ msgstr "常规设置"
 
 #: applications/luci-app-tinyproxy/root/usr/share/rpcd/acl.d/luci-app-tinyproxy.json:3
 msgid "Grant UCI access for luci-app-tinyproxy"
-msgstr "授予UCI访问luci-app-tinyproxy的权限"
+msgstr "授予 UCI 访问 luci-app-tinyproxy 的权限"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:169
 msgid "Group"
@@ -165,7 +165,7 @@ msgstr "日志级别"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:153
 msgid "Logging verbosity of the Tinyproxy process"
-msgstr "冗长的Tinyproxy过程日志"
+msgstr "冗长的 Tinyproxy 过程日志"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:244
 msgid "Max. clients"
@@ -207,11 +207,11 @@ msgstr "备用进程数的最小值"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:266
 msgid "Number of idle processes to start when launching Tinyproxy"
-msgstr "启动Tinyproxy时开启的进程数"
+msgstr "启动 Tinyproxy 时开启的进程数"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:213
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
-msgstr "带要过滤的URLs或域名的纯文本文件。每行一条"
+msgstr "带要过滤的 URLs 或域名的纯文本文件。每行一条"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:290
 msgid "Policy"
@@ -245,15 +245,17 @@ msgstr "服务器限制"
 msgid ""
 "Specifies HTTP header names which are allowed to pass-through, all others "
 "are discarded. Leave empty to disable header filtering"
-msgstr "指定HTTP报头名称可直通的,其它将被丢弃。保留空，禁用头过滤"
+msgstr ""
+"指定允许透传的 HTTP 头部名称，其他所有头部将被丢弃。若留空，则禁用头部过滤功"
+"能"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:104
 msgid "Specifies the HTTP port Tinyproxy is listening on for requests"
-msgstr "Tinyproxy正在侦听请求的指定HTTP端口"
+msgstr "Tinyproxy 正在侦听请求的指定 HTTP 端口"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:184
 msgid "Specifies the Tinyproxy hostname to use in the Via HTTP header"
-msgstr "通过HTTP头使用指定Tinyproxy主机名"
+msgstr "通过 HTTP 头使用指定 Tinyproxy 主机名"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:120
 msgid ""
@@ -266,19 +268,19 @@ msgstr "指定服务器接收代理请求所使用的地址"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:170
 msgid "Specifies the group name the Tinyproxy process is running as"
-msgstr "指定Tinyproxy进程所属组"
+msgstr "指定 Tinyproxy 进程所属组"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:306
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
 "<code>address:port</code> or <code>socks5 address:port</code>"
 msgstr ""
-"指定访问目标主机的上游代理。格式 <code>address:port</code> 或 <code>socks5 "
+"指定访问目标主机的上游代理。格式为 <code>address:port</code> 或 <code>socks5 "
 "address:port</code>"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:164
 msgid "Specifies the user name the Tinyproxy process is running as"
-msgstr "指定Tinyproxy进程所属用户"
+msgstr "指定 Tinyproxy 进程所属用户"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:265
 msgid "Start spare servers"
@@ -299,11 +301,11 @@ msgstr "目标主机"
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:79
 #: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:3
 msgid "Tinyproxy"
-msgstr "Tinyproxy服务器"
+msgstr "Tinyproxy 服务器"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:79
 msgid "Tinyproxy is a small and fast non-caching HTTP(S)-Proxy"
-msgstr "Tinyproxy是一个轻量级无缓存机制的高速HTTP(S)代理服务器"
+msgstr "Tinyproxy 是一个轻量级无缓存机制的高速 HTTP(S) 代理服务器"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:58
 msgid "Tinyproxy is disabled"
@@ -317,7 +319,7 @@ msgstr "上级代理"
 msgid ""
 "Upstream proxy rules define proxy servers to use when accessing certain IP "
 "addresses or domains."
-msgstr "当访问特定IP地址或域名时，使用外出代理规则定义的代理服务器。"
+msgstr "当访问特定 IP 地址或域名时，使用外出代理规则定义的代理服务器。"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:141
 msgid "Use syslog"
@@ -346,4 +348,4 @@ msgstr "将日志写入系统日志以代替指定的日志文件"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:179
 msgid "X-Tinyproxy header"
-msgstr "X-Tinyproxy头"
+msgstr "X-Tinyproxy 头"

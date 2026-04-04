@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-03-16 23:10+0000\n"
+"PO-Revision-Date: 2026-04-02 19:05+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsusteer/ko/>\n"
@@ -12,29 +12,31 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:729
 msgid "0 No active transition"
-msgstr ""
+msgstr "0 활성 전환 없음"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:730
 msgid "1 Passive BSS-transition-request"
-msgstr ""
+msgstr "1 수동 BSS 전환 요청"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:731
 msgid "2 BSS-transition-request with disassociation imminent"
-msgstr ""
+msgstr "2 BSS 전환 요청 (연결 해제 임박 알림 사용)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:732
 msgid "3 BSS-transition-request with disassociation imminent and timer"
-msgstr ""
+msgstr "3 BSS 전환 요청 (연결 해제 임박 알림 및 전환 대기 시간 사용)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:733
 msgid ""
 "4 BSS-transition-request with disassociation imminent, timer and forced "
 "disassociation"
 msgstr ""
+"4 BSS 전환 요청 (연결 해제 임박 알림 및 전환 대기 시간 사용, 강제 연결 해제 "
+"적용)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:760
 msgid "A value of 0 disables threshold."
-msgstr ""
+msgstr "0으로 설정하면 임계값을 비활성화합니다."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:81
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:291
@@ -49,17 +51,19 @@ msgstr "AP 피어키(PeerKey)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:726
 msgid "Aggressiveness"
-msgstr ""
+msgstr "전환 강도"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:739
 msgid "Aggressiveness mac list"
-msgstr ""
+msgstr "전환 강도 MAC 목록"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:727
 msgid ""
 "Aggressiveness of BSS-transition-request to push a station to another node "
 "(AP or band)."
 msgstr ""
+"스테이션을 다른 노드 (AP 또는 밴드)로 이동시키기 위한 BSS 전환 요청의 강도를 "
+"설정합니다."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:514
 msgid "All debug messages"
@@ -96,7 +100,7 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:759
 msgid "Avoids conflicts between roaming and band-steering policies."
-msgstr ""
+msgstr "로밍 정책과 밴드 스티어링 정책 간의 충돌을 방지합니다."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:293
 msgid "BSSID"
@@ -112,7 +116,7 @@ msgstr "밴드 스티어링 최소 SNR"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:757
 msgid "Band steering signal threshold"
-msgstr ""
+msgstr "밴드 스티어링 신호 임계값"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:558
 msgid "Band steering threshold"
@@ -237,6 +241,8 @@ msgid ""
 "List of MACs (lower case) to set aggressiveness per station, e.g. "
 "ff:ff:ff:ff:ff:ff,2"
 msgstr ""
+"단말별로 전환 강도를 개별 설정할 MAC 주소 목록 (소문자)입니다. (예: "
+"ff:ff:ff:ff:ff:ff,2)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:715
 msgid "List of SSIDs to enable steering on"
@@ -472,7 +478,7 @@ msgstr "채널 부하로 추방 시, 전송할 사유 코드."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:748
 msgid "Reassociation delay"
-msgstr ""
+msgstr "재연결 지연 시간"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:63
 msgid "Refresh page to get new mac addresses to show up"
@@ -549,6 +555,8 @@ msgid ""
 "SNR difference that the signal must be better compared to signal was on "
 "connection to node."
 msgstr ""
+"현재 연결된 노드보다 신호가 얼마나 더 개선되어야 하는지를 결정하는 SNR "
+"차이값을 설정합니다."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:83
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:294
@@ -570,7 +578,7 @@ msgstr "<a %s>문서</a>를 참조하세요"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:741
 msgid "See option above for a list of numberical values"
-msgstr ""
+msgstr "숫자 값의 상세 의미는 위 설정을 참조하세요"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:548
 msgid "Seen policy timeout"
@@ -648,6 +656,8 @@ msgid ""
 "Timeout (s in \"1024ms\") a station is requested to avoid reassociation "
 "after bss transition"
 msgstr ""
+"BSS 전환 발생 후, 해당 단말이 일정 시간 동안 재연결을 시도하지 않도록 "
+"요청하는 대기 시간 [단위: 약 1초(\"1024ms\")]"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:589
 msgid "Timeout after which a station with SNR < min_SNR will be kicked"
