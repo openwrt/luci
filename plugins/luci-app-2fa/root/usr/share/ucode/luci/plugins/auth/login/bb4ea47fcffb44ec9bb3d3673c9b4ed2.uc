@@ -42,11 +42,32 @@ function get_priority() {
 	return int(value);
 }
 
+function get_system_min_valid_time_fallback() {
+	let newest = 0;
+	let fd = popen('find /etc -type f -exec date -r {} +%s \\; 2>/dev/null', 'r');
+	if (!fd)
+		return DEFAULT_MIN_VALID_TIME;
+
+	for (let line = fd.read('line'); line; line = fd.read('line')) {
+		line = trim(line);
+		if (!match(line, /^[0-9]+$/))
+			continue;
+
+		let ts = int(line);
+		if (ts > newest)
+			newest = ts;
+	}
+
+	fd.close();
+
+	return newest > 0 ? newest : DEFAULT_MIN_VALID_TIME;
+}
+
 // Check if system time is calibrated (not earlier than minimum valid time)
 function check_time_calibration() {
 	let ctx = cursor();
 	let config_time = ctx.get('luci_plugins', PLUGIN_UUID, 'min_valid_time');
-	let min_valid_time = config_time ? int(config_time) : DEFAULT_MIN_VALID_TIME;
+	let min_valid_time = config_time ? int(config_time) : get_system_min_valid_time_fallback();
 	let current_time = time();
 
 	return {
