@@ -10,6 +10,21 @@ import { connect } from 'ubus';
 const ctx = cursor();
 const LXC_URL  = ctx.get('lxc', 'lxc', 'url');
 
+function shellquote(value) {
+	if (value == null)
+		value = '';
+
+	return "'" + replace(value, "'", "'\\''") + "'";
+}
+
+function is_valid_lxc_name(value) {
+	return type(value) == 'string' && match(value, /^[A-Za-z0-9._-]{1,64}$/) != null;
+}
+
+function is_valid_lxc_template(value) {
+	return type(value) == 'string' && match(value, /^.+:.+$/) != null;
+}
+
 function statfs(path) {
 	let p = fs.popen('df -kP ' + path);
 	p.read('line');               // header
@@ -53,12 +68,19 @@ const LXCController = {
 
 	lxc_create: function(lxc_name, lxc_template) {
 		http.prepare_content('text/plain');
+		if (!is_valid_lxc_name(lxc_name)) {
+			return;
+		}
+		if (!is_valid_lxc_template(lxc_template)) {
+			return;
+		}
+
 		let path = this.lxc_get_config_path();
 		if (!path) return;
 		let arr = match(lxc_template, /^(.+):(.+)$/);
 		let lxc_dist = arr[1], lxc_release = arr[2];
 
-		system(`/usr/bin/lxc-create --quiet --name ${lxc_name} --bdev best --template download -- --dist ${lxc_dist} --release ${lxc_release} --arch ${this.lxc_get_arch_target(LXC_URL)} --server ${LXC_URL}`);
+		system(`/usr/bin/lxc-create --quiet --name ${shellquote(lxc_name)} --bdev best --template download -- --dist ${shellquote(lxc_dist)} --release ${shellquote(lxc_release)} --arch ${this.lxc_get_arch_target(LXC_URL)} --server ${LXC_URL}`);
 
 		while (fs.access(path + lxc_name + '/partial')) {
 			sleep(1000);
