@@ -6,14 +6,6 @@ import { cursor } from 'uci';
 import { sha1 } from 'digest';
 import { pack } from 'struct';
 
-function hex_to_bin(hex) {
-	let bin = "";
-	for (let i = 0; i < length(hex); i += 2) {
-		bin += chr(int(substr(hex, i, 2), 16));
-	}
-	return bin;
-}
-
 const base32_decode_table = (function() {
 	let t = {};
 	for (let i = 0; i < 26; i++) { t[ord('A') + i] = i; t[ord('a') + i] = i; }
@@ -46,7 +38,7 @@ function decode_base32_to_bin(string) {
 
 function calculate_hmac_sha1(key, message) {
 	const blocksize = 64;
-	if (length(key) > blocksize) key = hex_to_bin(sha1(key));
+	if (length(key) > blocksize) key = hexdec(sha1(key));
 	while (length(key) < blocksize) key += chr(0);
 
 	let o_key_pad = "", i_key_pad = "";
@@ -55,7 +47,7 @@ function calculate_hmac_sha1(key, message) {
 		o_key_pad += chr(k ^ 0x5c);
 		i_key_pad += chr(k ^ 0x36);
 	}
-	let inner_hash = hex_to_bin(sha1(i_key_pad + message));
+	let inner_hash = hexdec(sha1(i_key_pad + message));
 	return sha1(o_key_pad + inner_hash);
 }
 
@@ -63,7 +55,7 @@ function calculate_otp(secret_base32, counter_int) {
 	let secret_bin = decode_base32_to_bin(secret_base32);
 	if (!secret_bin) return null;
 
-	let counter_bin = pack(">I", 0) + pack(">I", counter_int); 
+	let counter_bin = pack(">Q", counter_int);
 
 	let hmac_hex = calculate_hmac_sha1(secret_bin, counter_bin);
 
