@@ -1,10 +1,10 @@
 {
-	"admin/services/nlbw": {
+	"admin/control/nlbw": {
 		"title": "Bandwidth Monitor",
 		"order": 80,
 		"action": {
 			"type": "alias",
-			"path": "admin/services/nlbw/display"
+			"path": "admin/control/nlbw/display"
 		},
 		"depends": {
 			"acl": [ "luci-app-nlbwmon" ],
@@ -12,7 +12,7 @@
 		}
 	},
 
-	"admin/services/nlbw/display": {
+	"admin/control/nlbw/display": {
 		"title": "Display",
 		"order": 10,
 		"action": {
@@ -21,7 +21,7 @@
 		}
 	},
 
-	"admin/services/nlbw/config": {
+	"admin/control/nlbw/config": {
 		"title": "Configuration",
 		"order": 20,
 		"action": {
@@ -30,7 +30,7 @@
 		}
 	},
 
-	"admin/services/nlbw/backup": {
+	"admin/control/nlbw/backup": {
 		"title": "Backup",
 		"order": 30,
 		"action": {
