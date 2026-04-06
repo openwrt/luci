@@ -1,0 +1,14 @@
+{
+	"admin/network/arpbind": {
+		"title": "IP/MAC Binding",
+		"order": 45,
+		"action": {
+			"type": "view",
+			"path": "arpbind"
+		},
+		"depends": {
+			"acl": [ "luci-app-arpbind" ],
+			"uci": { "arpbind": true }
+		}
+	}
+}

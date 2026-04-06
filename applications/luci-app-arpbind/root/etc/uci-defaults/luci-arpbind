@@ -1,0 +1,8 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@arpbind[-1]
+	commit ucitrack
+EOF
+
+exit 0
