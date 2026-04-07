@@ -62,11 +62,16 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/banip_runtime.json'), null).then(function (stat) {
+			return L.resolveDefault(fs.stat('/var/run/banIP/banIP_runtime.json'), null).then(function (stat) {
 				if (!stat) {
 					return;
 				}
-				return L.resolveDefault(fs.read_direct('/var/run/banip_runtime.json'), 'null').then(function (res) {
+				return Promise.all([
+					L.resolveDefault(fs.read_direct('/var/run/banIP/banIP_runtime.json'), 'null'),
+					L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['actual']), '')
+				]).then(function (results) {
+					const res = results[0];
+					const actual = results[1]?.trim() || '';
 					const status = document.getElementById('status');
 					const buttons = document.querySelectorAll('.cbi-page-actions button');
 					let info = null;
@@ -90,7 +95,12 @@ return view.extend({
 						return;
 					}
 					if (status && info) {
-						status.textContent = `${info.status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
+						let statusText = info.status || '-';
+						if (actual) {
+							statusText += `: ${actual}`;
+						}
+						statusText += ` (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
+						status.textContent = statusText;
 						if (info.status === "processing") {
 							buttons.forEach(function (btn) {
 								btn.disabled = true;
@@ -597,9 +607,9 @@ return view.extend({
 		o.value('error: maximum authentication attempts exceeded', _('sshd failed login'));
 		o.value('sshd.*Connection closed by.*\\[preauth\\]', _('sshd closed connection'));
 		o.value('SecurityEvent=\\"InvalidAccountID\\".*RemoteAddress=', _('asterisk invalid account'));
-		o.value('received a suspicious remote IP .*', _('nginx suspicious IP'));
 		o.value('TLS Error: could not determine wrapping from \\[AF_INET\\]', _('openvpn TLS error'));
 		o.value('AdGuardHome.*\\[error\\].*/control/login: from ip', _('AdGuardHome login error'));
+		o.value('received a suspicious remote IP', _('Remote logging Event'));
 		o.placeholder = _('-- Please choose (optional) --');
 		o.optional = true;
 		o.rmempty = true;
