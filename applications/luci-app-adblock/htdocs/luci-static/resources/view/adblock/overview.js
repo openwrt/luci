@@ -477,9 +477,9 @@ return view.extend({
 		o.default = '2a13:1001::86:54:11:100';
 		o.rmempty = true;
 
-		const url = `https://${window.location.hostname}/cgi-bin/adblock`;
+		const url = `${window.location.protocol}//${window.location.hostname}/cgi-bin/adblock`;
 		const options = {
-			pixelSize: 2,
+			pixelSize: 3,
 			margin: 1,
 			ecLevel: 'M',
 			whiteColor: 'white',
