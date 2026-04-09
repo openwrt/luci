@@ -160,5 +160,5 @@ For production use, integrate with actual authentication systems:
 ## See Also
 
 - LuCI Plugin Architecture: commit 617f364
-- HTTP Header Plugins: `plugins/plugins-example/`
+- HTTP Header Plugins: `plugins/luci-plugin-examples/`
 - LuCI Dispatcher: `modules/luci-base/ucode/dispatcher.uc`
