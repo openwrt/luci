@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-03-29 16:36+0000\n"
-"Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-04-08 22:10+0000\n"
+"Last-Translator: UDP <udp@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -833,7 +833,7 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
-"新增監聽以接受來自非本地節點的傳入對等互連。無論此處設定的監聽如何，多播對等"
+"新增監聽以接受來自非本地節點的傳入對等互連。無論這裡設定的監聽如何，多播對等"
 "點發現都會起作用。URI格式: <code>tls://0.0.0.0:0</code> or <code>tls://"
 "[::]:0</code>監聽所有介面。選擇一個可接受的URI<code>tls://</code>, "
 "<code>tcp://</code>, <code>unix://</code> or <code>quic://</code>"
@@ -3095,7 +3095,7 @@ msgstr "動態授權擴充連接埠。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1590
 msgid "Dynamic Authorization Extension secret."
-msgstr "動態授權擴充密文。"
+msgstr "動態授權擴充秘密。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:805
 msgid "Dynamic load balance"
@@ -3745,7 +3745,7 @@ msgstr "FDB"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:77
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:77
 msgid "FDB entry lifetime"
-msgstr "FDB 條目有效時間"
+msgstr "FDB 條目生命週期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1196
 msgid "FQDN"
@@ -4402,7 +4402,7 @@ msgstr "授予存取連接埠狀態顯示的權限"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:13
 msgid "Grant access to process status"
-msgstr "授予存取程式狀態的權限"
+msgstr "授予存取行程狀態的權限"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:3
 msgid "Grant access to realtime statistics"
@@ -4765,7 +4765,7 @@ msgstr "IPv4 網路遮罩"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:347
 msgid "IPv4 network in address/netmask notation"
-msgstr "IPv4 網路 (\"位址/網路遮罩\" 標記法)"
+msgstr "IPv4 網路 (\"位址/網路遮罩\" 表示法)"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:140
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:205
@@ -4847,7 +4847,7 @@ msgstr "IPv6 鄰居"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 msgid "IPv6 Preferred Prefix Lifetime"
-msgstr "IPv6 優先前綴有效時間"
+msgstr "IPv6 偏好前綴生命週期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:631
 msgid "IPv6 RA Settings"
@@ -4875,7 +4875,7 @@ msgstr "IPv6 上游"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:947
 msgid "IPv6 Valid Prefix Lifetime"
-msgstr "IPv6 前綴生命週期"
+msgstr "IPv6 有效前綴生命週期"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:184
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:59
@@ -4898,7 +4898,7 @@ msgstr "IPv6 閘道"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:352
 msgid "IPv6 network in address/netmask notation"
-msgstr "IPv6 網路 (\"位址/網路遮罩\" 標記法)"
+msgstr "IPv6 網路 (\"位址/網路遮罩\" 表示法)"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:141
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:206
@@ -5319,6 +5319,7 @@ msgid "Insufficient permissions to read UCI configuration."
 msgstr "權限不足以讀取 UCI 配置。"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:136
+#, fuzzy
 msgid "Integrated Circuit Card Identifier"
 msgstr "ICCID"
 
@@ -5401,16 +5402,18 @@ msgid "Internal"
 msgstr "內部"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:85
+#, fuzzy
 msgid "International Mobile Station Equipment Identity"
 msgstr "IMEI"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:139
+#, fuzzy
 msgid "International Mobile Subscriber Identity"
 msgstr "IMSI"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:138
 msgid "Interval"
-msgstr ""
+msgstr "間隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1076
 msgid ""
@@ -6343,7 +6346,7 @@ msgstr "匹配發送至此介面的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:174
 msgid "Match traffic destined to this subnet (CIDR notation)"
-msgstr "匹配發送至此子網路 (CIDR 標記法) 的流量"
+msgstr "匹配發送至此子網路 (CIDR 表示法) 的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:153
 msgid "Match traffic from this interface"
@@ -6351,7 +6354,7 @@ msgstr "匹配來自此介面的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
 msgid "Match traffic from this source subnet (CIDR notation)"
-msgstr "匹配來自此來源子網路 (CIDR 標記法) 的流量"
+msgstr "匹配來自此來源子網路 (CIDR 表示法) 的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:183
 msgid "Matched traffic re-targets to an interface using this table."
@@ -6423,7 +6426,7 @@ msgstr "租約位址的最大數量。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 msgid "Maximum preferred lifetime for a prefix."
-msgstr "前綴的最大優先有效時間。"
+msgstr "前綴最大偏好有效時間。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1062
 msgid "Maximum snooping table size"
@@ -6447,7 +6450,7 @@ msgstr "最大傳輸功率"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:947
 msgid "Maximum valid lifetime for a prefix."
-msgstr "前綴最大生命週期。"
+msgstr "前綴最大有效生命週期。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:688
 msgid "May prevent VoIP or other services from working."
@@ -7976,7 +7979,7 @@ msgstr "密碼 2"
 msgid ""
 "Paste content of a file, or a URL to a key file, or drag and drop here to "
 "upload a software repository public key…"
-msgstr "貼上檔案內容或金鑰檔案 URL，或拖曳到此處以上傳儲存庫公鑰…"
+msgstr "貼上檔案內容或金鑰檔案 URL，或拖曳到這裡以上傳儲存庫公鑰…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:266
 msgid "Paste or drag SSH key file…"
@@ -8334,7 +8337,7 @@ msgstr "PrivateKey 設定遺失或無效"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
 msgid "Processes"
-msgstr "程式"
+msgstr "行程"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:67
 msgid "Prot."
@@ -8456,7 +8459,7 @@ msgstr "按照上游解析器在解析檔案中出現的順序查詢。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1694
 msgid "R0 Key Lifetime"
-msgstr "R0 金鑰有效時間"
+msgstr "R0 金鑰生命週期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1700
 msgid "R1 Key Holder"
@@ -8676,7 +8679,7 @@ msgstr "註冊狀態"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:102
 msgctxt "nft reject with icmp type"
 msgid "Reject IPv4 packet with <strong>ICMP type %h</strong>"
-msgstr "拒絕<strong>ICMP 類別為 %h 的</strong> IPv4 封包"
+msgstr "拒絕 <strong>ICMP 類別 %h</strong> 的 IPv4 封包"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:104
 msgctxt "nft reject with icmpx type"
@@ -9175,8 +9178,8 @@ msgid ""
 "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> messages. Maximum is 9000 seconds."
 msgstr ""
-"在 <abbr title=\"路由器公告，ICMPv6類別134\">RA</abbr> 訊息中發布路由器有效時"
-"間。最大值為 9000 秒。"
+"在 <abbr title=\"路由器公告，ICMPv6 類型 134\">RA</abbr> 訊息中發布路由器生命"
+"週期。最大值為 9000 秒。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -10151,7 +10154,7 @@ msgstr "切換協定"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:104
 #: modules/luci-compat/luasrc/view/cbi/ipaddr.htm:26
 msgid "Switch to CIDR list notation"
-msgstr "切換至 CIDR 清單標記法"
+msgstr "切換至 CIDR 清單表示法"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3028
 msgid "Symbolic link"
@@ -10356,7 +10359,7 @@ msgstr "此主機的DHCPv6-DUID（DHCP唯一識別碼）。"
 msgid ""
 "The DNS server entries in the local resolv.conf are primarily sorted by the "
 "weight specified here"
-msgstr "本地 resolv.conf 中的 DNS 伺服器條目主要按此處指定的權重排序"
+msgstr "本地 resolv.conf 中的 DNS 伺服器條目主要按這裡指定的權重排序"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:77
 msgid ""
@@ -10955,7 +10958,7 @@ msgstr "此金鑰已受保護無法刪除。"
 msgid ""
 "This list gives an overview over currently running system processes and "
 "their status."
-msgstr "此清單概述了當前執行的程式及其狀態。"
+msgstr "此清單概覽了當前執行的程式及其狀態。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:405
 msgid "This option adds additional record types to the cache."
@@ -11065,7 +11068,7 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
-"恢復設定檔案可在此處上傳已產生的備份存檔。若要重設韌體為初始狀態，按下 \"執行"
+"恢復設定檔案可在這裡上傳已產生的備份存檔。若要重設韌體為初始狀態，按下 \"執行"
 "重設\" (僅適用於 squashfs 映像檔) 。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1681
@@ -12475,7 +12478,7 @@ msgstr "中等安全性"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:138
 msgid "milliseconds"
-msgstr ""
+msgstr "毫秒"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:75
 msgctxt "nft unit"
@@ -12864,7 +12867,7 @@ msgstr "有效網路裝置名稱，非 \".\" 或 \"..\""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:365
 msgid "valid network in address/netmask notation"
-msgstr "有效網路 (\"位址/網路遮罩\" 標記法)"
+msgstr "有效網路 (\"位址/網路遮罩\" 表示法)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:595
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
