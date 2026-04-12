@@ -337,7 +337,7 @@ return view.extend({
 		if (opts['keep'][0].checked)
 			ui.awaitReconnect(window.location.host);
 		else
-			ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
+			ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
 	},
 
 	handleBackupList(ev) {
