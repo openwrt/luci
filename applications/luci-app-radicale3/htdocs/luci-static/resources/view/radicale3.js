@@ -453,21 +453,19 @@ return view.extend({
 		o = s.taboption('main', form.ListValue, 'level', _('Log Level'));
 		s.rmempty = true;
 		o.value('', _('Default (info)'));
+		o.value('trace', _('Trace'));
 		o.value('debug', _('Debug'));
 		o.value('info', _('Info'));
+		o.value('notice', _('Notice'));
 		o.value('warning', _('Warning'));
 		o.value('error', _('Error'));
 		o.value('critical', _('Critical'));
+		o.value('alert', _('Alert'));
 		o.default = '';
 
 		// TODO: Add more logging options
 
 		s.tab('advanced', _('Advanced'));
-
-		o = s.taboption('advanced', form.Flag, 'trace_on_debug', _('Trace on debug'), _('Do not filter debug messages starting with \'TRACE\''));
-		o.rmempty = true;
-		o.default = o.disabled;
-		o.depends('level', 'debug');
 
 		o = s.taboption('advanced', form.Flag, 'mask_passwords', _('Mask Passwords'), _('Redact passwords in logs'));
 		o.rmempty = true;

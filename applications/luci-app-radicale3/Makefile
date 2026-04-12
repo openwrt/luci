@@ -10,6 +10,8 @@ PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca>
 PROVIDES:=luci-app-radicale2
 
+EXTRA_DEPENDS:=radicale3 (>= 3.7.1-1)
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
