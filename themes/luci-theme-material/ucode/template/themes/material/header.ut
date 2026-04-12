@@ -23,14 +23,25 @@
 
 	const boardinfo = ubus.call('system', 'board');
 	const hostname = striptags(boardinfo?.hostname ?? '?');
+	const darkpref = (theme == 'material-dark' ? 'true' : (theme == 'material-light' ? 'false' : null));
 
 	http.prepare_content('text/html; charset=UTF-8');
 -%}
 
 <!DOCTYPE html>
-<html lang="{{ dispatcher.lang }}">
+<html lang="{{ dispatcher.lang }}" {{ darkpref ? `data-darkmode="${darkpref}"` : '' }}>
 <head>
 <meta charset="utf-8">
+{% if (!darkpref): %}
+<script>
+	var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
+	    rootElement = document.querySelector(':root'),
+	    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };
+
+	mediaQuery.addEventListener('change', setDarkMode);
+	setDarkMode(mediaQuery);
+</script>
+{% endif %}
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">

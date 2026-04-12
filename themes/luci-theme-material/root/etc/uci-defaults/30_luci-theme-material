@@ -1,12 +1,28 @@
 #!/bin/sh
 
-if [ "$PKG_UPGRADE" != 1 ]; then
-	uci get luci.themes.Material >/dev/null 2>&1 || \
-	uci batch <<-EOF
-		set luci.themes.Material=/luci-static/material
-		set luci.main.mediaurlbase=/luci-static/material
-		commit luci
-	EOF
+changed=0
+
+set_opt() {
+	local key=$1
+	local val=$2
+
+	if ! uci -q get "luci.$key" 2>/dev/null; then
+		uci set "luci.$key=$val"
+		changed=1
+	fi
+}
+
+set_opt themes.Material /luci-static/material
+
+if [ "$PKG_UPGRADE" != 1 ] && [ $changed = 1 ]; then
+	set_opt main.mediaurlbase /luci-static/material
+fi
+
+set_opt themes.MaterialDark /luci-static/material-dark
+set_opt themes.MaterialLight /luci-static/material-light
+
+if [ $changed = 1 ]; then
+	uci commit luci
 fi
 
 exit 0
