@@ -79,14 +79,8 @@ let config = {
 	paddingMin: 5,
 	paddingMax: 20,
 	currentDirectory: '/', // Current directory
-
-	windowHeight: 800,
-	windowWidth: 400,
-
 	texteditorHeight: 550,
-	texteditorWidth: 850,
 	hexeditorHeight: 550,
-	hexeditorWidth: 850,
 
 	// otherSettings: {} // Additional settings
 };
@@ -193,11 +187,7 @@ function saveConfig() {
 		'\toption paddingMin \'' + config.paddingMin + '\'',
 		'\toption paddingMax \'' + config.paddingMax + '\'',
 		'\toption currentDirectory \'' + config.currentDirectory + '\'',
-		'\toption windowHeight \'' + config.windowHeight + '\'',
-		'\toption windowWidth \'' + config.windowWidth + '\'',
-		'\toption texteditorWidth \'' + config.texteditorWidth + '\'',
 		'\toption texteditorHeight \'' + config.texteditorHeight + '\'',
-		'\toption hexeditorWidth \'' + config.hexeditorWidth + '\'',
 		'\toption hexeditorHeight \'' + config.hexeditorHeight + '\'',
 	];
 
@@ -263,7 +253,35 @@ function insertCss(cssContent) {
 
 // CSS styles for the file manager interface
 const cssContent = `
-.cbi-button-apply, .cbi-button-reset, .cbi-button-save:not(.custom-save-button) {
+:root {
+	color-scheme: light dark;
+	--light-bg: #EEE;
+	--light-bg-semi: #FFF;
+	--light-bg-semi2: #EEE;
+	--light-color: #111;
+	--light-border: #CCC;
+	--dark-bg: #111;
+	--dark-bg-semi: #222;
+	--dark-bg-semi2: #333;
+	--dark-color: #EEE;
+	--dark-border: #666;
+}
+#file-manager-container,
+#file-manager-container textarea,
+#file-manager-container textarea:hover,
+#file-manager-container input,
+#file-manager-container input:hover {
+	color: light-dark(var(--light-color),var(--dark-color));
+	background-color: light-dark(var(--light-bg-semi), var(--dark-bg-semi));
+}
+.node-admin-system-filemanager .main-right,
+.main-right > #maincontent,
+[data-page=admin-system-filemanager] > #maincontainer > #maincontent {
+    background-color: light-dark(var(--light-bg-semi), var(--dark-bg-semi));
+}
+.cbi-button-apply, 
+.cbi-button-reset, 
+.cbi-button-save:not(.custom-save-button) {
 	display: none !important;
 }
 .cbi-page-actions {
@@ -275,88 +293,102 @@ const cssContent = `
 	justify-content: flex-start;
 	margin-top: 10px;
 }
-.cbi-tabmenu {
+#file-manager-container .cbi-tabmenu {
 	background: none !important;
 	border: none !important;
 	margin: 0 !important;
 	padding: 0 !important;
 }
-.cbi-tabmenu li {
-	display: inline-block;
-	margin-right: 10px;
+#file-manager-container .cbi-tabmenu > li[class~="cbi-tab"] {
+	background: none !important;
+}
+#file-manager-container .cbi-tabmenu li {
+	margin: 15px 15px 21px 0;
+	border: 0;
+	height: unset;
+}
+#file-manager-container .cbi-tabmenu > li > a {
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
+	color: light-dark(var(--light-color),var(--dark-color));
+	padding: 3px 13px;
+	border-radius: 5px;
+	border: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
+}
+#file-manager-container .cbi-tabmenu > li > a:hover {
+	background-color: light-dark(var(--dark-bg), var(--light-bg));
+	color: light-dark(var(--dark-color),var(--light-color));
 }
 #file-list-container {
-	margin-top: 30px !important;
 	overflow: auto;
-	border: 1px solid #ccc;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-left: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 	padding: 0;
 	min-width: 600px;
 	position: relative;
 	resize: both;
 }
-#file-list-container.drag-over {
+#file-list {
+	background-color: light-dark(var(--light-bg-semi), var(--dark-bg-semi));
+}
+#file-list > tr:nth-of-type(2n) {
+	background-color: light-dark(var(--light-bg-semi2), var(--dark-bg-semi2));
+}
+#file-table > thead > tr > th:last-child {
+border-right: 1px solid;
+border-color: light-dark(var(--light-border),var(--dark-border));
+}
+#file-list-container .drag-over {
 	border: 2px dashed #00BFFF;
-	background-color: rgba(0, 191, 255, 0.1);
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
 }
-/* Add extra space to the left of the Name and Type columns */
-.table th:nth-child(1), .table td:nth-child(1),  /* Name column */
-.table th:nth-child(2), .table td:nth-child(2) { /* Type column */
-	padding-left: 5px; /* Adjust this value for the desired spacing */
-}
-/* Add extra space to the right of the Size column */
-.table th:nth-child(3), .table td:nth-child(3) { /* Size column */
-	padding-right: 5px; /* Adjust this value for the desired spacing */
-}
-/* Add extra space to the left of the Size column header */
-.table th:nth-child(3) { /* Size column header */
-	padding-left: 15px; /* Adjust this value for the desired spacing */
-}
-
 #drag-overlay {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(0, 191, 255, 0.2);
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 24px;
-	color: #00BFFF;
+	color: light-dark(var(--light-color), var(--dark-color));
 	z-index: 10;
 	pointer-events: none;
 }
-#content-editor {
-	margin-top: 30px !important;
-}
-.editor-container {
+#file-manager-container .editor-container {
 	display: flex;
 	flex-direction: column;
 	resize: both;
 	overflow: hidden;
 }
-.editor-content {
+#file-manager-container .editor-content {
 	flex: 1;
 	display: flex;
 	overflow: hidden;
+	border: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 }
-.line-numbers {
+#file-manager-container .line-numbers {
 	width: 50px;
-	background-color: #f0f0f0;
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
 	text-align: right;
 	padding-right: 5px;
 	user-select: none;
-	border-right: 1px solid #ccc;
+	border-right: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 	overflow: hidden;
 	flex-shrink: 0;
 	-ms-overflow-style: none; /* Hide scrollbar in IE и Edge */
 	scrollbar-width: none; /* Hide scrollbar in Firefox */
 }
-.line-numbers::-webkit-scrollbar {
+#file-manager-container .line-numbers::-webkit-scrollbar {
 	display: none; /* Hide scrollbar in Chrome, Safari и Opera */
 }
-.line-numbers div {
+#file-manager-container .line-numbers div {
 	font-family: monospace;
 	font-size: 14px;
 	line-height: 1.2em;
@@ -381,94 +413,107 @@ const cssContent = `
 #editor-textarea, .line-numbers {
 	overflow-y: scroll;
 }
-th {
+#file-manager-container .parent-dir {
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
+}
+#file-table th {
 	text-align: left !important;
 	position: sticky;
 	top: 0;
-	border-right: 1px solid #ddd;
+	border-right: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 	box-sizing: border-box;
 	padding-right: 30px;
 	white-space: nowrap;
 	min-width: 100px;
-	background-color: #fff;
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
 	z-index: 2;
+	padding: 5px 6px;
+	color: light-dark(var(--light-color),var(--dark-color));
 }
-td {
+#file-table td {
 	text-align: left !important;
-	border-right: 1px solid #ddd;
+	border-right: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 	box-sizing: border-box;
 	white-space: nowrap;
 	min-width: 100px;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	padding: 1px 6px;
+	color: light-dark(var(--light-color),var(--dark-color));
 }
-tr:hover {
-	background-color: #f0f0f0 !important;
+#file-manager-container th:last-child, td:last-child {
+	border-right: 0;
 }
-.download-button {
+#file-manager-container tr:hover {
+	background-color: light-dark(var(--light-bg), var(--dark-bg)) !important;
+}
+#file-manager-container .download-button {
 	color: green;
 	cursor: pointer;
 	margin-left: 5px;
 }
-.delete-button {
+#file-manager-container .delete-button {
 	color: red;
 	cursor: pointer;
 	margin-left: 5px;
 }
-.edit-button {
+#file-manager-container .edit-button {
 	color: blue;
 	cursor: pointer;
 	margin-left: 5px;
 }
-.duplicate-button {
+#file-manager-container .duplicate-button {
 	color: orange;
 	cursor: pointer;
 	margin-left: 5px;
 }
-.symlink {
+#file-manager-container .symlink {
 	color: green;
 }
-.status-link {
+#file-manager-container .status-link {
 	color: blue;
 	text-decoration: underline;
 	cursor: pointer;
 }
-.action-button {
+#file-manager-container .action-button {
 	margin-right: 10px;
 	cursor: pointer;
 }
-.size-cell {
+#file-manager-container .size-cell {
 	font-family: monospace;
 	box-sizing: border-box;
 	white-space: nowrap;
 	align-items: center;
 }
-.size-number {
+#file-manager-container .size-number {
 	display: inline-block;
 	width: 8ch;
 	text-align: right;
 }
-.size-unit {
+#file-manager-container .size-unit {
 	display: inline-block;
 	width: 4ch;
 	text-align: right;
 	margin-left: 0.5ch;
 }
-.table {
+#file-manager-container .table {
 	table-layout: fixed;
 	border-collapse: collapse;
 	white-space: nowrap;
 	width: 100%;
+	margin: 0 !important;
 }
-.table th:nth-child(3), .table td:nth-child(3) {
+#file-manager-container .table th:nth-child(3), .table td:nth-child(3) {
 	width: 100px;
 	min-width: 100px;
 	max-width: 500px;
 }
-.table th:nth-child(3) + th, .table td:nth-child(3) + td {
-	padding-left: 10px;
-}
-.resizer {
+#file-manager-container .resizer {
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -478,7 +523,7 @@ tr:hover {
 	user-select: none;
 	z-index: 3;
 }
-.resizer::after {
+#file-manager-container .resizer::after {
 	content: "";
 	position: absolute;
 	right: 2px;
@@ -491,13 +536,14 @@ tr:hover {
 	resize: both;
 	overflow: auto;
 }
-.sort-button {
+#file-manager-container .sort-button {
 	position: absolute;
 	right: 10px;
 	top: 50%;
 	transform: translateY(-50%);
 	background: none;
-	border: 1px solid #ccc; /* Add a visible border */
+	border: 1px solid; /* Add a visible border */
+	border-color: light-dark(var(--light-border),var(--dark-border));
 	color: #fff; /* White text color for better contrast on dark backgrounds */
 	cursor: pointer;
 	padding: 2px 5px; /* Add padding for better clickability */
@@ -507,19 +553,21 @@ tr:hover {
 	transition: background-color 0.3s, color 0.3s; /* Smooth transition effects for hover */
 }
 
-.sort-button:hover {
+#file-manager-container .sort-button:hover {
 	background-color: #fff; /* Change background to white on hover */
 	color: #000; /* Change text color to black on hover */
 	border-color: #fff; /* White border on hover */
 }
-.sort-button:focus {
+#file-manager-container .sort-button:focus {
 	outline: none;
 }
 #status-bar {
 	margin-top: 10px;
 	padding: 10px;
 	background-color: #f9f9f9;
-	border: 1px solid #ccc;
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
+	border: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 	min-height: 40px;
 	display: flex;
 	align-items: center;
@@ -530,19 +578,22 @@ tr:hover {
 	display: flex;
 	align-items: center;
 }
+#status-info span {
+	padding-right: 10px;
+}
 #status-progress {
 	width: 50%;
 }
 .cbi-progressbar {
 	width: 100%;
-	background-color: #e0e0e0;
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
 	border-radius: 5px;
 	overflow: hidden;
 	height: 10px;
 }
 .cbi-progressbar div {
 	height: 100%;
-	background-color: #76c7c0;
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
 	width: 0%;
 	transition: width 0.2s;
 }
@@ -552,25 +603,37 @@ tr:hover {
 }
 .file-manager-header h2 {
 	margin: 0;
+	min-width: fit-content;
 }
 .file-manager-header input {
 	margin-left: 10px;
 	width: 100%;
-	max-width: 700px;
 	font-size: 18px;
 }
-.file-manager-header button {
-	margin-left: 10px;
+#go-button {
 	font-size: 18px;
+	background-color: light-dark(var(--light-bg), var(--dark-bg));
+	color: light-dark(var(--light-color),var(--dark-color));
+	border-radius: 5px;
+	border: 1px solid;
+	border-color: light-dark(var(--light-border),var(--dark-border));
 }
-.directory-link {
-	/* Choose a color with good contrast or let the theme decide */
-	color: #00BFFF; /* DeepSkyBlue */
+#go-button:hover {
+	background-color: light-dark(var(--dark-bg), var(--light-bg));
+	color: light-dark(var(--dark-color),var(--light-color));
+}
+#file-manager-container .directory-link {
 	font-weight: bold;
 }
 
-.file-link {
+#file-manager-container .file-link {
 	color: inherit; /* Use the default text color */
+}
+#content-settings h3 {
+  margin-top: 0;
+  padding-top: 0;
+  padding-bottom: 25px;
+  line-height: unset;
 }
 `;
 
@@ -614,8 +677,8 @@ return view.extend({
 				E('button', {
 					'id': 'go-button',
 					'click': this.handleGoButtonClick.bind(this),
-					'style': 'margin-left: 10px;'
-				}, _('Go'))
+					'style': 'margin-left: 10px; padding: 3px 12px;'
+				}, _('&#8594;'))
 			]),
 
 			// Tab Panels
@@ -682,7 +745,6 @@ return view.extend({
 						const fileListContainer = E('div', {
 							'id': 'file-list-container',
 							'class': 'resizeable',
-							'style': 'width: ' + config.windowWidth + 'px; height: ' + config.windowHeight + 'px;'
 						}, [
 							E('table', {
 								'class': 'table',
@@ -840,7 +902,7 @@ return view.extend({
 				E('div', {
 					'id': 'content-help',
 					'class': 'cbi-tab',
-					'style': 'display:none; padding: 10px; overflow:auto; width: 650px; height: 600px; resize: both; border: 1px solid #ccc; box-sizing: border-box;'
+					'style': 'display:none; padding: 10px; overflow:auto; width: 100%; height: 600px; resize: both; border: 1px solid; border-color: light-dark(var(--light-border),var(--dark-border)); box-sizing: border-box;'
 				}, [
 					// The content will be dynamically inserted by renderHelp()
 				]),
@@ -851,9 +913,7 @@ return view.extend({
 					'class': 'cbi-tab',
 					'style': 'display:none;'
 				}, [
-					E('div', {
-						'style': 'margin-top: 20px;'
-					}, [
+					E('div', {}, [
 						E('h3', {}, _('Interface Settings')),
 						E('div', {
 							'id': 'settings-container'
@@ -862,47 +922,11 @@ return view.extend({
 								'id': 'settings-form'
 							}, [
 								E('div', {}, [
-									E('label', {}, _('Window Width:')),
-									E('input', {
-										'type': 'number',
-										'id': 'windowWidth-input',
-										'value': config.windowWidth,
-										'style': 'width:100%; margin-bottom:10px;'
-									})
-								]),
-								E('div', {}, [
-									E('label', {}, _('Window Height:')),
-									E('input', {
-										'type': 'number',
-										'id': 'windowHeight-input',
-										'value': config.windowHeight,
-										'style': 'width:100%; margin-bottom:10px;'
-									})
-								]),
-								E('div', {}, [
-									E('label', {}, _('Text Editor Width:')),
-									E('input', {
-										'type': 'number',
-										'id': 'texteditorWidth-input',
-										'value': config.texteditorWidth,
-										'style': 'width:100%; margin-bottom:10px;'
-									})
-								]),
-								E('div', {}, [
 									E('label', {}, _('Text Editor Height:')),
 									E('input', {
 										'type': 'number',
 										'id': 'texteditorHeight-input',
 										'value': config.texteditorHeight,
-										'style': 'width:100%; margin-bottom:10px;'
-									})
-								]),
-								E('div', {}, [
-									E('label', {}, _('Hex Editor Width:')),
-									E('input', {
-										'type': 'number',
-										'id': 'hexeditorWidth-input',
-										'value': config.hexeditorWidth,
 										'style': 'width:100%; margin-bottom:10px;'
 									})
 								]),
@@ -1014,12 +1038,6 @@ return view.extend({
 						for (let entry of entries) {
 							const newWidth = entry.contentRect.width;
 							const newHeight = entry.contentRect.height;
-
-							// Update config only if newWidth and newHeight are greater than 0
-							if (newWidth > 0 && newHeight > 0) {
-								config.windowWidth = newWidth;
-								config.windowHeight = newHeight;
-							}
 						}
 					});
 					self.fileListResizeObserver.observe(fileListContainer);
@@ -1146,8 +1164,8 @@ return view.extend({
 
 		if (helpContent) {
 			// Set initial dimensions
-			helpContent.style.width = '700px';
-			helpContent.style.height = '600px';
+			helpContent.style.width = '100%';
+			helpContent.style.height = '500px';
 			helpContent.style.resize = 'both';
 			helpContent.style.overflow = 'auto';
 			helpContent.style.border = '1px solid #ccc';
@@ -1560,7 +1578,7 @@ return view.extend({
 				for (const col of columns) {
 					if (col === 'name') {
 						tr.appendChild(
-							E('td', { colspan: columns.length }, [
+							E('td', { colspan: columns.length, 	class: 'parent-dir' }, [
 								E('a', {
 									href: '#',
 									click: () => self.handleDirectoryClick(parentPath)
@@ -2401,11 +2419,6 @@ return view.extend({
 				if (styleElement) {
 					styleElement.textContent = styleElement.textContent.replace(/padding: \d+px/g, 'padding: ' + config.padding + 'px');
 				}
-				const fileListContainer = document.getElementById('file-list-container');
-				if (fileListContainer) {
-					fileListContainer.style.width = config.windowWidth + 'px';
-					fileListContainer.style.height = config.windowHeight + 'px';
-				}
 				currentPath = config.currentDirectory || '/';
 				const pathInput = document.getElementById('path-input');
 				if (pathInput) {
@@ -2418,10 +2431,8 @@ return view.extend({
 				if (editorContainer) {
 					const editorMode = self.editorMode;
 					const editorSizes = {
-						width: config[`${editorMode}editorWidth`] || 850,
 						height: config[`${editorMode}editorHeight`] || 550
 					};
-					editorContainer.style.width = editorSizes.width + 'px';
 					editorContainer.style.height = editorSizes.height + 'px';
 				}
 			}).catch((err) => {
@@ -2454,18 +2465,10 @@ return view.extend({
 			styleElement.textContent = styleElement.textContent.replace(/padding: \d+px/g, `padding: ${config.padding}px`);
 		}
 
-		const fileListContainer = document.getElementById('file-list-container');
-		if (fileListContainer) {
-			fileListContainer.style.width = `${config.windowWidth}px`;
-			fileListContainer.style.height = `${config.windowHeight}px`;
-		}
-
 		const editorContainer = document.getElementById('editor-container');
 		if (editorContainer) {
 			const editorMode = this.editorMode;
 			const editorHeight = config[`${editorMode}editorHeight`] || 550;
-			const editorWidth = config[`${editorMode}editorWidth`] || 850;
-			editorContainer.style.width = `${editorWidth}px`;
 			editorContainer.style.height = `${editorHeight}px`;
 		}
 	},
@@ -2481,7 +2484,6 @@ return view.extend({
 		// Get the sizes from the config
 		const mode = self.editorMode; // 'text' or 'hex'
 		const editorHeight = config[`${mode}editorHeight`] || 550;
-		const editorWidth = config[`${mode}editorWidth`] || 850;
 
 		// Create the editor content container
 		const editorContentContainer = E('div', {
@@ -2584,7 +2586,7 @@ return view.extend({
 		// Create the editor container with resizing and scrolling
 		const editor = E('div', {
 			'class': 'editor-container',
-			'style': 'display: flex; flex-direction: column; width: ' + editorWidth + 'px; height: ' + editorHeight + 'px; resize: both; overflow: hidden;'
+			'style': 'display: flex; flex-direction: column; height: ' + editorHeight + 'px; resize: both; overflow: hidden;'
 		}, [
 			editorContentContainer,
 			E('div', {
@@ -2622,12 +2624,10 @@ return view.extend({
 			// Initialize a new ResizeObserver instance
 			self.editorResizeObserver = new ResizeObserver((entries) => {
 				for (let entry of entries) {
-					let newWidth = Math.round(entry.contentRect.width);
 					let newHeight = Math.round(entry.contentRect.height);
 
 					// Update config only if newWidth and newHeight are greater than 0
-					if (newWidth > 0 && newHeight > 0) {
-						config.editorWidth = newWidth;
+					if (newHeight > 0) {
 						config.editorHeight = newHeight;
 					}
 				}
