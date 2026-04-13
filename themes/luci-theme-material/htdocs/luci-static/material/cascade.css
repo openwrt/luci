@@ -966,7 +966,8 @@ td > table > tbody > tr > td,
 	border-radius: .2rem;
 	background-color: #f0f0f0;
 	background-image: none;
-	-webkit-appearance: none;
+	-webkit-appearance: none;  /* nonstandard, should remove in future */
+	appearance: none;
 	-ms-touch-action: manipulation;
 	touch-action: manipulation;
 }
@@ -987,7 +988,8 @@ td > table > tbody > tr > td,
 }
 
 .cbi-button:not(select) {
-	-webkit-appearance: none !important;
+	-webkit-appearance: none !important;  /* nonstandard, should remove in future */
+	appearance: none !important;
 }
 
 .cbi-button + .cbi-button {
@@ -3179,3 +3181,69 @@ input[name="nslookup"] {
 		background: #424242;
 	}*/
 }
+
+/* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* Change mouse icon from text cursor to pointer, and fix buttons not being same min-width */
+body[data-page='admin-status-overview'] .cbi-title .label {
+	cursor: pointer;
+	min-width: 5.2em !important;
+}
+
+/* Create larger buttons for smaller screens (same behaviour as luci-theme-bootstrap) */
+@media screen and (max-width: 480px) {
+	body[data-page='admin-status-overview'] .cbi-title .label {
+		line-height: 3em;
+	}
+}
+
+/* Slightly fade "show" button: no variable for disabled opacity like luci-theme-bootstrap, assuming 0.7 */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+	opacity: 0.7;
+}
+
+/* Remove fade when hovered */
+body[data-page='admin-status-overview'] .cbi-title .label.notice:hover {
+	opacity: initial;
+}
+
+/* === END STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* === STATUS OVERVIEW: FIX BOX SPACING === */
+
+/* Resolve mismatched spacing for each heading in box, fixing spacing for when contents are hidden and adding spacing when contents are shown */
+body[data-page='admin-status-overview'] .cbi-section {
+	padding-top: 1rem;
+}
+body[data-page='admin-status-overview'] .cbi-title h3 {
+	padding: 1rem 0 0 0;
+	margin: 0;
+	align-items: center;
+}
+body[data-page='admin-status-overview'] .cbi-section > div:last-child {
+		padding-top: 1rem;
+}
+body[data-page='admin-status-overview'] .cbi-section > div:empty {
+		display: none;
+}
+
+/* Looks like there's a tablet mode also done for 1600px, need to fix spacing changes for that too */
+@media screen and (max-width: 1600px) {
+	body[data-page='admin-status-overview'] .cbi-section {
+		padding-top: 0.5rem;
+	}
+	body[data-page='admin-status-overview'] .cbi-title h3 {
+		padding-top: 0.5rem;
+	}
+}
+
+/* === END STATUS OVERVIEW: FIX BOX SPACING === */
+
+/* === STATUS OVERVIEW: MATCH IFACEBOX COLOUR WITH HEADER === */
+
+/* Set text to header colour when using the header colour background to match same behaviour, for e.g. IPv4 Upstream and IPv6 Upstream boxes */
+body[data-page='admin-status-overview'] .ifacebox-head {
+  color: var(--header-color);
+}
+
+/* === END STATUS OVERVIEW: MATCH IFACEBOX COLOUR WITH HEADER === */

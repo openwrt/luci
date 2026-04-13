@@ -249,6 +249,7 @@ return dm2.dv.extend({
 			let dnet = this.section.getOption('network').getUIElement(section_id).getValue();
 			const disallowed = builtInNetworks.has(dnet);
 			if (disallowed) return _('Only for user-defined networks');
+			return true;
 		};
 
 		o = s.option(form.Value, 'ipv4', _('IPv4 Address'));

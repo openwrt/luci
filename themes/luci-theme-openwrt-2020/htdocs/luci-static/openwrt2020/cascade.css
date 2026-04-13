@@ -35,7 +35,8 @@
 	font-size: 100%;
 	background: none;
 	outline: none;
-	-webkit-appearance: none;
+	-webkit-appearance: none; /* nonstandard, should remove in future */
+	appearance: none;
 }
 
 html {
@@ -107,20 +108,22 @@ abbr[title], acronym[title] {
 	color: var(--main-bright-color);
 	display: inline-block;
 	font-size: .85em;
-	line-height: 1.5em;
-	padding: 0 .5em;
 	margin: .125em;
-	border-radius: 1em;
 	cursor: pointer;
 	white-space: nowrap;
+	/* Match rounded indicators to same style as "hide" and "show" buttons for design consistency (site wide) */
+	line-height: 1.8em;
+	border-radius: .5rem;
+	padding: 0 .7em;
 }
 
 #indicators > [data-style="inactive"] {
 	background: var(--main-bright-color);
 	color: var(--secondary-bright-color);
 	border: 2px solid var(--secondary-bright-color);
-	line-height: calc(1.5em - 4px);
-	padding: 0 calc(.5em - 2px);
+	/* Update existing calculations with same new adjustments as above */
+	line-height: calc(1.8em - 4px);
+	padding:0 calc(.7em - 2px);
 }
 
 #menubar h2,
@@ -979,9 +982,8 @@ input[type="checkbox"],
 input[type="radio"] {
 	--bd-color: var(--main-dark-color);
 	--fg-color: var(--main-dark-color);
-
+	-webkit-appearance: none; /* nonstandard, should remove in future */
 	appearance: none;
-	-webkit-appearance: none;
 	width: 1em;
 	height: 1em;
 	color: var(--fg-color);
@@ -1094,7 +1096,8 @@ input[type="password"] + .btn, input[type="password"] + button {
 
 select {
 	padding: .1rem 0;
-	-webkit-appearance: menulist;
+	-webkit-appearance: menulist; /* nonstandard, should remove in future */
+	appearance: menulist;
 }
 
 textarea {
@@ -2015,3 +2018,47 @@ ul.errors {
 		display: none;
 	}
 }
+
+/* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* Create larger buttons for smaller screens (same behaviour as luci-theme-bootstrap) */
+@media screen and (max-width: 480px) {
+  body[data-page='admin-status-overview'] h3, .cbi-section > legend:first-child {
+    line-height: 2em;
+  }
+}
+
+/* Swap the "hide" and "show" button styles to match all other luci-theme, as "hide" is currently using primary style and "show" is currently using secondary style. Also, change mouse icon from text cursor to pointer */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+  background: var(--main-bright-color);
+  color: var(--secondary-bright-color);
+  border: 0;
+}
+body[data-page='admin-status-overview'] .cbi-title .label {
+  background: var(--secondary-bright-color);
+  color: var(--main-bright-color);
+  border: 1px solid var(--main-bright-color);
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Slightly fade "show" button: no variable for disabled opacity like luci-theme-bootstrap, assuming 0.7 */
+body[data-page='admin-status-overview'] .cbi-title .label.notice {
+ opacity: 0.7;
+}
+
+/* Remove fade when hovered */
+body[data-page='admin-status-overview'] .cbi-title .label.notice:hover {
+ opacity: initial;
+}
+
+/* === END STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
+
+/* === STATUS OVERVIEW: MATCH IFACEBOX COLOUR WITH HEADER === */
+
+/* Set text to var(--secondary-bright-color) when using var(--main-bright-color) for background to match same behaviour as the header of the page, e.g. IPv4 Upstream and IPv6 Upstream boxes */
+body[data-page='admin-status-overview'] .ifacebox-head {
+  color: var(--secondary-bright-color);
+}
+
+/* === END STATUS OVERVIEW: MATCH IFACEBOX COLOUR WITH HEADER === */

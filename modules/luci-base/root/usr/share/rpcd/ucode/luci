@@ -242,6 +242,7 @@ const methods = {
 				ufpd:       access('/usr/sbin/ufpd') == true,
 				vrf:        access('/sys/module/vrf/refcnt') == true, // vrf.ko is loaded
 				netifd_vrf: false,
+				mptcp:      access('/proc/sys/net/mptcp/enabled'),
 			};
 
 			const wifi_features = [ 
@@ -291,7 +292,6 @@ const methods = {
 				fd.close();
 			}
 
-			result.odhcpd = false;
 			fd = popen('odhcpd -h 2>/dev/null');
 
 			if (fd) {
