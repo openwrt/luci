@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-01 16:08+0000\n"
-"Last-Translator: UDP <udp@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-04-13 14:31+0000\n"
+"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfirewall/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -179,7 +179,7 @@ msgstr "進階設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:281
 msgid "Allow \"invalid\" traffic"
-msgstr "允許 \"無效\" 流量"
+msgstr "允許「無效」流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:395
 msgid "Allow forward from <em>source zones</em>:"
@@ -345,8 +345,8 @@ msgid ""
 "outbound traffic on this zone. This is typically enabled on the <em>wan</em> "
 "zone."
 msgstr ""
-"為此區域的 IPv4 傳出流量啟用網路位址和連接埠轉換 (NAT4 或 NAPT4)，<em>wan</"
-"em> 區域預設啟用。"
+"為此區域的IPv4傳出流量開啟網路位址和連接埠轉換(NAT4或NAPT4)。 <em>wan</em>區"
+"域通常開啟此功能。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:241
 msgid ""
@@ -430,7 +430,7 @@ msgstr "防火牆 - 區域設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:692
 msgid "Firewall configuration migration"
-msgstr "防火牆配置遷移"
+msgstr "防火牆設定遷移"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:80
 msgid "Flow offloading type"
@@ -522,7 +522,7 @@ msgstr "一般設定"
 
 #: applications/luci-app-firewall/root/usr/share/rpcd/acl.d/luci-app-firewall.json:3
 msgid "Grant access to firewall configuration"
-msgstr "授予存取防火牆配置的權限"
+msgstr "授予存取防火牆設定的權限"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Hardware based offloading for routing with/without NAT."
@@ -874,10 +874,10 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。如: "
-"<code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。資料類"
-"別: <code>ip, port, mac, net, set</code>。<br />方向前綴可選。<br />*注意: "
-"fw4不支援資料類別<code>set</code>。"
+"要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。如: <code>"
+"src_port, dest_net</code>。<br />方向: <code>src, dst</code>。資料類別: "
+"<code>ip, port, mac, net, set</code>。<br />方向首碼可選。<br />*注意: fw4 不"
+"支援資料類別 <code>set</code>。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:356
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:473
@@ -1037,7 +1037,7 @@ msgstr "來源區域"
 msgid ""
 "Specifies whether to tie this traffic rule to a specific inbound or outbound "
 "network device."
-msgstr "指定是否將此流量規則綁定至特定的網路傳入或傳出裝置。"
+msgstr "指定是否將此流量規則繫結至特定的網路傳入或傳出裝置。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:309
 msgid ""
@@ -1078,7 +1078,7 @@ msgstr "星期日"
 msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
-msgstr "需要更改現有的防火牆配置以使 LuCI 正常運作。"
+msgstr "需要更改現有的防火牆設定以使 LuCI 正常運作。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:37
 msgid ""
@@ -1214,7 +1214,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:339
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:455
 msgid "Unknown or not installed conntrack helper \"%s\""
-msgstr "未知或未安裝連線跟蹤助手 \"%s\""
+msgstr "未知或未安裝連線跟蹤助手「%s」"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:185
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:189
@@ -1245,8 +1245,8 @@ msgid ""
 "be converted to \"nat\" sections and the firewall will be restarted to apply "
 "the updated configuration."
 msgstr ""
-"按下 \"繼續\" 後，目標為 \"SNAT\" 的 \"重新導向\" 部分將轉換為 \"nat\" 部分，"
-"防火牆將重新啟動以套用更新的設定。"
+"按下「繼續」後，目標為「SNAT」的「重新導向」部分將轉換為「nat」部分，防火牆將"
+"重新啟動以套用更新的設定。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:313
 msgid "Use external IP address"

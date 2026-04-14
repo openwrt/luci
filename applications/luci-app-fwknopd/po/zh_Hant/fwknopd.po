@@ -3,8 +3,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-06 19:59+0000\n"
-"Last-Translator: UDP <udp@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-04-13 17:19+0000\n"
+"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfwknopd/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -37,11 +37,11 @@ msgstr "關閉"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:480
 msgid "Custom configuration"
-msgstr "自訂配置"
+msgstr "自訂設定"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr "從 /etc/fwknop/access.conf 中讀取自訂配置。"
+msgstr "從 /etc/fwknop/access.conf 中讀取自訂設定。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -49,7 +49,7 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
-"定義一組明確禁止的連接埠和協定 (tcp 或 udp) ，無論傳入 SPA 封包的有效性如何。"
+"定義一組明確禁止的連接埠和協定 (tcp 或 udp)，無論傳入 SPA 封包的有效性如何。"
 "多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
@@ -61,15 +61,15 @@ msgid ""
 msgstr ""
 "定義一組連接埠和協定 (tcp 或 udp)，如果看到有效敲門 (knock) 序列，則開啟這些"
 "連接埠和協定。如果未設定此條目，fwknopd 將嘗試遵守 SPA 資料中指定的任何協"
-"定 / 連接埠請求 (除非匹配到了任何 \"RESTRICT_PORTS\" 條目) 。多個條目以逗號分"
-"隔。"
+"定 / 連接埠請求 (除非匹配到了任何「RESTRICT_PORTS」條目) 。多個條目以逗號分隔"
+"。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:557
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
-"定義 HMAC 身份認證金鑰 (採用 Base64 編碼) ，用於在解密 SPA 封包之前認證該封包"
+"定義 HMAC 身份認證金鑰 (採用 Base64 編碼)，用於在解密 SPA 封包之前認證該封包"
 "的真實性。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
@@ -85,8 +85,8 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
-"定義在取得源 IP 位址的有效敲門序列後，fwknopd 允許通過防火牆存取的 \"時間長度"
-"\"。如果未設定 \"FW_ACCESS_TIMEOUT\"，將自動設定逾時 30 秒為預設值。"
+"定義在取得源 IP 位址的有效敲門序列後，fwknopd 允許通過防火牆存取的「時間長度"
+"」。若未設定「FW_ACCESS_TIMEOUT」則預設 30 秒逾時。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:535
 msgid ""
@@ -108,11 +108,11 @@ msgstr "啟用 Uci/Luci 控制元件"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:477
 msgid "Enable config overwrite"
-msgstr "啟用配置覆寫"
+msgstr "啟用設定覆寫"
 
 #: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
 msgid "Firewall Knock Daemon"
-msgstr "Firewall Knock 守護程式"
+msgstr "Firewall Knock 常駐程式"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
@@ -179,7 +179,7 @@ msgstr "網路"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:487
 msgid "Network configuration"
-msgstr "網路配置"
+msgstr "網路設定"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
 msgid "No stanza found."
@@ -199,7 +199,7 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
-"解析 /etc/fwknop/access.conf 檔案 (以及包含的檔案 / 資料夾 / 金鑰) ，並為所有"
+"解析 /etc/fwknop/access.conf 檔案 (以及包含的檔案 / 資料夾 / 金鑰)，並為所有"
 "找到的節產生 QR codes。由於存取權限的限制，僅處理 /etc/fwknop 資料夾中的檔案"
 "。"
 
@@ -231,8 +231,8 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
-"SPA 封包將被接受的目標位址。如果有效 SPA 封包應遵循任何目標 IP，則也接受字串 "
-"\"ANY\"。應該以 CIDR 表示法指定網路 (例如 \"192.168.10.0/24\") ，也可以指定單"
+"SPA 封包將被接受的目標位址。如果有效 SPA 封包應遵循任何目標 IP，則也接受字串"
+"「ANY」。應該以 CIDR 表示法指定網路 (例如「192.168.10.0/24」)，也可以指定單"
 "個 IP 位址。多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
@@ -241,8 +241,8 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
-"守護程式監聽的網路。網路啟動並執行時，守護程式會自動啟動。此選項優先於 "
-"\"PCAP_INTF\" 選項。"
+"常駐程式監聽的網路。網路啟動並執行時，常駐程式會自動啟動。此選項優先於「"
+"PCAP_INTF」選項。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:503
 msgid ""
@@ -253,8 +253,8 @@ msgid ""
 "Multiple entries are comma-separated."
 msgstr ""
 "將接受 SPA 封包的來源位址。如果應該從任何來源 IP 接受有效 SPA 封包，則也接受"
-"字元 \"ANY\"。應該以 CIDR 表示法指定網路 (例如 \" 192.168.10.0/24\")，也可以"
-"指定單個 IP 位址。多個條目以逗號分隔。"
+"字元「ANY」。應該以 CIDR 表示法指定網路 (例如「192.168.10.0/24」)，也可以指定"
+"單個 IP 位址。多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:509
 msgid "The source address has to be specified."
@@ -275,14 +275,14 @@ msgid ""
 "started fwknopd if that is not set."
 msgstr ""
 "這指示 fwknopd 接受包含在授權封包中的完整指令。任何這樣的指令都將在 fwknopd "
-"伺服器上以 \"CMD_EXEC_USER\" 指定的使用者或啟動 fwknopd 的使用者 (如果沒有設"
-"定的話) 的身份執行。"
+"伺服器上以「CMD_EXEC_USER」指定的使用者或啟動 fwknopd 的使用者 (如果沒有設定"
+"的話) 的身份執行。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:477
 msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
-msgstr "取消選中時，/etc/fwknopd 中的配置檔案將按原樣使用，忽略這裡的任何設定。"
+msgstr "取消選中時，/etc/fwknopd 中的設定檔案將按原樣使用，忽略這裡的任何設定。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:497
@@ -291,4 +291,4 @@ msgstr "access.conf 節"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:593
 msgid "fwknopd.conf config options"
-msgstr "fwknopd.conf 配置選項"
+msgstr "fwknopd.conf 設定選項"
