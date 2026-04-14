@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-13 17:19+0000\n"
+"PO-Revision-Date: 2026-04-14 17:39+0000\n"
 "Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsaria2/zh_Hant/>\n"
@@ -119,8 +119,8 @@ msgid ""
 "Disable IPv6. This is useful if you have to use broken DNS and want to avoid "
 "terribly slow AAAA record lookup."
 msgstr ""
-"停用 IPv6。如果您必須使用損壞的 DNS 並希望避免非常緩慢的 AAAA 紀錄查詢，這非"
-"常有用。"
+"停用 IPv6。若您必須使用損壞的 DNS 並希望避免非常緩慢的 AAAA 紀錄查詢，這非常"
+"有用。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:577
 msgid "Disk cache"
@@ -254,8 +254,8 @@ msgid ""
 "Configuring this option with your preferred download speed can increase your "
 "download speed in some cases."
 msgstr ""
-"如果某個種子的下載速度小於設定的速度，Aria2 會臨時提高對等點數量以嘗試獲得更"
-"大的下載速度。某些情況下使用首選下載速度設定此選項可提高下載速度。"
+"若某個種子的下載速度小於設定的速度，Aria2 會臨時提高對等點數量以嘗試獲得更大"
+"的下載速度。某些情況下使用首選下載速度設定此選項可提高下載速度。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:231
 msgid "Info"
@@ -455,7 +455,7 @@ msgid ""
 "RPC transport will be encrypted by SSL/TLS. The RPC clients must use https "
 "scheme to access the server. For WebSocket client, use wss scheme."
 msgstr ""
-"通過 SSL/TLS 加密 RPC 傳輸。RPC 用戶端必須使用 HTTPS 存取伺服器。對於 "
+"透過 SSL/TLS 加密 RPC 傳輸。RPC 用戶端必須使用 HTTPS 存取伺服器。對於 "
 "WebSocket 用戶端使用 WSS。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:262
@@ -499,7 +499,7 @@ msgstr "執行狀態"
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
 "is not saved during download."
-msgstr "每 N 秒儲存一個控制檔案 (*.aria2)。如指定 0 則下載期間不儲存控制檔案。"
+msgstr "每 N 秒儲存一個控制檔案 (*.aria2)。若指定 0 則下載期間不儲存控制檔案。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:598
 msgid ""
@@ -646,10 +646,10 @@ msgid ""
 "such as ext3 and FAT32 because it takes almost same time as \"prealloc\" and "
 "it blocks aria2 entirely until allocation finishes."
 msgstr ""
-"指定檔案分配方式。如果您使用的檔案系統較新，例如: ext4 (支援 extents) 、btrfs"
-"、xfs 或 NTFS (僅限 MinGW 版本)，「falloc」是最佳選擇。這種方式幾乎能立刻分配"
-"比較大的檔案 (幾 GiB)，但是它要求您的系統必須支援 posix_fallocate(3) 函式。不"
-"要在 ext3 或者 FAT32 這些舊檔案系統中使用「falloc」，因為它花費的時間和「"
+"指定檔案分配方式。若您使用的檔案系統較新，例如: ext4 (支援 extents) 、btrfs、"
+"xfs 或 NTFS (僅限 MinGW 版本)，「falloc」是最佳選擇。這種方式幾乎能立刻分配比"
+"較大的檔案 (幾 GiB)，但是它要求您的系統必須支援 posix_fallocate(3) 函式。不要"
+"在 ext3 或者 FAT32 這些舊檔案系統中使用「falloc」，因為它花費的時間和「"
 "prealloc」幾乎一樣多，而且在檔案分配過程中會完全阻塞 Aria2 直到分配完成。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
@@ -664,8 +664,8 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
-"以分鐘指定做種時間。如果同時指定了「做種比例」選項，那麼將在任一條件滿足時停"
-"止做種。設定 0 表示下載完成後停止做種。"
+"以分鐘指定做種時間。若同時指定了「做種比例」選項，那麼將在任一條件滿足時停止"
+"做種。設定 0 表示下載完成後停止做種。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -687,9 +687,8 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
-"設定Peer ID首碼。Peer ID的長度為20位元組。如果設定超過了20位元組，將僅使用前"
-"面的20位元組。如果設定少於20位元組，將加入額外的隨機字元來讓長度達到20位元組"
-"。"
+"設定Peer ID首碼。Peer ID的長度為20位元組。若設定超過了20位元組，將僅使用前面"
+"的20位元組。若設定少於20位元組，將加入額外的隨機字元來讓長度達到20位元組。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:525
 msgid ""
@@ -732,7 +731,7 @@ msgstr "每個下載任務與同一伺服器建立的最大連線數。"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:436
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:445
 msgid "This option will be ignored if a private flag is set in a torrent."
-msgstr "如果種子具有私有屬性，該選項將會被忽略。"
+msgstr "若種子具有私有屬性，該選項將會被忽略。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:373
 msgid "Timeout"
