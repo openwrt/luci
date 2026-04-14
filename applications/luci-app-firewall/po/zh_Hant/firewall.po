@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-13 14:31+0000\n"
+"PO-Revision-Date: 2026-04-14 17:39+0000\n"
 "Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfirewall/zh_Hant/>\n"
@@ -70,7 +70,7 @@ msgid ""
 "{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
 "<var data-tooltip=\"目的網路位址轉譯\">轉送</var> 至 %{dest}%{dest_ip? IP "
-"<var>%{dest_ip}</var>}%{dest_port? 連接埠<var>%{dest_port}</var>}"
+"<var>%{dest_ip}</var>}%{dest_port? 連接埠 <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
@@ -124,8 +124,8 @@ msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"來源網路位址轉譯\">靜態重寫</var> 來源 %{snat_ip?IP "
-"<var>%{snat_ip}</var>} %{snat_port?連接埠<var>%{snat_port}</var>}"
+"<var data-tooltip=\"來源網路位址轉譯\">靜態重寫</var> 來源 %{snat_ip?IP <var>"
+"%{snat_ip}</var>} %{snat_port?連接埠 <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:305
 msgid "A rewrite IP must be specified!"
@@ -183,11 +183,11 @@ msgstr "允許「無效」流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:395
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "允許從<em>來源區域</em>的轉送:"
+msgstr "允許從來源區域轉送:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:354
 msgid "Allow forward to <em>destination zones</em>:"
-msgstr "允許轉送至<em>目的區域</em>:"
+msgstr "允許轉送至目的區域:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:551
 msgid "Any"
@@ -206,8 +206,8 @@ msgid ""
 "established connections. Format is value[/mask]. If a mask is specified then "
 "those bits set in the mask are zeroed out."
 msgstr ""
-"對已建立的連線套用給定值和現有標記值的位元互斥或。格式為 值[/遮罩]。如果指定"
-"了遮罩，則遮罩中設定的那些位元將清零。"
+"對已建立的連線套用給定值和現有標記值的位元互斥或。格式為 值[/遮罩]。若指定了"
+"遮罩，則遮罩中設定的那些位元將清零。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "Apply the given DSCP class or value to established connections."
@@ -310,9 +310,7 @@ msgstr "裝置名稱"
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
-msgstr ""
-"不設定額外拒絕轉送連線追蹤狀態<em>無效</em>流量的規則。對於複雜的不對稱路由設"
-"定可能是必需的。"
+msgstr "允許連線追蹤狀態為無效的流量轉送。對於複雜的不對稱路由設定可能是必需的。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:57
 msgid "Drop invalid packets"
@@ -345,8 +343,8 @@ msgid ""
 "outbound traffic on this zone. This is typically enabled on the <em>wan</em> "
 "zone."
 msgstr ""
-"為此區域的IPv4傳出流量開啟網路位址和連接埠轉換(NAT4或NAPT4)。 <em>wan</em>區"
-"域通常開啟此功能。"
+"為此區域的 IPv4 傳出流量啟用網路位址和連接埠轉換 (NAT4/NAPT4)，<em>wan</em> "
+"區域預設啟用。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:241
 msgid ""
@@ -674,7 +672,7 @@ msgid ""
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
 "限制匹配至 <var>%{limit.num}</var> 封包每 <var>%{limit.unit}</var>%"
-"{limit.burst?突發<var>%{limit.burst}</var>}"
+"{limit.burst?突發 <var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:248
@@ -874,7 +872,7 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。如: <code>"
+"要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。例如: <code>"
 "src_port, dest_net</code>。<br />方向: <code>src, dst</code>。資料類別: "
 "<code>ip, port, mac, net, set</code>。<br />方向首碼可選。<br />*注意: fw4 不"
 "支援資料類別 <code>set</code>。"
@@ -997,8 +995,8 @@ msgid ""
 "Set the given mark value on established connections. Format is value[/mask]. "
 "If a mask is specified then only those bits set in the mask are modified."
 msgstr ""
-"在已建立的連線上設定給定的標記值。格式為值[/遮罩]。如果指定了遮罩，則僅修改遮"
-"罩中設定的位元。"
+"在已建立的連線上設定給定的標記值。格式為值[/遮罩]。若指定了遮罩，則僅修改遮罩"
+"中設定的位元。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
 msgid "Software based offloading for routing/NAT."
@@ -1096,10 +1094,10 @@ msgid ""
 "rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
-"以下選項控制此區域 (%s) 和其他區域之間的轉送政策。<em>目的區域</em>接收"
-"<strong>源自%q</strong>的轉送流量。<em>來源區域</em>匹配來自其他區域<strong>"
-"目標為%q</strong>的轉送流量。轉送規則是<em>單向</em>的，例如: 從lan轉送至wan"
-"並<em>不</em>意味著允許從 wan 轉送至 lan。"
+"以下選項控制此區域 (%s) 和其他區域之間的轉送策略。<em>目的區域</em> 接收 "
+"<strong>源自 %q</strong> 的轉送流量。<em>來源區域</em> 匹配來自其他區域 "
+"<strong>目標為 %q</strong> 的轉送流量。轉送規則是 <em>單向</em> 的，例如: 從 "
+"lan 轉送至 wan 並 <em>不</em> 意味著允許從 wan 轉送至 lan。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:124
 msgid ""
@@ -1110,7 +1108,7 @@ msgid ""
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
 "本節定義 %q 的通用屬性。<em>傳入</em>和<em>傳出</em>選項設定此區域傳入和傳出"
-"流量的預設政策，<em>轉送</em>選項描述該區域內不同網路之間的流量轉送政策。<em>"
+"流量的預設策略，<em>轉送</em>選項描述該區域內不同網路之間的流量轉送策略。<em>"
 "覆蓋網路</em>指定從屬於這個區域的網路。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:486
@@ -1158,7 +1156,7 @@ msgid ""
 "{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except %"
 "{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"至 %{dest}%{dest_device?，通過介面 <var>%{dest_device}</var>}%{dest_ip?，IP %"
+"至 %{dest}%{dest_device?，透過介面 <var>%{dest_device}</var>}%{dest_ip?，IP %"
 "{dest_ip#%{next?，}<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 外的 IP "
 "位址。\"}>%{item.ival}</var>}}%{dest_port?，連接埠 %{dest_port#%{next?，}"
 "<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 外的連接埠。\"}>%"
@@ -1191,7 +1189,7 @@ msgid ""
 "zones, for example to reject traffic between certain hosts or to open WAN "
 "ports on the router."
 msgstr ""
-"流量規則定義了不同區域間的封包傳輸政策，例如拒絕某些主機間的流量或開啟路由器 "
+"流量規則定義了不同區域間的封包傳輸策略，例如拒絕某些主機間的流量或開啟路由器 "
 "WAN 連接埠。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:484
@@ -1446,7 +1444,7 @@ msgstr "ip[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:146
 msgid "ip[/cidr]<br />For use with Match datatypes: <code>*_ip</code>."
-msgstr "ip[/cidr]<br /> 用於匹配資料類別: <code>*_ip</code>。"
+msgstr "ip[/cidr]<br />用於匹配資料類別: <code>*_ip</code>。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:134
 msgid "list"
