@@ -51,7 +51,7 @@ return view.extend({
 					E('button', {
 						'class': 'btn cbi-button-negative',
 						'click': ui.createHandlerFn(this, 'handleSignal', 9, proc.PID)
-					}, _('Kill'))
+					}, _('Kill', 'status processes kill'))
 				])
 			]);
 		}
