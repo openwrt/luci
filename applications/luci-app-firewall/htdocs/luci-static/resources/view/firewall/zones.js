@@ -57,9 +57,9 @@ return view.extend({
 		o = s.option(form.Flag, 'drop_invalid', _('Drop invalid packets'));
 
 		let p = [
-			s.option(form.ListValue, 'input', _('Input')),
-			s.option(form.ListValue, 'output', _('Output')),
-			s.option(form.ListValue, 'forward', _('Forward'))
+			s.option(form.ListValue, 'input', _('Input', 'firewall input')),
+			s.option(form.ListValue, 'output', _('Output', 'firewall output')),
+			s.option(form.ListValue, 'forward', _('Forward', 'firewall forward'))
 		];
 
 		for (let popt of p) {
@@ -147,8 +147,8 @@ return view.extend({
 		};
 
 		p = [
-			s.taboption('general', form.ListValue, 'input', _('Input')),
-			s.taboption('general', form.ListValue, 'output', _('Output')),
+			s.taboption('general', form.ListValue, 'input', _('Input', 'firewall input')),
+			s.taboption('general', form.ListValue, 'output', _('Output', 'firewall output')),
 			s.taboption('general', form.ListValue, 'forward', _('Intra zone forward'))
 		];
 
