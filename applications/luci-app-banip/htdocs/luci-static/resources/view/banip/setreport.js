@@ -7,8 +7,6 @@
 /*
 	button handling
 */
-let errMsg = false;
-
 function handleAction(report, ev) {
 	if (ev === 'search') {
 		ui.showModal(_('IP Search'), [
@@ -83,6 +81,7 @@ function handleAction(report, ev) {
 	}
 	if (ev === 'content') {
 		let content, selectOption;
+		let errMsg = false;
 
 		if (report[1]) {
 			try {
