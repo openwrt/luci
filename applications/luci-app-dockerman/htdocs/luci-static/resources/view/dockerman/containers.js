@@ -308,6 +308,56 @@ return dm2.dv.extend({
 		}, E('div', btns));
 	},
 
+	buildPortLinks(ports) {
+		// cont.Ports[] from GET /containers/json — flat array.
+		// Published ports have {IP, PrivatePort, PublicPort, Type}.
+		// Exposed-only ports omit IP and PublicPort: {PrivatePort, Type}.
+		if (!Array.isArray(ports) || ports.length === 0) return '';
+
+		const LOCAL_IPS = new Set(['0.0.0.0', '::']);
+
+		// Sort: published (has PublicPort) before exposed-only, then by PrivatePort
+		const sorted = [...ports].sort((a, b) => {
+			const aHasPub = a.PublicPort ? 1 : 0;
+			const bHasPub = b.PublicPort ? 1 : 0;
+			if (aHasPub !== bHasPub) return bHasPub - aHasPub;
+			return (a.PrivatePort || 0) - (b.PrivatePort || 0);
+		});
+
+		const lines = sorted.map(p => {
+			const ip   = p.IP || '';
+			const pub  = p.PublicPort || '';
+			const priv = p.PrivatePort || '';
+			const type = p.Type || '';
+
+			const isIPv6    = ip.includes(':');
+			const isLocal   = LOCAL_IPS.has(ip);
+			const displayIp = isIPv6 ? `[${ip}]` : ip;
+
+			let label;
+			if (pub && ip)  label = `${displayIp}:${pub}->${priv}/${type}`;
+			else if (pub)   label = `${pub}->${priv}/${type}`;
+			else            label = `${priv}/${type}`;
+
+			// Clickable link for published TCP ports only
+			if (type === 'tcp' && pub) {
+				const host = isLocal ? window.location.hostname : displayIp;
+				return E('div', {}, [
+					E('a', {
+						href: `http://${host}:${pub}`,
+						target: '_blank',
+						rel: 'noopener noreferrer',
+						title: _('Open in browser'),
+					}, [label]),
+				]);
+			}
+
+			return E('div', {}, [label]);
+		});
+
+		return E('div', {}, lines);
+	},
+
 	handleSave: null,
 	handleSaveApply: null,
 	handleReset: null,
@@ -342,16 +392,7 @@ return dm2.dv.extend({
 				_shortId: (cont?.Id || '').substring(0, 12),
 				Networks: this.parseNetworkLinksForContainer(network_list, cont?.NetworkSettings?.Networks || {}, true),
 				Created: this.buildTimeString(cont?.Created) || '',
-				Ports: (Array.isArray(cont.Ports) && cont.Ports.length > 0)
-						? cont.Ports.map(p => {
-							// const ip = p.IP || '';
-							const pub = p.PublicPort || '';
-							const priv = p.PrivatePort || '';
-							const type = p.Type || '';
-							return `${pub ? pub + ':' : ''}${priv}/${type}`;
-							// return `${ip ? ip + ':' : ''}${pub} -> ${priv} (${type})`;
-						}).join('<br/>')
-						: '',
+				Ports: this.buildPortLinks(cont.Ports),
 			});
 		}
 
