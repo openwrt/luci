@@ -31,8 +31,8 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
 "{helper.val}</var>}}"
 msgstr ""
-"%{src?%{dest?Reenviat:Entrant}:Sortint} %{ipv6?%{ipv4?<var>IPv4</var> i <var>"
-"IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%"
+"%{src?%{dest?Reenviat:Entrant}:Sortint} %{ipv6?%{ipv4?<var>IPv4</var> i "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%"
 "{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
 "class=\"cbi-tooltip\">ICMP amb tipus %{item.types#%{next?, }<var>%{item}</"
 "var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, marca <var%{mark.inv? "
@@ -42,8 +42,8 @@ msgstr ""
 "{dscp?, DSCP %{dscp.inv?<var data-tooltip=\"Coincideix amb classificacions "
 "DSCP excepte %{dscp.num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}</"
 "var>}}%{helper?, ajudant %{helper.inv?<var data-tooltip=\"Coincideix amb "
-"qualsevol ajudant excepte &quot;%{helper.name}&quot;\">%{helper.val}</var>"
-":<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
+"qualsevol ajudant excepte &quot;%{helper.name}&quot;\">%{helper.val}</var>:"
+"<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:462
 msgid "-- add IP --"
@@ -113,8 +113,8 @@ msgstr ""
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"REJECT\">Rebutja</var> el %{src?%{dest?forward:input}"
-":output}"
+"<var data-tooltip=\"REJECT\">Rebutja</var> el %{src?%{dest?"
+"forward:input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:87
 msgid ""
@@ -427,8 +427,9 @@ msgid "Flow offloading type"
 msgstr "Tipus de descàrrega de flux"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
+msgctxt "firewall forward"
 msgid "Forward"
-msgstr "Reenvia"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -581,8 +582,9 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
+msgctxt "firewall input"
 msgid "Input"
-msgstr "Entrada"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:290
 msgid "Internal IP address"
@@ -817,8 +819,9 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
+msgctxt "firewall output"
 msgid "Output"
-msgstr "Sortida"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
@@ -1062,12 +1065,12 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
-"Aquesta secció defineix les propietats comunes de %q. Les opcions d'<em>"
-"entrada</em> i <em>sortida</em> estableixen les polítiques per defecte per "
-"al trànsit que entra i surt d'aquesta zona, mentre que l'opció de <em>"
-"reenviament</em> descriu la política per al trànsit reenviat entre diferents "
-"xarxes dins de la zona. Les <em>xarxes cobertes</em> especifiquen quines "
-"xarxes disponibles són membres d'aquesta zona."
+"Aquesta secció defineix les propietats comunes de %q. Les opcions "
+"d'<em>entrada</em> i <em>sortida</em> estableixen les polítiques per defecte "
+"per al trànsit que entra i surt d'aquesta zona, mentre que l'opció de "
+"<em>reenviament</em> descriu la política per al trànsit reenviat entre "
+"diferents xarxes dins de la zona. Les <em>xarxes cobertes</em> especifiquen "
+"quines xarxes disponibles són membres d'aquesta zona."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:486
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:358
@@ -1478,3 +1481,12 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
 msgstr ""
+
+#~ msgid "Forward"
+#~ msgstr "Reenvia"
+
+#~ msgid "Input"
+#~ msgstr "Entrada"
+
+#~ msgid "Output"
+#~ msgstr "Sortida"

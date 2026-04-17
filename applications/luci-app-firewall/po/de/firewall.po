@@ -465,8 +465,9 @@ msgid "Flow offloading type"
 msgstr "Art des Fluss-Offloadings"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
+msgctxt "firewall forward"
 msgid "Forward"
-msgstr "Weiterleitung"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -639,16 +640,17 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Eingehende %{ipv6?%{ipv4?<var>IPv4</var> und <var>IPv6</var>:<var>IPv6</var>}"
-":<var>IPv4</var>}%{proto?, Protokoll %{proto#%{next?, }%{item.types? <var "
-"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
-"mit Typen %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%"
-"{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Fwmarks "
-"abgleichen, außer %{mark.num}%{mark.mask? mit Maske %{mark.mask}}.\":%"
-"{mark.mask? data-tooltip=\"Fwmark-Wert vor dem Abgleich mit %{mark.mask} "
-"maskieren.\"}} >%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-"
-"tooltip=\"Alle Helper außer &quot;%{helper.name}&quot; abgleichen\">%"
-"{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
+"Eingehende %{ipv6?%{ipv4?<var>IPv4</var> und <var>IPv6</var>:<var>IPv6</"
+"var>}:<var>IPv4</var>}%{proto?, Protokoll %{proto#%{next?, }%{item.types? "
+"<var class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-"
+"tooltip\">ICMP mit Typen %{item.types#%{next?, }<var>%{item}</var>}</span></"
+"var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-"
+"tooltip=\"Fwmarks abgleichen, außer %{mark.num}%{mark.mask? mit Maske %"
+"{mark.mask}}.\":%{mark.mask? data-tooltip=\"Fwmark-Wert vor dem Abgleich mit "
+"%{mark.mask} maskieren.\"}} >%{mark.val}</var>}%{helper?, helper %"
+"{helper.inv?<var data-tooltip=\"Alle Helper außer &quot;%{helper.name}&quot; "
+"abgleichen\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
+"{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:181
 msgid "Initial Hash Size"
@@ -656,8 +658,9 @@ msgstr "Initiale Hash Größe"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
+msgctxt "firewall input"
 msgid "Input"
-msgstr "Eingehend"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:290
 msgid "Internal IP address"
@@ -911,8 +914,9 @@ msgstr "Ausgehende Zone"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
+msgctxt "firewall output"
 msgid "Output"
-msgstr "Ausgabe"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
@@ -1633,6 +1637,15 @@ msgstr "bis zu 65536 Einträgen."
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
 msgstr "gültige Firewall-Markierung"
+
+#~ msgid "Forward"
+#~ msgstr "Weiterleitung"
+
+#~ msgid "Input"
+#~ msgstr "Eingehend"
+
+#~ msgid "Output"
+#~ msgstr "Ausgabe"
 
 #~ msgid "Invalid set name"
 #~ msgstr "Falscher Setname"

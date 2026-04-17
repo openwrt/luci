@@ -30,8 +30,8 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
 "{helper.val}</var>}}"
 msgstr ""
-"%{src?%{dest?Препратен:Входящ}:Изходящ} %{ipv6?%{ipv4?<var>IPv4</var> и <var>"
-"IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, протокол %{proto#%"
+"%{src?%{dest?Препратен:Входящ}:Изходящ} %{ipv6?%{ipv4?<var>IPv4</var> и "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, протокол %{proto#%"
 "{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
 "class=\"cbi-tooltip\">ICMP с типове %{item.types#%{next?, }<var>%{item}</"
 "var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, маркер <var%{mark.inv? "
@@ -41,8 +41,8 @@ msgstr ""
 "DSCP %{dscp.inv?<var data-tooltip=\"Съвпадение с DSCP класификации с "
 "изключение на %{dscp.num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}"
 "</var>}}%{helper?, helper %{helper.inv?<var data-tooltip=\"Съвпадение с "
-"всеки helper с изключение на &quot;%{helper.name}&quot;\">%{helper.val}</var>"
-":<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
+"всеки helper с изключение на &quot;%{helper.name}&quot;\">%{helper.val}</"
+"var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:462
 msgid "-- add IP --"
@@ -417,8 +417,9 @@ msgid "Flow offloading type"
 msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
+msgctxt "firewall forward"
 msgid "Forward"
-msgstr "Напред"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -571,8 +572,9 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
+msgctxt "firewall input"
 msgid "Input"
-msgstr "Вход"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:290
 msgid "Internal IP address"
@@ -803,6 +805,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
+msgctxt "firewall output"
 msgid "Output"
 msgstr ""
 
@@ -1445,3 +1448,9 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
 msgstr ""
+
+#~ msgid "Forward"
+#~ msgstr "Напред"
+
+#~ msgid "Input"
+#~ msgstr "Вход"

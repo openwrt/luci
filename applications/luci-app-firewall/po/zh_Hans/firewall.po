@@ -109,7 +109,8 @@ msgstr "<var data-tooltip=\"MASQUERADE\">自动重写</var> 源 IP"
 msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?"
 "forward:input}:output}"
-msgstr "<var data-tooltip=\"NOTRACK\">不跟踪</var> %{src?%{dest?转发:入站}:出站}"
+msgstr ""
+"<var data-tooltip=\"NOTRACK\">不跟踪</var> %{src?%{dest?转发:入站}:出站}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
@@ -434,8 +435,9 @@ msgid "Flow offloading type"
 msgstr "流量卸载类型"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
+msgctxt "firewall forward"
 msgid "Forward"
-msgstr "转发"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -446,8 +448,8 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
-"转发的 %{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>:<var>IPv6</var>}"
-":<var>IPv4</var>}%{proto?, 协议 %{proto#%{next?, }<var>%{item.name}</var>}}%"
+"转发的 %{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?, 协议 %{proto#%{next?, }<var>%{item.name}</var>}}%"
 "{mark?, 标记 <var%{mark.inv? data-tooltip=\"匹配除 %{mark.num}%{mark.mask? 及"
 "掩码 %{mark.mask}} 以外的 fwmark。\":%{mark.mask? data-tooltip=\"比较前使用 %"
 "{mark.mask} 掩码处理 fwmark 值。\"}}>%{mark.val}</var>}"
@@ -487,8 +489,8 @@ msgstr ""
 "IP 地址。\"}>%{item.ival}</var>}}%{src_port?, 端口 %{src_port#%{next?, }<var%"
 "{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的端口。\"}>%{item.ival}</"
 "var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-tooltip=\"匹配"
-"除 %{item.val}%{item.hint.name? 或称为 %{item.hint.name}} 以外的 MAC 地址"
-"。\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</"
+"除 %{item.val}%{item.hint.name? 或称为 %{item.hint.name}} 以外的 MAC 地址。"
+"\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</"
 "var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
@@ -606,16 +608,16 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"入站 %{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>:<var>IPv6</var>}:<var>"
-"IPv4</var>}%{proto?, 协议 %{proto#%{next?, }%{item.types?<var class=\"cbi-"
-"tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP 类型 %"
-"{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</"
-"var>}}}%{mark?, 标记 <var%{mark.inv? data-tooltip=\"匹配除 %{mark.num}%"
-"{mark.mask? 及掩码 %{mark.mask}} 以外的 fwmark。\":%{mark.mask? data-"
-"tooltip=\"比较前使用 %{mark.mask} 掩码处理 fwmark 值。\"}}>%{mark.val}</var>}"
-"%{helper?, 助手 %{helper.inv?<var data-tooltip=\"匹配除 &quot;%{helper.name}"
-"&quot; 以外的任何助手\">%{helper.val}</var>:<var data-tooltip=\"%"
-"{helper.name}\">%{helper.val}</var>}}"
+"入站 %{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?, 协议 %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"类型 %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%"
+"{item.name}</var>}}}%{mark?, 标记 <var%{mark.inv? data-tooltip=\"匹配除 %"
+"{mark.num}%{mark.mask? 及掩码 %{mark.mask}} 以外的 fwmark。\":%{mark.mask? "
+"data-tooltip=\"比较前使用 %{mark.mask} 掩码处理 fwmark 值。\"}}>%{mark.val}</"
+"var>}%{helper?, 助手 %{helper.inv?<var data-tooltip=\"匹配除 &quot;%"
+"{helper.name}&quot; 以外的任何助手\">%{helper.val}</var>:<var data-"
+"tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:181
 msgid "Initial Hash Size"
@@ -623,8 +625,9 @@ msgstr "初始哈希大小"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
+msgctxt "firewall input"
 msgid "Input"
-msgstr "输入"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:290
 msgid "Internal IP address"
@@ -859,8 +862,9 @@ msgstr "出站区域"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
+msgctxt "firewall output"
 msgid "Output"
-msgstr "出站数据"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
@@ -873,9 +877,9 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"要进行匹配的数据包字段。<br />语法：<em>direction_datatype</em>。如：<code>"
-"src_port, dest_net</code>。<br />方向：<code>src, dst</code>。数据类型"
-"：<code>ip, port, mac, net, set</code>。<br />方向前缀可选。<br />*注意："
+"要进行匹配的数据包字段。<br />语法：<em>direction_datatype</em>。如："
+"<code>src_port, dest_net</code>。<br />方向：<code>src, dst</code>。数据类"
+"型：<code>ip, port, mac, net, set</code>。<br />方向前缀可选。<br />*注意："
 "datatype<code>set</code> 在 fw4 中不受支持。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:356
@@ -1418,8 +1422,8 @@ msgid ""
 "Port ranges in ipsets are unsupported by firewall4.<br />"
 msgstr ""
 "firewall4 支持通过引用和创建 IP 集合以简化大型地址列表的匹配，从而无需为每个"
-"要匹配的项目创建单独的规则。注意：firewall4 不支持 IP 集合中的端口范围"
-"。<br />"
+"要匹配的项目创建单独的规则。注意：firewall4 不支持 IP 集合中的端口范围。<br /"
+">"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:160
 msgid "fromport-toport"
@@ -1540,6 +1544,15 @@ msgstr "最多 65536 个条目。"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
 msgstr "有效的防火墙标记"
+
+#~ msgid "Forward"
+#~ msgstr "转发"
+
+#~ msgid "Input"
+#~ msgstr "输入"
+
+#~ msgid "Output"
+#~ msgstr "出站数据"
 
 #~ msgid "Invalid set name"
 #~ msgstr "无效的集合名"
