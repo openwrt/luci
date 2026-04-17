@@ -412,13 +412,18 @@ return baseclass.extend({
 				});
 			});
 
-			return Promise.all(psePromises).then((pseResults) => {
+			return Promise.all([
+    			Promise.all(psePromises),
+			    L.resolveDefault(fs.list('/sys/class/net'), [])
+			]).then(([pseResults, devs]) => {
 				const pseMap = {};
 				pseResults.forEach((r) => {
 					if (r.pse)
 						pseMap[r.name] = r.pse;
 				});
-				data.push(pseMap);
+				const present = (devs || []).map(d => d.name || d);
+			    data.push(pseMap);
+			    data.push(present);
 				return data;
 			});
 		});
@@ -460,6 +465,23 @@ return baseclass.extend({
 						});
 				}
 			}
+		}
+
+		const presentDevices = new Set(data[6] || []);
+		for (const dev in port_map) {
+		    if (dev === 'lo')
+		        continue;
+		
+		    if (!presentDevices.has(dev))
+		        continue;
+		
+		    if (!known_ports.find(p => p.device === dev)) {
+		        known_ports.push({
+		            role: 'extra',
+		            device: dev,
+		            netdev: network.instantiateDevice(dev)
+		        });
+		    }
 		}
 
 		known_ports.sort(function(a, b) {
