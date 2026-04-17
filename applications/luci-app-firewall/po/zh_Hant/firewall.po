@@ -26,14 +26,14 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
 "{helper.val}</var>}}"
 msgstr ""
-"%{src?%{dest?轉送:傳入}:傳出}%{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>"
-":<var>IPv6</var>}:<var>IPv4</var>}%{proto?，協定 %{proto#%{next?，}%"
+"%{src?%{dest?轉送:傳入}:傳出}%{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</"
+"var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?，協定 %{proto#%{next?，}%"
 "{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
 "class=\"cbi-tooltip\">ICMP 類型為 %{item.types#%{next?，}<var>%{item}</var>}"
 "</span></var>:<var>%{item.name}</var>}}}%{mark?，標記 <var%{mark.inv? data-"
-"tooltip=\"匹配除 %{mark.num}%{mark.mask? 帶有遮罩 %{mark.mask}} 外的 fwmarks"
-"。\":%{mark.mask? data-tooltip=\"對比前標記 fwmark 值為 %{mark.mask}。\"}}>%"
-"{mark.val}</var>}%{dscp?，DSCP%{dscp.inv?<var data-tooltip=\"匹配除 %"
+"tooltip=\"匹配除 %{mark.num}%{mark.mask? 帶有遮罩 %{mark.mask}} 外的 "
+"fwmarks。\":%{mark.mask? data-tooltip=\"對比前標記 fwmark 值為 %{mark.mask}。"
+"\"}}>%{mark.val}</var>}%{dscp?，DSCP%{dscp.inv?<var data-tooltip=\"匹配除 %"
 "{dscp.num?:%{dscp.name}} 外的 DSCP 類別。\">%{dscp.val}</var>:<var>%"
 "{dscp.val}</var>}}%{helper?，助手 %{helper.inv?<var data-tooltip=\"匹配除 "
 "&quot;%{helper.name}&quot; 外的任意助手\">%{helper.val}</var>:<var data-"
@@ -109,7 +109,8 @@ msgstr "<var data-tooltip=\"偽裝\">自動重寫</var> 來源IP"
 msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?"
 "forward:input}:output}"
-msgstr "<var data-tooltip=\"不追蹤\">不追蹤</var> %{src?%{dest?轉送:傳入}:傳出}"
+msgstr ""
+"<var data-tooltip=\"不追蹤\">不追蹤</var> %{src?%{dest?轉送:傳入}:傳出}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
@@ -121,8 +122,8 @@ msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"來源網路位址轉譯\">靜態重寫</var> 來源 %{snat_ip?IP <var>"
-"%{snat_ip}</var>} %{snat_port?連接埠 <var>%{snat_port}</var>}"
+"<var data-tooltip=\"來源網路位址轉譯\">靜態重寫</var> 來源 %{snat_ip?IP "
+"<var>%{snat_ip}</var>} %{snat_port?連接埠 <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:305
 msgid "A rewrite IP must be specified!"
@@ -307,7 +308,8 @@ msgstr "裝置名稱"
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
-msgstr "允許連線追蹤狀態為無效的流量轉送。對於複雜的不對稱路由設定可能是必需的。"
+msgstr ""
+"允許連線追蹤狀態為無效的流量轉送。對於複雜的不對稱路由設定可能是必需的。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:57
 msgid "Drop invalid packets"
@@ -432,6 +434,7 @@ msgid "Flow offloading type"
 msgstr "流量卸載類型"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
+msgctxt "firewall forward"
 msgid "Forward"
 msgstr "轉送"
 
@@ -603,13 +606,13 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"傳入 %{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>:<var>IPv6</var>}:<var>"
-"IPv4</var>}%{proto?，協定 %{proto#%{next?，}%{item.types?<var class=\"cbi-"
-"tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP 類型為 %"
-"{item.types#%{next?，}<var>%{item}</var>}</span></var>:<var>%{item.name}</"
-"var>}}}%{mark?，標記<var%{mark.inv? data-tooltip=\"匹配除 %{mark.num}%"
-"{mark.mask?具有遮罩 %{mark.mask}} 外的 fwmarks。\":%{mark.mask? data-"
-"tooltip=\"對比前標記 fwmark 值為 %{mark.mask}。\"}}>%{mark.val}</var>}%"
+"傳入 %{ipv6?%{ipv4?<var>IPv4</var> 和 <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?，協定 %{proto#%{next?，}%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"類型為 %{item.types#%{next?，}<var>%{item}</var>}</span></var>:<var>%"
+"{item.name}</var>}}}%{mark?，標記<var%{mark.inv? data-tooltip=\"匹配除 %"
+"{mark.num}%{mark.mask?具有遮罩 %{mark.mask}} 外的 fwmarks。\":%{mark.mask? "
+"data-tooltip=\"對比前標記 fwmark 值為 %{mark.mask}。\"}}>%{mark.val}</var>}%"
 "{helper?，助手 %{helper.inv?<var data-tooltip=\"匹配除 &quot;%{helper.name}"
 "&quot; 外的任意助手\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}"
 "\">%{helper.val}</var>}}"
@@ -620,6 +623,7 @@ msgstr "初始雜湊大小"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
+msgctxt "firewall input"
 msgid "Input"
 msgstr "傳入"
 
@@ -668,8 +672,8 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
-"限制每 <var>%{limit.unit}</var> <var>%{limit.num}</var> 封包，%"
-"{limit.burst?突發 <var>%{limit.burst}</var>}"
+"限制每 <var>%{limit.unit}</var> <var>%{limit.num}</var> 封包，%{limit.burst?"
+"突發 <var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:248
@@ -855,6 +859,7 @@ msgstr "傳出區域"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
+msgctxt "firewall output"
 msgid "Output"
 msgstr "傳出"
 
@@ -869,10 +874,10 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。例如: <code>"
-"src_port, dest_net</code>。<br />方向: <code>src, dst</code>。資料類型: "
-"<code>ip, port, mac, net, set</code>。<br />方向首碼可選。<br />*注意: fw4 不"
-"支援資料類型 <code>set</code>。"
+"要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。例如: "
+"<code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。資料類"
+"型: <code>ip, port, mac, net, set</code>。<br />方向首碼可選。<br />*注意: "
+"fw4 不支援資料類型 <code>set</code>。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:356
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:473
@@ -1536,6 +1541,15 @@ msgstr "最多 65536 個條目。"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
 msgstr "有效防火牆標記"
+
+#~ msgid "Forward"
+#~ msgstr "轉送"
+
+#~ msgid "Input"
+#~ msgstr "傳入"
+
+#~ msgid "Output"
+#~ msgstr "傳出"
 
 #~ msgid "Invalid set name"
 #~ msgstr "無效的集合名稱"
