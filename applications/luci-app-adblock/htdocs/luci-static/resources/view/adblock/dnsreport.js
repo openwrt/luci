@@ -132,12 +132,12 @@ function handleAction(ev) {
 								clearInterval(window._adbSearchPoller);
 								window._adbSearchPoller = null;
 							}
-							L.resolveDefault(fs.write('/var/run/adblock.search', ''), '').then(function () {
+							L.resolveDefault(fs.write('/var/run/adblock/adblock.search', ''), '').then(function () {
 								L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['search', domain]), '');
 								let attempts = 0;
 								window._adbSearchPoller = setInterval(function () {
 									attempts++;
-									L.resolveDefault(fs.read('/var/run/adblock.search'), '').then(function (res) {
+									L.resolveDefault(fs.read('/var/run/adblock/adblock.search'), '').then(function (res) {
 										if (res && res.trim()) {
 											clearInterval(window._adbSearchPoller);
 											window._adbSearchPoller = null;
@@ -213,12 +213,12 @@ function handleAction(ev) {
 						const top_count = document.getElementById('top_count').value;
 						const res_count = document.getElementById('res_count').value;
 						const search = document.getElementById('search').value.trim().replace(/[^\w.\-:]/g, '') || '+';
-						L.resolveDefault(fs.write('/var/run/adblock.report', ''), '').then(function () {
+						L.resolveDefault(fs.write('/var/run/adblock/adblock.report', ''), '').then(function () {
 							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '');
 							let attempts = 0;
 							let poller = setInterval(function () {
 								attempts++;
-								L.resolveDefault(fs.read('/var/run/adblock.report'), '').then(function (res) {
+								L.resolveDefault(fs.read('/var/run/adblock/adblock.report'), '').then(function (res) {
 									if (res && res.trim()) {
 										clearInterval(poller);
 										ui.hideModal();

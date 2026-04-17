@@ -80,11 +80,11 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/adb_runtime.json'), null).then(function (stat) {
+			return L.resolveDefault(fs.stat('/var/run/adblock/adblock.runtime.json'), null).then(function (stat) {
 				if (!stat) {
 					return;
 				}
-				return L.resolveDefault(fs.read_direct('/var/run/adb_runtime.json'), null).then(function (res) {
+				return L.resolveDefault(fs.read_direct('/var/run/adblock/adblock.runtime.json'), null).then(function (res) {
 					const status = document.getElementById('status');
 					const buttons = document.querySelectorAll('.cbi-page-actions button');
 					let info = null;
