@@ -8,15 +8,46 @@ const upsmon_tool = '/usr/sbin/upsmon';
 function ESIFlags(o) {
 	o.value('EXEC', _('Execute notify command'));
 	o.value('SYSLOG', _('Write to syslog'));
+	o.value('SYSLOG+EXEC', _('Write to syslog and execute notify command'))
 	o.value('IGNORE', _('Ignore'));
+	o.default = 'SYSLOG';
 	o.optional = true;
-	o.validate = function(section, v) {
-		if (!v) return true;
-		if(v.includes(' ') && v.includes('IGNORE'))
-			return _('%s is mutually exclusive to other choices'.format(_('Ignore')));
-		return true;
-	}
 	return o;
+}
+
+
+function MonitorUserOptions(s) {
+		let o
+
+		s.optional = true;
+		s.addremove = true;
+		s.anonymous = true;
+
+		o = s.option(form.Value, 'upsname', _('Name of UPS'), _('As configured by NUT'));
+		o.optional = false;
+
+		o = s.option(form.Value, 'hostname', _('Hostname or address of UPS'));
+		o.optional = false;
+		o.datatype = 'or(host,ipaddr)';
+
+		o = s.option(form.Value, 'port', _('Port'));
+		o.optional = true;
+		o.placeholder = 3493;
+		o.datatype = 'port';
+
+		o = s.option(form.Value, 'powervalue', _('Power value'));
+		o.optional = false;
+		o.datatype = 'uinteger';
+		o.default = 1;
+
+		o = s.option(form.Value, 'username', _('Username'));
+		o.optional = false;
+
+		o = s.option(form.Value, 'password', _('Password'));
+		o.optional = false;
+		o.password = true;
+
+		return s;
 }
 
 return view.extend({
@@ -75,69 +106,6 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = 15;
 
-		o = s.option(form.Value, 'onlinemsg', _('Online message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'onbattmsg', _('On battery message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'lowbattmsg', _('Low battery message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'fsdmsg', _('Forced shutdown message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'comokmsg', _('Communications restored message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'combadmsg', _('Communications lost message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'shutdownmsg', _('Shutdown message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'replbattmsg', _('Replace battery message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'nocommsg', _('No communications message'));
-		o.optional = true;
-
-		o = s.option(form.Value, 'noparentmsg', _('No parent message'));
-		o.optional = true;
-
-		o = s.option(form.MultiValue, 'defaultnotify', _('Notification defaults'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'onlinenotify', _('Notify when back online'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'onbattnotify', _('Notify when on battery'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'lowbattnotify', _('Notify when low battery'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'fsdnotify', _('Notify when force shutdown'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'comoknotify', _('Notify when communications restored'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'combadnotify', _('Notify when communications lost'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'shutdownotify', _('Notify when shutting down'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'replbattnotify', _('Notify when battery needs replacing'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'nocommnotify', _('Notify when no communications'));
-		ESIFlags(o);
-
-		o = s.option(form.MultiValue, 'noparentnotify', _('Notify when no parent process'));
-		ESIFlags(o);
-
 		if (have_ssl_support) {
 			o = s.option(form.Value, 'certpath', _('CA Certificate path'), _('Path containing ca certificates to match against host certificate'));
 			o.optional = true;
@@ -148,64 +116,31 @@ return view.extend({
 			o.default = false;
 		}
 
-		s = m.section(form.TypedSection, 'master', _('UPS Primary'));
+		s = m.section(form.TypedSection, 'notifications', _('Notifications settings'));
 		s.optional = true;
 		s.addremove = true;
-		s.anonymous = true;
+		s.anonymous = false;
 
-		o = s.option(form.Value, 'upsname', _('Name of UPS'), _('As configured by NUT'));
+		o = s.option(form.Value, 'message', _('Custom notification message for message type'));
+		o.optional = true
+
+		o = s.option(form.ListValue, 'flag', _('Notification flags'));
+		ESIFlags(o)
+
+		s = m.section(form.TypedSection, 'monitor', _('UPS Monitor User Settings)'));
+		MonitorUserOptions(s);
+
+		o = s.option(form.ListValue, 'type', _('User type (Primary/Auxiliary)'));
 		o.optional = false;
+		o.value('primary', 'Primary');
+		o.value('secondary', 'Auxiliary');
+		o.default = 'secondary'
 
-		o = s.option(form.Value, 'hostname', _('Hostname or address of UPS'));
-		o.optional = false;
-		o.datatype = 'or(host,ipaddr)';
+		s = m.section(form.TypedSection, 'master', _('UPS Primary (Deprecated)'));
+		MonitorUserOptions(s);
 
-		o = s.option(form.Value, 'port', _('Port'));
-		o.optional = true;
-		o.placeholder = 3493;
-		o.datatype = 'port';
-
-		o = s.option(form.Value, 'powervalue', _('Power value'));
-		o.optional = false;
-		o.datatype = 'uinteger';
-		o.default = 1;
-
-		o = s.option(form.Value, 'username', _('Username'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'password', _('Password'));
-		o.optional = false;
-		o.password = true;
-
-		s = m.section(form.TypedSection, 'slave', _('UPS Auxiliary'));
-		s.optional = true;
-		s.addremove = true;
-		s.anonymous = true;
-
-		o = s.option(form.Value, 'upsname', _('Name of UPS'), _('As configured by NUT'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'hostname', _('Hostname or address of UPS'));
-		o.optional = false;
-		o.datatype = 'or(host,ipaddr)';
-
-		o = s.option(form.Value, 'port', _('Port'));
-		o.optional = true;
-		o.placeholder = 3493;
-		o.datatype = 'port';
-
-		o = s.option(form.Value, 'powervalue', _('Power value'));
-		o.optional = false;
-		o.datatype = 'uinteger';
-		o.default = 1;
-
-		o = s.option(form.Value, 'username', _('Username'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'password', _('Password'));
-		o.optional = false;
-		o.password = true;
-
+		s = m.section(form.TypedSection, 'slave', _('UPS Auxiliary (Deprecated)'));
+		MonitorUserOptions(s);
 
 		return m.render();
 	}
