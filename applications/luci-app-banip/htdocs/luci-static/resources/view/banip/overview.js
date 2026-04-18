@@ -62,12 +62,12 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/banIP/banIP_runtime.json'), null).then(function (stat) {
+			return L.resolveDefault(fs.stat('/var/run/banIP/banIP.runtime.json'), null).then(function (stat) {
 				if (!stat) {
 					return;
 				}
 				return Promise.all([
-					L.resolveDefault(fs.read_direct('/var/run/banIP/banIP_runtime.json'), 'null'),
+					L.resolveDefault(fs.read_direct('/var/run/banIP/banIP.runtime.json'), 'null'),
 					L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['actual']), '')
 				]).then(function (results) {
 					const res = results[0];
