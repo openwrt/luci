@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-16 14:10+0000\n"
+"PO-Revision-Date: 2026-04-18 17:10+0000\n"
 "Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfirewall/zh_Hant/>\n"
@@ -308,8 +308,7 @@ msgstr "裝置名稱"
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
-msgstr ""
-"允許連線追蹤狀態為無效的流量轉送。對於複雜的不對稱路由設定可能是必需的。"
+msgstr "允許轉送連線追蹤狀態無效的流量。對於複雜的不對稱路由設定可能是必需的。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:57
 msgid "Drop invalid packets"
@@ -672,8 +671,8 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
-"限制每 <var>%{limit.unit}</var> <var>%{limit.num}</var> 封包，%{limit.burst?"
-"突發 <var>%{limit.burst}</var>}"
+"每 <var>%{limit.unit}</var> 最多 <var>%{limit.num}</var> 個封包，%"
+"{limit.burst?突發 <var>%{limit.burst}</var> 個封包}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:248
@@ -786,8 +785,7 @@ msgstr "最大長度"
 msgid ""
 "Maximum initial number of packets to match: this number gets recharged by "
 "one every time the limit specified above is not reached, up to this number."
-msgstr ""
-"匹配的最大初始封包數量: 每次未至上述指定的限制時，該數字將逐一增加直至此數。"
+msgstr "匹配的初始最大封包數: 當未達到上述指定的限制時，此數值將逐一增加直至最大值。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:483
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:355
