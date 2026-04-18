@@ -820,7 +820,7 @@ return view.extend({
 		// Begin ipsets
 		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
 			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
-			_('The netfilter components below are only regarded when running fw4.'));
+			_('The nftables components below are only regarded when running fw4.'));
 
 		ss = o.subsection;
 
@@ -845,7 +845,7 @@ return view.extend({
 		so.editable = false;
 		so.datatype = 'hostname';
 
-		so = ss.option(form.Value, 'table', _('Netfilter table name'), _('Defaults to fw4.'));
+		so = ss.option(form.Value, 'table', _('Nftables table name'), _('Defaults to fw4.'));
 		so.editable = false;
 		so.placeholder = 'fw4';
 		so.rmempty = true;
