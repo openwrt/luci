@@ -144,6 +144,9 @@ return view.extend({
 		o = s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols'));
 		o.default = '1';
 
+		s.taboption('setup', form.Flag, 'ext_allow_private_ipv4', _('Allow private IPv4'),
+			_('Enable forwarding for private/reserved IPv4 address'));
+
 		o = s.taboption('setup', form.Flag, 'igdv1', _('UPnP IGDv1 compatibility mode'),
 			_('Advertise as IGDv1 (IPv4 only) device instead of IGDv2'));
 		o.default = '1';
