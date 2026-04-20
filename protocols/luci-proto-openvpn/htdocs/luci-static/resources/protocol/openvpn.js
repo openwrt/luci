@@ -105,6 +105,14 @@ const openvpnOptions = [
 	{
 		tab: 'general',
 		type: form.Value,
+		name: 'server_ipv6',
+		datatype: 'cidr6',
+		placeholder: '2001:db8::/64',
+		label: _('Configure server Ipv6 mode')
+	},
+	{
+		tab: 'general',
+		type: form.Value,
 		name: 'server_bridge',
 		datatype: 'tuple(ipaddr,ipaddr,ipaddr,ipaddr)',
 		placeholder: '192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254',
