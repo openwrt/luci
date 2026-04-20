@@ -300,9 +300,9 @@ return baseclass.extend({
 				let hint;
 
 				if (name && ipv4 && ipv6)
-					hint = '%s <span class="hide-xs">(%s, %s)</span>'.format(name, ipv4, ipv6);
+					hint = '%h <span class="hide-xs">(%s, %s)</span>'.format(name, ipv4, ipv6);
 				else if (name && (ipv4 || ipv6))
-					hint = '%s <span class="hide-xs">(%s)</span>'.format(name, ipv4 || ipv6);
+					hint = '%h <span class="hide-xs">(%s)</span>'.format(name, ipv4 || ipv6);
 				else
 					hint = name || ipv4 || ipv6 || '?';
 
