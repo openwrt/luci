@@ -141,7 +141,7 @@ return view.extend({
 			"supported_interface",
 			_("Supported Interfaces"),
 			_(
-				"Allows to specify the list of interface names (in lower case) to be explicitly supported by the service. " +
+				"Allows to specify the list of interface names to be explicitly supported by the service. " +
 					"Can be useful if your OpenVPN tunnels have dev option other than tun* or tap* or specific use cases " +
 					"of WireGuard servers. See the %sREADME%s for details."
 			).format(
@@ -157,7 +157,7 @@ return view.extend({
 			"ignored_interface",
 			_("Ignored Interfaces"),
 			_(
-				"Allows to specify the list of interface names (lower case) to be ignored by the service. " +
+				"Allows to specify the list of interface names to be ignored by the service. " +
 					"Can be useful for an OpenVPN server running on OpenWrt device. WireGuard servers, which " +
 					"have a listen_port defined, are handled automatically, do not add those here." +
 					"See the %sREADME%s for details."
