@@ -58,7 +58,7 @@ return view.extend({
 			_('Acceptable values: 1-256. Defaults to 1 if not set'));
 		o.datatype = 'range(1, 256)';
 
-		o = s.option(form.Value, 'weight', ('Weight'),
+		o = s.option(form.Value, 'weight', _('Weight'),
 			_('Acceptable values: 1-1000. Defaults to 1 if not set'));
 		o.datatype = 'range(1, 1000)';
 
