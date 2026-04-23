@@ -163,7 +163,7 @@ html {
 
 body {
 	font-size: .8rem;
-	background-color: #eee;
+	background-color: var(--white-color-low);
 }
 
 html,
@@ -177,8 +177,8 @@ body {
 
 select {
 	padding: .36rem .8rem;
-	color: #555;
-	border: thin solid #ccc;
+	color: var(--black-color-low);
+	border: thin solid var(--gray-color-high);
 	background-color: var(--white-color);
 	background-image: none;
 }
@@ -190,9 +190,9 @@ input,
 .cbi-dropdown {
 	min-height: 1.8rem;
 	padding: 0;
-	color: rgba(0, 0, 0, .87);
+	color: var(--black-color);
 	border: 0;
-	border-bottom: 2px solid rgba(0, 0, 0, .26);
+	border-bottom: 2px solid var(--gray-color-high);
 	border-radius: 0;
 	outline: 0;
 	background-color: transparent;
@@ -226,21 +226,21 @@ code {
 	font-size: 1rem;
 	font-size-adjust: .35;
 	padding: 1px 3px;
-	color: #101010;
+	color: var(--black-color-low);
 	border-radius: 2px;
-	background: #ddd;
+	background: var(--gray-color);
 }
 
 abbr {
 	cursor: help;
 	text-decoration: underline;
-	color: #005470;
+	color: var(--secondary-color);
 }
 
 hr {
 	margin: 1rem 0;
 	opacity: .1;
-	border-color: #eee;
+	border-color: var(--gray-color);
 }
 
 header,
@@ -264,13 +264,13 @@ footer {
 	padding: 1rem;
 	text-align: right;
 	white-space: nowrap;
-	color: #aaa;
-	text-shadow: 0 0 2px #bbb;
+	color: var(--gray-color-high);
+	text-shadow: none;
 }
 
 footer > a {
 	text-decoration: none;
-	color: #aaa;
+	color: var(--gray-color-high);
 }
 
 small {
@@ -297,7 +297,7 @@ small {
 	width: 100%;
 	height: 100%;
 	pointer-events: none;
-	background-color: rgb(240, 240, 240);
+	background-color: var(--white-color-low);
 	transition: visibility 400ms, opacity 400ms;
 }
 
@@ -309,7 +309,7 @@ small {
 	top: 12.5%;
 	display: block;
 	text-align: center;
-	color: #888;
+	color: var(--gray-color-high);
 }
 
 .main > .loading > span > .loading-img {
@@ -355,11 +355,11 @@ small {
 	width: 85%;
 	width: calc(100% - 15rem);
 	height: 100%;
-	background-color: #eee;
+	background-color: var(--white-color-low);
 }
 
 .main-right > #maincontent {
-	background-color: #eee;
+	background-color: var(--white-color-low);
 }
 
 .pull-right {
@@ -452,9 +452,9 @@ header > .fill > .container > .status > * {
 	white-space: nowrap;
 	text-decoration: none;
 	text-transform: uppercase;
-	color: var(--white-color) !important;
+	color: var(--header-color) !important;
 	border-radius: 3px;
-	background-color: #bfbfbf;
+	background-color: var(--gray-color-high);
 	text-shadow: none;
 }
 
@@ -732,14 +732,14 @@ li {
 h1 {
 	font-size: 2rem;
 	padding-bottom: 10px;
-	border-bottom: thin solid #eee;
+	border-bottom: thin solid var(--gray-color);
 }
 
 h2 {
 	font-size: 1.8rem;
 	margin: 2rem 0 0 0;
 	padding-bottom: 10px;
-	border-bottom: thin solid #eee;
+	border-bottom: thin solid var(--gray-color);
 }
 
 h3 {
@@ -798,7 +798,7 @@ h5 {
 	font-size: small;
 	line-height: 1.42857143;
 	padding: .5rem;
-	color: #999;
+	color: var(--gray-color-high);
 }
 
 .cbi-map-descr + fieldset {
@@ -826,8 +826,8 @@ fieldset > fieldset,
 	margin: 0;
 	margin-bottom: .5rem;
 	padding-bottom: 1rem;
-	color: #404040;
-	border-bottom: thin solid #eee;
+	color: var(--black-color-low);
+	border-bottom: thin solid var(--gray-color);
 }
 
 .cbi-section > h4:first-child,
@@ -847,7 +847,7 @@ table,
 .table {
 	overflow-y: hidden;
 	width: 100%;
-	box-shadow: 0 0 0 1px #ddd;
+	box-shadow: 0 0 0 1px var(--gray-color);
 }
 
 table > tbody > tr > td,
@@ -883,7 +883,7 @@ tr > th,
 .tr > .th,
 .cbi-section-table-row::before,
 #cbi-wireless > #wifi_assoclist_table > .tr:nth-child(2) {
-	border-top: thin solid #ddd;
+	border-top: thin solid var(--gray-color);
 }
 
 #cbi-wireless .td,
@@ -961,10 +961,10 @@ td > table > tbody > tr > td,
 	white-space: nowrap;
 	text-decoration: none;
 	text-transform: uppercase;
-	color: rgba(0, 0, 0, .87);
+	color: var(--black-color);
 	border: 0;
 	border-radius: .2rem;
-	background-color: #f0f0f0;
+	background-color: var(--gray-color);
 	background-image: none;
 	-webkit-appearance: none;  /* nonstandard, should remove in future */
 	appearance: none;
@@ -1176,14 +1176,14 @@ td > table > tbody > tr > td,
 
 .tabs > li:hover {
 	cursor: pointer;
-	border-bottom-color: #c9c9c9;
+	border-bottom-color: var(--gray-color-high);
 }
 
 .tabs > li > a,
 .cbi-tabmenu > li > a {
 	padding: .6rem .9rem;
 	text-decoration: none;
-	color: #404040;
+	color: var(--black-color-low);
 }
 
 .tabs > li[class~="active"] > a {
@@ -1196,7 +1196,7 @@ td > table > tbody > tr > td,
 }
 
 .cbi-tabmenu > li:hover {
-	background-color: #f1f1f1;
+	background-color: var(--white-color-low);
 }
 
 .cbi-tabmenu > li[class~="cbi-tab"] {
@@ -1305,7 +1305,7 @@ td > table > tbody > tr > td,
 	padding: 6px;
 	border: thin solid var(--error-color);
 	border-radius: 3px;
-	background-color: #fce6e6;
+	background-color: var(--on-error-color);
 }
 
 .cbi-section-error ul {
@@ -1339,7 +1339,7 @@ td > table > tbody > tr > td,
 }
 
 .cbi-rowstyle-2 {
-	background-color: #eee;
+	background-color: var(--white-color-low);
 }
 
 .cbi-rowstyle-2 .cbi-button-up,
@@ -1385,8 +1385,8 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	margin-right: 2em;
 	padding: .5em .25em .25em 0;
 	pointer-events: auto; /* needed for drag-and-drop in UIDynamicList */
-	color: #666;
-	border-bottom: 2px solid rgba(0, 0, 0, .26);
+	color: var(--black-color-low);
+	border-bottom: 2px solid var(--gray-color-high);
 	outline: 0;
 	cursor: move; /* drag-and-drop */
 	user-select: text; /* text selection in drag-and-drop */
@@ -1532,8 +1532,8 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .cbi-dropdown > ul > li[placeholder] {
 	font-weight: bold;
 	display: none;
-	color: #777;
-	text-shadow: 1px 1px 0 var(--white-color);
+	color: var(--gray-color-high);
+	text-shadow: none;
 }
 
 .cbi-dropdown > ul > li {
@@ -1558,7 +1558,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 }
 
 .cbi-dropdown > ul > li[display]:not([display="0"]) {
-	border-left: thin solid #ccc;
+	border-left: thin solid var(--gray-color-high);
 }
 
 .cbi-dropdown[empty] > ul {
@@ -1594,9 +1594,9 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	min-width: 100%;
 	max-width: none;
 	max-height: 200px !important;
-	border: thin solid #918e8c;
-	background: #f6f6f6;
-	box-shadow: 0 0 4px #918e8c;
+	border: thin solid var(--gray-color-high);
+	background: var(--white-color);
+	box-shadow: 0 0 4px var(--gray-color-high);
 	color: var(--main-menu-color);
 }
 
@@ -1635,17 +1635,17 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 }
 
 .cbi-dropdown[open] > ul.dropdown > li {
-	border-bottom: thin solid #ccc;
+	border-bottom: thin solid var(--gray-color-high);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li[selected] {
-	background: #b0d0f0;
-	color: var(--black-color);
+	background: var(--submenu-bg-hover-active);
+	color: var(--header-color);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li.focus,
 .cbi-dropdown[open] > ul.dropdown > li:hover {
-	background: linear-gradient(90deg, #a3c2e8 0%, #84aad9 100%);
+	background: var(--submenu-bg-hover);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
@@ -1681,8 +1681,8 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	min-width: 170px;
 	height: 20px;
 	margin: 6px 0;
-	border: thin solid #999;
-	background: #eee;
+	border: thin solid var(--gray-color-high);
+	background: var(--white-color-low);
 }
 
 .cbi-progressbar > div {
@@ -1707,7 +1707,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	text-align: center;
 	white-space: pre;
 	text-overflow: ellipsis;
-	text-shadow: 0 0 2px #eee;
+	text-shadow: 0 0 2px var(--white-color);
 }
 
 #modal_overlay {
@@ -1772,7 +1772,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .modal li {
 	list-style-type: square;
-	color: #808080;
+	color: var(--gray-color-high);
 }
 
 .modal p {
@@ -1891,8 +1891,8 @@ body.modal-overlay-active #modal_overlay {
 	display: inline-flex;
 	gap: .2rem;
 	padding: .5rem .8rem;
-	border-bottom: thin solid #ccc;
-	background: #eee;
+	border-bottom: thin solid var(--gray-color-high);
+	background: var(--white-color-low);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
 }
 
@@ -1905,7 +1905,7 @@ body.modal-overlay-active #modal_overlay {
 td > .ifacebadge,
 .td > .ifacebadge {
 	font-size: .8rem;
-	background-color: #f0f0f0;
+	background-color: var(--white-color-low);
 }
 
 .ifacebadge > em,
@@ -2070,14 +2070,14 @@ td > .ifacebadge,
 	display: inline-flex;
 	flex-direction: column;
 	min-width: 100px;
-	border-bottom: thin solid #ccc;
+	border-bottom: thin solid var(--gray-color-high);
 	background-color: var(--white-color-low);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 1px 2px rgba(0, 0, 0, .2);
 }
 
 .ifacebox-head {
 	padding: .25em;
-	background: #eee;
+	background: var(--white-color-low);
 }
 
 .ifacebox-head.active {
@@ -2105,7 +2105,7 @@ td > .ifacebadge,
 .zonebadge .ifacebadge {
 	margin: .1rem .2rem;
 	padding: .2rem .3rem;
-	border: thin solid #6c6c6c;
+	border: thin solid var(--gray-color-high);
 }
 
 .zonebadge > input[type="text"] {
@@ -2136,7 +2136,7 @@ td > .ifacebadge,
 .cbi-value-field > ul > li .ifacebadge {
 	margin-top: -.5rem;
 	margin-left: .4rem;
-	background-color: #eee;
+	background-color: var(--white-color-low);
 }
 
 .cbi-section-table-row > .cbi-value-field .cbi-dropdown {
@@ -2161,12 +2161,12 @@ div.cbi-value var,
 td.cbi-value-field var,
 .td.cbi-value-field var {
 	font-style: italic;
-	color: #0069d6;
+	color: var(--dark-blue-color);
 }
 
 .cbi-optionals {
 	padding: 1rem 1rem 0 1rem;
-	border-top: thin solid #ccc;
+	border-top: thin solid var(--gray-color-high);
 }
 
 .cbi-dropdown-container {
@@ -2190,7 +2190,7 @@ span[data-tooltip] .label {
 	opacity: 0;
 	border-radius: 3px;
 	background: var(--white-color);
-	box-shadow: 0 0 2px #444;
+	box-shadow: 0 0 2px var(--gray-color-high);
 }
 
 .cbi-tooltip-container:hover .cbi-tooltip {
@@ -2206,7 +2206,7 @@ span[data-tooltip] .label {
 }
 
 .zonebadge-empty {
-	color: #404040;
+	color: var(--black-color-low);
 	background: repeating-linear-gradient(45deg, rgba(204, 204, 204, .5), rgba(204, 204, 204, .5) 5px, rgba(255, 255, 255, .5) 5px, rgba(255, 255, 255, .5) 10px);
 }
 
@@ -2241,9 +2241,9 @@ span[data-tooltip] .label {
 	white-space: nowrap;
 	text-decoration: none;
 	text-transform: uppercase;
-	color: var(--white-color) !important;
+	color: var(--header-color) !important;
 	border-radius: 3px;
-	background-color: #bfbfbf;
+	background-color: var(--gray-color-high);
 	text-shadow: none;
 }
 
@@ -2441,23 +2441,23 @@ input[name="nslookup"] {
 
 /* wireless overview */
 #cbi-wireless > #wifi_assoclist_table > .tr {
-	box-shadow: inset 1px -1px 0 #ddd, inset -1px -1px 0 #ddd;
+	box-shadow: inset 1px -1px 0 var(--gray-color), inset -1px -1px 0 var(--gray-color);
 }
 
 #cbi-wireless > #wifi_assoclist_table > .tr.placeholder > .td {
 	right: 33px;
 	bottom: 33px;
 	left: 33px;
-	border-top: thin solid #ddd !important;
+	border-top: thin solid var(--gray-color) !important;
 }
 
 #cbi-wireless > #wifi_assoclist_table > .tr.table-titles {
-	box-shadow: inset 1px 0 0 #ddd, inset -1px 0 0 #ddd;
+	box-shadow: inset 1px 0 0 var(--gray-color), inset -1px 0 0 var(--gray-color);
 }
 
 #cbi-wireless > #wifi_assoclist_table > .tr.table-titles > .th {
-	border-bottom: thin solid #ddd;
-	box-shadow: 0 -1px 0 0 #ddd;
+	border-bottom: thin solid var(--gray-color);
+	box-shadow: 0 -1px 0 0 var(--gray-color);
 }
 
 #wifi_assoclist_table > .tr > .td[data-title="RX Rate / TX Rate"] {
@@ -2528,8 +2528,8 @@ input[name="nslookup"] {
 	width: 24% !important;
 	margin: 10px 0 0 10px !important;
 	padding: .5rem 1rem;
-	border-bottom: thin solid #ccc;
-	background: #eee;
+	border-bottom: thin solid var(--gray-color-high);
+	background: var(--white-color-low);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
 }
 
@@ -2840,7 +2840,7 @@ input[name="nslookup"] {
 	}
 
 	.tr.placeholder {
-		border-bottom: thin solid #ddd;
+		border-bottom: thin solid var(--gray-color);
 	}
 
 	.tr.placeholder > .td,
@@ -2916,7 +2916,7 @@ input[name="nslookup"] {
 		display: block;
 		flex: 1 1 100%;
 		border-bottom: thin solid rgba(0, 0, 0, .26);
-		background: #90c0e0;
+		background: var(--bar-bg);
 	}
 
 	.td[data-title],
@@ -3170,16 +3170,49 @@ input[name="nslookup"] {
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: #9e9e9e;
+		background: var(--gray-color-high);
 	}
-/*
-	::-webkit-scrollbar-thumb:hover {
-		background: #757575;
-	}
+}
 
-	::-webkit-scrollbar-thumb:active {
-		background: #424242;
-	}*/
+/* Dark mode overrides */
+:root[data-darkmode="true"] .uci-change-list ins,
+:root[data-darkmode="true"] .uci-change-legend-label ins {
+	border-color: #090;
+	background-color: #030;
+}
+
+:root[data-darkmode="true"] .uci-change-list del,
+:root[data-darkmode="true"] .uci-change-legend-label del {
+	border-color: #900;
+	background-color: #300;
+}
+
+:root[data-darkmode="true"] .uci-change-list var,
+:root[data-darkmode="true"] .uci-change-legend-label var {
+	border-color: var(--gray-color-high);
+	background-color: var(--white-color);
+}
+
+:root[data-darkmode="true"] .zonebadge-empty {
+	background: repeating-linear-gradient(45deg, rgba(60, 60, 60, .5), rgba(60, 60, 60, .5) 5px, rgba(30, 30, 30, .5) 5px, rgba(30, 30, 30, .5) 10px);
+}
+
+:root[data-darkmode="true"] .zonebadge[style],
+:root[data-darkmode="true"] .ifacebox-head[style] {
+	filter: brightness(.7);
+}
+
+:root[data-darkmode="true"] .main > .main-left > .nav > li:last-child::before,
+:root[data-darkmode="true"] .main > .main-left > .nav > .slide > .menu::before {
+	filter: invert(1);
+}
+
+:root[data-darkmode="true"] .spinning::before {
+	filter: invert(1);
+}
+
+:root[data-darkmode="true"] .darkMask {
+	background-color: rgba(0, 0, 0, .7);
 }
 
 /* === STATUS OVERVIEW: HIDE/SHOW BUTTONS === */
