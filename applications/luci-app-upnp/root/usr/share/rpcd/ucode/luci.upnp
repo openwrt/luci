@@ -46,7 +46,7 @@ const methods = {
 
 			if (ipt) {
 				for (let line = ipt.read('line'); length(line); line = ipt.read('line')) {
-					let m = match(line, /^([0-9]+)\s+([a-z]+).+dpt:([0-9]+) to:(\S+):([0-9]+)/);
+					let m = match(line, /^([0-9]+).+\s+([a-z]+).+dpt:([0-9]+) to:(\S+):([0-9]+)/);
 
 					if (m) {
 						push(rules, {
