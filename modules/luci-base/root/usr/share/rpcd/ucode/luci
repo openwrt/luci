@@ -46,6 +46,67 @@ function callPackageVersionCheck(pkg) {
 	return version;
 }
 
+function set_new_pwd(user, pwd) {
+	const ctx = cursor();
+	let cmd, fd, value;
+
+	cmd = sprintf('/usr/sbin/uhttpd -m %s', pwd);
+	fd = popen(cmd);
+	value = trim(fd.read('line'));
+
+	fd.close();
+
+	ctx.foreach('rpcd', 'login', s => {
+		if (s.username == user) {
+			ctx.set('rpcd', s['.name'], 'password', value);
+			ctx.commit();
+		}
+	});
+}
+
+function check_oldpwd(user, pwd) {
+	let cmd, fd, value;
+	const ctx = cursor();
+	let valid = false;
+
+	cmd = sprintf('/usr/sbin/uhttpd -m %s', pwd);
+	fd = popen(cmd);
+	value = trim(fd.read('line'));
+	fd.close();
+
+	ctx.foreach('rpcd', 'login', s => {
+		if (s.username == user && s.password == value)
+			valid = true;
+	});
+
+	return valid;
+}
+
+function check_user(source, entry) {
+	let found = false;
+
+	switch (source) {
+		case 'unix': {
+			const fd = open('/etc/passwd');
+
+			for (let line = fd.read('line'); length(line); line = fd.read('line')) {
+				let user = split(line, /:/)[0];
+				if (user == entry)
+					found = true;
+			}
+		}
+
+		case 'rpcd': {
+			const ctx = cursor();
+			ctx.foreach('rpcd', 'login', s => {
+				if (s.username == entry)
+					found = true;
+				});
+		}
+	}
+	return found;
+}
+
 const methods = {
 	getVersion: {
 		call: function(request) {
@@ -465,14 +526,51 @@ const methods = {
 	},
 
 	setPassword: {
-		args: { username: 'root', password: 'password' },
+		args: {
+			username: 'root',
+			password: 'password',
+			oldpassword: '',
+			rpcd: false,
+		},
 		call: function(request) {
-			const u = shellquote(request.args.username);
-			const p = shellquote(request.args.password);
+			const user = request.args.username;
+			const pwd = request.args.password;
+			const oldpwd = request.args.oldpassword;
+			const type = request.args.rpcd == true ? 'rpcd' : 'unix';
+			const known_user = check_user(type, user);
+			const uci = cursor();
 
-			return {
-				result: system(`(echo ${p}; sleep 1; echo ${p}) | /bin/busybox passwd ${u} >/dev/null 2>&1`) == 0
-			};
+			if (type == 'unix') {
+				const u = shellquote(user);
+				const p = shellquote(pwd);
+
+				return {
+					result: system(`(echo ${p}; sleep 1; echo ${p}) | /bin/busybox passwd ${u} >/dev/null 2>&1`) == 0
+				};
+			}
+
+			if (known_user) {
+				if (!oldpwd)
+					return { result: 0 };
+
+				/*
+				* check if login is valid
+				*/
+				if (!check_oldpwd(user, oldpwd))
+					return { result: 0 };
+			} else {
+				/*
+				 * create user to keep logic of luci-app-acl
+				 */
+				const sid = uci.add('rpcd', 'login');
+				uci.set('rpcd', sid, 'username', user);
+			}
+
+			/*
+			 * encrypt password and assign it to rpcd login
+			 */
+			 set_new_pwd(user, pwd);
+			 return { result: 1 };
 		}
 	},
 
