@@ -59,18 +59,18 @@ return L.view.extend({
 
 	normalizeUser(entry) {
 		return {
-			id: entry.id,
-			user: entry?.username || entry?.user,
-			group: entry?.group,
-			vpn_ip: entry['vpn-ipv4'] || entry.vpn_ip,
-			vpn_ip6: entry['vpn-ipv6'] || entry.vpn_ip6,
-			ip: entry?.ip,
-			device: entry?.device,
-			time: entry?.time || entry['connected-at'],
-			cipher: entry?.cipher,
-			status: entry?.status,
-			tx: entry?._TX || entry?.TX || entry?.tx,
-			rx: entry?._RX || entry?.RX || entry?.rx
+			id: entry.ID,
+			user: entry?.Username || entry?.User,
+			group: entry?.Groupname || entry?.Group,
+			vpn_ip: entry['vpn-ipv4'] || entry.vpn_ip || entry?.['P-t-P IPv4'],
+			vpn_ip6: entry['vpn-ipv6'] || entry.vpn_ip6 || entry?.['P-t-P IPv6'],
+			ip: entry?.IPv4 || entry?.IPv6 || entry?.['Remote IP'],
+			device: entry?.Device,
+			time: entry?.raw_connected_at || entry['Connected at'],
+			cipher: entry?.Cipher || entry?.['TLS ciphersuite'],
+			status: entry?.Status || entry?.State,
+			tx: entry?._TX || entry?.TX || entry?.tx || entry?.raw_tx,
+			rx: entry?._RX || entry?.RX || entry?.rx || entry?.raw_rx,
 		};
 	},
 
