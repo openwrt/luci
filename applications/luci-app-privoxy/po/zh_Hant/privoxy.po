@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-privoxy\n"
 "POT-Creation-Date: 2015-06-10 20:16+0100\n"
-"PO-Revision-Date: 2026-03-29 16:36+0000\n"
-"Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-04-16 07:27+0000\n"
+"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsprivoxy/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 5.17.1-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:90
@@ -22,7 +22,7 @@ msgid ""
 "A directory where Privoxy can create temporary files.<br /><strong>Only when "
 "using 'external filters', Privoxy has to create temporary files.</strong>"
 msgstr ""
-"Privoxy 可以建立暫存檔案的目錄。<br /><strong>僅當使用 '外部過濾器' 時，"
+"Privoxy 可以建立暫存檔案的目錄。<br /><strong>僅當使用 '外部篩選器' 時，"
 "Privoxy 才需要建立臨時檔案。</strong>"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:209
@@ -91,7 +91,7 @@ msgstr "配置目錄"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:13
 msgid "Configure the Privoxy proxy daemon settings."
-msgstr "配置 Privoxy 代理守護程式設定。"
+msgstr "設定 Privoxy 代理常駐程式設定。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:233
 msgid "Connection sharing"
@@ -227,11 +227,11 @@ msgstr ""
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
 msgid "Enable/Disable autostart of Privoxy"
-msgstr "啟用 / 停用 Privoxy 自啟動"
+msgstr "啟用/停用 Privoxy 自啟動"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:150
 msgid "Enable/Disable filtering when Privoxy starts."
-msgstr "Privoxy 啟動時啟用 / 禁用篩選。"
+msgstr "Privoxy 啟動時啟用/禁用篩選。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
 msgid "Enabled"
@@ -241,7 +241,7 @@ msgstr "已啟用"
 msgid ""
 "Enabling this option is NOT recommended if there is no parent proxy that "
 "requires authentication!"
-msgstr "如果沒有需要認證的父級代理時，不建議開啟這個選項！"
+msgstr "若沒有需要認證的父級代理時，不建議開啟這個選項！"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:172
 msgid "Enforce page blocking"
@@ -303,8 +303,8 @@ msgid ""
 "be a good idea to let them know how to reach you, what you block and why you "
 "do that, your policies, etc."
 msgstr ""
-"如果除了您還有其他使用者使用 Privoxy 連線，最好讓他們知道如何聯絡您，您遮蔽什"
-"麼，您為什麼這樣做，您的政策等等。"
+"若除了您還有其他使用者使用 Privoxy 連線，最好讓他們知道如何聯絡您，您遮蔽什"
+"麼，您為什麼這樣做，您的策略等等。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:112
 msgid "It is NOT recommended for the casual user."
@@ -340,13 +340,13 @@ msgstr "記錄所有傳送的網路資料"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:336
 msgid "Log the applying actions"
-msgstr "記錄配置儲存動作"
+msgstr "記錄套用動作"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:274
 msgid ""
 "Log the destination for each request Privoxy let through. See also 'Debug "
 "1024'."
-msgstr "記錄 Privoxy 允許的所有請求。另請參考\"Debug 1024\"。"
+msgstr "記錄 Privoxy 允許的所有請求。請參考「Debug 1024」。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:314
 msgid ""
@@ -372,7 +372,7 @@ msgstr "最大用戶端連線數。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:142
 msgid "Maximum size (in KB) of the buffer for content filtering."
-msgstr "內容篩選的最大緩衝 (單位: KB) 。"
+msgstr "內容篩選的最大緩衝 (單位: KB)。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:207
 msgid "Misc"
@@ -570,8 +570,7 @@ msgstr "此分頁用於配置與安全相關的 Privoxy 選項。"
 msgid ""
 "Through which SOCKS proxy (and optionally to which parent HTTP proxy) "
 "specific requests should be routed."
-msgstr ""
-"指定的請求應該通過哪一個 SOCKS 代理 (並且通過哪一個 HTTP 父代理，可選) 。"
+msgstr "指定的請求應該透過哪個 SOCKS 代理 (以及透過哪個 HTTP 父代理，可選)。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:186
 msgid "To which parent HTTP proxy specific requests should be routed."
@@ -641,7 +640,7 @@ msgstr "是否處理管道化請求。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:182
 msgid "Whether or not proxy authentication through Privoxy should work."
-msgstr "是否可以通過 Privoxy 進行代理認證。"
+msgstr "是否可以經由 Privoxy 進行代理認證。"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:168
 msgid "Whether or not the web-based actions file editor may be used."
