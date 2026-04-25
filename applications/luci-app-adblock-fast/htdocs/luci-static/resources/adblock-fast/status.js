@@ -836,5 +836,6 @@ return L.Class.extend({
 	getServiceInfo: getServiceInfo,
 	getQueryLogStatus: getQueryLogStatus,
 	setQueryLog: setQueryLog,
+	setRpcdToken: RPC.setRpcdToken,
 	callLogRead: callLogRead,
 });

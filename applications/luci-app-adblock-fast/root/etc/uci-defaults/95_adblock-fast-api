@@ -18,7 +18,7 @@ fi
 # Generate random rpcd_token if not already set
 _token="$(uci -q get adblock-fast.config.rpcd_token)"
 if [ -z "$_token" ]; then
-	_token="$(head -c 24 /dev/urandom | base64 | tr -d '/+=' | head -c 24)"
+	_token="$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 24)"
 	uci set adblock-fast.config.rpcd_token="$_token"
 	uci commit adblock-fast
 fi
