@@ -58,12 +58,21 @@ function updateDevBadge(node, dev) {
 	const type = dev.getType();
 	const up = dev.getCarrier();
 
+	let label = null;
+	uci.sections('network', 'device', function(s) {
+		if (s.name === dev.getName() && s.label)
+			label = s.label;
+	});
+
 	dom.content(node, [
-		E('img', {
-			'class': 'middle',
-			'src': L.resource('icons/%s%s.svg').format(type, up ? '' : '_disabled')
-		}),
-		'\x0a', dev.getName()
+		E('span', { 'style': 'text-align:center;display:block' }, [
+			E('img', {
+				'class': 'middle',
+				'src': L.resource('icons/%s%s.svg').format(type, up ? '' : '_disabled')
+			})
+		]),
+		E('span', { 'style': 'text-align:center;display:block' }, [dev.getName()]),
+		E('small', { 'style': 'font-weight:normal;text-align:center;display:block' }, [label || '\u00a0'])
 	]);
 
 	return node;
@@ -1128,6 +1137,12 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
+
+		if (dev && dev.getType() === 'switch' && dev.getParent() != null) {
+			o = this.replaceOption(s, 'devgeneral', form.Value, 'label', _('Label'),
+				_('Optional human-friendly name for this port, shown in the UI alongside the device name.'));
+			o.rmempty = true;
+		}
 
 		/* PSE / PoE options */
 		if (hasPSE) {
