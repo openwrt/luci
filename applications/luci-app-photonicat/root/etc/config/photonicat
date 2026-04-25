@@ -1,0 +1,22 @@
+config fan 'fan'
+	option mode 'auto'
+	option manual_level '3'
+	option min_temp '45'
+	option max_temp '85'
+	option hysteresis '3'
+	option interval '3'
+
+config cpu 'cpu'
+	option governor 'schedutil'
+
+config display 'display'
+	option backlight '1'
+	option refresh '5'
+	option theme 'dark'
+	option font_scale '1.0'
+	# default pages for multi‑page UI; short‑press power button to cycle
+	list pages 'clock'
+	list pages 'cellular'
+	list pages 'battery'
+	list pages 'network'
+	list pages 'system'
