@@ -3,11 +3,19 @@
 'require dom';
 'require fs';
 'require ui';
+'require rpc';
 'require uci';
 'require form';
 'require tools.widgets as widgets';
 
 const aclList = {};
+
+const callSetPassword = rpc.declare({
+	object: 'luci',
+	method: 'setPassword',
+	params: [ 'username', 'password', 'oldpassword', 'rpcd' ],
+	expect: { result: 1}
+});
 
 function globListToRegExp(section_id, option) {
 	const list = L.toArray(uci.get('rpcd', section_id, option));
@@ -271,15 +279,12 @@ return view.extend({
 		};
 		o.write = function(section_id, value) {
 			const variant = this.map.lookupOption('_variant', section_id)[0];
+			const user = this.map.lookupOption('username', section_id)[0].formvalue(section_id);
 
 			if (variant.formvalue(section_id) == 'crypted' && value.substring(0, 3) != '$1$')
-				return fs.exec('/usr/sbin/uhttpd', [ '-m', value ]).then(function(res) {
-					if (res.code == 0 && res.stdout)
-						uci.set('rpcd', section_id, 'password', res.stdout.trim());
-					else
-						throw new Error(res.stderr);
-				}).catch(function(err) {
-					throw new Error(_('Unable to encrypt plaintext password: %s').format(err.message));
+				return callSetPassword(user, value, '', true).then(function(success) {
+					if (!success)
+						throw new Error('Failed to create password');
 				});
 
 			uci.set('rpcd', section_id, 'password', value);
