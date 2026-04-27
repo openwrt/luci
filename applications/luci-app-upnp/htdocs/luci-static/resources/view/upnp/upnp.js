@@ -145,6 +145,10 @@ return view.extend({
 		s = m.section(form.NamedSection, 'settings', 'upnpd', _('Service Settings'));
 		s.addremove = false;
 		s.tab('setup', _('Service Setup'));
+		s.tab('access_control', _('Access Control'), '<h5>' + _('Access Control Defaults') + '</h5>' +
+			_('Set defaults for ports that all devices can map.') + ' ' +
+			_('Client-specific permissions using the access control list (ACL) can extend/override the defaults.') + ' ' +
+			_('IPv6 is currently always accepted unless disabled. (alternative text welcome)'));
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('igd', _('UPnP IGD Adjustments'));
 
@@ -159,6 +163,21 @@ return view.extend({
 		o.default = 'all';
 		o.widget = 'radio';
 
+		o = s.taboption('setup', widgets.NetworkSelect, 'internal_iface', _('Enable networks'),
+			_('Select local/internal (LAN) network interfaces to enable the service for'));
+		o.exclude = 'wan'; // wan6 should also be excluded
+		o.nocreate = true;
+		o.editable = true;
+		o.multiple = true;
+		o.rmempty = false;
+		o.retain = true;
+		o.validate = function(section_id, value) {
+			return (value == '' || value == 'wan' || value == 'wan6') ? _('Expecting: %s').format(_('internal network interfaces')) : true;
+		};
+		o.write = function(section_id, formvalue) {
+			uci.set('upnpd', section_id, 'internal_iface', formvalue.join(' '));
+		};
+
 		o = s.taboption('setup', form.ListValue, 'upnp_igd_compat', _('UPnP IGD compatibility'),
 			_('Set compatibility mode (act as device) to workaround IGDv2-incompatible clients; %s are known to only work with %s (or) <br />Emulate/report a specific/different device to workaround/support/handle/bypass/assist/mitigate... (alternative text welcome)').format('Sony PS, Activision CoD…', 'IGDv1'));
 		o.value('igdv1', _('IGDv1 (IPv4 only)'));
@@ -166,6 +185,43 @@ return view.extend({
 		o.depends('enable_protocols', 'upnp-igd');
 		o.depends('enable_protocols', 'all');
 		o.retain = true;
+
+		o = s.taboption('access_control', form.ListValue, 'access_preset', _('Access preset'));
+		o.value('', _('None / accept listed ports only'));
+		o.value('accept-high-ports', _('Accept ports >= 1024'));
+		o.value('accept-web+high-ports', _('Accept HTTP/HTTPS + ports >= 1024'));
+		o.value('accept-web-ports', _('Accept HTTP/HTTPS ports only'));
+		o.value('accept-all-ports', _('Accept all ports'));
+		o.editable = true;
+		o.retain = true;
+
+		o = s.taboption('access_control', form.Value, 'accept_ports', _('Accept ports'));
+		o.retain = true;
+		o.validate = function(section_id, value) {
+			return value.replace(/\d+-\d+ ?|\d+ ?/g, '') == '' ? true : _('Expecting: %s').format(_('valid port or port range (port1-port2)'));
+		};
+
+		o = s.taboption('access_control', form.Value, 'reject_ports', _('Reject ports'),
+			_('Reject unsafe/insecure/risky FTP/Telnet/DCE/NetBIOS/SMB/RDP ports by default; overrides other settings; use space for none'));
+		o.placeholder = '21 23 135 137-139 445 3389';
+		o.modalonly = true;
+		o.retain = true;
+		o.validate = function(section_id, value) {
+			return value.replace(/\d+-\d+ ?|\d+ ?| /g, '') == '' ? true : _('Expecting: %s').format(_('valid port or port range (port1-port2)'));
+		};
+
+		o = s.taboption('access_control', form.Flag, 'check_acl', _('Check ACL'),
+			_('Check the ACL entries first; these extend/override the defaults') + '<br />' +
+			_('Sequence: 1. Reject ports, 2. ACL entries (if checked), 3. Preset ports, 4. Accept ports'));
+		o.default = '1';
+		o.editable = true;
+		o.rmempty = false;
+		o.onchange = function(ev, section_id, value) {
+			let acl = document.getElementById("cbi-upnpd-acl_entry");
+			value == 0 ? acl.style.display = 'none' : acl.style.display = 'block';
+		};
+
+		s.taboption('access_control', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'));
 
 		o = s.taboption('advanced', form.RichListValue, 'allow_cgnat', _('Allow %s/%s', 'Allow %s/%s (%s = CGNAT, %s = STUN)')
 			.format('<a href="https://en.wikipedia.org/wiki/Carrier-grade_NAT" target="_blank" rel="noreferrer"><abbr title="Carrier-grade NAT">CGNAT</abbr></a>',
@@ -196,8 +252,6 @@ return view.extend({
 		o.value('1', _('Enabled'));
 		o.value('upnp-igd', _('Enabled') + ' (' + _('UPnP IGD only') + ')');
 		o.value('pcp', _('Enabled') + ' (' + _('PCP only') + ')');
-
-		s.taboption('advanced', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'));
 
 		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'));
 		o.default = '1';
@@ -279,73 +333,15 @@ return view.extend({
 		o.depends('enable_protocols', 'all');
 		o.retain = true;
 
-		s = m.section(form.GridSection, 'internal_network', '<h5>' + _('Enable Networks / Access Control') + '</h5>',
-			_('Select local/internal (LAN) network interfaces to enable the service for.') + ' ' +
-			_('Set defaults for ports that all devices on a network can map.') + ' ' +
-			_('Client-specific permissions using the access control list (ACL) can extend/override the defaults.') + ' ' +
-			_('IPv6 is currently always accepted unless disabled. (alternative text welcome)'));
-		s.anonymous = true;
-		s.addremove = true;
-		s.cloneable = true;
-		s.sortable = true;
-		s.nodescriptions = true;
-		s.modaltitle = _('UPnP IGD & PCP') + ' - ' + _('Edit Network Access Control Settings');
-
-		o = s.option(widgets.NetworkSelect, 'interface', _('Internal network'),
-			_('Select the local/internal (LAN) network interface to enable the service for'));
-		o.exclude = 'wan'; // wan6 should also be excluded
-		o.nocreate = true;
-		o.editable = true;
-		o.retain = true;
-		o.validate = function(section_id, value) {
-			// Commented out, as it causes issues with cloning
-			//let netcount = 0;
-			//for (let ifnr = 0; uci.get('upnpd', `@internal_network[${ifnr}]`, 'interface'); ifnr++) {
-			//	if (uci.get('upnpd', `@internal_network[${ifnr}]`, 'interface') == value) netcount++;
-			//};
-			return (value == '' || value == 'wan' || value == 'wan6') ? _('Expecting: %s').format(_('internal network interface')) : true;
-		};
-
-		o = s.option(form.ListValue, 'access_preset', _('Access preset'));
-		o.value('', _('None / accept listed ports only'));
-		o.value('accept-high-ports', _('Accept ports >= 1024'));
-		o.value('accept-web+high-ports', _('Accept HTTP/HTTPS + ports >= 1024'));
-		o.value('accept-web-ports', _('Accept HTTP/HTTPS ports only'));
-		o.value('accept-all-ports', _('Accept all ports'));
-		o.editable = true;
-		o.retain = true;
-
-		o = s.option(form.Value, 'accept_ports', _('Accept ports'));
-		o.retain = true;
-		o.validate = function(section_id, value) {
-			return value.replace(/\d+-\d+ ?|\d+ ?/g, '') == '' ? true : _('Expecting: %s').format(_('valid port or port range (port1-port2)'));
-		};
-
-		o = s.option(form.Value, 'reject_ports', _('Reject ports'),
-			_('Reject unsafe/insecure/risky FTP/Telnet/DCE/NetBIOS/SMB/RDP ports on the network by default; overrides other settings; use space for none'));
-		o.placeholder = '21 23 135 137-139 445 3389';
-		o.modalonly = true;
-		o.retain = true;
-		o.validate = function(section_id, value) {
-			return value.replace(/\d+-\d+ ?|\d+ ?| /g, '') == '' ? true : _('Expecting: %s').format(_('valid port or port range (port1-port2)'));
-		};
-
-		o = s.option(form.Flag, 'check_acl', _('Check ACL'),
-			_('Check the ACL entries first; these extend/override the defaults') + '<br />' +
-			_('Sequence: 1. Reject ports, 2. ACL entries (if checked), 3. Preset ports, 4. Accept ports'));
-		o.default = '1';
-		o.editable = true;
-		o.retain = true;
-
 		s = m.section(form.GridSection, 'acl_entry', '<h5>' + _('Access Control List') + '</h5>',
 			_('The access control list (ACL) specifies which IP addresses and ports can be mapped.') + ' ' +
-			_('ACL entries are checked in order and, by default, rejected with no preset. (should be part of extra tab)'));
+			_('ACL entries are checked in order and, by default, rejected with no preset. (should be part of access control tab)'));
 		s.anonymous = true;
 		s.addremove = true;
 		s.cloneable = true;
 		s.sortable = true;
 		s.modaltitle = _('UPnP IGD & PCP') + ' - ' + _('Edit ACL Entry');
-		// Preferably: ACL part of extra tab with depends for section as immediately, and network section part of service setup tab. Nice to have: Add button (+input) calls function and opens modal pre-filled
+		// Preferably: ACL part of access control tab with depends for section as immediately. Nice to have: Add button (+input) calls function and opens modal pre-filled
 		let acl_used = false;
 		for (let ifnr = 0; uci.get('upnpd', `@internal_network[${ifnr}]`, 'interface'); ifnr++) {
 			if (uci.get('upnpd', `@internal_network[${ifnr}]`, 'check_acl') != '0') {
@@ -353,7 +349,7 @@ return view.extend({
 				break;
 			}
 		}
-		s.disable = !acl_used;
+		s.disable = uci.get('upnpd', 'settings', 'check_acl') == '0';
 
 		o = s.option(form.Value, 'comment', _('Comment'));
 		o.default = _('unspecified');
