@@ -231,7 +231,8 @@ function parseApkQueryJson(s, dest) {
 
 		// Determine all provided names (a package always provides itself)
 		const provides = [name, ...(Array.isArray(pkg.provides) ? pkg.provides : [])];
-		for (const p of provides) {
+		for (let p of provides) {
+			p = p.split('=')[0]; // Handle cases where provides are versioned
 			dest.providers[p] = dest.providers[p] || [];
 			if (!dest.providers[p].includes(pkg))
 				dest.providers[p].push(pkg);
