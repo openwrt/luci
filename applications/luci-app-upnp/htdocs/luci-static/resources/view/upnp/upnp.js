@@ -68,15 +68,19 @@ return view.extend({
 				rule.proto,
 				expires_str,
 				rule.descr,
-				E('button', {
+				rule.num != '0' ? E('button', {
 					'class': 'btn cbi-button-remove',
 					'click': L.bind(handleDelRule, this, rule.num),
 					'title': _('Delete')
+				}, [_('Delete')]) : E('button', {
+					'class': 'btn cbi-button-remove',
+					'title': _('Currently not deletable; UPnP IGDv2 IPv6 port maps expire more quickly'),
+					'style': 'cursor: not-allowed'
 				}, [_('Delete')])
 			];
 		});
 
-		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port maps.')));
+		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active IPv4/IPv6 port maps')));
 	},
 
 	render: function(data) {
@@ -127,15 +131,19 @@ return view.extend({
 					rule.extport,
 					rule.proto,
 					rule.descr,
-					E('button', {
+					rule.num != '0' ? E('button', {
 						'class': 'btn cbi-button-remove',
 						'click': L.bind(handleDelRule, this, rule.num),
 						'title': _('Delete')
+					}, [_('Delete')]) : E('button', {
+						'class': 'btn cbi-button-remove',
+						'title': _('Currently not deletable; UPnP IGDv2 IPv6 port maps expire more quickly'),
+						'style': 'cursor: not-allowed'
 					}, [_('Delete')])
 				];
 			});
 
-			cbi_update_table(table, rows, E('em', _('There are no active port maps.')));
+			cbi_update_table(table, rows, E('em', _('There are no active IPv4/IPv6 port maps')));
 
 			return E('div', { 'class': 'cbi-section cbi-tblsection' }, [
 				E('h3', _('Active Port Maps')), table

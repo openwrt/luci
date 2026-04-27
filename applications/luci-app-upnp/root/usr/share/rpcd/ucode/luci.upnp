@@ -60,6 +60,23 @@ const methods = {
 					}
 				}
 				ipt.close();
+
+				const iptipv6 = popen('ip6tables --line-numbers -xnvL MINIUPNPD 2>/dev/null');
+				if (iptipv6) {
+					for (let line = iptipv6.read('line'); length(line); line = iptipv6.read('line')) {
+						let m = match(line, /^([0-9]+) .+ ([0-9a-f:]+)  ([ut].p) dpt:([0-9]+)/);
+						if (m) {
+							push(rules, {
+								num: '0',
+								intaddr: arrtoip(iptoarr(m[2])),
+								intport: +m[4],
+								extport: +m[4],
+								proto: uc(m[3])
+							});
+						}
+					}
+					iptipv6.close();
+				}
 			}
 
 			const nft = popen('nft --handle list chain inet fw4 upnp_prerouting 2>/dev/null');
@@ -78,6 +95,26 @@ const methods = {
 					}
 				}
 				nft.close();
+
+				const nftipv6 = popen('nft --handle list chain inet fw4 upnp_forward 2>/dev/null');
+				if (nftipv6) {
+					for (let line = nftipv6.read('line'), num = 1; length(line); line = nftipv6.read('line')) {
+						let m = match(line, /^\t\tiif ".+" th dport ([0-9]+) @nh,192,128 0x([0-9a-f]+) @nh,48,8 (0x6|0x11) accept/);
+						if (m) {
+							push(rules, {
+								num: '0',
+								intaddr: arrtoip(iptoarr(join(':', [substr(m[2], 0, 4),
+									substr(m[2], 4, 4), substr(m[2], 8, 4), substr(m[2], 12, 4), substr(m[2], 16, 4),
+									substr(m[2], 20, 4), substr(m[2], 24, 4), substr(m[2], 28, 4)]))),
+								intport: +m[1],
+								extport: +m[1],
+								proto: (m[3] == '0x6') ? 'TCP' : 'UDP'
+							});
+							num++;
+						}
+					}
+					nftipv6.close();
+				}
 			}
 
 			return ubus.defer('luci-rpc', 'getHostHints', {}, function(rc, host_hints) {
@@ -93,7 +130,7 @@ const methods = {
 						}
 					}
 					for (let mac, hint in host_hints) {
-						if (rule.intaddr in hint.ipaddrs) {
+						if (rule.intaddr in hint.ipaddrs || rule.intaddr in hint.ip6addrs) {
 							rule.host_hint = hint.name;
 							break;
 						}
