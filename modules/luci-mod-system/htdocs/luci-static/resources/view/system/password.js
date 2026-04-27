@@ -6,6 +6,7 @@
 'require uci';
 'require form';
 'require rpc';
+'require tools.password as pwtool';
 
 var formData = {
 	data: {
@@ -25,12 +26,27 @@ var callSetPassword = rpc.declare({
 	expect: { result: 1 }
 });
 
+let pol;
+
 return view.extend({
 	checkPassword: function(section_id, value) {
 		var strength = document.querySelector('.cbi-value-description'),
 		    strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"),
 		    mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"),
 		    enoughRegex = new RegExp("(?=.{6,}).*", "g");
+
+		let pw_length, pw_digits, pw_ul, special;
+		let policies = pol ? JSON.parse(pol).policies : [];
+
+		for (let p of policies) {
+			if (p.name != "Password Policy" || p.required == false)
+				continue;
+
+			pw_length = p.length;
+			pw_digits = p.digits;
+			pw_ul = p.uc_lc;
+			special = p.schars;
+		}
 
 		if (strength && value.length) {
 			if (false == enoughRegex.test(value))
@@ -43,6 +59,18 @@ return view.extend({
 				strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'), _('Weak'));
 		}
 
+		if (pw_length && !pwtool.checkLength(value, pw_length))
+			return _('Policy: min. length of %s characters').format(pw_length);
+
+		if (pw_digits && !pwtool.checkDigits(value))
+			return _('Policy: contain digits');
+
+		if (pw_ul && !pwtool.checkUpperLower(value))
+			return _('Policy: contain uppercase/lowercase');
+
+		if (special && !pwtool.checkSpecialChars(value))
+			return _('Policy: contain special characters');
+
 		return true;
 	},
 
@@ -50,12 +78,16 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), null),
 			fs.lines('/etc/passwd'),
-			uci.load('rpcd')
+			L.resolveDefault(fs.exec('/usr/libexec/check_policy'), null),
+			uci.load('rpcd'),
+			uci.load('luci_plugins')
 		]);
 	},
 
-	render: function([has_uhttpd, passwd]) {
+	render: function([has_uhttpd, passwd, policy]) {
 		var m, s, o, rpcd;
+
+		pol = policy.code == 0 ? policy.stdout.trim() : null;
 
 		const known_unix_users = {};
 
