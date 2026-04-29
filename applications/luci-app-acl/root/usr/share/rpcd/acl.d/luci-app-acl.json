@@ -7,10 +7,11 @@
 				"/etc/passwd": [ "read" ],
 				"/usr/sbin/uhttpd": [ "list" ],
 				"/usr/sbin/uhttpd -m *": [ "exec" ],
+				"/usr/libexec/check_policy": [ "exec" ],
 				"/usr/share/rpcd/acl.d": [ "list" ],
 				"/usr/share/rpcd/acl.d/*.json": [ "read" ]
 			},
-			"uci": [ "rpcd" ]
+			"uci": [ "rpcd", "luci_plugins" ]
 		},
 		"write": {
 			"uci": [ "rpcd" ],
