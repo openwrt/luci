@@ -285,6 +285,14 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'ban_fetchinsecure', _('Download Insecure'), _('Don\'t check SSL server certificates during download.'));
 		o.rmempty = true;
 
+		o = s.taboption('general', form.Flag, 'ban_nftcount', _('Reporting Counters'), _('Enable NFT counters for Set elements and chain rules. Required for the GeoIP Map and packet statistics in the Set Reporting.'));
+		o.rmempty = true;
+
+		o = s.taboption('general', form.Flag, 'ban_map', _('Enable GeoIP Map'), _('Enable a GeoIP Map with suspicious Set elements. This requires external requests to get the map tiles and geolocation data.'));
+		o.depends('ban_nftcount', '1');
+		o.optional = true;
+		o.rmempty = true;
+
 		/*
 			additional settings tab
 		*/
@@ -365,7 +373,7 @@ return view.extend({
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
 			+ '<hr style="width: 200px; height: 1px;" />';
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table, lower values means higher priority.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the NFT chain priority within the banIP table, lower values means higher priority.'));
 		o.value('10');
 		o.value('0');
 		o.value('-100');
@@ -446,7 +454,7 @@ return view.extend({
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
 			+ '<hr style="width: 200px; height: 1px;" />';
 
-		o = s.taboption('adv_set', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the nft policy for banIP-related Sets.'));
+		o = s.taboption('adv_set', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the NFT policy for banIP-related Sets.'));
 		o.value('memory', _('memory'));
 		o.value('performance', _('performance'));
 		o.default = 'memory';
@@ -462,14 +470,6 @@ return view.extend({
 		o.default = '3';
 		o.placeholder = _('-- default --');
 		o.create = true;
-		o.optional = true;
-		o.rmempty = true;
-
-		o = s.taboption('adv_set', form.Flag, 'ban_nftcount', _('Set Element Counter'), _('Enable nft counter for every Set element.'));
-		o.rmempty = true;
-
-		o = s.taboption('adv_set', form.Flag, 'ban_map', _('Enable GeoIP Map'), _('Enable a GeoIP Map with suspicious Set elements. This requires external requests to get the map tiles and geolocation data.'));
-		o.depends('ban_nftcount', '1');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -599,6 +599,33 @@ return view.extend({
 		o = s.taboption('adv_log', form.Value, 'ban_logcount', _('Log Count'), _('Number of failed login attempts of the same IP in the log before blocking.'));
 		o.placeholder = '1';
 		o.datatype = 'range(1,10)';
+		o.rmempty = true;
+
+		o = s.taboption('adv_log', form.ListValue, 'ban_logratelimit', _('Log Rate Limit'), _('Rate (per second) for the shared NFT log limit, applied globally across all logged rules. Set to \'0\' to disable rate limiting entirely, e.g. when using ulogd or other userspace log handlers.'));
+		o.value('0');
+		o.value('1');
+		o.value('5');
+		o.value('10');
+		o.value('25');
+		o.value('50');
+		o.value('100');
+		o.default = '10';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_log', form.ListValue, 'ban_logburstlimit', _('Log Burst Limit'), _('Burst size in packets for the shared NFT log limit.'));
+		o.depends({ ban_logratelimit: '0', '!reverse': true });
+		o.value('1');
+		o.value('5');
+		o.value('10');
+		o.value('25');
+		o.value('50');
+		o.default = '5';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_log', form.DynamicList, 'ban_logterm', _('Log Terms'), _('Regular expressions to detect suspicious IPs in the system log.'));
