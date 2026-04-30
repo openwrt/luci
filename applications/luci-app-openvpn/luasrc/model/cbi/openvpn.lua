@@ -14,7 +14,7 @@ s.template_addremove = "openvpn/cbi-select-input-add"
 s.addremove = true
 s.add_select_options = { }
 
-local cfg = s:option(DummyValue, "config")
+local cfg = s:option(DummyValue, "config", translate("Name"))
 function cfg.cfgvalue(self, section)
 	local file_cfg = self.map:get(section, "config")
 	if file_cfg then
@@ -22,6 +22,7 @@ function cfg.cfgvalue(self, section)
 	else
 		s.extedit = luci.dispatcher.build_url("admin", "vpn", "openvpn", "basic", "%s")
 	end
+	return section or "-"
 end
 
 uci:load("openvpn_recipes")
