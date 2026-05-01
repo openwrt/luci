@@ -321,6 +321,32 @@ methods.setup_firewall = {
 				changed_firewall = true;
 			}
 
+			// Exit node requires WAN <-> tailscale forwarding
+			let fwd_wan_to_ts = false;
+			let fwd_ts_to_wan = false;
+
+			for (let sec_key in fw_all) {
+				let s = fw_all[sec_key];
+				if (s['.type'] == 'forwarding') {
+					if (s.src == 'wan' && s.dest == 'tailscale') fwd_wan_to_ts = true;
+					if (s.src == 'tailscale' && s.dest == 'wan') fwd_ts_to_wan = true;
+				}
+			}
+
+			if (!fwd_ts_to_wan) {
+				let fid = uci.add('firewall', 'forwarding');
+				uci.set('firewall', fid, 'src', 'tailscale');
+				uci.set('firewall', fid, 'dest', 'wan');
+				changed_firewall = true;
+			}
+
+			if (!fwd_wan_to_ts) {
+				let fid = uci.add('firewall', 'forwarding');
+				uci.set('firewall', fid, 'src', 'wan');
+				uci.set('firewall', fid, 'dest', 'tailscale');
+				changed_firewall = true;
+			}
+
 			// 4. save
 			if (changed_network) {
 				uci.save('network');
