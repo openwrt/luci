@@ -2,11 +2,18 @@
 'require view';
 'require dom';
 'require ui';
+'require fs';
+'require uci';
 'require form';
 'require rpc';
+'require tools.password as pwtool';
 
 var formData = {
-	password: {
+	data: {
+		rpc_user: null,
+		user: null,
+		rpcd: null,
+		oldpw: null,
 		pw1: null,
 		pw2: null
 	}
@@ -15,9 +22,11 @@ var formData = {
 var callSetPassword = rpc.declare({
 	object: 'luci',
 	method: 'setPassword',
-	params: [ 'username', 'password' ],
-	expect: { result: false }
+	params: [ 'username', 'password', 'oldpassword', 'rpcd' ],
+	expect: { result: 1 }
 });
+
+let pol;
 
 return view.extend({
 	checkPassword: function(section_id, value) {
@@ -25,6 +34,19 @@ return view.extend({
 		    strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"),
 		    mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"),
 		    enoughRegex = new RegExp("(?=.{6,}).*", "g");
+
+		let pw_length, pw_digits, pw_ul, special;
+		let policies = pol ? JSON.parse(pol).policies : [];
+
+		for (let p of policies) {
+			if (p.name != "Password Policy" || p.required == false)
+				continue;
+
+			pw_length = p.length;
+			pw_digits = p.digits;
+			pw_ul = p.uc_lc;
+			special = p.schars;
+		}
 
 		if (strength && value.length) {
 			if (false == enoughRegex.test(value))
@@ -37,16 +59,85 @@ return view.extend({
 				strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'), _('Weak'));
 		}
 
+		if (pw_length && !pwtool.checkLength(value, pw_length))
+			return _('Policy: min. length of %s characters').format(pw_length);
+
+		if (pw_digits && !pwtool.checkDigits(value))
+			return _('Policy: contain digits');
+
+		if (pw_ul && !pwtool.checkUpperLower(value))
+			return _('Policy: contain uppercase/lowercase');
+
+		if (special && !pwtool.checkSpecialChars(value))
+			return _('Policy: contain special characters');
+
 		return true;
 	},
 
-	render: function() {
-		var m, s, o;
+	load: function() {
+		return Promise.all([
+			L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), null),
+			fs.lines('/etc/passwd'),
+			L.resolveDefault(fs.exec('/usr/libexec/check_policy'), null),
+			uci.load('rpcd'),
+			uci.load('luci_plugins')
+		]);
+	},
 
-		m = new form.JSONMap(formData, _('Router Password'), _('Changes the administrator password for accessing the device'));
+	render: function([has_uhttpd, passwd, policy]) {
+		var m, s, o, rpcd;
+
+		pol = policy.code == 0 ? policy.stdout.trim() : null;
+
+		const known_unix_users = {};
+
+		for (let p of passwd) {
+			const parts = p.split(/:/);
+
+			if (parts.length >= 7)
+				known_unix_users[parts[0]] = true;
+		}
+
+		m = new form.JSONMap(formData, _('Password'), _('Changes the password for accessing the device as (rpcd) user'));
 		m.readonly = !L.hasViewPermission();
 
-		s = m.section(form.NamedSection, 'password', 'password');
+		s = m.section(form.NamedSection, 'data', 'data');
+
+		if (has_uhttpd) {
+			let logins = [];
+
+			uci.sections('rpcd', 'login', s => logins.push(s.username));
+
+			rpcd = s.option(form.Flag, 'rpcd', _('Change password for rpcd user'));
+			rpcd.default = false;
+
+			o = s.option(form.Value, 'rpc_user', _('rpcd username'));
+			for (let user of logins) {
+				if (user == 'root')
+					continue;
+
+				o.value(user, _('%s').format(user));
+			}
+			o.rmempty = false;
+			o.depends({ 'rpcd': '1' });
+
+			o = s.option(form.Value, 'user', _('Router username'));
+			for (let user in known_unix_users)
+				o.value(user, _('%s').format(user));
+			o.rmempty = false;
+			o.depends({ 'rpcd': '0' });
+
+			o = s.option(form.Value, 'oldpw', _('Old Password'));
+			o.password = true;
+			o.depends({ 'rpcd': '1' });
+		}
+
+		if (!has_uhttpd) {
+			o = s.option(form.Value, 'user', _('Router username'));
+			for (let user in known_unix_users)
+				o.value(user);
+			o.rmempty = false;
+		}
 
 		o = s.option(form.Value, 'pw1', _('Password'));
 		o.password = true;
@@ -72,22 +163,39 @@ return view.extend({
 		var map = document.querySelector('.cbi-map');
 
 		return dom.callClassMethod(map, 'save').then(function() {
-			if (formData.password.pw1 == null || formData.password.pw1.length == 0)
+			let rpc_user = formData.data.rpc_user;
+			let user = formData.data.user;
+			let rpcd = formData.data.rpcd;
+			let oldpw = formData.data.oldpw;
+
+			if (rpc_user && (oldpw == null || oldpw.length == 0))
 				return;
 
-			if (formData.password.pw1 != formData.password.pw2) {
+			if (formData.data.pw1 == null || formData.data.pw1.length == 0)
+				return;
+
+			if (formData.data.pw1 != formData.data.pw2) {
 				ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
 				return;
 			}
 
-			return callSetPassword('root', formData.password.pw1).then(function(success) {
+			return callSetPassword(
+				rpc_user ? rpc_user : user,
+				formData.data.pw1,
+				oldpw ? oldpw : '',
+				rpcd ? true : false,
+			).then(function(success) {
 				if (success)
 					ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
 				else
 					ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
 
-				formData.password.pw1 = null;
-				formData.password.pw2 = null;
+				formData.data.rpc_user = null;
+				formData.data.user = null;
+				formData.data.rpcd = null;
+				formData.data.pw1 = null;
+				formData.data.pw2 = null;
+				formData.data.oldpw = null;
 
 				dom.callClassMethod(map, 'render');
 			});

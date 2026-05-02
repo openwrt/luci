@@ -3,11 +3,51 @@
 'require dom';
 'require fs';
 'require ui';
+'require rpc';
 'require uci';
 'require form';
 'require tools.widgets as widgets';
+'require tools.password as pwtool';
 
 const aclList = {};
+
+const callSetPassword = rpc.declare({
+	object: 'luci',
+	method: 'setPassword',
+	params: [ 'username', 'password', 'oldpassword', 'rpcd' ],
+	expect: { result: 1}
+});
+
+let pol;
+
+function checkPassword(value) {
+	let pw_length, pw_digits, pw_ul, special;
+	let policies = JSON.parse(pol);
+
+	for (let p of policies.policies) {
+		if (p.name != "Password Policy" || p.required == false)
+			continue;
+
+		pw_length = p.length;
+		pw_digits = p.digits;
+		pw_ul = p.uc_lc;
+		special = p.schars;
+	}
+
+	if (pw_length && !pwtool.checkLength(value, pw_length))
+		return _('Policy: min. length of %s characters').format(pw_length);
+
+	if (pw_digits && !pwtool.checkDigits(value))
+		return _('Policy: contain digits');
+
+	if (pw_ul && !pwtool.checkUpperLower(value))
+		return _('Policy: contain uppercase/lowercase');
+
+	if (special && !pwtool.checkSpecialChars(value))
+		return _('Policy: contain special characters');
+
+	return true;
+}
 
 function globListToRegExp(section_id, option) {
 	const list = L.toArray(uci.get('rpcd', section_id, option));
@@ -162,7 +202,10 @@ return view.extend({
 		return L.resolveDefault(fs.list('/usr/share/rpcd/acl.d'), []).then(function(entries) {
 			const tasks = [
 				L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), null),
-				fs.lines('/etc/passwd')
+				fs.lines('/etc/passwd'),
+				fs.exec('/usr/libexec/check_policy'),
+				uci.load('rpcd'),
+				uci.load('luci_plugins')
 			];
 
 			for (let e of entries)
@@ -173,11 +216,12 @@ return view.extend({
 		});
 	},
 
-	render([has_uhttpd, passwd, ...acls]) {
+	render([has_uhttpd, passwd, policy, uci_rpcd, plugins, ...acls]) {
 		ui.addNotification(null, E('p', [
 			_('The LuCI ACL management is in an experimental stage! It does not yet work reliably with all applications')
 		]), 'warning');
 
+		pol = policy.code == 0 ? policy.stdout.trim() : null;
 		const known_unix_users = {};
 
 		for (let p of passwd) {
@@ -267,19 +311,16 @@ return view.extend({
 					return _('Cannot encrypt plaintext password since uhttpd is not installed.');
 			}
 
-			return true;
+			return checkPassword(value);
 		};
 		o.write = function(section_id, value) {
 			const variant = this.map.lookupOption('_variant', section_id)[0];
+			const user = this.map.lookupOption('username', section_id)[0].formvalue(section_id);
 
 			if (variant.formvalue(section_id) == 'crypted' && value.substring(0, 3) != '$1$')
-				return fs.exec('/usr/sbin/uhttpd', [ '-m', value ]).then(function(res) {
-					if (res.code == 0 && res.stdout)
-						uci.set('rpcd', section_id, 'password', res.stdout.trim());
-					else
-						throw new Error(res.stderr);
-				}).catch(function(err) {
-					throw new Error(_('Unable to encrypt plaintext password: %s').format(err.message));
+				return callSetPassword(user, value, '', true).then(function(success) {
+					if (!success)
+						throw new Error('Failed to create password');
 				});
 
 			uci.set('rpcd', section_id, 'password', value);

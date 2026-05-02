@@ -2,13 +2,21 @@
 	"luci-mod-system-config": {
 		"description": "Grant access to system configuration",
 		"read": {
+			"cgi-io": [ "read" ],
+			"file": {
+				"/etc/passwd": [ "read" ],
+				"/usr/libexec/check_policy": [ "exec" ]
+			},
 			"ubus": {
 				"luci": [ "getLEDs", "getTimezones", "getUSBDevices", "getUnixtime" ],
 				"rc": [ "list" ]
 			},
-			"uci": [ "luci", "system" ]
+			"uci": [ "luci", "system", "rpcd", "luci_plugins" ]
 		},
 		"write": {
+			"file": {
+				"/usr/sbin/uhttpd -m *": [ "exec" ]
+			},
 			"ubus": {
 				"luci": [ "setLocaltime", "setPassword" ],
 				"rc": [ "init" ]

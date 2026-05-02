@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# luci-app-pwpolicy: Setup script for pwpolicy plugin
+# This script sets up the password policy plugin configuration in luci_plugins
+
+PLUGIN_UUID="51af4ae847774aac863d4c94a9ba6d58"
+
+# Ensure luci_plugins config file exists
+touch /etc/config/luci_plugins
+
+# Create global section if not exists
+uci -q get luci_plugins.global >/dev/null || {
+	uci set luci_plugins.global=global
+	uci set luci_plugins.global.enabled='0'
+}
+
+# Enable pwppolicy plugins class if not set
+uci -q get luci_plugins.global.password_policy_enabled >/dev/null || {
+	uci set luci_plugins.global.password_policy_enabled='0'
+}
+
+# Create pwpolicy plugin section if not exists
+uci -q get "luci_plugins.${PLUGIN_UUID}" >/dev/null || {
+	uci set "luci_plugins.${PLUGIN_UUID}=password_policy"
+	uci set "luci_plugins.${PLUGIN_UUID}.enabled=0"
+	uci set "luci_plugins.${PLUGIN_UUID}.name=Password Policy"
+}
+
+uci set "luci_plugins.${PLUGIN_UUID}.pw_length=8"
+uci set "luci_plugins.${PLUGIN_UUID}.digits=0"
+uci set "luci_plugins.${PLUGIN_UUID}.uc_lc=0"
+uci set "luci_plugins.${PLUGIN_UUID}.special_characters=0"
+
+uci commit luci_plugins
+
+exit 0
