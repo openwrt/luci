@@ -1129,6 +1129,10 @@ return baseclass.extend({
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
 
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'qdisc', _('Queuing discipline'),
+			_('Override the default queuing discipline for this device.'));
+		o.rmempty = true;
+
 		/* PSE / PoE options */
 		if (hasPSE) {
 			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse', _('PoE (C33)'),
