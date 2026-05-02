@@ -141,6 +141,24 @@ apply_settings() {
 	return $ret
 }
 
+handle_service_state() {
+	config_load tailscale
+	local service_enabled
+	config_get service_enabled settings service_enabled '1'
+	
+	if [ "$service_enabled" = "0" ]; then
+		logger -t "$NAME" "Service is disabled, stopping tailscale"
+		/etc/init.d/tailscale stop 2>/dev/null
+		/etc/init.d/tailscale disable 2>/dev/null
+		killall tailscaled 2>/dev/null
+	else
+		logger -t "$NAME" "Service is enabled, ensuring tailscale is running"
+		/etc/init.d/tailscale enable 2>/dev/null
+		/etc/init.d/tailscale start 2>/dev/null
+		apply_settings
+	fi
+}
+
 start_service() {
 	apply_settings
 }
@@ -150,5 +168,5 @@ service_triggers() {
 }
 
 reload_service() {
-	apply_settings
+	handle_service_state
 }
