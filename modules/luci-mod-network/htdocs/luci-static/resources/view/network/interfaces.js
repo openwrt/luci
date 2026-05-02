@@ -1217,10 +1217,10 @@ return view.extend({
 				o.placeholder = '0';
 
 				if (L.hasSystemFeature('mptcp')) {
-					o = nettools.replaceOption(s, 'advanced', form.RichListValue, 'multipath', _('Multi-Path TCP'),
+					o = nettools.replaceOption(s, 'advanced', form.ListValue, 'multipath', _('Multi-Path TCP'),
 						_('Multi-Path TCP') + ' %s'.format('<a href="%s" target="_blank">RFC8684</a>').format('https://www.rfc-editor.org/rfc/rfc8684.html') + '<br/>' +
 						_('For packets originating from this device, e.g. VPN.') );
-					o.value('off', _('Off'), _('Disables this interface for MPTCP'));
+					o.value('', _('Off'), _('Disables this interface for MPTCP'));
 					o.value('on', _('On'), _('No special configuration'));
 					o.value('master', _('Master'), _('Sets default route for all traffic'));
 					o.value('backup', _('Backup'), _('Hot standby; use this interface; do not forward traffic until no other interface is available (faster)'));
