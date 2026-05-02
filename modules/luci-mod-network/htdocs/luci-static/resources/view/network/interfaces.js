@@ -1761,6 +1761,15 @@ return view.extend({
 			}, [ val ]) : (mtu || '-').toString();
 		};
 
+		o = s.option(form.DummyValue, 'label', _('Label'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const dev = getDevice(section_id);
+			if (!dev || dev.getType() !== 'switch' || dev.getParent() == null)
+				return E('span', {});
+			return uci.get('network', section_id, 'label') || '-';
+		};
+
 		s = m.section(form.TypedSection, 'globals', _('Global network options'));
 		s.addremove = false;
 		s.anonymous = true;
