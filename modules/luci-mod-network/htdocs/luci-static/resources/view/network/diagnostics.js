@@ -4,7 +4,24 @@
 'require fs';
 'require ui';
 'require uci';
+'require rpc';
 'require network';
+
+const callFingerprint = rpc.declare({
+	object: 'fingerprint',
+	method: 'fingerprint',
+	params: [ 'export' ],
+	expect: { '': {} }
+});
+
+const callServiceList = rpc.declare({
+	object: 'service',
+	method: 'list',
+	params: [ 'name' ],
+	expect: { ufp: {} }
+});
+
+let has_ufp;
 
 return view.extend({
 	handleCommand(exec, args) {
@@ -50,8 +67,11 @@ return view.extend({
 
 	handleArpScan(ev, cmd) {
 		const addr = ev.currentTarget.parentNode.previousSibling.value;
+		const ieee_file = '/tmp/arp-scan/ieee-oui.txt';
 
-		return this.handleCommand('arp-scan', [ '-l', '-I', addr ]);
+		if (!has_ufp)
+			return this.handleCommand('arp-scan', [ '-l', '-I', addr ]);
+		return this.handleCommand('arp-scan', [ '-l', '-I', addr, '-O', ieee_file ]);
 	},
 
 	load() {
@@ -60,14 +80,25 @@ return view.extend({
 			L.resolveDefault(fs.stat('/bin/traceroute6') || fs.stat('/usr/bin/traceroute6'), false),
 			L.resolveDefault(fs.stat('/usr/bin/arp-scan'), false),
 			network.getDevices(),
+			callServiceList('ufp').then((res) => {
+				let instances = res.instances;
+
+				for (let i in instances) {
+					if (instances[i].running)
+						return callFingerprint(true);
+				}
+
+				return null;
+			}),
 			uci.load('luci')
 		]);
 	},
 
-	render([has_ping6, has_traceroute6, has_arpscan, devices]) {
+	render([has_ping6, has_traceroute6, has_arpscan, devices, ufp]) {
 		const dns_host = uci.get('luci', 'diag', 'dns') || 'openwrt.org';
 		const ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org';
 		const route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
+		has_ufp = ufp != null ? true : false;
 
 		const table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr' }, [
