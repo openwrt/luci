@@ -121,14 +121,14 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'crypto_proposal');
+			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+				return section.is_esp != '1';
+			});
 			if (sections.length == 0) {
 				this.value('', _('Please create a Proposal first'));
 			} else {
 				sections.forEach(L.bind(function (section) {
-					if (section.is_esp != '1') {
-						this.value(section['.name']);
-					}
+					this.value(section['.name']);
 				}, this));
 			}
 
@@ -318,14 +318,14 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'crypto_proposal');
+			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+				return section.is_esp == '1';
+			});
 			if (sections.length == 0) {
 				this.value('', _('Please create an ESP Proposal first'));
 			} else {
 				sections.forEach(L.bind(function (section) {
-					if (section.is_esp == '1') {
-						this.value(section['.name']);
-					}
+					this.value(section['.name']);
 				}, this));
 			}
 
