@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2026-04-17 12:24+0000\n"
+"PO-Revision-Date: 2026-05-04 07:42+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ko/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -150,12 +150,18 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"영역 목적지 트래픽을 분류하기 위한 추가 <em>iptables</em> 인수를 직접 "
+"입력합니다. (예: 아웃바운드 HTTPS 트래픽만 일치 조건으로 하려면, <code>-p "
+"tcp --dport 443</code>)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:322
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"영역 출발지 트래픽을 분류하기 위한 추가 <em>iptables</em> 인수를 직접 "
+"입력합니다. (예: 인바운드 HTTPS 트래픽만 일치 조건으로 하려면, <code>-p "
+"tcp --sport 443</code>)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
@@ -768,7 +774,8 @@ msgid ""
 "Match incoming traffic directed at the given destination port or port range "
 "on this host"
 msgstr ""
-"호스트의 특정 목적지 포트 또는 포트 범위로 들어오는 트래픽을 매칭합니다"
+"호스트의 특정 목적지 포트 또는 포트 범위로 들어오는 트래픽을 일치 대상으로 "
+"설정합니다"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:315
 msgid "Match mark"
@@ -920,6 +927,10 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"출발지 및 목적지 트래픽 분류 규칙에 iptables 인수를 직접 전달하면, "
+"인터페이스나 서브넷 이외의 기준으로 패킷을 대조(Matching)할 수 있습니다. 이 "
+"값을 잘못 설정하면 방화벽 규칙 세트가 손상될 수 있습니다. 모든 서비스를 "
+"외부에 완전히 노출시킬 위험이 있으므로 각별히 주의해서 사용해야 합니다."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:189
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
@@ -963,7 +974,7 @@ msgstr "외부 세트 참조"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:318
 msgid "Reflection zones"
-msgstr ""
+msgstr "리플렉션 영역"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Requires hardware NAT support."
@@ -1300,6 +1311,8 @@ msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
 msgstr ""
+"<em>uci</em>로 관리되지 않는 네트워크 장치를 통해 직접 영역 트래픽을 "
+"분류하려면 이 옵션을 사용합니다."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:234
 msgid ""
@@ -1352,6 +1365,8 @@ msgid ""
 "Zones from which reflection rules shall be created. If unset, only the "
 "destination zone is used."
 msgstr ""
+"리플렉션 규칙을 생성할 영역을 지정합니다. 미지정 시, 목적지 영역만 "
+"사용됩니다."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:409
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68
@@ -1483,7 +1498,7 @@ msgstr "IP[/CIDR]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:146
 msgid "ip[/cidr]<br />For use with Match datatypes: <code>*_ip</code>."
-msgstr ""
+msgstr "ip[/cidr]<br />데이터유형 일치 조건과 함께 사용 시: <code>*_ip</code>."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:134
 msgid "list"
