@@ -4924,12 +4924,16 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * An optional DOM text node whose content text is set to the progress
 	 * percentage value during file upload.
 	 *
+	 * @param {string} [info]
+	 * An optional string that carries additional information that should
+	 * be shown under the progressbar.
+	 *
 	 * @returns {Promise<LuCI.ui.FileUploadReply>}
 	 * Returns a promise resolving to a file upload status object on success
 	 * or rejecting with an error in case the upload failed or has been
 	 * cancelled by the user.
 	 */
-	uploadFile(path, progressStatusNode) {
+	uploadFile(path, progressStatusNode, info) {
 		return new Promise((resolveFn, rejectFn) => {
 			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
@@ -4985,7 +4989,11 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 								const progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
 
-								UI.prototype.showModal(_('Uploading file…'), [ progress ]);
+								let infoNode;
+								if (info)
+									infoNode = E('p', _('%s').format(info));
+
+								UI.prototype.showModal(_('Uploading file…'), [ progress, infoNode ? infoNode : null ]);
 
 								const data = new FormData();
 
