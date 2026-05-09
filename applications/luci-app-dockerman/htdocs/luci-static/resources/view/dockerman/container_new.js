@@ -381,7 +381,7 @@ return dm2.dv.extend({
 				// Bind directory picker using ui.FileUpload
 				bindPicker = new ui.FileUpload(initialType === 'bind' ? initialSource : '', {
 					browser: false,
-					directory_select: true,
+					select: ['file', 'dir'],
 					directory_create: false,
 					enable_upload: false,
 					enable_remove: false,
