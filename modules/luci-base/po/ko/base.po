@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-05-06 12:33+0000\n"
+"PO-Revision-Date: 2026-05-07 15:35+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/>"
 "\n"
@@ -699,6 +699,8 @@ msgid ""
 "A tie-breaker for clients and their routes when multiple routers exist on "
 "the same network."
 msgstr ""
+"동일 네트워크에 여러 라우터가 존재할 때 클라이언트 및 관련 경로의 라우터 "
+"우선 선택 기준을 설정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1844
 msgid "A43C + J43 + A43"
@@ -1474,6 +1476,8 @@ msgid ""
 "Announce NAT64 prefix in <abbr title=\"Router Advertisement\">RA</abbr> "
 "messages."
 msgstr ""
+"<abbr title=\"라우터 광고(Router Advertisement)\">RA</abbr> 메시지에 NAT64 "
+"접두사를 포함하여 알립니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1126
 msgid "Announce encrypted DNS servers"
@@ -1484,29 +1488,26 @@ msgid "Announce this device as IPv6 DNS server."
 msgstr "장치를 IPv6 DNS 서버로 알립니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
-#, fuzzy
 msgid ""
 "Announce this device as default router if a local IPv6 default route is "
 "present."
-msgstr "로컬 IPv6 기본 경로가 있는 경우 이 디바이스를 기본 라우터로 알립니다."
+msgstr "로컬 IPv6 기본 경로가 존재하는 경우, 이 장치를 기본 라우터로 알립니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:886
-#, fuzzy
 msgid ""
 "Announce this device as default router if a public IPv6 prefix is available, "
 "regardless of local default route availability."
 msgstr ""
-"로컬 기본 경로 가용성에 관계없이 공용 IPv6 접두사를 사용할 수 있는 경우 이 디"
-"바이스를 기본 라우터로 알립니다."
+"로컬 기본 경로의 존재 여부와 상관없이, 공인 IPv6 접두사를 사용할 수 있으면 "
+"이 장치를 기본 라우터로 알립니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:888
-#, fuzzy
 msgid ""
 "Announce this device as default router regardless of whether a prefix or "
 "default route is present."
 msgstr ""
-"접두사 또는 기본 경로가 있는지 여부에 관계없이 이 장치를 기본 라우터로 알립니"
-"다."
+"접두사 또는 기본 경로의 존재 여부에 관계없이, 이 장치를 기본 라우터로 "
+"알립니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2086
 msgid "Anonymous Identity"
@@ -2497,6 +2498,8 @@ msgid ""
 "Configures the default router advertisement in <abbr title=\"Router "
 "Advertisement\">RA</abbr> messages."
 msgstr ""
+"<abbr title=\"라우터 광고(Router Advertisement)\">RA</abbr> 메시지에 포함될 "
+"기본 라우터 광고 방식을 설정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1101
 msgid ""
@@ -2505,6 +2508,9 @@ msgid ""
 "unspecified, the device will assign the smallest available prefix greater "
 "than or equal to the requested prefix."
 msgstr ""
+"하위 라우터에 할당할 접두사의 최소 길이를 설정합니다. 이 설정은 요청된 "
+"접두사 길이보다 우선 적용될 수 있습니다. 미설정 시, 요청된 길이 이상의 "
+"접두사 중 가장 좁은 범위를 할당합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:869
 msgid ""
@@ -3902,7 +3908,9 @@ msgstr "<abbr title=\"스패닝 트리 프로토콜\">STP</abbr> 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:892
 msgid "Enable <abbr title=\"Stateless Address Auto Config\">SLAAC</abbr>"
-msgstr "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> 활성화"
+msgstr ""
+"<abbr title=\"무상태 주소 자동 설정(Stateless Address Auto Config)\">SLAAC</"
+"abbr> 활성화"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:279
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:495
@@ -5922,6 +5930,8 @@ msgid ""
 "If left unspecified, the device will announce itself as DNS server unless "
 "the <em>Local IPv6 DNS server</em> option is disabled."
 msgstr ""
+"미설정 시, <em>로컬 IPv6 DNS 서버</em> 옵션이 비활성 상태가 아니라면 이 "
+"장치를 DNS 서버로 알립니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1270
 msgid ""
@@ -7549,6 +7559,9 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
+"요청하지 않은 <abbr title=\"라우터 광고(Router Advertisement), ICMPv6 Type "
+"134\">RA</abbr>를 주기적으로 전송할 때 허용되는 최대 시간 간격입니다. "
+"기본값은 600초입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1003
 msgid "Maximum transmit power"
@@ -7676,6 +7689,9 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
+"요청하지 않은 <abbr title=\"라우터 광고(Router Advertisement), ICMPv6 Type "
+"134\">RA</abbr>를 주기적으로 전송할 때 허용되는 최소 시간 간격입니다. "
+"기본값은 200초입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -7914,7 +7930,7 @@ msgstr "NCM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1189
 msgid "NDP-Proxy slave"
-msgstr "NDP 프록시 하위 장치"
+msgstr "NDP 프록시 하위 인터페이스"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
@@ -8388,7 +8404,7 @@ msgstr "연결되지 않음"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:145
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:313
 msgid "Not present"
-msgstr "없음"
+msgstr "존재하지 않음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:103
 msgid "Not started on boot"
@@ -10684,6 +10700,8 @@ msgid ""
 "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> messages. Maximum is 9000 seconds."
 msgstr ""
+"<abbr title=\"라우터 광고(Router Advertisement), ICMPv6 Type 134\">RA</abbr> "
+"메시지를 통해 전파할 라우터 유효 기간을 설정합니다. 최대값은 9000초입니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -11100,6 +11118,8 @@ msgstr "헤더 필드 <var>%s</var> 값을 <strong>%s</strong>(으)로 설정"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1189
 msgid "Set interface as NDP-Proxy external slave. Default is off."
 msgstr ""
+"인터페이스를 NDP 프록시 외부 하위 인터페이스로 설정합니다. 기본값은 "
+"비활성입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1510
 msgid ""
@@ -11136,6 +11156,9 @@ msgid ""
 "options of sent <abbr title=\"Router Advertisement\">RA</abbr> messages. "
 "When enabled, clients will perform stateless IPv6 address autoconfiguration."
 msgstr ""
+"전송되는 <abbr title=\"라우터 광고(Router Advertisement)\">RA</abbr> "
+"메시지의 접두사 정보 옵션 내 자율 주소 설정 플래그를 설정합니다. 활성화 시, "
+"클라이언트는 무상태 IPv6 주소 자동 설정을 수행합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:801
 msgid ""
@@ -12095,6 +12118,9 @@ msgid ""
 "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages. "
 "Minimum is 1280 bytes."
 msgstr ""
+"<abbr title=\"라우터 광고(Router Advertisement), ICMPv6 Type 134\">RA</abbr> "
+"메시지를 통해 전파할 <abbr title=\"최대 전송 단위(Maximum Transmission Unit)"
+"\">MTU</abbr> 값을 지정합니다. 최소값은 1280바이트입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid ""
@@ -12228,6 +12254,9 @@ msgid ""
 "clients use PD instead of individual addresses via DHCPv6 or SLAAC. Requires "
 "DHCPv6 and DHCPv6-PD."
 msgstr ""
+"PD <em>선호</em> (P) 플래그는 네트워크 클라이언트가 개별 IPv6 주소보다 PD를 "
+"통한 주소 할당을 우선 사용하도록 권장합니다. 사용하려면 DHCPv6 및 DHCPv6-PD "
+"설정이 필요합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1434
 msgid "The VLAN ID must be unique"
@@ -12500,6 +12529,8 @@ msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
 "abbr> messages. Maximum is 255 hops."
 msgstr ""
+"<abbr title=\"라우터 광고(Router Advertisement)\">RA</abbr> 메시지를 통해 "
+"전파할 최대 홉 수를 지정합니다. 최대값은 255홉입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:823
 msgid "The netfilter components below are only regarded when running fw4."
@@ -12954,7 +12985,7 @@ msgstr "ToS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1097
 msgid "Toggle IPv6 PD via DHCPv6."
-msgstr ""
+msgstr "DHCPv6로 IPv6 PD를 활성화합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1842
 msgid "Tone"
@@ -14545,7 +14576,7 @@ msgstr "none: 초기 EPS 베어러를 설정하지 않음 (기본 동작)"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:53
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:67
 msgid "not present"
-msgstr ""
+msgstr "존재하지 않음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1733
 msgid "octet string"
@@ -14566,7 +14597,7 @@ msgstr "꺼짐"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:885
 msgid "on available prefix"
-msgstr ""
+msgstr "사용 가능한 접두사 존재 시"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1481
 msgid "open network"
@@ -14609,7 +14640,7 @@ msgstr "양수 값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:937
 msgid "prefix delegation (PD) preferred (P)"
-msgstr ""
+msgstr "접두사 위임 (PD) 선호 (P)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
 msgid "random"
