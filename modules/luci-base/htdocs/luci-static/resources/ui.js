@@ -3089,9 +3089,13 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 	 * @property {boolean} [directory_create=false]
 	 * Specifies whether the widget allows the user to create directories.
 	 *
-	 * @property {boolean} [directory_select=false]
-	 * Specifies whether the widget shall select directories only instead of files.
-	 *
+	 * @property {string[]} [select=['file']]
+	 * Specifies the types of filesystem objects that can be selected.
+	 * Supported values in the array are `'file'` and `'dir'`.
+	 * - `['file']`: Only files can be selected (default).
+	 * - `['dir']`: Only directories can be selected.
+	 * - `['file', 'dir']`: Both files and directories can be selected in a unified list.
+	 * 
 	 * @property {boolean} [enable_download=false]
 	 * Specifies whether the widget allows the user to download files.
 	 *
@@ -3107,13 +3111,15 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		this.options = Object.assign({
 			browser: false,
 			directory_create: false,
-			directory_select: false,
+			select: ['file'],
 			show_hidden: false,
 			enable_upload: true,
 			enable_remove: true,
 			enable_download: false,
 			root_directory: '/etc/luci-uploads'
 		}, options);
+		if (!Array.isArray(this.options.select))
+			this.options.select = [this.options.select];
 	},
 
 	/**
@@ -3147,7 +3153,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 			else if (this.value != null)
 				label = [ this.iconForType('file'), ' %s (%s)'.format(this.truncatePath(this.value), _('File not accessible')) ];
 			else
-				label = [ this.options.directory_select ? _('Select directory…') : _('Select file…') ];
+				label = [ (this.options.select.includes('dir') && !this.options.select.includes('file')) ? _('Select directory…') : _('Select file…') ];
 			let btnOpenFileBrowser = E('button', {
 				'class': 'btn open-file-browser',
 				'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
@@ -3378,7 +3384,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 			const hidden = this.node.lastElementChild;
 
 			if (path == hidden.value) {
-				dom.content(button, this.options.directory_select ? _('Select directory…') : _('Select file…'));
+				dom.content(button, (this.options.select.includes('dir') && !this.options.select.includes('file')) ? _('Select directory…') : _('Select file…'));
 				hidden.value = '';
 			}
 
@@ -3468,7 +3474,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 				E('div', { 'class': 'name' }, [
 					this.iconForType(list[i].type),
 					' ',
-					(this.options.directory_select && list[i].type !== 'directory') ? 
+					(list[i].type !== 'directory' && !this.options.select.includes('file')) ?
 					list[i].name :
 					E('a', {
 						'href': '#',
@@ -3487,7 +3493,12 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 						mtime.getSeconds())
 				]),
 				E('div', [
-					(this.options.directory_select && list[i].type === 'directory') ? E('button', {
+					(this.options.select.includes('file') && list[i].type === 'file') ? E('button', {
+						'class': 'btn cbi-button',
+						'click': UI.prototype.createHandlerFn(this, 'handleSelect',
+							entrypath, list[i])
+					}, [ _('Select') ]) : '',
+					(this.options.select.includes('dir') && list[i].type === 'directory') ? E('button', {
 						'class': 'btn cbi-button',
 						'click': UI.prototype.createHandlerFn(this, 'handleSelect',
 							entrypath, list[i].type === 'directory' ? list[i] : null)
@@ -3569,7 +3580,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		const hidden = this.node.lastElementChild;
 
 		hidden.value = '';
-		dom.content(button, this.options.directory_select ? _('Select directory…') : _('Select file…'));
+		dom.content(button, (this.options.select.includes('dir') && !this.options.select.includes('file')) ? _('Select directory…') : _('Select file…'));
 
 		this.handleCancel(ev);
 	},
@@ -3649,6 +3660,14 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 				dom.findClassInstance(browserEl).handleCancel(ev);
 			});
 
+			const canSelectDir = this.options.select.indexOf('dir') !== -1;
+			if (canSelectDir) {
+				list.unshift({
+					name: '.',
+					type: 'directory',
+					is_current: true
+				});
+			}
 			button.style.display = 'none';
 			browser.classList.add('open');
 
