@@ -173,5 +173,8 @@ return network.registerProtocol('openfortivpn', {
 		o.dataype = 'ipaddr'
 		o.optional = true;
 
+		o = s.taboption('advanced', form.Value, 'realm', _("Realm"), _("Optional. Specify the realm if your VPN gateway uses custom login portals."));
+		o.optional = true;
+
 	}
 });
