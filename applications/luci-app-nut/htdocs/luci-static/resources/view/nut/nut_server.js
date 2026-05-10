@@ -3,8 +3,23 @@
 'require fs';
 'require view';
 
-const driver_path = '/lib/nut/';
+const driver_path = '/usr/libexec/nut/';
+const old_driver_path = '/lib/nut/';
 const ups_daemon = '/usr/sbin/upsd';
+
+function resolveDriverList(path) {
+	return Promise.resolve(L.resolveDefault(fs.list(path), []).then(function(entries) {
+		var files = [];
+		if (entries && entries.length > 0) {
+			entries.forEach(object => {
+				if (object.type == 'file') {
+					files.push(object.name);
+				}
+			});
+		}
+		return files;
+	}));
+}
 
 return view.extend({
 	load: function() {
@@ -14,22 +29,15 @@ return view.extend({
 			}).then(function(stdout) {
 				return stdout.includes('libssl.so');
 			}),
-			L.resolveDefault(fs.list(driver_path), []).then(function(entries) {
-				var files = [];
-				entries.forEach(object => {
-					if (object.type == 'file') {
-						files.push(object.name);
-					}
-				});
-				return files;
-			}),
+			resolveDriverList(driver_path),
+			resolveDriverList(old_driver_path),
 		])
 	},
 
 	render: function(loaded_promises) {
 		let m, s, o;
 		const have_ssl_support = loaded_promises[0];
-		const driver_list = loaded_promises[1];
+		const driver_list = (loaded_promises[1].length > 0) ? loaded_promises[1] : loaded_promises[2];
 
 		m = new form.Map('nut_server', _('NUT Server'),
 			_('Network UPS Tools Server Configuration'));
