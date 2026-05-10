@@ -19,7 +19,15 @@ function ovpn_upload()
 	local uci     = require("luci.model.uci").cursor()
 	local upload  = http.formvalue("ovpn_file")
 	local name    = http.formvalue("instance_name2")
+
 	local basedir = "/etc/openvpn"
+	-- SECURITY FIX: Validate instance_name2 to prevent path traversal
+	-- Allow only alphanumeric, underscore, and hyphen (standard UCI naming)
+	if not name or not name:match("^[a-zA-Z0-9_-]+$") then
+		http.status(400, "Bad Request")
+		http.write("Invalid instance name")
+		return
+	end
 	local file    = basedir.. "/" ..name.. ".ovpn"
 
 	if not fs.stat(basedir) then
