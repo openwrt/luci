@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-03 08:19+0000\n"
-"Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
+"PO-Revision-Date: 2026-05-11 15:01+0000\n"
+"Last-Translator: Oleksandr Yurov <oyurov@icloud.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspbr/uk/>\n"
 "Language: uk\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.5-dev\n"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:320
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:450
@@ -65,6 +65,10 @@ msgid ""
 "than tun* or tap* or specific use cases of WireGuard servers. See the "
 "%sREADME%s for details."
 msgstr ""
+"Дозволяє вказати список імен інтерфейсів, які явно підтримуються службою. "
+"Може бути корисно, якщо ваші OpenVPN-тунелі мають опцію dev, відмінну від "
+"tun*/tap*, або для специфічних сценаріїв із серверами WireGuard. Деталі — у "
+"%sREADME%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:160
 msgid ""
@@ -73,6 +77,10 @@ msgid ""
 "servers, which have a listen_port defined, are handled automatically, do not "
 "add those here.See the %sREADME%s for details."
 msgstr ""
+"Дозволяє вказати список імен інтерфейсів, які служба буде ігнорувати. Може "
+"бути корисно для OpenVPN-сервера, що працює на пристрої OpenWrt. WireGuard-"
+"сервери з визначеним listen_port обробляються автоматично — їх тут додавати "
+"не треба. Деталі — у %sREADME%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:44
 msgid "Basic Configuration"
@@ -138,7 +146,7 @@ msgstr "Вимкнути"
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:135
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:258
 msgid "Disabled"
-msgstr "Відключено"
+msgstr "Вимкнено"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:652
 msgid "Disabling %s service"
@@ -307,7 +315,7 @@ msgstr "Інтерфейс '%s' не має призначеного DNS"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:484
 msgid "Interface mark for '%s' exceeds the fwmask value"
-msgstr ""
+msgstr "Маркер інтерфейсу для «%s» перевищує значення fwmask"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:312
 msgid ""
@@ -374,7 +382,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:519
 msgid "Netifd setup: failed to delete fw4 netifd nft file '%s'"
-msgstr ""
+msgstr "Налаштування Netifd: не вдалося видалити nft-файл fw4 netifd «%s»"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:516
 msgid "Netifd setup: failed to install fw4 netifd nft file '%s'"
@@ -511,7 +519,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:425
 msgid "Refer to %sREADME%s for details"
-msgstr ""
+msgstr "Деталі — у %sREADME%s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:382
 msgid "Remote DNS"
@@ -561,7 +569,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:601
 msgid "Restart"
-msgstr "Перезавантажити"
+msgstr "Перезапустити"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:595
 msgid "Restarting %s service"
@@ -581,7 +589,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:241
 msgid "Running"
-msgstr "Запуск"
+msgstr "Запущено"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:81
 msgid "See the %sREADME%s for details."
@@ -593,7 +601,7 @@ msgstr "Виберіть Додати для -A/add і Вставити для -
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:684
 msgid "Service Control"
-msgstr "Контроль служби"
+msgstr "Керування службою"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:537
 msgid "Service Errors"
@@ -610,7 +618,7 @@ msgstr "Сервісні шлюзи"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:236
 msgid "Service Status"
-msgstr "Стан сервісу"
+msgstr "Стан служби"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:373
 msgid "Service Warnings"
@@ -658,7 +666,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:50
 msgid "Status"
-msgstr "Статус"
+msgstr "Стан"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:620
 msgid "Stop"
@@ -718,7 +726,7 @@ msgstr "%s не підтримується цією системою."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:419
 msgid "The %s service failed to discover uplink gateway"
-msgstr ""
+msgstr "Службі %s не вдалося визначити шлюз висхідної лінії"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:416
 msgid "The %s service is currently disabled"
@@ -730,7 +738,7 @@ msgstr "Підтримка %s невідома."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:499
 msgid "The '%s' schema requires curl, but it's not detected on this system"
-msgstr ""
+msgstr "Схема «%s» потребує curl, але його не виявлено в системі"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:337
 msgid "The WebUI application (luci-app-pbr) is outdated, please update it"
@@ -794,13 +802,15 @@ msgstr "Таблиця інтерфейсу висхідного каналу FW
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:367
 msgid "Uplink/WAN interface is still down, going back to boot mode"
-msgstr ""
+msgstr "Інтерфейс Uplink/WAN досі неактивний, повернення в режим завантаження"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:531
 msgid ""
 "Uplink/WAN interface is still down, increase value of "
 "'procd_boot_trigger_delay' option"
 msgstr ""
+"Інтерфейс Uplink/WAN досі неактивний, збільшіть значення опції «"
+"procd_boot_trigger_delay»"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:457
 msgid ""
