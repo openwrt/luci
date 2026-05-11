@@ -5,11 +5,18 @@
 			"file": {
 				"/usr/sbin/swanmon version": [ "exec" ],
 				"/usr/sbin/swanmon stats": [ "exec" ],
+				"/usr/sbin/swanmon list-conns": [ "exec" ],
 				"/usr/sbin/swanmon list-sas": [ "exec" ]
 			},
 			"uci": [ "ipsec" ]
 		},
 		"write": {
+			"file": {
+				"/usr/sbin/swanctl --initiate --ike *": [ "exec" ],
+				"/usr/sbin/swanctl --initiate --child *": [ "exec" ],
+				"/usr/sbin/swanctl --terminate --ike *": [ "exec" ],
+				"/usr/sbin/swanctl --terminate --child *": [ "exec" ]
+			},
 			"uci": [ "ipsec" ]
 		}
 	}
