@@ -4993,7 +4993,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 								if (info)
 									infoNode = E('p', _('%s').format(info));
 
-								UI.prototype.showModal(_('Uploading file…'), [ progress, infoNode ? infoNode : null ]);
+								UI.prototype.showModal(_('Uploading file…'), [ progress, infoNode ]);
 
 								const data = new FormData();
 
