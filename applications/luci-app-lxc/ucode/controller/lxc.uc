@@ -18,7 +18,9 @@ function shellquote(value) {
 }
 
 function is_valid_lxc_name(value) {
-	return type(value) == 'string' && match(value, /^[A-Za-z0-9._-]{1,64}$/) != null;
+	// LXC container names: start with alphanumeric or underscore, followed by
+	// alphanumeric, underscore, dash. No periods, no slashes, no leading dash
+	return type(value) == 'string' && match(value, /^[A-Za-z0-9_][A-Za-z0-9_-]{0,63}$/) != null;
 }
 
 function is_valid_lxc_template(value) {
@@ -49,7 +51,7 @@ const LXCController = {
 	lxc_get_downloadable: function() {
 		let target = this.lxc_get_arch_target(LXC_URL);
 		let templates = [];
-		let content = fs.popen(`sh /usr/share/lxc/templates/lxc-download --list --server ${LXC_URL} 2>/dev/null`, 'r').read('all');
+		let content = fs.popen(`sh /usr/share/lxc/templates/lxc-download --list --server ${shellquote(LXC_URL)} 2>/dev/null`, 'r').read('all');
 		content = split(content, '\n');
 		for (let line in content) {
 			let arr = match(line, /^(\S+)\s+(\S+)\s+(\S+)\s+default\s+(\S+)\s*$/);
@@ -80,7 +82,7 @@ const LXCController = {
 		let arr = match(lxc_template, /^(.+):(.+)$/);
 		let lxc_dist = arr[1], lxc_release = arr[2];
 
-		system(`/usr/bin/lxc-create --quiet --name ${shellquote(lxc_name)} --bdev best --template download -- --dist ${shellquote(lxc_dist)} --release ${shellquote(lxc_release)} --arch ${this.lxc_get_arch_target(LXC_URL)} --server ${LXC_URL}`);
+		system(`/usr/bin/lxc-create --quiet --name ${shellquote(lxc_name)} --bdev best --template download -- --dist ${shellquote(lxc_dist)} --release ${shellquote(lxc_release)} --arch ${this.lxc_get_arch_target(LXC_URL)} --server ${shellquote(LXC_URL)}`);
 
 		while (fs.access(path + lxc_name + '/partial')) {
 			sleep(1000);
@@ -123,23 +125,51 @@ const LXCController = {
 	},
 
 	lxc_configuration_get: function(lxc_name) {
-		let content = fs.readfile(this.lxc_get_config_path() + lxc_name + '/config');
-
 		http.prepare_content('text/plain');
+
+		// Re-validate before fs.readfile as lxc_name,
+		// escapes the lxcpath base and reaches arbitrary files
+		if (!is_valid_lxc_name(lxc_name)) {
+			http.status(400, 'Bad Request');
+			return;
+		}
+
+		// lxc_get_config_path() returns an 'lxc error: …' string on failure
+		// rather than null. Refuse to proceed instead of concatenating that
+		// into a real filesystem path
+		let base = this.lxc_get_config_path();
+		if (!base || index(base, 'lxc error') == 0) {
+			http.status(500, base);
+			return;
+		}
+		let content = fs.readfile(base + lxc_name + '/config');
 		http.write(content);
 	},
 
 	lxc_configuration_set: function(lxc_name) {
 		http.prepare_content('text/plain');
 
+		// Re-validate before fs.writefile as lxc_name,
+		// escapes the lxcpath
+		if (!is_valid_lxc_name(lxc_name)) {
+			http.status(400, 'Bad Request');
+			return;
+		}
+
+		// lxc_get_config_path() returns an 'lxc error: …' string on failure
+		// rather than null. Refuse to proceed instead of concatenating that
+		// into a real filesystem path
+		let base = this.lxc_get_config_path();
+		if (!base || index(base, 'lxc error') == 0) {
+			http.status(500, base);
+			return;
+		}
 		let lxc_configuration = http.formvalue('lxc_conf');
 		lxc_configuration = http.urldecode(lxc_configuration, true);
 		if (!lxc_configuration) {
 			return 'lxc error: config formvalue is empty';
 		}
-
-		fs.writefile(this.lxc_get_config_path() + lxc_name + '/config', lxc_configuration);
-
+		fs.writefile(base + lxc_name + '/config', lxc_configuration);
 		http.write('0');
 	},
 
