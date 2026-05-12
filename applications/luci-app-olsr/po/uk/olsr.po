@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-05-11 15:01+0000\n"
+"PO-Revision-Date: 2026-05-12 09:07+0000\n"
 "Last-Translator: Oleksandr Yurov <oyurov@icloud.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/uk/>\n"
@@ -23,7 +23,7 @@ msgstr "Активні вузли OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:171
 msgid "Active host net announcements"
-msgstr "Оголошення активних мереж хоста"
+msgstr "Активні оголошення мереж вузлів"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:126
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:124
@@ -43,7 +43,7 @@ msgstr "Дозволити вибір вихідного шлюзу IPv4 із NA
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:79
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:79
 msgid "Announce uplink"
-msgstr "Оголосити висхідну лінію"
+msgstr "Оголошувати висхідний канал"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:92
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:90
@@ -54,7 +54,7 @@ msgstr "Анонсована мережа"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:207
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:102
 msgid "Bad (ETX > 10)"
-msgstr "Бад (ETX > 10)"
+msgstr "Погано (ETX > 10)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:441
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:216
@@ -70,7 +70,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:65
 msgid "Broadcast address"
-msgstr "Трансляційна адреса"
+msgstr "Широкомовна адреса"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:59
 msgid "Device"
@@ -79,11 +79,11 @@ msgstr "Пристрій"
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:14
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:56
 msgid "Display"
-msgstr "Дисплей"
+msgstr "Відображення"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:67
 msgid "Downlink"
-msgstr "Низхідне з'єднання"
+msgstr "Низхідний канал"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:64
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:60
@@ -113,13 +113,13 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
-"Увімкніть SmartGateway. Якщо його вимкнено, усі інші параметри SmartGateway "
-"ігноруються. За замовчуванням \"ні\".\"."
+"Увімкнути SmartGateway. Якщо вимкнено, усі інші параметри SmartGateway "
+"ігноруються. Типово — «no»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:39
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:39
 msgid "Enable this interface."
-msgstr "Увімкніть цей інтерфейс."
+msgstr "Увімкнути цей інтерфейс."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:280
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:278
@@ -147,20 +147,18 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
-"FIBMetric контролює значення метрики наборів хост-маршрутів OLSRd. \"flat\" "
-"означає, що значення метрики завжди дорівнює 2. Це значення є кращим, "
-"оскільки воно допомагає маршрутизації ядра Linux очищати старі маршрути. "
-"\"правильно\" використовує кількість стрибків як значення метрики. "
-"\"приблизно\" також використовує кількість стрибків як значення метрики, але "
-"оновлює кількість стрибків, лише якщо змінюється наступний стрибок. За "
-"замовчуванням встановлено \"рівний\"."
+"FIBMetric контролює значення метрики маршрутів вузлів, які встановлює OLSRd. "
+"«flat» означає, що значення метрики завжди дорівнює 2. Це значення є кращим, "
+"оскільки воно допомагає маршрутизації ядра Linux очищати старі маршрути. «"
+"correct» використовує кількість стрибків як значення метрики. «approx» також "
+"використовує кількість стрибків як значення метрики, але оновлює кількість "
+"стрибків, лише якщо змінюється наступний стрибок. Типово — «flat»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:207
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:201
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
-"Механізм «риб’яче око» для TC (позначено означає ввімкнено). За "
-"замовчуванням увімкнено"
+"Механізм «рибʼяче око» для TC (позначено означає увімкнено). Типово — «on»"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:62
 msgid "Gateway"
@@ -178,7 +176,7 @@ msgstr "Загальні налаштування"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:43
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:43
 msgid "General settings"
-msgstr "Загальні параметри"
+msgstr "Загальні налаштування"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:430
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:205
@@ -194,7 +192,7 @@ msgstr "Добре (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
 msgid "Grant UCI access for luci-app-olsr"
-msgstr "Надайте доступ UCI для luci-app-olsr"
+msgstr "Надати доступ до UCI для luci-app-olsr"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr-unauthenticated.json:3
 msgid "Grant read access"
@@ -251,7 +249,7 @@ msgstr "Інтервал привітання"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:158
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:142
 msgid "Hello validity time"
-msgstr "Привіт час дії"
+msgstr "Час дії Hello"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:17
 msgid "Hna4"
@@ -264,18 +262,18 @@ msgstr "Hna6"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:65
 msgid "Hops"
-msgstr "Хміль"
+msgstr "Стрибки"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:161
 msgid "Hostname"
-msgstr "Ім'я хоста"
+msgstr "Імʼя вузла"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:14
 msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA messages."
 msgstr ""
-"Хости в мережі з маршрутизацією OLSR можуть повідомляти про підключення до "
+"Вузли в мережі з маршрутизацією OLSR можуть оголошувати підключення до "
 "зовнішніх мереж за допомогою повідомлень HNA."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:12
@@ -283,7 +281,7 @@ msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA6 messages."
 msgstr ""
-"Хости в мережі з маршрутизацією OLSR можуть повідомляти про підключення до "
+"Вузли в мережі з маршрутизацією OLSR можуть оголошувати підключення до "
 "зовнішніх мереж за допомогою повідомлень HNA6."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:216
@@ -293,9 +291,9 @@ msgid ""
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
 msgstr ""
-"Гістерезис для визначення посилання (тільки для метрики кількості "
-"переходів). Гістерезис додає більшої надійності виявлення зв’язку, але "
-"затримує реєстрацію сусідів. За замовчуванням \"так\""
+"Гістерезис для визначення каналу (тільки для метрики кількості переходів). "
+"Гістерезис додає більшої надійності виявлення звʼязку, але затримує "
+"реєстрацію сусідів. Типово — «yes»"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:283
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:277
@@ -328,9 +326,9 @@ msgid ""
 "be 255.255.255.255. Default is \"0.0.0.0\", which triggers the usage of the "
 "interface broadcast IP."
 msgstr ""
-"Широкомовна адреса IPv4 для вихідних пакетів OLSR. Одним з корисних "
-"прикладів може бути 255.255.255.255. За замовчуванням встановлено "
-"\"0.0.0.0\", що запускає використання широкомовної IP-адреси інтерфейсу."
+"Широкомовна адреса IPv4 для вихідних пакетів OLSR. Корисним прикладом є "
+"255.255.255.255. Типово — «0.0.0.0», що запускає використання широкомовної "
+"IP-адреси інтерфейсу."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:365
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:131
@@ -343,8 +341,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
-"Адреса src IPv4 для вихідних пакетів OLSR. За замовчуванням встановлено "
-"\"0.0.0.0\", що запускає використання IP-адреси інтерфейсу."
+"Початкова адреса IPv4 для вихідних пакетів OLSR. Типово — «0.0.0.0», що "
+"запускає використання IP-адреси інтерфейсу."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:69
 msgid "IPv6"
@@ -365,8 +363,8 @@ msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
 msgstr ""
-"Багатоадресна адреса IPv6. За замовчуванням \"FF02::6D\", локальна "
-"багатоадресна розсилка каналу manet-router."
+"Багатоадресна адреса IPv6. Типово — «FF02::6D», канально-локальна "
+"багатоадресна розсилка manet-router."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
@@ -392,14 +390,14 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
-"Префікс src IPv6. OLSRd вибере один із IP-адрес інтерфейсу, який відповідає "
-"префіксу цього параметра. За замовчуванням встановлено \"0::/0\", що "
-"запускає використання IP-адреси нелокального інтерфейсу."
+"Початковий префікс IPv6. OLSRd вибере одну з IP-адрес інтерфейсу, яка "
+"відповідає префіксу цього параметра. Типово — «0::/0», що запускає "
+"використання IP-адреси не канально-локального інтерфейсу."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:111
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:111
 msgid "IPv6-Prefix of the uplink"
-msgstr "IPv6-префікс висхідної лінії зв'язку"
+msgstr "IPv6-префікс висхідного каналу"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:255
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:249
@@ -414,15 +412,14 @@ msgstr ""
 "множиться на це значення перед тим, як порівнювати його з новим. Параметр "
 "може мати значення від 0,1 до 1,0, але має бути близьким до 1,0, якщо його "
 "змінити.<br /><b>УВАГА:</b> цей параметр не слід використовувати разом із "
-"метрикою etx_ffeth!<br />За замовчуванням до «1,0»."
+"метрикою etx_ffeth!<br />Типово — «1.0»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:91
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:91
 msgid ""
 "If this Node uses NAT for connections to the internet. Default is \"yes\"."
 msgstr ""
-"Якщо цей вузол використовує NAT для підключення до Інтернету. Типовим є "
-"\"так\"."
+"Чи використовує цей вузол NAT для підключення до інтернету. Типово — «yes»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:31
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:31
@@ -442,9 +439,9 @@ msgid ""
 "ethernet interfaces. Valid modes are \"mesh\" and \"ether\". Default is "
 "\"mesh\"."
 msgstr ""
-"Режим інтерфейсу використовується для запобігання непотрібного пересилання "
-"пакетів на комутованих інтерфейсах Ethernet. Допустимі режими — «сітка» та "
-"«ефір». За замовчуванням \"сітка\"."
+"Режим інтерфейсу використовується для запобігання непотрібному пересиланню "
+"пакетів на комутованих інтерфейсах Ethernet. Допустимі режими — «mesh» та «"
+"ether». Типово — «mesh»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:469
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:448
@@ -455,7 +452,7 @@ msgstr "Інтерфейси"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:278
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:272
 msgid "Interfaces Defaults"
-msgstr "Інтерфейси за замовчуванням"
+msgstr "Типові параметри інтерфейсів"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:128
 msgid "Internet protocol"
@@ -467,8 +464,8 @@ msgid ""
 "Interval to poll network interfaces for configuration changes (in seconds). "
 "Default is \"2.5\"."
 msgstr ""
-"Інтервал опитування мережевих інтерфейсів щодо змін конфігурації (у "
-"секундах). За замовчуванням встановлено \"2,5\"."
+"Інтервал опитування мережевих інтерфейсів щодо змін конфігурації (у секундах)"
+". Типово — «2.5»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:38
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:38
@@ -492,7 +489,7 @@ msgstr "LQ"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:179
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:173
 msgid "LQ aging"
-msgstr "LQ старіння"
+msgstr "Старіння LQ"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:189
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:183
@@ -535,7 +532,7 @@ msgstr "Бібліотека"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:47
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:47
 msgid "Link Quality Settings"
-msgstr "Налаштування якості посилання"
+msgstr "Налаштування якості каналу"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:180
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:174
@@ -544,7 +541,7 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
-"Коефіцієнт старіння якості зв’язку (тільки для lq рівня 2). Параметр "
+"Коефіцієнт старіння якості каналу (тільки для lq рівня 2). Параметр "
 "налаштування для etx_float і etx_fpm, менші значення означають повільніші "
 "зміни значення ETX. (дозволені значення від 0,01 до 1,0)"
 
@@ -558,13 +555,13 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"Алгоритм якості зв’язку (тільки для рівня lq 2).<br /><b>etx_float</b>: ETX "
-"з плаваючою комою з експоненціальним старінням<br /><b>etx_fpm</b> : те "
-"саме, що etx_float, але з цілим числом arithmetic<br /><b>etx_ff</b> : ETX "
-"freifunk, варіант etx, який використовує весь трафік OLSR (замість тільки "
-"hellos) для обчислення ETX<br /><b>etx_ffeth</b>: несумісний варіант etx_ff, "
-"який дозволяє з’єднання Ethernet з ETX 0.1.<br />За замовчуванням "
-"встановлено «etx_ff»"
+"Алгоритм якості каналу (тільки для рівня lq 2).<br /><b>etx_float</b>: ETX з "
+"рухомою комою з експоненціальним старінням<br /><b>etx_fpm</b> : те саме, що "
+"etx_float, але з цілочисельною арифметикою<br /><b>etx_ff</b> : ETX "
+"freifunk, варіант etx, який використовує весь трафік OLSR (замість лише "
+"повідомлень Hello) для обчислення ETX<br /><b>etx_ffeth</b>: несумісний "
+"варіант etx_ff, який дозволяє Ethernet-канали з ETX 0.1.<br />Типово — «"
+"etx_ff»"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:170
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:164
@@ -573,17 +570,17 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
-"Перемикання рівня якості з’єднання між підрахунком переходів і "
-"маршрутизацією на основі вартості (переважно ETX).<br /><b>0</b> = не "
-"використовувати якість з’єднання<br /><b>2</b> = використовувати якість "
-"з’єднання для вибору та маршрутизації MPR<br />За замовчуванням \"2\""
+"Перемикання рівня якості каналу між підрахунком переходів і маршрутизацією "
+"на основі вартості (переважно ETX).<br /><b>0</b> = не використовувати "
+"якість каналу<br /><b>2</b> = використовувати якість каналу для вибору та "
+"маршрутизації MPR<br />Типово — «2»"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:313
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:307
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:78
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:78
 msgid "LinkQuality Multiplicator"
-msgstr "Мультиплікатор якості зв'язку"
+msgstr "Мультиплікатор якості каналу"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:163
 msgid "Local interface IP"
@@ -600,14 +597,14 @@ msgstr "MID"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:191
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:175
 msgid "MID interval"
-msgstr "MID інтервал"
+msgstr "Інтервал MID"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:436
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:415
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:202
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:186
 msgid "MID validity time"
-msgstr "Середній термін дії"
+msgstr "Час дії MID"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:61
 msgid "MTU"
@@ -623,8 +620,8 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090, and accepts connections from \"127.0.0.1\"."
 msgstr ""
-"Переконайтеся, що OLSRd запущено, плагін «jsoninfo» завантажено, налаштовано "
-"на порт 9090 і приймає підключення з «127.0.0.1»."
+"Переконайтеся, що OLSRd запущено, плагін «jsoninfo» завантажено та "
+"налаштовано на порт 9090, і він приймає підключення з «127.0.0.1»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:93
 msgid "Metric"
@@ -647,10 +644,10 @@ msgid ""
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
-"Помножте маршрути на наведений тут коефіцієнт. Дозволені значення від 0,01 "
-"до 1,0. Він використовується лише тоді, коли LQ-Level перевищує 0. Приклади:"
-"<br />зменшити LQ до 192.168.0.1 наполовину: 192.168.0.1 0,5<br />зменшити "
-"LQ для всіх вузлів цього інтерфейсу на 20%: за замовчуванням 0,8"
+"Множити маршрути на наведений тут коефіцієнт. Дозволені значення від 0,01 до "
+"1,0. Він використовується лише тоді, коли LQ-Level перевищує 0. "
+"Приклади:<br />зменшити LQ до 192.168.0.1 наполовину: 192.168.0.1 0.5<br />"
+"зменшити LQ для всіх вузлів на цьому інтерфейсі на 20%: default 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:309
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:80
@@ -660,15 +657,16 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
-"Помножте маршрути на наведений тут коефіцієнт. Дозволені значення від 0,01 "
-"до 1,0. Він використовується лише тоді, коли LQ-Level перевищує 0. Приклади:"
-"<br />зменшити LQ до fd91:662e:3c58::1 наполовину: fd91:662e:3c58::1 0,5<br /"
-">зменшити LQ для всіх вузлів на цьому інтерфейсі на 20%: за замовчуванням 0,8"
+"Множити маршрути на наведений тут коефіцієнт. Дозволені значення від 0,01 до "
+"1,0. Він використовується лише тоді, коли LQ-Level перевищує 0. "
+"Приклади:<br />зменшити LQ до fd91:662e:3c58::1 наполовину: "
+"fd91:662e:3c58::1 0.5<br />зменшити LQ для всіх вузлів на цьому інтерфейсі "
+"на 20%: default 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:253
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:247
 msgid "NAT threshold"
-msgstr "поріг NAT"
+msgstr "Поріг NAT"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:59
 msgid "NLQ"
@@ -682,7 +680,7 @@ msgstr "NLQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:160
 msgid "Neighbour IP"
-msgstr "Сусід І.П"
+msgstr "IP сусіда"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:11
 msgid "Neighbours"
@@ -709,7 +707,7 @@ msgstr "Мережева адреса"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:137
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:131
 msgid "Nic changes poll interval"
-msgstr "Nic змінює інтервал опитування"
+msgstr "Інтервал опитування змін NIC"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:3
 msgid "OLSR"
@@ -717,33 +715,33 @@ msgstr "OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:14
 msgid "OLSR - Display Options"
-msgstr "OLSR - Параметри відображення"
+msgstr "OLSR — параметри відображення"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:14
 msgid "OLSR - HNA-Announcements"
-msgstr "OLSR - HNA-Оголошення"
+msgstr "OLSR — HNA-оголошення"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:12
 msgid "OLSR - HNA6-Announcements"
-msgstr "OLSR - HNA6-Оголошення"
+msgstr "OLSR — HNA6-оголошення"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:46
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:263
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:44
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:261
 msgid "OLSR - Plugins"
-msgstr "OLSR - плагіни"
+msgstr "OLSR — плагіни"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:35
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:35
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:8
 msgid "OLSR Daemon"
-msgstr "Демон OLSR"
+msgstr "Служба OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:16
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:16
 msgid "OLSR Daemon - Interface"
-msgstr "Демон OLSR – інтерфейс"
+msgstr "Служба OLSR — інтерфейс"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:3
 msgid "OLSR IPv4"
@@ -755,7 +753,7 @@ msgstr "OLSR IPv6"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:419
 msgid "OLSR connections"
-msgstr "З'єднання OLSR"
+msgstr "Зʼєднання OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:91
@@ -778,15 +776,15 @@ msgstr "Помаранчевий"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:169
 msgid "Overview of currently active OLSR host net announcements"
-msgstr "Огляд поточних активних мережевих оголошень OLSR"
+msgstr "Огляд поточних активних оголошень мереж вузлів OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:417
 msgid "Overview of currently established OLSR connections"
-msgstr "Огляд наразі встановлених підключень OLSR"
+msgstr "Огляд наразі встановлених зʼєднань OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:87
 msgid "Overview of currently known OLSR nodes"
-msgstr "Огляд відомих на даний момент вузлів OLSR"
+msgstr "Огляд наразі відомих вузлів OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:192
 msgid "Overview of currently known routes to other OLSR nodes"
@@ -819,13 +817,12 @@ msgstr "Плагіни"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:132
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:126
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
-msgstr ""
-"Швидкість опитування для сокетів OLSR у секундах. За замовчуванням 0,05."
+msgstr "Частота опитування сокетів OLSR у секундах. Типово — 0.05."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:132
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:126
 msgid "Pollrate"
-msgstr "Рейтинг опитування"
+msgstr "Частота опитування"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:225
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:219
@@ -849,7 +846,7 @@ msgstr "Червоний"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:22
 msgid "Resolve"
-msgstr "Розв'язати"
+msgstr "Розпізнавати"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:23
 msgid ""
@@ -857,10 +854,9 @@ msgid ""
 "if you use public IPs and have unstable DNS-Setup then those pages will load "
 "really slow. In this case disable it here."
 msgstr ""
-"Розпізнавати імена хостів на сторінках стану. Загалом дозволити це безпечно, "
-"але якщо ви використовуєте загальнодоступні IP-адреси та маєте нестабільні "
-"налаштування DNS, ці сторінки завантажуватимуться дуже повільно. У цьому "
-"випадку вимкніть його тут."
+"Розпізнавати імена вузлів на сторінках стану. Загалом дозволяти це безпечно, "
+"але за умови використання публічних IP-адрес і нестабільного DNS ці сторінки "
+"завантажуватимуться дуже повільно. У цьому випадку вимкнути тут."
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:20
 msgid "Routes"
@@ -886,9 +882,9 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
-"Встановлює основний IP-адресу маршрутизатора. Ця IP-адреса НІКОЛИ не "
-"зміниться під час роботи olsrd. За замовчуванням 0.0.0.0, що запускає "
-"використання IP-адреси першого інтерфейсу."
+"Встановлює основну IP-адресу маршрутизатора. Ця IP-адреса НІКОЛИ не "
+"зміниться під час роботи olsrd. Типово — 0.0.0.0, що запускає використання "
+"IP-адреси першого інтерфейсу."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:229
 msgid ""
@@ -896,9 +892,9 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
-"Встановлює основний IP-адресу маршрутизатора. Ця IP-адреса НІКОЛИ не "
-"зміниться під час роботи olsrd. Типовим значенням є ::, що запускає "
-"використання IP-адреси першого інтерфейсу."
+"Встановлює основну IP-адресу маршрутизатора. Ця IP-адреса НІКОЛИ не "
+"зміниться під час роботи olsrd. Типово — ::, що запускає використання IP-"
+"адреси першого інтерфейсу."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:435
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:210
@@ -930,13 +926,13 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
-"Визначає швидкість висхідного каналу в кілобітах/с. Перший параметр – вище "
-"за течією, другий параметр – вниз. За замовчуванням \"128 1024\"."
+"Визначає швидкість висхідного каналу в кілобітах/с. Перший параметр — "
+"висхідний, другий параметр — низхідний. Типово — «128 1024»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:100
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:100
 msgid "Speed of the uplink"
-msgstr "Швидкість висхідного зв'язку"
+msgstr "Швидкість висхідного каналу"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:60
 msgid "State"
@@ -983,12 +979,12 @@ msgstr "Інтервал TC"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:180
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:164
 msgid "TC validity time"
-msgstr "Термін дії ТК"
+msgstr "Час дії TC"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:142
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:136
 msgid "TOS value"
-msgstr "значення TOS"
+msgstr "Значення TOS"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:36
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:36
@@ -998,7 +994,7 @@ msgid ""
 "The OLSR daemon is an implementation of the Optimized Link State Routing "
 "protocol. As such it allows mesh routing for any network equipment."
 msgstr ""
-"Демон OLSR — це реалізація протоколу Optimized Link State Routing. Він "
+"Служба OLSR — це реалізація протоколу Optimized Link State Routing. Вона "
 "уможливлює меш-маршрутизацію для будь-якого мережевого обладнання."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:242
@@ -1008,13 +1004,13 @@ msgid ""
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
 "Фіксована готовність до використання. Якщо не встановлено, готовність "
-"обчислюватиметься динамічно на основі стану акумулятора/живлення. За "
-"замовчуванням \"3\"."
+"обчислюватиметься динамічно на основі стану акумулятора/живлення. Типово — «3"
+"»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:48
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:48
 msgid "The interface OLSRd should serve."
-msgstr "Інтерфейс OLSRd повинен служити."
+msgstr "Інтерфейс, який має обслуговувати OLSRd."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:225
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:219
@@ -1033,18 +1029,18 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
-"Це можна використовувати для сигналізації клієнтам про зовнішній префікс "
-"IPv6 висхідної лінії зв’язку. Це може дозволити клієнту змінити свою "
-"локальну IPv6-адресу для використання шлюзу IPv6 без будь-якої трансляції "
-"адреси. Максимальна довжина префікса становить 64 біти. Типовим є \"::/0\" "
-"(без префікса)."
+"Можна використовувати для сигналізації клієнтам про зовнішній префікс IPv6 "
+"висхідного каналу. Це може дозволити клієнту змінити свою локальну IPv6-"
+"адресу для використання шлюзу IPv6 без будь-якої трансляції адреси. "
+"Максимальна довжина префікса становить 64 біти. Типово — «::/0» (без "
+"префікса)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:284
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:278
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:37
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:37
 msgid "Timing and Validity"
-msgstr "Час і дійсність"
+msgstr "Час і термін дії"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:29
 msgid "Topology"
@@ -1056,26 +1052,25 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
-"Тип службового значення для IP-заголовка контрольного трафіку. За "
-"замовчуванням \"16\"."
+"Значення типу служби для IP-заголовка контрольного трафіку. Типово — «16»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:9
 msgid "Unable to connect to the OLSR daemon!"
-msgstr "Неможливо підключитися до демона OLSR!"
+msgstr "Неможливо підключитися до служби OLSR!"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:66
 msgid "Uplink"
-msgstr "Висхідне з'єднання"
+msgstr "Висхідний канал"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:91
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:91
 msgid "Uplink uses NAT"
-msgstr "Вихідна лінія використовує NAT"
+msgstr "Висхідний канал використовує NAT"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:215
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:209
 msgid "Use hysteresis"
-msgstr "Використовуйте гістерезис"
+msgstr "Використовувати гістерезис"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:94
 msgid "Validity Time"
@@ -1126,13 +1121,13 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
-"Якщо між хостами існує кілька посилань, вага інтерфейсу використовується для "
-"визначення посилання для використання. Зазвичай вага автоматично "
-"обчислюється olsrd на основі характеристик інтерфейсу, але тут ви можете "
-"вказати фіксоване значення. Olsrd вибере посилання з найнижчим значенням."
-"<br /><b>Примітка:</b> вага інтерфейсу використовується лише тоді, коли "
-"LinkQualityLevel встановлено на 0. Для будь-якого іншого значення "
-"LinkQualityLevel замість нього використовується значення ETX інтерфейсу."
+"Якщо між вузлами існує кілька каналів, вага інтерфейсу використовується для "
+"вибору каналу. Зазвичай вага автоматично обчислюється olsrd на основі "
+"характеристик інтерфейсу, але тут можна вказати фіксоване значення. Olsrd "
+"вибере канали з найнижчим значенням.<br /><b>Примітка:</b> вага інтерфейсу "
+"використовується лише тоді, коли LinkQualityLevel встановлено на 0. Для будь-"
+"якого іншого значення LinkQualityLevel замість нього використовується "
+"значення ETX інтерфейсу."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:80
 msgid ""
@@ -1140,9 +1135,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
-"Який вид висхідного каналу експортується в інші вузли сіті. Вихідна лінія "
-"виявляється шляхом пошуку локального HNA 0.0.0.0/0, ::ffff:0:0/96 або "
-"2000::/3. За замовчуванням встановлено \"обидва\"."
+"Який вид висхідного каналу експортується в інші меш-вузли. Висхідний канал "
+"виявляється шляхом пошуку локального HNA 0.0.0.0/0, ::ffff:0:0/96 або 2000::/"
+"3. Типово — «both»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:80
 msgid ""
@@ -1150,9 +1145,9 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
-"Який вид висхідного каналу експортується в інші вузли сіті. Вихідне "
-"з’єднання виявляється шляхом пошуку локального HNA6 ::ffff:0:0/96 або "
-"2000::/3. За замовчуванням встановлено \"обидва\"."
+"Який вид висхідного каналу експортується в інші меш-вузли. Висхідний канал "
+"виявляється шляхом пошуку локального HNA6 ::ffff:0:0/96 або 2000::/3. Типово "
+"— «both»."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:242
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:236
@@ -1189,7 +1184,7 @@ msgstr "ні"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:74
 msgid "up"
-msgstr "вгору"
+msgstr "активний"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:76
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:91

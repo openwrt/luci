@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-05-11 15:02+0000\n"
+"PO-Revision-Date: 2026-05-12 09:07+0000\n"
 "Last-Translator: Oleksandr Yurov <oyurov@icloud.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnut/uk/>\n"
@@ -52,7 +52,7 @@ msgstr "Файл сертифікату (SSL)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:36
 msgid "Control UPS via CGI"
-msgstr "Керувати ДБЖ за допомогою CGI"
+msgstr "Керувати UPS за допомогою CGI"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:124
 msgid "Custom notification message for message type"
@@ -64,7 +64,7 @@ msgstr "Мертвий час"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:118
 msgid "Default for UPSes without this field."
-msgstr "За замовчуванням для ДБЖ без цього поля."
+msgstr "Типово для UPS без цього поля."
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:209
 msgid "Delay for kill power command"
@@ -72,15 +72,17 @@ msgstr "Затримка для команди вимкнення живленн
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:218
 msgid "Delay to power on UPS if power returns after kill power"
-msgstr "Затримка ввімкнення ДБЖ, якщо живлення відновиться після відключення"
+msgstr ""
+"Затримка вмикання UPS, якщо живлення відновиться після його примусового "
+"вимкнення"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:159
 msgid "Description (Display)"
-msgstr "Опис (Показати)"
+msgstr "Опис (відображення)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:33
 msgid "Display name"
-msgstr "Відображуване ім'я"
+msgstr "Відображуване імʼя"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:201
 msgid "Do not lock port when starting driver"
@@ -92,29 +94,28 @@ msgstr "Драйвер"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:146
 msgid "Driver Configuration"
-msgstr "Конфігурація драйверу"
+msgstr "Конфігурація драйвера"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:108
 msgid "Driver Global Settings"
-msgstr "Глобальні налаштування драйверу"
+msgstr "Глобальні налаштування драйвера"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:114
 msgid "Driver Path"
-msgstr "Шлях до драйверу"
+msgstr "Шлях до драйвера"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:242
 msgid "Driver Shutdown Order"
-msgstr "Послідовність вимкнення драйверу"
+msgstr "Послідовність вимкнення драйвера"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:137
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:274
 msgid "Driver waits for data to be consumed by upsd before publishing more."
-msgstr ""
-"Перед опублікуванням драйвер очікує, поки дані будуть використані upsd."
+msgstr "Перед публікацією драйвер очікує, поки дані будуть використані upsd."
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:89
 msgid "Drop privileges to this user"
-msgstr "Скасувати привілеї для цього користувача"
+msgstr "Знизити привілеї до цього користувача"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:41
 msgid "Enable"
@@ -125,12 +126,12 @@ msgid ""
 "Enables a hotplug script that makes all ttyUSB devices (e.g. serial USB) "
 "group read-write as user %s"
 msgstr ""
-"Вмикає сценарій гарячого підключення, який змушує всі пристрої ttyUSB "
-"(наприклад, послідовний USB) групувати читання та запис як користувач %s"
+"Вмикає сценарій гарячого підключення, який надає всім пристроям ttyUSB "
+"(напр., послідовний USB) права на читання та запис у групі як користувачу %s"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:9
 msgid "Execute notify command"
-msgstr "Виконати команду notify"
+msgstr "Виконувати команду сповіщення"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:52
 msgid "Forced Shutdown"
@@ -138,7 +139,7 @@ msgstr "Примусове вимкнення"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:71
 msgid "Global Settings"
-msgstr "Загальні параметри"
+msgstr "Загальні налаштування"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:15
 msgid "Go to NUT CGI"
@@ -146,23 +147,23 @@ msgstr "Перейти до NUT CGI"
 
 #: applications/luci-app-nut/root/usr/share/rpcd/acl.d/luci-app-nut.json:3
 msgid "Grant UCI access for luci-app-nut"
-msgstr "Надати UCI доступ для luci-app-nut"
+msgstr "Надати доступ до UCI для luci-app-nut"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:17
 msgid "Host"
-msgstr "Хост"
+msgstr "Вузол"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:100
 msgid "Host Sync"
-msgstr "Синхронізація хосту"
+msgstr "Синхронізація вузла"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:24
 msgid "Hostname or IP address"
-msgstr "Ім'я хосту або IP-адреса"
+msgstr "Імʼя вузла або IP-адреса"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:29
 msgid "Hostname or address of UPS"
-msgstr "Ім'я хосту або IP-адреса ДБЖ"
+msgstr "Імʼя вузла або адреса UPS"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:70
 msgid "IP Address"
@@ -170,7 +171,7 @@ msgstr "IP-адреса"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:163
 msgid "If this list is empty you need to %s"
-msgstr "Якщо цей список порожній, вам потрібно %s"
+msgstr "Якщо цей список порожній, потрібно %s"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:12
 msgid "Ignore"
@@ -194,7 +195,7 @@ msgstr "Розмір переривання"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:195
 msgid "Manufacturer (Display)"
-msgstr "Виробник (Показати)"
+msgstr "Виробник (відображення)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:186
 msgid "Max USB HID Length Reported"
@@ -211,11 +212,11 @@ msgstr "Максимальна кількість повторних спроб"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:118
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:190
 msgid "Maximum Start Delay"
-msgstr "Максимальна затримка старту"
+msgstr "Максимальна затримка запуску"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:97
 msgid "Maximum connections"
-msgstr "Максимум з'єднань"
+msgstr "Максимальна кількість підключень"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:122
 msgid "Maximum number of times to try starting a driver."
@@ -223,15 +224,15 @@ msgstr "Максимальна кількість спроб запуску др
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:132
 msgid "Maximum time in seconds between refresh of UPS status"
-msgstr "Максимальний час у секундах між оновленням статусу ДБЖ"
+msgstr "Максимальний час у секундах між оновленнями стану UPS"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:78
 msgid "Minimum required number or power supplies"
-msgstr "Мінімальна необхідна кількість джерел живлення"
+msgstr "Мінімальна потрібна кількість джерел живлення"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:198
 msgid "Model (Display)"
-msgstr "Модель (Показати)"
+msgstr "Модель (відображення)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:13
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:42
@@ -258,15 +259,15 @@ msgstr "Назва UPS"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:3
 msgid "Network UPS Tools"
-msgstr "Інструменти мережевого ДБЖ"
+msgstr "Network UPS Tools"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:14
 msgid "Network UPS Tools CGI Configuration"
-msgstr "Конфігурація мережевих інструментів UPS CGI"
+msgstr "Конфігурація CGI Network UPS Tools"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:69
 msgid "Network UPS Tools Monitoring Configuration"
-msgstr "Конфігурація інструментів моніторингу мережі UPS"
+msgstr "Конфігурація моніторингу Network UPS Tools"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:35
 msgid "Network UPS Tools Server Configuration"
@@ -290,7 +291,7 @@ msgstr "Налаштування сповіщень"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:87
 msgid "Notify command"
-msgstr "Повідомити команду"
+msgstr "Команда сповіщення"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:209
 msgid "Off Delay(s)"
@@ -307,11 +308,11 @@ msgstr "Пароль"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:110
 msgid "Path containing ca certificates to match against host certificate"
-msgstr "Шлях із сертифікатами ca для відповідності сертифікату хоста"
+msgstr "Шлях із сертифікатами ca для звірення з сертифікатом вузла"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:114
 msgid "Path to drivers (instead of default)"
-msgstr "Шлях до драйверів (замість стандартного)"
+msgstr "Шлях до драйверів (замість типового)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:93
 msgid "Path to state file"
@@ -350,7 +351,7 @@ msgstr "Значення потужності"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:60
 msgid "Primary"
-msgstr "Первинний"
+msgstr "Основний"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:62
 msgid "Primary (Deprecated)"
@@ -362,7 +363,7 @@ msgstr "Продукт (regex)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:114
 msgid "Require SSL and make sure server CN matches hostname"
-msgstr "Вимагайте SSL і переконайтеся, що CN сервера відповідає імені хоста"
+msgstr "Вимагати SSL та упевнитися, що CN сервера відповідає імені вузла"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:127
 msgid "Retry Delay"
@@ -416,11 +417,11 @@ msgstr "Серійний номер"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:169
 msgid "Set USB serial port permissions"
-msgstr "Встановити дозволи для послідовного порту USB"
+msgstr "Задати дозволи для послідовного порту USB"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:51
 msgid "Set variables"
-msgstr "Встановити змінні"
+msgstr "Задати змінні"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:83
 msgid "Shutdown command"
@@ -429,11 +430,11 @@ msgstr "Команда вимкнення"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:137
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:274
 msgid "Synchronous Communication"
-msgstr "Синхронна комунікація"
+msgstr "Синхронний звʼязок"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:147
 msgid "The name of this section will be used as UPS name elsewhere"
-msgstr "Назва цього розділу використовуватиметься як назва UPS в інших місцях"
+msgstr "Назва цього розділу використовуватиметься як імʼя UPS в інших місцях"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:159
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:195
@@ -443,8 +444,8 @@ msgid ""
 "This is passed through to the driver, so make sure your driver supports this "
 "option"
 msgstr ""
-"Це передається драйверу, тому переконайтеся, що ваш драйвер підтримує цю "
-"опцію"
+"Це передається драйверу, тому переконайтеся, що ваш драйвер підтримує цей "
+"параметр"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:127
 msgid "Time in seconds between driver start retry attempts."
@@ -453,7 +454,7 @@ msgstr "Час у секундах між спробами повторного 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:190
 msgid "Time in seconds that upsdrvctl will wait for driver to finish starting"
 msgstr ""
-"Час у секундах, протягом якого upsdrvctl буде чекати завершення запуску "
+"Час у секундах, протягом якого upsdrvctl очікуватиме завершення запуску "
 "драйвера"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:142
@@ -470,19 +471,19 @@ msgstr "Основний UPS (застаріле)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:81
 msgid "UPS Server Global Settings"
-msgstr "Глобальні налаштування сервера ДБЖ"
+msgstr "Глобальні налаштування сервера UPS"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:21
 msgid "UPS name"
-msgstr "Ім'я ДБЖ"
+msgstr "Імʼя UPS"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:151
 msgid "USB Bus(es) (regex)"
-msgstr "USB шина(и) (regex)"
+msgstr "Шина(и) USB (regex)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:239
 msgid "USB Product Id"
-msgstr "USB ID пристрою"
+msgstr "Ідентифікатор продукту USB"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:271
 msgid "USB Vendor Id"
@@ -491,14 +492,14 @@ msgstr "Ідентифікатор постачальника USB"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:57
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:13
 msgid "Unable to run ldd: %s"
-msgstr "Неможливо запустити ldd: %s"
+msgstr "Не вдалося запустити ldd: %s"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:55
 msgid ""
 "Use %s to see full list of commands your UPS supports (requires %s package)"
 msgstr ""
-"Використовуйте %s, щоб побачити повний список команд, які підтримує ваш ДБЖ "
-"(потрібен пакет %s)"
+"Використовуйте %s, щоб побачити повний список команд, які підтримує ваш UPS "
+"(потрібен пакунок %s)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:141
 msgid ""
@@ -506,8 +507,8 @@ msgid ""
 "be read-write for that user."
 msgstr ""
 "Користувач, від імені якого запускати драйвер; вимагає, щоб файл пристрою, "
-"до якого звертається драйвер, був доступний для читання та запису для цього "
-"користувача."
+"до якого звертається драйвер, був доступний цьому користувачу для читання та "
+"запису."
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:133
 msgid "User type (Primary/Auxiliary)"
@@ -516,23 +517,23 @@ msgstr "Тип користувача (Основний/Допоміжний)"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:43
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:42
 msgid "Username"
-msgstr "Ім'я користувача"
+msgstr "Імʼя користувача"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:268
 msgid "Vendor (regex)"
-msgstr "Вендор (regex)"
+msgstr "Постачальник (regex)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:114
 msgid "Verify all connection with SSL"
-msgstr "Перевірте всі з’єднання за допомогою SSL"
+msgstr "Засвідчувати всі зʼєднання за допомогою SSL"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:186
 msgid "Workaround for buggy firmware"
-msgstr "Обхідний шлях для помилкової прошивки"
+msgstr "Обхідне рішення для помилкової прошивки"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:10
 msgid "Write to syslog"
-msgstr "Запис у syslog"
+msgstr "Записувати в syslog"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:11
 msgid "Write to syslog and execute notify command"
@@ -548,7 +549,7 @@ msgstr "встановити драйвери"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:75
 msgid "upsmon drops privileges to this user"
-msgstr "upsmon передає привілеї цьому користувачу"
+msgstr "upsmon знижує привілеї до цього користувача"
 
 #~ msgid "%s is mutually exclusive to other choices"
 #~ msgstr "%s є взаємовиключною опцією щодо інших варіантів"
