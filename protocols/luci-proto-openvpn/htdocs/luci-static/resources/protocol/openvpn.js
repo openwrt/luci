@@ -953,7 +953,7 @@ const openvpnOptions = [
 		tab: 'cryptography',
 		type: form.FileUpload,
 		root_directory: '/etc',
-		name: 'askpass_file',
+		name: 'askpass',
 		label: _('Get certificate password from file before we daemonize')
 	},
 	{
