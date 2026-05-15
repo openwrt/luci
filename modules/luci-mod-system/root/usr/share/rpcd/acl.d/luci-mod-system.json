@@ -222,5 +222,16 @@
 				"system": [ "reboot" ]
 			}
 		}
+	},
+
+	"luci-mod-system-pwpolicy": {
+		"description": "Grant access to password policy configuration",
+		"read": {
+			"uci": [ "rpcd" ]
+		},
+		"write": {
+			"uci": [ "rpcd" ]
+		}
 	}
+
 }

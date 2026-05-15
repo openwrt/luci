@@ -34,9 +34,21 @@
 		}
 	},
 
+	"admin/system/admin/pwpolicy": {
+		"title": "Password Policy",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "system/pwpolicy"
+		},
+		"depends": {
+			"acl": [ "luci-mod-system-pwpolicy" ]
+		}
+	},
+
 	"admin/system/admin/dropbear": {
 		"title": "SSH Access",
-		"order": 2,
+		"order": 5,
 		"action": {
 			"type": "view",
 			"path": "system/dropbear"
@@ -49,7 +61,7 @@
 
 	"admin/system/admin/sshkeys": {
 		"title": "SSH-Keys",
-		"order": 3,
+		"order": 6,
 		"action": {
 			"type": "view",
 			"path": "system/sshkeys"
@@ -62,7 +74,7 @@
 
 	"admin/system/admin/uhttpd": {
 		"title": "HTTP(S) Access",
-		"order": 4,
+		"order": 7,
 		"action": {
 			"type": "view",
 			"path": "system/uhttpd"
@@ -75,7 +87,7 @@
 
 	"admin/system/admin/repokeys": {
 		"title": "Repo Public Keys",
-		"order": 5,
+		"order": 8,
 		"action": {
 			"type": "view",
 			"path": "system/repokeys"
@@ -87,7 +99,7 @@
 
 	"admin/system/plugins": {
 		"title": "Plugins",
-		"order": 3,
+		"order": 4,
 		"action": {
 			"type": "view",
 			"path": "system/plugins"
