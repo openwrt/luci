@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2026-04-22 12:28+0000\n"
+"PO-Revision-Date: 2026-05-14 10:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/cs/>\n"
@@ -11,11 +11,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:423
 msgid "\"../\" not allowed in path for Security Reason."
-msgstr "\".. /\"není v cestě povoleno z bezpečnostních důvodů."
+msgstr "„.. /“ není v popisu umístění povoleno z bezpečnostních důvodů."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:763
 msgid "A.k.a. the TOKEN at e.g. afraid.org"
@@ -32,7 +32,7 @@ msgstr "Pokročilá nastavení"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:392
 msgid "Allow non-public IPs"
-msgstr "Povolit neveřejné adresy IP"
+msgstr "Umožnit IP adresy z neveřejných rozsahů"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:606
 msgid "Basic Settings"
@@ -51,17 +51,17 @@ msgid ""
 "BusyBox's nslookup and hostip do not support TCP instead of the default UDP "
 "when sending requests to the DNS server!"
 msgstr ""
-"Verze programů nslookup a hostip, které jsou součástí balíčku BusyBox, "
-"nepodporují využití TCP místo výchozího protokolu UDP pro dotazování serveru "
-"DNS!"
+"Varianty nástrojů nslookup a hostip, které jsou součástí balíčku BusyBox, "
+"nepodporují využití TCP namísto výchozího protokolu UDP pro dotazování DNS "
+"serveru!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:372
 msgid ""
 "BusyBox's nslookup in the current compiled version does not handle given DNS "
 "Servers correctly!"
 msgstr ""
-"Současně kompilovaná verze programu nslookup, která je součástí balíčku "
-"BusyBox, nemůže správně zpracovat uvedené servery DNS!"
+"Nyní používaná varianta kompilace nástroje nslookup, která je součástí "
+"balíčku BusyBox, nemůže správně zpracovat uvedené DNS servery!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:443
 msgid "CA cert bundle file"
@@ -72,8 +72,8 @@ msgid ""
 "CA certificate bundle file that will be used to download services data. Set "
 "IGNORE to skip certificate validation."
 msgstr ""
-"Adresář který bude využit pro stažení dat služeb. Nastavte na IGNORE pro "
-"přeskočení ověření certifikátu."
+"Soubor s balíčkem certifikátu cert. autority, který bude využit pro stažení "
+"dat služeb. Nastavte na IGNORE pro přeskočení ověření certifikátu."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:532
 msgid "Cancel"
@@ -102,8 +102,7 @@ msgstr "Adresář obsahuje soubory protokolu pro každou běžící sekci."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:411
 msgid "Contains PID and other status information for each running section."
-msgstr ""
-"Adresář obsahuje PID a další stavové informace pro každou běžící sekci."
+msgstr "Obsahuje PID a další stavové informace pro každou běžící sekci."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:536
 msgid "Create service"
@@ -315,7 +314,7 @@ msgstr "Je třeba, aby IPv6 adresa byla uvedena v hranatých závorkách"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:311
 msgid "IPv6 is not supported by this system"
-msgstr "Protokol IPv6 momentálně není (plně) podporován tímto systémem"
+msgstr "IPv6 není tímto systémem podporován"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:310
 msgid "IPv6 not supported"
@@ -350,7 +349,8 @@ msgstr ""
 msgid ""
 "In some versions cURL/libcurl in OpenWrt is compiled without proxy support."
 msgstr ""
-"V některých verzích je cURL / libcurl v OpenWrt kompilován bez podpory proxy."
+"V některých verzích je cURL / libcurl v OpenWrt zkompilován bez podpory "
+"proxy."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:963
 msgid "Info"
@@ -365,16 +365,16 @@ msgid ""
 "Install 'bind-host' or 'knot-host' or 'drill' package if you know you need "
 "TCP for DNS requests."
 msgstr ""
-"Měli byste nainstalovat balíček 'bind-host' nebo 'knot-host' nebo 'drill' "
-"pro DNS dotazy."
+"Pokud potřebujete pro DNS dotazy TCP, nainstalujte balíček „bind-host“ nebo „"
+"knot-host“ nebo „drill“."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:386
 msgid ""
 "Install 'ca-certificates' package or needed certificates by hand into /etc/"
 "ssl/certs default directory"
 msgstr ""
-"Nainstalujte balíček \"ca-certificates\" nebo manuálně vložte nutné "
-"certifikáty do výchozí složky /etc/ssl/certs"
+"Nainstalujte balíček „ca-certificates“ nebo potřebné certifikáty ručně do "
+"výchozí složky /etc/ssl/certs"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:670
 msgid "Install Service"
@@ -497,7 +497,7 @@ msgstr "Žádná data"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:383
 msgid "No certificates found"
-msgstr "Nebyly nalezeny žádné certifikáty"
+msgstr "Nenalezeny žádné certifikáty"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:962
 msgid "No logging"
@@ -579,7 +579,7 @@ msgstr "Popis umístění certifikátu cert. autority"
 msgid ""
 "Please follow the instructions on OpenWrt's homepage to enable IPv6 support"
 msgstr ""
-"Chcete-li povolit podporu protokolu IPv6, postupujte podle pokynů na "
+"Pokud chcete povolit podporu protokolu IPv6, postupujte podle pokynů na "
 "domovské stránce OpenWrt"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1086
@@ -702,7 +702,7 @@ msgstr "Stav"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:410
 msgid "Status directory"
-msgstr "Stavový adresář"
+msgstr "Stavová složka"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:566
 msgid "Stop"
@@ -751,7 +751,8 @@ msgstr ""
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1085
 msgid "This is the current content of the log file in %h for this service."
 msgstr ""
-"Toto je aktuální obsah souboru protokolu v adresáři %h pro tuto službu."
+"Toto je aktuální obsah souboru se záznamem událostí ve složce %h pro tuto "
+"službu."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:210
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:277
@@ -848,16 +849,16 @@ msgstr "Při chybě skript zopakuje neúspěšnou akci po daném čase."
 msgid ""
 "Writes detailed messages to log file. File will be truncated automatically."
 msgstr ""
-"Zapisuje podrobné zprávy do souboru protokolu. Soubor bude automaticky "
-"zkrácen."
+"Zapisuje podrobné zprávy do souboru záznamu událostí. Soubor bude "
+"automaticky zkrácen."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:958
 msgid ""
 "Writes log messages to syslog. Critical Errors will always be written to "
 "syslog."
 msgstr ""
-"Zapisuje zprávy protokolu do syslogu. Kritické chyby budou vždy zapsány do "
-"syslogu."
+"Zapisuje zprávy záznamu událostí do syslogu. Kritické chyby budou do syslog "
+"zapsány vždy."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:375
 msgid ""
@@ -865,16 +866,16 @@ msgid ""
 "package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
 "Pokud potřebujete zadat server DNS pro zjištění registrované IP adresy, měli "
-"byste si nainstalovat balíček \"bind-host\", \"knot-host\", \"drill\" nebo "
-"\"hostip\"."
+"byste si nainstalovat balíček „bind-host“, „knot-host“, „drill“ nebo „hostip"
+"“."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:323
 msgid ""
 "You should install 'wget' or 'curl' or 'uclient-fetch' with 'libustream-"
 "*ssl' package."
 msgstr ""
-"Měli byste nainstalovat balíček 'wget' nebo 'curl' nebo 'uclient-fetch' s "
-"balíčkem 'libustream-*ssl'."
+"Měli byste nainstalovat balíček „wget“ nebo „curl“ nebo „uclient-fetch“ s "
+"balíčkem „libustream-*ssl“."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:337
 msgid "You should install 'wget' or 'curl' package."
@@ -884,12 +885,12 @@ msgstr "Měli byste nainstalovat balíček „wget“ nebo „curl“."
 msgid ""
 "You should install 'wget' or 'uclient-fetch' package or replace libcurl."
 msgstr ""
-"Měli byste nainstalovat balíček 'wget' nebo 'uclient-fetch' nebo nahradit "
+"Měli byste nainstalovat balíček „wget“ nebo „uclient-fetch“ nebo nahradit "
 "libcurl."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:349
 msgid "cURL is installed, but libcurl was compiled without proxy support."
-msgstr "cURL je nainstalován, ale libcurl byl kompilován bez podpory proxy."
+msgstr "cURL je nainstalováno, ale libcurl bylo zkompilováno bez podpory proxy."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:348
 msgid "cURL without Proxy Support"

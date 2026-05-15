@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-05-11 15:01+0000\n"
+"PO-Revision-Date: 2026-05-14 10:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/luci/cs/>\n"
 "Language: cs\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:212
 msgid "!known (not known)"
@@ -1467,7 +1467,7 @@ msgstr "Množství sond k odeslání pro detekci duplicitní adresy"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
 msgid "Amount of seconds to wait for the modem to become ready"
-msgstr "Doba čekání v sekundách, než je modem připravený"
+msgstr "Doba (v sekundách) po kterou čekat až modem bude připravený"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:630
 msgid "An error occurred while saving the form:"
@@ -1644,7 +1644,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:133
 msgid "Attempt to enable configured mount points for attached devices"
 msgstr ""
-"Pokusit se povolit nakonfigurované přípojné body pro připojená zařízení"
+"Pokusit se povolit nastavené přípojné (mount) body pro připojená zařízení"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1737
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1744
@@ -1893,8 +1893,8 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
-"Seznam souborů k zálohování lze nalézt níže. Sestává se z konfiguračních "
-"souborů označených opkg, nezbyných systémových souborů a souborů "
+"Seznam souborů k zálohování lze nalézt níže. Sestává se ze souborů s "
+"nastaveními, označenými opkg, nezbytných systémových souborů a souborů "
 "vyhovujících uživatelem určeným vzorům."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:815
@@ -2424,7 +2424,7 @@ msgid ""
 "persist connection"
 msgstr ""
 "Uzavírat neaktivní spojení po daném počtu sekund. Pro vypnutí časového "
-"omezení použijte jako hodntu nulu"
+"omezení použijte jako hodnotu nulu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1227
 msgid ""
@@ -3886,8 +3886,8 @@ msgid ""
 "Edit the raw configuration data above to fix any error and hit \"Save\" to "
 "reload the page."
 msgstr ""
-"Upravte výše uvedená nezpracovaná konfigurační data a opravte všechny chyby, "
-"a klepnutím na tlačítko \"Uložit\" stránku znovu načtěte."
+"Upravením výše uvedených holých dat nastavení opravte jakékoli chyby a "
+"kliknutím na „Uložit“ stránku znovu načtěte."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:955
 msgid "Edit this network"
@@ -4437,7 +4437,7 @@ msgstr "Existující zařízení"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1191
 msgid "Exit on TLS negotiation failure"
-msgstr "Ukončit při selhání vyjednávání TLS"
+msgstr "Ukončit při nezdaru vyjednávání TLS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:218
 msgid "Expand hosts"
@@ -4829,7 +4829,7 @@ msgstr "Zapsat obraz do flash paměti?"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:437
 msgid "Flash new firmware image"
-msgstr "Nahrát nový obraz s firmwarem"
+msgstr "Zapsat nový obraz s firmwarem"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:382
 msgid "Flash operations"
@@ -5194,7 +5194,7 @@ msgstr "Před převodem na proces služby získat heslo k certifikátu ze soubor
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
 msgid "Given password confirmation did not match, password not changed!"
-msgstr "Heslo nezměněno z důvodu nesouhlasu nového hesla a ověření hesla!"
+msgstr "Heslo nezměněno z důvodu neshody nového hesla a ověření hesla!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:125
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js:57
@@ -7082,7 +7082,9 @@ msgstr "Očekávat spojení pouze na zadaných adresách."
 msgid ""
 "Listen only on the specified interfaces, and loopback if not excluded "
 "explicitly."
-msgstr "Omezit naslouchání na tato rozhraní a zpětnou smyčku."
+msgstr ""
+"Očekávat spojení pouze na uvedených rozhraních a zpětné smyčce (pokud není "
+"výslovně vynecháno)."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:295
 msgid "Listen to multicast beacons"
@@ -8283,7 +8285,7 @@ msgstr "Název pro novou instanci…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1426
 msgid "New interface for \"%s\" can not be created: %s"
-msgstr "Nové rozhraní pro \"%s\" nelze vytvořit: %s"
+msgstr "Nové rozhraní pro „%s“ nelze vytvořit: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1373
 msgid "New interface name…"
@@ -8700,7 +8702,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
-msgstr "Vypnutí prodlevy"
+msgstr "Prodleva stavu vypnuto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1765
 msgid ""
@@ -8735,7 +8737,7 @@ msgstr "Při l3miss odeslat ARP pro IP -> překlad mac"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:12
 msgid "On-State Delay"
-msgstr "Zapnutí prodlevy"
+msgstr "Prodleva stavu zapnuto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:116
 msgid "On-link"
@@ -8920,10 +8922,10 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"Volitelné. Povolené hodnoty: 'eui64', 'random', pevné hodnoty jako '::1' "
-"nebo '::1:2'. Pokud je z delegovacího serveru přijat IPv6 prefix (např. "
-"\"a:b:c:d::\"), použijte k vytvoření IPv6 adresy (\"a:b:c:d::1\") pro dané "
-"rozhraní suffix (např. '::1')."
+"Volitelné. Povolené hodnoty: „eui64“, „random“, pevné hodnoty jako „::1“ "
+"nebo „::1:2“. Pokud je z delegovacího serveru přijat IPv6 prefix (např. „"
+"a:b:c:d::“), použijte k vytvoření IPv6 adresy („a:b:c:d::1“) pro dané "
+"rozhraní suffix (např. „::1“)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
 msgid ""
@@ -10290,8 +10292,7 @@ msgstr "Znovunačítání"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1427
 msgid "Refuse connection if no custom client config"
-msgstr ""
-"Odmítnout spojení, pokud není uživatelem přizpůsobená konfigurace klienta"
+msgstr "Odmítnout spojení, pokud nastavení klienta není přizpůsobené uživatelem"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:102
 msgid "Registration State"
@@ -11373,11 +11374,11 @@ msgstr "Nastavit velikost hash tabulek skutečných a virtuálních adres"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:774
 msgid "Set the TCP/UDP receive buffer size"
-msgstr "Nastavit velikost příchozího bufferu TCP/UDP"
+msgstr "Nastavit velikost příchozí vyrovnávací paměti TCP/UDP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:766
 msgid "Set the TCP/UDP send buffer size"
-msgstr "Nastavit velikost odchozího bufferu TCP/UDP"
+msgstr "Nastavit velikost odchozí vyrovnávací paměti TCP/UDP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:893
 msgid ""
@@ -11784,7 +11785,7 @@ msgid ""
 "on regulatory requirements and wireless usage, the actual transmit power may "
 "be reduced by the driver."
 msgstr ""
-"Určuje maximální vysílací energii, kterou může bezdrátové rádio používat. V "
+"Určuje maximální vysílací výkon, kterou může bezdrátové rádio používat. V "
 "závislosti na regulačních požadavcích a bezdrátovém použití může ovladač "
 "dále snížit výkon."
 
@@ -12611,10 +12612,10 @@ msgid ""
 msgstr ""
 "Zařízení bylo po provedení změn %d sekund nedostupné, a proto bylo vráceno, "
 "jako bezpečnostní pojistka, zpět do původního nastavení. Pokud nicméně "
-"věříte, že požadované změny konfigurace jsou správné, prověďte změny bez "
+"věříte, že požadované změny nastavení jsou správné, proveďte změny bez "
 "pojistky. Toto upozornění můžete také zrušit a před opětovným pokusem "
-"čekající změny upravit nebo vrátit zpět, tak aby byla zachována aktuálně "
-"fungující konfigurace."
+"čekající změny upravit nebo vrátit zpět, tak aby bylo zachováno aktuálně "
+"fungující nastavení."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:260
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:369
@@ -12651,8 +12652,8 @@ msgid ""
 "'Continue' below to start the flash procedure."
 msgstr ""
 "Obraz s firmware byl nahrán. Níže je uveden kontrolní součet a velikost "
-"souboru. Porovnejte je s originálním souborem pro zajištění integrity dat. "
-"<br /> Klepněte na \"Pokračovat\" níže pro zahájení procedury flashování."
+"souboru. Porovnejte je s originálním souborem pro zajištění neporušenosti "
+"dat. <br /> Kliknutím na „Pokračovat“ níže pak zahajte proceduru flashování."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:249
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:301
@@ -12684,7 +12685,7 @@ msgid ""
 "The given SSH public key is invalid. Please supply proper public RSA, "
 "ED25519 or ECDSA keys."
 msgstr ""
-"Zadaný veřejný SSH klíč je neplatný. Použijte řádné veřejné RSA nebo ECDSA "
+"Zadaný veřejný SSH klíč není platný. Použijte řádné veřejné RSA nebo ECDSA "
 "klíče."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:166
@@ -12975,9 +12976,9 @@ msgid ""
 "listed below. Press \"Continue\" to restore the backup and reboot, or "
 "\"Cancel\" to abort the operation."
 msgstr ""
-"Nahraný záložní archiv se jeví jako platný a obsahuje níže uvedené soubory. "
-"Chcete-li obnovit zálohu a restartovat, klepněte na tlačítko 'Pokračovat', "
-"nebo operaci přerušte klepnutím na tlačítko 'Storno'."
+"Nahraný archiv se zálohou se jeví jako platný a obsahuje níže uvedené "
+"soubory. Pokud chcete obnovit ze zálohy a restartovat, klikněte na „"
+"Pokračovat“, nebo operaci přerušte tlačítkem „Storno“."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:115
 msgid "The uploaded backup archive is not readable"
@@ -12985,7 +12986,7 @@ msgstr "Nahraný archiv s zálohou není čitelný"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:251
 msgid "The uploaded firmware does not allow keeping current configuration."
-msgstr "Nahraný firmware neumožňuje zachování aktuální konfigurace."
+msgstr "Nahraný firmware neumožňuje zachování stávajícího nastavení."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:246
 msgid ""
@@ -14150,7 +14151,7 @@ msgid ""
 "the \"ca-bundle\" package"
 msgstr ""
 "Ověření certifikátu serveru pomocí vestavěného systémového balíčku "
-"certifikačních autorit,<br />vyžaduje balíček \"ca-bundle\""
+"certifikačních autorit,<br />vyžaduje balíček „ca-bundle“"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
@@ -14514,8 +14515,8 @@ msgid ""
 "inaccessible!</strong>"
 msgstr ""
 "Zde můžete povolit nebo zakázat init skripty. Změny se projeví po restartu "
-"zařízení.<br /><strong>Varování: Pokud zakážete základní init skripty jako "
-"\"network\", vaše zařízení se může stát nepřístupným!</strong>"
+"zařízení.<br /><strong>Varování: Pokud zakážete základní init skripty jako „"
+"network“, vaše zařízení se může stát nepřístupným!</strong>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:340
 msgid "You may add multiple records for the same Target."

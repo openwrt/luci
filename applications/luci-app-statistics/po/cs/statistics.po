@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-04-04 14:23+0000\n"
+"PO-Revision-Date: 2026-05-14 10:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:54
 msgid "%H: Attenuation on %pi"
@@ -556,9 +556,8 @@ msgid ""
 "Here you can define external commands which will be started by collectd in "
 "order to read certain values. The values will be read from stdout."
 msgstr ""
-"Zde můžete nastavit externí příkazy, které budou spuštěny v tomto pořadí "
-"daemonem collectd. Ze standardního výstupu příkazů vezme collectd potřebné "
-"hodnoty."
+"Zde je možné nastavit externí příkazy, které budou spuštěny procesem služby "
+"collectd pro čtení určitých hodnot. Ty budou čteny ze standardního vstupu."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:37
 msgid ""
@@ -566,16 +565,16 @@ msgid ""
 "certain threshold values have been reached. The values leading to invocation "
 "will be fed to the the called programs stdin."
 msgstr ""
-"Zde můžete definovat externí příkazy, které budou spuštěny démonem collectd "
-"při dosažení určitých mezních hodnot. Hodnoty vedoucí ke spuštění budou "
-"předány volanému programu na standardní vstup."
+"Zde je možné definovat externí příkazy, které budou procesem služby collectd "
+"spouštěny při dosažení určitých mezních hodnot. Hodnoty vedoucí ke spuštění "
+"budou předány volanému programu na standardní vstup."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:21
 msgid ""
 "Here you can define various criteria by which the monitored iptables rules "
 "are selected."
 msgstr ""
-"Zde můžete definovat různá kritéria, podle kterých budou vybrána sledovaná "
+"Zde je možné definovat různá kritéria, podle kterých budou vybrána sledovaná "
 "pravidla iptables."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
@@ -605,7 +604,7 @@ msgstr "Název hostitele"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:15
 msgid "IP or hostname where to get the txtinfo output from"
-msgstr "IP nebo hostname, odkud získá výstup z txtinfo"
+msgstr "IP nebo název hostitele, odkud získá výstup z txtinfo"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/ipstatistics.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/ipstatistics.json:2
@@ -1372,12 +1371,12 @@ msgstr "Soket %s aktivní"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:15
 msgid "Socket file"
-msgstr "Soubor socketu"
+msgstr "Soubor soketu"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:19
 msgid "Socket group"
-msgstr "Skupina socketů"
+msgstr "Skupina soketů"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:15
 msgid "Socket path"
@@ -1386,7 +1385,7 @@ msgstr "Popis umístění soketu"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:24
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:25
 msgid "Socket permissions"
-msgstr "Oprávnění socketu"
+msgstr "Oprávnění soketu"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:22
 msgid "Specifies what information to collect about links."
@@ -1394,7 +1393,7 @@ msgstr "Určuje, jaké informace sbírat o odkazech."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:29
 msgid "Specifies what information to collect about routes."
-msgstr "Určuje, jaké informace sbírat o cestách."
+msgstr "Určuje, jaké informace sbírat o trasách."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:36
 msgid "Specifies what information to collect about the global topology."
@@ -1420,7 +1419,7 @@ msgstr "Stav"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:14
 msgid "Storage directory"
-msgstr "Úložný adresář"
+msgstr "Úložná složka"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:14
 msgid "Storage directory for the csv files"
@@ -1520,7 +1519,8 @@ msgstr "Modul NUT čte informace o nepřerušitelných zdrojích napájení (UPS
 msgid ""
 "The OLSRd plugin reads information about meshed networks from the txtinfo "
 "plugin of OLSRd."
-msgstr "Modul OLSRd čte informace o mesh sítích z txtinfo pluginu OLSRd."
+msgstr ""
+"Modul OLSRd čte informace o mesh sítích z txtinfo zásuvného modulu OLSRd."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:8
 msgid ""
@@ -1552,7 +1552,8 @@ msgstr "Komentář pro hledání shody nemůže obsahovat mezery"
 msgid ""
 "The conntrack plugin collects statistics about the number of tracked "
 "connections."
-msgstr "Plugin Conntrack shromažďuje statistiky o počtu sledovaných spojení."
+msgstr ""
+"Zásuvný modul Conntrack shromažďuje statistiky o počtu sledovaných spojení."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:7
 msgid "The cpu plugin collects basic statistics about the processor usage."
@@ -1585,8 +1586,8 @@ msgid ""
 "The disk plugin collects detailed usage statistics for selected partitions "
 "or whole disks."
 msgstr ""
-"Plugin Disk shromažďuje podrobné statistiky o využívání vybraného oddílu "
-"nebo celého disku."
+"Zásuvný modul Disk shromažďuje podrobné statistiky o využívání vybraných "
+"oddílů nebo celých disků."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:8
 msgid ""
@@ -1603,22 +1604,22 @@ msgid ""
 "to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can "
 "be used in other ways as well."
 msgstr ""
-"Plugin E-mail vytváří unixový socket, které může být využit pro odeslání "
-"statistik o emailu běžícímu daemonu collectd. Plugin je primárně určen pro "
-"použití ve spojení s Mail::SpamAssasin::Plugin::Collectd, ale stejně dobře "
-"může být využit i jinak."
+"Zásuvný modul E-mail vytváří unixový soket, které může být využit pro "
+"odeslání statistik o e-mailu spuštěnému procesu služby collectd. Modul je "
+"určen hlavně pro použití ve spojení s Mail::SpamAssasin::Plugin::Collectd, "
+"ale stejně dobře může být využit i jinak."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
-msgstr "Modul entropie shromažďuje statistiku o dostupné entropii."
+msgstr "Zásuvný modul entropie shromažďuje statistiky o dostupné náhodnosti."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:8
 msgid ""
 "The exec plugin starts external commands to read values from or to notify "
 "external processes when certain threshold values have been reached."
 msgstr ""
-"Modul exec spouští externí příkazy pro čtení hodnot z externích procesů nebo "
-"pro jejich oznamování při dosažení určitých mezních hodnot."
+"Zásuvný modul exec spouští externí příkazy pro čtení hodnot z externích "
+"procesů nebo pro jejich oznamování při dosažení určitých mezních hodnot."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:81
 msgid "The instance name must not contain spaces"
@@ -1628,7 +1629,8 @@ msgstr "Je třeba, aby název instance neobsahoval mezery"
 msgid ""
 "The interface plugin collects traffic statistics on selected interfaces."
 msgstr ""
-"Plugin Interface shromažďuje statistiky o provozu na vybraných rozhraních."
+"Zásuvný modul Rozhraní shromažďuje statistiky o provozu na vybraných "
+"rozhraních."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:8
 msgid ""
@@ -1642,8 +1644,8 @@ msgid ""
 "The iptables plugin will monitor selected firewall rules and collect "
 "information about processed bytes and packets per rule."
 msgstr ""
-"Plugin Iptables monitoruje vybraná pravidla firewallu a shromažďuje "
-"informace o zpracovaných bajtech a paketech pro každé pravidlo."
+"Zásuvný modul Iptables monitoruje vybraná pravidla brány firewall a "
+"shromažďuje informace o zpracovaných bajtech a paketech pro každé pravidlo."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:8
 msgid ""
@@ -1659,24 +1661,24 @@ msgid ""
 "The iwinfo plugin collects statistics about wireless signal strength, noise "
 "and quality."
 msgstr ""
-"Plugin Iwinfo shromažďuje statistiky o síle, šumu a kvalitě bezdrátového "
-"signálu."
+"Zásuvný modul Iwinfo shromažďuje statistiky o síle, šumu a kvalitě "
+"bezdrátového signálu."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:7
 msgid "The load plugin collects statistics about the general system load."
-msgstr "Plugin Load shromažďuje statistiky o obecné zátěži systému."
+msgstr "Zásuvný modul Load shromažďuje statistiky o obecném vytížení systému."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:7
 msgid "The memory plugin collects statistics about the memory usage."
-msgstr "Plugin Memory shromažďuje statistiky o využití paměti."
+msgstr "Zásuvný modul Memory shromažďuje statistiky o využití operační paměti."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:8
 msgid ""
 "The netlink plugin collects extended information like qdisc-, class- and "
 "filter-statistics for selected interfaces."
 msgstr ""
-"Plugin Netlink shromažďuje rozšířené informace jako statistiky qdisk, class "
-"a filtru pro vybraná rozhraní."
+"Zásuvný modul Netlink shromažďuje rozšířené informace jako statistiky qdisk, "
+"class a filtru pro vybraná rozhraní."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:7
 msgid ""
@@ -1685,10 +1687,10 @@ msgid ""
 "client mode locally collected data is transferred to a collectd server "
 "instance, in server mode the local instance receives data from other hosts."
 msgstr ""
-"Plugin Network poskytuje síťovou komunikaci mezi různými instancemi daemonu "
-"collectd. Collectd může pracovat v režimu klienta i serveru. V režimu "
-"klienta jsou lokálně shromažďovaná data odeslána instanci serveru, jako "
-"server naopak collectd přijímá data z ostatních hostitelů."
+"Zásuvný modul Network poskytuje síťovou komunikaci mezi různými instancemi "
+"procesu služby collectd. Collectd může pracovat v režimu klienta i serveru. "
+"V režimu klienta jsou lokálně shromažďovaná data odeslána instanci serveru, "
+"jako server naopak collectd přijímá data z ostatních hostitelů."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:7
 msgid ""
@@ -1703,7 +1705,7 @@ msgid ""
 "The processes plugin collects information like cpu time, page faults and "
 "memory usage of selected processes."
 msgstr ""
-"Plugin Processes shromažďuje informace o procesorovém času, výpadcích "
+"Zásuvný modul Processes shromažďuje informace o procesorovém času, výpadcích "
 "stránky a využití paměti vybranými programy."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:7
@@ -1723,8 +1725,8 @@ msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
 msgstr ""
-"Modul senzorů používá rozhraní Linux Sensors ke shromažďování "
-"environmentálních statistik."
+"Zásuvný modul senzorů používá rozhraní Linux Sensors ke shromažďování "
+"statistik o prostředí."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:8
 msgid "The snmp6 plugin collects IPv6 statistics for selected interfaces."
@@ -1753,8 +1755,8 @@ msgid ""
 "read from /sys/class/thermal/*/temp ( '*' denotes the thermal device to be "
 "read, e.g. thermal_zone1 )"
 msgstr ""
-"Teplotní modul monitoruje teplotu systému. Data jsou obvykle čtena z /sys/"
-"class/thermal/*/temp ('*' označuje zařízení, které se má číst, např. "
+"Zásuvný modul Teploty monitoruje teplotu systému. Data jsou obvykle čtena z /"
+"sys/class/thermal/*/temp („*“ označuje zařízení, které se má číst – např. "
 "thermal_zone1)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:8
@@ -1762,12 +1764,12 @@ msgid ""
 "The unixsock plugin creates a unix socket which can be used to read "
 "collected data from a running collectd instance."
 msgstr ""
-"Plugin Unixsock vytváří unixový socket, které může být využit pro čtení dat "
-"z běžící instance collectd."
+"Zásuvný modul Unixsock vytváří unixový soket, které může být využit pro "
+"čtení dat z běžící instance collectd."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:7
 msgid "The uptime plugin collects statistics about the uptime of the system."
-msgstr "Modul uptime shromažďuje statistiku o době běhu systému."
+msgstr "Zásuvný modul uptime shromažďuje statistiku o době běhu systému."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/users.js:7
 msgid ""
@@ -1830,7 +1832,7 @@ msgstr "Platí"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:78
 msgid "Try to look up fully qualified hostname"
-msgstr "Zkuste vyhledat plně kvalifikovaný název hostitele"
+msgstr "Zkusit vyhledat plně kvalifikovaný název hostitele"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:20
 msgid "Type"
@@ -1848,7 +1850,7 @@ msgstr "Nastavení zásuvného modulu o UPS zdrojích"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:12
 msgid "UPS name in NUT ups@host format"
-msgstr "Název UPS ve formátu NUT ups@hostitel"
+msgstr "Název UPS zdroje ve formátu NUT ups@hostitel"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:27
 msgid "URL"
@@ -1930,7 +1932,7 @@ msgstr "Pokud nevybráno žádné, budou monitorována všechna rozhraní."
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:21
 msgid "When set to true, reports per-state metric (system, user, idle)"
 msgstr ""
-"Je-li nastaveno na 'povoleno', zaznamenává metriky dle stavu (systém, "
+"Pokud je nastaveno na „povoleno“, zaznamenává metriky dle stavu (systém, "
 "uživatel, nečinnost)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19

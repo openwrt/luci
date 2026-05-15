@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-05-12 09:06+0000\n"
-"Last-Translator: Oleksandr Yurov <oyurov@icloud.com>\n"
+"PO-Revision-Date: 2026-05-15 10:43+0000\n"
+"Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/uk/>\n"
 "Language: uk\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.5-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid ""
@@ -51,9 +51,8 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
-"Визначте набір портів і протоколів (tcp або udp), які явно заборонені "
-"незалежно від дійсності вхідного пакета SPA. Кілька записів відокремлюються "
-"комами."
+"Визначте набір портів і протоколів (tcp або udp), які явно заборонені, "
+"незалежно від дійсності вхідного пакета SPA. Кілька записів розділено комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
 msgid ""
@@ -62,11 +61,11 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
-"Визначте набір портів і протоколів (tcp або udp), які відкриватимуться, якщо "
-"буде помічено дійсну послідовність постукувань. Якщо цей запис не "
-"встановлено, fwknopd намагатиметься задовольнити будь-який запит прото/"
-"порту, указаний у даних SPA (якщо він не збігається з будь-якими записами «"
-"RESTRICT_PORTS»). Кілька записів відокремлюються комами."
+"Визначте набір портів і протоколів (tcp або udp), які будуть відкриті, якщо "
+"буде видно дійсну послідовність стуку. Якщо цей запис не встановлений, "
+"fwknopd спробує виконати будь-який запит протоколу / порту, вказаний у даних "
+"SPA (якщо він не відповідає жодному запису «RESTRICT_PORTS»). Кілька записів "
+"розділено комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:557
 msgid ""
@@ -74,8 +73,8 @@ msgid ""
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
 "Визначте ключ автентифікації HMAC (у кодуванні Base64), який "
-"використовується для перевірки автентичності пакета SPA перед розшифруванням "
-"пакета."
+"використовується для перевірки справжності SPA-пакету перед тим, як пакет "
+"буде розшифрований."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
 msgid ""
@@ -83,7 +82,7 @@ msgid ""
 "the SPA packet before the packet is decrypted."
 msgstr ""
 "Визначте ключ автентифікації HMAC, який використовується для перевірки "
-"автентичності пакета SPA перед розшифруванням пакета."
+"справжності SPA-пакету перед тим, як пакет буде розшифрований."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:580
 msgid ""
@@ -92,10 +91,10 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
-"Визначте проміжок часу, протягом якого fwknopd надаватиме доступ через "
-"брандмауер після правильної послідовності постукувань з IP-адреси джерела. "
-"Якщо «FW_ACCESS_TIMEOUT» не встановлено, автоматично буде встановлено "
-"типовий тайм-аут у 30 секунд."
+"Визначте тривалість часу, який буде надаватися fwknopd через брандмауер "
+"після дійсної послідовності стуку з вихідної IP-адреси. Якщо «"
+"FW_ACCESS_TIMEOUT» не встановлено, тоді автоматично встановлюється типовий "
+"час очікування — 30 секунд."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:535
 msgid ""
@@ -103,7 +102,7 @@ msgid ""
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
 "Визначте симетричний ключ (у кодуванні Base64), який використовується для "
-"розшифрування вхідного пакета SPA, зашифрованого клієнтом fwknop за "
+"розшифрування вхідного SPA-пакета, зашифрованого клієнтом fwknop за "
 "допомогою Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
@@ -112,7 +111,7 @@ msgid ""
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
 "Визначте симетричний ключ, який використовується для розшифрування вхідного "
-"пакета SPA, зашифрованого клієнтом fwknop за допомогою Rijndael."
+"SPA-пакета, зашифрованого клієнтом fwknop за допомогою Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:475
 msgid "Enable Uci/Luci control"
@@ -124,7 +123,7 @@ msgstr "Увімкнути перезапис конфігурації"
 
 #: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
 msgid "Firewall Knock Daemon"
-msgstr "Служба Firewall Knock"
+msgstr "Демон «стуку» фаєрволу"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314

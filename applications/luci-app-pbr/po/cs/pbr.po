@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-04 14:23+0000\n"
+"PO-Revision-Date: 2026-05-14 10:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspbr/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.5.dev0\n"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:320
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:450
@@ -64,6 +64,10 @@ msgid ""
 "than tun* or tap* or specific use cases of WireGuard servers. See the "
 "%sREADME%s for details."
 msgstr ""
+"Umožňuje výslovně určit seznam názvů rozhraní které mají být službou "
+"podporovány. Může se hodit pokud vámi využívané OpenVPN tunely mají "
+"předvolbu dev jinou než tun* nebo tap* nebo v případě specifických použití "
+"WireGuard serverů. Podrobnosti viz %sREADME%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:160
 msgid ""
@@ -72,6 +76,10 @@ msgid ""
 "servers, which have a listen_port defined, are handled automatically, do not "
 "add those here.See the %sREADME%s for details."
 msgstr ""
+"Umožní zadat seznam názvů rozhraní, která mají být službou ignorována. Může "
+"se hodit pro OpenVPN server provozovaný na OpenWrt zařízení. WireGuard "
+"servery, která mají definováno listen_port, jsou obslouženy automaticky – ty "
+"sem nepřidávejte. Podrobnosti viz %sREADME%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:44
 msgid "Basic Configuration"
@@ -441,20 +449,20 @@ msgstr ""
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:331
 msgid "Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"
 msgstr ""
-"Prosím zrušte nastavení 'chain' nebo nastavte 'chain' na 'prerouting' pro "
-"pravidlo '%s'"
+"Prosím zrušte nastavení „chain“ nebo nastavte „chain“ na „prerouting“ pro "
+"pravidlo „%s“"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:325
 msgid "Please unset 'proto' or set 'proto' to 'all' for policy '%s'"
 msgstr ""
-"Prosím zrušte nastavení 'proto' nebo nastavte 'proto' na 'all' pro pravidlo "
-"'%s'"
+"Prosím zrušte nastavení „proto“ nebo nastavte „proto“ na „all“ (vše) pro "
+"pravidlo „%s“"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:322
 msgid "Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
 msgstr ""
-"Prosím zrušte nastavení 'src_addr', 'src_port' a 'dest_port' pro pravidlo "
-"'%s'"
+"Prosím zrušte nastavení „src_addr“, „src_port“ a „dest_port“ pro pravidlo „%s"
+"“"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:275
 msgid "Policies"
@@ -548,15 +556,15 @@ msgstr "Nastavený resolver (%s) není na tomto systému podporován."
 msgid ""
 "Resolver set support (%s) requires ipset, but ipset binary cannot be found"
 msgstr ""
-"Podpora nastaveného resolveru (%s) vyžaduje ipset, ale binární soubor ipset "
-"nelze nalézt"
+"Podpora nastaveného resolveru (%s) vyžaduje ipset, ale spustitelný soubor "
+"ipset nebylo možné nalézt"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:410
 msgid ""
 "Resolver set support (%s) requires nftables, but nft binary cannot be found"
 msgstr ""
-"Podpora nastaveného resolveru (%s) vyžaduje nftables, ale binární soubor nft "
-"nelze nalézt"
+"Podpora nastaveného resolveru (%s) vyžaduje nftables, ale spustitelný soubor "
+"nft nebylo možné nalézt"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:601
 msgid "Restart"
@@ -575,7 +583,7 @@ msgid ""
 "Run the following user files after setting up but before restarting DNSMASQ. "
 "See the %sREADME%s for details."
 msgstr ""
-"Spusťte následující uživatelské soubory po nastavení, ale před restartováním "
+"Spustit následující uživatelské soubory po nastavení, ale před restartováním "
 "DNSMASQ. Podrobnosti naleznete v %sREADME%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:241
@@ -625,7 +633,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:462
 msgid "Skipping IPv6 policy '%s' as IPv6 support is disabled"
-msgstr "Přeskočení IPv6 pravidla '%s', protože je podpora IPv6 zakázána"
+msgstr "Přeskakuje se IPv6 pravidlo „%s“, protože je podpora IPv6 zakázána"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:582
 msgid "Start"
@@ -721,7 +729,7 @@ msgstr "Službě %s se nepodařilo objevit nadřazenou bránu"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:416
 msgid "The %s service is currently disabled"
-msgstr "Služba %s je v současné době vypnuta"
+msgstr "Služba %s je v současné době vypnutá"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:93
 msgid "The %s support is unknown."
@@ -738,7 +746,7 @@ msgstr "Aplikace WebUI (luci-app-pbr) je zastaralá – zaktualizujte ji"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:431
 msgid "The ipset name '%s' is longer than allowed 31 characters"
-msgstr "Název ipsetu '%s' je delší než povolených 31 znaků"
+msgstr "Název ipsetu „%s“ je delší než povolených 31 znaků"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:434
 msgid "The nft set name '%s' is longer than allowed 255 characters"
@@ -811,8 +819,8 @@ msgid ""
 "Use of 'curl' is detected in custom user file '%s', but 'curl' isn't "
 "installed"
 msgstr ""
-"Bylo zjištěno použití 'curl' v uživatelském souboru '%s', ale 'curl' není "
-"nainstalován"
+"Bylo zjištěno použití „curl“ v uživatelském souboru „%s“, ale „curl“ není "
+"nainstalováno"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:112
 msgid "Use resolver set support for domains"
