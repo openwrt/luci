@@ -376,6 +376,15 @@ const methods = {
 				result.ufpd = system(`/etc/init.d/ufp running >/dev/null 2>/dev/null`) == 0
 			}
 
+			result.batctl_json = false;
+			if (access('/usr/sbin/batctl')) {
+				let p = popen(`/usr/sbin/batctl -h 2>&1`);
+				if (p) {
+					result.batctl_json = index(p.read('all'), 'mesh_json') != -1;
+					p.close();
+				}
+			}
+
 			return result;
 		}
 	},
