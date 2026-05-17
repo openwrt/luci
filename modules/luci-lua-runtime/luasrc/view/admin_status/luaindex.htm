@@ -1,0 +1,18 @@
+<%-
+	local util = require "luci.util"
+	local fs = require "nixio.fs"
+
+	local incdir = util.libpath() .. "/view/admin_status/index/"
+	if fs.access(incdir) then
+		local _, inc
+		local includes = {}
+		for inc in fs.dir(incdir) do
+			if inc:match("%.htm$") then
+				includes[#includes + 1] = inc:gsub("%.htm$", "")
+			end
+		end
+		for _, inc in luci.util.vspairs(includes) do
+			include("admin_status/index/" .. inc)
+		end
+	end
+-%>

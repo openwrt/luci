@@ -1,0 +1,22 @@
+{
+	"luci-proto-wireguard": {
+		"description": "Grant access to LuCI Wireguard procedures",
+		"read": {
+			"ubus": {
+				"luci.wireguard": [
+					"getWgInstances"
+				]
+			},
+			"uci": [ "ddns", "system" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.wireguard": [
+					"generateKeyPair",
+					"getPublicAndPrivateKeyFromPrivate",
+					"generatePsk"
+				]
+			}
+		}
+	}
+}

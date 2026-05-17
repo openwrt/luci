@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPN Toggle</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f172a; color: #e2e8f0;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+
+    /* Login */
+    #loginSection {
+      background: #1e293b; border: 1px solid #334155; border-radius: 16px;
+      padding: 40px 36px; width: 100%; max-width: 380px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .brand-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    }
+    .brand-name  { font-size: 1.2rem; font-weight: 700; color: #f1f5f9; }
+    .brand-sub   { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+    .lbl { display: block; font-size: 0.78rem; font-weight: 500; color: #94a3b8; margin-bottom: 5px; }
+    .inp {
+      display: block; width: 100%; padding: 10px 14px;
+      background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+      color: #f1f5f9; font-size: 0.9rem; outline: none;
+      transition: border-color .15s; margin-bottom: 14px;
+    }
+    .inp:focus { border-color: #6366f1; }
+    .btn-primary {
+      display: block; width: 100%; padding: 11px;
+      background: #6366f1; color: #fff; border: none; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background .15s; margin-top: 4px;
+    }
+    .btn-primary:hover:not(:disabled) { background: #4f46e5; }
+    .btn-primary:disabled { opacity: 0.55; cursor: not-allowed; }
+    .err { color: #f87171; font-size: 0.82rem; text-align: center; margin-top: 12px; min-height: 18px; }
+
+    /* Dashboard */
+    #dashboard { display: none; width: 100%; max-width: 820px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-title { font-size: 1.15rem; font-weight: 700; }
+    .btn-ghost {
+      padding: 7px 16px; background: transparent;
+      border: 1px solid #334155; border-radius: 7px; color: #94a3b8;
+      font-size: 0.82rem; cursor: pointer; transition: all .15s;
+    }
+    .btn-ghost:hover { border-color: #f87171; color: #f87171; }
+
+    /* Grid */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .card {
+      background: #1e293b; border: 1px solid #334155; border-radius: 12px;
+      padding: 22px; display: flex; flex-direction: column; gap: 12px;
+      transition: border-color .15s;
+    }
+    .card:hover { border-color: #475569; }
+    .card-name { font-size: 1rem; font-weight: 600; color: #f1f5f9; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.73rem; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    }
+    .badge::before { content: ''; width: 7px; height: 7px; border-radius: 50%; }
+    .badge-vpn { background: #083344; color: #67e8f9; }
+    .badge-vpn::before { background: #22d3ee; box-shadow: 0 0 6px #22d3ee80; }
+    .badge-wan { background: #1e3a5f; color: #93c5fd; }
+    .badge-wan::before { background: #60a5fa; }
+    .card-via { font-size: 0.76rem; color: #64748b; }
+    .toggle-btn {
+      margin-top: 4px; padding: 10px; border: none; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all .15s;
+    }
+    .toggle-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-to-vpn { background: #164e63; color: #67e8f9; }
+    .btn-to-vpn:hover:not(:disabled) { background: #0e7490; color: #fff; }
+    .btn-to-wan { background: #1e3a5f; color: #93c5fd; }
+    .btn-to-wan:hover:not(:disabled) { background: #1d4ed8; color: #fff; }
+
+    .empty { text-align: center; color: #475569; padding: 60px 0; font-size: 0.9rem; }
+    .spinner-wrap { text-align: center; padding: 60px 0; }
+    .spinner {
+      display: inline-block; width: 28px; height: 28px;
+      border: 3px solid #334155; border-top-color: #6366f1;
+      border-radius: 50%; animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div id="loginSection">
+  <div class="brand">
+    <div class="brand-icon">&#x1F512;</div>
+    <div>
+      <div class="brand-name">VPN Toggle</div>
+      <div class="brand-sub">Network routing control</div>
+    </div>
+  </div>
+  <label class="lbl" for="inp-user">Username</label>
+  <input class="inp" id="inp-user" type="text" placeholder="Enter username" autocomplete="username">
+  <label class="lbl" for="inp-pass">Password</label>
+  <input class="inp" id="inp-pass" type="password" placeholder="Enter password" autocomplete="current-password">
+  <button class="btn-primary" id="loginBtn" onclick="doLogin()">Sign In</button>
+  <div class="err" id="loginErr"></div>
+</div>
+
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="brand-icon" style="width:34px;height:34px;font-size:17px">&#x1F512;</div>
+      <span class="topbar-title">Network Switches</span>
+    </div>
+    <button class="btn-ghost" onclick="doLogout()">Sign out</button>
+  </div>
+  <div id="switchGrid"></div>
+</div>
+
+<script>
+var _u = '', _p = '';
+
+document.getElementById('inp-user').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('inp-pass').focus();
+});
+document.getElementById('inp-pass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+
+function api(params) {
+  var qs = Object.keys(params).map(function(k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+  return fetch('/cgi-bin/vpn-api?' + qs).then(function(r) { return r.json(); });
+}
+
+function doLogin() {
+  var u = document.getElementById('inp-user').value.trim();
+  var p = document.getElementById('inp-pass').value;
+  if (!u || !p) return;
+  var btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Signing in\u2026';
+  document.getElementById('loginErr').textContent = '';
+  api({ action: 'list', user: u, pass: p }).then(function(data) {
+    if (!Array.isArray(data)) {
+      document.getElementById('loginErr').textContent =
+        data.error === 'Unauthorized' ? 'Invalid username or password.' : (data.error || 'Unknown error.');
+      btn.disabled = false; btn.textContent = 'Sign In';
+      return;
+    }
+    _u = u; _p = p;
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    renderGrid(data);
+  }).catch(function() {
+    document.getElementById('loginErr').textContent = 'Connection error. Try again.';
+    btn.disabled = false; btn.textContent = 'Sign In';
+  });
+}
+
+function doLogout() {
+  _u = ''; _p = '';
+  document.getElementById('inp-user').value = '';
+  document.getElementById('inp-pass').value = '';
+  var btn = document.getElementById('loginBtn');
+  btn.disabled = false; btn.textContent = 'Sign In';
+  document.getElementById('loginSection').style.display = '';
+  document.getElementById('dashboard').style.display = 'none';
+}
+
+function renderGrid(switches) {
+  var g = document.getElementById('switchGrid');
+  if (!switches.length) {
+    g.innerHTML = '<div class="empty">No switches configured.<br>Add one via the LuCI settings page.</div>';
+    return;
+  }
+  var html = '<div class="grid">';
+  for (var i = 0; i < switches.length; i++) {
+    var s = switches[i];
+    var isVpn = s.current_if === s.vpn_if;
+    html += '<div class="card">' +
+      '<div class="card-name">' + esc(s.name) + '</div>' +
+      '<span class="badge ' + (isVpn ? 'badge-vpn' : 'badge-wan') + '">' +
+        (isVpn ? 'VPN' : 'Direct') + '</span>' +
+      '<div class="card-via">via ' + esc(s.current_if) + '</div>' +
+      '<button class="toggle-btn ' + (isVpn ? 'btn-to-wan' : 'btn-to-vpn') + '" ' +
+        'id="tbtn-' + s.id + '" onclick="doToggle(' + s.id + ')">' +
+        (isVpn ? '\u21E6 Switch to Direct' : '\u21E8 Switch to VPN') +
+      '</button></div>';
+  }
+  g.innerHTML = html + '</div>';
+}
+
+function doToggle(id) {
+  var btn = document.getElementById('tbtn-' + id);
+  btn.disabled = true; btn.textContent = 'Switching\u2026';
+  api({ action: 'toggle', switch: id, user: _u, pass: _p }).then(function(data) {
+    if (data.success) {
+      return api({ action: 'list', user: _u, pass: _p }).then(renderGrid);
+    }
+    btn.disabled = false; btn.textContent = 'Error \u2013 retry';
+  }).catch(function() {
+    btn.disabled = false; btn.textContent = 'Error \u2013 retry';
+  });
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, function(c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+</script>
+</body>
+</html>

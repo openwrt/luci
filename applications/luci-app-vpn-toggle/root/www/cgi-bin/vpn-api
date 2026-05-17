@@ -1,0 +1,114 @@
+#!/bin/sh
+# /www/cgi-bin/vpn-api
+
+echo "Content-Type: application/json"
+echo "Cache-Control: no-cache"
+echo ""
+
+# Block access from non-local IP addresses
+case "$REMOTE_ADDR" in
+    10.*|172.1[6-9].*|172.2[0-9].*|172.3[0-1].*|192.168.*|127.*) ;;
+    *) echo '{"error":"Access denied"}'; exit 0 ;;
+esac
+
+REQ_USER=$(echo "$QUERY_STRING" | grep -o 'user=[^&]*' | cut -d= -f2)
+REQ_PASS=$(echo "$QUERY_STRING" | grep -o 'pass=[^&]*' | cut -d= -f2)
+ACTION=$(echo "$QUERY_STRING" | grep -o 'action=[^&]*' | cut -d= -f2)
+SWITCH_ID=$(echo "$QUERY_STRING" | grep -o 'switch=[^&]*' | cut -d= -f2)
+
+# Authenticate: loop through all user sections
+AUTH=0
+AUTH_USER=''
+i=0
+while true; do
+    CFG_USER=$(uci -q get "vpn_toggle.@user[$i].username" 2>/dev/null)
+    [ -z "$CFG_USER" ] && break
+    CFG_PASS=$(uci -q get "vpn_toggle.@user[$i].password" 2>/dev/null)
+    if [ "$REQ_USER" = "$CFG_USER" ] && [ "$REQ_PASS" = "$CFG_PASS" ]; then
+        AUTH=1
+        AUTH_USER="$CFG_USER"
+        break
+    fi
+    i=$((i + 1))
+done
+
+if [ "$AUTH" = "0" ]; then
+    echo '{"error":"Unauthorized"}'
+    exit 0
+fi
+
+# list: return all switches with current routing state
+if [ "$ACTION" = "list" ]; then
+    OUT='['
+    SEP=''
+    i=0
+    while true; do
+        DNAME=$(uci -q get "vpn_toggle.@switch[$i].display_name" 2>/dev/null)
+        [ -z "$DNAME" ] && break
+        SW_USER=$(uci -q get "vpn_toggle.@switch[$i].user" 2>/dev/null)
+        if [ -z "$SW_USER" ] || [ "$SW_USER" = "$AUTH_USER" ]; then
+            RULE=$(uci -q get "vpn_toggle.@switch[$i].pbr_rule")
+            WAN_IF=$(uci -q get "vpn_toggle.@switch[$i].wan_if")
+            VPN_IF=$(uci -q get "vpn_toggle.@switch[$i].vpn_if")
+            CURRENT_IF=$(uci -q get "pbr.$RULE.interface")
+            OUT="${OUT}${SEP}{\"id\":${i},\"name\":\"${DNAME}\",\"rule\":\"${RULE}\",\"current_if\":\"${CURRENT_IF}\",\"wan_if\":\"${WAN_IF}\",\"vpn_if\":\"${VPN_IF}\"}"
+            SEP=','
+        fi
+        i=$((i + 1))
+    done
+    echo "${OUT}]"
+    exit 0
+fi
+
+# toggle: flip one switch by index
+if [ "$ACTION" = "toggle" ] && [ -n "$SWITCH_ID" ]; then
+    # Validate SWITCH_ID is a non-negative integer
+    case "$SWITCH_ID" in
+        ''|*[!0-9]*) echo '{"error":"Invalid switch id"}'; exit 0 ;;
+    esac
+    SW_USER=$(uci -q get "vpn_toggle.@switch[$SWITCH_ID].user" 2>/dev/null)
+    if [ -n "$SW_USER" ] && [ "$SW_USER" != "$AUTH_USER" ]; then
+        echo '{"error":"Forbidden"}'
+        exit 0
+    fi
+    RULE=$(uci -q get "vpn_toggle.@switch[$SWITCH_ID].pbr_rule")
+    WAN_IF=$(uci -q get "vpn_toggle.@switch[$SWITCH_ID].wan_if")
+    VPN_IF=$(uci -q get "vpn_toggle.@switch[$SWITCH_ID].vpn_if")
+    TARGET_DEVICE=$(uci -q get "vpn_toggle.@switch[$SWITCH_ID].target_device")
+    TARGET_SUBNET=$(uci -q get "vpn_toggle.@switch[$SWITCH_ID].target_subnet")
+
+    if [ -z "$RULE" ]; then
+        echo '{"error":"Invalid switch"}'
+        exit 0
+    fi
+
+    CURRENT_IF=$(uci -q get "pbr.$RULE.interface")
+    if [ "$CURRENT_IF" = "$WAN_IF" ]; then
+        NEXT_IF=$VPN_IF
+    else
+        NEXT_IF=$WAN_IF
+    fi
+
+    ACTIVE_SRC="$TARGET_SUBNET"
+    [ -n "$TARGET_DEVICE" ] && ACTIVE_SRC="$TARGET_DEVICE"
+
+    OLD_SRC=$(uci -q get "pbr.$RULE.src_addr")
+    uci set "pbr.$RULE.interface=$NEXT_IF"
+    [ -n "$ACTIVE_SRC" ] && uci set "pbr.$RULE.src_addr=$ACTIVE_SRC"
+
+    DNS_RULE=$(uci show pbr | grep "src_addr='$OLD_SRC'" | grep "dns_policy" | cut -d. -f2 | head -n 1)
+    if [ -n "$DNS_RULE" ]; then
+        if [ "$NEXT_IF" = "$VPN_IF" ]; then
+            uci set "pbr.$DNS_RULE.enabled=1"
+        else
+            uci set "pbr.$DNS_RULE.enabled=0"
+        fi
+    fi
+
+    uci commit pbr
+    /etc/init.d/pbr reload > /dev/null 2>&1
+    echo "{\"success\":true,\"new_if\":\"$NEXT_IF\"}"
+    exit 0
+fi
+
+echo '{"error":"Invalid action"}'

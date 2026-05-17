@@ -1,0 +1,21 @@
+{
+  "luci-app-example": {
+    "description": "Grant UCI and RPC access to LuCI app example",
+    "read": {
+      "ubus": {
+        "luci.example": [
+          "get_sample1",
+          "get_sample2"
+        ]
+      },
+      "uci": [
+        "example"
+      ]
+    },
+    "write": {
+      "uci": [
+        "example"
+      ]
+    }
+  }
+}

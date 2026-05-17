@@ -1,0 +1,67 @@
+{#
+ Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+<!--]]>--><!--'>--><!--">-->
+<style>
+	body {
+		line-height: 1.5;
+		font-size: 14px;
+		font-family: sans-serif;
+	}
+
+	.error500 * {
+		margin: 0;
+		padding: 0;
+		color: inherit;
+	}
+
+	.error500 {
+		box-sizing: border-box;
+		position: fixed;
+		z-index: 999999;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		overflow: auto;
+		background: #ffe;
+		color: #f00 !important;
+		padding: 1em;
+	}
+
+	.error500 h1 {
+		margin-bottom: .5em;
+	}
+
+	.error500 .exception {
+		font-weight: normal;
+		white-space: normal;
+		margin: .25em;
+		padding: .5em;
+		border: 1px solid #f00;
+		background: rgba(204, 204, 204, .2);
+	}
+
+	.error500 .message {
+		font-weight: bold;
+		white-space: pre-line;
+	}
+
+	.error500 .context {
+		margin-top: 2em;
+	}
+</style>
+
+<div class="error500">
+	<h1>{{ title }}</h1>
+	<div class="message">{{ message }}</div>
+
+	{% if (exception): %}
+	<div class="exception">
+		<div class="message">{{ exception.message }}</div>
+		<pre class="context">{{ exception.stacktrace[0].context }}</pre>
+	</div>
+	{% endif %}
+</div>

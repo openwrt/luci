@@ -1,0 +1,69 @@
+#!/bin/sh /etc/rc.common
+
+START=80
+USE_PROCD=1
+
+. "$IPKG_INSTROOT/usr/share/libubox/jshn.sh"
+
+register_init() {
+	local config="$1"
+	local init="$2"
+	shift; shift
+
+	if [ -x "$init" ] && "$init" enabled && ! grep -sqE 'USE_PROCD=.' "$init"; then
+		logger -t "ucitrack" "Setting up /etc/config/$config reload trigger for non-procd $init"
+		procd_add_config_trigger "config.change" "$config" "$init" "$@"
+	fi
+}
+
+register_trigger() {
+	local file="$1"
+
+	local config init exec affects affected
+	local prev
+
+	json_set_namespace config prev
+	json_init
+	json_load_file "${file}" >/dev/null 2>&1
+	json_get_var config 'config'
+	json_get_var init 'init'
+	json_get_var exec 'exec'
+	json_get_values affects 'affects'
+	json_cleanup
+	json_set_namespace "$prev"
+
+	if [ -n "$init" ]; then
+		register_init "$config" "/etc/init.d/$init" "reload"
+	fi
+
+	if [ -n "$exec" ]; then
+		case "$exec" in
+			/etc/init.d/*)
+				set -- $exec
+				register_init "$config" "$@"
+			;;
+			*)
+				logger -t "ucitrack" "Setting up non-init /etc/config/$config reload handler: $exec"
+				procd_add_config_trigger "config.change" "$config" $exec
+			;;
+		esac
+	fi
+
+	for affected in $affects; do
+		logger -t "ucitrack" "Setting up /etc/config/$affected reload dependency on /etc/config/$config"
+		procd_add_config_trigger "config.change" "$config" \
+			ubus call service event \
+			"$(printf '{"type":"config.change","data":{"package":"%s"}}' $affected)"
+	done
+}
+
+service_triggers() {
+	local config="$1"
+
+	local file
+
+	for file in /usr/share/ucitrack/*.json; do
+		[ -f "$file" ] || continue
+		register_trigger "$file"
+	done
+}

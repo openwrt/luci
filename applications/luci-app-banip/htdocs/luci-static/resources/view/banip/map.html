@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>banIP Map</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+	<style>
+		#map {
+			height: 97vh;
+			width: 100%;
+		}
+
+		.mono {
+			font-size: small;
+			font-family: monospace;
+			white-space: nowrap;
+			margin: 0.3em !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="map"></div>
+
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+	<script>
+		'use strict';
+
+		/* intialize map */
+		let map = L.map('map', {
+			zoom: 3,
+			minZoom: 2,
+			maxZoom: 18,
+			center: [50, 10]
+			}).setView([50, 10]);
+			L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		}).addTo(map);
+
+		/* get mapData */
+		const mapData = sessionStorage.getItem('mapData');
+		if (mapData) {
+			let uniqueCoordinates = [];
+			let homeCoordinates = [];
+			const parsedData = JSON.parse(mapData);
+			parsedData.forEach(function (item, index) {
+				if (Object.keys(item).length !== 0) {
+					let keys = Object.keys(item);
+					keys.forEach(function (key) {
+						if (item[key] && item[key].lat && item[key].lon && item[key].query && item[key].as && item[key].city && item[key].countryCode) {
+							let coordObj = { lat: item[key].lat, lon: item[key].lon };
+							if (key === "homeIP" && !homeCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
+								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
+								homeCoordinates.push(coordObj);
+							}
+							if (key !== "homeIP" && !uniqueCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
+								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
+								uniqueCoordinates.push(coordObj);
+							}
+						}
+					});
+				}
+			});
+
+			/* render markers for local IPs, reset focus and zoom level */
+			homeCoordinates.forEach(function (coordObj) {
+				let latHome = coordObj.lat;
+				let lonHome = coordObj.lon;
+				let ipHome = coordObj.query.slice(0, 38);
+				let asHome = coordObj.as.slice(0, 38);
+				let cityHome = coordObj.city.slice(0, 33);
+				let ccHome = coordObj.cc;
+
+				map.setView([latHome, lonHome], 6);
+
+				let circle = L.circleMarker([latHome, lonHome]).addTo(map);
+				circle.setStyle({ color: '#378242', opacity: 1.0, fillColor: '#378242', fillOpacity: 0.5, radius: 6 });
+				circle.bindPopup("<b><center>local IP</center></b>" +
+					"<p class=\"mono\">" +
+					"City: " + cityHome + " (" + ccHome + ")" +
+					"<br />Latitude : " + latHome +
+					"<br />Longitude: " + lonHome +
+					"<br />IP: " + ipHome +
+					"<br />AS: " + asHome +
+					"</p>");
+			});
+
+			/* render markers for blocked IPs */
+			uniqueCoordinates.forEach(function (coordObj) {
+				let key = coordObj.key.slice(0, -3);
+				let lat = coordObj.lat;
+				let lon = coordObj.lon;
+				let ip = coordObj.query.slice(0, 38);
+				let as = coordObj.as.slice(0, 38);
+				let city = coordObj.city.slice(0, 33);
+				let cc = coordObj.cc;
+				let circle = L.circleMarker([lat, lon]).addTo(map);
+				circle.setStyle({ color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 2 });
+				circle.bindPopup("<b><center>blocked IP by " + key + "</center></b>" +
+					"<p class=\"mono\">" +
+					"City: " + city + " (" + cc + ")" +
+					"<br />Latitude : " + lat +
+					"<br />Longitude: " + lon +
+					"<br />IP: " + ip +
+					"<br />AS: " + as +
+					"</p>");
+			});
+		}
+	</script>
+</body>
+
+</html>

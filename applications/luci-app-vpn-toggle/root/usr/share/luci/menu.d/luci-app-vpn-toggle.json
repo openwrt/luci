@@ -1,0 +1,20 @@
+{
+	"admin/services/vpn_toggle": {
+		"title": "VPN Toggle Setup",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-vpn-toggle" ]
+		},
+		"weight": 50
+	},
+	"admin/services/vpn_toggle/settings": {
+		"title": "Settings",
+		"action": {
+			"type": "view",
+			"path": "vpn_toggle/settings"
+		},
+		"weight": 10
+	}
+}

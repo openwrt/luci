@@ -1,0 +1,36 @@
+{
+	"title": "v.recipes",
+	"template": "https://v.recipes/dns-{option}",
+	"bootstrap_dns": "1.1.1.1,1.0.0.1,8.8.8.8,8.8.4.4",
+	"help_link": "https://v.recipes/dns/",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(query|security|adblock|ecs|cn)",
+			"options": [
+				{
+					"value": "query",
+					"description": "Unfiltered"
+				},
+				{
+					"value": "security",
+					"description": "Security"
+				},
+				{
+					"value": "adblock",
+					"description": "Adblock"
+				},
+				{
+					"value": "ecs",
+					"description": "ECS Optimized"
+				},
+				{
+					"value": "cn",
+					"description": "CN Optimized"
+				}
+			],
+			"default": "query"
+		}
+	}
+}

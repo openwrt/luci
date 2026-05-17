@@ -1,0 +1,35 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA7500v1",
+		"board": [
+			"linksys,ea7500-v1"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd13",
+			"labelOffsetBytes": 32
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"mtd": "mtd15",
+			"labelOffsetBytes": 32
+		}
+	]
+}

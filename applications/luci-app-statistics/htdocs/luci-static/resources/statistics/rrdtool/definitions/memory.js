@@ -1,0 +1,100 @@
+/*
+ * Copyright  2011 Manuel Munz <freifunk at somakoma dot de>
+ * Licensed to the public under the Apache License 2.0.
+ */
+
+'use strict';
+'require baseclass';
+'require uci';
+
+return baseclass.extend({
+	title: _('Memory'),
+
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const p = [];
+		const hide_free = uci.get("luci_statistics", "collectd_memory", "HideFree") == "1" ? true : false;
+
+		const memory = {
+			title: "%H: Memory usage",
+			vlabel: "MB",
+			number_format: "%5.1lf%s",
+			y_min: "0",
+			alt_autoscale_max: true,
+			data: {
+				instances: {
+					memory: [
+						...(hide_free ? [] : ["free"]),
+						"buffered",
+						"cached",
+						"used"
+					]
+				},
+
+				options: {
+					memory_buffered: {
+						color: "0000ff",
+						title: "Buffered"
+					},
+					memory_cached: {
+						color: "ff00ff",
+						title: "Cached"
+					},
+					memory_used: {
+						color: "ff0000",
+						title: "Used"
+					},
+					memory_free: {
+						color: "00ff00",
+						title: "Free"
+					}
+				}
+			}
+		};
+
+		const percent = {
+			title: "%H: Memory usage",
+			vlabel: "Percent",
+			number_format: "%5.1lf%%",
+			y_min: "0",
+			alt_autoscale_max: true,
+			data: {
+				instances: {
+					percent: [
+						...(hide_free ? [] : ["free"]),
+						"buffered",
+						"cached",
+						"used"
+					]
+				},
+				options: {
+					percent_buffered: {
+						color: "0000ff",
+						title: "Buffered"
+					},
+					percent_cached: {
+						color: "ff00ff",
+						title: "Cached"
+					},
+					percent_used: {
+						color: "ff0000",
+						title: "Used"
+					},
+					percent_free: {
+						color: "00ff00",
+						title: "Free"
+					}
+				}
+			}
+		};
+
+		const types = graph.dataTypes(host, plugin, plugin_instance);
+
+		for (let type of types)
+			if (type == 'percent')
+				p.push(percent);
+			else if (type == 'memory')
+				p.push(memory);
+
+		return p;
+	}
+});

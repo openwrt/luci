@@ -1,0 +1,33 @@
+{
+    "admin/services/rustdesk-server": {
+        "title": "RustDesk Server",
+        "order": 60,
+        "action": {
+            "type": "firstchild"
+        },
+        "depends": {
+            "acl": [
+                "luci-app-rustdesk-server"
+            ],
+            "uci": {
+                "rustdesk-server": true
+            }
+        }
+    },
+    "admin/services/rustdesk-server/general": {
+        "title": "General",
+        "order": 10,
+        "action": {
+            "type": "view",
+            "path": "rustdesk-server/general"
+        }
+    },
+    "admin/services/rustdesk-server/logs": {
+        "title": "Log",
+        "order": 20,
+        "action": {
+            "type": "view",
+            "path": "rustdesk-server/logs"
+        }
+    }
+}

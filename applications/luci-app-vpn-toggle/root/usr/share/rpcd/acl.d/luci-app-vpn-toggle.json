@@ -1,0 +1,18 @@
+{
+	"luci-app-vpn-toggle": {
+		"description": "Grant access to VPN Toggle controls",
+		"read": {
+			"uci": [ "vpn_toggle", "pbr", "network", "dhcp", "firewall" ],
+			"file": {
+				"/var/dhcp.leases": [ "read" ],
+				"/proc/net/arp": [ "read" ]
+			}
+		},
+		"write": {
+			"uci": [ "vpn_toggle", "pbr", "firewall" ],
+			"file": {
+				"/etc/init.d/pbr reload": [ "exec" ]
+			}
+		}
+	}
+}

@@ -1,0 +1,2794 @@
+/*
+ * Copyright (C) 2022 Jo-Philipp Wich <jo@mein.io>
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+#define _GNU_SOURCE
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
+#include <limits.h>
+#include <unistd.h>
+#include <ctype.h>
+
+#include "ucode/module.h"
+
+
+typedef enum {
+	T_TEXT,
+	T_RAW,
+	T_OPEN,
+	T_ATTR,
+	T_CLOSE,
+	T_COMMENT,
+	T_CDATA,
+	T_PROCINST,
+	T_EOF
+} html_token_type_t;
+
+typedef bool (*html_token_callback_t)(html_token_type_t, const char *, size_t, void *);
+
+
+/* The array below encodes all named character entities as specified in
+ * https://html.spec.whatwg.org/multipage/named-characters.html#named-character-references
+ *
+ * Format of value is:
+ *  bit  0 - 20: value of second unicode codepoint
+ *  bit 21 - 31: unused
+ *  bit 32 - 53: value of first unicode codepoint
+ *  bit 54 - 62: unused
+ *  bit 63:      flag indicating whether semicolon is mandatory
+ *
+ * The array is pre-ordered to allow for efficient binary search.
+ */
+static const struct { const char *name; uint64_t value; } named_char_refs[] = {
+	{ "AElig", 0x000000c600000000ULL },
+	{ "AMP", 0x0000002600000000ULL },
+	{ "Aacute", 0x000000c100000000ULL },
+	{ "Abreve", 0x8000010200000000ULL },
+	{ "Acirc", 0x000000c200000000ULL },
+	{ "Acy", 0x8000041000000000ULL },
+	{ "Afr", 0x8001d50400000000ULL },
+	{ "Agrave", 0x000000c000000000ULL },
+	{ "Alpha", 0x8000039100000000ULL },
+	{ "Amacr", 0x8000010000000000ULL },
+	{ "And", 0x80002a5300000000ULL },
+	{ "Aogon", 0x8000010400000000ULL },
+	{ "Aopf", 0x8001d53800000000ULL },
+	{ "ApplyFunction", 0x8000206100000000ULL },
+	{ "Aring", 0x000000c500000000ULL },
+	{ "Ascr", 0x8001d49c00000000ULL },
+	{ "Assign", 0x8000225400000000ULL },
+	{ "Atilde", 0x000000c300000000ULL },
+	{ "Auml", 0x000000c400000000ULL },
+	{ "Backslash", 0x8000221600000000ULL },
+	{ "Barv", 0x80002ae700000000ULL },
+	{ "Barwed", 0x8000230600000000ULL },
+	{ "Bcy", 0x8000041100000000ULL },
+	{ "Because", 0x8000223500000000ULL },
+	{ "Bernoullis", 0x8000212c00000000ULL },
+	{ "Beta", 0x8000039200000000ULL },
+	{ "Bfr", 0x8001d50500000000ULL },
+	{ "Bopf", 0x8001d53900000000ULL },
+	{ "Breve", 0x800002d800000000ULL },
+	{ "Bscr", 0x8000212c00000000ULL },
+	{ "Bumpeq", 0x8000224e00000000ULL },
+	{ "CHcy", 0x8000042700000000ULL },
+	{ "COPY", 0x000000a900000000ULL },
+	{ "Cacute", 0x8000010600000000ULL },
+	{ "Cap", 0x800022d200000000ULL },
+	{ "CapitalDifferentialD", 0x8000214500000000ULL },
+	{ "Cayleys", 0x8000212d00000000ULL },
+	{ "Ccaron", 0x8000010c00000000ULL },
+	{ "Ccedil", 0x000000c700000000ULL },
+	{ "Ccirc", 0x8000010800000000ULL },
+	{ "Cconint", 0x8000223000000000ULL },
+	{ "Cdot", 0x8000010a00000000ULL },
+	{ "Cedilla", 0x800000b800000000ULL },
+	{ "CenterDot", 0x800000b700000000ULL },
+	{ "Cfr", 0x8000212d00000000ULL },
+	{ "Chi", 0x800003a700000000ULL },
+	{ "CircleDot", 0x8000229900000000ULL },
+	{ "CircleMinus", 0x8000229600000000ULL },
+	{ "CirclePlus", 0x8000229500000000ULL },
+	{ "CircleTimes", 0x8000229700000000ULL },
+	{ "ClockwiseContourIntegral", 0x8000223200000000ULL },
+	{ "CloseCurlyDoubleQuote", 0x8000201d00000000ULL },
+	{ "CloseCurlyQuote", 0x8000201900000000ULL },
+	{ "Colon", 0x8000223700000000ULL },
+	{ "Colone", 0x80002a7400000000ULL },
+	{ "Congruent", 0x8000226100000000ULL },
+	{ "Conint", 0x8000222f00000000ULL },
+	{ "ContourIntegral", 0x8000222e00000000ULL },
+	{ "Copf", 0x8000210200000000ULL },
+	{ "Coproduct", 0x8000221000000000ULL },
+	{ "CounterClockwiseContourIntegral", 0x8000223300000000ULL },
+	{ "Cross", 0x80002a2f00000000ULL },
+	{ "Cscr", 0x8001d49e00000000ULL },
+	{ "Cup", 0x800022d300000000ULL },
+	{ "CupCap", 0x8000224d00000000ULL },
+	{ "DD", 0x8000214500000000ULL },
+	{ "DDotrahd", 0x8000291100000000ULL },
+	{ "DJcy", 0x8000040200000000ULL },
+	{ "DScy", 0x8000040500000000ULL },
+	{ "DZcy", 0x8000040f00000000ULL },
+	{ "Dagger", 0x8000202100000000ULL },
+	{ "Darr", 0x800021a100000000ULL },
+	{ "Dashv", 0x80002ae400000000ULL },
+	{ "Dcaron", 0x8000010e00000000ULL },
+	{ "Dcy", 0x8000041400000000ULL },
+	{ "Del", 0x8000220700000000ULL },
+	{ "Delta", 0x8000039400000000ULL },
+	{ "Dfr", 0x8001d50700000000ULL },
+	{ "DiacriticalAcute", 0x800000b400000000ULL },
+	{ "DiacriticalDot", 0x800002d900000000ULL },
+	{ "DiacriticalDoubleAcute", 0x800002dd00000000ULL },
+	{ "DiacriticalGrave", 0x8000006000000000ULL },
+	{ "DiacriticalTilde", 0x800002dc00000000ULL },
+	{ "Diamond", 0x800022c400000000ULL },
+	{ "DifferentialD", 0x8000214600000000ULL },
+	{ "Dopf", 0x8001d53b00000000ULL },
+	{ "Dot", 0x800000a800000000ULL },
+	{ "DotDot", 0x800020dc00000000ULL },
+	{ "DotEqual", 0x8000225000000000ULL },
+	{ "DoubleContourIntegral", 0x8000222f00000000ULL },
+	{ "DoubleDot", 0x800000a800000000ULL },
+	{ "DoubleDownArrow", 0x800021d300000000ULL },
+	{ "DoubleLeftArrow", 0x800021d000000000ULL },
+	{ "DoubleLeftRightArrow", 0x800021d400000000ULL },
+	{ "DoubleLeftTee", 0x80002ae400000000ULL },
+	{ "DoubleLongLeftArrow", 0x800027f800000000ULL },
+	{ "DoubleLongLeftRightArrow", 0x800027fa00000000ULL },
+	{ "DoubleLongRightArrow", 0x800027f900000000ULL },
+	{ "DoubleRightArrow", 0x800021d200000000ULL },
+	{ "DoubleRightTee", 0x800022a800000000ULL },
+	{ "DoubleUpArrow", 0x800021d100000000ULL },
+	{ "DoubleUpDownArrow", 0x800021d500000000ULL },
+	{ "DoubleVerticalBar", 0x8000222500000000ULL },
+	{ "DownArrow", 0x8000219300000000ULL },
+	{ "DownArrowBar", 0x8000291300000000ULL },
+	{ "DownArrowUpArrow", 0x800021f500000000ULL },
+	{ "DownBreve", 0x8000031100000000ULL },
+	{ "DownLeftRightVector", 0x8000295000000000ULL },
+	{ "DownLeftTeeVector", 0x8000295e00000000ULL },
+	{ "DownLeftVector", 0x800021bd00000000ULL },
+	{ "DownLeftVectorBar", 0x8000295600000000ULL },
+	{ "DownRightTeeVector", 0x8000295f00000000ULL },
+	{ "DownRightVector", 0x800021c100000000ULL },
+	{ "DownRightVectorBar", 0x8000295700000000ULL },
+	{ "DownTee", 0x800022a400000000ULL },
+	{ "DownTeeArrow", 0x800021a700000000ULL },
+	{ "Downarrow", 0x800021d300000000ULL },
+	{ "Dscr", 0x8001d49f00000000ULL },
+	{ "Dstrok", 0x8000011000000000ULL },
+	{ "ENG", 0x8000014a00000000ULL },
+	{ "ETH", 0x000000d000000000ULL },
+	{ "Eacute", 0x000000c900000000ULL },
+	{ "Ecaron", 0x8000011a00000000ULL },
+	{ "Ecirc", 0x000000ca00000000ULL },
+	{ "Ecy", 0x8000042d00000000ULL },
+	{ "Edot", 0x8000011600000000ULL },
+	{ "Efr", 0x8001d50800000000ULL },
+	{ "Egrave", 0x000000c800000000ULL },
+	{ "Element", 0x8000220800000000ULL },
+	{ "Emacr", 0x8000011200000000ULL },
+	{ "EmptySmallSquare", 0x800025fb00000000ULL },
+	{ "EmptyVerySmallSquare", 0x800025ab00000000ULL },
+	{ "Eogon", 0x8000011800000000ULL },
+	{ "Eopf", 0x8001d53c00000000ULL },
+	{ "Epsilon", 0x8000039500000000ULL },
+	{ "Equal", 0x80002a7500000000ULL },
+	{ "EqualTilde", 0x8000224200000000ULL },
+	{ "Equilibrium", 0x800021cc00000000ULL },
+	{ "Escr", 0x8000213000000000ULL },
+	{ "Esim", 0x80002a7300000000ULL },
+	{ "Eta", 0x8000039700000000ULL },
+	{ "Euml", 0x000000cb00000000ULL },
+	{ "Exists", 0x8000220300000000ULL },
+	{ "ExponentialE", 0x8000214700000000ULL },
+	{ "Fcy", 0x8000042400000000ULL },
+	{ "Ffr", 0x8001d50900000000ULL },
+	{ "FilledSmallSquare", 0x800025fc00000000ULL },
+	{ "FilledVerySmallSquare", 0x800025aa00000000ULL },
+	{ "Fopf", 0x8001d53d00000000ULL },
+	{ "ForAll", 0x8000220000000000ULL },
+	{ "Fouriertrf", 0x8000213100000000ULL },
+	{ "Fscr", 0x8000213100000000ULL },
+	{ "GJcy", 0x8000040300000000ULL },
+	{ "GT", 0x0000003e00000000ULL },
+	{ "Gamma", 0x8000039300000000ULL },
+	{ "Gammad", 0x800003dc00000000ULL },
+	{ "Gbreve", 0x8000011e00000000ULL },
+	{ "Gcedil", 0x8000012200000000ULL },
+	{ "Gcirc", 0x8000011c00000000ULL },
+	{ "Gcy", 0x8000041300000000ULL },
+	{ "Gdot", 0x8000012000000000ULL },
+	{ "Gfr", 0x8001d50a00000000ULL },
+	{ "Gg", 0x800022d900000000ULL },
+	{ "Gopf", 0x8001d53e00000000ULL },
+	{ "GreaterEqual", 0x8000226500000000ULL },
+	{ "GreaterEqualLess", 0x800022db00000000ULL },
+	{ "GreaterFullEqual", 0x8000226700000000ULL },
+	{ "GreaterGreater", 0x80002aa200000000ULL },
+	{ "GreaterLess", 0x8000227700000000ULL },
+	{ "GreaterSlantEqual", 0x80002a7e00000000ULL },
+	{ "GreaterTilde", 0x8000227300000000ULL },
+	{ "Gscr", 0x8001d4a200000000ULL },
+	{ "Gt", 0x8000226b00000000ULL },
+	{ "HARDcy", 0x8000042a00000000ULL },
+	{ "Hacek", 0x800002c700000000ULL },
+	{ "Hat", 0x8000005e00000000ULL },
+	{ "Hcirc", 0x8000012400000000ULL },
+	{ "Hfr", 0x8000210c00000000ULL },
+	{ "HilbertSpace", 0x8000210b00000000ULL },
+	{ "Hopf", 0x8000210d00000000ULL },
+	{ "HorizontalLine", 0x8000250000000000ULL },
+	{ "Hscr", 0x8000210b00000000ULL },
+	{ "Hstrok", 0x8000012600000000ULL },
+	{ "HumpDownHump", 0x8000224e00000000ULL },
+	{ "HumpEqual", 0x8000224f00000000ULL },
+	{ "IEcy", 0x8000041500000000ULL },
+	{ "IJlig", 0x8000013200000000ULL },
+	{ "IOcy", 0x8000040100000000ULL },
+	{ "Iacute", 0x000000cd00000000ULL },
+	{ "Icirc", 0x000000ce00000000ULL },
+	{ "Icy", 0x8000041800000000ULL },
+	{ "Idot", 0x8000013000000000ULL },
+	{ "Ifr", 0x8000211100000000ULL },
+	{ "Igrave", 0x000000cc00000000ULL },
+	{ "Im", 0x8000211100000000ULL },
+	{ "Imacr", 0x8000012a00000000ULL },
+	{ "ImaginaryI", 0x8000214800000000ULL },
+	{ "Implies", 0x800021d200000000ULL },
+	{ "Int", 0x8000222c00000000ULL },
+	{ "Integral", 0x8000222b00000000ULL },
+	{ "Intersection", 0x800022c200000000ULL },
+	{ "InvisibleComma", 0x8000206300000000ULL },
+	{ "InvisibleTimes", 0x8000206200000000ULL },
+	{ "Iogon", 0x8000012e00000000ULL },
+	{ "Iopf", 0x8001d54000000000ULL },
+	{ "Iota", 0x8000039900000000ULL },
+	{ "Iscr", 0x8000211000000000ULL },
+	{ "Itilde", 0x8000012800000000ULL },
+	{ "Iukcy", 0x8000040600000000ULL },
+	{ "Iuml", 0x000000cf00000000ULL },
+	{ "Jcirc", 0x8000013400000000ULL },
+	{ "Jcy", 0x8000041900000000ULL },
+	{ "Jfr", 0x8001d50d00000000ULL },
+	{ "Jopf", 0x8001d54100000000ULL },
+	{ "Jscr", 0x8001d4a500000000ULL },
+	{ "Jsercy", 0x8000040800000000ULL },
+	{ "Jukcy", 0x8000040400000000ULL },
+	{ "KHcy", 0x8000042500000000ULL },
+	{ "KJcy", 0x8000040c00000000ULL },
+	{ "Kappa", 0x8000039a00000000ULL },
+	{ "Kcedil", 0x8000013600000000ULL },
+	{ "Kcy", 0x8000041a00000000ULL },
+	{ "Kfr", 0x8001d50e00000000ULL },
+	{ "Kopf", 0x8001d54200000000ULL },
+	{ "Kscr", 0x8001d4a600000000ULL },
+	{ "LJcy", 0x8000040900000000ULL },
+	{ "LT", 0x0000003c00000000ULL },
+	{ "Lacute", 0x8000013900000000ULL },
+	{ "Lambda", 0x8000039b00000000ULL },
+	{ "Lang", 0x800027ea00000000ULL },
+	{ "Laplacetrf", 0x8000211200000000ULL },
+	{ "Larr", 0x8000219e00000000ULL },
+	{ "Lcaron", 0x8000013d00000000ULL },
+	{ "Lcedil", 0x8000013b00000000ULL },
+	{ "Lcy", 0x8000041b00000000ULL },
+	{ "LeftAngleBracket", 0x800027e800000000ULL },
+	{ "LeftArrow", 0x8000219000000000ULL },
+	{ "LeftArrowBar", 0x800021e400000000ULL },
+	{ "LeftArrowRightArrow", 0x800021c600000000ULL },
+	{ "LeftCeiling", 0x8000230800000000ULL },
+	{ "LeftDoubleBracket", 0x800027e600000000ULL },
+	{ "LeftDownTeeVector", 0x8000296100000000ULL },
+	{ "LeftDownVector", 0x800021c300000000ULL },
+	{ "LeftDownVectorBar", 0x8000295900000000ULL },
+	{ "LeftFloor", 0x8000230a00000000ULL },
+	{ "LeftRightArrow", 0x8000219400000000ULL },
+	{ "LeftRightVector", 0x8000294e00000000ULL },
+	{ "LeftTee", 0x800022a300000000ULL },
+	{ "LeftTeeArrow", 0x800021a400000000ULL },
+	{ "LeftTeeVector", 0x8000295a00000000ULL },
+	{ "LeftTriangle", 0x800022b200000000ULL },
+	{ "LeftTriangleBar", 0x800029cf00000000ULL },
+	{ "LeftTriangleEqual", 0x800022b400000000ULL },
+	{ "LeftUpDownVector", 0x8000295100000000ULL },
+	{ "LeftUpTeeVector", 0x8000296000000000ULL },
+	{ "LeftUpVector", 0x800021bf00000000ULL },
+	{ "LeftUpVectorBar", 0x8000295800000000ULL },
+	{ "LeftVector", 0x800021bc00000000ULL },
+	{ "LeftVectorBar", 0x8000295200000000ULL },
+	{ "Leftarrow", 0x800021d000000000ULL },
+	{ "Leftrightarrow", 0x800021d400000000ULL },
+	{ "LessEqualGreater", 0x800022da00000000ULL },
+	{ "LessFullEqual", 0x8000226600000000ULL },
+	{ "LessGreater", 0x8000227600000000ULL },
+	{ "LessLess", 0x80002aa100000000ULL },
+	{ "LessSlantEqual", 0x80002a7d00000000ULL },
+	{ "LessTilde", 0x8000227200000000ULL },
+	{ "Lfr", 0x8001d50f00000000ULL },
+	{ "Ll", 0x800022d800000000ULL },
+	{ "Lleftarrow", 0x800021da00000000ULL },
+	{ "Lmidot", 0x8000013f00000000ULL },
+	{ "LongLeftArrow", 0x800027f500000000ULL },
+	{ "LongLeftRightArrow", 0x800027f700000000ULL },
+	{ "LongRightArrow", 0x800027f600000000ULL },
+	{ "Longleftarrow", 0x800027f800000000ULL },
+	{ "Longleftrightarrow", 0x800027fa00000000ULL },
+	{ "Longrightarrow", 0x800027f900000000ULL },
+	{ "Lopf", 0x8001d54300000000ULL },
+	{ "LowerLeftArrow", 0x8000219900000000ULL },
+	{ "LowerRightArrow", 0x8000219800000000ULL },
+	{ "Lscr", 0x8000211200000000ULL },
+	{ "Lsh", 0x800021b000000000ULL },
+	{ "Lstrok", 0x8000014100000000ULL },
+	{ "Lt", 0x8000226a00000000ULL },
+	{ "Map", 0x8000290500000000ULL },
+	{ "Mcy", 0x8000041c00000000ULL },
+	{ "MediumSpace", 0x8000205f00000000ULL },
+	{ "Mellintrf", 0x8000213300000000ULL },
+	{ "Mfr", 0x8001d51000000000ULL },
+	{ "MinusPlus", 0x8000221300000000ULL },
+	{ "Mopf", 0x8001d54400000000ULL },
+	{ "Mscr", 0x8000213300000000ULL },
+	{ "Mu", 0x8000039c00000000ULL },
+	{ "NJcy", 0x8000040a00000000ULL },
+	{ "Nacute", 0x8000014300000000ULL },
+	{ "Ncaron", 0x8000014700000000ULL },
+	{ "Ncedil", 0x8000014500000000ULL },
+	{ "Ncy", 0x8000041d00000000ULL },
+	{ "NegativeMediumSpace", 0x8000200b00000000ULL },
+	{ "NegativeThickSpace", 0x8000200b00000000ULL },
+	{ "NegativeThinSpace", 0x8000200b00000000ULL },
+	{ "NegativeVeryThinSpace", 0x8000200b00000000ULL },
+	{ "NestedGreaterGreater", 0x8000226b00000000ULL },
+	{ "NestedLessLess", 0x8000226a00000000ULL },
+	{ "NewLine", 0x8000000a00000000ULL },
+	{ "Nfr", 0x8001d51100000000ULL },
+	{ "NoBreak", 0x8000206000000000ULL },
+	{ "NonBreakingSpace", 0x800000a000000000ULL },
+	{ "Nopf", 0x8000211500000000ULL },
+	{ "Not", 0x80002aec00000000ULL },
+	{ "NotCongruent", 0x8000226200000000ULL },
+	{ "NotCupCap", 0x8000226d00000000ULL },
+	{ "NotDoubleVerticalBar", 0x8000222600000000ULL },
+	{ "NotElement", 0x8000220900000000ULL },
+	{ "NotEqual", 0x8000226000000000ULL },
+	{ "NotEqualTilde", 0x8000224200000338ULL },
+	{ "NotExists", 0x8000220400000000ULL },
+	{ "NotGreater", 0x8000226f00000000ULL },
+	{ "NotGreaterEqual", 0x8000227100000000ULL },
+	{ "NotGreaterFullEqual", 0x8000226700000338ULL },
+	{ "NotGreaterGreater", 0x8000226b00000338ULL },
+	{ "NotGreaterLess", 0x8000227900000000ULL },
+	{ "NotGreaterSlantEqual", 0x80002a7e00000338ULL },
+	{ "NotGreaterTilde", 0x8000227500000000ULL },
+	{ "NotHumpDownHump", 0x8000224e00000338ULL },
+	{ "NotHumpEqual", 0x8000224f00000338ULL },
+	{ "NotLeftTriangle", 0x800022ea00000000ULL },
+	{ "NotLeftTriangleBar", 0x800029cf00000338ULL },
+	{ "NotLeftTriangleEqual", 0x800022ec00000000ULL },
+	{ "NotLess", 0x8000226e00000000ULL },
+	{ "NotLessEqual", 0x8000227000000000ULL },
+	{ "NotLessGreater", 0x8000227800000000ULL },
+	{ "NotLessLess", 0x8000226a00000338ULL },
+	{ "NotLessSlantEqual", 0x80002a7d00000338ULL },
+	{ "NotLessTilde", 0x8000227400000000ULL },
+	{ "NotNestedGreaterGreater", 0x80002aa200000338ULL },
+	{ "NotNestedLessLess", 0x80002aa100000338ULL },
+	{ "NotPrecedes", 0x8000228000000000ULL },
+	{ "NotPrecedesEqual", 0x80002aaf00000338ULL },
+	{ "NotPrecedesSlantEqual", 0x800022e000000000ULL },
+	{ "NotReverseElement", 0x8000220c00000000ULL },
+	{ "NotRightTriangle", 0x800022eb00000000ULL },
+	{ "NotRightTriangleBar", 0x800029d000000338ULL },
+	{ "NotRightTriangleEqual", 0x800022ed00000000ULL },
+	{ "NotSquareSubset", 0x8000228f00000338ULL },
+	{ "NotSquareSubsetEqual", 0x800022e200000000ULL },
+	{ "NotSquareSuperset", 0x8000229000000338ULL },
+	{ "NotSquareSupersetEqual", 0x800022e300000000ULL },
+	{ "NotSubset", 0x80002282000020d2ULL },
+	{ "NotSubsetEqual", 0x8000228800000000ULL },
+	{ "NotSucceeds", 0x8000228100000000ULL },
+	{ "NotSucceedsEqual", 0x80002ab000000338ULL },
+	{ "NotSucceedsSlantEqual", 0x800022e100000000ULL },
+	{ "NotSucceedsTilde", 0x8000227f00000338ULL },
+	{ "NotSuperset", 0x80002283000020d2ULL },
+	{ "NotSupersetEqual", 0x8000228900000000ULL },
+	{ "NotTilde", 0x8000224100000000ULL },
+	{ "NotTildeEqual", 0x8000224400000000ULL },
+	{ "NotTildeFullEqual", 0x8000224700000000ULL },
+	{ "NotTildeTilde", 0x8000224900000000ULL },
+	{ "NotVerticalBar", 0x8000222400000000ULL },
+	{ "Nscr", 0x8001d4a900000000ULL },
+	{ "Ntilde", 0x000000d100000000ULL },
+	{ "Nu", 0x8000039d00000000ULL },
+	{ "OElig", 0x8000015200000000ULL },
+	{ "Oacute", 0x000000d300000000ULL },
+	{ "Ocirc", 0x000000d400000000ULL },
+	{ "Ocy", 0x8000041e00000000ULL },
+	{ "Odblac", 0x8000015000000000ULL },
+	{ "Ofr", 0x8001d51200000000ULL },
+	{ "Ograve", 0x000000d200000000ULL },
+	{ "Omacr", 0x8000014c00000000ULL },
+	{ "Omega", 0x800003a900000000ULL },
+	{ "Omicron", 0x8000039f00000000ULL },
+	{ "Oopf", 0x8001d54600000000ULL },
+	{ "OpenCurlyDoubleQuote", 0x8000201c00000000ULL },
+	{ "OpenCurlyQuote", 0x8000201800000000ULL },
+	{ "Or", 0x80002a5400000000ULL },
+	{ "Oscr", 0x8001d4aa00000000ULL },
+	{ "Oslash", 0x000000d800000000ULL },
+	{ "Otilde", 0x000000d500000000ULL },
+	{ "Otimes", 0x80002a3700000000ULL },
+	{ "Ouml", 0x000000d600000000ULL },
+	{ "OverBar", 0x8000203e00000000ULL },
+	{ "OverBrace", 0x800023de00000000ULL },
+	{ "OverBracket", 0x800023b400000000ULL },
+	{ "OverParenthesis", 0x800023dc00000000ULL },
+	{ "PartialD", 0x8000220200000000ULL },
+	{ "Pcy", 0x8000041f00000000ULL },
+	{ "Pfr", 0x8001d51300000000ULL },
+	{ "Phi", 0x800003a600000000ULL },
+	{ "Pi", 0x800003a000000000ULL },
+	{ "PlusMinus", 0x800000b100000000ULL },
+	{ "Poincareplane", 0x8000210c00000000ULL },
+	{ "Popf", 0x8000211900000000ULL },
+	{ "Pr", 0x80002abb00000000ULL },
+	{ "Precedes", 0x8000227a00000000ULL },
+	{ "PrecedesEqual", 0x80002aaf00000000ULL },
+	{ "PrecedesSlantEqual", 0x8000227c00000000ULL },
+	{ "PrecedesTilde", 0x8000227e00000000ULL },
+	{ "Prime", 0x8000203300000000ULL },
+	{ "Product", 0x8000220f00000000ULL },
+	{ "Proportion", 0x8000223700000000ULL },
+	{ "Proportional", 0x8000221d00000000ULL },
+	{ "Pscr", 0x8001d4ab00000000ULL },
+	{ "Psi", 0x800003a800000000ULL },
+	{ "QUOT", 0x0000002200000000ULL },
+	{ "Qfr", 0x8001d51400000000ULL },
+	{ "Qopf", 0x8000211a00000000ULL },
+	{ "Qscr", 0x8001d4ac00000000ULL },
+	{ "RBarr", 0x8000291000000000ULL },
+	{ "REG", 0x000000ae00000000ULL },
+	{ "Racute", 0x8000015400000000ULL },
+	{ "Rang", 0x800027eb00000000ULL },
+	{ "Rarr", 0x800021a000000000ULL },
+	{ "Rarrtl", 0x8000291600000000ULL },
+	{ "Rcaron", 0x8000015800000000ULL },
+	{ "Rcedil", 0x8000015600000000ULL },
+	{ "Rcy", 0x8000042000000000ULL },
+	{ "Re", 0x8000211c00000000ULL },
+	{ "ReverseElement", 0x8000220b00000000ULL },
+	{ "ReverseEquilibrium", 0x800021cb00000000ULL },
+	{ "ReverseUpEquilibrium", 0x8000296f00000000ULL },
+	{ "Rfr", 0x8000211c00000000ULL },
+	{ "Rho", 0x800003a100000000ULL },
+	{ "RightAngleBracket", 0x800027e900000000ULL },
+	{ "RightArrow", 0x8000219200000000ULL },
+	{ "RightArrowBar", 0x800021e500000000ULL },
+	{ "RightArrowLeftArrow", 0x800021c400000000ULL },
+	{ "RightCeiling", 0x8000230900000000ULL },
+	{ "RightDoubleBracket", 0x800027e700000000ULL },
+	{ "RightDownTeeVector", 0x8000295d00000000ULL },
+	{ "RightDownVector", 0x800021c200000000ULL },
+	{ "RightDownVectorBar", 0x8000295500000000ULL },
+	{ "RightFloor", 0x8000230b00000000ULL },
+	{ "RightTee", 0x800022a200000000ULL },
+	{ "RightTeeArrow", 0x800021a600000000ULL },
+	{ "RightTeeVector", 0x8000295b00000000ULL },
+	{ "RightTriangle", 0x800022b300000000ULL },
+	{ "RightTriangleBar", 0x800029d000000000ULL },
+	{ "RightTriangleEqual", 0x800022b500000000ULL },
+	{ "RightUpDownVector", 0x8000294f00000000ULL },
+	{ "RightUpTeeVector", 0x8000295c00000000ULL },
+	{ "RightUpVector", 0x800021be00000000ULL },
+	{ "RightUpVectorBar", 0x8000295400000000ULL },
+	{ "RightVector", 0x800021c000000000ULL },
+	{ "RightVectorBar", 0x8000295300000000ULL },
+	{ "Rightarrow", 0x800021d200000000ULL },
+	{ "Ropf", 0x8000211d00000000ULL },
+	{ "RoundImplies", 0x8000297000000000ULL },
+	{ "Rrightarrow", 0x800021db00000000ULL },
+	{ "Rscr", 0x8000211b00000000ULL },
+	{ "Rsh", 0x800021b100000000ULL },
+	{ "RuleDelayed", 0x800029f400000000ULL },
+	{ "SHCHcy", 0x8000042900000000ULL },
+	{ "SHcy", 0x8000042800000000ULL },
+	{ "SOFTcy", 0x8000042c00000000ULL },
+	{ "Sacute", 0x8000015a00000000ULL },
+	{ "Sc", 0x80002abc00000000ULL },
+	{ "Scaron", 0x8000016000000000ULL },
+	{ "Scedil", 0x8000015e00000000ULL },
+	{ "Scirc", 0x8000015c00000000ULL },
+	{ "Scy", 0x8000042100000000ULL },
+	{ "Sfr", 0x8001d51600000000ULL },
+	{ "ShortDownArrow", 0x8000219300000000ULL },
+	{ "ShortLeftArrow", 0x8000219000000000ULL },
+	{ "ShortRightArrow", 0x8000219200000000ULL },
+	{ "ShortUpArrow", 0x8000219100000000ULL },
+	{ "Sigma", 0x800003a300000000ULL },
+	{ "SmallCircle", 0x8000221800000000ULL },
+	{ "Sopf", 0x8001d54a00000000ULL },
+	{ "Sqrt", 0x8000221a00000000ULL },
+	{ "Square", 0x800025a100000000ULL },
+	{ "SquareIntersection", 0x8000229300000000ULL },
+	{ "SquareSubset", 0x8000228f00000000ULL },
+	{ "SquareSubsetEqual", 0x8000229100000000ULL },
+	{ "SquareSuperset", 0x8000229000000000ULL },
+	{ "SquareSupersetEqual", 0x8000229200000000ULL },
+	{ "SquareUnion", 0x8000229400000000ULL },
+	{ "Sscr", 0x8001d4ae00000000ULL },
+	{ "Star", 0x800022c600000000ULL },
+	{ "Sub", 0x800022d000000000ULL },
+	{ "Subset", 0x800022d000000000ULL },
+	{ "SubsetEqual", 0x8000228600000000ULL },
+	{ "Succeeds", 0x8000227b00000000ULL },
+	{ "SucceedsEqual", 0x80002ab000000000ULL },
+	{ "SucceedsSlantEqual", 0x8000227d00000000ULL },
+	{ "SucceedsTilde", 0x8000227f00000000ULL },
+	{ "SuchThat", 0x8000220b00000000ULL },
+	{ "Sum", 0x8000221100000000ULL },
+	{ "Sup", 0x800022d100000000ULL },
+	{ "Superset", 0x8000228300000000ULL },
+	{ "SupersetEqual", 0x8000228700000000ULL },
+	{ "Supset", 0x800022d100000000ULL },
+	{ "THORN", 0x000000de00000000ULL },
+	{ "TRADE", 0x8000212200000000ULL },
+	{ "TSHcy", 0x8000040b00000000ULL },
+	{ "TScy", 0x8000042600000000ULL },
+	{ "Tab", 0x8000000900000000ULL },
+	{ "Tau", 0x800003a400000000ULL },
+	{ "Tcaron", 0x8000016400000000ULL },
+	{ "Tcedil", 0x8000016200000000ULL },
+	{ "Tcy", 0x8000042200000000ULL },
+	{ "Tfr", 0x8001d51700000000ULL },
+	{ "Therefore", 0x8000223400000000ULL },
+	{ "Theta", 0x8000039800000000ULL },
+	{ "ThickSpace", 0x8000205f0000200aULL },
+	{ "ThinSpace", 0x8000200900000000ULL },
+	{ "Tilde", 0x8000223c00000000ULL },
+	{ "TildeEqual", 0x8000224300000000ULL },
+	{ "TildeFullEqual", 0x8000224500000000ULL },
+	{ "TildeTilde", 0x8000224800000000ULL },
+	{ "Topf", 0x8001d54b00000000ULL },
+	{ "TripleDot", 0x800020db00000000ULL },
+	{ "Tscr", 0x8001d4af00000000ULL },
+	{ "Tstrok", 0x8000016600000000ULL },
+	{ "Uacute", 0x000000da00000000ULL },
+	{ "Uarr", 0x8000219f00000000ULL },
+	{ "Uarrocir", 0x8000294900000000ULL },
+	{ "Ubrcy", 0x8000040e00000000ULL },
+	{ "Ubreve", 0x8000016c00000000ULL },
+	{ "Ucirc", 0x000000db00000000ULL },
+	{ "Ucy", 0x8000042300000000ULL },
+	{ "Udblac", 0x8000017000000000ULL },
+	{ "Ufr", 0x8001d51800000000ULL },
+	{ "Ugrave", 0x000000d900000000ULL },
+	{ "Umacr", 0x8000016a00000000ULL },
+	{ "UnderBar", 0x8000005f00000000ULL },
+	{ "UnderBrace", 0x800023df00000000ULL },
+	{ "UnderBracket", 0x800023b500000000ULL },
+	{ "UnderParenthesis", 0x800023dd00000000ULL },
+	{ "Union", 0x800022c300000000ULL },
+	{ "UnionPlus", 0x8000228e00000000ULL },
+	{ "Uogon", 0x8000017200000000ULL },
+	{ "Uopf", 0x8001d54c00000000ULL },
+	{ "UpArrow", 0x8000219100000000ULL },
+	{ "UpArrowBar", 0x8000291200000000ULL },
+	{ "UpArrowDownArrow", 0x800021c500000000ULL },
+	{ "UpDownArrow", 0x8000219500000000ULL },
+	{ "UpEquilibrium", 0x8000296e00000000ULL },
+	{ "UpTee", 0x800022a500000000ULL },
+	{ "UpTeeArrow", 0x800021a500000000ULL },
+	{ "Uparrow", 0x800021d100000000ULL },
+	{ "Updownarrow", 0x800021d500000000ULL },
+	{ "UpperLeftArrow", 0x8000219600000000ULL },
+	{ "UpperRightArrow", 0x8000219700000000ULL },
+	{ "Upsi", 0x800003d200000000ULL },
+	{ "Upsilon", 0x800003a500000000ULL },
+	{ "Uring", 0x8000016e00000000ULL },
+	{ "Uscr", 0x8001d4b000000000ULL },
+	{ "Utilde", 0x8000016800000000ULL },
+	{ "Uuml", 0x000000dc00000000ULL },
+	{ "VDash", 0x800022ab00000000ULL },
+	{ "Vbar", 0x80002aeb00000000ULL },
+	{ "Vcy", 0x8000041200000000ULL },
+	{ "Vdash", 0x800022a900000000ULL },
+	{ "Vdashl", 0x80002ae600000000ULL },
+	{ "Vee", 0x800022c100000000ULL },
+	{ "Verbar", 0x8000201600000000ULL },
+	{ "Vert", 0x8000201600000000ULL },
+	{ "VerticalBar", 0x8000222300000000ULL },
+	{ "VerticalLine", 0x8000007c00000000ULL },
+	{ "VerticalSeparator", 0x8000275800000000ULL },
+	{ "VerticalTilde", 0x8000224000000000ULL },
+	{ "VeryThinSpace", 0x8000200a00000000ULL },
+	{ "Vfr", 0x8001d51900000000ULL },
+	{ "Vopf", 0x8001d54d00000000ULL },
+	{ "Vscr", 0x8001d4b100000000ULL },
+	{ "Vvdash", 0x800022aa00000000ULL },
+	{ "Wcirc", 0x8000017400000000ULL },
+	{ "Wedge", 0x800022c000000000ULL },
+	{ "Wfr", 0x8001d51a00000000ULL },
+	{ "Wopf", 0x8001d54e00000000ULL },
+	{ "Wscr", 0x8001d4b200000000ULL },
+	{ "Xfr", 0x8001d51b00000000ULL },
+	{ "Xi", 0x8000039e00000000ULL },
+	{ "Xopf", 0x8001d54f00000000ULL },
+	{ "Xscr", 0x8001d4b300000000ULL },
+	{ "YAcy", 0x8000042f00000000ULL },
+	{ "YIcy", 0x8000040700000000ULL },
+	{ "YUcy", 0x8000042e00000000ULL },
+	{ "Yacute", 0x000000dd00000000ULL },
+	{ "Ycirc", 0x8000017600000000ULL },
+	{ "Ycy", 0x8000042b00000000ULL },
+	{ "Yfr", 0x8001d51c00000000ULL },
+	{ "Yopf", 0x8001d55000000000ULL },
+	{ "Yscr", 0x8001d4b400000000ULL },
+	{ "Yuml", 0x8000017800000000ULL },
+	{ "ZHcy", 0x8000041600000000ULL },
+	{ "Zacute", 0x8000017900000000ULL },
+	{ "Zcaron", 0x8000017d00000000ULL },
+	{ "Zcy", 0x8000041700000000ULL },
+	{ "Zdot", 0x8000017b00000000ULL },
+	{ "ZeroWidthSpace", 0x8000200b00000000ULL },
+	{ "Zeta", 0x8000039600000000ULL },
+	{ "Zfr", 0x8000212800000000ULL },
+	{ "Zopf", 0x8000212400000000ULL },
+	{ "Zscr", 0x8001d4b500000000ULL },
+	{ "aacute", 0x000000e100000000ULL },
+	{ "abreve", 0x8000010300000000ULL },
+	{ "ac", 0x8000223e00000000ULL },
+	{ "acE", 0x8000223e00000333ULL },
+	{ "acd", 0x8000223f00000000ULL },
+	{ "acirc", 0x000000e200000000ULL },
+	{ "acute", 0x000000b400000000ULL },
+	{ "acy", 0x8000043000000000ULL },
+	{ "aelig", 0x000000e600000000ULL },
+	{ "af", 0x8000206100000000ULL },
+	{ "afr", 0x8001d51e00000000ULL },
+	{ "agrave", 0x000000e000000000ULL },
+	{ "alefsym", 0x8000213500000000ULL },
+	{ "aleph", 0x8000213500000000ULL },
+	{ "alpha", 0x800003b100000000ULL },
+	{ "amacr", 0x8000010100000000ULL },
+	{ "amalg", 0x80002a3f00000000ULL },
+	{ "amp", 0x0000002600000000ULL },
+	{ "and", 0x8000222700000000ULL },
+	{ "andand", 0x80002a5500000000ULL },
+	{ "andd", 0x80002a5c00000000ULL },
+	{ "andslope", 0x80002a5800000000ULL },
+	{ "andv", 0x80002a5a00000000ULL },
+	{ "ang", 0x8000222000000000ULL },
+	{ "ange", 0x800029a400000000ULL },
+	{ "angle", 0x8000222000000000ULL },
+	{ "angmsd", 0x8000222100000000ULL },
+	{ "angmsdaa", 0x800029a800000000ULL },
+	{ "angmsdab", 0x800029a900000000ULL },
+	{ "angmsdac", 0x800029aa00000000ULL },
+	{ "angmsdad", 0x800029ab00000000ULL },
+	{ "angmsdae", 0x800029ac00000000ULL },
+	{ "angmsdaf", 0x800029ad00000000ULL },
+	{ "angmsdag", 0x800029ae00000000ULL },
+	{ "angmsdah", 0x800029af00000000ULL },
+	{ "angrt", 0x8000221f00000000ULL },
+	{ "angrtvb", 0x800022be00000000ULL },
+	{ "angrtvbd", 0x8000299d00000000ULL },
+	{ "angsph", 0x8000222200000000ULL },
+	{ "angst", 0x800000c500000000ULL },
+	{ "angzarr", 0x8000237c00000000ULL },
+	{ "aogon", 0x8000010500000000ULL },
+	{ "aopf", 0x8001d55200000000ULL },
+	{ "ap", 0x8000224800000000ULL },
+	{ "apE", 0x80002a7000000000ULL },
+	{ "apacir", 0x80002a6f00000000ULL },
+	{ "ape", 0x8000224a00000000ULL },
+	{ "apid", 0x8000224b00000000ULL },
+	{ "apos", 0x8000002700000000ULL },
+	{ "approx", 0x8000224800000000ULL },
+	{ "approxeq", 0x8000224a00000000ULL },
+	{ "aring", 0x000000e500000000ULL },
+	{ "ascr", 0x8001d4b600000000ULL },
+	{ "ast", 0x8000002a00000000ULL },
+	{ "asymp", 0x8000224800000000ULL },
+	{ "asympeq", 0x8000224d00000000ULL },
+	{ "atilde", 0x000000e300000000ULL },
+	{ "auml", 0x000000e400000000ULL },
+	{ "awconint", 0x8000223300000000ULL },
+	{ "awint", 0x80002a1100000000ULL },
+	{ "bNot", 0x80002aed00000000ULL },
+	{ "backcong", 0x8000224c00000000ULL },
+	{ "backepsilon", 0x800003f600000000ULL },
+	{ "backprime", 0x8000203500000000ULL },
+	{ "backsim", 0x8000223d00000000ULL },
+	{ "backsimeq", 0x800022cd00000000ULL },
+	{ "barvee", 0x800022bd00000000ULL },
+	{ "barwed", 0x8000230500000000ULL },
+	{ "barwedge", 0x8000230500000000ULL },
+	{ "bbrk", 0x800023b500000000ULL },
+	{ "bbrktbrk", 0x800023b600000000ULL },
+	{ "bcong", 0x8000224c00000000ULL },
+	{ "bcy", 0x8000043100000000ULL },
+	{ "bdquo", 0x8000201e00000000ULL },
+	{ "becaus", 0x8000223500000000ULL },
+	{ "because", 0x8000223500000000ULL },
+	{ "bemptyv", 0x800029b000000000ULL },
+	{ "bepsi", 0x800003f600000000ULL },
+	{ "bernou", 0x8000212c00000000ULL },
+	{ "beta", 0x800003b200000000ULL },
+	{ "beth", 0x8000213600000000ULL },
+	{ "between", 0x8000226c00000000ULL },
+	{ "bfr", 0x8001d51f00000000ULL },
+	{ "bigcap", 0x800022c200000000ULL },
+	{ "bigcirc", 0x800025ef00000000ULL },
+	{ "bigcup", 0x800022c300000000ULL },
+	{ "bigodot", 0x80002a0000000000ULL },
+	{ "bigoplus", 0x80002a0100000000ULL },
+	{ "bigotimes", 0x80002a0200000000ULL },
+	{ "bigsqcup", 0x80002a0600000000ULL },
+	{ "bigstar", 0x8000260500000000ULL },
+	{ "bigtriangledown", 0x800025bd00000000ULL },
+	{ "bigtriangleup", 0x800025b300000000ULL },
+	{ "biguplus", 0x80002a0400000000ULL },
+	{ "bigvee", 0x800022c100000000ULL },
+	{ "bigwedge", 0x800022c000000000ULL },
+	{ "bkarow", 0x8000290d00000000ULL },
+	{ "blacklozenge", 0x800029eb00000000ULL },
+	{ "blacksquare", 0x800025aa00000000ULL },
+	{ "blacktriangle", 0x800025b400000000ULL },
+	{ "blacktriangledown", 0x800025be00000000ULL },
+	{ "blacktriangleleft", 0x800025c200000000ULL },
+	{ "blacktriangleright", 0x800025b800000000ULL },
+	{ "blank", 0x8000242300000000ULL },
+	{ "blk12", 0x8000259200000000ULL },
+	{ "blk14", 0x8000259100000000ULL },
+	{ "blk34", 0x8000259300000000ULL },
+	{ "block", 0x8000258800000000ULL },
+	{ "bne", 0x8000003d000020e5ULL },
+	{ "bnequiv", 0x80002261000020e5ULL },
+	{ "bnot", 0x8000231000000000ULL },
+	{ "bopf", 0x8001d55300000000ULL },
+	{ "bot", 0x800022a500000000ULL },
+	{ "bottom", 0x800022a500000000ULL },
+	{ "bowtie", 0x800022c800000000ULL },
+	{ "boxDL", 0x8000255700000000ULL },
+	{ "boxDR", 0x8000255400000000ULL },
+	{ "boxDl", 0x8000255600000000ULL },
+	{ "boxDr", 0x8000255300000000ULL },
+	{ "boxH", 0x8000255000000000ULL },
+	{ "boxHD", 0x8000256600000000ULL },
+	{ "boxHU", 0x8000256900000000ULL },
+	{ "boxHd", 0x8000256400000000ULL },
+	{ "boxHu", 0x8000256700000000ULL },
+	{ "boxUL", 0x8000255d00000000ULL },
+	{ "boxUR", 0x8000255a00000000ULL },
+	{ "boxUl", 0x8000255c00000000ULL },
+	{ "boxUr", 0x8000255900000000ULL },
+	{ "boxV", 0x8000255100000000ULL },
+	{ "boxVH", 0x8000256c00000000ULL },
+	{ "boxVL", 0x8000256300000000ULL },
+	{ "boxVR", 0x8000256000000000ULL },
+	{ "boxVh", 0x8000256b00000000ULL },
+	{ "boxVl", 0x8000256200000000ULL },
+	{ "boxVr", 0x8000255f00000000ULL },
+	{ "boxbox", 0x800029c900000000ULL },
+	{ "boxdL", 0x8000255500000000ULL },
+	{ "boxdR", 0x8000255200000000ULL },
+	{ "boxdl", 0x8000251000000000ULL },
+	{ "boxdr", 0x8000250c00000000ULL },
+	{ "boxh", 0x8000250000000000ULL },
+	{ "boxhD", 0x8000256500000000ULL },
+	{ "boxhU", 0x8000256800000000ULL },
+	{ "boxhd", 0x8000252c00000000ULL },
+	{ "boxhu", 0x8000253400000000ULL },
+	{ "boxminus", 0x8000229f00000000ULL },
+	{ "boxplus", 0x8000229e00000000ULL },
+	{ "boxtimes", 0x800022a000000000ULL },
+	{ "boxuL", 0x8000255b00000000ULL },
+	{ "boxuR", 0x8000255800000000ULL },
+	{ "boxul", 0x8000251800000000ULL },
+	{ "boxur", 0x8000251400000000ULL },
+	{ "boxv", 0x8000250200000000ULL },
+	{ "boxvH", 0x8000256a00000000ULL },
+	{ "boxvL", 0x8000256100000000ULL },
+	{ "boxvR", 0x8000255e00000000ULL },
+	{ "boxvh", 0x8000253c00000000ULL },
+	{ "boxvl", 0x8000252400000000ULL },
+	{ "boxvr", 0x8000251c00000000ULL },
+	{ "bprime", 0x8000203500000000ULL },
+	{ "breve", 0x800002d800000000ULL },
+	{ "brvbar", 0x000000a600000000ULL },
+	{ "bscr", 0x8001d4b700000000ULL },
+	{ "bsemi", 0x8000204f00000000ULL },
+	{ "bsim", 0x8000223d00000000ULL },
+	{ "bsime", 0x800022cd00000000ULL },
+	{ "bsol", 0x8000005c00000000ULL },
+	{ "bsolb", 0x800029c500000000ULL },
+	{ "bsolhsub", 0x800027c800000000ULL },
+	{ "bull", 0x8000202200000000ULL },
+	{ "bullet", 0x8000202200000000ULL },
+	{ "bump", 0x8000224e00000000ULL },
+	{ "bumpE", 0x80002aae00000000ULL },
+	{ "bumpe", 0x8000224f00000000ULL },
+	{ "bumpeq", 0x8000224f00000000ULL },
+	{ "cacute", 0x8000010700000000ULL },
+	{ "cap", 0x8000222900000000ULL },
+	{ "capand", 0x80002a4400000000ULL },
+	{ "capbrcup", 0x80002a4900000000ULL },
+	{ "capcap", 0x80002a4b00000000ULL },
+	{ "capcup", 0x80002a4700000000ULL },
+	{ "capdot", 0x80002a4000000000ULL },
+	{ "caps", 0x800022290000fe00ULL },
+	{ "caret", 0x8000204100000000ULL },
+	{ "caron", 0x800002c700000000ULL },
+	{ "ccaps", 0x80002a4d00000000ULL },
+	{ "ccaron", 0x8000010d00000000ULL },
+	{ "ccedil", 0x000000e700000000ULL },
+	{ "ccirc", 0x8000010900000000ULL },
+	{ "ccups", 0x80002a4c00000000ULL },
+	{ "ccupssm", 0x80002a5000000000ULL },
+	{ "cdot", 0x8000010b00000000ULL },
+	{ "cedil", 0x000000b800000000ULL },
+	{ "cemptyv", 0x800029b200000000ULL },
+	{ "cent", 0x000000a200000000ULL },
+	{ "centerdot", 0x800000b700000000ULL },
+	{ "cfr", 0x8001d52000000000ULL },
+	{ "chcy", 0x8000044700000000ULL },
+	{ "check", 0x8000271300000000ULL },
+	{ "checkmark", 0x8000271300000000ULL },
+	{ "chi", 0x800003c700000000ULL },
+	{ "cir", 0x800025cb00000000ULL },
+	{ "cirE", 0x800029c300000000ULL },
+	{ "circ", 0x800002c600000000ULL },
+	{ "circeq", 0x8000225700000000ULL },
+	{ "circlearrowleft", 0x800021ba00000000ULL },
+	{ "circlearrowright", 0x800021bb00000000ULL },
+	{ "circledR", 0x800000ae00000000ULL },
+	{ "circledS", 0x800024c800000000ULL },
+	{ "circledast", 0x8000229b00000000ULL },
+	{ "circledcirc", 0x8000229a00000000ULL },
+	{ "circleddash", 0x8000229d00000000ULL },
+	{ "cire", 0x8000225700000000ULL },
+	{ "cirfnint", 0x80002a1000000000ULL },
+	{ "cirmid", 0x80002aef00000000ULL },
+	{ "cirscir", 0x800029c200000000ULL },
+	{ "clubs", 0x8000266300000000ULL },
+	{ "clubsuit", 0x8000266300000000ULL },
+	{ "colon", 0x8000003a00000000ULL },
+	{ "colone", 0x8000225400000000ULL },
+	{ "coloneq", 0x8000225400000000ULL },
+	{ "comma", 0x8000002c00000000ULL },
+	{ "commat", 0x8000004000000000ULL },
+	{ "comp", 0x8000220100000000ULL },
+	{ "compfn", 0x8000221800000000ULL },
+	{ "complement", 0x8000220100000000ULL },
+	{ "complexes", 0x8000210200000000ULL },
+	{ "cong", 0x8000224500000000ULL },
+	{ "congdot", 0x80002a6d00000000ULL },
+	{ "conint", 0x8000222e00000000ULL },
+	{ "copf", 0x8001d55400000000ULL },
+	{ "coprod", 0x8000221000000000ULL },
+	{ "copy", 0x000000a900000000ULL },
+	{ "copysr", 0x8000211700000000ULL },
+	{ "crarr", 0x800021b500000000ULL },
+	{ "cross", 0x8000271700000000ULL },
+	{ "cscr", 0x8001d4b800000000ULL },
+	{ "csub", 0x80002acf00000000ULL },
+	{ "csube", 0x80002ad100000000ULL },
+	{ "csup", 0x80002ad000000000ULL },
+	{ "csupe", 0x80002ad200000000ULL },
+	{ "ctdot", 0x800022ef00000000ULL },
+	{ "cudarrl", 0x8000293800000000ULL },
+	{ "cudarrr", 0x8000293500000000ULL },
+	{ "cuepr", 0x800022de00000000ULL },
+	{ "cuesc", 0x800022df00000000ULL },
+	{ "cularr", 0x800021b600000000ULL },
+	{ "cularrp", 0x8000293d00000000ULL },
+	{ "cup", 0x8000222a00000000ULL },
+	{ "cupbrcap", 0x80002a4800000000ULL },
+	{ "cupcap", 0x80002a4600000000ULL },
+	{ "cupcup", 0x80002a4a00000000ULL },
+	{ "cupdot", 0x8000228d00000000ULL },
+	{ "cupor", 0x80002a4500000000ULL },
+	{ "cups", 0x8000222a0000fe00ULL },
+	{ "curarr", 0x800021b700000000ULL },
+	{ "curarrm", 0x8000293c00000000ULL },
+	{ "curlyeqprec", 0x800022de00000000ULL },
+	{ "curlyeqsucc", 0x800022df00000000ULL },
+	{ "curlyvee", 0x800022ce00000000ULL },
+	{ "curlywedge", 0x800022cf00000000ULL },
+	{ "curren", 0x000000a400000000ULL },
+	{ "curvearrowleft", 0x800021b600000000ULL },
+	{ "curvearrowright", 0x800021b700000000ULL },
+	{ "cuvee", 0x800022ce00000000ULL },
+	{ "cuwed", 0x800022cf00000000ULL },
+	{ "cwconint", 0x8000223200000000ULL },
+	{ "cwint", 0x8000223100000000ULL },
+	{ "cylcty", 0x8000232d00000000ULL },
+	{ "dArr", 0x800021d300000000ULL },
+	{ "dHar", 0x8000296500000000ULL },
+	{ "dagger", 0x8000202000000000ULL },
+	{ "daleth", 0x8000213800000000ULL },
+	{ "darr", 0x8000219300000000ULL },
+	{ "dash", 0x8000201000000000ULL },
+	{ "dashv", 0x800022a300000000ULL },
+	{ "dbkarow", 0x8000290f00000000ULL },
+	{ "dblac", 0x800002dd00000000ULL },
+	{ "dcaron", 0x8000010f00000000ULL },
+	{ "dcy", 0x8000043400000000ULL },
+	{ "dd", 0x8000214600000000ULL },
+	{ "ddagger", 0x8000202100000000ULL },
+	{ "ddarr", 0x800021ca00000000ULL },
+	{ "ddotseq", 0x80002a7700000000ULL },
+	{ "deg", 0x000000b000000000ULL },
+	{ "delta", 0x800003b400000000ULL },
+	{ "demptyv", 0x800029b100000000ULL },
+	{ "dfisht", 0x8000297f00000000ULL },
+	{ "dfr", 0x8001d52100000000ULL },
+	{ "dharl", 0x800021c300000000ULL },
+	{ "dharr", 0x800021c200000000ULL },
+	{ "diam", 0x800022c400000000ULL },
+	{ "diamond", 0x800022c400000000ULL },
+	{ "diamondsuit", 0x8000266600000000ULL },
+	{ "diams", 0x8000266600000000ULL },
+	{ "die", 0x800000a800000000ULL },
+	{ "digamma", 0x800003dd00000000ULL },
+	{ "disin", 0x800022f200000000ULL },
+	{ "div", 0x800000f700000000ULL },
+	{ "divide", 0x000000f700000000ULL },
+	{ "divideontimes", 0x800022c700000000ULL },
+	{ "divonx", 0x800022c700000000ULL },
+	{ "djcy", 0x8000045200000000ULL },
+	{ "dlcorn", 0x8000231e00000000ULL },
+	{ "dlcrop", 0x8000230d00000000ULL },
+	{ "dollar", 0x8000002400000000ULL },
+	{ "dopf", 0x8001d55500000000ULL },
+	{ "dot", 0x800002d900000000ULL },
+	{ "doteq", 0x8000225000000000ULL },
+	{ "doteqdot", 0x8000225100000000ULL },
+	{ "dotminus", 0x8000223800000000ULL },
+	{ "dotplus", 0x8000221400000000ULL },
+	{ "dotsquare", 0x800022a100000000ULL },
+	{ "doublebarwedge", 0x8000230600000000ULL },
+	{ "downarrow", 0x8000219300000000ULL },
+	{ "downdownarrows", 0x800021ca00000000ULL },
+	{ "downharpoonleft", 0x800021c300000000ULL },
+	{ "downharpoonright", 0x800021c200000000ULL },
+	{ "drbkarow", 0x8000291000000000ULL },
+	{ "drcorn", 0x8000231f00000000ULL },
+	{ "drcrop", 0x8000230c00000000ULL },
+	{ "dscr", 0x8001d4b900000000ULL },
+	{ "dscy", 0x8000045500000000ULL },
+	{ "dsol", 0x800029f600000000ULL },
+	{ "dstrok", 0x8000011100000000ULL },
+	{ "dtdot", 0x800022f100000000ULL },
+	{ "dtri", 0x800025bf00000000ULL },
+	{ "dtrif", 0x800025be00000000ULL },
+	{ "duarr", 0x800021f500000000ULL },
+	{ "duhar", 0x8000296f00000000ULL },
+	{ "dwangle", 0x800029a600000000ULL },
+	{ "dzcy", 0x8000045f00000000ULL },
+	{ "dzigrarr", 0x800027ff00000000ULL },
+	{ "eDDot", 0x80002a7700000000ULL },
+	{ "eDot", 0x8000225100000000ULL },
+	{ "eacute", 0x000000e900000000ULL },
+	{ "easter", 0x80002a6e00000000ULL },
+	{ "ecaron", 0x8000011b00000000ULL },
+	{ "ecir", 0x8000225600000000ULL },
+	{ "ecirc", 0x000000ea00000000ULL },
+	{ "ecolon", 0x8000225500000000ULL },
+	{ "ecy", 0x8000044d00000000ULL },
+	{ "edot", 0x8000011700000000ULL },
+	{ "ee", 0x8000214700000000ULL },
+	{ "efDot", 0x8000225200000000ULL },
+	{ "efr", 0x8001d52200000000ULL },
+	{ "eg", 0x80002a9a00000000ULL },
+	{ "egrave", 0x000000e800000000ULL },
+	{ "egs", 0x80002a9600000000ULL },
+	{ "egsdot", 0x80002a9800000000ULL },
+	{ "el", 0x80002a9900000000ULL },
+	{ "elinters", 0x800023e700000000ULL },
+	{ "ell", 0x8000211300000000ULL },
+	{ "els", 0x80002a9500000000ULL },
+	{ "elsdot", 0x80002a9700000000ULL },
+	{ "emacr", 0x8000011300000000ULL },
+	{ "empty", 0x8000220500000000ULL },
+	{ "emptyset", 0x8000220500000000ULL },
+	{ "emptyv", 0x8000220500000000ULL },
+	{ "emsp", 0x8000200300000000ULL },
+	{ "emsp13", 0x8000200400000000ULL },
+	{ "emsp14", 0x8000200500000000ULL },
+	{ "eng", 0x8000014b00000000ULL },
+	{ "ensp", 0x8000200200000000ULL },
+	{ "eogon", 0x8000011900000000ULL },
+	{ "eopf", 0x8001d55600000000ULL },
+	{ "epar", 0x800022d500000000ULL },
+	{ "eparsl", 0x800029e300000000ULL },
+	{ "eplus", 0x80002a7100000000ULL },
+	{ "epsi", 0x800003b500000000ULL },
+	{ "epsilon", 0x800003b500000000ULL },
+	{ "epsiv", 0x800003f500000000ULL },
+	{ "eqcirc", 0x8000225600000000ULL },
+	{ "eqcolon", 0x8000225500000000ULL },
+	{ "eqsim", 0x8000224200000000ULL },
+	{ "eqslantgtr", 0x80002a9600000000ULL },
+	{ "eqslantless", 0x80002a9500000000ULL },
+	{ "equals", 0x8000003d00000000ULL },
+	{ "equest", 0x8000225f00000000ULL },
+	{ "equiv", 0x8000226100000000ULL },
+	{ "equivDD", 0x80002a7800000000ULL },
+	{ "eqvparsl", 0x800029e500000000ULL },
+	{ "erDot", 0x8000225300000000ULL },
+	{ "erarr", 0x8000297100000000ULL },
+	{ "escr", 0x8000212f00000000ULL },
+	{ "esdot", 0x8000225000000000ULL },
+	{ "esim", 0x8000224200000000ULL },
+	{ "eta", 0x800003b700000000ULL },
+	{ "eth", 0x000000f000000000ULL },
+	{ "euml", 0x000000eb00000000ULL },
+	{ "euro", 0x800020ac00000000ULL },
+	{ "excl", 0x8000002100000000ULL },
+	{ "exist", 0x8000220300000000ULL },
+	{ "expectation", 0x8000213000000000ULL },
+	{ "exponentiale", 0x8000214700000000ULL },
+	{ "fallingdotseq", 0x8000225200000000ULL },
+	{ "fcy", 0x8000044400000000ULL },
+	{ "female", 0x8000264000000000ULL },
+	{ "ffilig", 0x8000fb0300000000ULL },
+	{ "fflig", 0x8000fb0000000000ULL },
+	{ "ffllig", 0x8000fb0400000000ULL },
+	{ "ffr", 0x8001d52300000000ULL },
+	{ "filig", 0x8000fb0100000000ULL },
+	{ "fjlig", 0x800000660000006aULL },
+	{ "flat", 0x8000266d00000000ULL },
+	{ "fllig", 0x8000fb0200000000ULL },
+	{ "fltns", 0x800025b100000000ULL },
+	{ "fnof", 0x8000019200000000ULL },
+	{ "fopf", 0x8001d55700000000ULL },
+	{ "forall", 0x8000220000000000ULL },
+	{ "fork", 0x800022d400000000ULL },
+	{ "forkv", 0x80002ad900000000ULL },
+	{ "fpartint", 0x80002a0d00000000ULL },
+	{ "frac12", 0x000000bd00000000ULL },
+	{ "frac13", 0x8000215300000000ULL },
+	{ "frac14", 0x000000bc00000000ULL },
+	{ "frac15", 0x8000215500000000ULL },
+	{ "frac16", 0x8000215900000000ULL },
+	{ "frac18", 0x8000215b00000000ULL },
+	{ "frac23", 0x8000215400000000ULL },
+	{ "frac25", 0x8000215600000000ULL },
+	{ "frac34", 0x000000be00000000ULL },
+	{ "frac35", 0x8000215700000000ULL },
+	{ "frac38", 0x8000215c00000000ULL },
+	{ "frac45", 0x8000215800000000ULL },
+	{ "frac56", 0x8000215a00000000ULL },
+	{ "frac58", 0x8000215d00000000ULL },
+	{ "frac78", 0x8000215e00000000ULL },
+	{ "frasl", 0x8000204400000000ULL },
+	{ "frown", 0x8000232200000000ULL },
+	{ "fscr", 0x8001d4bb00000000ULL },
+	{ "gE", 0x8000226700000000ULL },
+	{ "gEl", 0x80002a8c00000000ULL },
+	{ "gacute", 0x800001f500000000ULL },
+	{ "gamma", 0x800003b300000000ULL },
+	{ "gammad", 0x800003dd00000000ULL },
+	{ "gap", 0x80002a8600000000ULL },
+	{ "gbreve", 0x8000011f00000000ULL },
+	{ "gcirc", 0x8000011d00000000ULL },
+	{ "gcy", 0x8000043300000000ULL },
+	{ "gdot", 0x8000012100000000ULL },
+	{ "ge", 0x8000226500000000ULL },
+	{ "gel", 0x800022db00000000ULL },
+	{ "geq", 0x8000226500000000ULL },
+	{ "geqq", 0x8000226700000000ULL },
+	{ "geqslant", 0x80002a7e00000000ULL },
+	{ "ges", 0x80002a7e00000000ULL },
+	{ "gescc", 0x80002aa900000000ULL },
+	{ "gesdot", 0x80002a8000000000ULL },
+	{ "gesdoto", 0x80002a8200000000ULL },
+	{ "gesdotol", 0x80002a8400000000ULL },
+	{ "gesl", 0x800022db0000fe00ULL },
+	{ "gesles", 0x80002a9400000000ULL },
+	{ "gfr", 0x8001d52400000000ULL },
+	{ "gg", 0x8000226b00000000ULL },
+	{ "ggg", 0x800022d900000000ULL },
+	{ "gimel", 0x8000213700000000ULL },
+	{ "gjcy", 0x8000045300000000ULL },
+	{ "gl", 0x8000227700000000ULL },
+	{ "glE", 0x80002a9200000000ULL },
+	{ "gla", 0x80002aa500000000ULL },
+	{ "glj", 0x80002aa400000000ULL },
+	{ "gnE", 0x8000226900000000ULL },
+	{ "gnap", 0x80002a8a00000000ULL },
+	{ "gnapprox", 0x80002a8a00000000ULL },
+	{ "gne", 0x80002a8800000000ULL },
+	{ "gneq", 0x80002a8800000000ULL },
+	{ "gneqq", 0x8000226900000000ULL },
+	{ "gnsim", 0x800022e700000000ULL },
+	{ "gopf", 0x8001d55800000000ULL },
+	{ "grave", 0x8000006000000000ULL },
+	{ "gscr", 0x8000210a00000000ULL },
+	{ "gsim", 0x8000227300000000ULL },
+	{ "gsime", 0x80002a8e00000000ULL },
+	{ "gsiml", 0x80002a9000000000ULL },
+	{ "gt", 0x0000003e00000000ULL },
+	{ "gtcc", 0x80002aa700000000ULL },
+	{ "gtcir", 0x80002a7a00000000ULL },
+	{ "gtdot", 0x800022d700000000ULL },
+	{ "gtlPar", 0x8000299500000000ULL },
+	{ "gtquest", 0x80002a7c00000000ULL },
+	{ "gtrapprox", 0x80002a8600000000ULL },
+	{ "gtrarr", 0x8000297800000000ULL },
+	{ "gtrdot", 0x800022d700000000ULL },
+	{ "gtreqless", 0x800022db00000000ULL },
+	{ "gtreqqless", 0x80002a8c00000000ULL },
+	{ "gtrless", 0x8000227700000000ULL },
+	{ "gtrsim", 0x8000227300000000ULL },
+	{ "gvertneqq", 0x800022690000fe00ULL },
+	{ "gvnE", 0x800022690000fe00ULL },
+	{ "hArr", 0x800021d400000000ULL },
+	{ "hairsp", 0x8000200a00000000ULL },
+	{ "half", 0x800000bd00000000ULL },
+	{ "hamilt", 0x8000210b00000000ULL },
+	{ "hardcy", 0x8000044a00000000ULL },
+	{ "harr", 0x8000219400000000ULL },
+	{ "harrcir", 0x8000294800000000ULL },
+	{ "harrw", 0x800021ad00000000ULL },
+	{ "hbar", 0x8000210f00000000ULL },
+	{ "hcirc", 0x8000012500000000ULL },
+	{ "hearts", 0x8000266500000000ULL },
+	{ "heartsuit", 0x8000266500000000ULL },
+	{ "hellip", 0x8000202600000000ULL },
+	{ "hercon", 0x800022b900000000ULL },
+	{ "hfr", 0x8001d52500000000ULL },
+	{ "hksearow", 0x8000292500000000ULL },
+	{ "hkswarow", 0x8000292600000000ULL },
+	{ "hoarr", 0x800021ff00000000ULL },
+	{ "homtht", 0x8000223b00000000ULL },
+	{ "hookleftarrow", 0x800021a900000000ULL },
+	{ "hookrightarrow", 0x800021aa00000000ULL },
+	{ "hopf", 0x8001d55900000000ULL },
+	{ "horbar", 0x8000201500000000ULL },
+	{ "hscr", 0x8001d4bd00000000ULL },
+	{ "hslash", 0x8000210f00000000ULL },
+	{ "hstrok", 0x8000012700000000ULL },
+	{ "hybull", 0x8000204300000000ULL },
+	{ "hyphen", 0x8000201000000000ULL },
+	{ "iacute", 0x000000ed00000000ULL },
+	{ "ic", 0x8000206300000000ULL },
+	{ "icirc", 0x000000ee00000000ULL },
+	{ "icy", 0x8000043800000000ULL },
+	{ "iecy", 0x8000043500000000ULL },
+	{ "iexcl", 0x000000a100000000ULL },
+	{ "iff", 0x800021d400000000ULL },
+	{ "ifr", 0x8001d52600000000ULL },
+	{ "igrave", 0x000000ec00000000ULL },
+	{ "ii", 0x8000214800000000ULL },
+	{ "iiiint", 0x80002a0c00000000ULL },
+	{ "iiint", 0x8000222d00000000ULL },
+	{ "iinfin", 0x800029dc00000000ULL },
+	{ "iiota", 0x8000212900000000ULL },
+	{ "ijlig", 0x8000013300000000ULL },
+	{ "imacr", 0x8000012b00000000ULL },
+	{ "image", 0x8000211100000000ULL },
+	{ "imagline", 0x8000211000000000ULL },
+	{ "imagpart", 0x8000211100000000ULL },
+	{ "imath", 0x8000013100000000ULL },
+	{ "imof", 0x800022b700000000ULL },
+	{ "imped", 0x800001b500000000ULL },
+	{ "in", 0x8000220800000000ULL },
+	{ "incare", 0x8000210500000000ULL },
+	{ "infin", 0x8000221e00000000ULL },
+	{ "infintie", 0x800029dd00000000ULL },
+	{ "inodot", 0x8000013100000000ULL },
+	{ "int", 0x8000222b00000000ULL },
+	{ "intcal", 0x800022ba00000000ULL },
+	{ "integers", 0x8000212400000000ULL },
+	{ "intercal", 0x800022ba00000000ULL },
+	{ "intlarhk", 0x80002a1700000000ULL },
+	{ "intprod", 0x80002a3c00000000ULL },
+	{ "iocy", 0x8000045100000000ULL },
+	{ "iogon", 0x8000012f00000000ULL },
+	{ "iopf", 0x8001d55a00000000ULL },
+	{ "iota", 0x800003b900000000ULL },
+	{ "iprod", 0x80002a3c00000000ULL },
+	{ "iquest", 0x000000bf00000000ULL },
+	{ "iscr", 0x8001d4be00000000ULL },
+	{ "isin", 0x8000220800000000ULL },
+	{ "isinE", 0x800022f900000000ULL },
+	{ "isindot", 0x800022f500000000ULL },
+	{ "isins", 0x800022f400000000ULL },
+	{ "isinsv", 0x800022f300000000ULL },
+	{ "isinv", 0x8000220800000000ULL },
+	{ "it", 0x8000206200000000ULL },
+	{ "itilde", 0x8000012900000000ULL },
+	{ "iukcy", 0x8000045600000000ULL },
+	{ "iuml", 0x000000ef00000000ULL },
+	{ "jcirc", 0x8000013500000000ULL },
+	{ "jcy", 0x8000043900000000ULL },
+	{ "jfr", 0x8001d52700000000ULL },
+	{ "jmath", 0x8000023700000000ULL },
+	{ "jopf", 0x8001d55b00000000ULL },
+	{ "jscr", 0x8001d4bf00000000ULL },
+	{ "jsercy", 0x8000045800000000ULL },
+	{ "jukcy", 0x8000045400000000ULL },
+	{ "kappa", 0x800003ba00000000ULL },
+	{ "kappav", 0x800003f000000000ULL },
+	{ "kcedil", 0x8000013700000000ULL },
+	{ "kcy", 0x8000043a00000000ULL },
+	{ "kfr", 0x8001d52800000000ULL },
+	{ "kgreen", 0x8000013800000000ULL },
+	{ "khcy", 0x8000044500000000ULL },
+	{ "kjcy", 0x8000045c00000000ULL },
+	{ "kopf", 0x8001d55c00000000ULL },
+	{ "kscr", 0x8001d4c000000000ULL },
+	{ "lAarr", 0x800021da00000000ULL },
+	{ "lArr", 0x800021d000000000ULL },
+	{ "lAtail", 0x8000291b00000000ULL },
+	{ "lBarr", 0x8000290e00000000ULL },
+	{ "lE", 0x8000226600000000ULL },
+	{ "lEg", 0x80002a8b00000000ULL },
+	{ "lHar", 0x8000296200000000ULL },
+	{ "lacute", 0x8000013a00000000ULL },
+	{ "laemptyv", 0x800029b400000000ULL },
+	{ "lagran", 0x8000211200000000ULL },
+	{ "lambda", 0x800003bb00000000ULL },
+	{ "lang", 0x800027e800000000ULL },
+	{ "langd", 0x8000299100000000ULL },
+	{ "langle", 0x800027e800000000ULL },
+	{ "lap", 0x80002a8500000000ULL },
+	{ "laquo", 0x000000ab00000000ULL },
+	{ "larr", 0x8000219000000000ULL },
+	{ "larrb", 0x800021e400000000ULL },
+	{ "larrbfs", 0x8000291f00000000ULL },
+	{ "larrfs", 0x8000291d00000000ULL },
+	{ "larrhk", 0x800021a900000000ULL },
+	{ "larrlp", 0x800021ab00000000ULL },
+	{ "larrpl", 0x8000293900000000ULL },
+	{ "larrsim", 0x8000297300000000ULL },
+	{ "larrtl", 0x800021a200000000ULL },
+	{ "lat", 0x80002aab00000000ULL },
+	{ "latail", 0x8000291900000000ULL },
+	{ "late", 0x80002aad00000000ULL },
+	{ "lates", 0x80002aad0000fe00ULL },
+	{ "lbarr", 0x8000290c00000000ULL },
+	{ "lbbrk", 0x8000277200000000ULL },
+	{ "lbrace", 0x8000007b00000000ULL },
+	{ "lbrack", 0x8000005b00000000ULL },
+	{ "lbrke", 0x8000298b00000000ULL },
+	{ "lbrksld", 0x8000298f00000000ULL },
+	{ "lbrkslu", 0x8000298d00000000ULL },
+	{ "lcaron", 0x8000013e00000000ULL },
+	{ "lcedil", 0x8000013c00000000ULL },
+	{ "lceil", 0x8000230800000000ULL },
+	{ "lcub", 0x8000007b00000000ULL },
+	{ "lcy", 0x8000043b00000000ULL },
+	{ "ldca", 0x8000293600000000ULL },
+	{ "ldquo", 0x8000201c00000000ULL },
+	{ "ldquor", 0x8000201e00000000ULL },
+	{ "ldrdhar", 0x8000296700000000ULL },
+	{ "ldrushar", 0x8000294b00000000ULL },
+	{ "ldsh", 0x800021b200000000ULL },
+	{ "le", 0x8000226400000000ULL },
+	{ "leftarrow", 0x8000219000000000ULL },
+	{ "leftarrowtail", 0x800021a200000000ULL },
+	{ "leftharpoondown", 0x800021bd00000000ULL },
+	{ "leftharpoonup", 0x800021bc00000000ULL },
+	{ "leftleftarrows", 0x800021c700000000ULL },
+	{ "leftrightarrow", 0x8000219400000000ULL },
+	{ "leftrightarrows", 0x800021c600000000ULL },
+	{ "leftrightharpoons", 0x800021cb00000000ULL },
+	{ "leftrightsquigarrow", 0x800021ad00000000ULL },
+	{ "leftthreetimes", 0x800022cb00000000ULL },
+	{ "leg", 0x800022da00000000ULL },
+	{ "leq", 0x8000226400000000ULL },
+	{ "leqq", 0x8000226600000000ULL },
+	{ "leqslant", 0x80002a7d00000000ULL },
+	{ "les", 0x80002a7d00000000ULL },
+	{ "lescc", 0x80002aa800000000ULL },
+	{ "lesdot", 0x80002a7f00000000ULL },
+	{ "lesdoto", 0x80002a8100000000ULL },
+	{ "lesdotor", 0x80002a8300000000ULL },
+	{ "lesg", 0x800022da0000fe00ULL },
+	{ "lesges", 0x80002a9300000000ULL },
+	{ "lessapprox", 0x80002a8500000000ULL },
+	{ "lessdot", 0x800022d600000000ULL },
+	{ "lesseqgtr", 0x800022da00000000ULL },
+	{ "lesseqqgtr", 0x80002a8b00000000ULL },
+	{ "lessgtr", 0x8000227600000000ULL },
+	{ "lesssim", 0x8000227200000000ULL },
+	{ "lfisht", 0x8000297c00000000ULL },
+	{ "lfloor", 0x8000230a00000000ULL },
+	{ "lfr", 0x8001d52900000000ULL },
+	{ "lg", 0x8000227600000000ULL },
+	{ "lgE", 0x80002a9100000000ULL },
+	{ "lhard", 0x800021bd00000000ULL },
+	{ "lharu", 0x800021bc00000000ULL },
+	{ "lharul", 0x8000296a00000000ULL },
+	{ "lhblk", 0x8000258400000000ULL },
+	{ "ljcy", 0x8000045900000000ULL },
+	{ "ll", 0x8000226a00000000ULL },
+	{ "llarr", 0x800021c700000000ULL },
+	{ "llcorner", 0x8000231e00000000ULL },
+	{ "llhard", 0x8000296b00000000ULL },
+	{ "lltri", 0x800025fa00000000ULL },
+	{ "lmidot", 0x8000014000000000ULL },
+	{ "lmoust", 0x800023b000000000ULL },
+	{ "lmoustache", 0x800023b000000000ULL },
+	{ "lnE", 0x8000226800000000ULL },
+	{ "lnap", 0x80002a8900000000ULL },
+	{ "lnapprox", 0x80002a8900000000ULL },
+	{ "lne", 0x80002a8700000000ULL },
+	{ "lneq", 0x80002a8700000000ULL },
+	{ "lneqq", 0x8000226800000000ULL },
+	{ "lnsim", 0x800022e600000000ULL },
+	{ "loang", 0x800027ec00000000ULL },
+	{ "loarr", 0x800021fd00000000ULL },
+	{ "lobrk", 0x800027e600000000ULL },
+	{ "longleftarrow", 0x800027f500000000ULL },
+	{ "longleftrightarrow", 0x800027f700000000ULL },
+	{ "longmapsto", 0x800027fc00000000ULL },
+	{ "longrightarrow", 0x800027f600000000ULL },
+	{ "looparrowleft", 0x800021ab00000000ULL },
+	{ "looparrowright", 0x800021ac00000000ULL },
+	{ "lopar", 0x8000298500000000ULL },
+	{ "lopf", 0x8001d55d00000000ULL },
+	{ "loplus", 0x80002a2d00000000ULL },
+	{ "lotimes", 0x80002a3400000000ULL },
+	{ "lowast", 0x8000221700000000ULL },
+	{ "lowbar", 0x8000005f00000000ULL },
+	{ "loz", 0x800025ca00000000ULL },
+	{ "lozenge", 0x800025ca00000000ULL },
+	{ "lozf", 0x800029eb00000000ULL },
+	{ "lpar", 0x8000002800000000ULL },
+	{ "lparlt", 0x8000299300000000ULL },
+	{ "lrarr", 0x800021c600000000ULL },
+	{ "lrcorner", 0x8000231f00000000ULL },
+	{ "lrhar", 0x800021cb00000000ULL },
+	{ "lrhard", 0x8000296d00000000ULL },
+	{ "lrm", 0x8000200e00000000ULL },
+	{ "lrtri", 0x800022bf00000000ULL },
+	{ "lsaquo", 0x8000203900000000ULL },
+	{ "lscr", 0x8001d4c100000000ULL },
+	{ "lsh", 0x800021b000000000ULL },
+	{ "lsim", 0x8000227200000000ULL },
+	{ "lsime", 0x80002a8d00000000ULL },
+	{ "lsimg", 0x80002a8f00000000ULL },
+	{ "lsqb", 0x8000005b00000000ULL },
+	{ "lsquo", 0x8000201800000000ULL },
+	{ "lsquor", 0x8000201a00000000ULL },
+	{ "lstrok", 0x8000014200000000ULL },
+	{ "lt", 0x0000003c00000000ULL },
+	{ "ltcc", 0x80002aa600000000ULL },
+	{ "ltcir", 0x80002a7900000000ULL },
+	{ "ltdot", 0x800022d600000000ULL },
+	{ "lthree", 0x800022cb00000000ULL },
+	{ "ltimes", 0x800022c900000000ULL },
+	{ "ltlarr", 0x8000297600000000ULL },
+	{ "ltquest", 0x80002a7b00000000ULL },
+	{ "ltrPar", 0x8000299600000000ULL },
+	{ "ltri", 0x800025c300000000ULL },
+	{ "ltrie", 0x800022b400000000ULL },
+	{ "ltrif", 0x800025c200000000ULL },
+	{ "lurdshar", 0x8000294a00000000ULL },
+	{ "luruhar", 0x8000296600000000ULL },
+	{ "lvertneqq", 0x800022680000fe00ULL },
+	{ "lvnE", 0x800022680000fe00ULL },
+	{ "mDDot", 0x8000223a00000000ULL },
+	{ "macr", 0x000000af00000000ULL },
+	{ "male", 0x8000264200000000ULL },
+	{ "malt", 0x8000272000000000ULL },
+	{ "maltese", 0x8000272000000000ULL },
+	{ "map", 0x800021a600000000ULL },
+	{ "mapsto", 0x800021a600000000ULL },
+	{ "mapstodown", 0x800021a700000000ULL },
+	{ "mapstoleft", 0x800021a400000000ULL },
+	{ "mapstoup", 0x800021a500000000ULL },
+	{ "marker", 0x800025ae00000000ULL },
+	{ "mcomma", 0x80002a2900000000ULL },
+	{ "mcy", 0x8000043c00000000ULL },
+	{ "mdash", 0x8000201400000000ULL },
+	{ "measuredangle", 0x8000222100000000ULL },
+	{ "mfr", 0x8001d52a00000000ULL },
+	{ "mho", 0x8000212700000000ULL },
+	{ "micro", 0x000000b500000000ULL },
+	{ "mid", 0x8000222300000000ULL },
+	{ "midast", 0x8000002a00000000ULL },
+	{ "midcir", 0x80002af000000000ULL },
+	{ "middot", 0x000000b700000000ULL },
+	{ "minus", 0x8000221200000000ULL },
+	{ "minusb", 0x8000229f00000000ULL },
+	{ "minusd", 0x8000223800000000ULL },
+	{ "minusdu", 0x80002a2a00000000ULL },
+	{ "mlcp", 0x80002adb00000000ULL },
+	{ "mldr", 0x8000202600000000ULL },
+	{ "mnplus", 0x8000221300000000ULL },
+	{ "models", 0x800022a700000000ULL },
+	{ "mopf", 0x8001d55e00000000ULL },
+	{ "mp", 0x8000221300000000ULL },
+	{ "mscr", 0x8001d4c200000000ULL },
+	{ "mstpos", 0x8000223e00000000ULL },
+	{ "mu", 0x800003bc00000000ULL },
+	{ "multimap", 0x800022b800000000ULL },
+	{ "mumap", 0x800022b800000000ULL },
+	{ "nGg", 0x800022d900000338ULL },
+	{ "nGt", 0x8000226b000020d2ULL },
+	{ "nGtv", 0x8000226b00000338ULL },
+	{ "nLeftarrow", 0x800021cd00000000ULL },
+	{ "nLeftrightarrow", 0x800021ce00000000ULL },
+	{ "nLl", 0x800022d800000338ULL },
+	{ "nLt", 0x8000226a000020d2ULL },
+	{ "nLtv", 0x8000226a00000338ULL },
+	{ "nRightarrow", 0x800021cf00000000ULL },
+	{ "nVDash", 0x800022af00000000ULL },
+	{ "nVdash", 0x800022ae00000000ULL },
+	{ "nabla", 0x8000220700000000ULL },
+	{ "nacute", 0x8000014400000000ULL },
+	{ "nang", 0x80002220000020d2ULL },
+	{ "nap", 0x8000224900000000ULL },
+	{ "napE", 0x80002a7000000338ULL },
+	{ "napid", 0x8000224b00000338ULL },
+	{ "napos", 0x8000014900000000ULL },
+	{ "napprox", 0x8000224900000000ULL },
+	{ "natur", 0x8000266e00000000ULL },
+	{ "natural", 0x8000266e00000000ULL },
+	{ "naturals", 0x8000211500000000ULL },
+	{ "nbsp", 0x000000a000000000ULL },
+	{ "nbump", 0x8000224e00000338ULL },
+	{ "nbumpe", 0x8000224f00000338ULL },
+	{ "ncap", 0x80002a4300000000ULL },
+	{ "ncaron", 0x8000014800000000ULL },
+	{ "ncedil", 0x8000014600000000ULL },
+	{ "ncong", 0x8000224700000000ULL },
+	{ "ncongdot", 0x80002a6d00000338ULL },
+	{ "ncup", 0x80002a4200000000ULL },
+	{ "ncy", 0x8000043d00000000ULL },
+	{ "ndash", 0x8000201300000000ULL },
+	{ "ne", 0x8000226000000000ULL },
+	{ "neArr", 0x800021d700000000ULL },
+	{ "nearhk", 0x8000292400000000ULL },
+	{ "nearr", 0x8000219700000000ULL },
+	{ "nearrow", 0x8000219700000000ULL },
+	{ "nedot", 0x8000225000000338ULL },
+	{ "nequiv", 0x8000226200000000ULL },
+	{ "nesear", 0x8000292800000000ULL },
+	{ "nesim", 0x8000224200000338ULL },
+	{ "nexist", 0x8000220400000000ULL },
+	{ "nexists", 0x8000220400000000ULL },
+	{ "nfr", 0x8001d52b00000000ULL },
+	{ "ngE", 0x8000226700000338ULL },
+	{ "nge", 0x8000227100000000ULL },
+	{ "ngeq", 0x8000227100000000ULL },
+	{ "ngeqq", 0x8000226700000338ULL },
+	{ "ngeqslant", 0x80002a7e00000338ULL },
+	{ "nges", 0x80002a7e00000338ULL },
+	{ "ngsim", 0x8000227500000000ULL },
+	{ "ngt", 0x8000226f00000000ULL },
+	{ "ngtr", 0x8000226f00000000ULL },
+	{ "nhArr", 0x800021ce00000000ULL },
+	{ "nharr", 0x800021ae00000000ULL },
+	{ "nhpar", 0x80002af200000000ULL },
+	{ "ni", 0x8000220b00000000ULL },
+	{ "nis", 0x800022fc00000000ULL },
+	{ "nisd", 0x800022fa00000000ULL },
+	{ "niv", 0x8000220b00000000ULL },
+	{ "njcy", 0x8000045a00000000ULL },
+	{ "nlArr", 0x800021cd00000000ULL },
+	{ "nlE", 0x8000226600000338ULL },
+	{ "nlarr", 0x8000219a00000000ULL },
+	{ "nldr", 0x8000202500000000ULL },
+	{ "nle", 0x8000227000000000ULL },
+	{ "nleftarrow", 0x8000219a00000000ULL },
+	{ "nleftrightarrow", 0x800021ae00000000ULL },
+	{ "nleq", 0x8000227000000000ULL },
+	{ "nleqq", 0x8000226600000338ULL },
+	{ "nleqslant", 0x80002a7d00000338ULL },
+	{ "nles", 0x80002a7d00000338ULL },
+	{ "nless", 0x8000226e00000000ULL },
+	{ "nlsim", 0x8000227400000000ULL },
+	{ "nlt", 0x8000226e00000000ULL },
+	{ "nltri", 0x800022ea00000000ULL },
+	{ "nltrie", 0x800022ec00000000ULL },
+	{ "nmid", 0x8000222400000000ULL },
+	{ "nopf", 0x8001d55f00000000ULL },
+	{ "not", 0x000000ac00000000ULL },
+	{ "notin", 0x8000220900000000ULL },
+	{ "notinE", 0x800022f900000338ULL },
+	{ "notindot", 0x800022f500000338ULL },
+	{ "notinva", 0x8000220900000000ULL },
+	{ "notinvb", 0x800022f700000000ULL },
+	{ "notinvc", 0x800022f600000000ULL },
+	{ "notni", 0x8000220c00000000ULL },
+	{ "notniva", 0x8000220c00000000ULL },
+	{ "notnivb", 0x800022fe00000000ULL },
+	{ "notnivc", 0x800022fd00000000ULL },
+	{ "npar", 0x8000222600000000ULL },
+	{ "nparallel", 0x8000222600000000ULL },
+	{ "nparsl", 0x80002afd000020e5ULL },
+	{ "npart", 0x8000220200000338ULL },
+	{ "npolint", 0x80002a1400000000ULL },
+	{ "npr", 0x8000228000000000ULL },
+	{ "nprcue", 0x800022e000000000ULL },
+	{ "npre", 0x80002aaf00000338ULL },
+	{ "nprec", 0x8000228000000000ULL },
+	{ "npreceq", 0x80002aaf00000338ULL },
+	{ "nrArr", 0x800021cf00000000ULL },
+	{ "nrarr", 0x8000219b00000000ULL },
+	{ "nrarrc", 0x8000293300000338ULL },
+	{ "nrarrw", 0x8000219d00000338ULL },
+	{ "nrightarrow", 0x8000219b00000000ULL },
+	{ "nrtri", 0x800022eb00000000ULL },
+	{ "nrtrie", 0x800022ed00000000ULL },
+	{ "nsc", 0x8000228100000000ULL },
+	{ "nsccue", 0x800022e100000000ULL },
+	{ "nsce", 0x80002ab000000338ULL },
+	{ "nscr", 0x8001d4c300000000ULL },
+	{ "nshortmid", 0x8000222400000000ULL },
+	{ "nshortparallel", 0x8000222600000000ULL },
+	{ "nsim", 0x8000224100000000ULL },
+	{ "nsime", 0x8000224400000000ULL },
+	{ "nsimeq", 0x8000224400000000ULL },
+	{ "nsmid", 0x8000222400000000ULL },
+	{ "nspar", 0x8000222600000000ULL },
+	{ "nsqsube", 0x800022e200000000ULL },
+	{ "nsqsupe", 0x800022e300000000ULL },
+	{ "nsub", 0x8000228400000000ULL },
+	{ "nsubE", 0x80002ac500000338ULL },
+	{ "nsube", 0x8000228800000000ULL },
+	{ "nsubset", 0x80002282000020d2ULL },
+	{ "nsubseteq", 0x8000228800000000ULL },
+	{ "nsubseteqq", 0x80002ac500000338ULL },
+	{ "nsucc", 0x8000228100000000ULL },
+	{ "nsucceq", 0x80002ab000000338ULL },
+	{ "nsup", 0x8000228500000000ULL },
+	{ "nsupE", 0x80002ac600000338ULL },
+	{ "nsupe", 0x8000228900000000ULL },
+	{ "nsupset", 0x80002283000020d2ULL },
+	{ "nsupseteq", 0x8000228900000000ULL },
+	{ "nsupseteqq", 0x80002ac600000338ULL },
+	{ "ntgl", 0x8000227900000000ULL },
+	{ "ntilde", 0x000000f100000000ULL },
+	{ "ntlg", 0x8000227800000000ULL },
+	{ "ntriangleleft", 0x800022ea00000000ULL },
+	{ "ntrianglelefteq", 0x800022ec00000000ULL },
+	{ "ntriangleright", 0x800022eb00000000ULL },
+	{ "ntrianglerighteq", 0x800022ed00000000ULL },
+	{ "nu", 0x800003bd00000000ULL },
+	{ "num", 0x8000002300000000ULL },
+	{ "numero", 0x8000211600000000ULL },
+	{ "numsp", 0x8000200700000000ULL },
+	{ "nvDash", 0x800022ad00000000ULL },
+	{ "nvHarr", 0x8000290400000000ULL },
+	{ "nvap", 0x8000224d000020d2ULL },
+	{ "nvdash", 0x800022ac00000000ULL },
+	{ "nvge", 0x80002265000020d2ULL },
+	{ "nvgt", 0x8000003e000020d2ULL },
+	{ "nvinfin", 0x800029de00000000ULL },
+	{ "nvlArr", 0x8000290200000000ULL },
+	{ "nvle", 0x80002264000020d2ULL },
+	{ "nvlt", 0x8000003c000020d2ULL },
+	{ "nvltrie", 0x800022b4000020d2ULL },
+	{ "nvrArr", 0x8000290300000000ULL },
+	{ "nvrtrie", 0x800022b5000020d2ULL },
+	{ "nvsim", 0x8000223c000020d2ULL },
+	{ "nwArr", 0x800021d600000000ULL },
+	{ "nwarhk", 0x8000292300000000ULL },
+	{ "nwarr", 0x8000219600000000ULL },
+	{ "nwarrow", 0x8000219600000000ULL },
+	{ "nwnear", 0x8000292700000000ULL },
+	{ "oS", 0x800024c800000000ULL },
+	{ "oacute", 0x000000f300000000ULL },
+	{ "oast", 0x8000229b00000000ULL },
+	{ "ocir", 0x8000229a00000000ULL },
+	{ "ocirc", 0x000000f400000000ULL },
+	{ "ocy", 0x8000043e00000000ULL },
+	{ "odash", 0x8000229d00000000ULL },
+	{ "odblac", 0x8000015100000000ULL },
+	{ "odiv", 0x80002a3800000000ULL },
+	{ "odot", 0x8000229900000000ULL },
+	{ "odsold", 0x800029bc00000000ULL },
+	{ "oelig", 0x8000015300000000ULL },
+	{ "ofcir", 0x800029bf00000000ULL },
+	{ "ofr", 0x8001d52c00000000ULL },
+	{ "ogon", 0x800002db00000000ULL },
+	{ "ograve", 0x000000f200000000ULL },
+	{ "ogt", 0x800029c100000000ULL },
+	{ "ohbar", 0x800029b500000000ULL },
+	{ "ohm", 0x800003a900000000ULL },
+	{ "oint", 0x8000222e00000000ULL },
+	{ "olarr", 0x800021ba00000000ULL },
+	{ "olcir", 0x800029be00000000ULL },
+	{ "olcross", 0x800029bb00000000ULL },
+	{ "oline", 0x8000203e00000000ULL },
+	{ "olt", 0x800029c000000000ULL },
+	{ "omacr", 0x8000014d00000000ULL },
+	{ "omega", 0x800003c900000000ULL },
+	{ "omicron", 0x800003bf00000000ULL },
+	{ "omid", 0x800029b600000000ULL },
+	{ "ominus", 0x8000229600000000ULL },
+	{ "oopf", 0x8001d56000000000ULL },
+	{ "opar", 0x800029b700000000ULL },
+	{ "operp", 0x800029b900000000ULL },
+	{ "oplus", 0x8000229500000000ULL },
+	{ "or", 0x8000222800000000ULL },
+	{ "orarr", 0x800021bb00000000ULL },
+	{ "ord", 0x80002a5d00000000ULL },
+	{ "order", 0x8000213400000000ULL },
+	{ "orderof", 0x8000213400000000ULL },
+	{ "ordf", 0x000000aa00000000ULL },
+	{ "ordm", 0x000000ba00000000ULL },
+	{ "origof", 0x800022b600000000ULL },
+	{ "oror", 0x80002a5600000000ULL },
+	{ "orslope", 0x80002a5700000000ULL },
+	{ "orv", 0x80002a5b00000000ULL },
+	{ "oscr", 0x8000213400000000ULL },
+	{ "oslash", 0x000000f800000000ULL },
+	{ "osol", 0x8000229800000000ULL },
+	{ "otilde", 0x000000f500000000ULL },
+	{ "otimes", 0x8000229700000000ULL },
+	{ "otimesas", 0x80002a3600000000ULL },
+	{ "ouml", 0x000000f600000000ULL },
+	{ "ovbar", 0x8000233d00000000ULL },
+	{ "par", 0x8000222500000000ULL },
+	{ "para", 0x000000b600000000ULL },
+	{ "parallel", 0x8000222500000000ULL },
+	{ "parsim", 0x80002af300000000ULL },
+	{ "parsl", 0x80002afd00000000ULL },
+	{ "part", 0x8000220200000000ULL },
+	{ "pcy", 0x8000043f00000000ULL },
+	{ "percnt", 0x8000002500000000ULL },
+	{ "period", 0x8000002e00000000ULL },
+	{ "permil", 0x8000203000000000ULL },
+	{ "perp", 0x800022a500000000ULL },
+	{ "pertenk", 0x8000203100000000ULL },
+	{ "pfr", 0x8001d52d00000000ULL },
+	{ "phi", 0x800003c600000000ULL },
+	{ "phiv", 0x800003d500000000ULL },
+	{ "phmmat", 0x8000213300000000ULL },
+	{ "phone", 0x8000260e00000000ULL },
+	{ "pi", 0x800003c000000000ULL },
+	{ "pitchfork", 0x800022d400000000ULL },
+	{ "piv", 0x800003d600000000ULL },
+	{ "planck", 0x8000210f00000000ULL },
+	{ "planckh", 0x8000210e00000000ULL },
+	{ "plankv", 0x8000210f00000000ULL },
+	{ "plus", 0x8000002b00000000ULL },
+	{ "plusacir", 0x80002a2300000000ULL },
+	{ "plusb", 0x8000229e00000000ULL },
+	{ "pluscir", 0x80002a2200000000ULL },
+	{ "plusdo", 0x8000221400000000ULL },
+	{ "plusdu", 0x80002a2500000000ULL },
+	{ "pluse", 0x80002a7200000000ULL },
+	{ "plusmn", 0x000000b100000000ULL },
+	{ "plussim", 0x80002a2600000000ULL },
+	{ "plustwo", 0x80002a2700000000ULL },
+	{ "pm", 0x800000b100000000ULL },
+	{ "pointint", 0x80002a1500000000ULL },
+	{ "popf", 0x8001d56100000000ULL },
+	{ "pound", 0x000000a300000000ULL },
+	{ "pr", 0x8000227a00000000ULL },
+	{ "prE", 0x80002ab300000000ULL },
+	{ "prap", 0x80002ab700000000ULL },
+	{ "prcue", 0x8000227c00000000ULL },
+	{ "pre", 0x80002aaf00000000ULL },
+	{ "prec", 0x8000227a00000000ULL },
+	{ "precapprox", 0x80002ab700000000ULL },
+	{ "preccurlyeq", 0x8000227c00000000ULL },
+	{ "preceq", 0x80002aaf00000000ULL },
+	{ "precnapprox", 0x80002ab900000000ULL },
+	{ "precneqq", 0x80002ab500000000ULL },
+	{ "precnsim", 0x800022e800000000ULL },
+	{ "precsim", 0x8000227e00000000ULL },
+	{ "prime", 0x8000203200000000ULL },
+	{ "primes", 0x8000211900000000ULL },
+	{ "prnE", 0x80002ab500000000ULL },
+	{ "prnap", 0x80002ab900000000ULL },
+	{ "prnsim", 0x800022e800000000ULL },
+	{ "prod", 0x8000220f00000000ULL },
+	{ "profalar", 0x8000232e00000000ULL },
+	{ "profline", 0x8000231200000000ULL },
+	{ "profsurf", 0x8000231300000000ULL },
+	{ "prop", 0x8000221d00000000ULL },
+	{ "propto", 0x8000221d00000000ULL },
+	{ "prsim", 0x8000227e00000000ULL },
+	{ "prurel", 0x800022b000000000ULL },
+	{ "pscr", 0x8001d4c500000000ULL },
+	{ "psi", 0x800003c800000000ULL },
+	{ "puncsp", 0x8000200800000000ULL },
+	{ "qfr", 0x8001d52e00000000ULL },
+	{ "qint", 0x80002a0c00000000ULL },
+	{ "qopf", 0x8001d56200000000ULL },
+	{ "qprime", 0x8000205700000000ULL },
+	{ "qscr", 0x8001d4c600000000ULL },
+	{ "quaternions", 0x8000210d00000000ULL },
+	{ "quatint", 0x80002a1600000000ULL },
+	{ "quest", 0x8000003f00000000ULL },
+	{ "questeq", 0x8000225f00000000ULL },
+	{ "quot", 0x0000002200000000ULL },
+	{ "rAarr", 0x800021db00000000ULL },
+	{ "rArr", 0x800021d200000000ULL },
+	{ "rAtail", 0x8000291c00000000ULL },
+	{ "rBarr", 0x8000290f00000000ULL },
+	{ "rHar", 0x8000296400000000ULL },
+	{ "race", 0x8000223d00000331ULL },
+	{ "racute", 0x8000015500000000ULL },
+	{ "radic", 0x8000221a00000000ULL },
+	{ "raemptyv", 0x800029b300000000ULL },
+	{ "rang", 0x800027e900000000ULL },
+	{ "rangd", 0x8000299200000000ULL },
+	{ "range", 0x800029a500000000ULL },
+	{ "rangle", 0x800027e900000000ULL },
+	{ "raquo", 0x000000bb00000000ULL },
+	{ "rarr", 0x8000219200000000ULL },
+	{ "rarrap", 0x8000297500000000ULL },
+	{ "rarrb", 0x800021e500000000ULL },
+	{ "rarrbfs", 0x8000292000000000ULL },
+	{ "rarrc", 0x8000293300000000ULL },
+	{ "rarrfs", 0x8000291e00000000ULL },
+	{ "rarrhk", 0x800021aa00000000ULL },
+	{ "rarrlp", 0x800021ac00000000ULL },
+	{ "rarrpl", 0x8000294500000000ULL },
+	{ "rarrsim", 0x8000297400000000ULL },
+	{ "rarrtl", 0x800021a300000000ULL },
+	{ "rarrw", 0x8000219d00000000ULL },
+	{ "ratail", 0x8000291a00000000ULL },
+	{ "ratio", 0x8000223600000000ULL },
+	{ "rationals", 0x8000211a00000000ULL },
+	{ "rbarr", 0x8000290d00000000ULL },
+	{ "rbbrk", 0x8000277300000000ULL },
+	{ "rbrace", 0x8000007d00000000ULL },
+	{ "rbrack", 0x8000005d00000000ULL },
+	{ "rbrke", 0x8000298c00000000ULL },
+	{ "rbrksld", 0x8000298e00000000ULL },
+	{ "rbrkslu", 0x8000299000000000ULL },
+	{ "rcaron", 0x8000015900000000ULL },
+	{ "rcedil", 0x8000015700000000ULL },
+	{ "rceil", 0x8000230900000000ULL },
+	{ "rcub", 0x8000007d00000000ULL },
+	{ "rcy", 0x8000044000000000ULL },
+	{ "rdca", 0x8000293700000000ULL },
+	{ "rdldhar", 0x8000296900000000ULL },
+	{ "rdquo", 0x8000201d00000000ULL },
+	{ "rdquor", 0x8000201d00000000ULL },
+	{ "rdsh", 0x800021b300000000ULL },
+	{ "real", 0x8000211c00000000ULL },
+	{ "realine", 0x8000211b00000000ULL },
+	{ "realpart", 0x8000211c00000000ULL },
+	{ "reals", 0x8000211d00000000ULL },
+	{ "rect", 0x800025ad00000000ULL },
+	{ "reg", 0x000000ae00000000ULL },
+	{ "rfisht", 0x8000297d00000000ULL },
+	{ "rfloor", 0x8000230b00000000ULL },
+	{ "rfr", 0x8001d52f00000000ULL },
+	{ "rhard", 0x800021c100000000ULL },
+	{ "rharu", 0x800021c000000000ULL },
+	{ "rharul", 0x8000296c00000000ULL },
+	{ "rho", 0x800003c100000000ULL },
+	{ "rhov", 0x800003f100000000ULL },
+	{ "rightarrow", 0x8000219200000000ULL },
+	{ "rightarrowtail", 0x800021a300000000ULL },
+	{ "rightharpoondown", 0x800021c100000000ULL },
+	{ "rightharpoonup", 0x800021c000000000ULL },
+	{ "rightleftarrows", 0x800021c400000000ULL },
+	{ "rightleftharpoons", 0x800021cc00000000ULL },
+	{ "rightrightarrows", 0x800021c900000000ULL },
+	{ "rightsquigarrow", 0x8000219d00000000ULL },
+	{ "rightthreetimes", 0x800022cc00000000ULL },
+	{ "ring", 0x800002da00000000ULL },
+	{ "risingdotseq", 0x8000225300000000ULL },
+	{ "rlarr", 0x800021c400000000ULL },
+	{ "rlhar", 0x800021cc00000000ULL },
+	{ "rlm", 0x8000200f00000000ULL },
+	{ "rmoust", 0x800023b100000000ULL },
+	{ "rmoustache", 0x800023b100000000ULL },
+	{ "rnmid", 0x80002aee00000000ULL },
+	{ "roang", 0x800027ed00000000ULL },
+	{ "roarr", 0x800021fe00000000ULL },
+	{ "robrk", 0x800027e700000000ULL },
+	{ "ropar", 0x8000298600000000ULL },
+	{ "ropf", 0x8001d56300000000ULL },
+	{ "roplus", 0x80002a2e00000000ULL },
+	{ "rotimes", 0x80002a3500000000ULL },
+	{ "rpar", 0x8000002900000000ULL },
+	{ "rpargt", 0x8000299400000000ULL },
+	{ "rppolint", 0x80002a1200000000ULL },
+	{ "rrarr", 0x800021c900000000ULL },
+	{ "rsaquo", 0x8000203a00000000ULL },
+	{ "rscr", 0x8001d4c700000000ULL },
+	{ "rsh", 0x800021b100000000ULL },
+	{ "rsqb", 0x8000005d00000000ULL },
+	{ "rsquo", 0x8000201900000000ULL },
+	{ "rsquor", 0x8000201900000000ULL },
+	{ "rthree", 0x800022cc00000000ULL },
+	{ "rtimes", 0x800022ca00000000ULL },
+	{ "rtri", 0x800025b900000000ULL },
+	{ "rtrie", 0x800022b500000000ULL },
+	{ "rtrif", 0x800025b800000000ULL },
+	{ "rtriltri", 0x800029ce00000000ULL },
+	{ "ruluhar", 0x8000296800000000ULL },
+	{ "rx", 0x8000211e00000000ULL },
+	{ "sacute", 0x8000015b00000000ULL },
+	{ "sbquo", 0x8000201a00000000ULL },
+	{ "sc", 0x8000227b00000000ULL },
+	{ "scE", 0x80002ab400000000ULL },
+	{ "scap", 0x80002ab800000000ULL },
+	{ "scaron", 0x8000016100000000ULL },
+	{ "sccue", 0x8000227d00000000ULL },
+	{ "sce", 0x80002ab000000000ULL },
+	{ "scedil", 0x8000015f00000000ULL },
+	{ "scirc", 0x8000015d00000000ULL },
+	{ "scnE", 0x80002ab600000000ULL },
+	{ "scnap", 0x80002aba00000000ULL },
+	{ "scnsim", 0x800022e900000000ULL },
+	{ "scpolint", 0x80002a1300000000ULL },
+	{ "scsim", 0x8000227f00000000ULL },
+	{ "scy", 0x8000044100000000ULL },
+	{ "sdot", 0x800022c500000000ULL },
+	{ "sdotb", 0x800022a100000000ULL },
+	{ "sdote", 0x80002a6600000000ULL },
+	{ "seArr", 0x800021d800000000ULL },
+	{ "searhk", 0x8000292500000000ULL },
+	{ "searr", 0x8000219800000000ULL },
+	{ "searrow", 0x8000219800000000ULL },
+	{ "sect", 0x000000a700000000ULL },
+	{ "semi", 0x8000003b00000000ULL },
+	{ "seswar", 0x8000292900000000ULL },
+	{ "setminus", 0x8000221600000000ULL },
+	{ "setmn", 0x8000221600000000ULL },
+	{ "sext", 0x8000273600000000ULL },
+	{ "sfr", 0x8001d53000000000ULL },
+	{ "sfrown", 0x8000232200000000ULL },
+	{ "sharp", 0x8000266f00000000ULL },
+	{ "shchcy", 0x8000044900000000ULL },
+	{ "shcy", 0x8000044800000000ULL },
+	{ "shortmid", 0x8000222300000000ULL },
+	{ "shortparallel", 0x8000222500000000ULL },
+	{ "shy", 0x000000ad00000000ULL },
+	{ "sigma", 0x800003c300000000ULL },
+	{ "sigmaf", 0x800003c200000000ULL },
+	{ "sigmav", 0x800003c200000000ULL },
+	{ "sim", 0x8000223c00000000ULL },
+	{ "simdot", 0x80002a6a00000000ULL },
+	{ "sime", 0x8000224300000000ULL },
+	{ "simeq", 0x8000224300000000ULL },
+	{ "simg", 0x80002a9e00000000ULL },
+	{ "simgE", 0x80002aa000000000ULL },
+	{ "siml", 0x80002a9d00000000ULL },
+	{ "simlE", 0x80002a9f00000000ULL },
+	{ "simne", 0x8000224600000000ULL },
+	{ "simplus", 0x80002a2400000000ULL },
+	{ "simrarr", 0x8000297200000000ULL },
+	{ "slarr", 0x8000219000000000ULL },
+	{ "smallsetminus", 0x8000221600000000ULL },
+	{ "smashp", 0x80002a3300000000ULL },
+	{ "smeparsl", 0x800029e400000000ULL },
+	{ "smid", 0x8000222300000000ULL },
+	{ "smile", 0x8000232300000000ULL },
+	{ "smt", 0x80002aaa00000000ULL },
+	{ "smte", 0x80002aac00000000ULL },
+	{ "smtes", 0x80002aac0000fe00ULL },
+	{ "softcy", 0x8000044c00000000ULL },
+	{ "sol", 0x8000002f00000000ULL },
+	{ "solb", 0x800029c400000000ULL },
+	{ "solbar", 0x8000233f00000000ULL },
+	{ "sopf", 0x8001d56400000000ULL },
+	{ "spades", 0x8000266000000000ULL },
+	{ "spadesuit", 0x8000266000000000ULL },
+	{ "spar", 0x8000222500000000ULL },
+	{ "sqcap", 0x8000229300000000ULL },
+	{ "sqcaps", 0x800022930000fe00ULL },
+	{ "sqcup", 0x8000229400000000ULL },
+	{ "sqcups", 0x800022940000fe00ULL },
+	{ "sqsub", 0x8000228f00000000ULL },
+	{ "sqsube", 0x8000229100000000ULL },
+	{ "sqsubset", 0x8000228f00000000ULL },
+	{ "sqsubseteq", 0x8000229100000000ULL },
+	{ "sqsup", 0x8000229000000000ULL },
+	{ "sqsupe", 0x8000229200000000ULL },
+	{ "sqsupset", 0x8000229000000000ULL },
+	{ "sqsupseteq", 0x8000229200000000ULL },
+	{ "squ", 0x800025a100000000ULL },
+	{ "square", 0x800025a100000000ULL },
+	{ "squarf", 0x800025aa00000000ULL },
+	{ "squf", 0x800025aa00000000ULL },
+	{ "srarr", 0x8000219200000000ULL },
+	{ "sscr", 0x8001d4c800000000ULL },
+	{ "ssetmn", 0x8000221600000000ULL },
+	{ "ssmile", 0x8000232300000000ULL },
+	{ "sstarf", 0x800022c600000000ULL },
+	{ "star", 0x8000260600000000ULL },
+	{ "starf", 0x8000260500000000ULL },
+	{ "straightepsilon", 0x800003f500000000ULL },
+	{ "straightphi", 0x800003d500000000ULL },
+	{ "strns", 0x800000af00000000ULL },
+	{ "sub", 0x8000228200000000ULL },
+	{ "subE", 0x80002ac500000000ULL },
+	{ "subdot", 0x80002abd00000000ULL },
+	{ "sube", 0x8000228600000000ULL },
+	{ "subedot", 0x80002ac300000000ULL },
+	{ "submult", 0x80002ac100000000ULL },
+	{ "subnE", 0x80002acb00000000ULL },
+	{ "subne", 0x8000228a00000000ULL },
+	{ "subplus", 0x80002abf00000000ULL },
+	{ "subrarr", 0x8000297900000000ULL },
+	{ "subset", 0x8000228200000000ULL },
+	{ "subseteq", 0x8000228600000000ULL },
+	{ "subseteqq", 0x80002ac500000000ULL },
+	{ "subsetneq", 0x8000228a00000000ULL },
+	{ "subsetneqq", 0x80002acb00000000ULL },
+	{ "subsim", 0x80002ac700000000ULL },
+	{ "subsub", 0x80002ad500000000ULL },
+	{ "subsup", 0x80002ad300000000ULL },
+	{ "succ", 0x8000227b00000000ULL },
+	{ "succapprox", 0x80002ab800000000ULL },
+	{ "succcurlyeq", 0x8000227d00000000ULL },
+	{ "succeq", 0x80002ab000000000ULL },
+	{ "succnapprox", 0x80002aba00000000ULL },
+	{ "succneqq", 0x80002ab600000000ULL },
+	{ "succnsim", 0x800022e900000000ULL },
+	{ "succsim", 0x8000227f00000000ULL },
+	{ "sum", 0x8000221100000000ULL },
+	{ "sung", 0x8000266a00000000ULL },
+	{ "sup", 0x8000228300000000ULL },
+	{ "sup1", 0x000000b900000000ULL },
+	{ "sup2", 0x000000b200000000ULL },
+	{ "sup3", 0x000000b300000000ULL },
+	{ "supE", 0x80002ac600000000ULL },
+	{ "supdot", 0x80002abe00000000ULL },
+	{ "supdsub", 0x80002ad800000000ULL },
+	{ "supe", 0x8000228700000000ULL },
+	{ "supedot", 0x80002ac400000000ULL },
+	{ "suphsol", 0x800027c900000000ULL },
+	{ "suphsub", 0x80002ad700000000ULL },
+	{ "suplarr", 0x8000297b00000000ULL },
+	{ "supmult", 0x80002ac200000000ULL },
+	{ "supnE", 0x80002acc00000000ULL },
+	{ "supne", 0x8000228b00000000ULL },
+	{ "supplus", 0x80002ac000000000ULL },
+	{ "supset", 0x8000228300000000ULL },
+	{ "supseteq", 0x8000228700000000ULL },
+	{ "supseteqq", 0x80002ac600000000ULL },
+	{ "supsetneq", 0x8000228b00000000ULL },
+	{ "supsetneqq", 0x80002acc00000000ULL },
+	{ "supsim", 0x80002ac800000000ULL },
+	{ "supsub", 0x80002ad400000000ULL },
+	{ "supsup", 0x80002ad600000000ULL },
+	{ "swArr", 0x800021d900000000ULL },
+	{ "swarhk", 0x8000292600000000ULL },
+	{ "swarr", 0x8000219900000000ULL },
+	{ "swarrow", 0x8000219900000000ULL },
+	{ "swnwar", 0x8000292a00000000ULL },
+	{ "szlig", 0x000000df00000000ULL },
+	{ "target", 0x8000231600000000ULL },
+	{ "tau", 0x800003c400000000ULL },
+	{ "tbrk", 0x800023b400000000ULL },
+	{ "tcaron", 0x8000016500000000ULL },
+	{ "tcedil", 0x8000016300000000ULL },
+	{ "tcy", 0x8000044200000000ULL },
+	{ "tdot", 0x800020db00000000ULL },
+	{ "telrec", 0x8000231500000000ULL },
+	{ "tfr", 0x8001d53100000000ULL },
+	{ "there4", 0x8000223400000000ULL },
+	{ "therefore", 0x8000223400000000ULL },
+	{ "theta", 0x800003b800000000ULL },
+	{ "thetasym", 0x800003d100000000ULL },
+	{ "thetav", 0x800003d100000000ULL },
+	{ "thickapprox", 0x8000224800000000ULL },
+	{ "thicksim", 0x8000223c00000000ULL },
+	{ "thinsp", 0x8000200900000000ULL },
+	{ "thkap", 0x8000224800000000ULL },
+	{ "thksim", 0x8000223c00000000ULL },
+	{ "thorn", 0x000000fe00000000ULL },
+	{ "tilde", 0x800002dc00000000ULL },
+	{ "times", 0x000000d700000000ULL },
+	{ "timesb", 0x800022a000000000ULL },
+	{ "timesbar", 0x80002a3100000000ULL },
+	{ "timesd", 0x80002a3000000000ULL },
+	{ "tint", 0x8000222d00000000ULL },
+	{ "toea", 0x8000292800000000ULL },
+	{ "top", 0x800022a400000000ULL },
+	{ "topbot", 0x8000233600000000ULL },
+	{ "topcir", 0x80002af100000000ULL },
+	{ "topf", 0x8001d56500000000ULL },
+	{ "topfork", 0x80002ada00000000ULL },
+	{ "tosa", 0x8000292900000000ULL },
+	{ "tprime", 0x8000203400000000ULL },
+	{ "trade", 0x8000212200000000ULL },
+	{ "triangle", 0x800025b500000000ULL },
+	{ "triangledown", 0x800025bf00000000ULL },
+	{ "triangleleft", 0x800025c300000000ULL },
+	{ "trianglelefteq", 0x800022b400000000ULL },
+	{ "triangleq", 0x8000225c00000000ULL },
+	{ "triangleright", 0x800025b900000000ULL },
+	{ "trianglerighteq", 0x800022b500000000ULL },
+	{ "tridot", 0x800025ec00000000ULL },
+	{ "trie", 0x8000225c00000000ULL },
+	{ "triminus", 0x80002a3a00000000ULL },
+	{ "triplus", 0x80002a3900000000ULL },
+	{ "trisb", 0x800029cd00000000ULL },
+	{ "tritime", 0x80002a3b00000000ULL },
+	{ "trpezium", 0x800023e200000000ULL },
+	{ "tscr", 0x8001d4c900000000ULL },
+	{ "tscy", 0x8000044600000000ULL },
+	{ "tshcy", 0x8000045b00000000ULL },
+	{ "tstrok", 0x8000016700000000ULL },
+	{ "twixt", 0x8000226c00000000ULL },
+	{ "twoheadleftarrow", 0x8000219e00000000ULL },
+	{ "twoheadrightarrow", 0x800021a000000000ULL },
+	{ "uArr", 0x800021d100000000ULL },
+	{ "uHar", 0x8000296300000000ULL },
+	{ "uacute", 0x000000fa00000000ULL },
+	{ "uarr", 0x8000219100000000ULL },
+	{ "ubrcy", 0x8000045e00000000ULL },
+	{ "ubreve", 0x8000016d00000000ULL },
+	{ "ucirc", 0x000000fb00000000ULL },
+	{ "ucy", 0x8000044300000000ULL },
+	{ "udarr", 0x800021c500000000ULL },
+	{ "udblac", 0x8000017100000000ULL },
+	{ "udhar", 0x8000296e00000000ULL },
+	{ "ufisht", 0x8000297e00000000ULL },
+	{ "ufr", 0x8001d53200000000ULL },
+	{ "ugrave", 0x000000f900000000ULL },
+	{ "uharl", 0x800021bf00000000ULL },
+	{ "uharr", 0x800021be00000000ULL },
+	{ "uhblk", 0x8000258000000000ULL },
+	{ "ulcorn", 0x8000231c00000000ULL },
+	{ "ulcorner", 0x8000231c00000000ULL },
+	{ "ulcrop", 0x8000230f00000000ULL },
+	{ "ultri", 0x800025f800000000ULL },
+	{ "umacr", 0x8000016b00000000ULL },
+	{ "uml", 0x000000a800000000ULL },
+	{ "uogon", 0x8000017300000000ULL },
+	{ "uopf", 0x8001d56600000000ULL },
+	{ "uparrow", 0x8000219100000000ULL },
+	{ "updownarrow", 0x8000219500000000ULL },
+	{ "upharpoonleft", 0x800021bf00000000ULL },
+	{ "upharpoonright", 0x800021be00000000ULL },
+	{ "uplus", 0x8000228e00000000ULL },
+	{ "upsi", 0x800003c500000000ULL },
+	{ "upsih", 0x800003d200000000ULL },
+	{ "upsilon", 0x800003c500000000ULL },
+	{ "upuparrows", 0x800021c800000000ULL },
+	{ "urcorn", 0x8000231d00000000ULL },
+	{ "urcorner", 0x8000231d00000000ULL },
+	{ "urcrop", 0x8000230e00000000ULL },
+	{ "uring", 0x8000016f00000000ULL },
+	{ "urtri", 0x800025f900000000ULL },
+	{ "uscr", 0x8001d4ca00000000ULL },
+	{ "utdot", 0x800022f000000000ULL },
+	{ "utilde", 0x8000016900000000ULL },
+	{ "utri", 0x800025b500000000ULL },
+	{ "utrif", 0x800025b400000000ULL },
+	{ "uuarr", 0x800021c800000000ULL },
+	{ "uuml", 0x000000fc00000000ULL },
+	{ "uwangle", 0x800029a700000000ULL },
+	{ "vArr", 0x800021d500000000ULL },
+	{ "vBar", 0x80002ae800000000ULL },
+	{ "vBarv", 0x80002ae900000000ULL },
+	{ "vDash", 0x800022a800000000ULL },
+	{ "vangrt", 0x8000299c00000000ULL },
+	{ "varepsilon", 0x800003f500000000ULL },
+	{ "varkappa", 0x800003f000000000ULL },
+	{ "varnothing", 0x8000220500000000ULL },
+	{ "varphi", 0x800003d500000000ULL },
+	{ "varpi", 0x800003d600000000ULL },
+	{ "varpropto", 0x8000221d00000000ULL },
+	{ "varr", 0x8000219500000000ULL },
+	{ "varrho", 0x800003f100000000ULL },
+	{ "varsigma", 0x800003c200000000ULL },
+	{ "varsubsetneq", 0x8000228a0000fe00ULL },
+	{ "varsubsetneqq", 0x80002acb0000fe00ULL },
+	{ "varsupsetneq", 0x8000228b0000fe00ULL },
+	{ "varsupsetneqq", 0x80002acc0000fe00ULL },
+	{ "vartheta", 0x800003d100000000ULL },
+	{ "vartriangleleft", 0x800022b200000000ULL },
+	{ "vartriangleright", 0x800022b300000000ULL },
+	{ "vcy", 0x8000043200000000ULL },
+	{ "vdash", 0x800022a200000000ULL },
+	{ "vee", 0x8000222800000000ULL },
+	{ "veebar", 0x800022bb00000000ULL },
+	{ "veeeq", 0x8000225a00000000ULL },
+	{ "vellip", 0x800022ee00000000ULL },
+	{ "verbar", 0x8000007c00000000ULL },
+	{ "vert", 0x8000007c00000000ULL },
+	{ "vfr", 0x8001d53300000000ULL },
+	{ "vltri", 0x800022b200000000ULL },
+	{ "vnsub", 0x80002282000020d2ULL },
+	{ "vnsup", 0x80002283000020d2ULL },
+	{ "vopf", 0x8001d56700000000ULL },
+	{ "vprop", 0x8000221d00000000ULL },
+	{ "vrtri", 0x800022b300000000ULL },
+	{ "vscr", 0x8001d4cb00000000ULL },
+	{ "vsubnE", 0x80002acb0000fe00ULL },
+	{ "vsubne", 0x8000228a0000fe00ULL },
+	{ "vsupnE", 0x80002acc0000fe00ULL },
+	{ "vsupne", 0x8000228b0000fe00ULL },
+	{ "vzigzag", 0x8000299a00000000ULL },
+	{ "wcirc", 0x8000017500000000ULL },
+	{ "wedbar", 0x80002a5f00000000ULL },
+	{ "wedge", 0x8000222700000000ULL },
+	{ "wedgeq", 0x8000225900000000ULL },
+	{ "weierp", 0x8000211800000000ULL },
+	{ "wfr", 0x8001d53400000000ULL },
+	{ "wopf", 0x8001d56800000000ULL },
+	{ "wp", 0x8000211800000000ULL },
+	{ "wr", 0x8000224000000000ULL },
+	{ "wreath", 0x8000224000000000ULL },
+	{ "wscr", 0x8001d4cc00000000ULL },
+	{ "xcap", 0x800022c200000000ULL },
+	{ "xcirc", 0x800025ef00000000ULL },
+	{ "xcup", 0x800022c300000000ULL },
+	{ "xdtri", 0x800025bd00000000ULL },
+	{ "xfr", 0x8001d53500000000ULL },
+	{ "xhArr", 0x800027fa00000000ULL },
+	{ "xharr", 0x800027f700000000ULL },
+	{ "xi", 0x800003be00000000ULL },
+	{ "xlArr", 0x800027f800000000ULL },
+	{ "xlarr", 0x800027f500000000ULL },
+	{ "xmap", 0x800027fc00000000ULL },
+	{ "xnis", 0x800022fb00000000ULL },
+	{ "xodot", 0x80002a0000000000ULL },
+	{ "xopf", 0x8001d56900000000ULL },
+	{ "xoplus", 0x80002a0100000000ULL },
+	{ "xotime", 0x80002a0200000000ULL },
+	{ "xrArr", 0x800027f900000000ULL },
+	{ "xrarr", 0x800027f600000000ULL },
+	{ "xscr", 0x8001d4cd00000000ULL },
+	{ "xsqcup", 0x80002a0600000000ULL },
+	{ "xuplus", 0x80002a0400000000ULL },
+	{ "xutri", 0x800025b300000000ULL },
+	{ "xvee", 0x800022c100000000ULL },
+	{ "xwedge", 0x800022c000000000ULL },
+	{ "yacute", 0x000000fd00000000ULL },
+	{ "yacy", 0x8000044f00000000ULL },
+	{ "ycirc", 0x8000017700000000ULL },
+	{ "ycy", 0x8000044b00000000ULL },
+	{ "yen", 0x000000a500000000ULL },
+	{ "yfr", 0x8001d53600000000ULL },
+	{ "yicy", 0x8000045700000000ULL },
+	{ "yopf", 0x8001d56a00000000ULL },
+	{ "yscr", 0x8001d4ce00000000ULL },
+	{ "yucy", 0x8000044e00000000ULL },
+	{ "yuml", 0x000000ff00000000ULL },
+	{ "zacute", 0x8000017a00000000ULL },
+	{ "zcaron", 0x8000017e00000000ULL },
+	{ "zcy", 0x8000043700000000ULL },
+	{ "zdot", 0x8000017c00000000ULL },
+	{ "zeetrf", 0x8000212800000000ULL },
+	{ "zeta", 0x800003b600000000ULL },
+	{ "zfr", 0x8001d53700000000ULL },
+	{ "zhcy", 0x8000043600000000ULL },
+	{ "zigrarr", 0x800021dd00000000ULL },
+	{ "zopf", 0x8001d56b00000000ULL },
+	{ "zscr", 0x8001d4cf00000000ULL },
+	{ "zwj", 0x8000200d00000000ULL },
+	{ "zwnj", 0x8000200c00000000ULL },
+};
+
+static void
+ucv_stringbuf_addutf8(uc_stringbuf_t *buf, unsigned int code)
+{
+	unsigned char seq[5];
+	size_t len = 0;
+
+	switch (code) {
+	// disallow CR (https://html.spec.whatwg.org/multipage/syntax.html#character-references)
+	case      0xD:
+
+	// disallow controls (https://infra.spec.whatwg.org/#control) except whitespace
+	case      0x0 ...      0x8:
+	case      0xB:
+	case      0xE ...     0x1F:
+	case     0x7F ...     0x9F:
+
+	// disallow noncharacter (https://infra.spec.whatwg.org/#noncharacter)
+	case   0xFDD0 ...   0xFDEF:
+	case   0xFFFE ...   0xFFFF:
+	case  0x1FFFE ...  0x1FFFF:
+	case  0x2FFFE ...  0x2FFFF:
+	case  0x3FFFE ...  0x3FFFF:
+	case  0x4FFFE ...  0x4FFFF:
+	case  0x5FFFE ...  0x5FFFF:
+	case  0x6FFFE ...  0x6FFFF:
+	case  0x7FFFE ...  0x7FFFF:
+	case  0x8FFFE ...  0x8FFFF:
+	case  0x9FFFE ...  0x9FFFF:
+	case  0xAFFFE ...  0xAFFFF:
+	case  0xBFFFE ...  0xBFFFF:
+	case  0xCFFFE ...  0xCFFFF:
+	case  0xDFFFE ...  0xDFFFF:
+	case  0xEFFFE ...  0xEFFFF:
+	case  0xFFFFE ...  0xFFFFF:
+	case 0x10FFFE ... 0x10FFFF:
+		return;
+	}
+
+	if (code <= 0x7F) {
+		seq[len++] = code;
+	}
+	else if (code <= 0x7FF) {
+		seq[len++] = ((code >>  6) & 0x1F) | 0xC0;
+		seq[len++] = ( code        & 0x3F) | 0x80;
+	}
+	else if (code <= 0xFFFF) {
+		seq[len++] = ((code >> 12) & 0x0F) | 0xE0;
+		seq[len++] = ((code >>  6) & 0x3F) | 0x80;
+		seq[len++] = ( code        & 0x3F) | 0x80;
+	}
+	else if (code <= 0x10FFFF) {
+		seq[len++] = ((code >> 18) & 0x07) | 0xF0;
+		seq[len++] = ((code >> 12) & 0x3F) | 0x80;
+		seq[len++] = ((code >>  6) & 0x3F) | 0x80;
+		seq[len++] = ( code        & 0x3F) | 0x80;
+	}
+
+	ucv_stringbuf_addstr(buf, (char *)seq, len);
+}
+
+static void
+expand_named_char_ref(uc_stringbuf_t *buf, const char *name, size_t len, bool semicolon)
+{
+	ssize_t l = 0;
+	ssize_t r = sizeof(named_char_refs) / sizeof(named_char_refs[0]) - 1;
+	ssize_t m;
+	int c;
+
+	while (l <= r) {
+		m = (l + r) / 2;
+		c = strncmp(named_char_refs[m].name, name, len);
+
+		if (c < 0) {
+			l = m + 1;
+			continue;
+		}
+
+		if (c > 0 || named_char_refs[m].name[len] != 0) {
+			r = m - 1;
+			continue;
+		}
+
+		if (!(named_char_refs[m].value & (1ULL << 63)) || semicolon) {
+			ucv_stringbuf_addutf8(buf, (named_char_refs[m].value >> 32) & 0x7FFFFFFFULL);
+			ucv_stringbuf_addutf8(buf, named_char_refs[m].value & 0xFFFFFFFFULL);
+
+			return;
+		}
+
+		break;
+	}
+
+	ucv_stringbuf_append(buf, "&");
+	ucv_stringbuf_addstr(buf, name, len);
+
+	if (semicolon)
+		ucv_stringbuf_append(buf, ";");
+}
+
+static void
+expand_char_refs(uc_stringbuf_t *buf, const char *s, size_t len, bool loose)
+{
+	const char *end = s + len, *p;
+	unsigned int u;
+	size_t elen;
+	char *e;
+
+	while (s < end) {
+		p = memchr(s, '&', end - s);
+		elen = 1;
+
+		if (!p) {
+			ucv_stringbuf_addstr(buf, s, end - s);
+			break;
+		}
+
+		ucv_stringbuf_addstr(buf, s, p - s);
+
+		while (isalpha(p[elen]))
+			elen++;
+
+		if (elen > 1) {
+			if (p[elen] == ';') {
+				expand_named_char_ref(buf, p + 1, elen - 1, true);
+				s = p + elen + 1;
+			}
+			else if (loose) {
+				expand_named_char_ref(buf, p + 1, elen - 1, false);
+				s = p + elen;
+			}
+			else {
+				ucv_stringbuf_addstr(buf, p, elen);
+				s = p + elen;
+			}
+		}
+		else if (p[elen] == '#') {
+			if ((p[++elen] | 32) == 'x') {
+				u = strtoul(p + ++elen, &e, 16);
+
+				if (e > p + elen && *e == ';') {
+					ucv_stringbuf_addutf8(buf, u);
+					s = e + 1;
+				}
+				else {
+					ucv_stringbuf_addstr(buf, p, e - p);
+					s = e;
+				}
+			}
+			else {
+				u = strtoul(p + elen, &e, 10);
+
+				if (e > p + elen && *e == ';') {
+					ucv_stringbuf_addutf8(buf, u);
+					s = e + 1;
+				}
+				else {
+					ucv_stringbuf_addstr(buf, p, e - p);
+					s = e;
+				}
+			}
+		}
+		else {
+			ucv_stringbuf_addstr(buf, p, elen);
+			s = p + elen;
+		}
+	}
+}
+
+static void
+ucv_stringbuf_addtext(uc_stringbuf_t *buf, const char *s, size_t len)
+{
+	bool space = (buf->bpos && isspace(buf->buf[buf->bpos - 1]));
+
+	while (space && isspace(*s)) {
+		s++;
+		len--;
+	}
+
+	while (len > 1 && isspace(s[len - 1]))
+		len--;
+
+	expand_char_refs(buf, s, len, true);
+}
+
+static bool
+_invoke_cb(const char *s, size_t len, html_token_callback_t cb,
+          html_token_type_t type, void *ud)
+{
+	size_t chunksize;
+
+	while (len > 0) {
+		chunksize = (len > 1024) ? 1024 : len;
+
+		if (!cb(type, s, chunksize, ud))
+			return false;
+
+		len -= chunksize;
+		s += chunksize;
+	}
+
+	return true;
+}
+
+#define invoke_cb(s, len, cb, type, ud)        \
+	do {                                       \
+		if (!_invoke_cb(s, len, cb, type, ud)) \
+			return false;                      \
+	} while(0)
+
+static size_t
+_memspn(const char *s, size_t n, const char *set, size_t m, bool invert)
+{
+	uint64_t mask[(1 << CHAR_BIT) / (sizeof(uint64_t) * CHAR_BIT)] = { 0 };
+
+	#define mask_off(n) mask[((unsigned char)(n) / (sizeof(mask[0]) * CHAR_BIT))]
+	#define mask_bit(n) (1ULL << ((unsigned char)(n) % (sizeof(mask[0]) * CHAR_BIT)))
+
+	/* NB: Nudge clang & gcc to unroll the mask initialization loop below.
+	 *     Since we only invoke _memspn() with constant set string literals
+	 *     containing only characters up to '>' (62), the loop below should
+	 *     be optimized into a single constant load opcode for mask[0].
+	 */
+	#ifdef __clang__
+	#pragma unroll 255
+	#elif __GNUC__
+	#pragma GCC unroll 255
+	#endif
+	for (; m > 0; m--, set++)
+		mask_off(*set) |= mask_bit(*set);
+
+	for (m = 0; m < n; m++)
+		if (!(mask_off(s[m]) & mask_bit(s[m])) == !invert)
+			break;
+
+	#undef mask_off
+	#undef mask_bit
+
+	return m;
+}
+
+#define memspn(s, n, set) _memspn(s, n, set, sizeof(set) - 1, false)
+#define memcspn(s, n, set) _memspn(s, n, set, sizeof(set) - 1, true)
+
+static bool
+tokenize_html(const char *s, size_t len, html_token_callback_t cb, void *ud)
+{
+	const char *end = s + len, *p;
+	char raw[16] = { 0 };
+
+	enum {
+		SEARCH,
+		IDENTIFY,
+		COMMENT,
+		ATTR,
+		END
+	} state = 0;
+
+	while (state != END) {
+		switch (state) {
+		case SEARCH:
+			p = memchr(s, '<', end - s);
+
+			if (p) {
+				if (p != s)
+					invoke_cb(s, p - s, cb, raw[0] ? T_RAW : T_TEXT, ud);
+
+				s = p + 1;
+				state = IDENTIFY;
+			}
+			else {
+				state = END;
+			}
+
+			break;
+
+		case IDENTIFY:
+			if (*s == '/') {
+				p = memchr(s, '>', end - s);
+
+				if (p) {
+					while (p != s && isspace(p[-1]))
+						p--;
+
+					if (!raw[0] || !strncasecmp(s + 1, raw, p - s - 1)) {
+						invoke_cb(s + 1, p - s - 1, cb, T_CLOSE, ud);
+						raw[0] = 0;
+					}
+					else {
+						invoke_cb(s - 1, p - s + 2, cb, T_RAW, ud);
+					}
+
+					s = p + 1;
+					state = SEARCH;
+				}
+				else {
+					state = END;
+				}
+			}
+			else if (raw[0]) {
+				invoke_cb("<", 1, cb, T_RAW, ud);
+				state = SEARCH;
+			}
+			else if (*s == '!') {
+				state = COMMENT;
+				s++;
+			}
+			else {
+				p = s + memcspn(s, end - s, "/'\"> \f\r\t\n\0");
+
+				if (p != s) {
+					invoke_cb(s, p - s, cb, T_OPEN, ud);
+
+					if (!strncasecmp(s, "script", p - s) ||
+					    !strncasecmp(s, "style", p - s)) {
+						memset(raw, 0, sizeof(raw));
+						memcpy(raw, s, p - s);
+					}
+
+					s = p + memspn(p, end - p, " \f\r\t\n\0");
+					state = ATTR;
+				}
+				else {
+					invoke_cb("<", 1, cb, T_TEXT, ud);
+					state = SEARCH;
+				}
+			}
+
+			break;
+
+		case COMMENT:
+			if (!strncmp(s, "--", 2)) {
+				p = memmem(s + 2, end - s - 2, "-->", 3);
+
+				if (p) {
+					invoke_cb(s + 2, p - s - 2, cb, raw[0] ? T_RAW : T_COMMENT, ud);
+					s = p + 3;
+					state = SEARCH;
+				}
+				else {
+					// unterminated comment
+					invoke_cb(s + 2, end - s - 2, cb, raw[0] ? T_RAW : T_COMMENT, ud);
+					s = NULL;
+					state = END;
+				}
+			}
+			else if (!strncasecmp(s, "[CDATA[", 7)) {
+				p = memmem(s + 7, end - s - 7, "]]>", 3);
+
+				if (p) {
+					invoke_cb(s + 7, p - s - 7, cb, raw[0] ? T_RAW : T_CDATA, ud);
+					s = p + 3;
+					state = SEARCH;
+				}
+				else {
+					// unterminated comment
+					invoke_cb(s + 7, end - s - 7, cb, raw[0] ? T_RAW : T_CDATA, ud);
+					s = NULL;
+					state = END;
+				}
+			}
+			else {
+				p = memchr(s, '>', end - s);
+
+				if (p) {
+					invoke_cb(s, p - s, cb, raw[0] ? T_RAW : T_PROCINST, ud);
+					s = p + 1;
+					state = SEARCH;
+				}
+				else {
+					// unterminated comment
+					invoke_cb(s, end - s, cb, raw[0] ? T_RAW : T_PROCINST, ud);
+					s = NULL;
+					state = END;
+				}
+			}
+
+			break;
+
+		case ATTR:
+			p = s + memcspn(s, end - s, "'\"> \f\r\t\n\0");
+
+			if (*p == '>') {
+				if (p != s) {
+					if ((p - s) > 1 || *s != '/')
+						invoke_cb(s, p - s, cb, T_ATTR, ud);
+				}
+
+				s = p + 1;
+				state = SEARCH;
+			}
+			else if (*p == '"' || *p == '\'') {
+				p = memchr(p + 1, *p, end - p);
+
+				if (p) {
+					invoke_cb(s, p - s + 1, cb, T_ATTR, ud);
+					s = p + 1;
+				}
+				else {
+					// unterminated quoted string
+					s = NULL;
+					state = END;
+				}
+			}
+			else if (*p) {
+				if (p != s)
+					invoke_cb(s, p - s, cb, T_ATTR, ud);
+
+				s = p + memspn(p, end - p, " \f\r\t\n\0");
+			}
+			else {
+				// eof
+				state = END;
+			}
+
+			break;
+
+		case END:
+			/* not reached */
+			break;
+		}
+	}
+
+	if (s && *s)
+		invoke_cb(s, end - s, cb, raw[0] ? T_RAW : T_TEXT, ud);
+
+	invoke_cb("", 0, cb, T_EOF, ud);
+
+	return true;
+}
+
+
+static bool
+uc_html_tokenize_cb(html_token_type_t type, const char *s, size_t len, void *ud)
+{
+	const char *end = s + len, *val;
+	uc_vm_t *vm = ud;
+
+	uc_vm_stack_push(vm, ucv_get(uc_vm_stack_peek(vm, 0)));
+	uc_vm_stack_push(vm, ucv_int64_new(type));
+
+	val = (type == T_ATTR && s != NULL) ? memchr(s, '=', len) : NULL;
+
+	if (val) {
+		uc_vm_stack_push(vm, ucv_string_new_length(s, val - s));
+
+		val++;
+
+		if ((end - val) >= 2 && (*val == '"' || *val == '\'')) {
+			val++;
+			end--;
+		}
+
+		uc_vm_stack_push(vm, ucv_string_new_length(val, end - val));
+	}
+	else if (type == T_TEXT && s) {
+		uc_vm_stack_push(vm, ucv_string_new_length(s, end - s));
+	}
+	else if (s) {
+		uc_vm_stack_push(vm, ucv_string_new_length(s, len));
+	}
+
+	if (uc_vm_call(vm, false, 1 + !!s + !!val) == EXCEPTION_NONE) {
+		ucv_put(uc_vm_stack_pop(vm));
+
+		return true;
+	}
+
+	return false;
+}
+
+static uc_value_t *
+uc_html_tokenize(uc_vm_t *vm, size_t nargs)
+{
+	uc_value_t *input = uc_fn_arg(0);
+	uc_value_t *callback = uc_fn_arg(1);
+	bool res;
+
+	if (ucv_type(input) != UC_STRING)
+		return NULL;
+
+	if (!ucv_is_callable(callback))
+		return NULL;
+
+	uc_vm_stack_push(vm, ucv_get(callback));
+
+	res = tokenize_html(
+		ucv_string_get(input), ucv_string_length(input),
+		uc_html_tokenize_cb, vm);
+
+	ucv_put(uc_vm_stack_pop(vm));
+
+	return ucv_boolean_new(res);
+}
+
+
+static bool
+uc_html_striptags_cb(html_token_type_t type, const char *s, size_t len, void *ud)
+{
+	uc_stringbuf_t *buf = ud;
+
+	if (type == T_TEXT)
+		ucv_stringbuf_addtext(buf, s, len);
+	else if (type == T_OPEN && (unsigned int)buf->bpos > sizeof(uc_string_t))
+		ucv_stringbuf_append(buf, " ");
+
+	return true;
+}
+
+static uc_value_t *
+uc_html_striptags(uc_vm_t *vm, size_t nargs)
+{
+	uc_value_t *input = uc_fn_arg(0);
+	uc_stringbuf_t *buf;
+
+	if (ucv_type(input) != UC_STRING)
+		return NULL;
+
+	buf = ucv_stringbuf_new();
+
+	tokenize_html(
+		ucv_string_get(input), ucv_string_length(input),
+		uc_html_striptags_cb, buf);
+
+	return ucv_stringbuf_finish(buf);
+}
+
+
+static uc_value_t *
+uc_html_entitydecode(uc_vm_t *vm, size_t nargs)
+{
+	uc_value_t *input = uc_fn_arg(0);
+	uc_value_t *loose = uc_fn_arg(1);
+	uc_stringbuf_t *buf;
+
+	if (ucv_type(input) != UC_STRING)
+		return NULL;
+
+	buf = ucv_stringbuf_new();
+
+	expand_char_refs(buf, ucv_string_get(input), ucv_string_length(input),
+	                 ucv_is_truish(loose));
+
+	return ucv_stringbuf_finish(buf);
+}
+
+static uc_value_t *
+uc_html_entityencode(uc_vm_t *vm, size_t nargs)
+{
+	uc_value_t *input = uc_fn_arg(0);
+	uc_value_t *quote = uc_fn_arg(1);
+	const char *s, *p, *end;
+	uc_stringbuf_t *buf;
+
+	if (ucv_type(input) != UC_STRING)
+		return NULL;
+
+	s = ucv_string_get(input);
+	end = s + ucv_string_length(input);
+	buf = ucv_stringbuf_new();
+
+	while (s < end) {
+		if (ucv_is_truish(quote))
+			p = s + memcspn(s, end - s, "<&'\">\0");
+		else
+			p = s + memcspn(s, end - s, "<&>\0");
+
+		if (p != s)
+			ucv_stringbuf_addstr(buf, s, p - s);
+
+		if (p < end) {
+			switch (*p) {
+			case '"':  ucv_stringbuf_append(buf, "&#34;"); break;
+			case '&':  ucv_stringbuf_append(buf, "&#38;"); break;
+			case '\'': ucv_stringbuf_append(buf, "&#39;"); break;
+			case '<':  ucv_stringbuf_append(buf, "&#60;"); break;
+			case '>':  ucv_stringbuf_append(buf, "&#62;"); break;
+			default:   ucv_stringbuf_append(buf, "&#xfffd;");
+			}
+		}
+
+		s = p + 1;
+	}
+
+	if (s < end)
+		ucv_stringbuf_addstr(buf, s, end - s);
+
+	return ucv_stringbuf_finish(buf);
+}
+
+
+static const uc_function_list_t html_fns[] = {
+	{ "tokenize",		uc_html_tokenize },
+	{ "striptags",		uc_html_striptags },
+	{ "entitydecode",	uc_html_entitydecode },
+	{ "entityencode",	uc_html_entityencode },
+};
+
+void uc_module_init(uc_vm_t *vm, uc_value_t *scope)
+{
+	uc_function_list_register(scope, html_fns);
+
+	ucv_object_add(scope, "TEXT",     ucv_int64_new(T_TEXT));
+	ucv_object_add(scope, "RAW",      ucv_int64_new(T_RAW));
+	ucv_object_add(scope, "OPEN",     ucv_int64_new(T_OPEN));
+	ucv_object_add(scope, "ATTR",     ucv_int64_new(T_ATTR));
+	ucv_object_add(scope, "CLOSE",    ucv_int64_new(T_CLOSE));
+	ucv_object_add(scope, "COMMENT",  ucv_int64_new(T_COMMENT));
+	ucv_object_add(scope, "CDATA",    ucv_int64_new(T_CDATA));
+	ucv_object_add(scope, "PROCINST", ucv_int64_new(T_PROCINST));
+	ucv_object_add(scope, "EOF",      ucv_int64_new(T_EOF));
+}

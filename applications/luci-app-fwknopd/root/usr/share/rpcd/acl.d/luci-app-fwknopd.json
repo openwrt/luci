@@ -1,0 +1,16 @@
+{
+	"luci-app-fwknopd": {
+		"description": "Grant UCI access for luci-app-fwknopd",
+		"read": {
+			"uci": [ "fwknopd" ],
+			"file": {
+				"/etc/fwknop/*": [ "read" ],
+				"/usr/bin/qrencode": [ "exec" ],
+				"/usr/sbin/fwknopd --key-gen": [ "exec" ]
+			}
+		},
+		"write": {
+			"uci": [ "fwknopd" ]
+		}
+	}
+}
