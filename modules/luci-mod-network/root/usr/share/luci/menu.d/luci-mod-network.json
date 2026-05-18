@@ -46,6 +46,23 @@
 		}
 	},
 
+	"admin/network/switchconfig": {
+		"title": "Switch/VLAN config",
+		"order": 16,
+		"action": {
+			"type": "view",
+			"path": "network/switchconfig"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-config" ],
+			"uci": {
+				"network": {
+					"@device": { "type": "bridge" }
+				}
+			}
+		}
+	},
+
 	"admin/network/routes": {
 		"title": "Routing",
 		"order": 30,

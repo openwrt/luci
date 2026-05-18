@@ -1,0 +1,391 @@
+/*
+ * Switch config view — port-centric VLAN assignment
+ * Injected as a stylesheet <link> in switchconfig.js load() (LuCI has no L.loadCSS).
+ * Scoped under .switchconfig-pc to avoid polluting other views.
+ */
+
+/* ------------------------------------------------------------------ layout */
+
+/*
+ * Reserve bottom padding for the fixed .assign-dock.
+ * LuCI nests .switchconfig-pc inside #maincontent, so the fixed dock
+ * sits relative to the viewport, not this element.
+ */
+.switchconfig-pc {
+	padding-bottom: clamp(14rem, 38vh, 26rem);
+	box-sizing: border-box;
+}
+
+/* ------------------------------------------------------------------ assign dock (fixed bottom bar) */
+
+.switchconfig-pc .assign-dock {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 850;
+	background: var(--background-color-high);
+	border-top: 1px solid var(--border-color-medium);
+	box-shadow: 0 -2px 8px hsla(0, 0%, 0%, .08);
+}
+
+.switchconfig-pc .assign-dock > .container {
+	padding-top: .5rem;
+	padding-bottom: 0;
+}
+
+.switchconfig-pc .assign-dock .cbi-section > legend:first-child {
+	padding-top: 8px;
+}
+
+.switchconfig-pc .assign-dock .cbi-page-actions {
+	margin-bottom: 0;
+}
+
+.switchconfig-pc .assign-dock-tools {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .375rem;
+	margin: .25rem 0 .5rem;
+}
+
+/* ------------------------------------------------------------------ port grid */
+
+.switchconfig-pc .pc-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(108px, 120px));
+	gap: .5rem .625rem;
+	justify-content: start;
+	align-items: start;
+	margin: .5rem 0 0;
+}
+
+/* ------------------------------------------------------------------ port chip */
+
+.switchconfig-pc .pc-chip {
+	width: 120px;
+	height: 126px;
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--border-color-medium);
+	border-radius: 3px;
+	padding: 6px;
+	cursor: pointer;
+	box-sizing: border-box;
+	background: var(--background-color-high);
+	box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .6);
+	overflow: hidden;
+}
+
+.switchconfig-pc .pc-chip:hover {
+	border-color: var(--primary-color-high);
+}
+
+.switchconfig-pc .pc-chip.selected {
+	outline: 2px solid var(--primary-color-high);
+	outline-offset: 1px;
+	background: var(--background-color-low);
+}
+
+.switchconfig-pc .pc-name {
+	font-family: var(--font-mono);
+	font-weight: bold;
+	font-size: .75rem;
+	text-align: center;
+	color: var(--text-color-high);
+	flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ link status indicator */
+
+.switchconfig-pc .pc-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	margin-top: 2px;
+	font-size: .5625rem;
+	line-height: 1.15;
+	flex-shrink: 0;
+}
+
+.switchconfig-pc .pc-link-ico {
+	display: inline-block;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	flex-shrink: 0;
+	box-shadow: inset 0 -1px 1px rgba(0, 0, 0, .18);
+}
+
+.switchconfig-pc .pc-link--up .pc-link-ico {
+	background: linear-gradient(180deg, var(--success-color-high), var(--success-color-medium));
+	box-shadow: 0 0 0 1px rgba(var(--success-color-high-rgb), .35);
+}
+
+.switchconfig-pc .pc-link--down .pc-link-ico {
+	background: linear-gradient(180deg, var(--error-color-medium), var(--error-color-low));
+	box-shadow: 0 0 0 1px rgba(var(--error-color-high-rgb), .28);
+}
+
+.switchconfig-pc .pc-link--up .pc-link-desc {
+	color: var(--success-color-medium);
+	font-weight: bold;
+}
+
+.switchconfig-pc .pc-link--down .pc-link-desc {
+	color: var(--error-color-medium);
+	font-weight: bold;
+}
+
+/* ------------------------------------------------------------------ chip summary text */
+
+.switchconfig-pc .pc-sum {
+	margin-top: 3px;
+	font-size: .6875rem;
+	line-height: 1.35;
+	word-break: break-word;
+	overflow-wrap: anywhere;
+	color: var(--text-color-medium);
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+.switchconfig-pc .pc-sum strong {
+	color: var(--text-color-high);
+}
+
+.switchconfig-pc .pc-sum em {
+	font-style: normal;
+	font-weight: bold;
+	color: var(--primary-color-medium);
+}
+
+.switchconfig-pc .chip-empty {
+	color: var(--text-color-low);
+}
+
+/* ------------------------------------------------------------------ port label input (inside chip) */
+
+.switchconfig-pc .pc-port-label {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 2px;
+	padding: 1px 3px;
+	font-size: .625rem;
+	line-height: 1.15;
+	font-weight: normal;
+	font-family: var(--font-sans);
+	color: var(--text-color-medium);
+	border: 1px solid var(--border-color-medium);
+	border-radius: 2px;
+	background: var(--background-color-medium);
+}
+
+/* ------------------------------------------------------------------ native VLAN select (dock) */
+
+.switchconfig-pc .assign-dock .cbi-value-field > span.cbi-select {
+	display: inline-block;
+	vertical-align: middle;
+	position: relative;
+	width: 210px;
+	max-width: min(100%, 210px);
+	height: 30px;
+	min-height: 30px;
+	padding: 0 !important;
+	margin: 0;
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 1px solid var(--border-color-high);
+	border-radius: 3px;
+	background: linear-gradient(var(--background-color-high), var(--border-color-low));
+}
+
+.switchconfig-pc .assign-dock .cbi-value-field > span.cbi-select select {
+	display: block;
+	width: 100% !important;
+	height: 30px !important;
+	min-height: 30px !important;
+	margin: 0 !important;
+	padding: 0 1.75em 0 6px !important;
+	line-height: 28px !important;
+	font-size: .8125rem;
+	font-family: var(--font-sans);
+	color: var(--text-color-high);
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	-webkit-appearance: none;
+	appearance: none;
+	cursor: pointer;
+}
+
+/* ------------------------------------------------------------------ tagged VLAN custom dropdown */
+
+.switchconfig-pc .ck-dd {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+	max-width: 100%;
+}
+
+.switchconfig-pc .assign-dock button.ck-dd-toggle {
+	appearance: none;
+	font-family: var(--font-sans);
+	font-size: .8125rem;
+	height: 30px;
+	min-height: 30px;
+	max-height: 30px;
+	margin: 0;
+	padding: 0 8px;
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	width: fit-content;
+	max-width: min(100%, 260px);
+	text-align: left;
+	color: var(--text-color-high);
+	cursor: pointer;
+	background: linear-gradient(var(--background-color-high), var(--border-color-low));
+	border: 1px solid var(--border-color-high);
+	border-radius: 3px;
+}
+
+.switchconfig-pc .assign-dock .ck-dd-label {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	flex: 0 1 auto;
+	min-width: 0;
+}
+
+.switchconfig-pc .ck-dd-menu {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 100%;
+	margin-top: 3px;
+	min-width: 12rem;
+	width: max-content;
+	max-width: min(calc(100vw - 24px), 20rem);
+	max-height: 12rem;
+	overflow-y: auto;
+	z-index: 9000;
+	padding: 5px 6px;
+	background: var(--background-color-high);
+	border: 1px solid var(--border-color-medium);
+	border-radius: 3px;
+	box-shadow: 0 4px 12px hsla(0, 0%, 0%, .15);
+	list-style: none;
+}
+
+.switchconfig-pc .ck-dd.open > .ck-dd-menu {
+	display: block;
+}
+
+.switchconfig-pc .ck-dd-menu li.ck-dd-meta {
+	margin: 0 0 5px;
+	padding: 0 0 6px;
+	border-bottom: 1px solid var(--border-color-medium);
+	list-style: none;
+}
+
+.switchconfig-pc .ck-dd-menu .ck-dd-tag-bulk {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 5px 6px;
+	font-size: .75rem;
+	font-weight: bold;
+	text-align: left;
+	cursor: pointer;
+	color: var(--primary-color-medium);
+	background: var(--background-color-low);
+	border: 1px solid var(--border-color-medium);
+	border-radius: 3px;
+}
+
+.switchconfig-pc .ck-dd-menu .ck-dd-tag-bulk:hover:not(:disabled) {
+	background: var(--background-color-medium);
+	color: var(--primary-color-low);
+}
+
+.switchconfig-pc .ck-dd-menu .ck-dd-tag-bulk:disabled {
+	opacity: var(--disabled-opacity);
+	cursor: not-allowed;
+}
+
+.switchconfig-pc .ck-dd-menu li label.ck-dd-vlan {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	margin: 0;
+	padding: 4px 6px;
+	font-size: .8125rem;
+	cursor: pointer;
+	border-radius: 2px;
+}
+
+/* ------------------------------------------------------------------ preview / status line */
+
+.switchconfig-pc #scp-preview {
+	margin: .5rem 0 .75rem;
+	font-size: .75rem;
+	line-height: 1.45;
+	max-height: 6.5rem;
+	overflow: auto;
+}
+
+/* ------------------------------------------------------------------ VLAN catalogue section */
+
+.switchconfig-pc fieldset.vlan-maint-section {
+	margin-top: 1.5rem;
+}
+
+.switchconfig-pc .vlan-catalog-line {
+	font-family: var(--font-mono);
+	font-size: .75rem;
+	margin-bottom: .625rem;
+}
+
+.switchconfig-pc .vlan-maint-add .cbi-value-field {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .5rem;
+}
+
+.switchconfig-pc .vlan-maint-add input[type="number"] {
+	width: 108px;
+	flex-shrink: 0;
+}
+
+.switchconfig-pc .vlan-maint-add input.scp-vlan-add-label {
+	flex: 1 1 12rem;
+	min-width: 10rem;
+	max-width: 36rem;
+	font-size: .8125rem;
+	padding: 3px 8px;
+	box-sizing: border-box;
+}
+
+.switchconfig-pc .scp-vlan-label {
+	width: 100%;
+	max-width: 18rem;
+	box-sizing: border-box;
+	font-size: .75rem;
+	padding: 2px 6px;
+}
+
+.switchconfig-pc #scp-vlan-table td:last-child {
+	width: 7rem;
+}
+
+.switchconfig-pc #scp-vlan-table td:first-child {
+	font-family: var(--font-mono);
+}
