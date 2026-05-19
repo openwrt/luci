@@ -746,7 +746,7 @@ return view.extend({
 							so = ss.taboption('ipv4', form.RichListValue, 'dhcpv4', _('DHCPv4 Service'),
 									  _('Enable or disable DHCPv4 services on this interface.'));
 							so.optional = true;
-							so.value('disabled', _('disabled'),
+							so.value('', _('disabled'),
 								 _('Do not provide DHCPv4 services on this interface.'));
 							so.value('server', _('enabled'),
 								 _('Provide DHCPv4 services on this interface.'));
