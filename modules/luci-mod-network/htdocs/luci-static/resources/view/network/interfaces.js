@@ -897,8 +897,9 @@ return view.extend({
 
 					so = ss.taboption('ipv6-ra', form.ListValue, 'ra_preference', _('Router Priority'),
 						_('A tie-breaker for clients and their routes when multiple routers exist on the same network.'));
-					so.value('', _('Medium'));
+					so.default = 'medium';
 					so.value('low', _('Low'));
+					so.value('medium', _('Medium'));
 					so.value('high', _('High'));
 					so.depends('ra', 'server');
 
