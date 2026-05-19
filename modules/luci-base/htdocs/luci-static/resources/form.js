@@ -2143,7 +2143,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 			const cval = this.cfgvalue(section_id);
 			const fval = this.formvalue(section_id);
 
-			if (fval == null || fval == '') {
+			if (fval == null || fval == '' || (fval == this.default && (this.optional || this.rmempty))) {
 				if (this.rmempty || this.optional) {
 					return Promise.resolve(this.remove(section_id));
 				}
