@@ -62,6 +62,10 @@ msgid "<IP-Address><Space><Netmask>"
 msgstr "<IP-Address><Space><Netmask>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:237
+msgid "<JSON Lines><IP-Address><JSON Lines>"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:238
 msgid "<Suricata Syntax>"
 msgstr "<Синтаксис сурікати>"
 
@@ -246,7 +250,7 @@ msgstr "Ядра ЦП"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
 msgid "Chain"
 msgstr "Ланцюг"
 
@@ -270,7 +274,7 @@ msgstr ""
 "Щоб зміни на цій вкладці набули чинності, потрібно перезапустити службу "
 "banIP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:306
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:307
 msgid "Clear"
 msgstr "Очистити"
 
@@ -314,7 +318,7 @@ msgstr ""
 msgid "Deduplicate IPs"
 msgstr "Дедуплікувати IP-адреси"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:247
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:248
 msgid "Description"
 msgstr "Опис"
 
@@ -334,7 +338,7 @@ msgstr "Вимкнути"
 msgid "Don't check SSL server certificates during download."
 msgstr "Не перевіряти SSL-сертифікати сервера під час завантаження."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:280
 msgid "Download"
 msgstr "Завантажити"
 
@@ -399,7 +403,7 @@ msgid "Elements (max. 50)"
 msgstr "Елементи (макс. 50)"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:203
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:251
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:252
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:654
 msgid "Empty field not allowed"
 msgstr "Порожнє поле не допускається"
@@ -496,7 +500,7 @@ msgstr "Вибір каналу"
 msgid "Feed/Set Settings"
 msgstr "Налаштування каналу/набору"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:298
 msgid "Fill"
 msgstr "Заповнити"
 
@@ -504,11 +508,11 @@ msgstr "Заповнити"
 msgid "Firewall Log"
 msgstr "Журнал брандмауера"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:256
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:257
 msgid "Flag"
 msgstr "Прапорець"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:262
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:263
 msgid "Flag not supported"
 msgstr "Прапорець не підтримується"
 
@@ -568,11 +572,11 @@ msgstr "Мережеві інтерфейси IPv6"
 msgid "IPv6 Support"
 msgstr "Підтримка IPv6"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
 msgid "Inbound"
 msgstr "Вхідний"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
 msgid "Inbound & Outbound"
 msgstr "Вхідні та вихідні"
 
@@ -793,7 +797,7 @@ msgstr ""
 msgid "Opt out specific feeds from the deduplication process."
 msgstr "Виключити певні канали з процесу дедуплікації."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Outbound"
 msgstr "Вихідний"
 
@@ -840,10 +844,9 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:258
 msgid ""
 "Override the pre-configured download options for the selected download "
-"utility."
+"utility. The output flag, e.g. '-o' for curl or '-O' for wget, must be the "
+"last parameter."
 msgstr ""
-"Перевизначити попередньо налаштовані параметри завантаження для вибраної "
-"утиліти завантаження."
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:25
 msgid "Overview"
@@ -962,7 +965,7 @@ msgstr ""
 "SYN-Threshold у пакетах за секунду для запобігання атак WAN-DoS. Щоб "
 "вимкнути цей захист, встановіть для нього значення «0»."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:315
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:316
 msgid "Save"
 msgstr "Зберегти"
 
@@ -1258,7 +1261,7 @@ msgstr "Не вдалося проаналізувати файл набору �
 msgid "Unable to save modifications: %s"
 msgstr "Не вдалося зберегти зміни: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:289
 msgid "Upload"
 msgstr "Вивантажити"
 
@@ -1409,6 +1412,13 @@ msgstr "невдалий вхід через sshd"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "warn"
 msgstr "попередження"
+
+#~ msgid ""
+#~ "Override the pre-configured download options for the selected download "
+#~ "utility."
+#~ msgstr ""
+#~ "Перевизначити попередньо налаштовані параметри завантаження для вибраної "
+#~ "утиліти завантаження."
 
 #~ msgid "Enable nft counter for every Set element."
 #~ msgstr "Увімкнути лічильник nft для кожного елемента Set."

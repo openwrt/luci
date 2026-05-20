@@ -362,18 +362,23 @@ return view.extend({
 							L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['report', 'gen']), '');
 							let attempts = 0;
 							let poller = setInterval(function () {
-								attempts++;
 								L.resolveDefault(fs.read('/var/run/banIP/banIP.report'), '').then(function (res) {
-									if (res && res.trim()) {
+									res = (res || '').trim();
+									if (res === '1') {
 										clearInterval(poller);
 										location.reload();
-									} else if (attempts >= 40) {
-										clearInterval(poller);
-										btn.classList.remove('spinning');
-										document.querySelectorAll('.cbi-page-actions button').forEach(function (b) {
-											b.disabled = false;
-										});
-										ui.addNotification(null, E('p', _('Failed to generate a banIP report!')), 'error');
+									} else if (res === '0') {
+										// keep polling, no attempt counter
+									} else {
+										attempts++;
+										if (attempts >= 10) {
+											clearInterval(poller);
+											btn.classList.remove('spinning');
+											document.querySelectorAll('.cbi-page-actions button').forEach(function (b) {
+												b.disabled = false;
+											});
+											ui.addNotification(null, E('p', _('Failed to generate a banIP report!')), 'error');
+										}
 									}
 								});
 							}, 3000);

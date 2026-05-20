@@ -61,6 +61,10 @@ msgid "<IP-Address><Space><Netmask>"
 msgstr "<IP-Adresse>Space><Netmask>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:237
+msgid "<JSON Lines><IP-Address><JSON Lines>"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:238
 msgid "<Suricata Syntax>"
 msgstr "<Suricata Syntax>"
 
@@ -246,7 +250,7 @@ msgstr "CPU-Kerne"
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
 msgid "Chain"
 msgstr "Kette"
 
@@ -270,7 +274,7 @@ msgstr ""
 "Änderungen auf dieser Registerkarte benötigen einen Neustart des BanIP-"
 "Services, um wirksam zu werden."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:306
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:307
 msgid "Clear"
 msgstr "Leeren"
 
@@ -314,7 +318,7 @@ msgstr ""
 msgid "Deduplicate IPs"
 msgstr "IPs deduplizieren"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:247
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:248
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -334,7 +338,7 @@ msgstr "Deaktivieren"
 msgid "Don't check SSL server certificates during download."
 msgstr "Während des Downloads keine SSL-Serverzertifikate überprüfen."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:280
 msgid "Download"
 msgstr "Herunterladen"
 
@@ -400,7 +404,7 @@ msgid "Elements (max. 50)"
 msgstr "Elemente (max. 50)"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:203
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:251
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:252
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:654
 msgid "Empty field not allowed"
 msgstr "Leeres Feld ist nicht erlaubt"
@@ -497,7 +501,7 @@ msgstr "Feed-Auswahl"
 msgid "Feed/Set Settings"
 msgstr "Feed/Set Einstellungen"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:298
 msgid "Fill"
 msgstr "Füllen"
 
@@ -505,11 +509,11 @@ msgstr "Füllen"
 msgid "Firewall Log"
 msgstr "Firewall-Protokoll"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:256
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:257
 msgid "Flag"
 msgstr "Flag"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:262
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:263
 msgid "Flag not supported"
 msgstr "Flag nicht unterstützt"
 
@@ -569,11 +573,11 @@ msgstr "IPv6-Netzwerkschnittstellen"
 msgid "IPv6 Support"
 msgstr "IPv6 Unterstützung"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
 msgid "Inbound"
 msgstr "Eingehend"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
 msgid "Inbound & Outbound"
 msgstr "Ein- und ausgehend"
 
@@ -799,7 +803,7 @@ msgstr ""
 msgid "Opt out specific feeds from the deduplication process."
 msgstr "Spezifische Feeds aus dem Deduplikationsprozess ausschließen."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Outbound"
 msgstr "Ausgehend"
 
@@ -846,10 +850,9 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:258
 msgid ""
 "Override the pre-configured download options for the selected download "
-"utility."
+"utility. The output flag, e.g. '-o' for curl or '-O' for wget, must be the "
+"last parameter."
 msgstr ""
-"Überschreiben der vorkonfigurierten Download-Optionen für das ausgewählte "
-"Download-Dienstprogramm."
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:25
 msgid "Overview"
@@ -960,7 +963,7 @@ msgstr ""
 "SYN-Schwelle in Paketen pro Sekunde, um WAN-DoS Angriffe zu verhindern. Um "
 "diesen Schutz zu deaktivieren, auf '0' setzen."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:315
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:316
 msgid "Save"
 msgstr "Speichern"
 
@@ -1259,7 +1262,7 @@ msgstr "Regelsatzdatei kann nicht geparst werden!"
 msgid "Unable to save modifications: %s"
 msgstr "Änderungen können nicht gespeichert werden: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:289
 msgid "Upload"
 msgstr "Hochladen"
 
@@ -1410,6 +1413,13 @@ msgstr "sshd konnte sich nicht anmelden"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "warn"
 msgstr "warn"
+
+#~ msgid ""
+#~ "Override the pre-configured download options for the selected download "
+#~ "utility."
+#~ msgstr ""
+#~ "Überschreiben der vorkonfigurierten Download-Optionen für das ausgewählte "
+#~ "Download-Dienstprogramm."
 
 #~ msgid "Enable nft counter for every Set element."
 #~ msgstr "Nft-Zähler für jedes Set-Eement aktivieren."

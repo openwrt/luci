@@ -239,7 +239,6 @@ const methods = {
 				relayd:     access('/usr/sbin/relayd') == true,
 				apk:        access('/usr/bin/apk') == true,
 				wifi:       access('/sbin/wifi') == true,
-				ufpd:       access('/usr/sbin/ufpd') == true,
 				vrf:        access('/sys/module/vrf/refcnt') == true, // vrf.ko is loaded
 				netifd_vrf: false,
 				mptcp:      access('/proc/sys/net/mptcp/enabled'),
@@ -330,6 +329,11 @@ const methods = {
 				}
 
 				fd.close();
+			}
+
+			result.ufpd = false;
+			if (access('/usr/sbin/ufpd')) {
+				result.ufpd = system(`/etc/init.d/ufp running >/dev/null 2>/dev/null`) == 0
 			}
 
 			return result;

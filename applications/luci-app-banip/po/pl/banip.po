@@ -62,6 +62,10 @@ msgid "<IP-Address><Space><Netmask>"
 msgstr "<Adres-IP><Odstęp><Maska-sieciowa>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:237
+msgid "<JSON Lines><IP-Address><JSON Lines>"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:238
 msgid "<Suricata Syntax>"
 msgstr "<Składnia Suricaty>"
 
@@ -247,7 +251,7 @@ msgstr "Rdzenie procesora"
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
 msgid "Chain"
 msgstr "Łańcuch"
 
@@ -267,7 +271,7 @@ msgstr "Przeładuj usługę banIP, aby zmiany zostały wprowadzone."
 msgid "Changes on this tab needs a banIP service restart to take effect."
 msgstr "Restartuj usługę banIP, aby zmiany zostały wprowadzone."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:306
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:307
 msgid "Clear"
 msgstr "Wyczyść"
 
@@ -312,7 +316,7 @@ msgstr ""
 msgid "Deduplicate IPs"
 msgstr "Deduplikacja adresów IP"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:247
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:248
 msgid "Description"
 msgstr "Opis"
 
@@ -332,7 +336,7 @@ msgstr "Wyłącz"
 msgid "Don't check SSL server certificates during download."
 msgstr "Nie sprawdzaj certyfikatów SSL serwera podczas pobierania."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:280
 msgid "Download"
 msgstr "Pobierz"
 
@@ -397,7 +401,7 @@ msgid "Elements (max. 50)"
 msgstr "Elementy (maks. 50)"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:203
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:251
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:252
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:654
 msgid "Empty field not allowed"
 msgstr "Puste pole jest niedozwolone"
@@ -496,7 +500,7 @@ msgstr "Wybór źródeł"
 msgid "Feed/Set Settings"
 msgstr "Ustawienia źródła/zestawu"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:298
 msgid "Fill"
 msgstr "Wypełnij"
 
@@ -504,11 +508,11 @@ msgstr "Wypełnij"
 msgid "Firewall Log"
 msgstr "Dziennik zapory"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:256
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:257
 msgid "Flag"
 msgstr "Flaga"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:262
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:263
 msgid "Flag not supported"
 msgstr "Flaga jest nieobsługiwana"
 
@@ -568,11 +572,11 @@ msgstr "Interfejsy sieciowe IPv6"
 msgid "IPv6 Support"
 msgstr "Obsługa IPv6"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
 msgid "Inbound"
 msgstr "Przychodzący"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
 msgid "Inbound & Outbound"
 msgstr "Przychodzący i wychodzący"
 
@@ -795,7 +799,7 @@ msgstr ""
 msgid "Opt out specific feeds from the deduplication process."
 msgstr "Zrezygnuj z procesu deduplikacji określonych źródeł."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Outbound"
 msgstr "Wychodzący"
 
@@ -842,10 +846,9 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:258
 msgid ""
 "Override the pre-configured download options for the selected download "
-"utility."
+"utility. The output flag, e.g. '-o' for curl or '-O' for wget, must be the "
+"last parameter."
 msgstr ""
-"Zastąp wstępnie skonfigurowane opcje pobierania dla wybranego narzędzia do "
-"pobierania."
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:25
 msgid "Overview"
@@ -964,7 +967,7 @@ msgstr ""
 "Próg SVN w pakietach na sekundę, aby zapobiec atakom WAN-DoS. Aby wyłączyć "
 "to zabezpieczenie, ustaw je na '0'."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:315
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:316
 msgid "Save"
 msgstr "Zapisz"
 
@@ -1260,7 +1263,7 @@ msgstr "Nie można przeanalizować pliku zestawu reguł!"
 msgid "Unable to save modifications: %s"
 msgstr "Nie można zapisać modyfikacji: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:289
 msgid "Upload"
 msgstr "Wysyłanie"
 
@@ -1411,6 +1414,13 @@ msgstr "sshd: nieudane logowanie"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "warn"
 msgstr "ostrzeżenie"
+
+#~ msgid ""
+#~ "Override the pre-configured download options for the selected download "
+#~ "utility."
+#~ msgstr ""
+#~ "Zastąp wstępnie skonfigurowane opcje pobierania dla wybranego narzędzia "
+#~ "do pobierania."
 
 #~ msgid "Enable nft counter for every Set element."
 #~ msgstr "Włącz licznik nft dla każdego elementu zestawu."
