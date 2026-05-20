@@ -405,6 +405,7 @@ return view.extend({
 		o = s.taboption('general', form.ListValue, 'target', _('Action'));
 		o.modalonly = true;
 		o.default = 'ACCEPT';
+		o.rmempty = false;
 		o.value('DROP', _('drop'));
 		o.value('ACCEPT', _('accept'));
 		o.value('REJECT', _('reject'));

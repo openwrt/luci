@@ -160,8 +160,11 @@ return view.extend({
 		}
 
 		p[0].default = fwDefaults.getInput();
+		p[0].rmempty = false;
 		p[1].default = fwDefaults.getOutput();
+		p[1].rmempty = false;
 		p[2].default = fwDefaults.getForward();
+		p[2].rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'masq', _('IPv4 Masquerading'),
 			_('Enable network address and port translation IPv4 (NAT4 or NAPT4) for outbound traffic on this zone. This is typically enabled on the <em>wan</em> zone.'));
