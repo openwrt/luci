@@ -1800,8 +1800,6 @@ return view.extend({
 		o.default = '1';
 		o.optional = true;
 
-		const steer_flow = uci.get('network', 'globals', 'steering_flows');	
-
 		o = s.option(form.Value, 'steering_flows', _('Steering flows (<abbr title="Receive Packet Steering">RPS</abbr>)'),
 			_('Directs packet flows to specific CPUs where the local socket owner listens (the local service).') + ' ' +
 			_('Note: this setting is for local services on the device only (not for forwarding).'));
@@ -1811,7 +1809,6 @@ return view.extend({
 		o.depends('packet_steering', '1');
 		o.depends('packet_steering', '2');
 		o.datatype = 'uinteger';
-		o.default = steer_flow;
 
 		if (dslModemType != null) {
 			s = m.section(form.TypedSection, 'dsl', _('DSL'));
