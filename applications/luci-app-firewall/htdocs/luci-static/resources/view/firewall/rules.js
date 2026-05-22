@@ -225,6 +225,7 @@ return view.extend({
 		o = s.option(form.Flag, 'enabled', _('Enable'));
 		o.modalonly = false;
 		o.default = o.enabled;
+		o.rmempty = false;
 		o.editable = true;
 		o.tooltip = function(section_id) {
 			const weekdays = uci.get('firewall', section_id, 'weekdays');
