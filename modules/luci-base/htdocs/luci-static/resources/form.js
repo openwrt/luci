@@ -1309,6 +1309,12 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 		const sids = this.cfgsections();
 
 		for (let i = 0, sid = sids[0]; (sid = sids[i]) != null; i++) {
+			/*
+			 * do not remove elements that are not rendered yet
+			 */
+			if (!this.map.findElement('data-section-id', sid))
+				continue;
+
 			for (let j = 0, o = this.children[0]; (o = this.children[j]) != null; j++) {
 				let isActive = o.isActive(sid);
 				const isSatisfied = o.checkDepends(sid);
@@ -2155,7 +2161,11 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 				}
 			}
 			else if (this.forcewrite || !isEqual(cval, fval)) {
-				return Promise.resolve(this.write(section_id, fval));
+				/*
+				 * do not remove elements that are not rendered yet
+				 */
+				if (this.map.findElement('data-field', this.cbid(section_id)) != null)
+					return Promise.resolve(this.write(section_id, fval));
 			}
 		}
 		else if (!this.retain) {
