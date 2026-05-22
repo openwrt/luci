@@ -20,7 +20,7 @@ return olsr.olsrview.extend({
 				if (a.proto === b.proto) {
 					return a.linkCost < b.linkCost;
 				} else {
-					return a.proto < b.proto;
+					return a.proto < b.proto ? -1 : a.proto > b.proto ? 1 : 0;
 				}
 			}
 
@@ -171,7 +171,7 @@ return olsr.olsrview.extend({
 				const rv = [];
 				for (let link of neigh_res) {
 					link.linkCost = (link.linkCost).toFixed(3) || 0;
-					if (link.linkCost === 4194304) {
+					if (link.linkCost == 4194304) {
 						link.linkCost = 0;
 					}
 					const color = etx_color(link.linkCost);

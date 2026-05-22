@@ -153,5 +153,7 @@ const olsrview = view.extend({
 
 return L.Class.extend({
 	olsrview: olsrview,
+	etx_color: etx_color,
+	snr_colors: snr_colors,
 
 });

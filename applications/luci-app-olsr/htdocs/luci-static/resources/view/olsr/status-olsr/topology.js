@@ -22,7 +22,7 @@ return olsr.olsrview.extend({
 						if (a.proto === b.proto) {
 							return a.tcEdgeCost < b.tcEdgeCost;
 						} else {
-							return a.proto < b.proto;
+							return a.proto < b.proto ? -1 : a.proto > b.proto ? 1 : 0;
 						}
 					}
 

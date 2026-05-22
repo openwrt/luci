@@ -25,7 +25,7 @@ return olsr.olsrview.extend({
 						if (a.proto === b.proto) {
 							return a.genmask < b.genmask;
 						} else {
-							return a.proto < b.proto;
+							return a.proto < b.proto ? -1 : a.proto > b.proto ? 1 : 0;
 						}
 					}
 					let modifiedData;
