@@ -10,6 +10,38 @@
 'require tools.widgets as widgets';
 'require uqr';
 
+
+/*
+	QR-Code escape helper
+*/
+function qrEscape(s) {
+	if (s == null)
+		return '';
+	return String(s).replace(/([\\;,:"])/g, '\\$1');
+}
+
+/*
+	network interface helper
+*/
+function waitForIface(ifaceName, timeoutMs) {
+	const deadline = Date.now() + (timeoutMs || 20000);
+	function tick() {
+		return network.flushCache().then(function () {
+			return network.getNetwork(ifaceName);
+		}).then(function (net) {
+			if (net && net.isUp())
+				return true;
+			if (Date.now() >= deadline)
+				return false;
+			return new Promise(function (resolve) {
+				window.setTimeout(resolve, 500);
+			}).then(tick);
+		});
+	}
+	return tick();
+}
+
+
 /*
 	button handling
 */
@@ -18,8 +50,9 @@ function handleAction(ev) {
 	if (ev === 'restartInterface') {
 		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || 'trm_wwan');
 		return fs.exec('/etc/init.d/travelmate', ['stop'])
-			.then(fs.exec('/sbin/ifup', [ifaceValue]))
-			.then(fs.exec('/etc/init.d/travelmate', ['start']))
+			.then(() => L.resolveDefault(fs.exec('/sbin/ifup', [ifaceValue])))
+			.then(() => waitForIface(ifaceValue, 20000))
+			.then(() => fs.exec('/etc/init.d/travelmate', ['start']))
 	}
 	if (ev === 'restartTravelmate') {
 		const map = document.querySelector('.cbi-map');
@@ -31,7 +64,7 @@ function handleAction(ev) {
 	}
 	if (ev === 'setup') {
 		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || '');
-		L.ui.showModal(_('Interface Wizard'), [
+		ui.showModal(_('Interface Wizard'), [
 			E('p', _('To use Travelmate, you have to set up an uplink interface once. This wizard creates an IPv4- and an IPv6 alias network interface with all required network- and firewall settings.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em;' }, [
@@ -51,7 +84,7 @@ function handleAction(ev) {
 				E('button', {
 					'class': 'cbi-button',
 					'style': 'float:none;margin-right:.4em;',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Dismiss')),
 				E('button', {
 					'class': 'cbi-button cbi-button-positive important',
@@ -60,9 +93,9 @@ function handleAction(ev) {
 						const iface = (document.getElementById('iface').value || 'trm_wwan').toLowerCase();
 						const zone = (document.getElementById('zone').value || 'wan').toLowerCase();
 						const metric = document.getElementById('metric').value.replace(/\D/g, '') || '100';
-						fs.exec('/etc/init.d/travelmate', ['setup', iface, zone, metric])
+						return fs.exec('/etc/init.d/travelmate', ['setup', iface, zone, metric])
 							.then(function (rc) {
-								L.hideModal();
+								ui.hideModal();
 								switch (rc.code) {
 									case 1:
 										ui.addNotification(null, E('p', _('The interface already exists!')), 'info');
@@ -72,11 +105,15 @@ function handleAction(ev) {
 										break;
 								}
 							})
+							.catch(function (err) {
+								ui.hideModal();
+								ui.addNotification(null, E('p', _('Interface setup failed: %s').format(err)), 'error');
+							})
 					})
 				}, _('Save'))
 			])
 		]);
-		return document.getElementById('iface').focus();
+		document.getElementById('iface').focus();
 	}
 
 	if (ev === 'qrcode') {
@@ -102,16 +139,18 @@ function handleAction(ev) {
 						if (document.getElementById("selectID").value) {
 							w_sid = document.getElementById("selectID").value;
 							w_ssid = w_sections[w_sid].ssid;
-							w_enc = w_sections[w_sid].encryption;
+							w_enc = w_sections[w_sid].encryption || '';
 							w_key = w_sections[w_sid].key;
-							w_hidden = (w_sections[w_sid].hidden == 1 ? 'true' : 'false');
+							w_hidden = (w_sections[w_sid].hidden === '1' ? 'true' : 'false');
 							if (w_enc === 'none') {
 								w_enc = 'nopass';
 								w_key = 'nokey';
+							} else if (w_enc.indexOf('sae') !== -1) {
+								w_enc = 'SAE';
 							} else {
 								w_enc = 'WPA';
 							}
-							const data = `WIFI:S:${w_ssid};T:${w_enc};P:${w_key};H:${w_hidden};;`;
+							const data = `WIFI:S:${qrEscape(w_ssid)};T:${qrEscape(w_enc)};P:${qrEscape(w_key)};H:${w_hidden};;`;
 							const options = {
 								pixelSize: 12,
 								margin: 1,
@@ -126,7 +165,7 @@ function handleAction(ev) {
 						}
 					}
 				}, optionsAP);
-				L.ui.showModal(_('QR-Code Overview'), [
+				ui.showModal(_('QR-Code Overview'), [
 					E('p', _('Render the QR-Code of the selected Access Point to transfer the WLAN credentials to your mobile devices comfortably.')),
 					E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 						E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [selectAP,])
@@ -137,7 +176,7 @@ function handleAction(ev) {
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'cbi-button',
-							'click': L.hideModal
+							'click': ui.hideModal
 						}, _('Dismiss'))
 					])
 				]);
@@ -194,8 +233,8 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.runtime.json'), null).then(function (res) {
-				if (!res) {
+			return L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.runtime.json'), null).then(function (stat) {
+				if (!stat) {
 					return;
 				}
 				return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.runtime.json'), null).then(function (res) {
@@ -269,7 +308,7 @@ return view.extend({
 			runtime information and buttons
 		*/
 		s = m.section(form.NamedSection, 'global');
-		s.render = L.bind(function (view, section_id) {
+		s.render = function (section_id) {
 			return E('div', { 'class': 'cbi-section' }, [
 				E('h3', _('Information')),
 				E('div', { 'class': 'cbi-value' }, [
@@ -309,7 +348,7 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-field', 'id': 'sys', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				])
 			]);
-		}, o, this);
+		};
 
 		/*
 			tabbed config section
@@ -504,7 +543,7 @@ return view.extend({
 		o.rmempty = true;
 
 		s = m.section(form.NamedSection, 'global');
-		s.render = L.bind(function () {
+		s.render = function () {
 			return E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
@@ -535,12 +574,12 @@ return view.extend({
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
 					'title': 'Save & Restart',
-					'click': function () {
+					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restartTravelmate');
-					}
+					})
 				}, [_('Save & Restart')])
 			])
-		});
+		};
 		return m.render();
 	},
 	handleSaveApply: null,
