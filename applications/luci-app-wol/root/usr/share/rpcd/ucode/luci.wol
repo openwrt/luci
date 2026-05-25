@@ -38,7 +38,7 @@ const methods = {
 		call: function(request) {
 			const result = {};
 			if (request.args.name == etherwake || request.args.name == wakeonlan) {
-				parts = map(request.args.args, shellquote);
+				let parts = map(request.args.args, shellquote);
 				const fd = popen(request.args.name + ' ' + join(' ', parts));
 
 				result.stdout = fd.read('all');
