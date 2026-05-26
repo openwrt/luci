@@ -2161,11 +2161,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 				}
 			}
 			else if (this.forcewrite || !isEqual(cval, fval)) {
-				/*
-				 * do not remove elements that are not rendered yet
-				 */
-				if (this.map.findElement('data-field', this.cbid(section_id)) != null)
-					return Promise.resolve(this.write(section_id, fval));
+				return Promise.resolve(this.write(section_id, fval));
 			}
 		}
 		else if (!this.retain) {
