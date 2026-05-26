@@ -21,6 +21,51 @@ version_gte() {
 	return $?
 }
 
+# Add/remove DNS forward entry in dnsmasq for MagicDNS via OpenWrt
+setup_tailscale_dns_forward() {
+	if [ ! -x /usr/sbin/tailscale ] && [ ! -x /usr/bin/tailscale ]; then
+		return 0
+	fi
+
+	local entry="/.ts.net/100.100.100.100"
+	local found=0
+
+	# Check if entry already exists in dnsmasq
+	if uci -q show dhcp.@dnsmasq[0].server 2>/dev/null | grep -Fqx "dhcp.@dnsmasq[0].server='$entry'"; then
+		found=1
+	fi
+
+	if [ "$found" = "0" ]; then
+		uci add_list dhcp.@dnsmasq[0].server="$entry"
+		uci commit dhcp
+		/etc/init.d/dnsmasq reload 2>/dev/null || /etc/init.d/dnsmasq restart 2>/dev/null
+		logger -t "$NAME" "Added DNS forward: $entry"
+	fi
+}
+
+remove_tailscale_dns_forward() {
+	local entry="/.ts.net/100.100.100.100"
+	local idx=0
+	local removed=0
+	while true; do
+		local val
+		val=$(uci -q get dhcp.@dnsmasq[0].server."${idx}" 2>/dev/null)
+		[ -z "$val" ] && break
+		if [ "$val" = "$entry" ]; then
+			uci -q del_list dhcp.@dnsmasq[0].server="$entry"
+			removed=1
+			break
+		fi
+		idx=$((idx + 1))
+	done
+
+	if [ "$removed" = "1" ]; then
+		uci commit dhcp
+		/etc/init.d/dnsmasq reload 2>/dev/null || /etc/init.d/dnsmasq restart 2>/dev/null
+		logger -t "$NAME" "Removed Tailscale DNS forward entry: $entry"
+	fi
+}
+
 apply_settings() {
 	local ts_bin
 	if [ -x /usr/sbin/tailscale ]; then
@@ -35,7 +80,7 @@ apply_settings() {
 	config_load tailscale
 
 	local accept_routes advertise_exit_node exit_node exit_node_allow_lan_access
-	local ssh disable_magic_dns shields_up runwebclient nosnat hostname
+	local ssh shields_up runwebclient nosnat hostname
 	local enable_relay relay_server_port
 
 	config_get accept_routes              settings accept_routes              '0'
@@ -43,7 +88,7 @@ apply_settings() {
 	config_get exit_node                  settings exit_node                  ''
 	config_get exit_node_allow_lan_access settings exit_node_allow_lan_access '0'
 	config_get ssh                        settings ssh                        '0'
-	config_get disable_magic_dns          settings disable_magic_dns          '0'
+	config_get dns_mode                   settings dns_mode                   'disabled'
 	config_get shields_up                 settings shields_up                 '0'
 	config_get runwebclient               settings runwebclient               '0'
 	config_get nosnat                     settings nosnat                     '0'
@@ -89,10 +134,22 @@ apply_settings() {
 		&& set -- "$@" --ssh=true \
 		|| set -- "$@" --ssh=false
 
-	# --accept-dns (inverse of disable_magic_dns)
-	[ "$disable_magic_dns" = "1" ] \
-		&& set -- "$@" --accept-dns=false \
-		|| set -- "$@" --accept-dns=true
+	# --accept-dns based on dns_mode
+	case "$dns_mode" in
+		magicdns)
+			set -- "$@" --accept-dns=true
+			remove_tailscale_dns_forward
+			;;
+		openwrt_forward)
+			set -- "$@" --accept-dns=false
+			setup_tailscale_dns_forward
+			;;
+		*)
+			# disabled (default)
+			set -- "$@" --accept-dns=false
+			remove_tailscale_dns_forward
+			;;
+	esac
 
 	# --shields-up
 	[ "$shields_up" = "1" ] \
