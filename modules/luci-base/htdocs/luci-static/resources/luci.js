@@ -2836,9 +2836,16 @@
 		 * Return the joined URL path.
 		 */
 		path(prefix = '', ...parts) {
+			/**
+			 * Backwards-compat: accept a single array argument,
+			 * pre-rest-params calling convention used by require()/compileClass
+			*/
+			if (parts.length === 1 && Array.isArray(parts[0]))
+				parts = parts[0];
+
 			const url = [ prefix ];
 
-			for (let i = 0; i < parts.length; i++){				
+			for (let i = 0; i < parts.length; i++){
 				const part = parts[i];
 				if (Array.isArray(part))
 					url.push(this.path('', part));
