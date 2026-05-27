@@ -675,133 +675,165 @@ String.prototype.format = function()
 		return s;
 	}
 
+	const dicts = [];
+	for (let i = 0; i < arguments.length; i++)
+		if (arguments[i] !== null && typeof(arguments[i]) === 'object' && !Array.isArray(arguments[i]))
+			dicts.push(arguments[i]);
+
 	let str = this;
 	let subst, n, pad;
 	let out = '';
 	const re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
+	const re_named = /^(([^%]*)%\{([^}:]+)(?::('.|0|\x20)?(-)?(\d+)?(\.\d+)?(b|c|d|u|f|o|s|x|X|q|h|j|t|m))?\})/;
 	let a = [], numSubstitutions = 0;
 
-	while ((a = re.exec(str)) !== null) {
-		const m = a[1];
-		let leftpart = a[2], pPad = a[3], pJustify = a[4], pMinLength = a[5];
-		let pPrecision = a[6], pType = a[7];
-		let precision;
+	while (true) {
+		const an = re_named.exec(str);
+		a = an || re.exec(str);
 
-		if (pType == '%') {
-			subst = '%';
+		if (!a)
+			break;
+
+		const m = a[1];
+		let leftpart = a[2], pPad, pJustify, pMinLength, pPrecision, pType;
+		let precision;
+		let param;
+
+		if (an) {
+			pPad = a[4]; pJustify = a[5]; pMinLength = a[6];
+			pPrecision = a[7]; pType = a[8] || 's';
+
+			param = '';
+			for (let i = 0; i < dicts.length; i++) {
+				if (Object.prototype.hasOwnProperty.call(dicts[i], a[3])) {
+					param = dicts[i][a[3]];
+					break;
+				}
+			}
 		}
 		else {
-			if (numSubstitutions < arguments.length) {
-				let param = arguments[numSubstitutions++];
+			pPad = a[3]; pJustify = a[4]; pMinLength = a[5];
+			pPrecision = a[6]; pType = a[7];
 
-				pad = '';
-				if (pPad && pPad.substr(0,1) == "'")
-					pad = pPad.substr(1,1);
-				else if (pPad)
-					pad = pPad;
-				else
-					pad = ' ';
+			if (pType == '%') {
+				subst = '%';
+				out += leftpart + subst;
+				str = str.substr(m.length);
+				continue;
+			}
 
-				precision = -1;
-				if (pPrecision && pType == 'f')
-					precision = +pPrecision.substring(1);
+			if (numSubstitutions < arguments.length)
+				param = arguments[numSubstitutions++];
+		}
 
-				subst = param;
+		if (param !== undefined) {
+			pad = '';
+			if (pPad && pPad.substr(0,1) == "'")
+				pad = pPad.substr(1,1);
+			else if (pPad)
+				pad = pPad;
+			else
+				pad = ' ';
 
-				switch(pType) {
-					case 'b':
-						subst = Math.floor(+param || 0).toString(2);
-						break;
+			precision = -1;
+			if (pPrecision && pType == 'f')
+				precision = +pPrecision.substring(1);
 
-					case 'c':
-						subst = String.fromCharCode(+param || 0);
-						break;
+			subst = param;
 
-					case 'd':
-						subst = Math.floor(+param || 0).toFixed(0);
-						break;
+			switch(pType) {
+				case 'b':
+					subst = Math.floor(+param || 0).toString(2);
+					break;
 
-					case 'u':
-						n = +param || 0;
-						subst = Math.floor((n < 0) ? 0x100000000 + n : n).toFixed(0);
-						break;
+				case 'c':
+					subst = String.fromCharCode(+param || 0);
+					break;
 
-					case 'f':
-						subst = (precision > -1)
-							? ((+param || 0.0)).toFixed(precision)
-							: (+param || 0.0);
-						break;
+				case 'd':
+					subst = Math.floor(+param || 0).toFixed(0);
+					break;
 
-					case 'o':
-						subst = Math.floor(+param || 0).toString(8);
-						break;
+				case 'u':
+					n = +param || 0;
+					subst = Math.floor((n < 0) ? 0x100000000 + n : n).toFixed(0);
+					break;
 
-					case 's':
-						subst = param;
-						break;
+				case 'f':
+					subst = (precision > -1)
+						? ((+param || 0.0)).toFixed(precision)
+						: (+param || 0.0);
+					break;
 
-					case 'x':
-						subst = Math.floor(+param || 0).toString(16).toLowerCase();
-						break;
+				case 'o':
+					subst = Math.floor(+param || 0).toString(8);
+					break;
 
-					case 'X':
-						subst = Math.floor(+param || 0).toString(16).toUpperCase();
-						break;
+				case 's':
+					subst = param;
+					break;
 
-					case 'h':
-						subst = esc(param, html_esc);
-						break;
+				case 'x':
+					subst = Math.floor(+param || 0).toString(16).toLowerCase();
+					break;
 
-					case 'q':
-						subst = esc(param, quot_esc);
-						break;
+				case 'X':
+					subst = Math.floor(+param || 0).toString(16).toUpperCase();
+					break;
 
-					case 't':
-						var td = 0;
-						var th = 0;
-						var tm = 0;
-						var ts = (param || 0);
+				case 'h':
+					subst = esc(param, html_esc);
+					break;
 
-						if (ts > 59) {
-							tm = Math.floor(ts / 60);
-							ts = (ts % 60);
-						}
+				case 'q':
+					subst = esc(param, quot_esc);
+					break;
 
-						if (tm > 59) {
-							th = Math.floor(tm / 60);
-							tm = (tm % 60);
-						}
+				case 't':
+					var td = 0;
+					var th = 0;
+					var tm = 0;
+					var ts = (param || 0);
 
-						if (th > 23) {
-							td = Math.floor(th / 24);
-							th = (th % 24);
-						}
+					if (ts > 59) {
+						tm = Math.floor(ts / 60);
+						ts = (ts % 60);
+					}
 
-						subst = (td > 0)
-							? String.format('%dd %dh %dm %ds', td, th, tm, ts)
-							: String.format('%dh %dm %ds', th, tm, ts);
+					if (tm > 59) {
+						th = Math.floor(tm / 60);
+						tm = (tm % 60);
+					}
 
-						break;
+					if (th > 23) {
+						td = Math.floor(th / 24);
+						th = (th % 24);
+					}
 
-					case 'm':
-						var mf = pMinLength ? +pMinLength : 1000;
-						var pr = pPrecision ? ~~(10 * +('0' + pPrecision)) : 2;
+					subst = (td > 0)
+						? String.format('%dd %dh %dm %ds', td, th, tm, ts)
+						: String.format('%dh %dm %ds', th, tm, ts);
 
-						var i = 0;
-						var val = (+param || 0);
-						var units = [ ' ', ' K', ' M', ' G', ' T', ' P', ' E' ];
+					break;
 
-						for (i = 0; (i < units.length) && (val > mf); i++)
-							val /= mf;
+				case 'm':
+					var mf = pMinLength ? +pMinLength : 1000;
+					var pr = pPrecision ? ~~(10 * +('0' + pPrecision)) : 2;
 
-						if (i)
-							subst = val.toFixed(pr) + units[i] + (mf == 1024 ? 'i' : '');
-						else
-							subst = val + ' ';
+					var i = 0;
+					var val = (+param || 0);
+					var units = [ ' ', ' K', ' M', ' G', ' T', ' P', ' E' ];
 
-						pMinLength = null;
-						break;
-				}
+					for (i = 0; (i < units.length) && (val > mf); i++)
+						val /= mf;
+
+					if (i)
+						subst = val.toFixed(pr) + units[i] + (mf == 1024 ? 'i' : '');
+					else
+						subst = val + ' ';
+
+					pMinLength = null;
+					break;
 			}
 		}
 
