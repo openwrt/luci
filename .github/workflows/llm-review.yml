@@ -1,0 +1,34 @@
+name: LLM Review
+
+on:
+  schedule:
+    - cron: '0 4,16 * * *'
+  workflow_dispatch:
+    inputs:
+      max_prs:
+        description: 'Max PRs to review in this nightly run'
+        required: false
+        type: number
+        default: 16
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-nightly
+  cancel-in-progress: false
+
+jobs:
+  nightly:
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.repository_owner == 'openwrt'
+    permissions:
+      pull-requests: read
+    uses: openwrt/actions-shared-workflows/.github/workflows/reusable_llm-nightly-digest.yml@main
+    with:
+      routine_id: ${{ vars.LLM_ROUTINE_ID_NIGHTLY }}
+      # LuCI PRs frequently touch backends served via rpcd/ubus, ucode
+      # handlers, fw4/netifd config surfaces, and packages from feeds.
+      # The routine clones each entry only when the diff calls for it.
+      extra_repos: openwrt/openwrt:main,openwrt/rpcd:master,openwrt/netifd:master,openwrt/firewall4:master,openwrt/uhttpd:master,jow-/ucode:master,openwrt/packages:master
+      max_prs: ${{ fromJSON(inputs.max_prs || '16') }}
+    secrets:
+      llm_routine_token: ${{ secrets.LLM_ROUTINE_TOKEN_NIGHTLY }}
