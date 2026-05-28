@@ -152,7 +152,33 @@ return view.extend({
 
 		Promise.resolve().then(() => this.onSelectionChange());
 
+		Promise.resolve().then(() => this.showExperimentalDisclaimer());
+
 		return root;
+	},
+
+	showExperimentalDisclaimer() {
+		ui.showModal(_('Experimental view'), [
+			E('p', _('The Switch / VLAN configuration view is new and still considered experimental. Bugs in this view may result in network misconfiguration that can leave your device unreachable over the network.')),
+			E('p', _('Before making changes, make sure you have an alternative way to access the device (e.g. a serial or out-of-band connection) and review every change in "Unsaved Changes" before applying.')),
+			E('div', { 'class': 'right' }, [
+				E('button', {
+					'class': 'btn',
+					'click': function() {
+						ui.hideModal();
+						if (window.history.length > 1)
+							window.history.back();
+						else
+							window.location.href = L.url('admin/network/network');
+					}
+				}, _('Cancel')),
+				' ',
+				E('button', {
+					'class': 'btn cbi-button-action important',
+					'click': ui.hideModal
+				}, _('I understand, continue'))
+			])
+		]);
 	},
 
 	refreshAll() {
