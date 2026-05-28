@@ -46,6 +46,24 @@
 		}
 	},
 
+	"admin/network/switch-vlan": {
+		"title": "Switch/VLAN config",
+		"order": 12,
+		"action": {
+			"type": "view",
+			"path": "network/switch-vlan"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-config" ],
+			"uci": [
+				{ "network": { "@device": { "type": "bridge", "name": "switch", "vlan_filtering": "1" } } },
+				{ "network": { "@device": { "type": "bridge", "name": "switch" }, "@bridge-vlan": { "device": "switch" } } },
+				{ "network": { "@device": { "type": "bridge", "vlan_filtering": "1" } } },
+				{ "network": { "@bridge-vlan": true } }
+			]
+		}
+	},
+
 	"admin/network/routes": {
 		"title": "Routing",
 		"order": 30,
