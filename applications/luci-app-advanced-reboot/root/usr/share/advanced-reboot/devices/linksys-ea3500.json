@@ -1,0 +1,41 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA3500",
+		"board": [
+			"linksys-audi",
+			"linksys,audi",
+			"linksys-ea3500",
+			"linksys,ea3500"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part",
+			"bootcmd"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1,
+				"run nandboot"
+			],
+			"mtd": "mtd3",
+			"labelOffsetBytes": 32
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2,
+				"run altnandboot"
+			],
+			"mtd": "mtd5",
+			"labelOffsetBytes": 32
+		}
+	]
+}

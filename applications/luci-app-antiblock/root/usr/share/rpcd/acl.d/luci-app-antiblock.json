@@ -1,0 +1,34 @@
+{
+	"luci-app-antiblock": {
+		"description": "Grant UCI and RPC access to LuCI app AntiBlock",
+		"read": {
+			"file": {
+				"/tmp/antiblock/*": [
+					"read"
+				],
+				"/etc/antiblock/*": [
+					"read"
+				],
+				"/etc/init.d/antiblock restart": [
+					"exec"
+				],
+				"/bin/mkdir /etc/antiblock": [
+					"exec"
+				]
+			},
+			"uci": [
+				"antiblock"
+			]
+		},
+		"write": {
+			"file": {
+				"/etc/antiblock/*": [
+					"write"
+				]
+			},
+			"uci": [
+				"antiblock"
+			]
+		}
+	}
+}

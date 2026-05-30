@@ -1,0 +1,13 @@
+{
+	"admin/services/ksmbd": {
+		"title": "Network Shares",
+		"action": {
+			"type": "view",
+			"path": "ksmbd"
+		},
+		"depends": {
+			"acl": [ "luci-app-ksmbd" ],
+			"uci": { "ksmbd": true }
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"admin/vpn/strongswan-swanctl": {
+		"title": "strongSwan IPsec",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/swanctl"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-strongswan-swanctl"
+			]
+		}
+	},
+	"admin/status/strongswan": {
+		"title": "strongSwan IPsec",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/status"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-strongswan-swanctl"
+			]
+		}
+	}
+}

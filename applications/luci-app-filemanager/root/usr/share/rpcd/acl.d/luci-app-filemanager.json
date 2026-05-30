@@ -1,0 +1,14 @@
+{
+	"luci-app-filemanager": {
+		"description": "Grant access to File Manager",
+		"write": {
+			"cgi-io": [ "upload", "download" ],
+			"ubus": {
+				"file": [ "*" ]
+			},
+			"file": {
+				"/*": [  "list", "read", "write", "exec" ]
+			}
+		}
+	}
+}

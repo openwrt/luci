@@ -1,0 +1,16 @@
+{
+	"admin/services/olsr": {
+		"title": "OLSR Services",
+		"order": 30,
+		"depends_comment":{
+            "uci" : {"olsrd": {"@LoadPlugin": {"library": "olsrd_nameservice"  }}}
+		},
+        "depends": {
+            "uci" : ["olsrd"]
+        },
+		"action": {
+			"type": "view",
+			"path": "olsr-services/services"
+		}
+	}
+}

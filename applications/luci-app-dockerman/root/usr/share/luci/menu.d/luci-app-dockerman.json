@@ -1,0 +1,318 @@
+{
+	"admin/services/dockerman": {
+		"title": "Dockerman JS",
+		"order": "60",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-dockerman" ],
+			"fs": {
+				"/etc/init.d/dockerd": "executable",
+				"/usr/bin/dockerd": "executable"
+			},
+			"uci": { "dockerd": true }
+		}
+	},
+
+	"admin/services/dockerman/overview": {
+		"title": "Overview",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "dockerman/overview"
+		}
+	},
+
+	"admin/services/dockerman/configuration": {
+		"title": "Configuration",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "dockerman/configuration"
+		}
+	},
+
+	"admin/services/dockerman/container/archive/*": {
+		"action": {
+			"type": "alias",
+			"path": "admin/services/dockerman/containers"
+		}
+	},
+
+	"admin/services/dockerman/container/archive/put/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "container_put_archive"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/container/archive/get/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "container_get_archive"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/container/export/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "container_export"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/container/*": {
+		"title_hide": "Container",
+		"action": {
+			"type": "view",
+			"path": "dockerman/container"
+		}
+	},
+
+	"admin/services/dockerman/containers": {
+		"title": "Containers",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "dockerman/containers"
+		}
+	},
+
+	"admin/services/dockerman/containers/prune": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "containers_prune",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/container": {
+		"action": {
+			"type": "alias",
+			"path": "admin/services/dockerman/containers"
+		}
+	},
+
+	"admin/services/dockerman/container_new": {
+		"title_hide": "Container",
+		"action": {
+			"type": "view",
+			"path": "dockerman/container_new"
+		}
+	},
+
+	"admin/services/dockerman/images/build": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "image_build",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/images/build/prune": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "image_build_prune",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/images/get/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "image_get"
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/images/load": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "image_load",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/images/prune": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "images_prune",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/images": {
+		"title": "Images",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "dockerman/images"
+		}
+	},
+
+	"admin/services/dockerman/images/create": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "image_create",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/images/push/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "image_push",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/image": {
+		"action": {
+			"type": "alias",
+			"path": "admin/services/dockerman/images"
+		}
+	},
+
+	"admin/services/dockerman/network/*": {
+		"title_hide": "Network",
+		"action": {
+			"type": "view",
+			"path": "dockerman/network"
+		}
+	},
+
+	"admin/services/dockerman/networks": {
+		"title": "Networks",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "dockerman/networks"
+		}
+	},
+
+	"admin/services/dockerman/networks/prune": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "networks_prune",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/network_new": {
+		"title_hide": "Network",
+		"action": {
+			"type": "view",
+			"path": "dockerman/network_new"
+		}
+	},
+
+	"admin/services/dockerman/network": {
+		"action": {
+			"type": "alias",
+			"path": "admin/services/dockerman/networks"
+		}
+	},
+
+	"admin/services/dockerman/volumes": {
+		"title": "Volumes",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "dockerman/volumes"
+		}
+	},
+
+	"admin/services/dockerman/volumes/prune": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "volumes_prune",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/docker/events": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.docker",
+			"function": "docker_events",
+			"post": true
+		},
+		"auth": {
+			"methods": [ "cookie:sysauth_https", "cookie:sysauth_http" ],
+			"login": true
+		}
+	},
+
+	"admin/services/dockerman/events": {
+		"title": "Events",
+		"order": 7,
+		"action": {
+			"type": "view",
+			"path": "dockerman/events"
+		}
+	}
+}

@@ -1,0 +1,75 @@
+'use strict';
+
+import { readfile, writefile, stat } from 'fs';
+
+const interfaceregex = /^[a-zA-Z0-9_]+$/;
+const paths = {
+	user_certificate: "/etc/openconnect/user-cert-vpn-%s.pem",
+	user_privatekey:  "/etc/openconnect/user-key-vpn-%s.pem",
+	ca_certificate:   "/etc/openconnect/ca-vpn-%s.pem"
+};
+
+function _readfile(path) {
+	let s = stat(path);
+	return (s?.type == 'file') ? trim(readfile(path) ?? '') || 'File empty' : null;
+}
+
+function _writefile(path, data) {
+	return data ? writefile(path, data) == length(data) : false;
+}
+
+function is_valid_iface(ifname) {
+	return ifname && match(ifname, interfaceregex);
+}
+
+const methods = {
+	list: {
+		call: function() {
+			return {
+				getCertificates: { interface: "interface" },
+				setCertificates: {
+					interface: "interface",
+					user_certificate: "user_certificate",
+					user_privatekey: "user_privatekey",
+					ca_certificate: "ca_certificate"
+				}
+			};
+		}
+	},
+
+	getCertificates: {
+		args: { interface: "interface" },
+		call: function(req) {
+			let iface = req.args?.interface;
+			if (!is_valid_iface(iface)) return;
+
+			let result = {};
+			for (let k in paths)
+				result[k] = _readfile(sprintf(paths[k], iface));
+
+			return result;
+		}
+	},
+
+	setCertificates: {
+		args: {
+			interface: "interface",
+			user_certificate: "user_certificate",
+			user_privatekey: "user_privatekey",
+			ca_certificate: "ca_certificate",
+		},
+		call: function(req) {
+			let iface = req.args?.interface;
+			if (!is_valid_iface(iface)) return;
+
+			let result = false;
+			for (let k in paths) {
+				if (req.args?.[k])
+					result = _writefile(sprintf(paths[k], iface), req.args[k]);
+			}
+			return { result: result };
+		}
+	}
+};
+
+return { 'luci.openconnect': methods };

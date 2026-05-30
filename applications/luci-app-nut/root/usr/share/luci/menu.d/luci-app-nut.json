@@ -1,0 +1,52 @@
+{
+	"admin/services/nut": {
+		"title": "Network UPS Tools",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-nut" ],
+			"fs": [
+				{ "/etc/config/nut_server": "file" },
+				{ "/etc/config/nut_monitor": "file" },
+				{ "/etc/config/nut_cgi": "file" }
+			]
+		}
+	},
+
+	"admin/services/nut/server": {
+		"title": "NUT Server",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "nut/nut_server"
+		},
+		"depends": {
+			"fs": { "/etc/config/nut_server": "file" }
+		}
+	},
+
+	"admin/services/nut/monitor": {
+		"title": "NUT Monitor",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "nut/nut_monitor"
+		},
+		"depends": {
+			"fs": { "/etc/config/nut_monitor": "file" }
+		}
+	},
+
+	"admin/services/nut/cgi": {
+		"title": "NUT CGI",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "nut/nut_cgi"
+		},
+		"depends": {
+			"fs": { "/etc/config/nut_cgi": "file" }
+		}
+	}
+}

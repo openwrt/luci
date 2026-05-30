@@ -1,0 +1,55 @@
+{
+	"admin/services/clamav": {
+		"title": "ClamAV",
+		"action": {
+			"type": "alias",
+			"path": "admin/services/clamav/clamav"
+		},
+		"depends": {
+			"acl": [ "luci-app-clamav" ],
+			"fs": { "/usr/sbin/clamd": "executable" }
+		}
+	},
+
+	"admin/services/clamav/clamav": {
+		"title": "ClamAV",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "clamav/clamav"
+		}
+	},
+
+	"admin/services/clamav/clamav-milter": {
+		"title": "ClamAV Milter",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "clamav/clamav-milter"
+		},
+		"depends": {
+			"fs": { "/usr/sbin/clamav-milter": "executable" }
+		}
+	},
+
+	"admin/services/clamav/freshclam": {
+		"title": "Freshclam",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "clamav/freshclam"
+		},
+		"depends": {
+			"fs": { "/usr/sbin/freshclam": "executable" }
+		}
+	},
+
+	"admin/services/clamav/clamav-log": {
+		"title": "Log",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "clamav/clamav-log"
+		}
+	}
+}

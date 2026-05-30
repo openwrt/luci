@@ -1,0 +1,39 @@
+{
+	"luci-app-pbr": {
+		"description": "Grant UCI and file access for luci-app-pbr",
+		"read": {
+			"ubus": {
+				"luci.pbr": [
+					"getInitList",
+					"getInitStatus",
+					"getInterfaces",
+					"getPlatformSupport"
+				],
+				"service": [
+					"list"
+				]
+			},
+			"file": {
+				"/usr/share/nftables.d/ruleset-post/30-pbr.nft": [
+					"read"
+				],
+				"/var/run/pbr.nft": [
+					"read"
+				]
+			},
+			"uci": [
+				"pbr"
+			]
+		},
+		"write": {
+			"uci": [
+				"pbr"
+			],
+			"ubus": {
+				"luci.pbr": [
+					"setInitAction"
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,43 @@
+{
+	"luci-app-lldpd-status": {
+		"description": "Grant access for LLDP status information",
+		"read": {
+			"ubus": {
+				"luci.lldpd": [
+					"getStatus"
+				]
+			},
+			"uci": [
+				"lldpd",
+				"luci"
+			]
+		}
+	},
+
+	"luci-app-lldpd-config": {
+		"description": "Grant access for LLDP configuration",
+		"read": {
+			"uci": [
+				"lldpd"
+			],
+			"ubus": {
+				"luci.lldpd": [
+					"getStatus"
+				],
+				"luci": [
+					"getInitList"
+				]
+			}
+		},
+		"write": {
+			"uci": [
+				"lldpd"
+			],
+			"ubus": {
+				"luci": [
+					"setInitAction"
+				]
+			}
+		}
+	}
+}
