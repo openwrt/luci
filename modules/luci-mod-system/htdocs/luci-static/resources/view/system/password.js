@@ -6,6 +6,7 @@
 'require uci';
 'require form';
 'require rpc';
+'require tools.password as pwtool';
 
 var formData = {
 	data: {
@@ -32,6 +33,12 @@ return view.extend({
 		    mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"),
 		    enoughRegex = new RegExp("(?=.{6,}).*", "g");
 
+		const pw_enabled = uci.get('rpcd', 'policy', 'enabled');
+		const pw_length = uci.get('rpcd', 'policy', 'pw_length');
+		const pw_digits = uci.get('rpcd', 'policy', 'digits');
+		const pw_ul = uci.get('rpcd', 'policy', 'uc_lc');
+		const special = uci.get('rpcd', 'policy', 'special_characters');
+
 		if (strength && value.length) {
 			if (false == enoughRegex.test(value))
 				strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'), _('More Characters'));
@@ -43,6 +50,21 @@ return view.extend({
 				strength.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'), _('Weak'));
 		}
 
+		if (!pw_enabled)
+			return true;
+
+		if (pw_length && !pwtool.checkLength(value, pw_length))
+			return _('Policy: min. length of %s characters').format(pw_length);
+
+		if (pw_digits && !pwtool.checkDigits(value))
+			return _('Policy: contain digits');
+
+		if (pw_ul && !pwtool.checkUpperLower(value))
+			return _('Policy: contain uppercase/lowercase');
+
+		if (special && !pwtool.checkSpecialChars(value))
+			return _('Policy: contain special characters');
+
 		return true;
 	},
 
@@ -50,7 +72,8 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), null),
 			fs.lines('/etc/passwd'),
-			uci.load('rpcd')
+			uci.load('rpcd'),
+			uci.load('luci')
 		]);
 	},
 
