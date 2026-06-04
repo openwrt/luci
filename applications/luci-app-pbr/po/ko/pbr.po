@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-31 00:39+0000\n"
+"PO-Revision-Date: 2026-06-04 15:47+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspbr/ko/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.6\n"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:320
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:450
@@ -90,7 +90,7 @@ msgstr "설정 (%s) 검증 실패"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:69
 msgid "Controls both system log and console output verbosity."
-msgstr ""
+msgstr "시스템 로그와 콘솔 출력의 상세 수준을 제어합니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:422
 msgid "Custom User File Includes"
@@ -98,7 +98,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:453
 msgid "Custom user file '%s' not found or empty"
-msgstr ""
+msgstr "사용자 정의 파일('%s')을 찾을 수 없거나 파일이 비어 있음"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:354
 msgid "DNS Policies"
@@ -256,7 +256,7 @@ msgstr "비활성 (사용 안 함)"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:361
 msgid "Incompatible DHCP Option 6 for interface %s"
-msgstr ""
+msgstr "인터페이스 %s의 DHCP 옵션 6이 호환되지 않음"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:503
 msgid "Incompatible custom user file detected '%s'"
@@ -322,7 +322,7 @@ msgstr "로컬 포트"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:468
 msgid "Mismatched IP family between in policy '%s'"
-msgstr ""
+msgstr "정책 '%s' 내 IP 체계 불일치"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:52
 msgid "Mode"
@@ -408,19 +408,19 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:328
 msgid "Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"
-msgstr ""
+msgstr "정책 '%s'의 'chain' 설정을 해제하거나 'chain'을 'PREROUTING'으로 설정하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:331
 msgid "Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"
-msgstr ""
+msgstr "정책 '%s'의 'chain' 설정을 해제하거나 'chain'을 'prerouting'으로 설정하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:325
 msgid "Please unset 'proto' or set 'proto' to 'all' for policy '%s'"
-msgstr ""
+msgstr "정책 '%s'의 'proto' 설정을 해제하거나 'proto'를 'all'로 설정하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:322
 msgid "Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
-msgstr ""
+msgstr "정책 '%s'의 'src_addr', 'src_port', 'dest_port' 설정을 해제하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:275
 msgid "Policies"
@@ -428,7 +428,7 @@ msgstr "정책"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:448
 msgid "Policy '%s' has an unknown interface"
-msgstr ""
+msgstr "정책 '%s'에 알 수 없는 인터페이스가 지정되었습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:443
 msgid "Policy '%s' has no assigned DNS"
@@ -511,11 +511,15 @@ msgstr "리졸버 세트 (%s)는 이 시스템에서 지원되지 않습니다."
 msgid ""
 "Resolver set support (%s) requires ipset, but ipset binary cannot be found"
 msgstr ""
+"리졸버 세트 지원 (%s)에는 ipset이 필요하지만, ipset 바이너리를 찾을 수 "
+"없습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:410
 msgid ""
 "Resolver set support (%s) requires nftables, but nft binary cannot be found"
 msgstr ""
+"리졸버 세트 지원 (%s)에는 nftables가 필요하지만, nft 바이너리를 찾을 수 "
+"없습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:601
 msgid "Restart"
@@ -580,7 +584,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:462
 msgid "Skipping IPv6 policy '%s' as IPv6 support is disabled"
-msgstr ""
+msgstr "IPv6 지원이 비활성화되어 IPv6 정책('%s')을 건너뜁니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:582
 msgid "Start"
@@ -657,6 +661,8 @@ msgid ""
 "The %s interface not found, you need to set the "
 "'pbr.config.uplink_interface' option"
 msgstr ""
+"%s 인터페이스를 찾을 수 없습니다. 'pbr.config.uplink_interface' 옵션을 "
+"설정해야 합니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:97
 msgid "The %s is not supported on this system."
@@ -664,11 +670,11 @@ msgstr "이 시스템에서는 %s가 지원되지 않습니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:419
 msgid "The %s service failed to discover uplink gateway"
-msgstr ""
+msgstr "%s 서비스가 상위 게이트웨이를 탐색하는 데 실패했습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:416
 msgid "The %s service is currently disabled"
-msgstr ""
+msgstr "%s 서비스가 현재 비활성화되어 있습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:93
 msgid "The %s support is unknown."
@@ -680,7 +686,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:337
 msgid "The WebUI application (luci-app-pbr) is outdated, please update it"
-msgstr ""
+msgstr "웹 UI 애플리케이션 (luci-app-pbr)이 최신 버전이 아닙니다. 업데이트하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:431
 msgid "The ipset name '%s' is longer than allowed 31 characters"
@@ -692,7 +698,7 @@ msgstr "nft set 이름('%s')은 최대 255자까지만 허용됩니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:340
 msgid "The principal package (pbr) is outdated, please update it"
-msgstr ""
+msgstr "핵심 패키지 (pbr)가 최신 버전이 아닙니다. 업데이트하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:66
 msgid "Unable to retrieve %s status"
@@ -700,7 +706,7 @@ msgstr "%s 상태를 불러올 수 없음"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:437
 msgid "Unexpected exit or service termination: '%s'"
-msgstr ""
+msgstr "예기치 않은 종료 또는 서비스 중단: '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:509
 msgid "Unknown IPv6 Link type for device '%s'"
@@ -740,13 +746,15 @@ msgstr "업링크 인터페이스 테이블 방화벽 마크"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:367
 msgid "Uplink/WAN interface is still down, going back to boot mode"
-msgstr ""
+msgstr "상위/WAN 인터페이스가 아직 활성화되지 않았습니다. 부트 모드로 되돌아갑니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:531
 msgid ""
 "Uplink/WAN interface is still down, increase value of "
 "'procd_boot_trigger_delay' option"
 msgstr ""
+"상위/WAN 인터페이스가 아직 활성화되지 않았습니다. 'procd_boot_trigger_delay' "
+"옵션 값을 늘리세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:457
 msgid ""
