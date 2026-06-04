@@ -325,7 +325,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					return;
 
 				const band = '%dg'.format(freq.band);
-				const available = (freq.restricted && freq.no_ir) ? false: true;
+				const available = !(freq.restricted && freq.flags.includes("no_ir"));
 
 				this.channels[band].push(
 					freq.channel,
