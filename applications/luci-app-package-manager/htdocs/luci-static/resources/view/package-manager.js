@@ -624,54 +624,50 @@ function renderDependencyItem(dep, info, flat)
 	return li;
 }
 
+let pC = null;
+
 function renderDependencies(depends, info, flat)
 {
 	const deps = depends || [];
 	const items = [];
+	info.seen ??= Object.create(null);
 
-	info.seen = info.seen || [];
+	pC ??= Object.create(null);
 
 	for (let i = 0; i < deps.length; i++) {
-		let dep, vop, ver;
-
 		if (deps[i] === 'libc')
 			continue;
 
-		// This regex handles "name", "name>=ver", and "name (>=ver)"
-		const match = deps[i].match(/^([^><=~\s]+)\s*\(?([><=~]+)?\s*([^)]+)?\)?$/);
-
-		if (match) {
-			// Destructure the match array: [full_match, name, operator, version]
-			const [, matchedDep, matchedVop, matchedVer] = match;
-			dep = (matchedDep || '').trim();
-			vop = (matchedVop || '').trim() || null;
-			ver = (matchedVer || '').trim() || null;
-		} else {
-			// Fallback if the string is just a plain name with no operators
-			dep = deps[i].trim();
-			vop = ver = null;
-		}
-
-		if (info.seen[dep])
+		// This regex handles "name", "name>=ver", "name (>= ver)" with operators: > < = ~ >= <=
+		// Regex (capture groups numbered):
+		//   ^([^><=~\s]+)    [1] package name
+		//   \s?\(?            optional space + optional paren
+		//   ([><=~]+)?       [2] optional operators: > < = ~ >= <=
+		//   \s?               optional space before version
+		//   ([^)]+)?         [3] optional version string
+		//   \)?$              optional closing paren + end
+		const m = deps[i].match(/^([^><=~\s]+)\s?\(?([><=~]+)?\s?([^)]+)?\)?$/);
+		if (!m || info.seen[m[1]])
 			continue;
 
-		const pkgs = [];
+		// Provider cache (pC): dep name -> Set of package names (incrementally populated)
+		//   .installed.providers[ip] = [ ip, ip-tiny ]
+		//   .available.providers[ip]  = [ ip, ip-full ]
+		//   pC[ip]                    = Set( ip, ip-tiny, ip-full )
+		if (!pC[m[1]]) {
+			pC[m[1]] = new Set();
+			for (const src of [packages.installed.providers, packages.available.providers])
+				for (const p of (src[m[1]] || []))
+					pC[m[1]].add(p.name);
+		}
 
-		(packages.installed.providers[dep] || []).forEach(function(p) {
-			if (pkgs.indexOf(p.name) === -1) pkgs.push(p.name);
-		});
-
-		(packages.available.providers[dep] || []).forEach(function(p) {
-			if (pkgs.indexOf(p.name) === -1) pkgs.push(p.name);
-		});
-
-		info.seen[dep] = {
-			name:    dep,
-			pkgs:    pkgs,
-			version: [vop, ver]
+		info.seen[m[1]] = {
+			name:    m[1],
+			pkgs:    [...pC[m[1]]],
+			version: [m[2] || null, m[3] || null]
 		};
 
-		items.push(renderDependencyItem(info.seen[dep], info, flat));
+		items.push(renderDependencyItem(info.seen[m[1]], info, flat));
 	}
 
 	if (items.length)
@@ -1152,6 +1148,7 @@ function updateLists(data)
 
 	packages.available = { providers: {}, pkgs: {} };
 	packages.installed = { providers: {}, pkgs: {} };
+	pC = null;
 
 	return (data ? Promise.resolve(data) : downloadLists()).then(function(data) {
 		const pg = document.querySelector('.cbi-progressbar');
