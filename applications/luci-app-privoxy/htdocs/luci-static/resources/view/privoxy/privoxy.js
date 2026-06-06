@@ -6,7 +6,23 @@
 'require fs';
 'require view';
 
+const callRcInit = rpc.declare({
+	object: 'rc',
+	method: 'init',
+	params: [ 'name', 'action' ],
+	expect: { result: false }
+});
+
 return view.extend({
+
+	handleSaveApply: function(ev, mode) {
+		var Fn = L.bind(function() {
+			callRcInit('privoxy', 'reload');
+			document.removeEventListener('uci-applied', Fn);
+		});
+		document.addEventListener('uci-applied', Fn);
+		this.super('handleSaveApply', [ev, mode]);
+	},
 
 	render: function(data) {
 		const m = new form.Map('privoxy', _('Privoxy'),
@@ -76,7 +92,7 @@ return view.extend({
 		// CONFDIR
 		let confdir = s.taboption('filtering', form.Value, 'confdir', _('Configuration Directory'),
 			_('The directory where the other configuration files are located.'));
-		confdir.default = '/var/etc/privoxy';
+		confdir.default = '/etc/privoxy';
 		confdir.rmempty = false;
 
 		// TEMPLDIR
@@ -143,7 +159,7 @@ return view.extend({
 			_('Value range 1 to 4096, no entry defaults to 4096'));
 		buffer.default = 4096;
 		buffer.rmempty = true;
-		buffer.datatype = 'and(uinteger,min(1),max(4096))'
+		buffer.datatype = 'and(uinteger,min(1),max(4096))';
 
 		// TOGGLE
 		let toggle = s.taboption('access', form.Flag, 'toggle', _('Toggle Status'),
@@ -203,6 +219,108 @@ return view.extend({
 		    "<br />" + _("Syntax: target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]");
 
 
+		// Tab: HTTPS Inspection (Section 7.7)
+		s.tab('https', _('HTTPS Inspection'), _("Privoxy can intercept HTTPS connections and generate on-the-fly SSL certificates. "
+		+ "This allows inspection and filtering of HTTPS traffic. <strong>A CA certificate must be installed on clients to trust.</strong>"));
+
+		o = s.taboption("https", form.Flag, "enable_ssl_bumping", _("Enable HTTPS Inspection"),
+			_("Enable on-the-fly certificate generation for HTTPS connections.") +
+			"<br /><strong>" + _("Warning: ") + "</strong>" + _("Clients must trust the Privoxy CA certificate to avoid SSL errors."));
+		o.orientation = "horizontal";
+
+		let certdir = s.taboption("https", form.Value, "certdir", _("Certificate Directory"),
+			_("Directory for the CA certificate and generated certificates.") +
+			"<br /><strong>" + _("Required for HTTPS inspection to work.") + "</strong>");
+		certdir.default = '/etc/privoxy/ssl';
+		certdir.rmempty = false;
+
+		let caName = s.taboption("https", form.Value, "ca_common_name", _("CA Common Name"),
+			_("Common name (CN) for the Privoxy Certificate Authority.") +
+			"<br />" + _("This name will appear in the certificate details presented to clients."));
+		caName.default = 'Privoxy CA';
+
+		let caDays = s.taboption("https", form.Value, "ca_validity_days", _("CA Certificate Validity (days)"),
+			_("Validity period in days for the Certificate Authority certificate.") +
+			"<br />" + _("A longer validity period reduces the frequency of CA certificate regeneration."));
+		caDays.default = '3650';
+		caDays.datatype = 'and(uinteger,min(1),max(8250))';
+
+		let certDays = s.taboption("https", form.Value, "cert_validity_days", _("Certificate Validity (days)"),
+			_("Default validity period in days for generated server certificates."));
+		certDays.default = '365';
+		certDays.datatype = 'and(uinteger,min(1),max(8250))';
+
+		let certKeySize = s.taboption("https", form.Value, "cert_key_size", _("Certificate Key Size (bits)"),
+			_("RSA key size in bits 1024/2048/4096") +
+			"<br />" + _("Larger keys provide more security but take longer to generate."));
+		certKeySize.default = '2048';
+		certKeySize.datatype = 'uinteger';
+
+		// CA Certificate status display
+		let caCertPath = s.taboption("https", form.DummyValue, '_ca_cert_path', _('CA Certificate Path'),
+			_('Path to the CA certificate file. Install this in your browser/trusted CA store on each client.'));
+		caCertPath.rawhtml = true;
+		caCertPath.default = '/etc/privoxy/ssl/ca-cert.pem';
+
+		// Download button
+		let downloadBtn = s.taboption("https", form.Button, '_download_ca_cert', _('Download CA Certificate'),
+			_('Click to download the Privoxy CA certificate for installation on clients.'));
+		downloadBtn.inputstyle = 'primary';
+		downloadBtn.inputtitle = _('Download CA Certificate');
+		downloadBtn.onclick = L.bind(function() {
+			var certDir = document.querySelector('input[name="w.-privoxy.-privoxy.certdir"]');
+			var dir = certDir ? certDir.value : '/etc/privoxy/ssl';
+			var certPath = dir + '/ca-cert.pem';
+
+			fs.read_direct(certPath, 'blob').then(function(blob) {
+				if (!(blob instanceof Blob)) {
+					throw new Error(_('Response is not a Blob'));
+				}
+				var url = URL.createObjectURL(blob);
+				var a = document.createElement('a');
+				a.href = url;
+				a.download = 'ca-cert.pem';
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+				URL.revokeObjectURL(url);
+			}).catch(function(err) {
+				L.ui.addNotification(null, E('p', {}, _('Failed to read certificate file: ') + err.message), 'error');
+			});
+		}, this);
+
+		// Regenerate button
+		let regenBtn = s.taboption("https", form.Button, '_regenerate_ca', _('Regenerate CA Certificate'),
+			_('Click to delete and regenerate the CA certificate (will cause SSL warnings on clients until new cert is installed).'));
+		regenBtn.inputstyle = 'negative';
+		regenBtn.inputtitle = _('Regenerate CA Certificate');
+		regenBtn.onclick = L.bind(function() {
+			if (confirm(_('Are you sure you want to regenerate the CA certificate? This will cause SSL warnings on all clients until the new certificate is installed.'))) {
+				// Create marker file to trigger certificate regeneration
+				return fs.write('/etc/privoxy/regenerate_ca', '1').then(function() {
+					console.log('UCI: marker file created successfully');
+					return callRcInit('privoxy', 'reload');
+				}).then(function() {
+					L.ui.addNotification(null, E('p', {}, _('CA certificate has been regenerated.')), 'info');
+				}).catch(function(err) {
+					console.error('UCI error:', err);
+					L.ui.addNotification(null, E('p', {}, _('Failed to regenerate CA certificate: ') + err.message), 'error');
+				});
+			}
+		}, this);
+
+		// Instructions section
+		let instructions = s.taboption("https", form.DummyValue, '_https_instructions', _('Installation Instructions'));
+		instructions.rawhtml = true;
+		instructions.default = '<div class="notice"><p>' +
+			_('1. Enable HTTPS Inspection above') + '</p>' +
+			'<p>2. ' + _('Configure the certificate directory and CA settings') + '</p>' +
+			'<p>3. ' + _('Save & Apply to generate the CA certificate') + '</p>' +
+			'<p>4. ' + _('Download the CA certificate using the button above') + '</p>' +
+			'<p>5. ' + _('Install the CA certificate in your browser/trusted store on each client device') + '</p>' +
+			'<p>6. ' + _('Configure clients to use this Privoxy proxy for HTTPS traffic') + '</p>' +
+			'</div>';
+
 		// Tab: Misc
 		s.tab('misc', _('Misc'));
 
@@ -238,6 +356,11 @@ return view.extend({
 		o.default = 300;
 		o.description = _("Number of seconds after which a socket times out if no data is received.");
 		o.datatype = 'and(uinteger,min(1),max(300))'
+
+		o = s.taboption("misc", form.Value, "receive_buffer_size", _("Receive Buffer Size"));
+		o.default = 30000;
+		o.description = _("Maximum size (in bytes) of the receive buffer for content filtering.")
+		o.datatype = 'and(uinteger,min(1),max(65535))';
 
 		o = s.taboption("misc", form.Value, "max_client_connections", _("Max. client connections"));
 		o.default = 128;
@@ -337,6 +460,26 @@ return view.extend({
 		o.orientation = "horizontal";
 
 
-		return m.render();
+		// Post-render: Setup dynamic behavior
+		return m.render().then(function(node) {
+			// Update certificate path display
+			function updateCertPath() {
+				var certDir = document.querySelector('input[name="w.-privoxy.-privoxy.certdir"]');
+				var certPathDisplay = document.querySelector('input[name="w.-privoxy.-privoxy._ca_cert_path"]');
+				if (certDir && certPathDisplay) {
+					var dir = certDir.value || '/etc/privoxy/ssl';
+					certPathDisplay.value = dir + '/ca-cert.pem';
+				}
+			}
+
+			// Update path when certdir changes
+			var certDirInput = document.querySelector('input[name="w.-privoxy.-privoxy.certdir"]');
+			if (certDirInput) {
+				certDirInput.addEventListener('input', updateCertPath);
+				updateCertPath();
+			}
+
+			return node;
+		});
 	}
 });
