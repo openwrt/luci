@@ -93,8 +93,8 @@ return view.extend({
 				]),
 				E('label', { 'for': 'log-direction', 'style': 'margin-right: 8px;' }, _('Log Direction:')),
 				E('select', { 'id': 'log-direction', 'style': 'margin-right: 8px;' }, [
-					E('option', { 'value': 'down', 'selected': 'selected' }, _('Down')),
-					E('option', { 'value': 'up' }, _('Up')),
+					E('option', { 'value': 'down', 'selected': 'selected' }, _('Down', 'Log direction')),
+					E('option', { 'value': 'up' }, _('Up', 'Log direction')),
 				]),
 				E('button', {
 					'id': 'download-log',
