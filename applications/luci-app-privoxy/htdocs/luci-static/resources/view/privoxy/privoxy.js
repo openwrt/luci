@@ -260,7 +260,10 @@ return view.extend({
 		let caCertPath = s.taboption("https", form.DummyValue, '_ca_cert_path', _('CA Certificate Path'),
 			_('Path to the CA certificate file. Install this in your browser/trusted CA store on each client.'));
 		caCertPath.rawhtml = true;
-		caCertPath.default = '/etc/privoxy/ssl/ca-cert.pem';
+		caCertPath.cfgvalue = function(section_id) {
+			var dir = uci.get(this.map.config, section_id, 'certdir') || '/etc/privoxy/ssl';
+			return dir + '/ca-cert.pem';
+		};
 
 		// Download button
 		let downloadBtn = s.taboption("https", form.Button, '_download_ca_cert', _('Download CA Certificate'),
@@ -268,8 +271,7 @@ return view.extend({
 		downloadBtn.inputstyle = 'primary';
 		downloadBtn.inputtitle = _('Download CA Certificate');
 		downloadBtn.onclick = L.bind(function() {
-			var certDir = document.querySelector('input[name="w.-privoxy.-privoxy.certdir"]');
-			var dir = certDir ? certDir.value : '/etc/privoxy/ssl';
+			var dir = certdir.formvalue('privoxy') || '/etc/privoxy/ssl';
 			var certPath = dir + '/ca-cert.pem';
 
 			fs.read_direct(certPath, 'blob').then(function(blob) {
@@ -298,12 +300,10 @@ return view.extend({
 			if (confirm(_('Are you sure you want to regenerate the CA certificate? This will cause SSL warnings on all clients until the new certificate is installed.'))) {
 				// Create marker file to trigger certificate regeneration
 				return fs.write('/etc/privoxy/regenerate_ca', '1').then(function() {
-					console.log('UCI: marker file created successfully');
 					return callRcInit('privoxy', 'reload');
 				}).then(function() {
 					L.ui.addNotification(null, E('p', {}, _('CA certificate has been regenerated.')), 'info');
 				}).catch(function(err) {
-					console.error('UCI error:', err);
 					L.ui.addNotification(null, E('p', {}, _('Failed to regenerate CA certificate: ') + err.message), 'error');
 				});
 			}
@@ -459,27 +459,6 @@ return view.extend({
 		o.description = _("Log the applying actions");
 		o.orientation = "horizontal";
 
-
-		// Post-render: Setup dynamic behavior
-		return m.render().then(function(node) {
-			// Update certificate path display
-			function updateCertPath() {
-				var certDir = document.querySelector('input[name="w.-privoxy.-privoxy.certdir"]');
-				var certPathDisplay = document.querySelector('input[name="w.-privoxy.-privoxy._ca_cert_path"]');
-				if (certDir && certPathDisplay) {
-					var dir = certDir.value || '/etc/privoxy/ssl';
-					certPathDisplay.value = dir + '/ca-cert.pem';
-				}
-			}
-
-			// Update path when certdir changes
-			var certDirInput = document.querySelector('input[name="w.-privoxy.-privoxy.certdir"]');
-			if (certDirInput) {
-				certDirInput.addEventListener('input', updateCertPath);
-				updateCertPath();
-			}
-
-			return node;
-		});
+		return m.render();
 	}
 });
