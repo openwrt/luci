@@ -46,8 +46,7 @@ function callPackageVersionCheck(pkg) {
 	return version;
 }
 
-function set_new_pwd(user, pwd) {
-	const ctx = cursor();
+function set_new_pwd(ctx, user, pwd, change) {
 	let cmd, fd, value;
 
 	cmd = sprintf('/usr/sbin/uhttpd -m %s', shellquote(pwd));
@@ -56,17 +55,20 @@ function set_new_pwd(user, pwd) {
 
 	fd.close();
 
-	ctx.foreach('rpcd', 'login', s => {
-		if (s.username == user) {
-			ctx.set('rpcd', s['.name'], 'password', value);
-			ctx.commit();
-		}
-	});
+	if (change) {
+		ctx.foreach('rpcd', 'login', s => {
+			if (s.username == user) {
+				ctx.set('rpcd', s['.name'], 'password', value);
+				ctx.commit('rpcd');
+			}
+		});
+	}
+
+	return value;
 }
 
-function check_oldpwd(user, pwd) {
+function check_oldpwd(ctx, user, pwd) {
 	let cmd, fd, value;
-	const ctx = cursor();
 	let valid = false;
 
 	cmd = sprintf('/usr/sbin/uhttpd -m %s', shellquote(pwd));
@@ -82,7 +84,7 @@ function check_oldpwd(user, pwd) {
 	return valid;
 }
 
-function check_user(source, entry) {
+function check_user(ctx, source, entry) {
 	let found = false;
 
 	switch (source) {
@@ -98,13 +100,12 @@ function check_user(source, entry) {
 		}
 
 		case 'rpcd': {
-			const ctx = cursor();
 			ctx.foreach('rpcd', 'login', s => {
 				if (s.username == entry)
 					found = true;
-				});
+			});
+			break;
 		}
-		break;
 	}
 	return found;
 }
@@ -542,8 +543,7 @@ const methods = {
 			const user = request.args.username;
 			const pwd = request.args.password;
 			const oldpwd = request.args.oldpassword;
-			const type = request.args.rpcd == true ? 'rpcd' : 'unix';
-			const known_user = check_user(type, user);
+			const type = request.args.rpcd ? 'rpcd' : 'unix';
 			const uci = cursor();
 
 			if (type == 'unix') {
@@ -561,29 +561,20 @@ const methods = {
 					msg: "uhttpd not installed"
 				};
 
-			if (known_user) {
-				if (!oldpwd)
-					return { result: 0 };
+			uci.load('rpcd');
+			const known_user = check_user(uci, type, user);
 
-				/*
-				* check if login is valid
-				*/
-				if (!check_oldpwd(user, oldpwd))
+			if (known_user) {
+				if (!oldpwd || !check_oldpwd(uci, user, oldpwd)) {
 					return { result: 0 };
-			} else {
-				/*
-				 * create user to keep logic of luci-app-acl
-				 */
-				const sid = uci.add('rpcd', 'login');
-				uci.set('rpcd', sid, 'username', user);
-				uci.commit('rpcd');
+				}
 			}
 
 			/*
 			 * encrypt password and assign it to rpcd login
 			 */
-			 set_new_pwd(user, pwd);
-			 return { result: 1 };
+			const value = set_new_pwd(uci, user, pwd, known_user ? true : false);
+			return { result: 1, hash: value };
 		}
 	},
 
