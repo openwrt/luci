@@ -609,14 +609,6 @@ msgstr "<abbr title=\"Fógra Ródaire\">RA</abbr>-Seirbhís"
 msgid "<br/>"
 msgstr "<br/>"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:656
-msgid "<em>%s</em>"
-msgstr "<em>%s</em>"
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:710
-msgid "<em>Add</em>"
-msgstr "<em>Cuir leis</em>"
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
 msgid "<var>%s</var> greater than <strong>%s</strong>"
@@ -1951,6 +1943,7 @@ msgstr "Ceangail freastalaí NTP"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:64
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:144
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:59
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:132
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
@@ -1984,6 +1977,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:64
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:48
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:144
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:59
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:132
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
@@ -2085,6 +2079,14 @@ msgid "By default, dnsmasq caches A, AAAA, CNAME and SRV DNS record types."
 msgstr ""
 "De réir réamhshocraithe, cuireann dnsmasq caches ar chineálacha taifead A, "
 "AAAA, CNAME agus SRV DNS."
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:131
+msgid ""
+"CA certificate (PEM encoded; Use instead of system-wide store to verify the "
+"gateway certificate."
+msgstr ""
+"Teastas CA (ionchódaithe PEM; Úsáid in ionad stór ar fud an chórais chun "
+"deimhniú an geata a fhíorú."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:178
 msgid "CA certificate; if empty it will be saved after the first connection."
@@ -6166,12 +6168,14 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1197
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:135
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:158
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:129
 msgid "If unchecked, no default route is configured"
 msgstr "Mura ndéantar seiceáil, níl aon bhealach réamhshocraithe cum"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1201
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:146
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:162
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:140
 msgid "If unchecked, the advertised DNS server addresses are ignored"
 msgstr "Mura ndéantar seiceáil, déantar neamhaird ar na seoltaí freastalaí DNS"
@@ -6599,6 +6603,11 @@ msgstr "Neamhbhailí"
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:73
 msgid "Invalid APN provided"
 msgstr "APN neamhbhailí curtha ar fáil"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:38
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:41
+msgid "Invalid Base64 key string"
+msgstr "Eochair sreang Base64 neamhbhailí"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:729
 msgid ""
@@ -7285,6 +7294,10 @@ msgstr "Áitiúil 6"
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:57
 msgid "Local 7"
 msgstr "Áitiúil 7"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:171
+msgid "Local IP address"
+msgstr "Seoladh IP áitiúil"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:12
 #: modules/luci-compat/luasrc/model/network.lua:30
@@ -8948,9 +8961,17 @@ msgstr "Forbhreathnú ar rialacha iptables oscailte…"
 msgid "Open list..."
 msgstr "Liosta oscailte..."
 
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:63
+msgid "OpenConnect"
+msgstr "Oscailceangail"
+
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
 msgstr "OpenConnect (CISCO AnyConnect)"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:63
+msgid "OpenFortivpn"
+msgstr "OpenFortivpn"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1624
 msgid "OpenVPN"
@@ -9041,6 +9062,12 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:137
 msgid "Optional, free-form notes about this device"
 msgstr "Nótaí roghnacha, saorfhoirme faoin bhfeiste seo"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:149
+msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
+msgstr ""
+"Roghnach, i soicindí. Má tá sé socraithe ar '0', ní dhéanfar iarracht ar aon "
+"athnasc."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid ""
@@ -9137,6 +9164,11 @@ msgstr ""
 "Roghnach. Soicind idir teachtaireachtaí a choinneáil beo. Is é "
 "réamhshocraithe 0 (míchumasaithe). Is é 25 an luach a mholtar má tá an gléas "
 "seo taobh thiar de NAT."
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:176
+msgid ""
+"Optional. Specify the realm if your VPN gateway uses custom login portals."
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Optional. UDP port used for outgoing and incoming packets."
@@ -9517,6 +9549,7 @@ msgstr "Pas tríd (Gléas fisiceach scátháin chuig MAC VLAN aonair)"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:92
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:133
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:145
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:301
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:19
@@ -9721,6 +9754,10 @@ msgstr "leanún/gan leanúint ifconfig-pool"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:653
 msgid "Persistent Keep Alive"
 msgstr "Coinnigh Leanúnach Beo"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:149
+msgid "Persistent reconnect interval"
+msgstr "Eatramh athnasctha leanúnach"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:310
 msgid "PersistentKeepAlive setting is invalid"
@@ -10366,6 +10403,10 @@ msgstr "Scrios an eochair phoiblí stórais bogearraí seo a leanas i ndáiríre
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:599
 msgid "Really switch protocol?"
 msgstr "An bhfuil fonn ort an prótacal a athrú?"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:176
+msgid "Realm"
+msgstr ""
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:139
 msgid "Realtime Graphs"
@@ -13281,6 +13322,11 @@ msgstr ""
 "Níl an cineál fíordheimhnithe seo infheidhme maidir leis an modh EAP "
 "roghnaithe."
 
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:48
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
+msgid "This does not look like a valid PEM file"
+msgstr "Ní chuma é seo cosúil le comhad bailí PEM"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1777
 msgid ""
 "This identifier is randomly generated the first time the device is booted."
@@ -14087,6 +14133,7 @@ msgstr "Úsáid DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1201
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:162
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:139
 msgid "Use DNS servers advertised by peer"
 msgstr "Úsáid freastalaithe DNS a fógraíonn piaraí"
@@ -14143,6 +14190,7 @@ msgstr "Úsáid freastalaithe saincheaptha DNS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1197
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:134
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:158
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:128
 msgid "Use default gateway"
 msgstr "Úsáid geata réamhshocrú"
@@ -14150,6 +14198,7 @@ msgstr "Úsáid geata réamhshocrú"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1214
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:73
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:139
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:166
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "Use gateway metric"
 msgstr "Úsáid méadrach geata"
@@ -14187,14 +14236,14 @@ msgstr "Úsáid teastais chórais"
 msgid "Use system certificates for inner-tunnel"
 msgstr "Úsáid teastais chórais le haghaidh tollán istigh"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:710
-msgid "Use the %s Button to add a new %s."
-msgstr "Úsáid an Cnaipe %s chun %s nua a chur leis."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:656
 msgctxt "use the add button to add a new tag"
-msgid "Use the %s button to add a new %s."
-msgstr "Úsáid an cnaipe %s chun %s nua a chur leis."
+msgid "Use the <em>%s</em> button to add a new %s."
+msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:710
+msgid "Use the <em>Add</em> Button to add a new %s."
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
 msgid "Use the <em>Add</em> Button to add a new UC."
@@ -14262,6 +14311,7 @@ msgid "User"
 msgstr "Úsáideoir"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
 msgstr "Teastas úsáideora (ionchódaithe PEM)"
 
@@ -14270,11 +14320,13 @@ msgid "User identifier"
 msgstr "Aitheantóir úsáideora"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:166
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:118
 msgid "User key (PEM encoded)"
 msgstr "Eochair úsáideora (ionchódaithe PEM)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:143
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
 msgid "Username"
@@ -14343,10 +14395,24 @@ msgstr "Seoladh áitiúil VPN"
 msgid "VPN Local port"
 msgstr "Port áitiúil VPN"
 
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:94
+msgid "VPN Protocol"
+msgstr "Prótacal VPN"
+
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:103
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39
 msgid "VPN Server"
 msgstr "Freastalaí VPN"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:154
+msgid "VPN Server certificate's SHA256 hash"
+msgstr "Hash SHA256 deimhniú Freastalaí VPN"
+
+#: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:96
+msgid "VPN Server port"
+msgstr "Port freastalaí VPN"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:141
 msgid "VPN Server's certificate SHA1 hash"
@@ -15593,6 +15659,14 @@ msgstr "luach sláimhir bailí"
 msgid "valid multicast MAC address"
 msgstr "seoladh MAC bailí multicast"
 
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:1006
+msgid ""
+"valid network device name between 1 and 15 characters not containing \":\", "
+"\"/\", \"%\" or spaces"
+msgstr ""
+"ainm bailí feiste líonra idir 1 agus 15 carachtar nach bhfuil “:”, “/”, “%” "
+"nó spásanna"
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1004
 msgid "valid network device name, not \".\" or \"..\""
 msgstr "ainm bailí gléas líonra, ní “.” nó “..”"
@@ -15702,6 +15776,19 @@ msgstr "Tugann {example_nx} ar ais {nxdomain}."
 msgid "« Back"
 msgstr "“Ar ais"
 
+#~ msgid "<em>%s</em>"
+#~ msgstr "<em>%s</em>"
+
+#~ msgid "<em>Add</em>"
+#~ msgstr "<em>Cuir leis</em>"
+
+#~ msgid "Use the %s Button to add a new %s."
+#~ msgstr "Úsáid an Cnaipe %s chun %s nua a chur leis."
+
+#~ msgctxt "use the add button to add a new tag"
+#~ msgid "Use the %s button to add a new %s."
+#~ msgstr "Úsáid an cnaipe %s chun %s nua a chur leis."
+
 #~ msgid "Changes the administrator password for accessing the device"
 #~ msgstr "Athraíonn sé pasfhocal an riarthóra chun an gléas a rochtain"
 
@@ -15716,52 +15803,6 @@ msgstr "“Ar ais"
 
 #~ msgid "IP sets"
 #~ msgstr "Leagann IP"
-
-#~ msgid ""
-#~ "CA certificate (PEM encoded; Use instead of system-wide store to verify "
-#~ "the gateway certificate."
-#~ msgstr ""
-#~ "Teastas CA (ionchódaithe PEM; Úsáid in ionad stór ar fud an chórais chun "
-#~ "deimhniú an geata a fhíorú."
-
-#~ msgid "Invalid Base64 key string"
-#~ msgstr "Eochair sreang Base64 neamhbhailí"
-
-#~ msgid "Local IP address"
-#~ msgstr "Seoladh IP áitiúil"
-
-#~ msgid "OpenConnect"
-#~ msgstr "Oscailceangail"
-
-#~ msgid "OpenFortivpn"
-#~ msgstr "OpenFortivpn"
-
-#~ msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
-#~ msgstr ""
-#~ "Roghnach, i soicindí. Má tá sé socraithe ar '0', ní dhéanfar iarracht ar "
-#~ "aon athnasc."
-
-#~ msgid "Persistent reconnect interval"
-#~ msgstr "Eatramh athnasctha leanúnach"
-
-#~ msgid "This does not look like a valid PEM file"
-#~ msgstr "Ní chuma é seo cosúil le comhad bailí PEM"
-
-#~ msgid "VPN Protocol"
-#~ msgstr "Prótacal VPN"
-
-#~ msgid "VPN Server certificate's SHA256 hash"
-#~ msgstr "Hash SHA256 deimhniú Freastalaí VPN"
-
-#~ msgid "VPN Server port"
-#~ msgstr "Port freastalaí VPN"
-
-#~ msgid ""
-#~ "valid network device name between 1 and 15 characters not containing \":"
-#~ "\", \"/\", \"%\" or spaces"
-#~ msgstr ""
-#~ "ainm bailí feiste líonra idir 1 agus 15 carachtar nach bhfuil “:”, “/”, "
-#~ "“%” nó spásanna"
 
 #~ msgid "Add template based configuration"
 #~ msgstr "Cuir cumraíocht bunaithe teimpléad"
