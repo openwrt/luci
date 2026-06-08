@@ -127,7 +127,7 @@ return view.extend({
 		o = s.option(form.ListValue, 'flag', _('Notification flags'));
 		ESIFlags(o)
 
-		s = m.section(form.TypedSection, 'monitor', _('UPS Monitor User Settings)'));
+		s = m.section(form.TypedSection, 'monitor', _('UPS Monitor User Settings'));
 		MonitorUserOptions(s);
 
 		o = s.option(form.ListValue, 'type', _('User type (Primary/Auxiliary)'));
