@@ -1272,7 +1272,7 @@ const openvpnOptions = [
 		tab: 'cryptography',
 		type: form.Value,
 		name: 'tls_cert_profile',
-		label: _('TLS cet profile'),
+		label: _('TLS cert profile'),
 		lvalues: [
 			'insecure',
 			'legacy',
