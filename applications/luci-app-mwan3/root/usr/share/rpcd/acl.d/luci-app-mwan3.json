@@ -8,16 +8,7 @@
 			"file": {
 				"/usr/sbin/mwan3 status": [
 					"exec"
-				]
-			},
-			"ubus": {
-				"mwan3": [
-					"status"
-				]
-			}
-		},
-		"write": {
-			"file": {
+				],
 				"/usr/libexec/luci-mwan3 diag gateway *": [
 					"exec"
 				],
@@ -30,16 +21,27 @@
 				"/usr/libexec/luci-mwan3 diag routes *": [
 					"exec"
 				],
-				"/usr/sbin/mwan3 internal ipv4": [
-					"exec"
-				],
 				"/usr/sbin/mwan3 ifup *": [
 					"exec"
 				],
 				"/usr/sbin/mwan3 ifdown *": [
 					"exec"
+				],
+				"/usr/sbin/mwan3 internal ipv4": [
+					"exec"
 				]
 			},
+			"ubus": {
+				"mwan3": [
+					"status"
+				]
+			},
+			"uci": [
+				"mwan3",
+				"network"
+			]
+		},
+		"write": {
 			"ubus": {
 				"file": [
 					"exec"
@@ -53,23 +55,6 @@
 			"cgi-io": [
 				"exec"
 			],
-			"file": {
-				"/etc/mwan3.user": [
-					"read"
-				],
-				"/usr/bin/httping": [
-					"list"
-				],
-				"/usr/bin/nping": [
-					"list"
-				],
-				"/usr/bin/arping": [
-					"list"
-				],
-				"/usr/libexec/luci-mwan3 ipset dump": [
-					"exec"
-				]
-			},
 			"ubus": {
 				"mwan3": [
 					"status"
