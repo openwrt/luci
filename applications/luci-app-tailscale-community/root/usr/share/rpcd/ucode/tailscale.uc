@@ -204,7 +204,7 @@ methods.do_login = {
 
 		// Run the command in the background using /bin/sh -c to handle the '&' correctly
 		let login_cmd = 'tailscale login '+join(' ', loginargs);
-		popen('/bin/sh -c "' + login_cmd + ' &"', 'r');
+		popen('/bin/sh -c ' + shell_quote(login_cmd + ' &'), 'r');
 
 		// --- 2. Loop to Check Status for URL ---
 		let max_attempts = 15;
