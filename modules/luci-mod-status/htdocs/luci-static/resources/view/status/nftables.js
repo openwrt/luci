@@ -143,19 +143,34 @@ const action_translations = {
 };
 
 return view.extend({
+
+	resolveCounter(data, spec, counter) {
+		if (typeof(counter) == 'object')
+			return counter;
+
+		for (let d of data)
+			if (typeof(d.counter) == 'object' &&
+				d.counter.family == spec.family &&
+				d.counter.table == spec.table &&
+				d.counter.name == counter)
+				return d.counter;
+
+		return null;
+	},
+
 	load() {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--terse', '--json', 'list', 'ruleset' ], 'json'), {}),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', ['--terse', '--json', 'list', 'ruleset'], 'json'), {}),
 			fs.stat('/usr/sbin/iptables-legacy-save').then(function() {
-                return L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-legacy-save'), '');
-            }).catch(function() {
-                return L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), '');
-            }),
-            fs.stat('/usr/sbin/ip6tables-legacy-save').then(function() {
-                return L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-legacy-save'), '');
-            }).catch(function() {
-                return L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '');
-            })
+				return L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-legacy-save'), '');
+			}).catch(function() {
+				return L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), '');
+			}),
+			fs.stat('/usr/sbin/ip6tables-legacy-save').then(function() {
+				return L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-legacy-save'), '');
+			}).catch(function() {
+				return L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '');
+			})
 		]);
 	},
 
@@ -582,8 +597,11 @@ return view.extend({
 					empty = false;
 
 					if (typeof(se) == 'object' && se.counter) {
-						row.childNodes[0].appendChild(
-							this.renderCounter(se.counter));
+						const ctr = this.resolveCounter(data, spec, se.counter);
+
+						if (ctr)
+							row.childNodes[0].appendChild(
+								this.renderCounter(ctr));
 					}
 
 					// append each mapped action to the actions column
@@ -595,9 +613,12 @@ return view.extend({
 				const res = this.renderExpr(se, spec.table);
 
 				if (typeof(se) == 'object' && se.counter) {
-					row.childNodes[0].insertBefore(
-						this.renderCounter(se.counter),
-						row.childNodes[0].firstChild);
+					const ctr = this.resolveCounter(data, spec, se.counter);
+
+					if (ctr)
+						row.childNodes[0].insertBefore(
+							this.renderCounter(ctr),
+							row.childNodes[0].firstChild);
 				}
 				else if (this.isActionExpression(se)) {
 					dom.append(row.childNodes[1], [ res ]);
