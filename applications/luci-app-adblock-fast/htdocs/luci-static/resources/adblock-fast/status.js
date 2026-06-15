@@ -12,14 +12,17 @@ var pkg = {
 		return "adblock-fast";
 	},
 	get LuciCompat() {
-		return 14;
+		return 17;
+	},
+	get ChromeExtensionId() {
+		return "klkdabjeohlmbcnidbealmacfjlihopo";
 	},
 	get ReadmeCompat() {
 		return "";
 	},
 	get URL() {
 		return (
-			"https://docs.openwrt.melmac.ca/" +
+			"https://docs.mossdef.org/" +
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
@@ -27,7 +30,7 @@ var pkg = {
 	},
 	get DonateURL() {
 		return (
-			"https://docs.openwrt.melmac.ca/" +
+			"https://docs.mossdef.org/" +
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "") +
@@ -107,6 +110,12 @@ var pkg = {
 		warningCronMissing: _(
 			"Cron daemon is not available. If BusyBox crond is present, enable it with: %s; otherwise install another cron daemon.",
 		),
+		warningParallelDownloadsThrottled: _(
+			"Parallel downloads reduced to %s due to low free memory",
+		),
+		warningDownloadTimeout: _(
+			"Download of '%s' timed out; the server may be too slow — consider increasing download_timeout, download_connect_timeout or download_max_time",
+		),
 	},
 
 	errorTable: {
@@ -155,7 +164,7 @@ var pkg = {
 		errorCreatingDirectory: _(
 			"Failed to create output/cache/gzip file directory",
 		),
-		errorDetectingFileType: _("Failed to detect format %s"),
+		errorDetectingFileType: _("Failed to detect format for %s"),
 		errorNothingToDo: _("No blocked list URLs nor blocked-domains enabled"),
 		errorTooLittleRam: _(
 			"Free ram (%s) is not enough to process all enabled block-lists",
@@ -176,12 +185,30 @@ var getFileUrlFilesizes = rpc.declare({
 	params: ["name", "url"],
 });
 
-var syncCron = rpc.declare({
+var _syncCron = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "syncCron",
-	params: ["name", "action"],
+	params: [
+		"name", "action",
+		"auto_update_enabled", "auto_update_mode", "auto_update_minute",
+		"auto_update_hour", "auto_update_weekday", "auto_update_monthday",
+		"auto_update_every_ndays", "auto_update_every_nhours",
+	],
 	expect: { result: false },
 });
+
+// syncCron(name, action, schedule?) — the schedule object's auto_update_*
+// fields are passed as discrete, server-validated args (no cron-line string,
+// no UCI write). Omit schedule for a state-only change (preserves existing).
+function syncCron(name, action, schedule) {
+	var s = schedule || {};
+	return _syncCron(
+		name, action,
+		s.auto_update_enabled, s.auto_update_mode, s.auto_update_minute,
+		s.auto_update_hour, s.auto_update_weekday, s.auto_update_monthday,
+		s.auto_update_every_ndays, s.auto_update_every_nhours,
+	);
+}
 
 var getInitList = rpc.declare({
 	object: "luci." + pkg.Name,
@@ -199,13 +226,6 @@ var getCronStatus = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getCronStatus",
 	params: ["name"],
-});
-
-var setCronEntry = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "setCronEntry",
-	params: ["name", "entry"],
-	expect: { result: false },
 });
 
 var getPlatformSupport = rpc.declare({
@@ -831,7 +851,6 @@ return L.Class.extend({
 	getFileUrlFilesizes: getFileUrlFilesizes,
 	syncCron: syncCron,
 	getCronStatus: getCronStatus,
-	setCronEntry: setCronEntry,
 	getPlatformSupport: getPlatformSupport,
 	getServiceInfo: getServiceInfo,
 	getQueryLogStatus: getQueryLogStatus,
