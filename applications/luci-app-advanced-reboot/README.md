@@ -21,7 +21,7 @@ opkg install luci-app-advanced-reboot
 ## Documentation
 
 Full documentation is available at:  
-[https://docs.openwrt.melmac.ca/luci-app-advanced-reboot/](https://docs.openwrt.melmac.ca/luci-app-advanced-reboot/)
+[https://docs.mossdef.org/luci-app-advanced-reboot/](https://docs.mossdef.org/luci-app-advanced-reboot/)
 
 ## License
 
