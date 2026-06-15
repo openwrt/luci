@@ -1,0 +1,26 @@
+Test boot_partition when fw_setenv fails (non-zero exit code).
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+linksys,e7350
+-- End --
+
+-- File fs/popen~fw_printenv_-n_bootimage_2_dev_null.txt --
+1
+-- End --
+
+-- File fs/popen~fw_setenv_bootimage_2_2_dev_null_echo_.txt --
+1
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.boot_partition.call({ args: { number: "2" } });
+printf("error: %s\n", result.error);
+printf("args: %J\n", result.args);
+-- End --
+
+-- Expect stdout --
+error: ERR_SET_ENV
+args: [ "bootimage", "2" ]
+-- End --

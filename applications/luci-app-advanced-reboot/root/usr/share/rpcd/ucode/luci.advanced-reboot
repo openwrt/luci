@@ -18,17 +18,31 @@
  * 		"params": ["<env1>", "<env2>"],
  * 		"get": "fw_printenv",
  * 		"set": "fw_setenv",
- * 		"save": null
+ * 		"save": null,
+ * 		"set_helper": "/usr/share/advanced-reboot/helpers/<device>.sh",
+ * 		"dual_flag": { "mtd": "<partition-name>", "offset": <int> }
  * 	},
  * 	"partitions": [
- * 		{ "number": 1, "param_values": [v1, w1], "mtd": "mtdX", "labelOffsetBytes": <int|null>, "altMountOptions": { "mtdOffset": <int>, "ubiVolume": <int> } },
- * 		{ "number": 2, "param_values": [v2, w2], "mtd": "mtdY", "labelOffsetBytes": <int|null> }
+ * 		{ "number": 1, "param_values": [v1, w1], "firmware": { "kernel": "mtdX", "rootfs": "mtdY", "kernel_label_offset": <int>, "rootfs_ubi_volume": <int> } },
+ * 		{ "number": 2, "param_values": [v2, w2], "firmware": { ... } }
  * 	]
  * }
  *
  * Notes:
- * - `altMountOptions` is optional; when absent, defaults are mtdOffset=1, ubiVolume=0.
  * - `param_values[i]` aligns with `commands.params[i]`.
+ * - `set_helper` is optional; when present, the script is called with the partition
+ *   number as its sole argument after the standard params have been set.
+ * - When `commands.params` is empty the dual-flag method is used: a single byte in
+ *   an MTD partition selects the boot slot. `commands.dual_flag` is optional and
+ *   customizes this: `mtd` is the partition name to locate via find_mtd_part
+ *   (default: "0:dual_flag"/"0:DUAL_FLAG"), `offset` is the byte offset of the flag
+ *   (default: 0). `param_values[0]` for each partition is the matching flag byte as
+ *   two lowercase hex digits (e.g. "01"). Example: ZyXEL WSM20 stores the boot
+ *   number at offset 4 of the "persist" partition (1 => first OS, 2 => second OS).
+ * - `firmware.kernel` is optional; the device to read raw label from at kernel_label_offset.
+ * - `firmware.rootfs` is optional; the device to UBI-mount for alt partition info.
+ * - `firmware.kernel_label_offset` is optional; byte offset for label probe (requires kernel).
+ * - `firmware.rootfs_ubi_volume` is optional; UBI volume index within rootfs (default 0).
  */
 
 "use strict";
@@ -36,6 +50,10 @@
 import * as fs from "fs";
 let DEVICES_DIR = "/usr/share/advanced-reboot/devices/";
 let DEVICES_JSON = "/usr/share/advanced-reboot/devices.json";
+/* Reset in alt_partition_mount() on each call; tracks whether the UBI device
+ * was already attached (e.g. by the kernel on IPQ5018) so alt_partition_unmount() knows
+ * not to detach it. */
+let alt_ubi_pre_attached = false;
 
 function file_exists(p) {
 	try {
@@ -90,28 +108,28 @@ function find_device_info(romBoardName) {
 
 	// Read one big JSON file instead of many small ones
 	let txt = fs.readfile(DEVICES_JSON);
-	if (!txt) return null;
+	if (txt) {
+		// devices.json : [ { device: {...} }, { device: {...} }, ... ]
+		let arr = json(txt);
+		if (arr && type(arr) == "array") {
+			// Loop over each object in the array
+			for (let obj in arr) {
+				if (!obj || !obj.device) continue;
 
-	// devices.json : [ { device: {...} }, { device: {...} }, ... ]
-	let arr = json(txt);
-	if (!arr || type(arr) != "array") return null;
+				let boards = obj.device.board;
+				if (!boards) continue;
 
-	// Loop over each object in the array
-	for (let obj in arr) {
-		if (!obj || !obj.device) continue;
+				// normalise to array
+				if (type(boards) != "array") boards = ["" + boards];
 
-		let boards = obj.device.board;
-		if (!boards) continue;
-
-		// normalise to array
-		if (type(boards) != "array") boards = ["" + boards];
-
-		for (let i = 0; i < length(boards); i++) {
-			let s = "" + boards[i];
-			if (s == rb) return obj;
+				for (let i = 0; i < length(boards); i++) {
+					let s = "" + boards[i];
+					if (s == rb) return obj;
+				}
+			}
 		}
 	}
-	// Fallback: old schema with many small files
+	// Fallback: individual device JSON files
 	let list = fs.glob(DEVICES_DIR + "*.json");
 	for (let f in list) {
 		let ftxt = fs.readfile(f);
@@ -188,6 +206,22 @@ function get_partition_info_current() {
 	return get_volume_info("/");
 }
 
+/* Find the UBI device number for a given MTD index via sysfs.
+ *
+ * Checks /sys/class/ubi/ubiN/mtd_num entries to find a match.
+ *
+ * @param {Number|String} mtd_idx  MTD index to look up.
+ * @returns {Number|null} UBI device number, or null if not found.
+ */
+function find_ubi_dev_by_mtd(mtd_idx) {
+	let out = command(
+		"for d in /sys/class/ubi/ubi[0-9]*; do " +
+		"[ \"$(cat \"$d/mtd_num\" 2>/dev/null)\" = \"" + mtd_idx + "\" ] && " +
+		"echo \"${d##*/ubi}\" && break; done"
+	);
+	return out && length(out) ? int(out) : null;
+}
+
 /* Determine if an alternate partition can be mounted.
  *
  * Requires: ubiattach, ubiblock, and mount commands available.
@@ -229,8 +263,18 @@ function alt_partition_mount(op_ubi, ubi_vol) {
 		op_ubi +
 		" 2>/dev/null | sed -n 's/^UBI device number\\s*\\([0-9]*\\),.*$/\\1/p'"
 	);
-	log("mounted alternative partition UBI device number: " + out);
 	let dev = out && length(out) ? int(out) : null;
+	alt_ubi_pre_attached = false;
+	if (dev == null) {
+		/* ubiattach failed — MTD may already be attached (e.g. by kernel).
+		 * Look up the existing UBI device number via sysfs. */
+		dev = find_ubi_dev_by_mtd(op_ubi);
+		if (dev != null) {
+			alt_ubi_pre_attached = true;
+			log("found pre-attached UBI device " + dev + " for mtd" + op_ubi);
+		}
+	}
+	log("alternative partition UBI device number: " + dev);
 	if (dev == null) {
 		command("ubidetach -m " + op_ubi + " >/dev/null 2>&1");
 		return false;
@@ -247,6 +291,7 @@ function alt_partition_mount(op_ubi, ubi_vol) {
 /* Unmount and detach any UBI devices associated with a given MTD index.
  *
  * Also removes possible ubiblock nodes for the device.
+ * Skips ubidetach when the UBI was pre-attached (not attached by us).
  *
  * @param {Number|String} op_ubi   UBI mtd index previously attached.
  * @param {Number|String} ubi_vol  UBI volume index (ignored during cleanup).
@@ -254,25 +299,18 @@ function alt_partition_mount(op_ubi, ubi_vol) {
  * @sideeffects  umounts /var/alt_rom, ubidetach, removes ubiblock nodes.
  */
 function alt_partition_unmount(op_ubi, ubi_vol) {
-	let mtdCount = command(
-		'ubinfo | grep "Present UBI devices" | tr "," "\\n" | grep -c "ubi"'
-	);
-	mtdCount = int(mtdCount) || 10;
 	command("umount /var/alt_rom");
-	for (let i = 0; i <= mtdCount; i++) {
-		let mtd = fs.readfile("/sys/devices/virtual/ubi/ubi" + i + "/mtd_num");
-		if (!mtd) break;
-		mtd = trim(mtd);
-		if (mtd == "" + op_ubi) {
-			/* remove any ubiblock nodes on this ubi dev */
-			for (let vid = 0; vid < 16; vid++)
-				command(
-					"ubiblock --remove /dev/ubi" + i + "_" + vid + " >/dev/null 2>&1"
-				);
+	let dev = find_ubi_dev_by_mtd(op_ubi);
+	if (dev != null) {
+		/* remove any ubiblock nodes on this ubi dev */
+		for (let vid = 0; vid < 16; vid++)
+			command(
+				"ubiblock --remove /dev/ubi" + dev + "_" + vid + " >/dev/null 2>&1"
+			);
+		if (!alt_ubi_pre_attached)
 			command("ubidetach -m " + op_ubi + " >/dev/null 2>&1");
-			command("rm -rf /var/alt_rom");
-		}
 	}
+	command("rm -rf /var/alt_rom");
 }
 
 /* Get label/OS info from an alternative partition, using UBI mount flow.
@@ -331,8 +369,16 @@ function get_partition_info_fallback(mtd, offset, vendor) {
 	return { label: label, os: os };
 }
 
-function read_dual_flag_mtd() {
-	for (let name in ["0:dual_flag", "0:DUAL_FLAG"]) {
+/* Locate the MTD block device holding the dual-boot flag.
+ *
+ * @param {String|null} mtd_name  Partition name to look up via find_mtd_part.
+ *                                When null, falls back to the conventional
+ *                                "0:dual_flag"/"0:DUAL_FLAG" names.
+ * @returns {String|null} Device path (e.g., /dev/mtdblockN) or null if not found.
+ */
+function read_dual_flag_mtd(mtd_name) {
+	let names = mtd_name ? ["" + mtd_name] : ["0:dual_flag", "0:DUAL_FLAG"];
+	for (let name in names) {
 		let dev = command(". /lib/functions.sh; find_mtd_part " + shellquote(name));
 		if (dev) return dev;
 	}
@@ -341,15 +387,18 @@ function read_dual_flag_mtd() {
 
 /* Read the single-byte dual-boot flag value from a block device.
  *
- * @param {String} dev  Path to the block (e.g., /dev/mtdX) returned by find_mtd_part.
+ * @param {String} dev     Path to the block (e.g., /dev/mtdX) returned by find_mtd_part.
+ * @param {Number} offset  Byte offset of the flag (default 0).
  * @returns {String|null} Lowercase hex byte (e.g., "00", "01") or null on error.
  */
-function read_dual_flag_value(dev) {
+function read_dual_flag_value(dev, offset) {
 	if (!dev || dev == "" || !file_exists(dev)) return null;
+	let off = offset != null ? int(offset) : 0;
 	let r = command(
 		"dd if=" +
 		shellquote(dev) +
-		" bs=1 count=1 2>/dev/null | hexdump -n 1 -e '" +
+		" bs=1 count=1 skip=" + off +
+		" 2>/dev/null | hexdump -n 1 -e '" +
 		'1/1 "%02x"' +
 		"'"
 	);
@@ -358,20 +407,36 @@ function read_dual_flag_value(dev) {
 
 /* Write a single-byte dual-boot flag value to a block device.
  *
- * @param {String} dev  Device path (e.g., /dev/mtdX).
- * @param {String} cur  Hex byte without prefix (e.g., "01"); will be written as \\x01.
+ * @param {String} dev     Device path (e.g., /dev/mtdX).
+ * @param {String} cur     Hex byte without prefix (e.g., "01"); written as \\x01.
+ * @param {Number} offset  Byte offset of the flag (default 0).
  * @returns {Boolean} true if write succeeded, false otherwise.
  * @sideeffects  Overwrites one byte on the target device.
  */
-function write_dual_flag_value(dev, cur) {
+function write_dual_flag_value(dev, cur, offset) {
+	let off = offset != null ? int(offset) : 0;
 	cur = "\\x" + cur;
-	let rc = command(
-		"printf %b " +
-		shellquote(cur) +
-		" > " +
-		shellquote(dev) +
-		" 2>/dev/null; echo $?"
-	);
+	let rc;
+	if (off == 0) {
+		rc = command(
+			"printf %b " +
+			shellquote(cur) +
+			" > " +
+			shellquote(dev) +
+			" 2>/dev/null; echo $?"
+		);
+	} else {
+		/* Patch a single byte in place without truncating the rest of the
+		 * partition (matches upstream zyxel_mstc_upgrade_prepare). */
+		rc = command(
+			"printf %b " +
+			shellquote(cur) +
+			" | dd of=" +
+			shellquote(dev) +
+			" bs=1 seek=" + off +
+			" count=1 conv=notrunc 2>/dev/null; echo $?"
+		);
+	}
 	return rc == "0";
 }
 
@@ -411,12 +476,13 @@ function obtain_device_info() {
 			push(curvals, v);
 		}
 	} else {
-		let df = read_dual_flag_mtd();
+		let dual = cmds.dual_flag ?? {};
+		let df = read_dual_flag_mtd(dual.mtd);
 		let v = null;
 		if (!df) return { error: "NO_DUAL_FLAG", rom_board_name: board };
 		if (!file_exists(df))
 			return { error: "NO_DUAL_FLAG_BLOCK", rom_board_name: board };
-		v = read_dual_flag_value(df);
+		v = read_dual_flag_value(df, dual.offset);
 		push(curvals, v);
 	}
 
@@ -424,32 +490,31 @@ function obtain_device_info() {
 	for (let i = 0; i < length(parts); i++) {
 		let p = parts[i] ?? {};
 		let num = p.number != null ? p.number : i;
-		let mtd = p.mtd ?? null;
+		let fw = p.firmware ?? {};
+		let kernel = fw.kernel ?? null;
+		let rootfs = fw.rootfs ?? null;
+		let label_offset = fw.kernel_label_offset ?? null;
+		let ubi_vol = fw.rootfs_ubi_volume ?? 0;
 		let info = {};
-		let v;
 
 		if ("" + curvals[0] == "" + p.param_values[0]) {
 			/* current partition */
 			active_num = num;
 			info = get_partition_info_current();
-		} else if (mtd && is_alt_mountable([mtd])) {
-			/* attempt alt mount if we have mount options (or defaults) and tools */
-			let amo = p.altMountOptions ?? {};
-			let mtdOff = amo.mtdOffset == null ? 1 : int(amo.mtdOffset);
-			let ubiVol = amo.ubiVolume == null ? 0 : int(amo.ubiVolume);
-			let idx = mtd_index(mtd);
+		} else if (rootfs && is_alt_mountable([rootfs])) {
+			/* attempt alt mount for rootfs */
+			let idx = mtd_index(rootfs);
 			if (idx != null) {
-				let op_ubi = idx + mtdOff;
-				info = get_partition_info_alt(op_ubi, dev.vendor ?? null, ubiVol);
+				info = get_partition_info_alt(idx, dev.vendor ?? null, ubi_vol);
 				if (info && info.label == null && info.os == null) info = {};
 			}
 		}
-		/* raw-label fallback if needed */
-		if (mtd && p.labelOffsetBytes != null) {
+		/* raw-label fallback from kernel partition */
+		if (kernel && label_offset != null) {
 			if (!info?.label || !info?.os) {
 				let fb = get_partition_info_fallback(
-					mtd,
-					p.labelOffsetBytes,
+					kernel,
+					label_offset,
 					dev.vendor
 				);
 				if (!info) {
@@ -468,7 +533,7 @@ function obtain_device_info() {
 			number: "" + num,
 			label: info ? info.label : null,
 			os: info ? info.os : null,
-			mtd: mtd,
+			mtd: kernel ?? rootfs,
 		});
 	}
 
@@ -573,15 +638,33 @@ function boot_partition(req) {
 			}
 			if (rc != "0") return { error: "ERR_SAVE_ENV", rom_board_name: board };
 		}
+
+		/* Run device-specific helper if defined */
+		let helper = cmds.set_helper;
+		if (helper && helper != "" &&
+			match(helper, /^\/usr\/share\/advanced-reboot\/helpers\/[^\/]+$/)) {
+			let cmd = shellquote(helper) +
+				" " + shellquote("" + number) +
+				" 2>/dev/null; echo $?";
+			log("boot_partition running helper: " + cmd);
+			let rc = command(cmd);
+			if (rc != "0")
+				return {
+					error: "ERR_SET_HELPER",
+					args: [helper, "" + number],
+					rom_board_name: board,
+				};
+		}
 	} else {
-		let df = read_dual_flag_mtd();
+		let dual = cmds.dual_flag ?? {};
+		let df = read_dual_flag_mtd(dual.mtd);
 		if (!df) return { error: "NO_DUAL_FLAG", rom_board_name: board };
 		if (!file_exists(df))
 			return { error: "NO_DUAL_FLAG_BLOCK", rom_board_name: board };
 
 		log("boot_partition setting dual flag: " + df + " to " + target.param_values[0]);
 
-		if (!write_dual_flag_value(df, target.param_values[0]))
+		if (!write_dual_flag_value(df, target.param_values[0], dual.offset))
 			return { error: "ERR_SET_DUAL_FLAG", args: [df], rom_board_name: board };
 	}
 	return {};

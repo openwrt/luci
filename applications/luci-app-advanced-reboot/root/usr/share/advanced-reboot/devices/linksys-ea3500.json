@@ -25,8 +25,11 @@
 				1,
 				"run nandboot"
 			],
-			"mtd": "mtd3",
-			"labelOffsetBytes": 32
+			"firmware": {
+				"kernel": "mtd3",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd4"
+			}
 		},
 		{
 			"number": 2,
@@ -34,8 +37,11 @@
 				2,
 				"run altnandboot"
 			],
-			"mtd": "mtd5",
-			"labelOffsetBytes": 32
+			"firmware": {
+				"kernel": "mtd5",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd6"
+			}
 		}
 	]
 }

@@ -6,16 +6,14 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=luci-app-advanced-reboot
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=1.1.1
-PKG_RELEASE:=15
-
-PKG_BUILD_DEPENDS:=jq/host
+PKG_VERSION:=1.1.2
+PKG_RELEASE:=6
 
 LUCI_TITLE:=Advanced Linksys Reboot Web UI
-LUCI_URL:=https://github.com/stangri/luci-app-advanced-reboot/
+LUCI_URL:=https://github.com/mossdef-org/luci-app-advanced-reboot/
 LUCI_DESCRIPTION:=Provides Web UI (found under System/Advanced Reboot) to reboot supported Linksys and ZyXEL routers to\
 	an alternative partition. Also provides Web UI to shut down (power off) your device. 	Supported dual-partition\
-	routers are listed at https://docs.openwrt.melmac.ca/luci-app-advanced-reboot/
+	routers are listed at https://docs.mossdef.org/luci-app-advanced-reboot/
 LUCI_DEPENDS:=+luci-base +jshn
 
 define Package/$(PKG_NAME)/config
@@ -26,23 +24,28 @@ help
 	Version: $(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
-include ../../luci.mk
-
-# Prune individual device JSON directories from the package image.
-# The default LuCI install logic from luci.mk copies everything under
-# htdocs/, root/, etc. We let it run, then remove folders we keep only
-# in source control.
-define Package/$(PKG_NAME)/install
-	$(call Package/$(PKG_NAME)/install/default,$(1))
-	@mkdir -p $(1)/usr/share/advanced-reboot
-	@if [ -d $(1)/usr/share/advanced-reboot/devices ] \
-		&& ls $(1)/usr/share/advanced-reboot/devices/*.json >/dev/null 2>&1; then \
-			$(STAGING_DIR_HOST)/bin/jq -s '.' $(1)/usr/share/advanced-reboot/devices/*.json \
-				> $(1)/usr/share/advanced-reboot/devices.json; \
+# Consolidate individual device JSON files into devices.json in the build tree.
+# luci.mk's Build/Prepare calls Build/Prepare/$(LUCI_NAME) as a per-package hook.
+# The merged file lands in root/ so luci.mk's install step copies it automatically.
+define Build/Prepare/luci-app-advanced-reboot
+	@if [ -d $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices ] \
+		&& ls $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices/*.json >/dev/null 2>&1; then \
+			sep=''; printf '[' > $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.json; \
+			for f in $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices/*.json; do \
+				printf '%s' "$$$$sep" >> $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.json; \
+				cat "$$$$f" >> $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.json; \
+				sep=','; \
+			done; \
+			printf ']' >> $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.json; \
 	fi
-	@if [ -s $(1)/usr/share/advanced-reboot/devices.json ]; then \
-		$(RM) -r $(1)/usr/share/advanced-reboot/devices $(1)/usr/share/advanced-reboot/devices.disabled || true; \
+	@rm -rf $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.disabled
+	@if grep -q '"device"' $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.json 2>/dev/null; then \
+		rm -rf $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices; \
+	else \
+		rm -f $(PKG_BUILD_DIR)/root/usr/share/advanced-reboot/devices.json; \
 	fi
 endef
+
+include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

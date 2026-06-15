@@ -15,15 +15,25 @@
 	"partitions": [
 		{
 			"number": 1,
-			"param_values": [1],
-			"mtd": "mtd3",
-			"labelOffsetBytes": 28
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd3",
+				"kernel_label_offset": 28,
+				"rootfs": "mtd4"
+			}
 		},
 		{
 			"number": 2,
-			"param_values": [2],
-			"mtd": "mtd6",
-			"labelOffsetBytes": 28
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd6",
+				"kernel_label_offset": 28,
+				"rootfs": "mtd7"
+			}
 		}
 	]
 }
