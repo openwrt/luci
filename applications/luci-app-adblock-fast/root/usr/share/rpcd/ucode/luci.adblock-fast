@@ -11,9 +11,9 @@ ubus call luci.adblock-fast getPlatformSupport '{"name":"adblock-fast"}'
 ubus call luci.adblock-fast getCronStatus '{"name":"adblock-fast"}'
 ubus call luci.adblock-fast getCronEntry '{"name":"adblock-fast"}'
 ubus call luci.adblock-fast getFileUrlFilesizes '{"name":"adblock-fast"}'
-ubus call luci.adblock-fast setCronEntry '{"name":"adblock-fast","entry":"0 4 * * * /etc/init.d/adblock-fast dl"}'
 ubus call luci.adblock-fast setInitAction '{"name":"adblock-fast","action":"start"}'
-ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","action":"start"}'
+ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","auto_update_enabled":"1","auto_update_mode":"daily","auto_update_hour":"4","auto_update_minute":"0"}'  # set schedule (validated server-side, replaces setCronEntry)
+ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","action":"stop"}'  # state-only change, preserves existing schedule
 ubus call luci.adblock-fast setRpcdToken '{"name":"adblock-fast","token":"newtoken"}'
 ubus call luci.adblock-fast getQueryLogStatus '{"name":"adblock-fast"}'
 ubus call luci.adblock-fast setQueryLog '{"name":"adblock-fast","action":"enable"}'
@@ -24,7 +24,7 @@ import { readfile, writefile, stat, rename, unlink, chmod, mkdir, access } from 
 import { cursor } from 'uci';
 
 const packageName = 'adblock-fast';
-const rpcdCompat = 14; // ucode-lsp disable
+const rpcdCompat = 17; // ucode-lsp disable
 
 // ── Helpers ─────────────────────────────────────────────────────────
 
@@ -37,6 +37,20 @@ function uci_bool(val) {
 		return false;
 	}
 }
+
+// Coerce a scheduling field to a bounded integer. Anything that is not a
+// plain decimal in [lo, hi] falls back to dflt. This is the security gate
+// for cron-line assembly: the returned value is an int, so no newline or
+// shell metacharacter from UCI/RPC input can ever reach /etc/crontabs/root.
+function cron_field(val, lo, hi, dflt) {
+	val = '' + (val ?? '');
+	if (!match(val, /^[0-9]+$/)) return dflt;
+	let n = int(val);
+	return (n < lo || n > hi) ? dflt : n;
+}
+
+// Allowlist of accepted scheduling modes.
+const CRON_MODES = { daily: 1, weekly: 1, monthly: 1, every_n_days: 1, every_n_hours: 1 };
 
 // Return resolved list of selected instance section names.
 // null = all instances, [] = none, [...] = specific names.
@@ -65,35 +79,109 @@ function get_selected_instances(uci_ctx, config, section_type, instance_option) 
 
 // ── Cron Management ─────────────────────────────────────────────────
 
-function update_cron(action) {
+// Parse one adblock-fast cron line body (comment marker already stripped) into
+// raw schedule fields, or null if it isn't a well-formed adblock-fast line.
+// Values are returned as-is (strings); cron_write re-validates them through
+// cron_field/CRON_MODES, so this never has to be trusted on its own.
+function parse_cron_line(body) {
+	let f = split(trim(body), /\s+/);
+	if (length(f) < 7) return null;
+	if (f[3] != '*') return null;
+	if (f[5] != '/etc/init.d/' + packageName) return null;
+	if (f[6] != 'dl') return null;
+	if (!match(f[0], /^[0-9]+$/)) return null;
+
+	let minute = f[0], hour = f[1], dom = f[2], dow = f[4];
+	let r = { minute: minute, hour: hour };
+
+	if (index(hour, '/') >= 0) {
+		if (dom != '*' || dow != '*') return null;
+		let n = split(hour, '/')[1];
+		if (!match(n, /^[0-9]+$/)) return null;
+		r.mode = 'every_n_hours'; r.nhours = n;
+	} else if (index(dom, '/') >= 0) {
+		if (dow != '*' || !match(hour, /^[0-9]+$/)) return null;
+		let n = split(dom, '/')[1];
+		if (!match(n, /^[0-9]+$/)) return null;
+		r.mode = 'every_n_days'; r.ndays = n;
+	} else if (dom != '*') {
+		if (dow != '*' || !match(hour, /^[0-9]+$/) || !match(dom, /^[0-9]+$/)) return null;
+		r.mode = 'monthly'; r.mday = dom;
+	} else if (dow != '*') {
+		if (!match(hour, /^[0-9]+$/) || !match(dow, /^[0-9]+$/)) return null;
+		r.mode = 'weekly'; r.wday = dow;
+	} else {
+		if (!match(hour, /^[0-9]+$/)) return null;
+		r.mode = 'daily';
+	}
+	return r;
+}
+
+// cron_write: assemble and write the adblock-fast crontab line.
+//   action   - optional state change ('enable'/'start' → active,
+//              'disable'/'stop' → suspended; anything else → derive from
+//              the service 'enabled' flag).
+//   schedule - object of auto_update_* fields (from a validated RPC call), or
+//              null for a state-only change, in which case the schedule of the
+//              EXISTING line is preserved.
+// SECURITY: this is the single validation chokepoint. Every field that gets
+// interpolated — whether it came from the RPC args or from parsing the existing
+// crontab line — is forced through cron_field()/CRON_MODES immediately below,
+// so no input path can write a newline or shell metacharacter into the crontab
+// (GHSA-ggpf-xrph-wg5v class). No schedule is read from or written to UCI.
+function cron_write(action, schedule) {
 	let cron_file = '/etc/crontabs/root';
 	let tmp_file = cron_file + '.tmp';
 
-	let uci_ctx = cursor();
-	uci_ctx.load(packageName);
-	let cfg = uci_ctx.get_all(packageName, 'config') || {};
-
-	// Read existing cron, filter out our lines
+	// Read existing cron, drop our line(s), and remember the existing schedule
+	// and on/off state so a state-only change can preserve them.
 	let content = readfile(cron_file) || '';
 	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
 	let re = regexp(pattern);
 	let lines = [];
+	let existing = null, existing_enabled = false;
 	for (let line in split(content, '\n')) {
-		if (!match(line, re))
-			push(lines, line);
+		let commented = match(line, /^\s*#/) ? true : false;
+		let body = commented ? replace(line, /^\s*#\s*/, '') : line;
+		if (match(body, re)) {
+			let st = (index(line, 'adblock-fast-auto-disabled') >= 0) ? 'disabled' :
+			         (index(line, 'adblock-fast-auto-suspended') >= 0) ? 'suspended' :
+			         (commented ? 'disabled' : 'active');
+			if (st == 'active' || st == 'suspended') existing_enabled = true;
+			let p = parse_cron_line(body);
+			if (p) existing = p;
+			continue;
+		}
+		push(lines, line);
 	}
-	// Remove trailing empty element from split
 	while (length(lines) > 0 && lines[length(lines) - 1] === '')
 		pop(lines);
 
-	let auto_enabled = uci_bool(cfg.auto_update_enabled ?? '0');
-	let mode = cfg.auto_update_mode || 'daily';
-	let minute = cfg.auto_update_minute || '0';
-	let hour = cfg.auto_update_hour || '4';
-	let wday = cfg.auto_update_weekday || '0';
-	let mday = cfg.auto_update_monthday || '1';
-	let ndays = cfg.auto_update_every_ndays || '3';
-	let nhours = cfg.auto_update_every_nhours || '6';
+	// Choose the schedule source, then validate every field at the gate.
+	let src, auto_enabled;
+	if (schedule != null) {
+		src = {
+			mode:   schedule.auto_update_mode,
+			minute: schedule.auto_update_minute,
+			hour:   schedule.auto_update_hour,
+			wday:   schedule.auto_update_weekday,
+			mday:   schedule.auto_update_monthday,
+			ndays:  schedule.auto_update_every_ndays,
+			nhours: schedule.auto_update_every_nhours,
+		};
+		auto_enabled = uci_bool(schedule.auto_update_enabled ?? '0');
+	} else {
+		src = existing || {};
+		auto_enabled = existing_enabled;
+	}
+
+	let mode = CRON_MODES[src.mode] ? src.mode : 'daily';
+	let minute = cron_field(src.minute, 0, 59, 0);
+	let hour = cron_field(src.hour, 0, 23, 4);
+	let wday = cron_field(src.wday, 0, 7, 0);
+	let mday = cron_field(src.mday, 1, 31, 1);
+	let ndays = cron_field(src.ndays, 1, 31, 3);
+	let nhours = cron_field(src.nhours, 1, 23, 6);
 
 	let dom = '*', dow = '*';
 	switch (mode) {
@@ -115,10 +203,11 @@ function update_cron(action) {
 			add_line = 2; break;
 		case 'enable': case 'start':
 			add_line = 1; break;
-		default:
-			let is_en = uci_bool(cfg.enabled ?? '0');
-			add_line = is_en ? 1 : 2;
+		default: {
+			let c = cursor(); c.load(packageName);
+			add_line = uci_bool(c.get(packageName, 'config', 'enabled') ?? '0') ? 1 : 2;
 			break;
+		}
 		}
 	} else {
 		add_line = 3;
@@ -146,14 +235,13 @@ function update_cron(action) {
 	return true;
 }
 
-function get_cron_status(req) {
+// cron_read: report the state of the adblock-fast crontab line. Read-only —
+// it parses the crontab and returns status + the matched entry to the caller
+// (the UI parses the entry for display). It does NOT write UCI: the crontab is
+// the single source of truth for the schedule, so there is nothing to sync.
+function cron_read(req) {
 	let name = req.args?.name || packageName;
 	let cron_file = '/etc/crontabs/root';
-
-	let cron_uci = cursor();
-	cron_uci.load(packageName);
-
-	let auto_enabled = uci_bool(cron_uci.get(packageName, 'config', 'auto_update_enabled') ?? '0');
 
 	let cron_init = !!access('/etc/init.d/cron', 'x');
 	let cron_bin = system('command -v crond >/dev/null 2>&1') == 0 || !!access('/usr/sbin/crond', 'x');
@@ -161,15 +249,13 @@ function get_cron_status(req) {
 	let cron_running = (cron_init && system('/etc/init.d/cron status >/dev/null 2>&1') == 0) ||
 		system('pidof crond >/dev/null 2>&1') == 0;
 
-	let cron_line_present = false;
-	let cron_line_match = false;
-	let cron_multi = false;
-	let cron_parse_ok = false;
-	let cron_state = 'none';
-	let parsed = {};
+	let cron_line_present = false, cron_line_match = false, cron_multi = false;
+	let cron_parse_ok = false, cron_state = 'none';
+	let auto_enabled = false;
+	let parsed_state = '';
 
 	let line_count = 0, match_count = 0;
-	let active_seen = false, suspended_seen = false, disabled_seen = false;
+	let active_seen = false, suspended_seen = false;
 	let last_line_state = '';
 	let matched_entry = '';
 
@@ -181,75 +267,21 @@ function get_cron_status(req) {
 		if (!length(trim(line))) continue;
 
 		let commented = match(line, /^\s*#/) ? true : false;
-		let line_content = commented ? replace(line, /^\s*#\s*/, '') : line;
-
-		if (!match(line_content, re)) continue;
+		let body = commented ? replace(line, /^\s*#\s*/, '') : line;
+		if (!match(body, re)) continue;
 
 		line_count++;
 		matched_entry = line;
-		let state;
-		if (index(line, 'adblock-fast-auto-disabled') >= 0) {
-			state = 'disabled';
-		} else if (index(line, 'adblock-fast-auto-suspended') >= 0) {
-			state = 'suspended';
-		} else if (index(line, 'adblock-fast-auto') >= 0) {
-			state = commented ? 'disabled' : 'active';
-		} else {
-			state = commented ? 'disabled' : 'active';
-		}
+		let state = (index(line, 'adblock-fast-auto-disabled') >= 0) ? 'disabled' :
+		            (index(line, 'adblock-fast-auto-suspended') >= 0) ? 'suspended' :
+		            (commented ? 'disabled' : 'active');
 		last_line_state = state;
-
 		if (state == 'active') active_seen = true;
 		if (state == 'suspended') suspended_seen = true;
-		if (state == 'disabled') disabled_seen = true;
 
-		let fields = split(trim(line_content), /\s+/);
-		let p_ok = true;
-
-		// Validate basic structure
-		if (length(fields) < 7) p_ok = false;
-		if (p_ok && fields[3] != '*') p_ok = false;
-		if (p_ok && fields[5] != '/etc/init.d/' + packageName) p_ok = false;
-		if (p_ok && fields[6] != 'dl') p_ok = false;
-		if (p_ok && !match(fields[0], /^[0-9]+$/)) p_ok = false;
-
-		let p_minute = fields[0], p_hour = fields[1], p_dom = fields[2], p_dow = fields[4];
-		let p_mode = '', p_ndays = '', p_nhours = '';
-
-		if (p_ok) {
-			if (index(p_hour, '/') >= 0) {
-				p_nhours = split(p_hour, '/')[1];
-				if (!match(p_nhours, /^[0-9]+$/)) p_ok = false;
-				if (p_dom != '*' || p_dow != '*') p_ok = false;
-				p_mode = 'every_n_hours';
-			} else if (index(p_dom, '/') >= 0) {
-				p_ndays = split(p_dom, '/')[1];
-				if (!match(p_ndays, /^[0-9]+$/)) p_ok = false;
-				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
-				if (p_dow != '*') p_ok = false;
-				p_mode = 'every_n_days';
-			} else if (p_dom != '*') {
-				if (!match(p_dom, /^[0-9]+$/)) p_ok = false;
-				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
-				if (p_dow != '*') p_ok = false;
-				p_mode = 'monthly';
-			} else if (p_dow != '*') {
-				if (!match(p_dow, /^[0-9]+$/)) p_ok = false;
-				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
-				p_mode = 'weekly';
-			} else {
-				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
-				p_mode = 'daily';
-			}
-		}
-
-		if (p_ok) {
+		if (parse_cron_line(body) != null) {
 			match_count++;
-			parsed = {
-				state: state, mode: p_mode, minute: p_minute,
-				hour: p_hour, dom: p_dom, dow: p_dow,
-				wday: p_dow, mday: p_dom, ndays: p_ndays, nhours: p_nhours,
-			};
+			parsed_state = state;
 		}
 	}
 
@@ -265,30 +297,12 @@ function get_cron_status(req) {
 	} else if (match_count == 1) {
 		cron_line_match = true;
 		cron_parse_ok = true;
-		cron_state = parsed.state;
-		auto_enabled = (parsed.state == 'active' || parsed.state == 'suspended');
-
-		if (parsed.mode)
-			cron_uci.set(packageName, 'config', 'auto_update_mode', parsed.mode);
-		if (parsed.minute)
-			cron_uci.set(packageName, 'config', 'auto_update_minute', parsed.minute);
-		if (parsed.hour && parsed.mode != 'every_n_hours')
-			cron_uci.set(packageName, 'config', 'auto_update_hour', parsed.hour);
-		if (parsed.mode == 'weekly' && parsed.wday)
-			cron_uci.set(packageName, 'config', 'auto_update_weekday', parsed.wday);
-		if (parsed.mode == 'monthly' && parsed.mday)
-			cron_uci.set(packageName, 'config', 'auto_update_monthday', parsed.mday);
-		if (parsed.mode == 'every_n_days' && parsed.ndays)
-			cron_uci.set(packageName, 'config', 'auto_update_every_ndays', parsed.ndays);
-		if (parsed.mode == 'every_n_hours' && parsed.nhours)
-			cron_uci.set(packageName, 'config', 'auto_update_every_nhours', parsed.nhours);
+		cron_state = parsed_state;
+		auto_enabled = (parsed_state == 'active' || parsed_state == 'suspended');
 	} else {
 		cron_state = 'unsupported';
 		auto_enabled = (last_line_state == 'active' || last_line_state == 'suspended');
 	}
-
-	cron_uci.set(packageName, 'config', 'auto_update_enabled', auto_enabled ? '1' : '0');
-	if (length(cron_uci.changes(packageName))) cron_uci.commit(packageName);
 
 	let result = {};
 	result[name] = {
@@ -329,58 +343,26 @@ function get_cron_entry(req) {
 	return result;
 }
 
-function set_cron_entry(req) {
-	let name = req.args?.name || packageName;
-	let cron_entry = req.args?.entry;
-	let cron_file = '/etc/crontabs/root';
-	let temp_file = cron_file + '.tmp';
-	let found = false, written = false;
-
-	let dir = replace(cron_file, /\/[^\/]+$/, '');
-	if (!stat(dir)) mkdir(dir);
-
-	let content = readfile(cron_file) || '';
-	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
-	let re = regexp(pattern);
-	let out_lines = [];
-
-	for (let line in split(content, '\n')) {
-		if (match(line, re)) {
-			if (!written && cron_entry) {
-				push(out_lines, cron_entry);
-				written = true;
-			}
-			found = true;
-		} else {
-			push(out_lines, line);
-		}
-	}
-
-	if (!found && cron_entry)
-		push(out_lines, cron_entry);
-
-	writefile(temp_file, join('\n', out_lines) + '\n');
-
-	if (rename(temp_file, cron_file)) {
-		chmod(cron_file, 0600);
-		if (access('/etc/init.d/cron', 'x')) {
-			if (system('/etc/init.d/cron enabled >/dev/null 2>&1') == 0)
-				system('/etc/init.d/cron restart >/dev/null 2>&1');
-			else if (system('pidof crond >/dev/null 2>&1') == 0)
-				system('killall -HUP crond 2>/dev/null');
-		} else if (system('pidof crond >/dev/null 2>&1') == 0) {
-			system('killall -HUP crond 2>/dev/null');
-		}
-		return { result: true };
-	}
-	unlink(temp_file);
-	return { result: false };
-}
+// NOTE: the former set_cron_entry() RPC (which wrote a caller-supplied cron
+// line verbatim into /etc/crontabs/root) has been removed — it allowed a
+// delegated user to inject arbitrary root crontab lines via embedded
+// newlines (GHSA-ggpf-xrph-wg5v). The schedule now travels as discrete
+// auto_update_* fields in the syncCron RPC and is rendered server-side by
+// cron_write(), which validates every field before assembling the line.
 
 function sync_cron(req) {
-	let name = req.args?.name || packageName;
-	let action = req.args?.action;
-	if (update_cron(action))
+	let a = req.args || {};
+	// Reject a mismatched package name up front, consistent with the other
+	// write methods (setInitAction/setRpcdToken). cron_write only ever touches
+	// the adblock-fast crontab, so a wrong name must be a no-op, not a silent
+	// operation on adblock-fast.
+	if ((a.name || packageName) != packageName)
+		return { result: false };
+	// Presence of auto_update_enabled marks an explicit schedule update (from
+	// the UI). Without it this is a state-only change and cron_write preserves
+	// the existing line's schedule. Either way cron_write validates.
+	let schedule = (a.auto_update_enabled != null) ? a : null;
+	if (cron_write(a.action, schedule))
 		return { result: true };
 	return { result: false };
 }
@@ -422,6 +404,20 @@ const methods = {
 			let name = req.args.name || packageName;
 			let action = req.args.action;
 			if (name != packageName) return { result: false };
+			// Allowlist the action up front so the value interpolated into the
+			// system() calls below can only ever be one of these literals.
+			const INIT_ACTIONS = { enable: 1, disable: 1, start: 1, stop: 1,
+				reload: 1, restart: 1, dl: 1, pause: 1 };
+			if (!INIT_ACTIONS[action]) return { result: false };
+			// dl/start/reload/restart download and process every block-list
+			// synchronously inside the init script, and 'pause' additionally
+			// sleeps for pause_timeout. rpcd is single-threaded, so running any
+			// of these under a blocking system() ties it up — and freezes every
+			// LuCI page — until the operation finishes (issue #9). Detach these
+			// so the RPC returns immediately; the UI polls getInitStatus for
+			// progress. 'stop' is quick and stays synchronous so the UI reflects
+			// the stopped state right away.
+			const BG_INIT_ACTIONS = { start: 1, reload: 1, restart: 1, dl: 1, pause: 1 };
 			if (!access('/etc/init.d/' + packageName, 'x'))
 				return { error: 'Init script not found!' };
 
@@ -440,14 +436,24 @@ const methods = {
 				break;
 			}
 			case 'start': case 'stop': case 'reload': case 'restart': case 'dl': case 'pause':
-				if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0)
+				if (BG_INIT_ACTIONS[action]) {
+					// Fire-and-forget: sh backgrounds the job and exits, so
+					// system() returns at once and the job is reparented to init
+					// and runs to completion. Report success optimistically — the
+					// UI tracks the real outcome by polling getInitStatus.
+					system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1 &", packageName, action));
 					result = true;
+				} else if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0) {
+					result = true;
+				}
 				break;
 			}
 
 			switch (action) {
 			case 'enable': case 'start': case 'disable': case 'stop':
-				update_cron(action);
+				// State-only change: preserve the existing schedule line, flip
+				// its active/suspended/disabled marker.
+				cron_write(action, null);
 				break;
 			}
 			return { result: result };
@@ -455,18 +461,24 @@ const methods = {
 	},
 	getCronStatus: {
 		args: { name: 'name' },
-		call: get_cron_status,
+		call: cron_read,
 	},
 	getCronEntry: {
 		args: { name: 'name' },
 		call: get_cron_entry,
 	},
-	setCronEntry: {
-		args: { name: 'name', entry: 'entry' },
-		call: set_cron_entry,
-	},
 	syncCron: {
-		args: { name: 'name', action: 'action' },
+		args: {
+			name: 'name', action: 'action',
+			auto_update_enabled: 'auto_update_enabled',
+			auto_update_mode: 'auto_update_mode',
+			auto_update_minute: 'auto_update_minute',
+			auto_update_hour: 'auto_update_hour',
+			auto_update_weekday: 'auto_update_weekday',
+			auto_update_monthday: 'auto_update_monthday',
+			auto_update_every_ndays: 'auto_update_every_ndays',
+			auto_update_every_nhours: 'auto_update_every_nhours',
+		},
 		call: sync_cron,
 	},
 	setRpcdToken: {
@@ -475,6 +487,11 @@ const methods = {
 			let name = req.args.name || packageName;
 			let token = req.args.token;
 			if (name != packageName || !token || token == '')
+				return { result: false };
+			// Token becomes the adblock-fast-api system password; constrain it
+			// to an alphanumeric charset so nothing can perturb the passwd
+			// pipeline (defence in depth — the value is already shell-quoted).
+			if (!match('' + token, /^[A-Za-z0-9]+$/))
 				return { result: false };
 
 			// Update UCI config

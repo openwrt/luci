@@ -1,4 +1,18 @@
 #!/bin/sh
 rm -rf /var/luci-modulecache/; rm -f /var/luci-indexcache;
+
+# The cron schedule is no longer mirrored into UCI (the crontab is its sole
+# source of truth). Drop any stale auto_update_* keys left by older versions
+# so they don't linger in the config; they are unused and inert otherwise.
+adbf_changed=0
+for opt in auto_update_enabled auto_update_mode auto_update_minute \
+	auto_update_hour auto_update_weekday auto_update_monthday \
+	auto_update_every_ndays auto_update_every_nhours; do
+	if [ -n "$(uci -q get "adblock-fast.config.${opt}")" ]; then
+		uci -q delete "adblock-fast.config.${opt}" && adbf_changed=1
+	fi
+done
+[ "$adbf_changed" = 1 ] && uci commit adblock-fast
+
 [ -x /etc/init.d/rpcd ] && /etc/init.d/rpcd reload;
 exit 0
