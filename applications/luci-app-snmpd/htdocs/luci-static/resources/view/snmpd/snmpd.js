@@ -464,8 +464,8 @@ return L.view.extend({
 		go.value('SHA-224', _('SHA-224'));
 		go.value('SHA', _('SHA'));
 		go.value('MD5', _('MD5'));
-		go.rmempty = true;
 		go.default = 'SHA-256';
+		go.rmempty = false;
 
 		// SNMPv3 auth pass
 		go = g.option(form.Value, 'auth_pass',
@@ -485,8 +485,8 @@ return L.view.extend({
 		go.value('AES-192', _('AES-192'));
 		go.value('AES', _('AES'));
 		go.value('DES', _('DES'));
-		go.rmempty = true;
 		go.default = 'AES';
+		go.rmempty = false;
 
 		// SNMPv3 privacy/encryption pass
 		go = g.option(form.Value, 'privacy_pass',
