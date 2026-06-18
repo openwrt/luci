@@ -90,7 +90,7 @@ return olsr.olsrview.extend({
 				let statusOlsrCommonJs = null;
 
 				if (has_v4 && has_v6) {
-					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('common/common_js.js') });
+					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('olsr/common_js.js') });
 				}
 
 				const fresult = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrCommonJs]);
