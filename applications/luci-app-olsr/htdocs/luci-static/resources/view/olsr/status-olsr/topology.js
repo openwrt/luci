@@ -64,7 +64,7 @@ return olsr.olsrview.extend({
 
 				for (let route of routes_res) {
 					const cost = (parseInt(route.tcEdgeCost) || 0).toFixed(3);
-					const color = etx_color(parseInt(cost));
+					const color = olsr.etx_color(parseInt(cost));
 					const lq = (parseInt(route.linkQuality) || 0).toFixed(3);
 					const nlq = (parseInt(route.neighborLinkQuality) || 0).toFixed(3);
 
