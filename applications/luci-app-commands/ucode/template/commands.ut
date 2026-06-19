@@ -141,6 +141,9 @@
 				<div class="commandbox">
 					<h3>{{ entityencode(command.name) }}</h3>
 					<p>{{ _('Command:') }} <code>{{ entityencode(command.command) }}</code></p>
+					{% if (command.description): %}
+						<p><em>{{ entityencode(command.description) }}</em></p>
+					{% endif %}
 					{% if (command.param == "1"): %}
 						<p>{{ _('Arguments:') }} <input type="text" id="{{ command['.name'] }}" /></p>
 					{% endif %}
