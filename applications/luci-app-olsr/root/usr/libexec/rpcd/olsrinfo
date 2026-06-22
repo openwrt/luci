@@ -33,6 +33,19 @@ load_hosts() {
 	json_dump
 }
 
+json_stringescape() {
+	awk '
+		NR>1 { r = r "\\n" }
+		{
+			gsub(/["\\]/, "\\\\&");
+			gsub(/\t/, "\\t");
+			gsub(/\r/, "\\r");
+			r = r $0
+		}
+		END  { print r }
+	' | tr -d '\n'
+}
+
 case "$1" in
 list)
 	json_init
@@ -58,9 +71,9 @@ call)
 
 		{
 			printf '{"jsonreq4":"'
-			echo "/${otable}" | nc 127.0.0.1 "${v4_port}" | sed -n '/^[}{ ]/p' | sed 's/\\/\\\\/g; s/"/\\"/g'
+			echo "/${otable}" | nc 127.0.0.1 "${v4_port}" | sed -n '/^[}{ ]/p' | json_stringescape
 			printf '","jsonreq6":"'
-			echo "/${otable}" | nc ::1 "${v6_port}" | sed -n '/^[}{ ]/p' | sed 's/\\/\\\\/g; s/"/\\"/g'
+			echo "/${otable}" | nc ::1 "${v6_port}" | sed -n '/^[}{ ]/p' | json_stringescape
 			printf '"}\n'
 		} 2>/dev/null
 		;;
