@@ -140,9 +140,9 @@ return baseclass.extend({
 				vendor = macaddr[lease.macaddr.toLowerCase()]?.vendor ?? null;
 
 			const columns = [
-				host || '-',
+				'%h'.format(host || '-'),
 				lease.ipaddr,
-				vendor ? lease.macaddr + ` (${vendor})` : lease.macaddr,
+				'%h'.format(vendor ? lease.macaddr + ` (${vendor})` : lease.macaddr),
 				lease.duid || '-',
 				lease.iaid || '-',
 				exp,
@@ -208,7 +208,7 @@ return baseclass.extend({
 				disabled = true;
 
 			const columns = [
-				host || '-',
+				'%h'.format(host || '-'),
 				lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
 				duid || '-',
 				iaid || '-',
