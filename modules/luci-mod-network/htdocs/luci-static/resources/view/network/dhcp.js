@@ -1382,7 +1382,7 @@ return view.extend({
 								host = lease.hostname;
 
 							return [
-								host || '-',
+								'%h'.format(host || '-'),
 								lease.ipaddr,
 								lease.macaddr,
 								exp
@@ -1414,7 +1414,7 @@ return view.extend({
 									host = name;
 
 								return [
-									host || '-',
+									'%h'.format(host || '-'),
 									lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
 									lease.duid,
 									exp
