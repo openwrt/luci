@@ -118,7 +118,8 @@ const Class = {
 	render_any: function(path, scope) {
 		let ucode_path = `${template_directory}/${path}.ut`;
 
-		scope = proto(scope ?? {}, this.scopes[-1]);
+		let parent_scope = (length(this.scopes) > 0) ? this.scopes[-1] : this.global;
+		scope = proto(scope ?? {}, parent_scope);
 
 		push(this.scopes, scope);
 
