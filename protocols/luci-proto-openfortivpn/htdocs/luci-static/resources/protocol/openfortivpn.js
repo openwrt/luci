@@ -128,7 +128,7 @@ return network.registerProtocol('openfortivpn', {
 			return callSetCertificateFiles(section_id, null, sanitizeCert(value), null);
 		};
 
-		o = s.taboption('general', form.TextValue, 'ca_file', _('CA certificate (PEM encoded; Use instead of system-wide store to verify the gateway certificate.'));
+		o = s.taboption('general', form.TextValue, 'ca_file', _('CA certificate (PEM encoded. Use instead of system-wide store to verify the gateway certificate.)'));
 		o.optional = true;
 		o.rows = 10;
 		o.monospace = true;
