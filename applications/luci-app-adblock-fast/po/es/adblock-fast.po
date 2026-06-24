@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2026-06-22 22:15+0000\n"
+"PO-Revision-Date: 2026-06-24 12:59+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/es/>\n"
@@ -33,6 +33,9 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"Si la descarga completa tarda más de esta cantidad de segundos, aunque siga "
+"en curso, se interrumpirá. Déjelo en blanco para desactivarlo. Actualmente "
+"solo está implementado para curl."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -96,7 +99,7 @@ msgstr "Permitir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:729
 msgid "Allow insecure downloads"
-msgstr ""
+msgstr "Permitir descargas no seguras"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:986
 msgid "Allowed Domains"
@@ -169,7 +172,7 @@ msgstr "¡Error de validación de configuración (%s)!"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "Tiempo de espera de conexión (en segundos)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -277,6 +280,9 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"La descarga de «%s» ha expirado; el servidor puede ser demasiado lento; "
+"considere aumentar download_timeout, download_connect_timeout o "
+"download_max_time"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -387,7 +393,7 @@ msgstr "No se pudo crear el directorio de archivos de salida/caché/gzip"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:167
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "No se pudo detectar el formato para %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:160
 msgid "Failed to download %s"
@@ -572,13 +578,16 @@ msgstr "Programación de actualizaciones de listas"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:716
 msgid "Maximum download time (in seconds)"
-msgstr ""
+msgstr "Tiempo máximo de descarga (en segundos)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:779
 msgid ""
 "Maximum number of block lists to download and process at the same time (0 "
 "disables). Automatically reduced when free memory is low."
 msgstr ""
+"Número máximo de listas de bloqueo que se pueden descargar y procesar "
+"simultáneamente (0 desactiva). Se reduce automáticamente cuando la memoria "
+"libre es baja."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:648
 msgid ""
@@ -640,6 +649,7 @@ msgstr "Configuración de verbosidad de salida"
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:114
 msgid "Parallel downloads reduced to %s due to low free memory"
 msgstr ""
+"Las descargas paralelas se redujeron a %s debido a la poca memoria libre"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:659
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:681
@@ -814,6 +824,9 @@ msgid ""
 "default for compatibility with self-signed or otherwise untrusted "
 "certificates."
 msgstr ""
+"Omitir la verificación del certificado SSL al descargar listas de bloqueo. "
+"Activado por defecto para garantizar la compatibilidad con certificados "
+"autofirmados o que no sean de confianza."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:480
 msgid "Some output"
@@ -850,6 +863,8 @@ msgid ""
 "Stop the download if the connection cannot be established within this many "
 "seconds. Supported by curl and GNU wget only."
 msgstr ""
+"Detener la descarga si no se puede establecer la conexión en este número de "
+"segundos. Solo compatible con curl y GNU wget."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:70
 msgid "Stopped"
@@ -928,6 +943,8 @@ msgid ""
 "Tip: install the %sAdBlock-Fast Controller Chrome extension%s to control "
 "this router from your browser toolbar."
 msgstr ""
+"Consejo: instale la extensión %sAdBlock-Fast Controller para Chrome%s para "
+"controlar este enrutador desde la barra de herramientas de su navegador."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:857
 msgid ""

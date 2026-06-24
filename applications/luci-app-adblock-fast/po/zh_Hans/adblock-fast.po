@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2026-05-02 12:03+0000\n"
-"Last-Translator: 大王叫我来巡山 "
+"PO-Revision-Date: 2026-06-24 12:59+0000\n"
+"Last-Translator: Hosted Weblate user 54392 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsadblock-fast/zh_Hans/>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:125
 msgid "%s is currently disabled"
@@ -37,6 +37,8 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"如果完整传输所花时间多于该秒数就终止下载，即便下载仍未结束。留空禁用。当前仅 "
+"curl 支持。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -100,7 +102,7 @@ msgstr "允许"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:729
 msgid "Allow insecure downloads"
-msgstr ""
+msgstr "允许不安全下载"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:986
 msgid "Allowed Domains"
@@ -171,7 +173,7 @@ msgstr "配置（%s）验证失败！"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "连接超时（秒数）"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -274,6 +276,8 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"下载 '%s' 超时; 服务器可能太慢 — 考虑提高 download_timeout、"
+"download_connect_timeout 或 download_max_time"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -377,7 +381,7 @@ msgstr "未能创建 output/cache/gzip 文件目录"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:167
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "检测 %s 格式失败"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:160
 msgid "Failed to download %s"
@@ -550,13 +554,13 @@ msgstr "列表更新计划"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:716
 msgid "Maximum download time (in seconds)"
-msgstr ""
+msgstr "最长下载时间（秒数）"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:779
 msgid ""
 "Maximum number of block lists to download and process at the same time (0 "
 "disables). Automatically reduced when free memory is low."
-msgstr ""
+msgstr "同时下载和处理的黑名单的最大数量（0 禁用限制）。可用内存低时自动降低数量。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:648
 msgid ""
@@ -616,7 +620,7 @@ msgstr "输出详细程度设置"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:114
 msgid "Parallel downloads reduced to %s due to low free memory"
-msgstr ""
+msgstr "因可用内存少并行下载数减少至 %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:659
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:681
@@ -779,7 +783,7 @@ msgid ""
 "Skip SSL certificate verification when downloading block-lists. Enabled by "
 "default for compatibility with self-signed or otherwise untrusted "
 "certificates."
-msgstr ""
+msgstr "下载黑名单时跳过 SSL 证书验证。为兼容自签名或不受信任证书默认开启。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:480
 msgid "Some output"
@@ -813,7 +817,7 @@ msgstr "如果下载停顿了指定的秒数则停止下载。"
 msgid ""
 "Stop the download if the connection cannot be established within this many "
 "seconds. Supported by curl and GNU wget only."
-msgstr ""
+msgstr "如果超出该秒数仍无法建立连接就停止下载。仅 curl 和 GNU wget 支持。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:70
 msgid "Stopped"
@@ -889,6 +893,8 @@ msgid ""
 "Tip: install the %sAdBlock-Fast Controller Chrome extension%s to control "
 "this router from your browser toolbar."
 msgstr ""
+"提示：安装 %sAdBlock-Fast Controller Chrome extension%s 从浏览器工具栏控制该"
+"路由器。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:857
 msgid ""

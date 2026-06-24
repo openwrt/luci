@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-01 19:58+0000\n"
+"PO-Revision-Date: 2026-06-24 12:59+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:125
 msgid "%s is currently disabled"
@@ -31,6 +31,9 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"Przerwij pobieranie, jeśli cały transfer trwa dłużej niż podana liczba "
+"sekund, nawet jeśli nadal trwa. Pozostaw puste, aby wyłączyć. Obecnie "
+"zaimplementowano tylko w curl."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -81,7 +84,7 @@ msgstr "Dodawanie wpisów IPv6"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:680
 msgid "Add IPv6 entries to block-list."
-msgstr "Dodaj wpisy IPv6 do list blokujących."
+msgstr "Dodaj wpisy IPv6 do listy blokowania."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:204
 msgid "Advanced Configuration"
@@ -94,7 +97,7 @@ msgstr "Zezwól"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:729
 msgid "Allow insecure downloads"
-msgstr ""
+msgstr "Zezwalaj na niezabezpieczone pobieranie"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:986
 msgid "Allowed Domains"
@@ -104,7 +107,7 @@ msgstr "Dozwolone domeny"
 msgid ""
 "Attempt to create a compressed cache of block-list in the persistent memory."
 msgstr ""
-"Próba utworzenia z skompresowanej pamięci podręcznej list blokujących w "
+"Próba utworzenia z skompresowanej pamięci podręcznej listy blokowania w "
 "pamięci trwałej."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:668
@@ -167,7 +170,7 @@ msgstr "Błąd sprawdzania poprawności konfiguracji (%s)!"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "Limit czasu połączenia (w sekundach)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -229,7 +232,7 @@ msgstr "Katalog dla skompresowanego pliku pamięci podręcznej"
 msgid ""
 "Directory for compressed cache file of block-list in the persistent memory."
 msgstr ""
-"Katalog dla skompresowanego pliku pamięci podręcznej listy zablokowanych w "
+"Katalog dla skompresowanego pliku pamięci podręcznej listy blokowania w "
 "pamięci trwałej."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:762
@@ -275,6 +278,9 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"Pobieranie pliku '%s' przekroczyło limit czasu. Serwer może być zbyt wolny — "
+"rozważ zwiększenie wartości parametrów download_timeout, "
+"download_connect_timeout lub download_max_time"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -323,7 +329,7 @@ msgid ""
 "Enable sanity check for dnsmasq block-list processing to detect and report "
 "issues."
 msgstr ""
-"Włącz kontrolę poprawności przetwarzania listy blokowanych dnsmasq w celu "
+"Włącz kontrolę poprawności przetwarzania listy blokowania dnsmasq w celu "
 "wykrywania i zgłaszania problemów."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:506
@@ -368,8 +374,7 @@ msgstr "Nie udało się utworzyć pliku '%s'"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:156
 msgid "Failed to create block-list or restart DNS resolver"
-msgstr ""
-"Nie udało się utworzyć listy zablokowanych lub zrestartować resolwera DNS"
+msgstr "Nie udało się utworzyć listy blokowania lub zrestartować resolwera DNS"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:151
 msgid "Failed to create compressed cache"
@@ -385,7 +390,7 @@ msgstr "Nie udało się utworzyć katalogu plików output/cache/gzip"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:167
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "Nie udało się wykryć formatu dla %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:160
 msgid "Failed to download %s"
@@ -477,7 +482,7 @@ msgstr "Wymuś serwer DNS routera na wszystkich urządzeniach lokalnych"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:648
 msgid "Force redownloading %s block lists"
-msgstr "Wymuszone ponowne pobieranie listy zablokowanych %s"
+msgstr "Wymuś ponowne pobieranie %s list blokowania"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:466
 msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
@@ -568,13 +573,15 @@ msgstr "Harmonogram aktualizacji list"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:716
 msgid "Maximum download time (in seconds)"
-msgstr ""
+msgstr "Maksymalny czas pobierania (w sekundach)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:779
 msgid ""
 "Maximum number of block lists to download and process at the same time (0 "
 "disables). Automatically reduced when free memory is low."
 msgstr ""
+"Maksymalna liczba list blokowania do pobrania i przetworzenia jednocześnie "
+"(0 wyłącza). Automatycznie zmniejszana, gdy brakuje wolnej pamięci."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:648
 msgid ""
@@ -636,6 +643,8 @@ msgstr "Ustawienia szczegółowości danych wyjściowych"
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:114
 msgid "Parallel downloads reduced to %s due to low free memory"
 msgstr ""
+"Pobieranie równoległe zmniejszone do %s ze względu na małą ilość wolnej "
+"pamięci"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:659
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:681
@@ -714,7 +723,7 @@ msgid ""
 "Removed %s invalid domain entries from block-list (domains starting with -/./"
 "numbers or containing invalid patterns)"
 msgstr ""
-"Usunięte nieprawidłowe wpisy domen z listy blokowanych (domeny zaczynające "
+"Usunięte nieprawidłowe wpisy domen z listy blokowania (domeny zaczynające "
 "się od -/./liczb lub zawierające nieprawidłowe wzorce): %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:73
@@ -810,6 +819,9 @@ msgid ""
 "default for compatibility with self-signed or otherwise untrusted "
 "certificates."
 msgstr ""
+"Pomiń weryfikację certyfikatu SSL podczas pobierania list blokowania. Opcja "
+"domyślnie włączona dla zapewnienia zgodności z certyfikatami podpisanymi "
+"samodzielnie lub w inny sposób niezaufanymi."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:480
 msgid "Some output"
@@ -845,6 +857,8 @@ msgid ""
 "Stop the download if the connection cannot be established within this many "
 "seconds. Supported by curl and GNU wget only."
 msgstr ""
+"Zatrzymaj pobieranie, jeśli połączenie nie zostanie nawiązane w ciągu kilku "
+"sekund. Obsługiwane tylko przez curl i GNU wget."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:70
 msgid "Stopped"
@@ -923,6 +937,8 @@ msgid ""
 "Tip: install the %sAdBlock-Fast Controller Chrome extension%s to control "
 "this router from your browser toolbar."
 msgstr ""
+"Wskazówka: zainstaluj %srozszerzenie AdBlock-Fast Controller dla Chrome%s, "
+"aby sterować tym routerem z paska narzędzi przeglądarki."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:857
 msgid ""
@@ -1070,7 +1086,7 @@ msgstr "Nie udało się utworzyć pliku kopii zapasowej %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:175
 msgid "failed to create final block-list %s"
-msgstr "Nie udało się utworzyć ostatecznej listy zablokowanych %s"
+msgstr "Nie udało się utworzyć ostatecznej listy blokowania %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:173
 msgid "failed to delete data file %s"

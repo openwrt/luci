@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-07-05 23:01+0000\n"
-"Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
+"PO-Revision-Date: 2026-06-24 12:59+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsprivoxy/pl/>\n"
 "Language: pl\n"
@@ -9,11 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.7.dev0\n"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:316
 msgid "1. Enable HTTPS Inspection above"
-msgstr ""
+msgstr "1. Włącz powyżej inspekcję HTTPS"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:106
 msgid ""
@@ -29,6 +29,8 @@ msgid ""
 "A longer validity period reduces the frequency of CA certificate "
 "regeneration."
 msgstr ""
+"Dłuższy okres ważności zmniejsza częstotliwość ponownego odnawiania "
+"certyfikatu CA."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:327
 msgid "Accept intercepted requests"
@@ -69,6 +71,9 @@ msgid ""
 "Are you sure you want to regenerate the CA certificate? This will cause SSL "
 "warnings on all clients until the new certificate is installed."
 msgstr ""
+"Czy na pewno chcesz ponownie wygenerować certyfikat CA? Spowoduje to "
+"wyświetlanie ostrzeżeń SSL na wszystkich urządzeniach klienckich do momentu "
+"zainstalowania nowego certyfikatu."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:348
 msgid ""
@@ -88,19 +93,19 @@ msgstr "Limit bufora"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:260
 msgid "CA Certificate Path"
-msgstr ""
+msgstr "Ścieżka certyfikatu CA"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:242
 msgid "CA Certificate Validity (days)"
-msgstr ""
+msgstr "Ważność certyfikatu CA (dni)"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:237
 msgid "CA Common Name"
-msgstr ""
+msgstr "Nazwa pospolita CA"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:305
 msgid "CA certificate has been regenerated."
-msgstr ""
+msgstr "Certyfikat CA został wygenerowany ponownie."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:441
 msgid "CGI user interface"
@@ -108,26 +113,31 @@ msgstr "Interfejs użytkownika CGI"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:231
 msgid "Certificate Directory"
-msgstr ""
+msgstr "Katalog certyfikatów"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:253
 msgid "Certificate Key Size (bits)"
-msgstr ""
+msgstr "Rozmiar klucza certyfikatu (bity)"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:248
 msgid "Certificate Validity (days)"
-msgstr ""
+msgstr "Ważność certyfikatu (dni)"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:296
 msgid ""
 "Click to delete and regenerate the CA certificate (will cause SSL warnings "
 "on clients until new cert is installed)."
 msgstr ""
+"Kliknij, aby usunąć i ponownie wygenerować certyfikat CA (spowoduje to "
+"wyświetlanie ostrzeżeń SSL na urządzeniach klienckich do momentu "
+"zainstalowania nowego certyfikatu)."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:270
 msgid ""
 "Click to download the Privoxy CA certificate for installation on clients."
 msgstr ""
+"Kliknij, aby pobrać certyfikat CA Privoxy do instalacji na urządzeniach "
+"klienckich."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:383
 msgid "Client header order"
@@ -135,7 +145,7 @@ msgstr "Kolejność nagłówków klienta"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:228
 msgid "Clients must trust the Privoxy CA certificate to avoid SSL errors."
-msgstr ""
+msgstr "Klienty muszą zaufać certyfikatowi Privoxy CA, aby uniknąć błędów SSL."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:433
 msgid "Common Log Format"
@@ -143,7 +153,7 @@ msgstr "Wspólny format dziennika"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:238
 msgid "Common name (CN) for the Privoxy Certificate Authority."
-msgstr ""
+msgstr "Nazwa pospolita (CN) urzędu certyfikacji Privoxy."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:378
 msgid "Compression level"
@@ -156,6 +166,8 @@ msgstr "Katalog konfiguracji"
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:321
 msgid "Configure clients to use this Privoxy proxy for HTTPS traffic"
 msgstr ""
+"Skonfiguruj klienty do korzystania z tego serwera proxy Privoxy w przypadku "
+"ruchu HTTPS"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:29
 msgid "Configure the Privoxy proxy daemon settings."
@@ -163,7 +175,7 @@ msgstr "Konfiguruj ustawienia demona proxy Privoxy."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:317
 msgid "Configure the certificate directory and CA settings"
-msgstr ""
+msgstr "Skonfiguruj katalog certyfikatów i ustawienia urzędu certyfikacji"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:351
 msgid "Connection sharing"
@@ -260,6 +272,7 @@ msgstr "Domyślny limit czasu serwera"
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:249
 msgid "Default validity period in days for generated server certificates."
 msgstr ""
+"Domyślny okres ważności w dniach dla wygenerowanych certyfikatów serwera."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:39
 msgid "Delay (in seconds) during system boot before Privoxy starts."
@@ -272,7 +285,7 @@ msgstr "Odmów dostępu"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:232
 msgid "Directory for the CA certificate and generated certificates."
-msgstr ""
+msgstr "Katalog certyfikatu CA i wygenerowanych certyfikatów."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:167
 msgid "Disabled == Transparent Proxy Mode"
@@ -285,11 +298,11 @@ msgstr "Dokumentacja"
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:269
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:272
 msgid "Download CA Certificate"
-msgstr ""
+msgstr "Pobierz certyfikat CA"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:319
 msgid "Download the CA certificate using the button above"
-msgstr ""
+msgstr "Pobierz certyfikat CA, korzystając z przycisku powyżej"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:59
 msgid "Email address for the Privoxy administrator."
@@ -297,7 +310,7 @@ msgstr "Adres e-mail administratora Privoxy."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:226
 msgid "Enable HTTPS Inspection"
-msgstr ""
+msgstr "Włącz inspekcję HTTPS"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:183
 msgid "Enable action file editor"
@@ -309,7 +322,7 @@ msgstr "Włącz kompresję"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:227
 msgid "Enable on-the-fly certificate generation for HTTPS connections."
-msgstr ""
+msgstr "Włącz generowanie certyfikatów „w locie” dla połączeń HTTPS."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:197
 msgid "Enable proxy authentication forwarding"
@@ -349,11 +362,11 @@ msgstr "Wymuś blokowanie stron"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:290
 msgid "Failed to read certificate file:"
-msgstr ""
+msgstr "Nie udało się odczytać pliku certyfikatu:"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:307
 msgid "Failed to regenerate CA certificate:"
-msgstr ""
+msgstr "Nie udało się wygenerować ponownie certyfikatu CA:"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:71
 msgid "Files and Directories"
@@ -393,7 +406,7 @@ msgstr "Przyznaj luci-app-privoxy dostęp do UCI"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:223
 msgid "HTTPS Inspection"
-msgstr ""
+msgstr "Inspekcja HTTPS"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:370
 msgid "Handle as empty doc returns ok"
@@ -426,10 +439,12 @@ msgid ""
 "Install the CA certificate in your browser/trusted store on each client "
 "device"
 msgstr ""
+"Zainstaluj certyfikat CA w przeglądarce / magazynie zaufanych na każdym "
+"urządzeniu klienckim"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:313
 msgid "Installation Instructions"
-msgstr ""
+msgstr "Instrukcja instalacji"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:128
 msgid "It is NOT recommended for the casual user."
@@ -442,6 +457,8 @@ msgstr "Limit czasu podtrzymania aktywności"
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:255
 msgid "Larger keys provide more security but take longer to generate."
 msgstr ""
+"Dłuższe klucze zapewniają większe bezpieczeństwo, ale ich wygenerowanie "
+"zajmuje więcej czasu."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:137
 msgid "Listen addresses"
@@ -510,6 +527,7 @@ msgstr "Maksymalny rozmiar (w KB) bufora do filtrowania treści."
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:362
 msgid "Maximum size (in bytes) of the receive buffer for content filtering."
 msgstr ""
+"Maksymalny rozmiar (w bajtach) bufora odbiorczego do filtrowania treści."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:325
 msgid "Misc"
@@ -536,6 +554,8 @@ msgid ""
 "Path to the CA certificate file. Install this in your browser/trusted CA "
 "store on each client."
 msgstr ""
+"Ścieżka do pliku certyfikatu CA. Zainstaluj go w przeglądarce / magazynie "
+"zaufanych CA na każdym urządzeniu klienckim."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:145
 msgid "Permit access"
@@ -576,6 +596,10 @@ msgid ""
 "certificates. This allows inspection and filtering of HTTPS traffic. "
 "<strong>A CA certificate must be installed on clients to trust.</strong>"
 msgstr ""
+"Privoxy może przechwytywać połączenia HTTPS i generować certyfikaty SSL „w "
+"locie”. Umożliwia to inspekcję i filtrowanie ruchu HTTPS. <strong>Aby "
+"zaufać, na urządzeniach klienckich musi być zainstalowany certyfikat CA.</"
+"strong>"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:63
 msgid "Proxy Info URL"
@@ -583,28 +607,28 @@ msgstr "URL informacji o proxy"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:254
 msgid "RSA key size in bits 1024/2048/4096"
-msgstr ""
+msgstr "Rozmiar klucza RSA w bitach 1024/2048/4096"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:360
 msgid "Receive Buffer Size"
-msgstr ""
+msgstr "Rozmiar bufora odbiorczego"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:295
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:298
 msgid "Regenerate CA Certificate"
-msgstr ""
+msgstr "Wygeneruj ponownie certyfikat CA"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:233
 msgid "Required for HTTPS inspection to work."
-msgstr ""
+msgstr "Wymagane do działania inspekcji HTTPS."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:279
 msgid "Response is not a Blob"
-msgstr ""
+msgstr "Odpowiedź nie jest typem blob"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:318
 msgid "Save & Apply to generate the CA certificate"
-msgstr ""
+msgstr "Zapisz i zastosuj, aby wygenerować certyfikat CA"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:405
 msgid "Show I/O status"
@@ -746,6 +770,8 @@ msgstr ""
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:239
 msgid "This name will appear in the certificate details presented to clients."
 msgstr ""
+"Nazwa ta będzie widoczna w szczegółach certyfikatu przedstawianych "
+"urządzeniom klienckim."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:393
 msgid ""
@@ -824,7 +850,7 @@ msgstr "Modyfikacje użytkownika"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:243
 msgid "Validity period in days for the Certificate Authority certificate."
-msgstr ""
+msgstr "Okres ważności certyfikatu urzędu certyfikacji wyrażony w dniach."
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:159
 msgid "Value range 1 to 4096, no entry defaults to 4096"
@@ -832,7 +858,7 @@ msgstr "Zakres wartości od 1 do 4096, brak wpisów domyślnych do 4096"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:228
 msgid "Warning:"
-msgstr ""
+msgstr "Ostrzeżenie:"
 
 #: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:328
 msgid "Whether intercepted requests should be treated as valid."
