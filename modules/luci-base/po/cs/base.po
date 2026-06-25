@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-06-18 12:30+0000\n"
+"PO-Revision-Date: 2026-06-25 19:51+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/luci/cs/>\n"
 "Language: cs\n"
@@ -191,6 +191,10 @@ msgid ""
 "selection). Optional labels for ports and VLANs are stored in the LuCI "
 "configuration and are for human reference only."
 msgstr ""
+". Vyberte porty, poté použijte T a U na řádku každé VLAN pro přidělení nebo "
+"odebrání štítkovaného nebo neštítkovaného (nativní) členství (prázdné, "
+"částečné nebo plné pro stávající výběr). Volitelné jmenovky portů a VLAN "
+"sítí jsou ukládány v nastavení LuCI a slouží pouze pro referenci lidem."
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:59
 msgctxt "sstp log level value"
@@ -1259,7 +1263,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:828
 msgid "Affected ports:"
-msgstr ""
+msgstr "Porty, kterých se týká:"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:76
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:76
@@ -1635,11 +1639,11 @@ msgstr "jako DHCP volby – odeslat nevyžádaně (pouze v případě dnsmasq)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:672
 msgid "Assign VLAN %d as tagged on selected ports"
-msgstr ""
+msgstr "Přiřadit VLAN %sd jako štítkovanou na označených portech"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:678
 msgid "Assign VLAN %d as untagged (native) on selected ports"
-msgstr ""
+msgstr "Přiřadit VLAN %d jako neštítkovanou (nativní) na označených portech"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1249
 msgid ""
@@ -1648,7 +1652,7 @@ msgstr "Přiřadit tomuto rozhraní část dané délky každé veřejné iPv6 p
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:459
 msgid "Assign membership"
-msgstr ""
+msgstr "Přiřadit členství"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1254
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -1940,6 +1944,9 @@ msgid ""
 "device (e.g. a serial or out-of-band connection) and review every change in "
 "\"Unsaved Changes\" before applying."
 msgstr ""
+"Než budete provádět změny, ověřte, že máte alternativní způsob jak "
+"přistupovat k tomuto zařízení (např. sériová linka nebo OOB spojení) a než "
+"je uplatníte, zkontrolujte každou změnu v „Neuložené změny“."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:354
 msgid ""
@@ -2045,7 +2052,7 @@ msgstr "Filtrování VLAN na mostu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:58
 msgid "Bridge VLAN filtering dialog"
-msgstr ""
+msgstr "Dialog filtrování VLAN na síťovém mostu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:453
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1700
@@ -2342,6 +2349,8 @@ msgid ""
 "Changes have been staged. Use \"Save & Apply\" or the \"Unsaved Changes\" "
 "indicator to apply them."
 msgstr ""
+"Změny byly zařazeny do fronty. Pokud je chcete uplatnit, použijte indikátory "
+"„Uložit a uplatnit“ nebo „Neuložené změny“."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:92
 msgid "Changes the password for accessing the device as (rpcd) user"
@@ -2438,7 +2447,7 @@ msgstr "Vyčistit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:264
 msgid "Clear selection"
-msgstr ""
+msgstr "Vyčistit výběr"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
 msgid ""
@@ -2594,6 +2603,8 @@ msgstr "Nastavení se nezdařilo"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:139
 msgid "Configure VLANs and per-port VLAN membership on bridge device"
 msgstr ""
+"Nastavit VLAN sítě a členství ve VLAN pro jednotlivé porty na zařízení "
+"síťového mostu"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:39
 msgid "Configure client mode"
@@ -4602,7 +4613,7 @@ msgstr "Očekáváno: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:161
 msgid "Experimental view"
-msgstr ""
+msgstr "Experimentální pohled"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1585
 msgid "Expert Settings"
@@ -4763,7 +4774,7 @@ msgstr "Modem se nepodařilo inicializovat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1089
 msgid "Failed to save configuration: %s"
-msgstr ""
+msgstr "Nastavení se nepodařilo uložit: %s"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:30
 msgid "Failed to set operating mode"
@@ -5690,7 +5701,7 @@ msgstr "Hybridní"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:179
 msgid "I understand, continue"
-msgstr ""
+msgstr "Rozumím, pokračovat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:60
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:81
@@ -6590,7 +6601,7 @@ msgstr "Rozhraní"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:74
 msgid "Interfaces → Devices"
-msgstr ""
+msgstr "Rozhraní → Zařízení"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:20
 msgid "Internal"
@@ -7677,7 +7688,7 @@ msgstr "Výrobce"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:485
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:569
 msgid "Mark VLAN as locally terminated on the bridge"
-msgstr ""
+msgstr "Označit VLAN jako lokálně zakončenou na síťovém mostu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1225
 msgid "Master"
@@ -8121,6 +8132,10 @@ msgid ""
 "different VLAN than its untagged egress VLAN — a combination that is allowed "
 "by 802.1Q but very rarely intentional."
 msgstr ""
+"Běžněji to znamená, že port má svou hlavní VLAN (PVID) nastavenou na jinou "
+"VLAN, než svou neštítkovanou VLAN pro procházející provoz – kombinace která "
+"je sice normou 802.1Q povolená, ale velmi zřídkakdy je tím, čeho chcete "
+"dosáhnout."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:171
 msgid "Mount Point"
@@ -8528,6 +8543,12 @@ msgid ""
 "switch ports. Bridges containing wireless, tunnel, VLAN sub-interfaces or "
 "other virtual members are intentionally excluded."
 msgstr ""
+"Nebyl nalezen žádný síťový most, který by bylo možné nastavovat jako by to "
+"byl přepínač. Tento pohled vyžaduje most, který má zapnuté VLAN filtrování "
+"(výslovně nebo z kontextu prostřednictvím sekcí bridge-vlan), kterého členy "
+"jsou všechny fyzické ethernetové nebo DSA porty přepínače. Mosty obsahující "
+"bezdrátová rozhraní, tunely, dílčí rozhraní VLAN a ostatní virtuální členové "
+"jsou záměrně vynechány."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:70
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:93
@@ -8607,7 +8628,7 @@ msgstr "Nejsou k dispozici žádné údaje"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:70
 msgid "No managed switch found"
-msgstr ""
+msgstr "Nenalezeny žádné spravovatelné přepínače"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:116
 msgid "No master"
@@ -8643,7 +8664,7 @@ msgstr "Zatím nedefinovány žádné protějšky."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:258
 msgid "No ports are configured on this bridge."
-msgstr ""
+msgstr "Na tomto mostu nejsou nastavené žádné porty."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:15
 msgid "No preferred mode configuration found."
@@ -9828,7 +9849,7 @@ msgstr "Paketů"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:788
 msgid "Please enter a VLAN ID between %d and %d."
-msgstr ""
+msgstr "Zadejte VLAN ID z rozmezí %d až %d."
 
 #: modules/luci-base/ucode/template/sysauth.ut:25
 msgid "Please enter your username and password."
@@ -9844,7 +9865,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:57
 msgid "Please review the configuration via the legacy"
-msgstr ""
+msgstr "Zkontrolujte nastavení prostřednictvím zastaralého"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4930
 msgid "Please select the file to upload."
@@ -9927,28 +9948,33 @@ msgstr "Port"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:923
 msgid "Port \"%s\" already has VLAN %d as its native (untagged) VLAN."
-msgstr ""
+msgstr "Port „%s“ už má VLAN %d jako svou nativní (neštítkovanou) VLAN."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:243
 msgid ""
 "Port \"%s\" has the primary VLAN flag together with tagged egress on VLAN %d "
 "(PVID ≠ untagged VLAN)."
 msgstr ""
+"Port „%s“ má příznak hlavní VLAN dohromady se štítkovanou pro provoz skrze "
+"na VLAN %d (PVID ≠ neštítkovaná VLAN)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:245
 msgid "Port \"%s\" is both tagged and untagged on VLAN %d."
-msgstr ""
+msgstr "Port „%s“ je oboje jak štítkovaný, tak neštítkovaný na VLAN %d."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:251
 msgid ""
 "Port \"%s\" is configured as untagged on more than one VLAN (%d and %d)."
 msgstr ""
+"Port „%s“ je nastavený jako neštítkovaný na jedné nebo více VLAN (%d a %d)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:247
 msgid ""
 "Port \"%s\" is the primary VLAN on VLAN %d but has no untagged egress (PVID "
 "≠ untagged VLAN)."
 msgstr ""
+"Port „%s“ je hlavní VLAN nebo VLAN %d ale nemá žádné neštítkované pro provoz "
+"skrz (PVID ≠ neštítkovaná VLAN)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:152
 msgctxt "WireGuard listen port"
@@ -9969,7 +9995,7 @@ msgstr "Priorita portu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:235
 msgid "Port specification \"%s\" on VLAN %d cannot be parsed."
-msgstr ""
+msgstr "Specifikace portu „%s“ na VLAN %d nebylo možné zpracovat."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:375
 msgid "Port status"
@@ -10737,27 +10763,29 @@ msgstr "Odebrat předvolby Push"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:509
 msgid "Remove VLAN %d"
-msgstr ""
+msgstr "Odebrat VLAN %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:675
 msgid "Remove VLAN %d as tagged from all selected ports"
-msgstr ""
+msgstr "Odebrat VLAN %d jako štítkovanou ze všech označených portů"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:674
 msgid "Remove VLAN %d as tagged from selected ports that have it"
-msgstr ""
+msgstr "Odebrat VLAN %d jako štítkovanou z označených portů, které ji mají"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:681
 msgid "Remove VLAN %d as untagged (native) from all selected ports"
-msgstr ""
+msgstr "Odebrat VLAN %d jako neštítkovanou (nativní) ze všech označených portů"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:680
 msgid "Remove VLAN %d as untagged (native) from selected ports that have it"
 msgstr ""
+"Odebrat VLAN %d jako neštítkovanou (nativní) ze všech označených portů, "
+"které ji mají"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:826
 msgid "Remove VLAN %d?"
-msgstr ""
+msgstr "Odebrat VLAN %d?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:701
 msgid ""
@@ -11564,17 +11592,20 @@ msgstr "Vybrat Batman VLAN zařízení…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:270
 msgid "Select all ports"
-msgstr ""
+msgstr "Vybrat všechny porty"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:491
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:654
 msgid "Select all ports having VLAN %d assigned as tagged (%d)"
 msgstr ""
+"Vybrat všechny porty které mají přiřazenou VLAN %d jako štítkovanou (%d)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:499
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:655
 msgid "Select all ports having VLAN %d assigned as untagged / native (%d)"
 msgstr ""
+"Vybrat všechny porty které mají VLAN %d přiřazenou jako neštítkovanou / "
+"nativní (%d)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3150
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3381
@@ -11590,15 +11621,15 @@ msgstr "Vybrat soubor…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:666
 msgid "Select one or more ports first"
-msgstr ""
+msgstr "Nejprve vyberte jeden nebo více portů"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:410
 msgid "Select one or more ports first."
-msgstr ""
+msgstr "Nejprve vyberete jeden nebo více portů."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:458
 msgid "Select ports"
-msgstr ""
+msgstr "Vyberte porty"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:874
 msgid ""
@@ -12501,7 +12532,7 @@ msgstr "Přepínač %q má neznámou topologii – nastavení VLAN nemusí být 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:68
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:137
 msgid "Switch / VLAN Configuration"
-msgstr ""
+msgstr "Nastavení přepínače / VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3064
 #: modules/luci-compat/luasrc/model/network.lua:1426
@@ -12524,7 +12555,7 @@ msgstr "Přepnout na formu zápisu seznamu v CIDR"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
 msgid "Switch/VLAN config"
-msgstr ""
+msgstr "Nastavení přepínače/VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3203
 msgid "Symbolic link"
@@ -12650,7 +12681,7 @@ msgstr "TLS 1.3 nebo novější šifra"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1275
 msgid "TLS cert profile"
-msgstr ""
+msgstr "Profil TLS certifikátu"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1057
 msgid "TLS cipher"
@@ -12907,6 +12938,9 @@ msgid ""
 "experimental. Bugs in this view may result in network misconfiguration that "
 "can leave your device unreachable over the network."
 msgstr ""
+"Pohled Nastavení přepínače / VLAN je nový a pořád ještě považovaný za "
+"experimentální. Chyby v tomto pohledu mohou vést k nesprávnému nastavení "
+"sítě, které mohou způsobit nedosažitelnost vašich zařízení po síti."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1434
 msgid "The VLAN ID must be unique"
@@ -12955,6 +12989,8 @@ msgid ""
 "The bridge device \"%s\" has a VLAN configuration that this view cannot "
 "represent."
 msgstr ""
+"Zařízení mostu „%s“ má nastavení VLAN, které tento pohled nedokáže "
+"představovat."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:323
 msgid ""
@@ -13267,6 +13303,9 @@ msgid ""
 "one or more selected ports. No change was made; a port cannot have the same "
 "VLAN as both native and tagged."
 msgstr ""
+"Požadovaná změna koliduje s existujícím přiřazením nativní VLAN jednoho nebo "
+"více portů. Nebyly provedeny žádné změny – port nemůže mít stejnou VLAN "
+"obojí jak nativní, tak štítkovanou."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:147
 msgid "The restore command failed with code %d"
@@ -14117,7 +14156,7 @@ msgstr "Nepodporované URI schéma v %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:50
 msgid "Unsupported VLAN configuration"
-msgstr ""
+msgstr "Nepodporované nastavení VLAN"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
@@ -14471,15 +14510,15 @@ msgstr "VEPA (virtuální agregátor ethernetových portů)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:544
 msgid "VLAN"
-msgstr ""
+msgstr "VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1016
 msgid "VLAN %d does not exist."
-msgstr ""
+msgstr "VLAN %d neexistuje."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:794
 msgid "VLAN %d is already configured."
-msgstr ""
+msgstr "VLAN %d už je nastavená."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1694
@@ -14499,11 +14538,11 @@ msgstr "VLAN ID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:226
 msgid "VLAN ID %s is outside the valid range %d–%d."
-msgstr ""
+msgstr "VLAN ID %s se nachází mimo platný rozsah %d-%d."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:447
 msgid "VLANs"
-msgstr ""
+msgstr "VLAN sítě"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:171
 msgid "VLANs on %q"
@@ -14947,10 +14986,12 @@ msgid ""
 "You are about to remove VLAN %d%s. This will also remove the VLAN from every "
 "port that currently has it assigned (tagged or untagged)."
 msgstr ""
+"Chystáte se odebrat VLAN %d%s. Toto také VLAN odebere z každého portu, "
+"kterému je v tuto chvíli přiřazena (štítkované i neštítkované)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:73
 msgid "You can enable VLAN filtering on a bridge from the"
-msgstr ""
+msgstr "Filtrování VLAN na síťovém mostu je možné zapnout z"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:112
 msgid ""
@@ -15018,6 +15059,8 @@ msgid ""
 "and either correct the unusual configuration or remove the offending VLAN "
 "assignments before returning here."
 msgstr ""
+"a než se sem vrátíte buď opravte neobvyklé nastavení nebo odeberte "
+"kolidující přiřazení VLAN."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:261
 msgid "and:"
@@ -15336,11 +15379,11 @@ msgstr "l3miss: minutí na 3. vrstvě"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:291
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:468
 msgid "label"
-msgstr ""
+msgstr "jmenovka"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:553
 msgid "label (optional)"
-msgstr ""
+msgstr "jmenovka (volitelné)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:909
 msgid "managed config (M)"
@@ -15467,7 +15510,7 @@ msgstr "pakety"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:75
 msgid "page."
-msgstr ""
+msgstr "stránka."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
 msgctxt "packets, abbreviated"
@@ -15919,7 +15962,7 @@ msgstr "« Zpět"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:926
 msgid "… and %d more."
-msgstr ""
+msgstr "…a %d další."
 
 #~ msgid ""
 #~ "CA certificate (PEM encoded; Use instead of system-wide store to verify "
