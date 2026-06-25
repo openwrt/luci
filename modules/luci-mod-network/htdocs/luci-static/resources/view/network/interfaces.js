@@ -358,6 +358,7 @@ return view.extend({
 			network.getDSLModemType(),
 			network.getDevices(),
 			fs.lines('/etc/iproute2/rt_tables'),
+			L.resolveDefault(callNetworkDeviceStatus(), {}),
 			uci.changes()
 		]);
 	},
@@ -456,7 +457,7 @@ return view.extend({
 		]);
 	},
 
-	render([dslModemType, netDevs, rtTables]) {
+	render([dslModemType, netDevs, rtTables, devStatus]) {
 
 		if (this.interfaceBridgeWithIfnameSections().length)
 			return this.renderBridgeMigration();
@@ -1737,6 +1738,41 @@ return view.extend({
 		o = s.option(form.DummyValue, 'type', _('Type'));
 		o.textvalue = getDevTypeDesc;
 		o.modalonly = false;
+
+		o = s.option(form.DummyValue, '_speed', _('Link Speed'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const dev = getDevice(section_id);
+
+			if (!dev || !dev.getCarrier())
+				return '-';
+
+			const cur = dev.getSpeed();
+
+			/* getSpeed() returns Mbit/s, -1 with carrier but no negotiated rate, or null if unsupported */
+			if (!(cur > 0))
+				return '-';
+
+			/* %1000mBit/s would render 1 Gbit as "1000.00 MBit/s" (strict scale step + forced decimals), so format directly */
+			const fmt = (mbit) => (mbit >= 1000) ? (mbit / 1000) + ' Gbit/s' : mbit + ' Mbit/s';
+
+			/* distinct ethtool-supported link speeds, e.g. 1000baseT-F => 1000, sorted ascending */
+			const st = devStatus ? devStatus[dev.getName()] : null;
+			const supported = (st ? L.toArray(st['link-supported']) : []).reduce(function(speeds, mode) {
+				const n = mode.match(/^(\d+)base/);
+				if (n && speeds.indexOf(+n[1]) < 0)
+					speeds.push(+n[1]);
+				return speeds;
+			}, []).sort((a, b) => a - b);
+
+			/* current speed in the cell; all supported speeds in the tooltip when known */
+			if (supported.length)
+				return E('span', {
+					'data-tooltip': _('Supported link speeds: %s').format(supported.map(fmt).join(', '))
+				}, [ fmt(cur) ]);
+
+			return fmt(cur);
+		};
 
 		o = s.option(form.DummyValue, 'macaddr', _('MAC Address'));
 		o.modalonly = false;
