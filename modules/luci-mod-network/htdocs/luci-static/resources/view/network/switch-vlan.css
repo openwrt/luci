@@ -41,6 +41,44 @@
 	--svc-vlan-tagged-bg: rgba(217, 119, 6, 0.14);
 	--svc-vlan-untagged-stripe: rgba(13, 148, 136, 0.2);
 	--svc-vlan-tagged-stripe: rgba(217, 119, 6, 0.2);
+	--svc-row-bg: var(--background-color-medium, #fafafa);
+	--svc-row-hover-bg: var(--background-color-high, #f3f3f3);
+	--svc-row-add-bg: #f7faff;
+}
+
+/* Theme overrides: several LuCI themes set large min-widths on text inputs
+ * (e.g. openwrt-2020: 20rem, material: 25rem in .cbi-value) and global
+ * button/input resets (openwrt-2020 zeros borders on *). Scope fixes here. */
+#switch-vlan-view input[type="text"],
+#switch-vlan-view input[type="number"] {
+	min-width: 0;
+	max-width: 100%;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: unset;
+	line-height: normal;
+	font-size: inherit;
+	color: var(--text-color-high, inherit);
+	background-color: var(--background-color-high, #fff);
+	background-image: none;
+	border: 1px solid var(--border-color-low, #ddd);
+	border-radius: 2px;
+	box-shadow: none;
+}
+
+#switch-vlan-view input[type="text"]:focus,
+#switch-vlan-view input[type="number"]:focus {
+	border-color: var(--primary-color-high, #3c8dbc);
+	outline: none;
+}
+
+#switch-vlan-view .svc-vlan-btn-tagged,
+#switch-vlan-view .svc-vlan-btn-untagged,
+#switch-vlan-view .svc-vlan-btn-remove,
+#switch-vlan-view .svc-vlan-btn-add,
+#switch-vlan-view .svc-vlan-assign-btn {
+	box-shadow: none;
+	background-image: none;
 }
 
 :root[data-darkmode="true"] #switch-vlan-view {
@@ -53,6 +91,9 @@
 	--svc-vlan-tagged-bg: rgba(251, 191, 36, 0.2);
 	--svc-vlan-untagged-stripe: rgba(45, 212, 191, 0.32);
 	--svc-vlan-tagged-stripe: rgba(251, 191, 36, 0.36);
+	--svc-row-bg: var(--background-color-medium, #2a2a2a);
+	--svc-row-hover-bg: var(--background-color-high, #333);
+	--svc-row-add-bg: var(--background-color-high, #2d333b);
 }
 
 #switch-vlan-view .svc-block {
@@ -86,7 +127,7 @@
 
 .svc-empty {
 	margin: 0.5em 0;
-	color: #888;
+	color: var(--text-color-low, #888);
 	font-style: italic;
 }
 
@@ -98,7 +139,7 @@
 }
 
 .svc-port-tile {
-	border: 1px solid #ccc;
+	border: 1px solid var(--border-color-medium, #ccc);
 	border-radius: 4px;
 	padding: 0.5em 0.6em;
 	background: var(--background-color-medium, #fafafa);
@@ -110,10 +151,11 @@
 	gap: 0.35em;
 	transition: background 0.05s linear, border-color 0.05s linear, box-shadow 0.05s linear;
 	min-width: 0;
+	overflow: hidden;
 }
 
 .svc-port-tile:hover {
-	border-color: #888;
+	border-color: var(--border-color-high, #888);
 	background: var(--background-color-high, #f3f3f3);
 }
 
@@ -168,18 +210,12 @@
 .svc-port-link[data-state="down"] .svc-port-dot { background: #b0b0b0; }
 
 .svc-port-label {
-	width: 100%;
-	box-sizing: border-box;
 	font-size: 0.92em;
-	color: inherit;
 	padding: 2px 4px;
-	border: 1px solid #ddd;
-	border-radius: 2px;
-	background: var(--background-color-high, #fff);
 }
 
 .svc-port-label:focus {
-	border-color: #3c8dbc;
+	border-color: var(--primary-color-high, #3c8dbc);
 	outline: none;
 }
 
@@ -218,29 +254,30 @@
 
 /* Highlight ports when hovering a VLAN row (teal = untagged, amber = tagged) */
 .svc-port-tile.highlight-untagged {
-        border-color: var(--svc-vlan-untagged);
-        background:
-                repeating-linear-gradient(
-                        90deg,
-                        var(--svc-vlan-untagged-stripe) 0 24px,
-                        var(--svc-vlan-untagged-bg) 24px 48px
-                );
+	border: 2px solid var(--svc-vlan-untagged);
+	background:
+		repeating-linear-gradient(
+			90deg,
+			var(--svc-vlan-untagged-stripe) 0 24px,
+			var(--svc-vlan-untagged-bg) 24px 48px
+		);
 }
 
 .svc-port-tile.highlight-tagged {
-        border-color: var(--svc-vlan-tagged);
-        background:
-                repeating-linear-gradient(
-                        180deg,
-                        var(--svc-vlan-tagged-stripe) 0 24px,
-                        var(--svc-vlan-tagged-bg) 24px 48px
-                );
+	border: 2px solid var(--svc-vlan-tagged);
+	background:
+		repeating-linear-gradient(
+			180deg,
+			var(--svc-vlan-tagged-stripe) 0 24px,
+			var(--svc-vlan-tagged-bg) 24px 48px
+		);
 }
 
 /* VLAN list — table layout keeps column widths and dividers aligned */
 .svc-vlans {
 	display: table;
 	width: 100%;
+	max-width: 100%;
 	border-collapse: separate;
 	border-spacing: 0 0.3em;
 	table-layout: auto;
@@ -281,9 +318,10 @@
 	text-align: right;
 }
 
-/* No width — extra space goes here (auto layout + narrow 1% siblings) */
+/* Label column absorbs remaining width; keep inputs inside the cell */
 .svc-vlan-cell-label {
-	min-width: 10em;
+	min-width: 0;
+	overflow: hidden;
 }
 
 .svc-vlan-cell-label,
@@ -312,35 +350,35 @@
 }
 
 .svc-vlan-row > .svc-vlan-cell-id {
-	border: 1px solid #ddd;
+	border: 1px solid var(--border-color-low, #ddd);
 	border-right: none;
 	border-radius: 4px 0 0 4px;
-	background: #fafafa;
+	background: var(--svc-row-bg);
 }
 
 .svc-vlan-row > .svc-vlan-cell-label,
 .svc-vlan-row > .svc-vlan-cell-local,
 .svc-vlan-row > .svc-vlan-cell-select,
 .svc-vlan-row > .svc-vlan-cell-assign {
-	border-top: 1px solid #ddd;
-	border-bottom: 1px solid #ddd;
-	background: #fafafa;
+	border-top: 1px solid var(--border-color-low, #ddd);
+	border-bottom: 1px solid var(--border-color-low, #ddd);
+	background: var(--svc-row-bg);
 }
 
 .svc-vlan-row > .svc-vlan-cell-action {
-	border: 1px solid #ddd;
+	border: 1px solid var(--border-color-low, #ddd);
 	border-left: 1px solid var(--border-color-low, #ccc);
 	border-radius: 0 4px 4px 0;
-	background: #fafafa;
+	background: var(--svc-row-bg);
 }
 
 .svc-vlan-row:hover > .svc-vlan-cell {
-	background: #f3f3f3;
-	border-color: #bbb;
+	background: var(--svc-row-hover-bg);
+	border-color: var(--border-color-medium, #bbb);
 }
 
 .svc-vlan-row.svc-vlan-add-row > .svc-vlan-cell {
-	background: #f7faff;
+	background: var(--svc-row-add-bg);
 }
 
 /* Dashed outline on the outside of the add row only — not between columns */
@@ -367,7 +405,7 @@
 
 @keyframes svc-flash {
 	0%   { background: #fff5b1; }
-	100% { background: #fafafa; }
+	100% { background: var(--svc-row-bg); }
 }
 
 .svc-vlan-id {
@@ -376,26 +414,17 @@
 }
 
 .svc-vlan-id-input {
-	width: 100%;
-	max-width: 100%;
-	min-width: 0;
-	box-sizing: border-box;
 	padding: 2px 4px;
 	font-family: monospace;
 }
 
 .svc-vlan-label {
-	width: 100%;
-	box-sizing: border-box;
 	padding: 2px 4px;
-	border: 1px solid #ddd;
-	border-radius: 2px;
-	background: var(--background-color-high, #fff);
 }
 
 .svc-vlan-label:focus,
 .svc-vlan-id-input:focus {
-	border-color: #3c8dbc;
+	border-color: var(--primary-color-high, #3c8dbc);
 	outline: none;
 }
 
@@ -446,24 +475,26 @@
 /* T = tagged (amber), U = untagged (teal) — select + assign buttons */
 #switch-vlan-view .svc-vlan-btn-tagged:not(:disabled),
 #switch-vlan-view .svc-vlan-btn-assign-tagged:not(.svc-vlan-assign-disabled) {
-	border-color: var(--svc-vlan-tagged);
+	border: 1px solid var(--svc-vlan-tagged);
 	background-color: var(--svc-vlan-tagged-bg);
+	color: var(--svc-vlan-tagged);
 }
 
 #switch-vlan-view .svc-vlan-btn-untagged:not(:disabled),
 #switch-vlan-view .svc-vlan-btn-assign-untagged:not(.svc-vlan-assign-disabled) {
-	border-color: var(--svc-vlan-untagged);
+	border: 1px solid var(--svc-vlan-untagged);
 	background-color: var(--svc-vlan-untagged-bg);
+	color: var(--svc-vlan-untagged);
 }
 
 #switch-vlan-view .svc-vlan-btn-tagged .svc-vlan-btn-prefix,
 #switch-vlan-view .svc-vlan-btn-assign-tagged .svc-vlan-btn-prefix {
-	color: var(--svc-vlan-tagged);
+	color: inherit;
 }
 
 #switch-vlan-view .svc-vlan-btn-untagged .svc-vlan-btn-prefix,
 #switch-vlan-view .svc-vlan-btn-assign-untagged .svc-vlan-btn-prefix {
-	color: var(--svc-vlan-untagged);
+	color: inherit;
 }
 
 #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked,
@@ -478,12 +509,12 @@
 
 #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked {
 	background: linear-gradient(#b45309, var(--svc-vlan-tagged));
-	border-color: #b45309;
+	border: 1px solid #b45309;
 }
 
 #switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked {
 	background: linear-gradient(#0f766e, var(--svc-vlan-untagged));
-	border-color: #0f766e;
+	border: 1px solid #0f766e;
 }
 
 #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-mixed {
@@ -494,7 +525,8 @@
 		transparent 55%,
 		var(--svc-vlan-tagged-bg) 55%
 	);
-	border-color: var(--svc-vlan-tagged);
+	border: 1px solid var(--svc-vlan-tagged);
+	color: var(--svc-vlan-tagged);
 }
 
 #switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-mixed {
@@ -505,7 +537,8 @@
 		transparent 55%,
 		var(--svc-vlan-untagged-bg) 55%
 	);
-	border-color: var(--svc-vlan-untagged);
+	border: 1px solid var(--svc-vlan-untagged);
+	color: var(--svc-vlan-untagged);
 }
 
 :root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked,
@@ -520,12 +553,12 @@
 
 :root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked {
 	background: linear-gradient(#f59e0b, var(--svc-vlan-tagged));
-	border-color: var(--svc-vlan-tagged);
+	border: 1px solid var(--svc-vlan-tagged);
 }
 
 :root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked {
 	background: linear-gradient(#14b8a6, var(--svc-vlan-untagged));
-	border-color: var(--svc-vlan-untagged);
+	border: 1px solid var(--svc-vlan-untagged);
 }
 
 .svc-vlan-btn-prefix {
@@ -556,16 +589,16 @@
 	}
 
 	.svc-vlan-row {
-		border: 1px solid #ddd;
+		border: 1px solid var(--border-color-low, #ddd);
 		border-radius: 4px;
-		background: #fafafa;
+		background: var(--svc-row-bg);
 		padding: 0.4em 0.6em;
 		margin-bottom: 0.3em;
 	}
 
 	.svc-vlan-row.svc-vlan-add-row {
 		border-style: dashed;
-		background: #f7faff;
+		background: var(--svc-row-add-bg);
 	}
 
 	.svc-vlan-row > .svc-vlan-cell-label,
