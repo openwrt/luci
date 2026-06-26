@@ -8,7 +8,7 @@
 {%
 	import { getuid, getspnam } from 'luci.core';
 
-	const boardinfo = ubus.call('system', 'board');
+	const boardinfo = ubus.call('system', 'board') ?? {};
 	const darkpref = (theme == 'bootstrap-dark' ? 'true' : (theme == 'bootstrap-light' ? 'false' : null));
 
 	http.prepare_content('text/html; charset=UTF-8');
