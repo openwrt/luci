@@ -229,15 +229,6 @@ return view.extend({
 		});
 	},
 
-	load() {
-		return new Promise(function (resolve, reject) {
-			const script = E('script', { 'type': 'text/javascript' });
-			script.onload = resolve;
-			script.onerror = reject;
-			script.src = L.resource('babeld.js');
-			document.querySelector('head').appendChild(script);
-		});
-	},
 	render() {
 		return this.action_babeld()
 			.then(function (result) {
