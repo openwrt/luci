@@ -1044,7 +1044,7 @@ dispatch = function(_http, path) {
 				    cookie_secure = (http.getenv('HTTPS') == 'on') ? '; secure' : '';
 
 				http.header('Set-Cookie', `${cookie_name}=${session.sid}; path=${build_url()}; SameSite=strict; HttpOnly${cookie_secure}`);
-				http.redirect(build_url(...resolved.ctx.request_path));
+				http.redirect(build_url(...(length(resolved.ctx.request_path) ? resolved.ctx.request_path : resolved.ctx.path)));
 
 				return;
 			}
