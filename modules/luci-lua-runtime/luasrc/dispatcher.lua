@@ -5,6 +5,7 @@
 module("luci.dispatcher", package.seeall)
 
 local http = _G.L.http
+local fs     = require "nixio.fs"
 
 context = setmetatable({}, {
 	__index = function(t, k)
