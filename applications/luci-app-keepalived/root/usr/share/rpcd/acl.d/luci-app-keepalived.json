@@ -1,0 +1,21 @@
+{
+	"luci-app-keepalived" : {
+		"description" : "Grant access to LuCI app keepalived",
+		"read" : {
+			"ubus" : {
+				"keepalived" : [ "*" ]
+			},
+			"uci": [ "keepalived" ],
+			"file": {
+				"/etc/keepalived.user": [ "read" ]
+			}
+		},
+		"write" : {
+			"uci": [ "keepalived" ],
+			"file" : {
+				"/etc/keepalived/keys/*" : [ "write" ],
+				"/etc/keepalived.user": [ "write" ]
+			}
+		}
+	}
+}

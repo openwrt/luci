@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# Wrapper script for hbbs (RustDesk ID/Rendezvous server)
+#
+# Purpose: This wrapper changes to /etc/rustdesk before exec'ing hbbs.
+# hbbs generates its keypair (id_ed25519, id_ed25519.pub) in its
+# working directory. Using exec ensures the process name remains
+# "hbbs" (not "sh") so syslog filtering works correctly.
+
+cd /etc/rustdesk
+exec /usr/bin/hbbs "$@"

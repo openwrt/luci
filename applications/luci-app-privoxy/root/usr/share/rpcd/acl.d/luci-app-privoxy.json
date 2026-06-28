@@ -1,0 +1,23 @@
+{
+	"luci-app-privoxy": {
+		"description": "Grant UCI access for luci-app-privoxy",
+		"read": {
+			"uci": [ "privoxy" ],
+			"file": {
+				"/etc/config/privoxy": ["read"],
+				"/etc/privoxy/*": ["read"],
+				"/etc/privoxy/ssl/ca-cert.pem": ["read"]
+			}
+		},
+		"write": {
+			"uci": [ "privoxy" ],
+			"file": {
+				"/etc/config/privoxy": ["write"],
+				"/etc/privoxy/regenerate_ca": ["write"]
+			},
+			"ubus": {
+				"rc": [ "init" ]
+			}
+		}
+	}
+}

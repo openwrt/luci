@@ -1,0 +1,28 @@
+{
+	"admin/services/v2raya": {
+		"title": "v2rayA",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-v2raya" ],
+			"uci": { "v2raya": true }
+		}
+	},
+	"admin/services/v2raya/config": {
+		"title": "Configuration",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "v2raya/config"
+		}
+	},
+	"admin/services/v2raya/log": {
+		"title": "Log",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "v2raya/log"
+		}
+	}
+}

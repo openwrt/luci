@@ -1,0 +1,21 @@
+{
+	"luci-app-sqm": {
+		"description": "Grant UCI access for luci-app-sqm",
+		"read": {
+			"file": {
+				"/var/run/sqm/available_qdiscs": [ "list" ],
+				"/usr/lib/sqm/*.qos.help": [ "read" ],
+				"/etc/init.d/sqm enable" : [ "exec" ],
+				"/etc/init.d/sqm start" : [ "exec" ]
+			},
+			"uci": [ "sqm" ],
+			"ubus": {
+				"file": [ "read", "list" ],
+				"luci": [ "setInitAction" ]
+			}
+		},
+		"write": {
+			"uci": [ "sqm" ]
+		}
+	}
+}

@@ -1,0 +1,41 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA8100v2",
+		"board": [
+			"linksys,ea8100-v2"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd5",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd6"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd7",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd8"
+			}
+		}
+	]
+}

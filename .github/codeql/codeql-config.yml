@@ -1,0 +1,34 @@
+name: "CodeQL config"
+
+# Paths example; these are completely different from the same keywords when used for on.<push|pull_request>.paths in a workflow
+# Restrict code scanning to files in specific directories by adding a paths array
+paths:
+  - '**/*.js'
+  - '**/*.json'
+  - '**/*.htm*'
+# # Exclude files in specific directories from analysis by adding a paths-ignore array
+# paths-ignore: 
+#   - src/node_modules
+#   - '**/*.test.js'
+
+# # Scanner packs example
+# packs:
+#   # Use these packs for JavaScript and TypeScript analysis
+#   javascript:
+#     - scope/js-pack1
+#     - scope/js-pack2
+
+
+# # Query filters example
+# query-filters:
+# - exclude:
+#     problem.severity:
+#       - warning
+#       - recommendation
+
+# # Query filters example 2
+# query-filters:
+#   - exclude:
+#       id: js/redundant-assignment
+#   - exclude:
+#       id: js/useless-assignment-to-local

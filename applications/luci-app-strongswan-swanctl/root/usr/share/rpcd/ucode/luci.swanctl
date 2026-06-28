@@ -1,0 +1,377 @@
+#!/usr/bin/env ucode
+
+'use strict';
+
+import { popen } from 'fs';
+
+const encryption_map = {
+	'3DES_CBC': [
+		{ name: '3des', insecure: true }
+	],
+	'AES_CBC': [
+		{ name: 'aes', insecure: false },
+		{ name: 'aes128', insecure: false },
+		{ name: 'aes192', insecure: false },
+		{ name: 'aes256', insecure: false }
+	],
+	'AES_CTR': [
+		{ name: 'aes128ctr', insecure: false },
+		{ name: 'aes192ctr', insecure: false },
+		{ name: 'aes256ctr', insecure: false }
+	],
+	'BLOWFISH_CBC': [
+		{ name: 'blowfish', insecure: true },
+		{ name: 'blowfish128', insecure: true },
+		{ name: 'blowfish192', insecure: true },
+		{ name: 'blowfish256', insecure: true }
+	],
+	'CAMELLIA_CBC': [
+		{ name: 'camellia', insecure: false },
+		{ name: 'camellia128', insecure: false },
+		{ name: 'camellia192', insecure: false },
+		{ name: 'camellia256', insecure: false }
+	],
+	'CAMELLIA_CTR': [
+		{ name: 'camellia128ctr', insecure: false },
+		{ name: 'camellia192ctr', insecure: false },
+		{ name: 'camellia256ctr', insecure: false }
+	],
+	'CAST_CBC': [
+		{ name: 'cast128', insecure: true }
+	],
+	'DES_CBC': [
+		{ name: 'des', insecure: true }
+	],
+	'NULL': [
+		{ name: 'null', insecure: true }
+	],
+	'NULL_AES_GMAC': [
+		{ name: 'aes128gmac', insecure: false },
+		{ name: 'aes192gmac', insecure: false },
+		{ name: 'aes256gmac', insecure: false }
+	],
+	'SERPENT_CBC': [
+		{ name: 'serpent', insecure: false },
+		{ name: 'serpent128', insecure: false },
+		{ name: 'serpent192', insecure: false },
+		{ name: 'serpent256', insecure: false }
+	],
+	'TWOFISH_CBC': [
+		{ name: 'twofish', insecure: false },
+		{ name: 'twofish128', insecure: false },
+		{ name: 'twofish192', insecure: false },
+		{ name: 'twofish256', insecure: false }
+	]
+};
+
+const aead_map = {
+	'AES_CCM_8': [
+		{ name: 'aes128ccm8', insecure: false },
+		{ name: 'aes128ccm64', insecure: false },
+		{ name: 'aes192ccm8', insecure: false },
+		{ name: 'aes192ccm64', insecure: false },
+		{ name: 'aes256ccm8', insecure: false },
+		{ name: 'aes256ccm64', insecure: false }
+	],
+	'AES_CCM_12': [
+		{ name: 'aes128ccm12', insecure: false },
+		{ name: 'aes128ccm96', insecure: false },
+		{ name: 'aes192ccm12', insecure: false },
+		{ name: 'aes192ccm96', insecure: false },
+		{ name: 'aes256ccm12', insecure: false },
+		{ name: 'aes256ccm96', insecure: false }
+	],
+	'AES_CCM_16': [
+		{ name: 'aes128ccm16', insecure: false },
+		{ name: 'aes128ccm128', insecure: false },
+		{ name: 'aes128ccm', insecure: false },
+		{ name: 'aes192ccm16', insecure: false },
+		{ name: 'aes192ccm128', insecure: false },
+		{ name: 'aes192ccm', insecure: false },
+		{ name: 'aes256ccm16', insecure: false },
+		{ name: 'aes256ccm128', insecure: false },
+		{ name: 'aes256ccm', insecure: false }
+	],
+	'AES_GCM_12': [
+		{ name: 'aes128gcm12', insecure: false },
+		{ name: 'aes128gcm96', insecure: false },
+		{ name: 'aes192gcm12', insecure: false },
+		{ name: 'aes192gcm96', insecure: false },
+		{ name: 'aes256gcm12', insecure: false },
+		{ name: 'aes256gcm96', insecure: false }
+	],
+	'AES_GCM_8': [
+		{ name: 'aes128gcm8', insecure: false },
+		{ name: 'aes128gcm64', insecure: false },
+		{ name: 'aes192gcm8', insecure: false },
+		{ name: 'aes192gcm64', insecure: false },
+		{ name: 'aes256gcm8', insecure: false },
+		{ name: 'aes256gcm64', insecure: false }
+	],
+	'AES_GCM_16': [
+		{ name: 'aes128gcm16', insecure: false },
+		{ name: 'aes128gcm128', insecure: false },
+		{ name: 'aes128gcm', insecure: false },
+		{ name: 'aes192gcm16', insecure: false },
+		{ name: 'aes192gcm128', insecure: false },
+		{ name: 'aes192gcm', insecure: false },
+		{ name: 'aes256gcm16', insecure: false },
+		{ name: 'aes256gcm128', insecure: false },
+		{ name: 'aes256gcm', insecure: false }
+	],
+	'CAMELLIA_CCM_8': [
+		{ name: 'camellia128ccm8', insecure: false },
+		{ name: 'camellia128ccm64', insecure: false },
+		{ name: 'camellia192ccm8', insecure: false },
+		{ name: 'camellia192ccm64', insecure: false },
+		{ name: 'camellia256ccm8', insecure: false },
+		{ name: 'camellia256ccm64', insecure: false }
+	],
+	'CAMELLIA_CCM_12': [
+		{ name: 'camellia128ccm12', insecure: false },
+		{ name: 'camellia128ccm96', insecure: false },
+		{ name: 'camellia192ccm12', insecure: false },
+		{ name: 'camellia192ccm96', insecure: false },
+		{ name: 'camellia256ccm12', insecure: false },
+		{ name: 'camellia256ccm96', insecure: false }
+	],
+	'CAMELLIA_CCM_16': [
+		{ name: 'camellia128ccm16', insecure: false },
+		{ name: 'camellia128ccm128', insecure: false },
+		{ name: 'camellia192ccm16', insecure: false },
+		{ name: 'camellia192ccm128', insecure: false },
+		{ name: 'camellia256ccm16', insecure: false },
+		{ name: 'camellia256ccm128', insecure: false }
+	],
+	'CHACHA20_POLY1305': [
+		{ name: 'chacha20poly1305', insecure: false },
+		{ name: 'chacha20poly1305compat', insecure: false }
+	]
+};
+
+const integrity_map = {
+	'AES_CMAC_96': [
+		{ name: 'aescmac', insecure: false }
+	],
+	'AES_XCBC_96': [
+		{ name: 'aesxcbc', insecure: false }
+	],
+	'CAMELLIA_XCBC_96': [
+		{ name: 'camelliaxcbc', insecure: false }
+	],
+	'HMAC_MD5_128': [
+		{ name: 'md5_128', insecure: true }
+	],
+	'HMAC_MD5_96': [
+		{ name: 'md5', insecure: true }
+	],
+	'HMAC_SHA1_160': [
+		{ name: 'sha1_160', insecure: true }
+	],
+	'HMAC_SHA1_96': [
+		{ name: 'sha', insecure: true },
+		{ name: 'sha1', insecure: true }
+	],
+	'HMAC_SHA2_256_128': [
+		{ name: 'sha256', insecure: false },
+		{ name: 'sha2_256', insecure: false }
+	],
+	'HMAC_SHA2_256_96': [
+		{ name: 'sha256_96', insecure: false },
+		{ name: 'sha2_256_96', insecure: false }
+	],
+	'HMAC_SHA2_384_192': [
+		{ name: 'sha384', insecure: false },
+		{ name: 'sha2_384', insecure: false }
+	],
+	'HMAC_SHA2_512_256': [
+		{ name: 'sha512', insecure: false },
+		{ name: 'sha2_512', insecure: false }
+	]
+};
+
+const prf_map = {
+	'PRF_AES128_CMAC': [
+		{ name: 'prfaescmac', insecure: false }
+	],
+	'PRF_AES128_XCBC': [
+		{ name: 'prfaesxcbc', insecure: false }
+	],
+	'PRF_CAMELLIA128_XCBC': [
+		{ name: 'prfcamelliaxcbc', insecure: false }
+	],
+	'PRF_HMAC_MD5': [
+		{ name: 'prfmd5', insecure: true }
+	],
+	'PRF_HMAC_SHA1': [
+		{ name: 'prfsha1', insecure: true }
+	],
+	'PRF_HMAC_SHA2_256': [
+		{ name: 'prfsha256', insecure: false }
+	],
+	'PRF_HMAC_SHA2_384': [
+		{ name: 'prfsha384', insecure: false }
+	],
+	'PRF_HMAC_SHA2_512': [
+		{ name: 'prfsha512', insecure: false }
+	]
+};
+
+const ke_map = {
+	'CURVE_25519': [
+		{ name: 'curve25519', insecure: false },
+		{ name: 'x25519', insecure: false }
+	],
+	'CURVE_448': [
+		{ name: 'curve448', insecure: false },
+		{ name: 'x448', insecure: false }
+	],
+	'ECP_192': [
+		{ name: 'ecp192', insecure: true }
+	],
+	'ECP_224': [
+		{ name: 'ecp224', insecure: false }
+	],
+	'ECP_224_BP': [
+		{ name: 'ecp224bp', insecure: false }
+	],
+	'ECP_256': [
+		{ name: 'ecp256', insecure: false }
+	],
+	'ECP_256_BP': [
+		{ name: 'ecp256bp', insecure: false }
+	],
+	'ECP_384': [
+		{ name: 'ecp384', insecure: false }
+	],
+	'ECP_384_BP': [
+		{ name: 'ecp384bp', insecure: false }
+	],
+	'ECP_512_BP': [
+		{ name: 'ecp512bp', insecure: false }
+	],
+	'ECP_521': [
+		{ name: 'ecp521', insecure: false }
+	],
+	'GOST3410_256': [
+		{ name: 'gost256', insecure: false }
+	],
+	'GOST3410_512': [
+		{ name: 'gost512', insecure: false }
+	],
+	'KE_NONE': [
+		{ name: 'none', insecure: true },
+		{ name: 'modpnone', insecure: true }
+	],
+	'ML_KEM_1024': [
+		{ name: 'mlkem1024', insecure: false }
+	],
+	'ML_KEM_512': [
+		{ name: 'mlkem512', insecure: false }
+	],
+	'ML_KEM_768': [
+		{ name: 'mlkem768', insecure: false }
+	],
+	'MODP_1024': [
+		{ name: 'modp1024', insecure: true }
+	],
+	'MODP_1024_160': [
+		{ name: 'modp1024s160', insecure: true }
+	],
+	'MODP_1536': [
+		{ name: 'modp1536', insecure: true }
+	],
+	'MODP_2048': [
+		{ name: 'modp2048', insecure: false }
+	],
+	'MODP_2048_224': [
+		{ name: 'modp2048s224', insecure: true }
+	],
+	'MODP_2048_256': [
+		{ name: 'modp2048s256', insecure: true }
+	],
+	'MODP_3072': [
+		{ name: 'modp3072', insecure: false }
+	],
+	'MODP_4096': [
+		{ name: 'modp4096', insecure: false }
+	],
+	'MODP_6144': [
+		{ name: 'modp6144', insecure: false }
+	],
+	'MODP_768': [
+		{ name: 'modp768', insecure: true }
+	],
+	'MODP_8192': [
+		{ name: 'modp8192', insecure: false }
+	],
+	'MODP_NULL': [
+		{ name: 'modpnull', insecure: true }
+	]
+};
+
+const category_maps = {
+	encryption: encryption_map,
+	aead: aead_map,
+	integrity: integrity_map,
+	prf: prf_map,
+	ke: ke_map
+};
+
+const methods = {
+	'list-algs': {
+		args: { type: 'type' },
+		call: function(req) {
+			const result = {
+				error: null,
+				data: null
+			};
+			const cmd = '/usr/sbin/swanmon get-algorithms';
+			const categories = keys(category_maps);
+			let output;
+			let selected_categories = categories;
+			if (req && req.args && req.args.type)
+				selected_categories = [req.args.type];
+
+			try {
+				output = json(popen(cmd)?.read?.('all'));
+			}
+			catch (e) {
+				result.error = e.message;
+				return result;
+			}
+
+			if (length(output.errors) > 0)
+				result.error = output.errors[0].message;
+
+			if (output.data) {
+				result.data = {};
+
+				for (let category in selected_categories) {
+					const category_map = category_maps[category];
+					const output_algorithms = output.data[category];
+
+					result.data[category] = [];
+
+					for (let algorithm_name, algorithm_plugin in output_algorithms) {
+						const map_algorithm = category_map[algorithm_name] ?? [];
+						if (!map_algorithm)
+							continue;
+
+						for (let algorithm in map_algorithm) {
+							push(result.data[category], {
+								name: algorithm.name,
+								plugin: algorithm_plugin,
+								insecure: algorithm.insecure
+							});
+						}
+					}
+				}
+			}
+
+			return result;
+		}
+	}
+};
+
+return { 'luci.swanctl': methods };

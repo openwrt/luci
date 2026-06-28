@@ -1,0 +1,16 @@
+{
+	"luci-app-tinyproxy": {
+		"description": "Grant UCI access for luci-app-tinyproxy",
+		"read": {
+			"uci": [ "tinyproxy" ],
+			"file": {
+				"/usr/bin/wget -q http://127.0.0.1:[0-9]*/ -O -": [ "exec" ],
+				"/etc/init.d/tinyproxy reload": ["exec"],
+				"/etc/init.d/tinyproxy restart": ["exec"]
+			}
+		},
+		"write": {
+			"uci": [ "tinyproxy" ]
+		}
+	}
+}

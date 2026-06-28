@@ -1,0 +1,39 @@
+{
+	"device": {
+		"vendor": "MERCUSYS",
+		"model": "MR90X v1",
+		"board": [
+			"mercusys,mr90x-v1"
+		]
+	},
+	"commands": {
+		"params": [
+			"tp_boot_idx"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				0
+			],
+			"firmware": {
+				"rootfs": "mtd2",
+				"rootfs_ubi_volume": 2
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"rootfs": "mtd3",
+				"rootfs_ubi_volume": 2
+			}
+		}
+	]
+}

@@ -1,0 +1,45 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA4500",
+		"board": [
+			"linksys-ea4500",
+			"linksys,ea4500"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part",
+			"bootcmd"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1,
+				"run nandboot"
+			],
+			"firmware": {
+				"kernel": "mtd3",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd4"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2,
+				"run altnandboot"
+			],
+			"firmware": {
+				"kernel": "mtd5",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd6"
+			}
+		}
+	]
+}

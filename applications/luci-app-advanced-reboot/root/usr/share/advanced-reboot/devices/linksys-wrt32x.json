@@ -1,0 +1,42 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "WRT32X",
+		"board": [
+			"linksys-venom",
+			"linksys,venom",
+			"linksys,wrt32x"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part",
+			"bootcmd"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1,
+				"run nandboot"
+			],
+			"firmware": {
+				"rootfs": "mtd6"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2,
+				"run altnandboot"
+			],
+			"firmware": {
+				"rootfs": "mtd8"
+			}
+		}
+	]
+}

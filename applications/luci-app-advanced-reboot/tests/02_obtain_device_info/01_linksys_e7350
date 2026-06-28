@@ -1,0 +1,57 @@
+Test obtain_device_info for Linksys E7350 with partition 1 active.
+Uses fw_printenv params and kernel label fallback for alt partition.
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+linksys,e7350
+-- End --
+
+-- File fs/popen~fw_printenv_-n_bootimage_2_dev_null.txt --
+1
+-- End --
+
+-- File fs/popen~_etc_os-release_2_dev_null_echo_OPENWRT_RELEASE_2_dev_null.txt --
+OpenWrt SNAPSHOT r28105-abcdef0123
+-- End --
+
+-- File fs/open~_proc_version.txt --
+Linux version 6.6.63 (builder@buildhost) (aarch64-openwrt-linux-musl-gcc) #0
+-- End --
+
+-- File fs/popen~dd_if_dev_mtd3_bs_1_skip_192_count_64.txt --
+Linux version 6.6.63 OpenWrt
+-- End --
+
+-- File fs/popen~dd_if_dev_mtd6_bs_1_skip_192_count_64.txt --
+Linux version 6.6.50 OpenWrt
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.obtain_device_info.call();
+
+// Verify device info
+printf("vendor: %s\n", result.device.vendor);
+printf("model: %s\n", result.device.model);
+printf("board: %s\n", result.device.board);
+printf("active: %s\n", result.device.partition_active);
+printf("partitions: %d\n", length(result.partitions));
+
+// Partition 1 (current)
+let p1 = result.partitions[0];
+printf("p1: number=%s label=%s os=%s\n", p1.number, p1.label, p1.os);
+
+// Partition 2 (alternate — label from dd fallback)
+let p2 = result.partitions[1];
+printf("p2: number=%s label=%s os=%s\n", p2.number, p2.label, p2.os);
+-- End --
+
+-- Expect stdout --
+vendor: Linksys
+model: E7350
+board: linksys,e7350
+active: 1
+partitions: 2
+p1: number=1 label=OpenWrt SNAPSHOT r28105-abcdef0123 os=6.6.63
+p2: number=2 label=OpenWrt os=6.6.50
+-- End --

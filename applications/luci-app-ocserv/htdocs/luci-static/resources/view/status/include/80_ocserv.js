@@ -1,0 +1,136 @@
+'use strict';
+'require baseclass';
+'require fs';
+
+/* OpenConnect VPN Status Widget for LuCI 
+   Converted from Lua to JavaScript by @systemcrash
+   Copyright 2014 Nikos Mavrogiannopoulos <n.mavrogiannopoulos@gmail.com>
+   Licensed to the public under the Apache License 2.0.
+*/
+
+return baseclass.extend({
+	title: _('Active OpenConnect Users'),
+
+	parseUsers: function(output) {
+		const users = [];
+		
+		// Handle empty or invalid output
+		if (!output || !output.trim()) {
+			return users;
+		}
+
+		try {
+			// Clean up the output - remove extra newlines and trim
+			const cleaned = output.trim().replace(/\[\s*\n\s*\]/g, '[]');
+			const json = JSON.parse(cleaned);
+			
+			// Handle different JSON structures
+			if (Array.isArray(json)) {
+				// Handle empty array like "[\n]"
+				if (json.length === 0) {
+					return users;
+				}
+				// If it's an array of users directly
+				return json.map(entry => this.normalizeUser(entry));
+			} else if (json && json.users && Array.isArray(json.users)) {
+				// If it's wrapped in a "users" property
+				return json.users.map(entry => this.normalizeUser(entry));
+			}
+			
+			return users;
+		} catch (e) {
+			console.error('Failed to parse JSON:', e.message);
+			return users;
+		}
+	},
+
+	normalizeUser: function(entry) {
+		return {
+			id: entry.ID,
+			user: entry?.Username || entry?.User,
+			group: entry?.Groupname || entry?.Group,
+			vpn_ip: entry['vpn-ipv4'] || entry.vpn_ip || entry?.IPv4,
+			vpn_ip6: entry['vpn-ipv6'] || entry.vpn_ip6 || entry?.IPv6,
+			ip: entry?.['Remote IP'],
+			device: entry?.Device,
+			time: entry['_Connected at'] || entry?.raw_connected_at,
+			cipher: entry?.Cipher || entry?.['TLS ciphersuite'],
+			status: entry?.Status || entry?.State,
+			tx: entry?._TX || entry?.TX || entry?.tx || entry?.raw_tx,
+			rx: entry?._RX || entry?.RX || entry?.rx || entry?.raw_rx,
+		};
+	},
+
+	handleDisconnect: function(id) {
+		return L.resolveDefault(
+			fs.exec('/usr/bin/occtl', ['disconnect', 'id', id]),
+			null
+		).then(() => {
+			L.ui.addNotification(null, E('p', _('User %s has been disconnected.').format(id)), 'info');
+			// Trigger refresh
+			this.load();
+		}).catch(function(e) {
+			L.ui.addNotification(null, E('p', _('Failed to disconnect user: %s').format(e.message)), 'error');
+		});
+	},
+
+	load: function() {
+		return L.resolveDefault(
+			fs.exec('/usr/bin/occtl', ['--json', 'show', 'users']).then(res => res.stdout),
+			''
+		);
+	},
+
+	render: function(data) {
+		const users = this.parseUsers(data || '');
+
+		const table = E('div', { 'class': 'table' }, [
+			E('div', { 'class': 'tr table-titles' }, [
+				E('div', { 'class': 'th' }, _('User')),
+				E('div', { 'class': 'th' }, _('Group')),
+				E('div', { 'class': 'th' }, _('VPN IP Address')),
+				E('div', { 'class': 'th' }, _('IP Address')),
+				E('div', { 'class': 'th' }, _('Device')),
+				E('div', { 'class': 'th' }, _('Time')),
+				E('div', { 'class': 'th' }, _('Cipher')),
+				E('div', { 'class': 'th' }, _('Status')),
+				E('div', { 'class': 'th' }, _('Tx')),
+				E('div', { 'class': 'th' }, _('Rx')),
+				E('div', { 'class': 'th' }, '\u00a0')
+			])
+		]);
+
+		if (users.length === 0) {
+			table.appendChild(
+				E('div', { 'class': 'tr placeholder' }, [
+					E('div', { 'class': 'td' }, 
+						E('em', _('There are no active users.')))
+				])
+			);
+		} else {
+			for (let user of users) {
+				table.appendChild(
+					E('div', { 'class': 'tr' }, [
+						E('div', { 'class': 'td' }, user.user),
+						E('div', { 'class': 'td' }, user.group),
+						E('div', { 'class': 'td' }, user.vpn_ip),
+						E('div', { 'class': 'td' }, user.ip),
+						E('div', { 'class': 'td' }, user.device),
+						E('div', { 'class': 'td' }, user.time),
+						E('div', { 'class': 'td' }, user.cipher),
+						E('div', { 'class': 'td' }, user.status),
+						E('div', { 'class': 'td' }, user.tx),
+						E('div', { 'class': 'td' }, user.rx),
+						E('div', { 'class': 'td' },
+							E('button', {
+								'class': 'cbi-button cbi-button-remove',
+								'click': L.bind(this.handleDisconnect, this, user.id)
+							}, _('Disconnect')))
+					])
+				);
+			}
+		}
+
+		return table;
+	}
+});

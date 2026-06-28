@@ -1,0 +1,36 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "generateKeyPair"
+		json_close_object
+		json_add_object "getPeers"
+		json_add_string "interface"
+		json_close_object
+		json_dump
+	;;
+	call)
+		case "$2" in
+			generateKeyPair)
+				json_load "$(yggdrasil -genconf -json)"
+				json_get_vars PrivateKey
+				json_cleanup
+				json_init
+				json_add_object "keys"
+				json_add_string "priv" "$PrivateKey"
+				json_add_string "pub" "${PrivateKey:64}"
+				json_close_object
+				json_dump
+			;;
+			getPeers)
+				read -r input
+				json_load "$input"
+				json_get_vars interface
+				yggdrasilctl -endpoint="unix:///tmp/yggdrasil/${interface}.sock" -json getPeers
+			;;
+		esac
+	;;
+esac

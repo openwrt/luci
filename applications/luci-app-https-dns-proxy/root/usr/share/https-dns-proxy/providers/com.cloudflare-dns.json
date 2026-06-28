@@ -1,0 +1,28 @@
+{
+	"title": "Cloudflare",
+	"template": "https://{option}cloudflare-dns.com/dns-query",
+	"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001",
+	"help_link": "https://one.one.one.one/",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(family.||security.)",
+			"options": [
+				{
+					"value": "family.",
+					"description": "Family Filter"
+				},
+				{
+					"value": "",
+					"description": "Standard"
+				},
+				{
+					"value": "security.",
+					"description": "Security Filter"
+				}
+			],
+			"default": ""
+		}
+	}
+}
