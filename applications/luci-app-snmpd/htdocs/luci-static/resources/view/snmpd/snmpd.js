@@ -9,7 +9,7 @@
 'require view';
 
 var testlibsslv3 = function() {
-	return fs.exec('/usr/bin/ldd', [ '/usr/lib/libnetsnmp.so' ]).then(function (res) {
+	return fs.exec('/usr/bin/ldd', [ '/usr/sbin/snmpd' ]).then(function (res) {
 		return res.stdout.includes('libssl');
 	});
 };
