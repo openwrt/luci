@@ -274,19 +274,19 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'local_subnet', _('Local Subnet'),
 			_('Local network(s)'));
-		o.datatype = 'subnet';
+		o.datatype = 'cidr';
 		o.placeholder = '192.168.1.1/24';
 		o.rmempty = false;
 
 		o = s.taboption('general', form.DynamicList, 'remote_subnet', _('Remote Subnet'),
 			_('Remote network(s)'));
-		o.datatype = 'subnet';
+		o.datatype = 'cidr';
 		o.placeholder = '192.168.2.1/24';
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Value, 'local_nat', _('Local NAT'),
 			_('NAT range for tunnels with overlapping IP addresses'));
-		o.datatype = 'subnet';
+		o.datatype = 'cidr';
 		o.modalonly = true;
 
 		o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
