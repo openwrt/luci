@@ -10,7 +10,7 @@ import { rand } from 'math';
 import { hash, load_catalog, change_catalog, translate, ntranslate, getuid } from 'luci.core';
 import { revision as luciversion, branch as luciname } from 'luci.version';
 import { default as LuCIRuntime } from 'luci.runtime';
-import { urldecode } from 'luci.http';
+import { urldecode, urlencode } from 'luci.http';
 
 let ubus = connect();
 let uci = cursor();
@@ -503,13 +503,13 @@ function session_setup(user, pass, path) {
 			values: { token: randomid(16) }
 		});
 		syslog("info", sprintf("luci: accepted login on /%s for %s from %s",
-			join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+			join('/', map(path, p => urlencode(p))), urlencode(user || "?"), http.getenv("REMOTE_ADDR") || "?"));
 
 		return session_retrieve(login.ubus_rpc_session);
 	}
 
 	syslog("info", sprintf("luci: failed login on /%s for %s from %s",
-		join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+		join('/', map(path, p => urlencode(p))), urlencode(user || "?"), http.getenv("REMOTE_ADDR") || "?"));
 }
 
 function check_authentication(method) {
