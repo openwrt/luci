@@ -76,11 +76,6 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = true;
 
-		o = s.option(widgets.ZoneSelect, 'zone', _('Zone'),
-			_('Firewall zone that has to match the defined firewall zone'));
-		o.default = 'lan';
-		o.multiple = true;
-
 		o = s.option(widgets.NetworkSelect, 'listen', _('Listening Interfaces'),
 			_('Interfaces that accept VPN traffic'));
 		o.datatype = 'interface';
