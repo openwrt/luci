@@ -11,7 +11,7 @@ import { openlog, syslog, closelog, LOG_INFO, LOG_WARNING, LOG_AUTHPRIV } from '
 import { hash, load_catalog, change_catalog, translate, ntranslate, getuid } from 'luci.core';
 import { revision as luciversion, branch as luciname } from 'luci.version';
 import { default as LuCIRuntime } from 'luci.runtime';
-import { urldecode } from 'luci.http';
+import { urldecode, urlencode } from 'luci.http';
 import { get_challenges, verify } from 'luci.authplugins';
 
 let ubus = connect();
@@ -509,14 +509,14 @@ function session_setup(user, pass, path) {
 			ubus_rpc_session: login.ubus_rpc_session,
 			values: { token: randomid(16) }
 		});
-		syslog(LOG_INFO|LOG_AUTHPRIV, sprintf("luci: accepted login on /%s for %s from %s",
-			join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+		syslog(LOG_INFO|LOG_AUTHPRIV, "luci: accepted login on /%s for %s from %s",
+			join('/', map(path, p => urlencode(p))), urlencode(user || "?"), http.getenv("REMOTE_ADDR") || "?");
 
 		return session_retrieve(login.ubus_rpc_session);
 	}
 
-	syslog(LOG_WARNING|LOG_AUTHPRIV, sprintf("luci: failed login on /%s for %s from %s",
-		join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+	syslog(LOG_WARNING|LOG_AUTHPRIV, "luci: failed login on /%s for %s from %s",
+		join('/', map(path, p => urlencode(p))), urlencode(user || "?"), http.getenv("REMOTE_ADDR") || "?");
 
 	closelog();
 }
