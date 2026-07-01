@@ -11,7 +11,7 @@ var pkg = {
 		return "pbr";
 	},
 	get LuciCompat() {
-		return 25;
+		return 26;
 	},
 	get ReadmeCompat() {
 		return "1.2.2";
@@ -329,6 +329,9 @@ var status = baseclass.extend({
 					),
 					warningTorUnsetChainNft: _(
 						"Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'",
+					),
+					warningInterfaceRoutingUnknownGateway: _(
+						"Unknown Gateway for device '%s'",
 					),
 					warningInvalidOVPNConfig: _(
 						"Invalid OpenVPN config for %s interface",
