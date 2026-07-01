@@ -76,13 +76,12 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = true;
 
-		o = s.option(widgets.NetworkSelect, 'listen', _('Listening Interfaces'),
-			_('Interfaces that accept VPN traffic'));
-		o.datatype = 'interface';
-		o.placeholder = _('Select an interface or leave empty for all interfaces');
-		o.default = 'wan';
+		o = s.option(widgets.NetworkSelect, 'interface', _('Listening Interfaces'),
+			_('Interfaces that accept VPN traffic') + '<br /> ' +
+			_('Select an interface or leave empty for all interfaces'));
 		o.multiple = true;
-		o.rmempty = false;
+		o.nocreate = true;
+		o.optional = true;
 
 		o = s.option(form.Value, 'debug', _('Debug Level'),
 			_('Trace level: 0 is least verbose, 4 is most'));
