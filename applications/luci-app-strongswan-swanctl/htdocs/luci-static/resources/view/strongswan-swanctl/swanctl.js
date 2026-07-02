@@ -72,9 +72,7 @@ return view.extend({
 		m.tabbed = true;
 
 		// strongSwan General Settings
-		s = m.section(form.TypedSection, 'ipsec', _('General Settings'));
-		s.anonymous = true;
-		s.addremove = true;
+		s = m.section(form.NamedSection, 'globals', 'ipsec', _('General Settings'));
 
 		o = s.option(widgets.NetworkSelect, 'interface', _('Listening Interfaces'),
 			_('Interfaces that accept VPN traffic') + '<br /> ' +
