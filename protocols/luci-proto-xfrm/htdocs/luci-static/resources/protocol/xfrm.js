@@ -37,7 +37,8 @@ return network.registerProtocol('xfrm', {
 		var o, ss;
 
 		o = s.taboption('general', form.Value, 'ifid', _('Interface ID'), _('Required. XFRM interface ID to be used for SA.'));
-		o.datatype = 'integer';
+		o.datatype = 'range(1,4294967295)';
+		o.rmempty = false;
 
 		o = s.taboption('general', widgets.NetworkSelect, 'tunlink', _('Underlying interface'),_('Optional. Bind to a specific interface.'));
 		o.exclude = s.section;
