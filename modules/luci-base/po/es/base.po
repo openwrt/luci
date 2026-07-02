@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2026-06-25 19:51+0000\n"
+"PO-Revision-Date: 2026-06-27 12:01+0000\n"
 "Last-Translator: apemay <apemay.dev@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -197,6 +197,11 @@ msgid ""
 "selection). Optional labels for ports and VLANs are stored in the LuCI "
 "configuration and are for human reference only."
 msgstr ""
+". Selecciona los puertos y luego usa T y U en cada fila de la VLAN para "
+"asignar o quitar la pertenencia etiquetada o sin etiquetar (nativa), ya sea "
+"vacía, parcial o completa según la selección actual. Las etiquetas "
+"opcionales para puertos y VLAN se almacenan en la configuración de LuCI y "
+"son solo como referencia."
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:59
 msgctxt "sstp log level value"
@@ -1654,11 +1659,12 @@ msgstr "Como opciones DHCP; enviar no solicitado (solo dnsmasq)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:672
 msgid "Assign VLAN %d as tagged on selected ports"
-msgstr ""
+msgstr "Asignar la VLAN %d como etiquetada en los puertos seleccionados"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:678
 msgid "Assign VLAN %d as untagged (native) on selected ports"
 msgstr ""
+"Asignar la VLAN %d como no etiquetada (nativa) en los puertos seleccionados"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1250
 msgid ""
@@ -1669,7 +1675,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:459
 msgid "Assign membership"
-msgstr ""
+msgstr "Asignar pertenencia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1255
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -2141,6 +2147,8 @@ msgid ""
 "CA certificate (PEM encoded. Use instead of system-wide store to verify the "
 "gateway certificate.)"
 msgstr ""
+"Certificado CA (codificado en PEM. Úsalo en lugar del almacén del sistema "
+"para verificar el certificado de la puerta de enlace)."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:178
 msgid "CA certificate; if empty it will be saved after the first connection."
@@ -3225,7 +3233,7 @@ msgstr "Retraso de n segundos después de la conexión"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:359
 msgid "Delay tun/tap open and up script execution"
-msgstr "Espera para la apertura TUN/TAP y ejecución del script de arranque"
+msgstr "Retrasar la apertura del TUN/TAP y la ejecución del script up"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1247
 msgid "Delegate IPv6 prefixes"
@@ -4556,11 +4564,11 @@ msgstr "Excluir interfaces"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:391
 msgid "Execute shell cmd after routes are added"
-msgstr "Comandos a ejecutar tras añadir rutas"
+msgstr "Comando de shell a ejecutar después de añadir rutas"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:399
 msgid "Execute shell command on remote IP change"
-msgstr "Comando a ejecutar si se cambia la IP remota"
+msgstr "Comando de shell a ejecutar al cambiar la IP remota"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:471
 msgid ""
@@ -5415,105 +5423,104 @@ msgstr "Ir a la cadena <strong><a href=\"#%q.%q\">%h</a></strong>"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:52
 msgid "Grant access to DHCP configuration"
-msgstr "Permitir el acceso a la configuración de DHCP"
+msgstr "Conceder acceso a la configuración de DHCP"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:33
 msgid "Grant access to DHCP status display"
-msgstr "Permitir el acceso a la pantalla de estado de DHCP"
+msgstr "Conceder acceso a la pantalla de estado de DHCP"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:39
 msgid "Grant access to DNS configuration"
-msgstr "Otorgar acceso a la configuración de DNS"
+msgstr "Conceder acceso a la configuración de DNS"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:43
 msgid "Grant access to DSL status display"
-msgstr "Permitir el acceso a la pantalla de estado de DSL"
+msgstr "Conceder acceso a la pantalla de estado de DSL"
 
 #: protocols/luci-proto-openconnect/root/usr/share/rpcd/acl.d/luci-openconnect.json:3
 msgid "Grant access to LuCI OpenConnect procedures"
-msgstr "Permitir el acceso a los procedimientos de OpenConnect de LuCI"
+msgstr "Conceder acceso a los procedimientos de OpenConnect de LuCI"
 
 #: protocols/luci-proto-wireguard/root/usr/share/rpcd/acl.d/luci-wireguard.json:3
 msgid "Grant access to LuCI Wireguard procedures"
-msgstr "Permitir el acceso a los procedimientos de Wireguard de LuCI"
+msgstr "Conceder acceso a los procedimientos Wireguard de LuCI"
 
 #: protocols/luci-proto-yggdrasil/root/usr/share/rpcd/acl.d/luci-proto-yggdrasil.json:3
 msgid "Grant access to LuCI Yggdrasil procedures"
-msgstr "Permitir el acceso a los procedimientos Yggdrasil de LuCI"
+msgstr "Conceder acceso a los procedimientos Yggdrasil de LuCI"
 
 #: protocols/luci-proto-openfortivpn/root/usr/share/rpcd/acl.d/luci-openfortivpn.json:3
 msgid "Grant access to LuCI openfortivpn procedures"
-msgstr "Permitir el acceso a los procedimientos de openfortivpn de LuCI"
+msgstr "Conceder acceso a los procedimientos openfortivpn de LuCI"
 
 #: protocols/luci-proto-openvpn/root/usr/share/rpcd/acl.d/luci-proto-openvpn.json:3
 msgid "Grant access to LuCI openvpn procedures"
-msgstr "Otorgar acceso a los procedimientos de OpenVPN de LuCI"
+msgstr "Conceder acceso a los procedimientos OpenVPN de LuCI"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:67
 msgid "Grant access to Plugin management"
-msgstr "Otorgar acceso a la gestión de complementos"
+msgstr "Conceder acceso a la gestión de complementos"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:28
 msgid "Grant access to SSH configuration"
-msgstr "Permitir el acceso a la configuración de SSH"
+msgstr "Conceder acceso a la configuración de SSH"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:51
 msgid "Grant access to Software Repository Public Key management"
 msgstr ""
-"Permitir el acceso a la gestión de claves públicas del repositorio de "
-"software"
+"Conceder acceso a la gestión de claves públicas del repositorio de software"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:23
 msgid "Grant access to Storage and Mount status display"
-msgstr "Permitir el acceso a la pantalla de estado de Almacenamiento y Montaje"
+msgstr "Conceder acceso a la pantalla de estado de Almacenamiento y Montaje"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:12
 msgid "Grant access to basic LuCI procedures"
-msgstr "Permitir el acceso a los procedimientos básicos de LuCI"
+msgstr "Conceder acceso a los procedimientos básicos de LuCI"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:115
 msgid "Grant access to crontab configuration"
-msgstr "Permitir el acceso a la configuración de crontab"
+msgstr "Conceder acceso a la configuración de crontab"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:88
 msgid "Grant access to firewall status"
-msgstr "Permitir el acceso al estado del cortafuegos"
+msgstr "Conceder acceso al estado del cortafuegos"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:168
 msgid "Grant access to flash operations"
-msgstr "Permitir el acceso a las operaciones de flash"
+msgstr "Conceder acceso a las operaciones de flash"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:3
 msgid "Grant access to main status display"
-msgstr "Permitir el acceso a la pantalla de estado principal"
+msgstr "Conceder acceso a la pantalla de estado principal"
 
 #: protocols/luci-proto-modemmanager/root/usr/share/rpcd/acl.d/luci-proto-modemmanager.json:3
 msgid "Grant access to mmcli"
-msgstr "Permitir el acceso a mmcli"
+msgstr "Conceder acceso a mmcli"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:136
 msgid "Grant access to mount configuration"
-msgstr "Permitir el acceso a la configuración de montaje"
+msgstr "Conceder acceso a la configuración de montaje"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:3
 msgid "Grant access to network configuration"
-msgstr "Permitir el acceso a la configuración de red"
+msgstr "Conceder acceso a la configuración de red"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:67
 msgid "Grant access to network diagnostic tools"
-msgstr "Permitir el acceso a las herramientas de diagnóstico de red"
+msgstr "Conceder acceso a las herramientas de diagnóstico de red"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:37
 msgid "Grant access to network status information"
-msgstr "Permitir el acceso a la información del estado de la red"
+msgstr "Conceder acceso a la información del estado de la red"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:228
 msgid "Grant access to password policy configuration"
-msgstr "Otorgar acceso a la configuración de la política de contraseñas"
+msgstr "Conceder acceso a la configuración de la política de contraseñas"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:52
 msgid "Grant access to port status display"
-msgstr "Permitir el acceso a la visualización del estado del puerto"
+msgstr "Conceder acceso a la visualización del estado del puerto"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:17
 msgid "Grant access to process status"
@@ -5526,31 +5533,31 @@ msgstr "Conceder acceso a las estadísticas en tiempo real"
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:49
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:64
 msgid "Grant access to routing status"
-msgstr "Otorgar acceso al estado de enrutamiento"
+msgstr "Conceder acceso al estado de enrutamiento"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:93
 msgid "Grant access to startup configuration"
-msgstr "Permitir el acceso a la configuración de inicio"
+msgstr "Conceder acceso a la configuración de inicio"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:3
 msgid "Grant access to system configuration"
-msgstr "Permitir el acceso a la configuración del sistema"
+msgstr "Conceder acceso a la configuración del sistema"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:34
 msgid "Grant access to system logs"
-msgstr "Permitir el acceso a los registros del sistema"
+msgstr "Conceder acceso a los registros del sistema"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:82
 msgid "Grant access to uHTTPd configuration"
-msgstr "Permitir el acceso a la configuración de uHTTPd"
+msgstr "Conceder acceso a la configuración de uHTTPd"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:79
 msgid "Grant access to wireless channel status"
-msgstr "Permitir el acceso al estado del canal del Wi-Fi"
+msgstr "Conceder acceso al estado del canal del Wi-Fi"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:61
 msgid "Grant access to wireless status display"
-msgstr "Permitir el acceso a la pantalla de estado del Wi-Fi"
+msgstr "Conceder acceso a la pantalla de estado del Wi-Fi"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:124
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:124
@@ -7217,7 +7224,7 @@ msgstr "Enlace conectado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1742
 msgid "Link Speed"
-msgstr ""
+msgstr "Velocidad del enlace"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:83
 msgctxt "nft @ll,off,len"
@@ -7793,7 +7800,7 @@ msgid ""
 "on them."
 msgstr ""
 "Hacer coincidir las cadenas de clase de usuario (UC) enviadas por los "
-"clientes DHCP como disparador para establecer etiquetas en ellas."
+"clientes DHCP como activación para asignarles etiquetas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:743
 msgid ""
@@ -7801,7 +7808,7 @@ msgid ""
 "tags on them."
 msgstr ""
 "Hacer coincidir las cadenas de clase de proveedor (VC) enviadas por los "
-"clientes DHCP como disparador para establecer etiquetas en ellas."
+"clientes DHCP como activación para asignarles etiquetas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:601
 msgid "Match this Tag"
@@ -10072,12 +10079,16 @@ msgstr "El puerto «%s» está etiquetado y sin etiquetar en la VLAN %d."
 msgid ""
 "Port \"%s\" is configured as untagged on more than one VLAN (%d and %d)."
 msgstr ""
+"El puerto «%s» está configurado como no etiquetado en más de una VLAN (%d y "
+"%d)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:247
 msgid ""
 "Port \"%s\" is the primary VLAN on VLAN %d but has no untagged egress (PVID "
 "≠ untagged VLAN)."
 msgstr ""
+"El puerto «%s» es la VLAN primaria en la VLAN %d, pero no tiene salida sin "
+"etiquetar (PVID ≠ VLAN sin etiquetar)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:152
 msgctxt "WireGuard listen port"
@@ -10098,7 +10109,7 @@ msgstr "Prioridad de puerto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:235
 msgid "Port specification \"%s\" on VLAN %d cannot be parsed."
-msgstr ""
+msgstr "La configuración del puerto «%s» en la VLAN %d no se puede analizar."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:375
 msgid "Port status"
@@ -10482,7 +10493,7 @@ msgstr "Tiempo de vida de la clave R0"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1911
 msgid "R1 Key Holder"
-msgstr "Llavero R1"
+msgstr "Titular de la clave R1"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:935
 msgid "RA <abbr title=\"Prefix Information Option\">PIO</abbr> Flags"
@@ -10873,27 +10884,32 @@ msgstr "Eliminar opciones de Push"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:509
 msgid "Remove VLAN %d"
-msgstr ""
+msgstr "Eliminar la VLAN %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:675
 msgid "Remove VLAN %d as tagged from all selected ports"
-msgstr ""
+msgstr "Quitar la VLAN %d como etiquetada de todos los puertos seleccionados"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:674
 msgid "Remove VLAN %d as tagged from selected ports that have it"
 msgstr ""
+"Quitar la VLAN %d como etiquetada de los puertos seleccionados que la tengan"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:681
 msgid "Remove VLAN %d as untagged (native) from all selected ports"
 msgstr ""
+"Quitar la VLAN %d como no etiquetada (nativa) de todos los puertos "
+"seleccionados"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:680
 msgid "Remove VLAN %d as untagged (native) from selected ports that have it"
 msgstr ""
+"Quitar la VLAN %d como no etiquetada (nativa) de los puertos seleccionados "
+"que la tengan"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:826
 msgid "Remove VLAN %d?"
-msgstr ""
+msgstr "¿Eliminar la VLAN %d?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:701
 msgid ""
@@ -11256,7 +11272,7 @@ msgstr "Reintentar indefinidamente en errores del proxy HTTP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1552
 msgid "Retry indefinitely on Socks proxy errors"
-msgstr "Reintentar indefinidamente en errores del proxy Socks"
+msgstr "Reintentar indefinidamente ante errores del proxy SOCKS"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:390
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:391
@@ -11370,7 +11386,7 @@ msgstr "Round robin"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:629
 msgid "Route Allowed IPs"
-msgstr "IPs permitidas en la ruta"
+msgstr "Enrutar las IP permitidas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:654
 msgid "Route action chain \"%h\""
@@ -11702,17 +11718,21 @@ msgstr "Seleccione el dispositivo VLAN de Batman…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:270
 msgid "Select all ports"
-msgstr ""
+msgstr "Seleccionar todos los puertos"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:491
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:654
 msgid "Select all ports having VLAN %d assigned as tagged (%d)"
 msgstr ""
+"Seleccionar todos los puertos que tengan asignada la VLAN %d como etiquetada "
+"(%d)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:499
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:655
 msgid "Select all ports having VLAN %d assigned as untagged / native (%d)"
 msgstr ""
+"Seleccionar todos los puertos que tengan asignada la VLAN %d como no "
+"etiquetada / nativa (%d)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3150
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3381
@@ -11728,15 +11748,15 @@ msgstr "Seleccionar archivo…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:666
 msgid "Select one or more ports first"
-msgstr ""
+msgstr "Selecciona primero uno o más puertos"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:410
 msgid "Select one or more ports first."
-msgstr ""
+msgstr "Selecciona primero uno o más puertos."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:458
 msgid "Select ports"
-msgstr ""
+msgstr "Seleccionar puertos"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:875
 msgid ""
@@ -11909,20 +11929,20 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:767
 msgid "Set tun/tap TX queue length"
-msgstr "Longitud de la cola de transmisión TUN/TAP"
+msgstr "Configurar la longitud de la cola de transmisión TUN/TAP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:80
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:88
 msgid "Set tun/tap adapter parameters"
-msgstr "Parámetros del adaptador TUN/TAP"
+msgstr "Configurar los parámetros del adaptador TUN/TAP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:719
 msgid "Set tun/tap device MTU"
-msgstr "MTU del dispositivo TUN/TAP"
+msgstr "Configurar la MTU del dispositivo TUN/TAP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:727
 msgid "Set tun/tap device overhead"
-msgstr "Sobrecarga del dispositivo TUN/TAP"
+msgstr "Configurar la sobrecarga del dispositivo TUN/TAP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:689
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:705
@@ -11977,11 +11997,11 @@ msgstr "Adaptar ancho de banda de clientes"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:351
 msgid "Shell cmd to execute after tun device open"
-msgstr "Comando de intérprete a ejecutar tras abrir el dispositivo TUN"
+msgstr "Comando de shell a ejecutar después de abrir el dispositivo TUN"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:367
 msgid "Shell cmd to run after tun device close"
-msgstr "Comando intérprete a ejecutar tras cerrar el dispositivo TUN"
+msgstr "Comando de shell a ejecutar después de cerrar el dispositivo TUN"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:423
 msgid "Shell command to verify X509 name"
@@ -12611,7 +12631,7 @@ msgstr "Sugerido: 128"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1771
 msgid "Supported link speeds: %s"
-msgstr ""
+msgstr "Velocidades de enlace compatibles: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:478
 msgid "Suppress logging"
@@ -12657,7 +12677,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:68
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:137
 msgid "Switch / VLAN Configuration"
-msgstr ""
+msgstr "Configuración del conmutador / VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3064
 #: modules/luci-compat/luasrc/model/network.lua:1426
@@ -12680,7 +12700,7 @@ msgstr "Cambiar a la notación de lista CIDR"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
 msgid "Switch/VLAN config"
-msgstr ""
+msgstr "Configuración del conmutador / VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3203
 msgid "Symbolic link"
@@ -13071,6 +13091,9 @@ msgid ""
 "experimental. Bugs in this view may result in network misconfiguration that "
 "can leave your device unreachable over the network."
 msgstr ""
+"La vista de configuración del conmutador / VLAN es nueva y aún se considera "
+"experimental. Los errores en esta vista pueden provocar una configuración "
+"incorrecta de la red que deje su dispositivo inaccesible a través de la red."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1434
 msgid "The VLAN ID must be unique"
@@ -13119,6 +13142,8 @@ msgid ""
 "The bridge device \"%s\" has a VLAN configuration that this view cannot "
 "represent."
 msgstr ""
+"El dispositivo puente «%s» tiene una configuración de VLAN que esta vista no "
+"puede representar."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:323
 msgid ""
@@ -13446,6 +13471,9 @@ msgid ""
 "one or more selected ports. No change was made; a port cannot have the same "
 "VLAN as both native and tagged."
 msgstr ""
+"El cambio solicitado entra en conflicto con la asignación de VLAN nativa de "
+"uno o más de los puertos seleccionados. No se realizó ningún cambio; un "
+"puerto no puede tener la misma VLAN como nativa y etiquetada a la vez."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:147
 msgid "The restore command failed with code %d"
@@ -14310,7 +14338,7 @@ msgstr "Esquema URI no soportado en %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:50
 msgid "Unsupported VLAN configuration"
-msgstr ""
+msgstr "Configuración de VLAN no compatible"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
@@ -14572,13 +14600,12 @@ msgid ""
 "the requesting host. The optional <em>Lease time</em> can be used to set non-"
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
-"Utilice el botón <em>Añadir</em> para agregar una entrada de asignación "
-"nueva. La <em>Dirección MAC</em> identifica el host, la <em>Dirección IPv4</"
-"em> especifica la dirección fija a utilizar y <em>Nombre de host</em> se "
-"asigna como nombre simbólico a el anfitrión solicitante. El parámetro "
-"opcional <em>Tiempo de asignación</em> se puede utilizar para establecer un "
-"tiempo de arrendamiento no estándar específico del host, p.e., 12 h, 3 días "
-"o infinito."
+"Utilice el botón <em>Añadir</em> para agregar una nueva entrada de "
+"concesión. La <em>dirección MAC</em> identifica al host, la <em>dirección "
+"IPv4</em> especifica la dirección fija que se debe utilizar, y el <em>nombre "
+"de host</em> se asigna como nombre simbólico al host solicitante. El "
+"parámetro opcional <em>tiempo de concesión</em> permite establecer un tiempo "
+"de concesión específico para el host, por ejemplo 12 h, 3 d o infinito."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:228
 msgid "Use these PVIDs"
@@ -14586,11 +14613,11 @@ msgstr "Utilizar estos PVID"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:202
 msgid "Use tun/tap device node"
-msgstr "Nodo de dispositivo TUN/TAP"
+msgstr "Usar nodo de dispositivo TUN/TAP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1464
 msgid "Use username as common name"
-msgstr "Nombre de usuario como nombre común"
+msgstr "Usar el nombre de usuario como «Common Name» (CN)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:173
@@ -14671,15 +14698,15 @@ msgstr "VEPA (agregador de puertos Ethernet virtual)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:544
 msgid "VLAN"
-msgstr ""
+msgstr "VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1016
 msgid "VLAN %d does not exist."
-msgstr ""
+msgstr "La VLAN %d no existe."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:794
 msgid "VLAN %d is already configured."
-msgstr ""
+msgstr "La VLAN %d ya está configurada."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1695
@@ -14699,11 +14726,11 @@ msgstr "ID de VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:226
 msgid "VLAN ID %s is outside the valid range %d–%d."
-msgstr ""
+msgstr "El ID de VLAN %s está fuera del rango válido %d–%d."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:447
 msgid "VLANs"
-msgstr ""
+msgstr "VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:171
 msgid "VLANs on %q"
@@ -14895,8 +14922,8 @@ msgid ""
 "WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
 "and ad-hoc mode) to be installed."
 msgstr ""
-"Para el cifrado WPA se necesita que estén instalados «wpa_supplicant» para "
-"el modo cliente y/o \"hostapd\" para los modos AP y ad-hoc."
+"El cifrado WPA requiere tener instalado «wpa_supplicant» (para el modo "
+"cliente) o «hostapd» (para los modos AP y ad‑hoc)."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:159
 msgid "WPS status"
@@ -15166,10 +15193,13 @@ msgid ""
 "You are about to remove VLAN %d%s. This will also remove the VLAN from every "
 "port that currently has it assigned (tagged or untagged)."
 msgstr ""
+"Está a punto de eliminar la VLAN %d%s. Esto también eliminará la VLAN de "
+"todos los puertos que la tengan asignada actualmente (etiquetada o no "
+"etiquetada)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:73
 msgid "You can enable VLAN filtering on a bridge from the"
-msgstr ""
+msgstr "Puede habilitar el filtrado de VLAN en un puente desde la"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:112
 msgid ""
@@ -15238,6 +15268,8 @@ msgid ""
 "and either correct the unusual configuration or remove the offending VLAN "
 "assignments before returning here."
 msgstr ""
+"y corregir la configuración inusual o eliminar las asignaciones de VLAN "
+"problemáticas antes de volver aquí."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:261
 msgid "and:"
@@ -15558,11 +15590,11 @@ msgstr "l3miss: La tercera capa falla"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:291
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:468
 msgid "label"
-msgstr ""
+msgstr "etiqueta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:553
 msgid "label (optional)"
-msgstr ""
+msgstr "etiqueta (opcional)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid "managed config (M)"
@@ -15690,7 +15722,7 @@ msgstr "paquetes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:75
 msgid "page."
-msgstr ""
+msgstr "página."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
 msgctxt "packets, abbreviated"
@@ -15823,7 +15855,7 @@ msgstr "dispositivo TUN/TAP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:783
 msgid "tun/tap inactivity timeout"
-msgstr "inactividad TUN/TAP vencida"
+msgstr "tiempo de espera por inactividad de TUN/TAP"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:9
 msgid ""
@@ -15881,7 +15913,7 @@ msgstr "desetiquetado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:239
 msgid "up"
-msgstr ""
+msgstr "arriba"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:510
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:72
@@ -16150,7 +16182,7 @@ msgstr "« Volver"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:926
 msgid "… and %d more."
-msgstr ""
+msgstr "… y %d más."
 
 #~ msgid ""
 #~ "CA certificate (PEM encoded; Use instead of system-wide store to verify "
