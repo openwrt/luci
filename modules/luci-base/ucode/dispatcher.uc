@@ -931,6 +931,8 @@ dispatch = function(_http, path) {
 		let resolved = resolve_page(menu, path);
 
 		runtime.env.ctx = resolved.ctx;
+		resolved.ctx.csp_nonce = randomid(16);
+		http.csp_nonce = resolved.ctx.csp_nonce;
 		runtime.env.dispatched = resolved.node;
 		runtime.env.requested ??= resolved.node;
 
