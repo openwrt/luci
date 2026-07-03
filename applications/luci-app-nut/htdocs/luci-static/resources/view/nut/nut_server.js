@@ -111,10 +111,6 @@ return view.extend({
 		o = s.option(form.Value, 'chroot', _('chroot'), _('Run drivers in a chroot(2) environment'));
 		o.optional = true;
 
-		o = s.option(form.Value, 'driverpath', _('Driver Path'), _('Path to drivers (instead of default)'));
-		o.optional = true;
-		o.placeholder = '/lib/lnut';
-
 		o = s.option(form.Value, 'maxstartdelay', _('Maximum Start Delay'), _('Default for UPSes without this field.'));
 		o.optional = true;
 		o.datatype = 'uinteger';
