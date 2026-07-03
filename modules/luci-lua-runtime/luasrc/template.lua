@@ -116,6 +116,8 @@ context.viewns = setmetatable({
 		return table.concat(url, "")
 	elseif key == "token" then
 		return disp.context.authtoken
+	elseif key == "csp_nonce" then
+		return disp.context.csp_nonce
 	elseif key == "theme" then
 		return L.media and fs.basename(L.media) or tostring(L)
 	elseif key == "resource" then
