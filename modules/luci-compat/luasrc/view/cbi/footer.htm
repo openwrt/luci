@@ -11,15 +11,15 @@
 		%><div class="cbi-page-actions"><%
 
 		if display_back then
-			%><input class="btn cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
+			%><input class="btn cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" data-href="<%=pcdata(redirect)%>" /> <%
 		end
 
 		if display_skip then
-			%><input class="btn cbi-button cbi-button-skip" type="button" value="<%:Skip%>" onclick="cbi_submit(this, 'cbi.skip')" /> <%
+			%><input class="btn cbi-button cbi-button-skip" type="button" value="<%:Skip%>" data-cbi-submit="cbi.skip" /> <%
 		end
 
 		if display_apply then
-			%><input class="btn cbi-button cbi-button-apply" type="button" value="<%:Save & Apply%>" onclick="cbi_submit(this, 'cbi.apply')"<%=ifattr(not writable, "disabled")%> /> <%
+			%><input class="btn cbi-button cbi-button-apply" type="button" value="<%:Save & Apply%>" data-cbi-submit="cbi.apply"<%=ifattr(not writable, "disabled")%> /> <%
 		end
 
 		if display_save then
@@ -27,7 +27,7 @@
 		end
 
 		if display_reset then
-			%><input class="btn cbi-button cbi-button-reset" type="button" value="<%:Reset%>" onclick="location.href='<%=REQUEST_URI%>'"<%=ifattr(not writable, "disabled")%> /> <%
+			%><input class="btn cbi-button cbi-button-reset" type="button" value="<%:Reset%>" data-href="<%=REQUEST_URI%>"<%=ifattr(not writable, "disabled")%> /> <%
 		end
 
 		%></div><%
@@ -36,6 +36,6 @@
 
 </form>
 
-<script>cbi_init();</script>
+<script nonce="<%=csp_nonce%>">cbi_init();</script>
 
 <%+footer%>
