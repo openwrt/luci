@@ -41,19 +41,9 @@ return view.extend({
 		s.addremove = true;
 		s.optional = true;
 
-		o = s.option(form.Value, 'runas', _('RunAs User'), _('upsmon drops privileges to this user'));
-		o.placeholder = 'nutmon'
-
 		o = s.option(form.Value, 'minsupplies', _('Minimum required number or power supplies'));
 		o.datatype = 'uinteger'
 		o.placeholder = 1;
-		o.optional = true;
-
-		o = s.option(form.Value, 'shutdowncmd', _('Shutdown command'));
-		o.optional = true;
-		o.placeholder = '/sbin/halt'
-
-		o = s.option(form.Value, 'notifycmd', _('Notify command'));
 		o.optional = true;
 
 		o = s.option(form.Value, 'pollfreq', _('Poll frequency'));

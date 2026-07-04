@@ -1,11 +1,16 @@
 {
 	"admin/services/nut": {
 		"title": "Network UPS Tools",
+		"order": 1,
 		"action": {
-			"type": "firstchild"
+			"type": "firstchild",
+			"recurse": true,
+			"preferred": "nut_server_main"
 		},
 		"depends": {
-			"acl": [ "luci-app-nut" ],
+			"acl": [
+				"luci-app-nut-read"
+			],
 			"fs": [
 				{ "/etc/config/nut_server": "file" },
 				{ "/etc/config/nut_monitor": "file" },
@@ -14,38 +19,95 @@
 		}
 	},
 
-	"admin/services/nut/server": {
-		"title": "NUT Server",
-		"order": 1,
+	"admin/services/nut/nut_server_main": {
+		"title": "NUT server - main",
+		"order": 2,
 		"action": {
 			"type": "view",
 			"path": "nut/nut_server"
 		},
 		"depends": {
+			"acl": [
+				"luci-app-nut-read"
+			],
 			"fs": { "/etc/config/nut_server": "file" }
 		}
 	},
 
-	"admin/services/nut/monitor": {
-		"title": "NUT Monitor",
-		"order": 2,
+	"admin/services/nut/nut_server_admin": {
+		"title": "NUT server - admin",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "nut/nut_server_admin"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-nut-read",
+				"luci-app-nut-admin"
+			],
+			"fs": { "/etc/config/nut_server": "file" }
+		}
+	},
+
+	"admin/services/nut/nut_monitor_main": {
+		"title": "NUT monitor - main",
+		"order": 4,
 		"action": {
 			"type": "view",
 			"path": "nut/nut_monitor"
 		},
 		"depends": {
+			"acl": [
+				"luci-app-nut-read"
+			],
 			"fs": { "/etc/config/nut_monitor": "file" }
 		}
 	},
 
-	"admin/services/nut/cgi": {
-		"title": "NUT CGI",
-		"order": 3,
+	"admin/services/nut/nut_monitor_admin": {
+		"title": "NUT monitor - admin",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "nut/nut_monitor_admin"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-nut-read",
+				"luci-app-nut-admin"
+			],
+			"fs": { "/etc/config/nut_monitor": "file" }
+		}
+	},
+
+	"admin/services/nut/nut_cgi_main": {
+		"title": "NUT CGI - main",
+		"order": 6,
 		"action": {
 			"type": "view",
 			"path": "nut/nut_cgi"
 		},
 		"depends": {
+			"acl": [
+				"luci-app-nut-read"
+			],
+			"fs": { "/etc/config/nut_cgi": "file" }
+		}
+	},
+
+	"admin/services/nut/nut_cgi_admin": {
+		"title": "NUT CGI - admin",
+		"order": 7,
+		"action": {
+			"type": "view",
+			"path": "nut/nut_cgi_admin"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-nut-read",
+				"luci-app-nut-admin"
+			],
 			"fs": { "/etc/config/nut_cgi": "file" }
 		}
 	}
