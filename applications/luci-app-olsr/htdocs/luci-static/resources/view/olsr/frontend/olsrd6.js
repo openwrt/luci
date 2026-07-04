@@ -462,6 +462,7 @@ return view.extend({
 		ifs.template = 'cbi/tblsection';
 
 		ifs.handleAdd = function (ev) {
+			uci.add('olsrd6', 'Interface');
 			uci
 				.save()
 				.then(function () {
