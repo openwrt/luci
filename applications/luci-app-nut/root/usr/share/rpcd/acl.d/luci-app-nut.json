@@ -4,7 +4,6 @@
 		"read": {
 			"file": {
 				"/etc/ssl/certs": [ "read" ],
-				"/tmp/*": [ "list" ],
 				"/lib/nut/": [ "list" ],
 				"/usr/libexec/nut/": [ "list" ],
 				"/usr/sbin/upsd": [ "read" ],
@@ -16,7 +15,10 @@
 			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
 		},
 		"write": {
-			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
+			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ],
+			"file": {
+				"/etc/luci-uploads/*": ["write"]
+			}
 		}
 	}
 }

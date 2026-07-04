@@ -27,7 +27,7 @@ return view.extend({
 			L.resolveDefault(fs.exec_direct('/usr/bin/ldd', [ups_daemon]), []).catch(function(err) {
 				throw new Error(_('Unable to run ldd: %s').format(err.message));
 			}).then(function(stdout) {
-				return stdout.includes('libssl.so');
+				return (stdout.includes('libnss3.so') || stdout.includes('libssl.so'));
 			}),
 			resolveDriverList(driver_path),
 			resolveDriverList(old_driver_path),
@@ -108,7 +108,8 @@ return view.extend({
 		o.placeholder = 24;
 
 		if (have_ssl_support) {
-			o = s.option(form.Value, 'certfile', _('Certificate file (SSL)'));
+			o = s.option(form.FileUpload, 'certfile', _('Certificate file (SSL)'));
+			o.rmempty = true;
 			o.optional = true;
 		}
 

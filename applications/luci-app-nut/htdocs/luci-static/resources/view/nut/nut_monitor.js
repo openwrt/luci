@@ -56,7 +56,7 @@ return view.extend({
 			L.resolveDefault(fs.exec_direct('/usr/bin/ldd', [upsmon_tool]), []).catch(function(err) {
 				throw new Error(_('Unable to run ldd: %s').format(err.message));
 			}).then(function(stdout) {
-				return stdout.includes('libssl.so');
+				return (stdout.includes('libnss3.so') || stdout.includes('libssl.so'));
 			}),
 		])
 	},
