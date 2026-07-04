@@ -2,50 +2,6 @@
 'require form';
 'require view';
 
-function ESIFlags(o) {
-	o.value('EXEC', _('Execute notify command'));
-	o.value('SYSLOG', _('Write to syslog'));
-	o.value('SYSLOG+EXEC', _('Write to syslog and execute notify command'))
-	o.value('IGNORE', _('Ignore'));
-	o.default = 'SYSLOG';
-	o.optional = true;
-	return o;
-}
-
-function MonitorUserOptions(s) {
-		let o
-
-		s.optional = true;
-		s.addremove = true;
-		s.anonymous = true;
-
-		o = s.option(form.Value, 'upsname', _('Name of UPS'), _('As configured by NUT'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'hostname', _('Hostname or address of UPS'));
-		o.optional = false;
-		o.datatype = 'or(host,ipaddr)';
-
-		o = s.option(form.Value, 'port', _('Port'));
-		o.optional = true;
-		o.placeholder = 3493;
-		o.datatype = 'port';
-
-		o = s.option(form.Value, 'powervalue', _('Power value'));
-		o.optional = false;
-		o.datatype = 'uinteger';
-		o.default = 1;
-
-		o = s.option(form.Value, 'username', _('Username'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'password', _('Password'));
-		o.optional = false;
-		o.password = true;
-
-		return s;
-}
-
 return view.extend({
 	render: function() {
 		let m, s, o;
@@ -55,7 +11,7 @@ return view.extend({
 
 		s = m.section(form.NamedSection, 'upsmon', 'upsmon', _('Global Settings'));
 		s.addremove = true;
-		s.optional = true;
+		s.optional = false;
 
 		o = s.option(form.Value, 'minsupplies', _('Minimum required number or power supplies'));
 		o.datatype = 'uinteger'
@@ -80,32 +36,6 @@ return view.extend({
 		o.datatype = 'uinteger'
 		o.optional = true;
 		o.placeholder = 15;
-
-		s = m.section(form.TypedSection, 'notifications', _('Notifications settings'));
-		s.optional = true;
-		s.addremove = true;
-		s.anonymous = false;
-
-		o = s.option(form.Value, 'message', _('Custom notification message for message type'));
-		o.optional = true
-
-		o = s.option(form.ListValue, 'flag', _('Notification flags'));
-		ESIFlags(o)
-
-		s = m.section(form.TypedSection, 'monitor', _('UPS Monitor User Settings'));
-		MonitorUserOptions(s);
-
-		o = s.option(form.ListValue, 'type', _('User type (Primary/Auxiliary)'));
-		o.optional = false;
-		o.value('primary', 'Primary');
-		o.value('secondary', 'Auxiliary');
-		o.default = 'secondary'
-
-		s = m.section(form.TypedSection, 'master', _('UPS Primary (Deprecated)'));
-		MonitorUserOptions(s);
-
-		s = m.section(form.TypedSection, 'slave', _('UPS Auxiliary (Deprecated)'));
-		MonitorUserOptions(s);
 
 		return m.render();
 	}
