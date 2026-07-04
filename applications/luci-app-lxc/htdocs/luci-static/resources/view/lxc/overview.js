@@ -218,7 +218,7 @@ return L.view.extend({
 
 			switch(option) {
 				case 'configure':
-					if (next_div && next_div.dataset['action'] !== null) {
+					if (next_div && next_div.dataset['action'] !== undefined) {
 						div1.parentNode.removeChild(next_div);
 					}
 
