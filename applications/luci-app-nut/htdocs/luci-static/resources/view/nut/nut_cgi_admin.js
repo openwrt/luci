@@ -10,7 +10,7 @@ return view.extend({
 	render: function() {
 		let m, s, o;
 
-		m = new form.Map('nut_cgi', _('NUT CGI'),
+		m = new form.Map('nut_cgi_root', _('NUT CGI'),
 			_('Network UPS Tools CGI Configuration') + '<br />' +
 			'%s'.format('<a href="/nut">%s</a>'.format(_('Go to NUT CGI'))));
 

@@ -42,34 +42,6 @@ return view.extend({
 		m = new form.Map('nut_server', _('NUT Server'),
 			_('Network UPS Tools Server Configuration'));
 
-		// User settings
-		s = m.section(form.TypedSection, 'user', _('NUT Users'));
-		s.addremove = true;
-		s.anonymous = true;
-
-		o = s.option(form.Value, 'username', _('Username'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'password', _('Password'));
-		o.password = true;
-		o.optional = false;
-
-		o = s.option(form.MultiValue, 'actions', _('Allowed actions'));
-		// o.widget = 'select'
-		o.value('set', _('Set variables'));
-		o.value('fsd', _('Forced Shutdown'));
-		o.optional = true;
-
-		o = s.option(form.DynamicList, 'instcmd', _('Instant commands'), _('Use %s to see full list of commands your UPS supports (requires %s package)'.format('<code>upscmd -l</code>', '<code>upscmd</code>')));
-		o.optional = true;
-
-		o = s.option(form.ListValue, 'upsmon', _('Role'));
-		o.value('secondary', _('Auxiliary'));
-		o.value('primary', _('Primary'));
-		o.value('slave', _('Auxiliary (Deprecated)'));
-		o.value('master', _('Primary (Deprecated)'));
-		o.optional = false;
-
 		// Listen settings
 		s = m.section(form.TypedSection, 'listen_address', _('Addresses on which to listen'));
 		s.addremove = true;
@@ -100,8 +72,9 @@ return view.extend({
 		o.placeholder = 24;
 
 		if (have_ssl_support) {
-			o = s.option(form.Value, 'certfile', _('Certificate file (SSL)'));
-			o.optional = true;
+			o = s.option(form.FileUpload, 'certfile', _('Certificate file (SSL)'));
+			o.rmempty = true;
+			o.optional = false;
 		}
 
 		// Drivers global settings
