@@ -33,15 +33,6 @@ return view.extend({
 		o = s.option(form.Value, 'displayname', _('Display name'));
 		o.optional = false;
 
-		s = m.section(form.TypedSection, 'upsset', _('Control UPS via CGI'));
-		s.addremove = false;
-		s.anonymous = true;
-		s.optional = false;
-
-		o = s.option(form.Flag, 'enable', _('Enable'));
-		o.optional = false;
-		o.default = false;
-
 		return m.render();
 	}
 });

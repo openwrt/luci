@@ -1,21 +1,18 @@
 {
-	"luci-app-nut": {
-		"description": "Grant UCI access for luci-app-nut",
+	"luci-app-nut-read": {
+		"description": "Grant limited UCI read access for luci-app-nut",
 		"read": {
 			"file": {
-				"/etc/ssl/certs": [ "read" ],
-				"/tmp/*": [ "list" ],
-				"/lib/lnut": [ "read" ],
 				"/lib/nut/": [ "list" ],
 				"/usr/libexec/nut/": [ "list" ],
-				"/usr/sbin/upsd": [ "read" ],
-				"/usr/sbin/upsmon": [ "read" ],
-				"/var/run/nut": [ "read" ],
 				"/usr/bin/ldd /usr/sbin/upsmon": ["exec"],
 				"/usr/bin/ldd /usr/sbin/upsd": ["exec"]
 			},
 			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
-		},
+		}
+	},
+	"luci-app-nut-admin": {
+		"description": "Grant admin UCI access for luci-app-nut",
 		"write": {
 			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
 		}

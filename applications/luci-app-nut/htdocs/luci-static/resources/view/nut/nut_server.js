@@ -94,14 +94,6 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = 15;
 
-		o = s.option(form.Value, 'runas', _('RunAs User'), _('Drop privileges to this user'));
-		o.optional = true;
-		o.placeholder = 'nut'
-
-		o = s.option(form.Value, 'statepath', _('Path to state file'));
-		o.optional = true;
-		o.placeholder = '/var/run/nut'
-
 		o = s.option(form.Value, 'maxconn', _('Maximum connections'));
 		o.optional = true;
 		o.datatype = 'uinteger'
@@ -145,10 +137,6 @@ return view.extend({
 		o = s.option(form.Flag, 'synchronous', _('Synchronous Communication'), _('Driver waits for data to be consumed by upsd before publishing more.'));
 		o.optional = true;
 		o.default = false;
-
-		o = s.option(form.Value, 'user', _('RunAs User'), _('User as which to execute driver; requires device file accessed by driver to be read-write for that user.'));
-		o.optional = true;
-		o.placeholder = 'nut';
 
 		// Drivers
 		s = m.section(form.TypedSection, 'driver', _('Driver Configuration'),
