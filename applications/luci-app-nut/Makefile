@@ -12,7 +12,7 @@ PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca> \
 		Paul Donald <newtwen+github@gmail.com>
 
-EXTRA_DEPENDS:=nut (>= 2.8.4-3)
+LUCI_EXTRA_DEPENDS:=nut (>=2.8.4-r3)
 
 include ../../luci.mk
 

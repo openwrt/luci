@@ -5,7 +5,6 @@
 
 const driver_path = '/usr/libexec/nut/';
 const old_driver_path = '/lib/nut/';
-const ups_daemon = '/usr/sbin/upsd';
 
 function resolveDriverList(path) {
 	return Promise.resolve(L.resolveDefault(fs.list(path), []).then(function(entries) {
@@ -24,11 +23,6 @@ function resolveDriverList(path) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/usr/bin/ldd', [ups_daemon]), []).catch(function(err) {
-				throw new Error(_('Unable to run ldd: %s').format(err.message));
-			}).then(function(stdout) {
-				return stdout.includes('libssl.so');
-			}),
 			resolveDriverList(driver_path),
 			resolveDriverList(old_driver_path),
 		])
@@ -36,8 +30,8 @@ return view.extend({
 
 	render: function(loaded_promises) {
 		let m, s, o;
-		const have_ssl_support = loaded_promises[0];
-		const driver_list = (loaded_promises[1].length > 0) ? loaded_promises[1] : loaded_promises[2];
+
+		const driver_list = (loaded_promises[0].length > 0) ? loaded_promises[0] : loaded_promises[1];
 
 		m = new form.Map('nut_server', _('NUT Server'),
 			_('Network UPS Tools Server Configuration'));
@@ -98,11 +92,6 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'uinteger'
 		o.placeholder = 24;
-
-		if (have_ssl_support) {
-			o = s.option(form.Value, 'certfile', _('Certificate file (SSL)'));
-			o.optional = true;
-		}
 
 		// Drivers global settings
 		s = m.section(form.NamedSection, 'driver_global', 'driver_global', _('Driver Global Settings'));
