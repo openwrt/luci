@@ -160,14 +160,27 @@ return view.extend({
 				return (e.type == 'sysupgrade' || e.type == 'combined');
 			}
 		}
-		return images.filter(filesystemFilter).filter(typeFilter)[0];
+		let candidates = images.filter(filesystemFilter);
+		let image = candidates.filter(typeFilter)[0];
+
+		if (!image) {
+			/* Some devices ship a single image used for both factory
+			 * install and sysupgrade under a device specific type, e.g.
+			 * 'trx' on bcm53xx. Like owut, fall back to the remaining
+			 * non-factory type if it is unambiguous. */
+			let remaining = candidates.filter((e) => !e.type.includes('factory'));
+			if (remaining.length && remaining.every((e) => e.type == remaining[0].type))
+				image = remaining[0];
+		}
+
+		return image;
 	},
 
 	handle200: function (response, content, data, firmware) {
 		response = response.json();
 		let image = this.selectImage(response.images, data, firmware);
 
-		if (image.name != undefined) {
+		if (image) {
 			this.sha256_unsigned = image.sha256_unsigned;
 			let sysupgrade_url = `${data.url}/store/${response.bin_dir}/${image.name}`;
 
@@ -246,6 +259,18 @@ return view.extend({
 			if (data.rebuilder) {
 				this.handleRebuilder(content, data, firmware);
 			}
+		} else {
+			ui.showModal(_('No sysupgrade image found'), [
+				E('p', _('The image builder did not return a usable sysupgrade image for this device (image types: %s).').format(
+					response.images.map((i) => i.type).join(', '))),
+				E('p', [
+					_('Please report this in'), ' ',
+					support_link, '.',
+				]),
+				E('div', { class: 'right' }, [
+					E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+				]),
+			]);
 		}
 	},
 
@@ -395,7 +420,9 @@ return view.extend({
 							response = response.json();
 							let view = document.getElementById(server);
 							let image = this.selectImage(response.images, data, firmware);
-							if (image.sha256_unsigned == this.sha256_unsigned) {
+							if (!image) {
+								view.innerText = '⚠️ %s'.format(server);
+							} else if (image.sha256_unsigned == this.sha256_unsigned) {
 								view.innerText = '✅ %s'.format(server);
 							} else {
 								view.innerHTML = `⚠️ ${server} (<a href="${server}/store/${
