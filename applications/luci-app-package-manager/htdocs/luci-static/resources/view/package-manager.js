@@ -523,7 +523,7 @@ function versionSatisfied(ver, ref, vop)
 	return false;
 }
 
-function pkgStatus(pkg, vop, ver, info)
+function pkgStatus(pkg, vop, ver, info, count)
 {
 	info.errors = info.errors || [];
 	info.install = info.install || [];
@@ -559,7 +559,8 @@ function pkgStatus(pkg, vop, ver, info)
 	}
 	else if (!pkg.missing) {
 		if (!vop || versionSatisfied(pkg.version, ver, vop)) {
-			info.install.push(pkg);
+			if (count !== false)
+				info.install.push(pkg);
 			return E('span', { 'class': 'label' }, _('Not installed'));
 		}
 
@@ -586,6 +587,42 @@ function renderDependencyItem(dep, info, flat)
 	const ver = dep.version ? dep.version[1] : null;
 	const depends = [];
 
+	// A dependency with several providers (alternatives) is satisfied by any
+	// single one of them, so apk only ever installs one. Mirror the apk
+	// solver's provider selection - an already installed one, otherwise the
+	// available one with the highest provider-priority, otherwise the first
+	// available one - and count only that towards the size estimate and
+	// subdependencies instead of every alternative.
+	let effective = -1;
+
+	for (let i = 0; dep.pkgs && i < dep.pkgs.length; i++) {
+		if (isPkgInstalled(packages.installed.pkgs[dep.pkgs[i]])) {
+			effective = i;
+			break;
+		}
+	}
+
+	const satisfied = effective >= 0;
+
+	if (!satisfied && dep.pkgs && dep.pkgs.length) {
+		let prio = null;
+
+		for (let i = 0; i < dep.pkgs.length; i++) {
+			const p = packages.available.pkgs[dep.pkgs[i]];
+			if (!p)
+				continue;
+
+			const pprio = Number(p['provider-priority']) || 0;
+			if (prio === null || pprio > prio) {
+				effective = i;
+				prio = pprio;
+			}
+		}
+
+		if (effective < 0)
+			effective = 0;
+	}
+
 	for (let i = 0; dep.pkgs && i < dep.pkgs.length; i++) {
 		const pkg = packages.installed.pkgs[dep.pkgs[i]] ||
 		          packages.available.pkgs[dep.pkgs[i]] ||
@@ -602,12 +639,13 @@ function renderDependencyItem(dep, info, flat)
 			text += ' (~%1024mB)'.format(pkg.size);
 
 		li.appendChild(E('span', { 'data-tooltip': pkg.description },
-			[ text, ' ', pkgStatus(pkg, vop, ver, info) ]));
+			[ text, ' ', pkgStatus(pkg, vop, ver, info, !satisfied && i === effective) ]));
 
-		(pkg.depends || []).forEach(function(d) {
-			if (depends.indexOf(d) === -1)
-				depends.push(d);
-		});
+		if (i === effective)
+			(pkg.depends || []).forEach(function(d) {
+				if (depends.indexOf(d) === -1)
+					depends.push(d);
+			});
 	}
 
 	if (!li.firstChild)
