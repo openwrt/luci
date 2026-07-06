@@ -250,7 +250,7 @@ return view.extend({
 
 		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
 			_('Version of IKE for negotiation'));
-		o.value('ikev1', 'IKEv1 (%s)', _('deprecated'));
+		o.value('ikev1', 'IKEv1 (%s)'.format(_('deprecated')));
 		o.value('ikev2', 'IKEv2');
 		o.value('ike', 'IKE (%s, %s)'.format(_('both'), _('deprecated')));
 		o.default = 'ikev2';
