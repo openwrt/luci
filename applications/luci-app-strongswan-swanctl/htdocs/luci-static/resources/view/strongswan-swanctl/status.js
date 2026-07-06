@@ -93,7 +93,7 @@ function renderDetailsSection(connection) {
 	]));
 }
 
-function handleChildDetails(childName, child, childSa) {
+function handleChildDetails(connection, childName, child, childSa) {
 	const modal = buildSection(_('Details'), buildKeyValueTable([
 		[_('Name'), childName],
 		[_('Mode'), child.mode],
@@ -114,12 +114,12 @@ function handleChildDetails(childName, child, childSa) {
 	ui.showModal(_('Child Details'), [modal, E('div', { 'class': 'right' }, [
 		E('button', {
 			'class': 'btn cbi-button',
-			'click': ui.hideModal
+			'click': ui.createHandlerFn(null, handleConnectionDetails, connection)
 		}, [_('Dismiss')])
 	])], 'cbi-modal');
 }
 
-function renderChildTable(children) {
+function renderChildTable(connection) {
 	const tableHeaders = [
 		[_('Name')],
 		[_('State')],
@@ -137,7 +137,7 @@ function renderChildTable(children) {
 		))
 	];
 
-	Object.entries(children).forEach(([childName, child]) => {
+	Object.entries(connection.children).forEach(([childName, child]) => {
 		const childSa = child.childSa;
 		const state = childSa ? childSa.state : _('Inactive');
 		const isDown = !childSa;
@@ -154,7 +154,7 @@ function renderChildTable(children) {
 				E('button', {
 					'title': _('Details'),
 					'class': 'btn cbi-button cbi-button-primary',
-					'click': ui.createHandlerFn(null, handleChildDetails, childName, child, childSa)
+					'click': ui.createHandlerFn(null, handleChildDetails, connection, childName, child, childSa)
 				}, [_('Details')])
 			],
 			[
@@ -206,7 +206,7 @@ function filterConnectionAuths(connection, prefix) {
 
 function handleConnectionDetails(connection) {
 	const detailSection = renderDetailsSection(connection);
-	const childTable = renderChildTable(connection.children);
+	const childTable = renderChildTable(connection);
 	const localAuths = filterConnectionAuths(connection, 'local-');
 	const remoteAuths = filterConnectionAuths(connection, 'remote-');
 	const localAuthTable = renderAuthTable(localAuths);
