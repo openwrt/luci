@@ -4,12 +4,10 @@
 		"read": {
 			"file": {
 				"/usr/sbin/swanmon version": [ "exec" ],
-				"/usr/sbin/swanmon stats": [ "exec" ],
-				"/usr/sbin/swanmon list-conns": [ "exec" ],
-				"/usr/sbin/swanmon list-sas": [ "exec" ]
+				"/usr/sbin/swanmon stats": [ "exec" ]
 			},
 			"ubus": {
-				"luci.swanctl": [ "list-algs" ]
+				"luci.swanctl": [ "list-algs", "map-conns" ]
 			},
 			"uci": [ "ipsec" ]
 		},

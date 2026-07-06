@@ -371,6 +371,102 @@ const methods = {
 
 			return result;
 		}
+	},
+	'map-conns': {
+		call: function() {
+			const result = {
+				error: null,
+				data: null
+			};
+			const conns_cmd = '/usr/sbin/swanmon list-conns';
+			const sas_cmd = '/usr/sbin/swanmon list-sas';
+			let conns_output;
+			let sas_output;
+
+			try {
+				conns_output = json(popen(conns_cmd)?.read?.('all'));
+			}
+			catch (e) {
+				result.error = e.message;
+				return result;
+			}
+			if (length(conns_output.errors) > 0)
+				result.error = conns_output.errors[0].message;
+
+			try {
+				sas_output = json(popen(sas_cmd)?.read?.('all'));
+			}
+			catch (e) {
+				result.error = e.message;
+				return result;
+			}
+			if (length(sas_output.errors) > 0)
+				result.error = sas_output.errors[0].message;
+
+			if (conns_output.data && sas_output.data) {
+				const saMap = {};
+
+				for (let saObject in sas_output.data) {
+					const saName = keys(saObject)[0];
+					saMap[saName] = saObject[saName];
+				}
+
+				result.data = map(conns_output.data, connObj => {
+					const connName = keys(connObj)[0];
+					const conn = connObj[connName];
+
+					/* set name as property of connection */
+					conn.name = connName;
+
+					/* connection name and SA name are equal -> match using name */
+					if (exists(saMap, connName)) {
+						const sa = saMap[connName];
+						const childSas = sa["child-sas"];
+						const childSaMap = {};
+
+						/* set SA as property of connection */
+						conn.sa = sa;
+
+						for (let _, childSa in childSas)
+							childSaMap[childSa.name] = childSa;
+
+						for (let connChildName, child in conn.children) {
+							/* connection child name and SA child name are equal -> match using name */
+							if (exists(childSaMap, connChildName)) {
+								/* set SA child as property of connection child */
+								child.childSa = childSaMap[connChildName];
+							}
+						}
+					}
+
+					return conn;
+				});
+			}
+
+			/*
+			 * Successful response format:
+			 *	{
+			 *		"error": null,
+			 *		"data": [{
+			 *			"name": "remote_1",
+			 *			... // data from swanctl --list-conns
+			 *			"sa": {
+			 *				... // data from swanctl --list-sas
+			 *			},
+			 *			"children": {
+			 *				"remote_child_1": {
+			 *					... // child data from swanctl --list-conns
+			 *					"childSa": {
+			 *						"name": "remote_child_1",
+			 *						... // child data from swanctl --list-sas
+			 *					}
+			 *				}
+			 *			}
+			 *		}]
+			 *	}
+			 */
+			return result;
+		}
 	}
 };
 

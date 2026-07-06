@@ -3,7 +3,14 @@
 'require dom';
 'require poll';
 'require fs';
+'require rpc';
 'require ui';
+
+const callMapConns = rpc.declare({
+	object: 'luci.swanctl',
+	method: 'map-conns',
+	expect: { }
+});
 
 function formatTime(seconds, selectCount) {
 	const days = Math.floor(seconds / (60 * 60 * 24));
@@ -48,36 +55,6 @@ function buildKeyValueTable(kvPairs) {
 	return buildTable(rows);
 }
 
-function mapConnectionSas(conns, sas) {
-	/* map connections to SAs and connection children to SA children */
-	const connMap = new Map();
-	const childConnMap = new Map();
-	conns.forEach(function (connObject) {
-		const [connName, conn] = Object.entries(connObject)[0];
-		connMap.set(connName, conn);
-		Object.entries(conn.children).forEach(function ([childName, child]) {
-			childConnMap.set(childName, child);
-		});
-	});
-
-	sas.forEach(function (saObject) {
-		const [saName, sa] = Object.entries(saObject)[0];
-		const connection = connMap.get(saName);
-		if (connection) {
-			connection.childSa = sa;
-		}
-
-		Object.entries(sa['child-sas']).forEach(function ([childSaName, childSa]) {
-			const childConnection = childConnMap.get(childSaName);
-			if (childConnection) {
-				childConnection.childSa = childSa;
-			}
-		});
-	});
-
-	return conns;
-}
-
 function swanctlCommand(parameters) {
 	return fs.exec('/usr/sbin/swanctl', parameters)
 		.catch(e => ui.addNotification(null, E('p', e.message)));
@@ -99,11 +76,11 @@ function handleChildDown(childName) {
 	return swanctlCommand(['--terminate', '--child', childName]);
 }
 
-function renderDetailsSection(connection, connectionName) {
+function renderDetailsSection(connection) {
 	const sa = connection.sa;
 
 	return buildSection(_('Details'), buildKeyValueTable([
-		[_('Name'), connectionName],
+		[_('Name'), connection.name],
 		[_('Unique ID'), sa ? sa.uniqueid : ''],
 		[_('Local Addresses'), connection.local_addrs.join(', ')],
 		[_('Remote Addresses'), connection.remote_addrs.join(', ')],
@@ -161,7 +138,7 @@ function renderChildTable(children) {
 	];
 
 	Object.entries(children).forEach(([childName, child]) => {
-		const childSa = child.ChildSa;
+		const childSa = child.childSa;
 		const state = childSa ? childSa.state : _('Inactive');
 		const isDown = !childSa;
 
@@ -227,8 +204,8 @@ function filterConnectionAuths(connection, prefix) {
 	return auths.map(([key, value]) => value);
 }
 
-function handleConnectionDetails(connection, connectionName) {
-	const detailSection = renderDetailsSection(connection, connectionName);
+function handleConnectionDetails(connection) {
+	const detailSection = renderDetailsSection(connection);
 	const childTable = renderChildTable(connection.children);
 	const localAuths = filterConnectionAuths(connection, 'local-');
 	const remoteAuths = filterConnectionAuths(connection, 'remote-');
@@ -255,7 +232,7 @@ function handleConnectionDetails(connection, connectionName) {
 	])], 'cbi-modal');
 }
 
-function collectErrorMessages(results) {
+function collectSwanmonErrorMessages(results) {
 	const errorMessages = results.reduce(function (messages, result) {
 		return messages.concat(result.errors.map(function (error) {
 			return error.message;
@@ -271,8 +248,7 @@ return view.extend({
 		return Promise.all([
 			fs.exec_direct('/usr/sbin/swanmon', ['version'], 'json'),
 			fs.exec_direct('/usr/sbin/swanmon', ['stats'], 'json'),
-			fs.exec_direct('/usr/sbin/swanmon', ['list-conns'], 'json'),
-			fs.exec_direct('/usr/sbin/swanmon', ['list-sas'], 'json')
+			callMapConns()
 		]);
 	},
 
@@ -285,10 +261,14 @@ return view.extend({
 	},
 
 	renderContent(results) {
+		const [versionResult, statsResult, connectionResult] = results;
 		const node = E('div', [E('div')]);
 		const firstNode = node.firstElementChild;
 
-		const errorMessages = collectErrorMessages(results);
+		const errorMessages = collectSwanmonErrorMessages([versionResult, statsResult]);
+		if (connectionResult.error)
+			errorMessages.push(connectionResult.error);
+
 		if (errorMessages.length > 0) {
 			const messageEls = errorMessages.map(function (message) {
 				return E('li', message);
@@ -300,7 +280,7 @@ return view.extend({
 			return node;
 		}
 
-		const [version, stats, conns, sas] = results.map(function (r) {
+		const [version, stats, connections] = results.map(function (r) {
 			return r.data;
 		});
 
@@ -314,7 +294,6 @@ return view.extend({
 		]));
 		firstNode.appendChild(overviewSection);
 
-		const connections = mapConnectionSas(conns, sas);
 		const connectionTableRows = [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Name')),
@@ -323,31 +302,30 @@ return view.extend({
 				E('th', { 'class': 'th' }) /* up/down button */
 			])
 		];
-		connections.forEach(function (connectionObject) {
-			const [connectionName, connection] = Object.entries(connectionObject)[0];
+		connections.forEach(function (connection) {
 			const state = connection.sa ? connection.sa.state : _('Inactive');
 			const isDown = !connection.sa;
 
 			connectionTableRows.push(E('tr', { 'class': 'tr' }, [
-				E('td', { 'class': 'td' }, [connectionName]),
+				E('td', { 'class': 'td' }, [connection.name]),
 				E('td', { 'class': 'td' }, [state]),
 				E('td', { 'class': 'td', 'width': '20%' }, [E('button', {
 					'title': _('Details'),
 					'class': 'btn cbi-button cbi-button-primary',
-					'click': ui.createHandlerFn(null, handleConnectionDetails, connection, connectionName)
+					'click': ui.createHandlerFn(null, handleConnectionDetails, connection)
 				}, [_('Details')])]),
 				E('td', { 'class': 'td', 'width': '25%' }, [
 					E('button', {
 						'title': _('Start'),
 						'class': 'btn cbi-button cbi-button-positive',
 						...(isDown ? {} : { 'disabled': 'disabled' }),
-						'click': ui.createHandlerFn(null, handleConnectionUp, connectionName)
+						'click': ui.createHandlerFn(null, handleConnectionUp, connection.name)
 					}, [_('Start')]),
 					E('button', {
 						'title': _('Stop'),
 						'class': 'btn cbi-button cbi-button-negative',
 						...(isDown ? { 'disabled': 'disabled' } : {}),
-						'click': ui.createHandlerFn(null, handleConnectionDown, connectionName)
+						'click': ui.createHandlerFn(null, handleConnectionDown, connection.name)
 					}, [_('Stop')])
 				])
 			]));
