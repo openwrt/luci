@@ -748,10 +748,13 @@ return network.registerProtocol('wireguard', {
 						const dns = [];
 
 						if (lnet) {
+							const lanIp6 = lnet.getIP6Addr();
+							if (lanIp6)
+								dns.push(lanIp6.split('/')[0]);
+
 							const lanIp = lnet.getIPAddr();
-							if (lanIp) {
-								dns.unshift(lanIp)
-							}
+							if (lanIp)
+								dns.unshift(lanIp);
 						}
 
 						let qrm, qrs, qro;
