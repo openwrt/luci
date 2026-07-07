@@ -723,6 +723,10 @@ return network.registerProtocol('wireguard', {
 						if (next && !next.error) {
 							if (next.ipv4) eips.push(next.ipv4);
 							if (next.ipv6) eips.push(next.ipv6);
+							// Write the allocated addresses back as allowed_ips so the
+							// server-side peer entry is complete without a manual edit.
+							uci.set('network', section_id, 'allowed_ips', eips);
+							return parent.save(null, true);
 						}
 					}).then(function() {
 						const hostnames = [];
