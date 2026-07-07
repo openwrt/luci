@@ -4,7 +4,7 @@
 'use strict';
 
 import { cursor } from 'uci';
-import { popen } from 'fs';
+import { popen, opendir } from 'fs';
 
 
 function shellquote(s) {
@@ -54,6 +54,93 @@ const methods = {
 			const pub = command(`echo ${shellquote(priv)} | wg pubkey 2>/dev/null`);
 
 			return { keys: { priv, pub } };
+		}
+	},
+
+	getNextPeerAddress: {
+		args: { interface: 'interface' },
+		call: function(req) {
+			const ifname = req.args?.interface ?? 'wg0';
+			const uci = cursor();
+
+			uci.load('network');
+
+			// Derive subnet prefixes from the server interface's own addresses.
+			//
+			// IPv4: "10.0.0.1/24" → ipv4_prefix = "10.0.0"
+			//
+			// IPv6: "fd11:5ee:bad:c0de::ac7:9301/64"
+			//   The last 16-bit group encodes a high byte shared by all client
+			//   addresses plus the host octet.  We record the group base (high byte
+			//   shifted left) so we can reconstruct e.g. "930d" for octet 13.
+			//   ipv6_prefix    = "fd11:5ee:bad:c0de::ac7:"
+			//   ipv6_group_base = 0x9300
+			let ipv4_prefix = null;
+			let ipv6_prefix = null;
+			let ipv6_group_base = 0;
+
+			for (let addr in (uci.get('network', ifname, 'addresses') ?? [])) {
+				const bare = split(addr, '/')[0];
+
+				if (index(bare, ':') < 0) {
+					if (!ipv4_prefix) {
+						const parts = split(bare, '.');
+						if (length(parts) == 4)
+							ipv4_prefix = parts[0] + '.' + parts[1] + '.' + parts[2];
+					}
+				} else {
+					if (!ipv6_prefix) {
+						const last_colon = rindex(bare, ':');
+						if (last_colon >= 0) {
+							ipv6_prefix = substr(bare, 0, last_colon + 1);
+							ipv6_group_base = +('0x' + substr(bare, last_colon + 1)) & 0xff00;
+						}
+					}
+				}
+			}
+
+			if (!ipv4_prefix && !ipv6_prefix)
+				return { error: 'No server addresses configured on interface' };
+
+			// Collect the host octets already in use across all UCI peers.
+			const used = {};
+
+			uci.foreach('network', 'wireguard_' + ifname, (peer) => {
+				for (let cidr in (peer.allowed_ips ?? [])) {
+					const bare = split(cidr, '/')[0];
+
+					if (ipv4_prefix && index(bare, ':') < 0) {
+						const parts = split(bare, '.');
+						if (length(parts) == 4 &&
+						    parts[0] + '.' + parts[1] + '.' + parts[2] == ipv4_prefix)
+							used[+parts[3]] = true;
+
+					} else if (ipv6_prefix && index(bare, ':') >= 0) {
+						if (substr(bare, 0, length(ipv6_prefix)) == ipv6_prefix) {
+							const last_group = +('0x' + substr(bare, length(ipv6_prefix)));
+							used[last_group & 0xff] = true;
+						}
+					}
+				}
+			});
+
+			// Find the lowest free host value >= 2 (1 is reserved for the server).
+			let octet = 2;
+			while (used[octet] && octet < 255)
+				octet++;
+
+			if (octet >= 255)
+				return { error: 'No free addresses in pool' };
+
+			const result = { octet };
+
+			if (ipv4_prefix)
+				result.ipv4 = ipv4_prefix + '.' + octet + '/32';
+
+			if (ipv6_prefix)
+				result.ipv6 = ipv6_prefix + sprintf('%x', ipv6_group_base | octet) + '/128';
+
+			return result;
 		}
 	},
 
