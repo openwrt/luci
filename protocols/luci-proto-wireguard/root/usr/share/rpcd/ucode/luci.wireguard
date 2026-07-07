@@ -58,7 +58,7 @@ const methods = {
 	},
 
 	getNextPeerAddress: {
-		args: { interface: 'interface' },
+		args: { interface: 'interface', reserved: [] },
 		call: function(req) {
 			const ifname = req.args?.interface ?? 'wg0';
 			const uci = cursor();
@@ -123,6 +123,10 @@ const methods = {
 					}
 				}
 			});
+
+			// Also mark octets the client reserved this session but hasn't saved yet.
+			for (let o in (req.args?.reserved ?? []))
+				used[+o] = true;
 
 			// Find the lowest free host value >= 2 (1 is reserved for the server).
 			let octet = 2;
