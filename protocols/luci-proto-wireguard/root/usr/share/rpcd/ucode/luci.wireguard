@@ -66,18 +66,15 @@ const methods = {
 			uci.load('network');
 
 			// Derive subnet prefixes from the server interface's own addresses.
+			// Peers always receive /32 (IPv4) or /128 (IPv6) addresses, so the
+			// server's prefix length does not bound allocation.  We vary only the
+			// last octet (IPv4) or the low byte of the last 16-bit group (IPv6).
 			//
 			// IPv4: "10.0.0.1/24" → ipv4_prefix = "10.0.0"
-			//
 			// IPv6: "fd11:5ee:bad:c0de::ac7:9301/64"
-			//   The last 16-bit group encodes a high byte shared by all client
-			//   addresses plus the host octet.  We record the group base (high byte
-			//   shifted left) so we can reconstruct e.g. "930d" for octet 13.
-			//   ipv6_prefix    = "fd11:5ee:bad:c0de::ac7:"
-			//   ipv6_group_base = 0x9300
+			//   ipv6_prefix = "fd11:5ee:bad:c0de::ac7:", ipv6_group_base = 0x9300
 			let ipv4_prefix = null;
-			let ipv6_prefix = null;
-			let ipv6_group_base = 0;
+			let ipv6_prefix = null, ipv6_group_base = 0;
 
 			for (let addr in (uci.get('network', ifname, 'addresses') ?? [])) {
 				const bare = split(addr, '/')[0];
