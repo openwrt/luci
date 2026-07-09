@@ -1,0 +1,17 @@
+{
+	"admin/services/accel-ppp": {
+		"title": "Accel-PPP",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "accel-ppp/config"
+		},
+		"depends": {
+			"acl": [ "luci-app-accel-ppp" ],
+			"fs": {
+				"/etc/init.d/accel-ppp": "executable",
+				"/etc/accel-ppp/accel-ppp.conf": "file"
+			}
+		}
+	}
+}

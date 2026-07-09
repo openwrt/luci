@@ -1,0 +1,25 @@
+{
+	"luci-app-accel-ppp": {
+		"description": "Grant access to Accel-PPP configuration",
+		"read": {
+			"file": {
+				"/etc/accel-ppp/accel-ppp.conf": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ],
+				"luci-rpc": [ "getNetworkDevices" ],
+				"rc": [ "list" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/accel-ppp/accel-ppp.conf": [ "write" ],
+				"/etc/accel-ppp/accel-ppp.conf.luci-backup": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ],
+				"rc": [ "init" ]
+			}
+		}
+	}
+}
