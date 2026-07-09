@@ -185,12 +185,6 @@ return view.extend({
 			}
 		}
 		createGraphHLine(G,curr_offset+step, 0.1, 1);
-
-		chan_analysis.tab.addEventListener('cbi-tab-active', L.bind(function(ev) {
-			this.active_tab = ev.detail.tab;
-			if (!this.radios[this.active_tab].loadedOnce)
-				poll.start();
-		}, this));
 	},
 
 	handleScanRefresh: function() {
@@ -475,6 +469,8 @@ return view.extend({
 					offset_tbl: {},
 					col_width: 0,
 					tab: tab,
+					created: false,
+					channels: bands[band].channels,
 				};
 
 				this.radios[ifname+band] = {
@@ -488,9 +484,24 @@ return view.extend({
 
 				cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
 
-				tabs.firstElementChild.appendChild(tab)
+				tabs.firstElementChild.appendChild(tab);
 
-				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, bands[band].channels, band));
+				/* Draw on first tab activation: column width comes from
+				 * offsetWidth, which is 0 while the pane is hidden, so
+				 * rendering all tabs upfront squishes inactive ones. */
+				tab.addEventListener('cbi-tab-active', L.bind(function(ev) {
+					this.active_tab = ev.detail.tab;
+					var radio = this.radios[this.active_tab];
+
+					if (!radio.graph.created) {
+						radio.graph.created = true;
+						this.create_channel_graph(radio.graph, radio.graph.channels, radio.band);
+					}
+
+					if (!radio.loadedOnce) {
+						poll.start();
+					}
+				}, this));
 			}
 		}
 
