@@ -5,7 +5,6 @@
 'require ui';
 
 var confPath = '/etc/accel-ppp/accel-ppp.conf';
-var backupPath = '/etc/accel-ppp/accel-ppp.conf.luci-backup';
 var serviceName = 'accel-ppp';
 var isReadonlyView = !L.hasViewPermission() || null;
 
@@ -512,9 +511,7 @@ return view.extend({
 
 		showApplyModal(_('Saving configuration...'));
 
-		return fs.write(backupPath, oldValue).then(function() {
-			return fs.write(confPath, newValue);
-		}).then(L.bind(function() {
+		return fs.write(confPath, newValue).then(L.bind(function() {
 			this.sourceText = newValue;
 			stage = 'restart';
 			showApplyModal(_('Restarting Accel-PPP...'));
