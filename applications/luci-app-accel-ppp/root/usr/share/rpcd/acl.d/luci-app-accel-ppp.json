@@ -3,10 +3,12 @@
 		"description": "Grant access to Accel-PPP configuration",
 		"read": {
 			"file": {
-				"/etc/accel-ppp/accel-ppp.conf": [ "read" ]
+				"/etc/accel-ppp/accel-ppp.conf": [ "read" ],
+				"/usr/bin/accel-cmd -p 2001 show sessions": [ "exec" ],
+				"/usr/bin/accel-cmd -p 2001 show sessions ifname,username,calling-sid,sid,ip,uptime,tx-bytes,rx-bytes": [ "exec" ]
 			},
 			"ubus": {
-				"file": [ "read" ],
+				"file": [ "read", "exec" ],
 				"luci-rpc": [ "getNetworkDevices" ],
 				"rc": [ "list" ]
 			}

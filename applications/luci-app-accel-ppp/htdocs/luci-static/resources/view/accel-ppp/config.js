@@ -2,9 +2,17 @@
 'require view';
 'require rpc';
 'require fs';
+'require poll';
 'require ui';
 
 var confPath = '/etc/accel-ppp/accel-ppp.conf';
+var accelCmdPath = '/usr/bin/accel-cmd';
+var activeSessionArgs = [
+	'-p', '2001', 'show', 'sessions',
+	'ifname,username,calling-sid,sid,ip,uptime,tx-bytes,rx-bytes'
+];
+var activeSessionFallbackArgs = [ '-p', '2001', 'show', 'sessions' ];
+var activeSessionPollInterval = 5;
 var serviceName = 'accel-ppp';
 var isReadonlyView = !L.hasViewPermission() || null;
 
@@ -213,6 +221,89 @@ function errorText(e) {
 	return e && e.message ? e.message : String(e);
 }
 
+function splitSessionLine(line) {
+	var parts = String(line || '').split('|').map(function(part) {
+		return part.trim();
+	});
+
+	while (parts.length && parts[0] == '')
+		parts.shift();
+
+	while (parts.length && parts[parts.length - 1] == '')
+		parts.pop();
+
+	return parts;
+}
+
+function parseActiveSessions(output) {
+	var sessions = [];
+	var lines = String(output || '').split(/\r?\n/);
+	var headers = null;
+
+	for (var i = 0; i < lines.length; i++) {
+		if (lines[i].indexOf('|') < 0)
+			continue;
+
+		var parts = splitSessionLine(lines[i]);
+
+		if (parts.length == 0)
+			continue;
+
+		var first = parts[0].toLowerCase();
+		var joined = parts.join(' ').toLowerCase();
+
+		if (first == 'ifname' || (joined.indexOf('username') > -1 && joined.indexOf('calling') > -1)) {
+			headers = parts.map(function(part) { return part.toLowerCase(); });
+			continue;
+		}
+
+		if (/^-+$/.test(parts[0]))
+			continue;
+
+		if (!headers)
+			continue;
+
+		var row = {};
+
+		for (var j = 0; j < headers.length && j < parts.length; j++)
+			row[headers[j]] = parts[j];
+
+		var ifname = row.ifname || '';
+		var username = row.username || '';
+		var sid = row.sid || '';
+		var pppUnit = ifname.match(/^ppp([0-9]+)$/);
+		var displayName = pppUnit && username ? 'pppoe%s-%s'.format(pppUnit[1], username).toLowerCase() : username;
+		var shortSid = String(sid || '').replace(/^0+/, '') || '0';
+
+		sessions.push({
+			ifname: ifname,
+			username: displayName,
+			callingSid: row['calling-sid'] || '',
+			sid: shortSid,
+			ip: row.ip || '',
+			uptime: row.uptime || '',
+			download: row['tx-bytes'] || '',
+			upload: row['rx-bytes'] || ''
+		});
+	}
+
+	return sessions;
+}
+
+function activeSessionOutput(result) {
+	if (typeof result == 'string')
+		return result;
+
+	return result && result.stdout ? result.stdout : '';
+}
+
+function activeSessionError(result) {
+	if (!result || result.code == 0)
+		return '';
+
+	return result.stderr || result.stdout || _('Command failed');
+}
+
 function showApplyModal(message) {
 	ui.showModal(_('Applying changes'), [
 		E('p', { 'class': 'spinning' }, message)
@@ -396,8 +487,18 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(fs.read(confPath), ''),
 			L.resolveDefault(this.callRcList(serviceName), {}),
-			L.resolveDefault(this.callNetworkDevices(), {})
+			L.resolveDefault(this.callNetworkDevices(), {}),
+			this.loadActiveSessions()
 		]);
+	},
+
+	loadActiveSessions: function() {
+		return L.resolveDefault(fs.exec(accelCmdPath, activeSessionArgs), null).then(function(result) {
+			if (result && result.code == 0)
+				return result;
+
+			return L.resolveDefault(fs.exec(accelCmdPath, activeSessionFallbackArgs), result || { code: 1 });
+		});
 	},
 
 	handleServiceAction: function(action, ev) {
@@ -577,6 +678,104 @@ return view.extend({
 		]);
 	},
 
+	renderActiveSessionsTable: function(sessionsOutput) {
+		var sessions = parseActiveSessions(activeSessionOutput(sessionsOutput));
+		var readError = activeSessionError(sessionsOutput);
+		var rows = [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Session')),
+				E('th', { 'class': 'th' }, _('Interface')),
+				E('th', { 'class': 'th' }, _('Calling-Station-Id')),
+				E('th', { 'class': 'th' }, _('SID')),
+				E('th', { 'class': 'th' }, _('IP address')),
+				E('th', { 'class': 'th' }, _('Uptime')),
+				E('th', { 'class': 'th' }, _('Download')),
+				E('th', { 'class': 'th' }, _('Upload'))
+			])
+		];
+
+		if (readError) {
+			rows.push(E('tr', { 'class': 'tr placeholder' }, [
+				E('td', { 'class': 'td', 'colspan': '8' }, E('em', _('Session data unavailable')))
+			]));
+		}
+		else if (sessions.length == 0) {
+			rows.push(E('tr', { 'class': 'tr placeholder' }, [
+				E('td', { 'class': 'td', 'colspan': '8' }, E('em', _('No active sessions')))
+			]));
+		}
+		else {
+			for (var i = 0; i < sessions.length; i++) {
+				var session = sessions[i];
+
+				rows.push(E('tr', { 'class': 'tr cbi-section-table-row cbi-rowstyle-' + ((i % 2) + 1) }, [
+					E('td', { 'class': 'td' }, session.username),
+					E('td', { 'class': 'td' }, session.ifname),
+					E('td', { 'class': 'td' }, session.callingSid),
+					E('td', { 'class': 'td' }, session.sid),
+					E('td', { 'class': 'td' }, session.ip),
+					E('td', { 'class': 'td' }, session.uptime),
+					E('td', { 'class': 'td' }, session.download),
+					E('td', { 'class': 'td' }, session.upload)
+				]));
+			}
+		}
+
+		return E('table', { 'id': 'accel-ppp-active-sessions', 'class': 'table cbi-section-table' }, rows);
+	},
+
+	renderActiveError: function(sessionsOutput) {
+		var readError = activeSessionError(sessionsOutput);
+
+		return E('div', {
+			'id': 'accel-ppp-active-error',
+			'class': 'alert-message warning',
+			'style': readError ? '' : 'display:none'
+		}, readError ? [ _('Unable to read active sessions'), ': ', readError ] : []);
+	},
+
+	refreshActiveSessions: function() {
+		var table = document.getElementById('accel-ppp-active-sessions');
+		var error = document.getElementById('accel-ppp-active-error');
+
+		if (!table)
+			return Promise.resolve();
+
+		return this.loadActiveSessions().then(L.bind(function(result) {
+			var nextTable = this.renderActiveSessionsTable(result);
+			var readError = activeSessionError(result);
+
+			table.parentNode.replaceChild(nextTable, table);
+
+			if (error) {
+				if (readError) {
+					error.style.display = '';
+					error.textContent = '%s: %s'.format(_('Unable to read active sessions'), readError);
+				}
+				else {
+					error.style.display = 'none';
+					error.textContent = '';
+				}
+			}
+		}, this));
+	},
+
+	renderActiveTab: function(sessionsOutput) {
+		return E('div', { 'data-tab': 'active', 'data-tab-title': _('Active') }, [
+			E('div', { 'class': 'cbi-section cbi-tblsection' }, [
+				E('h3', _('Active sessions')),
+				this.renderActiveError(sessionsOutput),
+				this.renderActiveSessionsTable(sessionsOutput),
+				E('div', { 'class': 'cbi-page-actions' }, [
+					E('button', {
+						'class': 'btn cbi-button cbi-button-reload',
+						'click': ui.createHandlerFn(this, 'refreshActiveSessions')
+					}, _('Refresh'))
+				])
+			])
+		]);
+	},
+
 	renderModulesTab: function(lines) {
 		return E('div', { 'data-tab': 'modules', 'data-tab-title': _('Modules') }, [
 			E('div', { 'class': 'cbi-section' }, [
@@ -720,8 +919,10 @@ return view.extend({
 		var config = data[0] || '';
 		var serviceInfo = data[1] || {};
 		var devices = data[2] || {};
+		var sessionsOutput = data[3] || '';
 		var lines = linesOf(config);
 		var tabs = E('div', { 'class': 'cbi-section-node-tabbed' }, [
+			this.renderActiveTab(sessionsOutput),
 			this.renderModulesTab(lines),
 			this.renderPppTab(lines),
 			this.renderPppoeTab(lines, devices),
@@ -737,6 +938,7 @@ return view.extend({
 
 		this.sourceText = config;
 		ui.tabs.initTabGroup(tabs.childNodes);
+		poll.add(L.bind(this.refreshActiveSessions, this), activeSessionPollInterval);
 
 		return viewNode;
 	},
