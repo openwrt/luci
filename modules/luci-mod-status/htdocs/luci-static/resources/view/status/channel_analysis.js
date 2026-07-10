@@ -466,7 +466,6 @@ return view.extend({
 					graph: csvg,
 					offset_tbl: {},
 					col_width: 0,
-					tab: tab,
 					created: false,
 					channels: bands[band].channels,
 				};
