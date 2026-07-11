@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-21 05:04+0000\n"
+"PO-Revision-Date: 2026-07-08 15:16+0000\n"
 "Last-Translator: Dan <jonweblin2205@protonmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/uk/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.7.1.dev0\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:125
 msgid "%s is currently disabled"
@@ -31,6 +31,9 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"Перервати завантаження, якщо передача триває довше вказаної кількості "
+"секунд, навіть якщо процес триває. Залиште порожнім, щоб вимкнути. Наразі "
+"реалізовано лише для curl."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -94,7 +97,7 @@ msgstr "Дозволити"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:729
 msgid "Allow insecure downloads"
-msgstr ""
+msgstr "Дозволити небезпечні завантаження"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:986
 msgid "Allowed Domains"
@@ -165,7 +168,7 @@ msgstr "Помилка перевірки конфігурації (%s)!"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "Час очікування з’єднання (у секундах)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -270,6 +273,9 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"Час очікування завантаження «%s» вичерпано; можливо, сервер занадто "
+"повільний — спробуйте збільшити значення download_timeout, "
+"download_connect_timeout або download_max_time"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -379,7 +385,7 @@ msgstr "Не вдалося створити каталог файлів output/
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:167
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "Не вдалося визначити формат для %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:160
 msgid "Failed to download %s"
@@ -565,13 +571,16 @@ msgstr "Графік оновлення списку"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:716
 msgid "Maximum download time (in seconds)"
-msgstr ""
+msgstr "Максимальний час завантаження (у секундах)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:779
 msgid ""
 "Maximum number of block lists to download and process at the same time (0 "
 "disables). Automatically reduced when free memory is low."
 msgstr ""
+"Максимальна кількість списків блокування для одночасного завантаження та "
+"обробки (0 — вимкнено). Автоматично зменшується, коли залишається мало "
+"вільної пам’яті."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:648
 msgid ""
@@ -595,7 +604,7 @@ msgstr "Щомісяця"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1045
 msgid "Name"
-msgstr "Імʼя"
+msgstr "Назва"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1036
 msgid "Name/URL"
@@ -632,6 +641,7 @@ msgstr "Налаштування детальності виводу"
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:114
 msgid "Parallel downloads reduced to %s due to low free memory"
 msgstr ""
+"Кількість паралельних завантажень обмежено до %s через брак вільної пам’яті"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:659
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:681
@@ -805,6 +815,9 @@ msgid ""
 "default for compatibility with self-signed or otherwise untrusted "
 "certificates."
 msgstr ""
+"Пропускати перевірку сертифіката SSL під час завантаження списків "
+"блокування. Типово ввімкнено для сумісності із самопідписаними або іншими "
+"ненадійними сертифікатами."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:480
 msgid "Some output"
@@ -840,6 +853,8 @@ msgid ""
 "Stop the download if the connection cannot be established within this many "
 "seconds. Supported by curl and GNU wget only."
 msgstr ""
+"Зупинити завантаження, якщо з’єднання не вдалося встановити протягом цієї "
+"кількості секунд. Підтримуються лише curl та GNU wget."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:70
 msgid "Stopped"
@@ -915,6 +930,8 @@ msgid ""
 "Tip: install the %sAdBlock-Fast Controller Chrome extension%s to control "
 "this router from your browser toolbar."
 msgstr ""
+"Порада: встановіть розширення Chrome %sAdBlock-Fast Controller%s, щоби "
+"керувати цим маршрутизатором прямо з панелі інструментів вашого браузера."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:857
 msgid ""
