@@ -16,7 +16,7 @@ const methods = {
 			const ubus = connect();
 			const rules = [];
 			const leases = [];
-			const leasefile = open(uci.get('upnpd', 'config', 'lease_file') || '/var/run/miniupnpd.leases', 'r');
+			const leasefile = open(uci.get('upnpd', 'settings', 'lease_file') || '/var/run/miniupnpd.leases', 'r');
 			if (leasefile) {
 				for (let line = leasefile.read('line'); length(line); line = leasefile.read('line')) {
 					const record = split(line, ':', 6);
@@ -109,7 +109,7 @@ const methods = {
 			const idx = +req.args?.token;
 			if (idx > 0) {
 				const uci = cursor();
-				const leasefile = uci.get('upnpd', 'config', 'lease_file') || '/var/run/miniupnpd.leases';
+				const leasefile = uci.get('upnpd', 'settings', 'lease_file') || '/var/run/miniupnpd.leases';
 				if (access(leasefile)) {
 					system(['sed', '-i', '-e', `${idx}d`, leasefile]);
 					system(['/etc/init.d/miniupnpd', 'restart']);
