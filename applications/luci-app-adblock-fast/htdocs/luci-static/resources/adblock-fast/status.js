@@ -40,6 +40,15 @@ var pkg = {
 	isVersionMismatch: function (luci, pkg, rpcd) {
 		return luci !== pkg || pkg !== rpcd || luci !== rpcd;
 	},
+	// HTML-escape an untrusted scalar value with LuCI's %h format specifier so
+	// config-derived text reflected into status messages cannot inject markup
+	// when appended via innerHTML by E()/dom.create. Trusted array infos built
+	// in this file (e.g. anchor tags) are passed through unchanged.
+	escapeInfo: function (info) {
+		return Array.isArray(info)
+			? info
+			: info != null && info !== "" ? "%h".format(info) : info;
+	},
 	formatMessage: function (info, template) {
 		if (!template) return _("Unknown message") + "<br />";
 		return (
@@ -391,8 +400,12 @@ var status = baseclass.extend({
 							},
 				ubus: {
 					packageCompat: initData.packageCompat || 0,
-					errors: initData.errors ? [...initData.errors] : [],
-					warnings: initData.warnings ? [...initData.warnings] : [],
+					errors: (initData.errors || []).map(function (e) {
+						return Object.assign({}, e, { info: pkg.escapeInfo(e.info) });
+					}),
+					warnings: (initData.warnings || []).map(function (e) {
+						return Object.assign({}, e, { info: pkg.escapeInfo(e.info) });
+					}),
 				},
 				cron: cronStatus?.[pkg.Name] || {
 					auto_update_enabled: false,
