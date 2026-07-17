@@ -45,11 +45,14 @@ Upstream corrected version handling after 2.3.0 in
 
 ## Compatibility
 
-The package targets LuCI `master`, requires `lpac >= 2.3.0-r2`, and is
+The package targets LuCI `master`, requires `lpac >= 2.3.0-r3`, and is
 architecture-independent.
 
 When driver discovery succeeds, Settings offers the reported AT, uqmi, MBIM,
 or PC/SC backends. Safe AT and MBIM device paths below `/dev` are accepted.
+The MBIM section exposes the upstream slot-mapping bypass as an opt-in setting
+for devices that cannot use normal MBIM slot mapping. It remains disabled by
+default because enabling it ignores the configured MBIM UIM slot.
 The active OpenWrt uqmi backend remains restricted to `/dev/cdc-wdmN` because
 that downstream integration currently constructs a shell command.
 
@@ -100,7 +103,8 @@ Direct RPC calls bypass that browser state check; the backend relies on the
 eUICC to reject deletion of an enabled profile and normalizes the resulting
 lpac error.
 
-Settings writes update only the options managed by this application.
+Settings writes update only the options managed by this application,
+including the packaged MBIM skip-slot-mapping preference.
 Additional package- or vendor-specific UCI options in the named sections are
 left intact.
 

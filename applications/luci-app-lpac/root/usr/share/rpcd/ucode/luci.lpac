@@ -644,7 +644,9 @@ function normalize_config(config) {
 	    }) ||
 	    !has_exact_keys(config.at, { device: true, debug: true }) ||
 	    !has_exact_keys(config.uqmi, { device: true, debug: true }) ||
-	    !has_exact_keys(config.mbim, { device: true, proxy: true }))
+	    !has_exact_keys(config.mbim, {
+		device: true, proxy: true, skip_slot_mapping: true
+	    }))
 		return null;
 
 	const apdu_backend = config.global.apdu_backend;
@@ -654,12 +656,14 @@ function normalize_config(config) {
 	const at_debug = normalize_flag(config.at.debug);
 	const uqmi_debug = normalize_flag(config.uqmi.debug);
 	const mbim_proxy = normalize_flag(config.mbim.proxy);
+	const mbim_skip_slot_mapping = normalize_flag(config.mbim.skip_slot_mapping);
 	const aid = config.global.custom_isd_r_aid;
 
 	if (type(apdu_backend) != 'string' ||
 	    index([ 'uqmi', 'mbim', 'at', 'pcsc' ], apdu_backend) < 0 ||
 	    http_backend !== 'curl' || apdu_debug === null || http_debug === null ||
 	    at_debug === null || uqmi_debug === null || mbim_proxy === null ||
+	    mbim_skip_slot_mapping === null ||
 	    !valid_aid(aid) ||
 	    !valid_device_path(config.at.device) ||
 	    !valid_device_path(config.uqmi.device) ||
@@ -685,7 +689,8 @@ function normalize_config(config) {
 		},
 		mbim: {
 			device: config.mbim.device,
-			proxy: mbim_proxy
+			proxy: mbim_proxy,
+			skip_slot_mapping: mbim_skip_slot_mapping
 		}
 	};
 }
@@ -726,7 +731,9 @@ read_config = function() {
 			},
 			mbim: {
 				device: uci_value(uci, 'mbim', 'device', '/dev/cdc-wdm0'),
-				proxy: uci_value(uci, 'mbim', 'proxy', '1')
+				proxy: uci_value(uci, 'mbim', 'proxy', '1'),
+				skip_slot_mapping:
+					uci_value(uci, 'mbim', 'skip_slot_mapping', '0')
 			}
 		});
 	}
@@ -765,6 +772,8 @@ function write_config(config) {
 			uci.set('lpac', 'mbim', 'mbim') &&
 			uci.set('lpac', 'mbim', 'device', config.mbim.device) &&
 			uci.set('lpac', 'mbim', 'proxy', config.mbim.proxy) &&
+			uci.set('lpac', 'mbim', 'skip_slot_mapping',
+				config.mbim.skip_slot_mapping) &&
 			uci.commit('lpac');
 	}
 	catch (e) {

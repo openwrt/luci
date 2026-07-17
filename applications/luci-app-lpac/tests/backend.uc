@@ -21,7 +21,8 @@ function default_config() {
 		},
 		mbim: {
 			device: '/dev/cdc-wdm0',
-			proxy: '1'
+			proxy: '1',
+			skip_slot_mapping: '0'
 		}
 	};
 }
@@ -103,6 +104,17 @@ check(result.success && result.data == 'v2.3.0', 'version response is normalized
 check(global.TEST_LAST_CALL.request.command == '/usr/bin/lpac',
 	'packaged lpac entrypoint is executed directly for non-eUICC commands');
 same(global.TEST_LAST_CALL.request.params, [ 'version' ], 'version argv is fixed');
+
+reset();
+result = invoke('get_config');
+same(result.data, default_config(),
+	'configuration reads expose the normalized MBIM slot-mapping preference');
+
+reset();
+delete global.TEST_UCI.mbim.skip_slot_mapping;
+result = invoke('get_config');
+check(result.success && result.data.mbim.skip_slot_mapping == '0',
+	'missing MBIM slot-mapping preference falls back to disabled');
 
 reset();
 global.TEST_EXEC_REPLY = {
@@ -336,10 +348,24 @@ check(!result.success && result.error == 'invalid_config',
 	'device paths containing traversal components are rejected');
 
 reset();
-global.TEST_UCI.mbim.skip_slot_mapping = '1';
-result = invoke('set_config', { config: default_config() });
+config = default_config();
+config.mbim.skip_slot_mapping = '1';
+result = invoke('set_config', { config });
 check(result.success && global.TEST_UCI.mbim.skip_slot_mapping == '1',
+	'MBIM slot-mapping preference is validated and committed');
+
+reset();
+global.TEST_UCI.mbim.vendor_mode = 'keep';
+result = invoke('set_config', { config: default_config() });
+check(result.success && global.TEST_UCI.mbim.vendor_mode == 'keep',
 	'unmanaged vendor options are preserved by settings writes');
+
+reset();
+config = default_config();
+config.mbim.skip_slot_mapping = 'yes';
+result = invoke('set_config', { config });
+check(!result.success && result.error == 'invalid_config',
+	'invalid MBIM slot-mapping flags are rejected');
 
 reset();
 global.TEST_UCI_LOAD_FAIL = true;

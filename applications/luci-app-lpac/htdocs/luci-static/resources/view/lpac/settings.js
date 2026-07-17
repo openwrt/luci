@@ -114,7 +114,8 @@ return view.extend({
 			},
 			mbim: {
 				device: mbimDevice,
-				proxy: document.getElementById('lpac-mbim-proxy').checked ? '1' : '0'
+				proxy: document.getElementById('lpac-mbim-proxy').checked ? '1' : '0',
+				skip_slot_mapping: document.getElementById('lpac-mbim-skip-slot-mapping').checked ? '1' : '0'
 			}
 		};
 
@@ -206,7 +207,10 @@ return view.extend({
 			E('div', { 'class': 'cbi-section' }, [
 				E('h3', {}, [ _('MBIM backend') ]),
 				formRow(_('Control device'), textInput('lpac-mbim-device', mbim.device || '/dev/cdc-wdm0', '/dev/cdc-wdm0')),
-				formRow(_('Use mbim-proxy'), checkbox('lpac-mbim-proxy', mbim.proxy !== '0'))
+				formRow(_('Use mbim-proxy'), checkbox('lpac-mbim-proxy', mbim.proxy !== '0')),
+				formRow(_('Skip MBIM slot mapping'),
+					checkbox('lpac-mbim-skip-slot-mapping', mbim.skip_slot_mapping === '1'),
+					_('Use the modem\'s currently selected slot without querying or changing MBIM Device Slot Mapping. Enable only for devices that cannot use normal slot mapping; the configured MBIM UIM slot is ignored.'))
 			]),
 			E('div', { 'class': 'cbi-section' }, [
 				E('h3', {}, [ _('AT backend') ]),

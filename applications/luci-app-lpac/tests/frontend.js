@@ -293,7 +293,7 @@ const settingsPage = settingsView.render([
 			},
 			at: { device: '/dev/ttyUSB2', debug: '0' },
 			uqmi: { device: '/dev/cdc-wdm0', debug: '0' },
-			mbim: { device: '/dev/cdc-wdm0', proxy: '0' }
+			mbim: { device: '/dev/cdc-wdm0', proxy: '0', skip_slot_mapping: '0' }
 		}
 	},
 	{ success: true, data: { apdu: [ 'mbim', 'at' ], http: [ 'curl' ] } }
@@ -309,6 +309,8 @@ assert.ok(findById('lpac-http-debug').attrs.checked != null,
 	'true HTTP debug must render checked');
 assert.ok(findById('lpac-mbim-proxy').attrs.checked == null,
 	'false MBIM proxy must render unchecked');
+assert.ok(findById('lpac-mbim-skip-slot-mapping').attrs.checked == null,
+	'false MBIM slot-mapping bypass must render unchecked');
 
 const backend = findById('lpac-apdu-backend');
 const backendOptions = findAll(backend, function(node) { return node.tag === 'option'; });
@@ -326,6 +328,10 @@ assert.strictEqual(findAll(settingsPage, function(node) {
 	return node.attrs?.class === 'cbi-value-description' &&
 		textContent(node).startsWith('Use the /dev/cdc-wdmN device');
 }).length, 1, 'uqmi device guidance should render as field help');
+assert.strictEqual(findAll(settingsPage, function(node) {
+	return node.attrs?.class === 'cbi-value-description' &&
+		textContent(node).startsWith("Use the modem's currently selected slot");
+}).length, 1, 'MBIM slot-mapping guidance should render as field help');
 assert.strictEqual(findAll(settingsPage, function(node) {
 	return node.attrs?.class === 'cbi-value-description' &&
 		textContent(node).startsWith('The AT backend is timing-sensitive');
