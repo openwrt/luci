@@ -1,0 +1,939 @@
+// SPDX-License-Identifier: Apache-2.0
+
+'use strict';
+
+import { chmod, lstat, open } from 'fs';
+import {
+	connect,
+	STATUS_NOT_FOUND,
+	STATUS_NOT_SUPPORTED,
+	STATUS_OK,
+	STATUS_TIMEOUT
+} from 'ubus';
+import { cursor } from 'uci';
+
+const LPAC_PATH = '/usr/bin/lpac';
+const FLOCK_PATH = '/usr/bin/flock';
+const LOCK_PATH = '/var/run/luci-lpac.lock';
+const DEFAULT_AID = 'A0000005591010FFFFFFFF8900000100';
+let read_config;
+
+/*
+ * Keep the connection alive for the lifetime of the rpcd script.  Its nested
+ * call timeout is deliberately longer than rpcd's maximum configurable
+ * 600-second execution timeout, so this client does not abandon the nested
+ * call before file.exec returns a status.
+ */
+const ubus = connect(null, 610);
+
+const INVALID = {};
+
+function success(data) {
+	return {
+		success: true,
+		code: 0,
+		message: 'success',
+		data
+	};
+}
+
+function failure(error, message, code) {
+	const result = {
+		success: false,
+		error,
+		message
+	};
+
+	if (type(code) == 'int')
+		result.code = code;
+
+	return result;
+}
+
+function safe_text(value, max_length) {
+	if (value === null)
+		return null;
+
+	if (type(value) != 'string' || length(value) > max_length ||
+	    match(value, /[[:cntrl:]]/) !== null)
+		return null;
+
+	return value;
+}
+
+function safe_uint(value) {
+	return (type(value) == 'int' && value >= 0) ? value : null;
+}
+
+function safe_text_list(value, max_items, max_length) {
+	const result = [];
+
+	if (type(value) != 'array')
+		return result;
+
+	for (let item in value) {
+		const text = safe_text(item, max_length);
+
+		if (text !== null)
+			push(result, text);
+
+		if (length(result) >= max_items)
+			break;
+	}
+
+	return result;
+}
+
+function safe_hex_list(value, max_items) {
+	const result = [];
+
+	if (type(value) != 'array')
+		return result;
+
+	for (let item in value) {
+		if (type(item) == 'string' && length(item) >= 2 &&
+		    length(item) <= 128 && length(item) % 2 == 0 &&
+		    match(item, /^[0-9A-Fa-f]+$/) !== null)
+			push(result, uc(item));
+
+		if (length(result) >= max_items)
+			break;
+	}
+
+	return result;
+}
+
+function valid_iccid(value) {
+	return type(value) == 'string' &&
+		match(value, /^[0-9]{18,20}$/) !== null;
+}
+
+function valid_profile_id(value) {
+	return valid_iccid(value) ||
+		(type(value) == 'string' &&
+		 match(value, /^[0-9A-Fa-f]{32}$/) !== null);
+}
+
+function valid_aid(value) {
+	return type(value) == 'string' && length(value) == 32 &&
+		match(value, /^[0-9A-Fa-f]+$/) !== null;
+}
+
+function valid_device_path(value) {
+	if (type(value) != 'string' || length(value) < 6 || length(value) > 128 ||
+	    match(value, /^\/dev\/[A-Za-z0-9._:+@,\/-]+$/) === null)
+		return false;
+
+	const parts = split(value, '/');
+
+	for (let i = 2; i < length(parts); i++)
+		if (!length(parts[i]) || parts[i] == '.' || parts[i] == '..')
+			return false;
+
+	return true;
+}
+
+function valid_uqmi_device(value) {
+	return type(value) == 'string' &&
+		match(value, /^\/dev\/cdc-wdm[0-9]+$/) !== null;
+}
+
+function normalize_info(data) {
+	if (type(data) != 'object')
+		return INVALID;
+
+	const addresses_in = (type(data.EuiccConfiguredAddresses) == 'object')
+		? data.EuiccConfiguredAddresses : {};
+	const info2_in = (type(data.EUICCInfo2) == 'object')
+		? data.EUICCInfo2 : {};
+	const resources_in = (type(info2_in.extCardResource) == 'object')
+		? info2_in.extCardResource : {};
+	const certification_in = (type(info2_in.certificationDataObject) == 'object')
+		? info2_in.certificationDataObject : {};
+	const eid = (type(data.eidValue) == 'string' &&
+		match(data.eidValue, /^[0-9]{32}$/) !== null)
+		? data.eidValue : null;
+
+	if (eid === null)
+		return INVALID;
+
+	return {
+		eidValue: eid,
+		EuiccConfiguredAddresses: {
+			defaultDpAddress: safe_text(addresses_in.defaultDpAddress, 255),
+			rootDsAddress: safe_text(addresses_in.rootDsAddress, 255)
+		},
+		EUICCInfo2: {
+			profileVersion: safe_text(info2_in.profileVersion, 64),
+			svn: safe_text(info2_in.svn, 64),
+			euiccFirmwareVer: safe_text(info2_in.euiccFirmwareVer, 128),
+			extCardResource: {
+				installedApplication: safe_uint(resources_in.installedApplication),
+				freeNonVolatileMemory: safe_uint(resources_in.freeNonVolatileMemory),
+				freeVolatileMemory: safe_uint(resources_in.freeVolatileMemory)
+			},
+			uiccCapability: safe_text_list(info2_in.uiccCapability, 64, 64),
+			ts102241Version: safe_text(info2_in.ts102241Version, 64),
+			globalplatformVersion: safe_text(info2_in.globalplatformVersion, 64),
+			rspCapability: safe_text_list(info2_in.rspCapability, 64, 64),
+			euiccCiPKIdListForVerification:
+				safe_hex_list(info2_in.euiccCiPKIdListForVerification, 64),
+			euiccCiPKIdListForSigning:
+				safe_hex_list(info2_in.euiccCiPKIdListForSigning, 64),
+			euiccCategory: safe_text(info2_in.euiccCategory, 64),
+			forbiddenProfilePolicyRules:
+				safe_text_list(info2_in.forbiddenProfilePolicyRules, 64, 64),
+			ppVersion: safe_text(info2_in.ppVersion, 64),
+			sasAcreditationNumber: safe_text(info2_in.sasAcreditationNumber, 128),
+			sasAccreditationNumber: safe_text(info2_in.sasAccreditationNumber, 128),
+			certificationDataObject: {
+				platformLabel: safe_text(certification_in.platformLabel, 255),
+				discoveryBaseURL: safe_text(certification_in.discoveryBaseURL, 255)
+			}
+		}
+	};
+}
+
+function normalize_profiles(data) {
+	const profiles = [];
+
+	if (type(data) != 'array')
+		return INVALID;
+
+	for (let profile in data) {
+		if (type(profile) != 'object')
+			continue;
+
+		const iccid = valid_iccid(profile.iccid) ? profile.iccid : null;
+		const aid = (type(profile.isdpAid) == 'string' &&
+			match(profile.isdpAid, /^[0-9A-Fa-f]{32}$/) !== null)
+			? uc(profile.isdpAid) : null;
+
+		if (iccid === null && aid === null)
+			continue;
+
+		push(profiles, {
+			iccid,
+			isdpAid: aid,
+			profileState: safe_text(profile.profileState, 32),
+			profileNickname: safe_text(profile.profileNickname, 64),
+			serviceProviderName: safe_text(profile.serviceProviderName, 128),
+			profileName: safe_text(profile.profileName, 128),
+			iconType: safe_text(profile.iconType, 16),
+			profileClass: safe_text(profile.profileClass, 32)
+		});
+
+		if (length(profiles) >= 128)
+			break;
+	}
+
+	return profiles;
+}
+
+function normalize_notifications(data) {
+	const notifications = [];
+
+	if (type(data) != 'array')
+		return INVALID;
+
+	for (let notification in data) {
+		if (type(notification) != 'object')
+			continue;
+
+		const seq = safe_uint(notification.seqNumber);
+
+		if (seq === null || seq > 4294967295)
+			continue;
+
+		push(notifications, {
+			seqNumber: seq,
+			profileManagementOperation:
+				safe_text(notification.profileManagementOperation, 32),
+			notificationAddress: safe_text(notification.notificationAddress, 255),
+			iccid: valid_iccid(notification.iccid) ? notification.iccid : null
+		});
+
+		if (length(notifications) >= 256)
+			break;
+	}
+
+	return notifications;
+}
+
+function normalize_driver_list(value, allowed) {
+	const drivers = [];
+
+	if (type(value) != 'array')
+		return drivers;
+
+	for (let driver in value) {
+		if (type(driver) == 'string' && index(allowed, driver) >= 0 &&
+		    index(drivers, driver) < 0)
+			push(drivers, driver);
+	}
+
+	return drivers;
+}
+
+function normalize_drivers(record) {
+	if (type(record?.payload) != 'object' ||
+	    type(record.payload.LPAC_APDU) != 'array' ||
+	    type(record.payload.LPAC_HTTP) != 'array')
+		return failure('invalid_response',
+			'lpac did not return a valid driver list.');
+
+	return success({
+		apdu: normalize_driver_list(record.payload.LPAC_APDU,
+			[ 'uqmi', 'mbim', 'at', 'pcsc' ]),
+		http: normalize_driver_list(record.payload.LPAC_HTTP, [ 'curl' ])
+	});
+}
+
+function operation_error(kind) {
+	switch (kind) {
+	case 'info':
+		return 'Unable to read eUICC information.';
+	case 'profiles':
+		return 'Unable to read eSIM profiles.';
+	case 'notifications':
+		return 'Unable to read eUICC notifications.';
+	case 'enable':
+		return 'Unable to enable the profile.';
+	case 'disable':
+		return 'Unable to disable the profile.';
+	case 'nickname':
+		return 'Unable to update the profile nickname.';
+	case 'delete':
+		return 'Unable to delete the profile.';
+	case 'remove_notification':
+		return 'Unable to remove the notification.';
+	default:
+		return 'The lpac operation failed.';
+	}
+}
+
+function operation_reason(kind, data) {
+	if (type(data) != 'string')
+		return null;
+
+	switch (data) {
+	case 'iccid or aid not found':
+		return (kind == 'enable' || kind == 'disable')
+			? 'profile_not_found' : null;
+	case 'profile not in disabled state':
+		return kind == 'enable' ? 'profile_not_disabled' : null;
+	case 'profile not in enabled state':
+		return kind == 'disable' ? 'profile_not_enabled' : null;
+	case 'disallowed by policy':
+		return 'policy_denied';
+	case 'wrong profile reenabling':
+		return kind == 'enable' ? 'wrong_reenable' : null;
+	case 'internal error, maybe illegal iccid/aid coding':
+		return (kind == 'enable' || kind == 'disable')
+			? 'profile_internal_error' : null;
+	default:
+		return null;
+	}
+}
+
+function normalize_lpa(record, kind) {
+	const payload = record?.payload;
+
+	if (type(payload) != 'object' || type(payload.code) != 'int')
+		return failure('invalid_response',
+			'lpac did not return a valid result envelope.');
+
+	if (payload.code != 0) {
+		const result = failure('lpac_error', operation_error(kind), payload.code);
+		const reason = operation_reason(kind, payload.data);
+
+		if (reason !== null)
+			result.reason = reason;
+
+		return result;
+	}
+
+	let data;
+
+	switch (kind) {
+	case 'version':
+		data = safe_text(payload.data, 128);
+		if (data === null)
+			data = INVALID;
+		break;
+	case 'info':
+		data = normalize_info(payload.data);
+		break;
+	case 'profiles':
+		data = normalize_profiles(payload.data);
+		break;
+	case 'notifications':
+		data = normalize_notifications(payload.data);
+		break;
+	default:
+		/* Mutating lpac commands return null.  Never forward unexpected data. */
+		data = null;
+		break;
+	}
+
+	if (data === INVALID)
+		return failure('invalid_response',
+			'lpac returned data in an unexpected format.');
+
+	return success(data);
+}
+
+function parse_lpac_output(output, kind) {
+	let terminal = null;
+	let driver_record = null;
+
+	if (type(output) != 'string')
+		return failure('invalid_response', 'lpac returned no usable output.');
+
+	for (let line in split(output, '\n')) {
+		line = trim(line);
+
+		if (!length(line))
+			continue;
+
+		let record = null;
+
+		try {
+			record = json(line);
+		}
+		catch (e) {
+			continue;
+		}
+
+		if (type(record) != 'object')
+			continue;
+
+		if (record.type == 'lpa')
+			terminal = record;
+		else if (record.type == 'driver')
+			driver_record = record;
+	}
+
+	if (kind == 'drivers')
+		return driver_record !== null
+			? normalize_drivers(driver_record)
+			: failure('invalid_response',
+				'lpac did not return a driver list.');
+
+	return terminal !== null
+		? normalize_lpa(terminal, kind)
+		: failure('invalid_response',
+			'lpac did not return a terminal JSON result.');
+}
+
+function exec_failure(status, needs_lock) {
+	if (status == STATUS_NOT_FOUND)
+		return needs_lock
+			? failure('lock_failed', 'The flock executable is not installed.')
+			: failure('not_installed', 'The lpac executable is not installed.');
+
+	if (status == STATUS_TIMEOUT)
+		return failure('timeout', 'The lpac operation timed out.');
+
+	if (status == STATUS_NOT_SUPPORTED)
+		return failure('output_too_large',
+			'The lpac output exceeded the rpcd response limit.');
+
+	return failure('execution_failed',
+		'The lpac process could not be executed.');
+}
+
+function release_lock(handle) {
+	if (!handle)
+		return;
+
+	try {
+		handle.close();
+	}
+	catch (e) {
+		/* The kernel will release the lock when rpcd closes the descriptor. */
+	}
+}
+
+function valid_lock_file(stat, require_mode) {
+	return type(stat) == 'object' && stat.type == 'file' && stat.uid == 0 &&
+		stat.nlink == 1 && (!require_mode || stat.mode == 0o600);
+}
+
+function open_lock_file() {
+	let stat;
+	let handle;
+
+	try {
+		stat = lstat(LOCK_PATH);
+
+		/* Never follow or reuse a non-regular or non-root-owned lock path. */
+		if (stat !== null && !valid_lock_file(stat, false))
+			return null;
+
+		handle = open(LOCK_PATH, 'ae', 0o600);
+
+		if (!handle)
+			return null;
+
+		stat = lstat(LOCK_PATH);
+
+		if (!valid_lock_file(stat, false) || chmod(LOCK_PATH, 0o600) !== true ||
+		    !valid_lock_file(lstat(LOCK_PATH), true)) {
+			release_lock(handle);
+			return null;
+		}
+
+		return handle;
+	}
+	catch (e) {
+		release_lock(handle);
+		return null;
+	}
+}
+
+function acquire_lock() {
+	const handle = open_lock_file();
+
+	if (!handle)
+		return {
+			result: failure('lock_failed',
+				'Unable to create the lpac operation lock.')
+		};
+
+	if (!handle.lock('xn')) {
+		release_lock(handle);
+
+		return {
+			result: failure('busy',
+				'Another lpac operation is already running.')
+		};
+	}
+
+	return { handle };
+}
+
+function run_lpac(request, params, kind, needs_lock) {
+	if (kind != 'version' && kind != 'drivers' && read_config() === null)
+		return failure('invalid_config',
+			'The installed lpac configuration is missing or invalid.');
+
+	let command = LPAC_PATH;
+	let exec_params = params;
+
+	if (needs_lock) {
+		const handle = open_lock_file();
+
+		if (!handle)
+			return failure('lock_failed',
+				'Unable to prepare the lpac operation lock.');
+
+		release_lock(handle);
+		command = FLOCK_PATH;
+		exec_params = [ '-n', LOCK_PATH, LPAC_PATH ];
+
+		for (let param in params)
+			push(exec_params, param);
+	}
+
+	let callback_called = false;
+
+	try {
+		const pending = ubus.defer('file', 'exec', {
+			command,
+			params: exec_params
+		}, function(status, reply) {
+			callback_called = true;
+
+			let result;
+
+			try {
+				if (status != STATUS_OK) {
+					result = exec_failure(status, needs_lock);
+				}
+				else if (type(reply) != 'object') {
+					result = failure('execution_failed',
+						'The lpac process returned no execution result.');
+				}
+				else {
+					result = parse_lpac_output(reply.stdout, kind);
+
+					if (type(reply.code) != 'int')
+						result = failure('execution_failed',
+							'The lpac process returned no exit status.');
+					else if (reply.code != 0) {
+						if (needs_lock && reply.code == 1 &&
+						    !result.success && result.error == 'invalid_response')
+							result = failure('busy',
+								'Another lpac operation is already running.');
+						else if (reply.code == 127 &&
+						         !result.success && result.error == 'invalid_response')
+							result = failure('not_installed',
+								'The lpac executable is not installed.');
+						else if (result.success || result.error == 'invalid_response')
+							result = failure('execution_failed',
+								'The lpac process exited unexpectedly.', reply.code);
+					}
+				}
+			}
+			catch (e) {
+				result = failure('invalid_response',
+					'Unable to normalize the lpac response.');
+			}
+
+			/* stderr is intentionally never inspected, logged, or returned. */
+			try {
+				request.reply(result);
+			}
+			catch (e) {
+				/* The outer rpcd request may have reached its guard timeout. */
+			}
+		});
+
+		if (!pending && !callback_called) {
+			return failure('execution_failed',
+				'Unable to start the lpac process.');
+		}
+
+		return pending;
+	}
+	catch (e) {
+		if (!callback_called) {
+			return failure('execution_failed',
+				'Unable to start the lpac process.');
+		}
+
+		/* An immediate defer failure may already have invoked the callback. */
+		return null;
+	}
+}
+
+function has_exact_keys(value, allowed) {
+	if (type(value) != 'object')
+		return false;
+
+	for (let key in value)
+		if (!(key in allowed))
+			return false;
+
+	for (let key in allowed)
+		if (!(key in value))
+			return false;
+
+	return true;
+}
+
+function normalize_flag(value) {
+	if (value === true || value === 1 || value === '1')
+		return '1';
+
+	if (value === false || value === 0 || value === '0')
+		return '0';
+
+	return null;
+}
+
+function normalize_config(config) {
+	if (!has_exact_keys(config, { global: true, at: true, uqmi: true, mbim: true }) ||
+	    !has_exact_keys(config.global, {
+		apdu_backend: true,
+		http_backend: true,
+		apdu_debug: true,
+		http_debug: true,
+		custom_isd_r_aid: true
+	    }) ||
+	    !has_exact_keys(config.at, { device: true, debug: true }) ||
+	    !has_exact_keys(config.uqmi, { device: true, debug: true }) ||
+	    !has_exact_keys(config.mbim, { device: true, proxy: true }))
+		return null;
+
+	const apdu_backend = config.global.apdu_backend;
+	const http_backend = config.global.http_backend;
+	const apdu_debug = normalize_flag(config.global.apdu_debug);
+	const http_debug = normalize_flag(config.global.http_debug);
+	const at_debug = normalize_flag(config.at.debug);
+	const uqmi_debug = normalize_flag(config.uqmi.debug);
+	const mbim_proxy = normalize_flag(config.mbim.proxy);
+	const aid = config.global.custom_isd_r_aid;
+
+	if (type(apdu_backend) != 'string' ||
+	    index([ 'uqmi', 'mbim', 'at', 'pcsc' ], apdu_backend) < 0 ||
+	    http_backend !== 'curl' || apdu_debug === null || http_debug === null ||
+	    at_debug === null || uqmi_debug === null || mbim_proxy === null ||
+	    !valid_aid(aid) ||
+	    !valid_device_path(config.at.device) ||
+	    !valid_device_path(config.uqmi.device) ||
+	    !valid_device_path(config.mbim.device) ||
+	    (apdu_backend == 'uqmi' && !valid_uqmi_device(config.uqmi.device)))
+		return null;
+
+	return {
+		global: {
+			apdu_backend,
+			http_backend: 'curl',
+			apdu_debug,
+			http_debug,
+			custom_isd_r_aid: uc(aid)
+		},
+		at: {
+			device: config.at.device,
+			debug: at_debug
+		},
+		uqmi: {
+			device: config.uqmi.device,
+			debug: uqmi_debug
+		},
+		mbim: {
+			device: config.mbim.device,
+			proxy: mbim_proxy
+		}
+	};
+}
+
+function uci_value(uci, section, option, fallback) {
+	const value = uci.get('lpac', section, option);
+
+	if (value === null)
+		return fallback;
+
+	return type(value) == 'string' ? value : INVALID;
+}
+
+read_config = function() {
+	const uci = cursor();
+	let config = null;
+
+	try {
+		if (!uci || !uci.load('lpac'))
+			return null;
+
+		config = normalize_config({
+			global: {
+				apdu_backend: uci_value(uci, 'global', 'apdu_backend', 'uqmi'),
+				http_backend: uci_value(uci, 'global', 'http_backend', 'curl'),
+				apdu_debug: uci_value(uci, 'global', 'apdu_debug', '0'),
+				http_debug: uci_value(uci, 'global', 'http_debug', '0'),
+				custom_isd_r_aid:
+					uci_value(uci, 'global', 'custom_isd_r_aid', DEFAULT_AID)
+			},
+			at: {
+				device: uci_value(uci, 'at', 'device', '/dev/ttyUSB2'),
+				debug: uci_value(uci, 'at', 'debug', '0')
+			},
+			uqmi: {
+				device: uci_value(uci, 'uqmi', 'device', '/dev/cdc-wdm0'),
+				debug: uci_value(uci, 'uqmi', 'debug', '0')
+			},
+			mbim: {
+				device: uci_value(uci, 'mbim', 'device', '/dev/cdc-wdm0'),
+				proxy: uci_value(uci, 'mbim', 'proxy', '1')
+			}
+		});
+	}
+	catch (e) {
+		config = null;
+	}
+
+	if (uci)
+		uci.unload('lpac');
+
+	return config;
+};
+
+function write_config(config) {
+	const uci = cursor();
+	let written = false;
+
+	try {
+		if (!uci || !uci.load('lpac'))
+			return false;
+
+		written =
+			uci.set('lpac', 'global', 'global') &&
+			uci.set('lpac', 'global', 'apdu_backend', config.global.apdu_backend) &&
+			uci.set('lpac', 'global', 'http_backend', config.global.http_backend) &&
+			uci.set('lpac', 'global', 'apdu_debug', config.global.apdu_debug) &&
+			uci.set('lpac', 'global', 'http_debug', config.global.http_debug) &&
+			uci.set('lpac', 'global', 'custom_isd_r_aid',
+				config.global.custom_isd_r_aid) &&
+			uci.set('lpac', 'at', 'at') &&
+			uci.set('lpac', 'at', 'device', config.at.device) &&
+			uci.set('lpac', 'at', 'debug', config.at.debug) &&
+			uci.set('lpac', 'uqmi', 'uqmi') &&
+			uci.set('lpac', 'uqmi', 'device', config.uqmi.device) &&
+			uci.set('lpac', 'uqmi', 'debug', config.uqmi.debug) &&
+			uci.set('lpac', 'mbim', 'mbim') &&
+			uci.set('lpac', 'mbim', 'device', config.mbim.device) &&
+			uci.set('lpac', 'mbim', 'proxy', config.mbim.proxy) &&
+			uci.commit('lpac');
+	}
+	catch (e) {
+		written = false;
+	}
+
+	if (uci)
+		uci.unload('lpac');
+
+	return written;
+}
+
+const methods = {
+	get_version: {
+		args: {},
+		call: function(request) {
+			return run_lpac(request, [ 'version' ], 'version', false);
+		}
+	},
+
+	get_drivers: {
+		args: {},
+		call: function(request) {
+			return run_lpac(request, [ 'driver', 'list' ], 'drivers', false);
+		}
+	},
+
+	get_info: {
+		args: {},
+		call: function(request) {
+			return run_lpac(request, [ 'chip', 'info' ], 'info', true);
+		}
+	},
+
+	list_profiles: {
+		args: {},
+		call: function(request) {
+			return run_lpac(request, [ 'profile', 'list' ], 'profiles', true);
+		}
+	},
+
+	list_notifications: {
+		args: {},
+		call: function(request) {
+			return run_lpac(request, [ 'notification', 'list' ],
+				'notifications', true);
+		}
+	},
+
+	enable_profile: {
+		args: { iccid: '', refresh: false },
+		call: function(request) {
+			const id = request.args?.iccid;
+			let refresh = request.args?.refresh;
+
+			if (refresh === null)
+				refresh = false;
+
+			if (!valid_profile_id(id) || type(refresh) != 'bool')
+				return failure('invalid_argument',
+					'The profile identifier or refresh flag is invalid.');
+
+			return run_lpac(request,
+				[ 'profile', 'enable', id, refresh ? '1' : '0' ],
+				'enable', true);
+		}
+	},
+
+	disable_profile: {
+		args: { iccid: '', refresh: false },
+		call: function(request) {
+			const id = request.args?.iccid;
+			let refresh = request.args?.refresh;
+
+			if (refresh === null)
+				refresh = false;
+
+			if (!valid_profile_id(id) || type(refresh) != 'bool')
+				return failure('invalid_argument',
+					'The profile identifier or refresh flag is invalid.');
+
+			return run_lpac(request,
+				[ 'profile', 'disable', id, refresh ? '1' : '0' ],
+				'disable', true);
+		}
+	},
+
+	nickname_profile: {
+		args: { iccid: '', nickname: '' },
+		call: function(request) {
+			const iccid = request.args?.iccid;
+			const nickname = request.args?.nickname;
+
+			if (!valid_iccid(iccid) || type(nickname) != 'string' ||
+			    length(nickname) > 64 || match(nickname, /[[:cntrl:]]/) !== null)
+				return failure('invalid_argument',
+					'The ICCID or profile nickname is invalid.');
+
+			return run_lpac(request,
+				[ 'profile', 'nickname', iccid, nickname ], 'nickname', true);
+		}
+	},
+
+	delete_profile: {
+		args: { iccid: '' },
+		call: function(request) {
+			const id = request.args?.iccid;
+
+			if (!valid_profile_id(id))
+				return failure('invalid_argument',
+					'The profile identifier is invalid.');
+
+			return run_lpac(request,
+				[ 'profile', 'delete', id ], 'delete', true);
+		}
+	},
+
+	remove_notification: {
+		args: { seq: '' },
+		call: function(request) {
+			const seq = request.args?.seq;
+			const seq_number = (type(seq) == 'string' &&
+				match(seq, /^[1-9][0-9]{0,9}$/) !== null) ? int(seq) : null;
+
+			if (seq_number === null || seq_number > 4294967295)
+				return failure('invalid_argument',
+					'The notification sequence number is invalid.');
+
+			return run_lpac(request,
+				[ 'notification', 'remove', `${seq_number}` ],
+				'remove_notification', true);
+		}
+	},
+
+	get_config: {
+		args: {},
+		call: function() {
+			const config = read_config();
+
+			return config !== null
+				? success(config)
+				: failure('invalid_config',
+					'The installed lpac configuration is missing or invalid.');
+		}
+	},
+
+	set_config: {
+		args: { config: {} },
+		call: function(request) {
+			const config = normalize_config(request.args?.config);
+
+			if (config === null)
+				return failure('invalid_config',
+					'The supplied lpac configuration is invalid.');
+
+			const lock_state = acquire_lock();
+
+			if (!lock_state.handle)
+				return lock_state.result;
+
+			const written = write_config(config);
+			release_lock(lock_state.handle);
+
+			return written
+				? success(config)
+				: failure('config_write_failed',
+					'Unable to commit the lpac configuration.');
+		}
+	}
+};
+
+return { 'luci.lpac': methods };

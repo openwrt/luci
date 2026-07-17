@@ -1,0 +1,131 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+.lpac-profile-key {
+	display: none;
+}
+
+.lpac-profile-field,
+.lpac-profile-value {
+	min-width: 0;
+}
+
+@media screen and (max-width: 854px) {
+	#lpac-profile-table,
+	#lpac-profile-table > tbody {
+		display: block;
+		width: 100%;
+	}
+
+	#lpac-profile-table .tr.table-titles {
+		display: none;
+	}
+
+	#lpac-profile-table .tr:not(.table-titles):not(.placeholder) {
+		display: grid;
+		grid-template-columns: minmax(0, 2fr) minmax(7rem, 1fr);
+		column-gap: .5em;
+		align-items: start;
+		width: 100%;
+		border-top: 1px solid var(--border-color-medium, var(--gray-color, rgba(127, 127, 127, .35)));
+	}
+
+	#lpac-profile-table .td {
+		display: block;
+		width: auto;
+		max-width: none;
+		min-width: 0;
+		padding: 3px;
+		position: static;
+		border-top: 0;
+		box-sizing: border-box;
+	}
+
+	#lpac-profile-table .td[data-title]::before,
+	#lpac-profile-table .td[data-title]::after {
+		display: none !important;
+		content: none !important;
+	}
+
+	#lpac-profile-table .tr.placeholder {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	#lpac-profile-table .tr.placeholder > .td {
+		display: block;
+		width: 100%;
+		position: static;
+		text-align: center;
+		line-height: 3em;
+	}
+
+	#lpac-profile-table .td:nth-child(1) {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	#lpac-profile-table .td:nth-child(2) {
+		grid-column: 2;
+		grid-row: 1;
+	}
+
+	#lpac-profile-table .td:nth-child(3) {
+		grid-column: 1;
+		grid-row: 2;
+	}
+
+	#lpac-profile-table .td:nth-child(4) {
+		grid-column: 2;
+		grid-row: 2;
+	}
+
+	#lpac-profile-table .td.cbi-section-actions {
+		grid-column: 1 / -1;
+		grid-row: 3;
+		width: auto;
+		max-width: none;
+		display: flex;
+		align-items: baseline;
+	}
+
+	#lpac-profile-table .lpac-profile-field {
+		display: flex;
+		align-items: baseline;
+		gap: .3em;
+		width: 100%;
+		font-size: 1em;
+		line-height: 1.5;
+	}
+
+	#lpac-profile-table .lpac-profile-key {
+		display: inline;
+		flex: 0 0 auto;
+	}
+
+	#lpac-profile-table .lpac-profile-value {
+		overflow-wrap: anywhere;
+		word-break: normal;
+	}
+
+	#lpac-profile-table .td:nth-child(3) .lpac-profile-value {
+		font-variant-numeric: tabular-nums;
+	}
+
+	#lpac-profile-table .td.cbi-section-actions > .lpac-profile-actions {
+		display: flex;
+		align-items: center;
+		gap: .3em;
+		width: 100%;
+	}
+
+	#lpac-profile-table .lpac-profile-actions > .btn {
+		flex: 1 1 0;
+		min-width: 0;
+		font-size: 13px !important;
+		line-height: 1.8em;
+		padding: 0 .6em;
+		margin-left: .15em;
+		margin-right: .15em;
+	}
+}

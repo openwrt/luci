@@ -1,0 +1,29 @@
+{
+	"luci-app-lpac": {
+		"description": "Grant access to the lpac eSIM manager",
+		"read": {
+			"ubus": {
+				"luci.lpac": [
+					"get_version",
+					"get_drivers",
+					"get_info",
+					"list_profiles",
+					"list_notifications",
+					"get_config"
+				]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.lpac": [
+					"enable_profile",
+					"disable_profile",
+					"nickname_profile",
+					"delete_profile",
+					"remove_notification",
+					"set_config"
+				]
+			}
+		}
+	}
+}
