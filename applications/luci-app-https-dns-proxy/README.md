@@ -1,8 +1,8 @@
 # luci-app-https-dns-proxy
 
 [![OpenWrt](https://img.shields.io/badge/OpenWrt-Compatible-blueviolet)](https://openwrt.org)
-[![Web UI](https://img.shields.io/badge/Web_UI-Available-blue)](https://docs.openwrt.melmac.ca/https-dns-proxy/)
-[![Resolvers](https://img.shields.io/badge/Resolvers-40%2B%20Built--in-brightgreen)](https://docs.openwrt.melmac.ca/https-dns-proxy/)
+[![Web UI](https://img.shields.io/badge/Web_UI-Available-blue)](https://docs.mossdef.org/https-dns-proxy/)
+[![Resolvers](https://img.shields.io/badge/Resolvers-40%2B%20Built--in-brightgreen)](https://docs.mossdef.org/https-dns-proxy/)
 [![Minimal Footprint](https://img.shields.io/badge/Size-~40KB-green)](https://github.com/stangri/https-dns-proxy)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](https://github.com/stangri/https-dns-proxy/blob/master/LICENSE)
 
@@ -17,6 +17,6 @@ Includes optional integration with `dnsmasq`, automatic fallback, and canary dom
 
 **Full documentation:**
 
-[https://docs.openwrt.melmac.ca/https-dns-proxy/](https://docs.openwrt.melmac.ca/https-dns-proxy/)
+[https://docs.mossdef.org/https-dns-proxy/](https://docs.mossdef.org/https-dns-proxy/)
 
 Based on [@aarond10](https://github.com/aarond10)'s excellent [https_dns_proxy](https://github.com/aarond10/https_dns_proxy)
