@@ -525,8 +525,8 @@ function versionSatisfied(ver, ref, vop)
 
 function pkgStatus(pkg, vop, ver, info)
 {
-	info.errors = info.errors || [];
-	info.install = info.install || [];
+	info.errors ??= [];
+	info.install ??= new Set();
 
 	if (isPkgInstalled(pkg)) {
 		if (vop && !versionSatisfied(pkg.version, ver, vop)) {
@@ -538,7 +538,7 @@ function pkgStatus(pkg, vop, ver, info)
 			});
 
 			if (repl) {
-				info.install.push(repl);
+				info.install.add(repl);
 				return E('span', {
 					'class': 'label',
 					'data-tooltip': _('Requires update to %h %h')
@@ -559,7 +559,7 @@ function pkgStatus(pkg, vop, ver, info)
 	}
 	else if (!pkg.missing) {
 		if (!vop || versionSatisfied(pkg.version, ver, vop)) {
-			info.install.push(pkg);
+			info.install.add(pkg);
 			return E('span', { 'class': 'label' }, _('Not installed'));
 		}
 
@@ -596,12 +596,15 @@ function renderDependencyItem(dep, info, flat)
 
 		let text = pkg.name;
 
+		if (vop && ver)
+			text += ' (%s %s)'.format(vop, ver);
+
 		if (pkg.installsize)
 			text += ' (%1024mB)'.format(pkg.installsize);
 		else if (pkg.size)
 			text += ' (~%1024mB)'.format(pkg.size);
 
-		li.appendChild(E('span', { 'data-tooltip': pkg.description },
+		li.appendChild(E('span', { 'data-tooltip': (pkg.description || '') + (vop && ver && pkg.version ? '\nAvailable: %s'.format(pkg.version) : '') || null },
 			[ text, ' ', pkgStatus(pkg, vop, ver, info) ]));
 
 		(pkg.depends || []).forEach(function(d) {
@@ -624,54 +627,54 @@ function renderDependencyItem(dep, info, flat)
 	return li;
 }
 
+let pC = null;
+
 function renderDependencies(depends, info, flat)
 {
 	const deps = depends || [];
 	const items = [];
+	info.seen ??= Object.create(null);
 
-	info.seen = info.seen || [];
+	pC ??= Object.create(null);
 
 	for (let i = 0; i < deps.length; i++) {
-		let dep, vop, ver;
-
 		if (deps[i] === 'libc')
 			continue;
 
-		// This regex handles "name", "name>=ver", and "name (>=ver)"
-		const match = deps[i].match(/^([^><=~\s]+)\s*\(?([><=~]+)?\s*([^)]+)?\)?$/);
-
-		if (match) {
-			// Destructure the match array: [full_match, name, operator, version]
-			const [, matchedDep, matchedVop, matchedVer] = match;
-			dep = (matchedDep || '').trim();
-			vop = (matchedVop || '').trim() || null;
-			ver = (matchedVer || '').trim() || null;
-		} else {
-			// Fallback if the string is just a plain name with no operators
-			dep = deps[i].trim();
-			vop = ver = null;
-		}
-
-		if (info.seen[dep])
+		// This regex handles "name", "name>=ver", "name (>= ver)" with operators: > < = ~ >= <=
+		// Regex (capture groups numbered):
+		//   ^([^><=~\s]+)    [1] package name
+		//   \s?\(?            optional space + optional paren
+		//   ([><=~]+)?       [2] optional operators: > < = ~ >= <=
+		//   \s?               optional space before version
+		//   ([^)]+)?         [3] optional version string
+		//   \)?$              optional closing paren + end
+		const m = deps[i].match(/^([^><=~\s]+)\s?\(?([><=~]+)?\s?([^)]+)?\)?$/);
+		if (!m || info.seen[m[0]])
 			continue;
 
-		const pkgs = [];
+		// Provider cache (pC): dep name -> Set of package names (incrementally populated)
+		//   .installed.providers[ip] = [ ip, ip-tiny ]
+		//   .available.providers[ip]  = [ ip, ip-full ]
+		//   pC[ip]                    = Set( ip, ip-tiny, ip-full )
+		if (!pC[m[1]]) {
+			pC[m[1]] = new Set();
+			for (const src of [packages.installed.providers, packages.available.providers])
+				for (const p of (src[m[1]] || []))
+					pC[m[1]].add(p.name);
+		}
 
-		(packages.installed.providers[dep] || []).forEach(function(p) {
-			if (pkgs.indexOf(p.name) === -1) pkgs.push(p.name);
-		});
-
-		(packages.available.providers[dep] || []).forEach(function(p) {
-			if (pkgs.indexOf(p.name) === -1) pkgs.push(p.name);
-		});
-
-		info.seen[dep] = {
-			name:    dep,
-			pkgs:    pkgs,
-			version: [vop, ver]
+		// Index by full string so entries with different constraints on
+		// the same package each get their own line:
+		//   "ucode (>= 2022.03.22)" vs "ucode"
+		//   "dovecot2.3.21>=2.3.0" vs "dovecot2.3.21<2.4.0"
+		info.seen[m[0]] = {
+			name:    m[1],
+			pkgs:    [...pC[m[1]]],
+			version: [m[2] || null, m[3] || null]
 		};
 
-		items.push(renderDependencyItem(info.seen[dep], info, flat));
+		items.push(renderDependencyItem(info.seen[m[0]], info, flat));
 	}
 
 	if (items.length)
@@ -717,7 +720,7 @@ function handleInstall(ev)
 	const deps = renderDependencies(pkg.depends, depcache);
 	let tree = null, errs = null, inst = null, desc = null;
 
-	if (depcache.errors && depcache.errors.length) {
+	if (depcache.errors?.length) {
 		errs = E('ul', { 'class': 'errors' });
 		depcache.errors.forEach(function(err) {
 			errs.appendChild(E('li', {}, err));
@@ -728,7 +731,7 @@ function handleInstall(ev)
 	let totalpkgs = 1;
 	let suggestsize = 0;
 
-	if (depcache.install && depcache.install.length)
+	if (depcache.install?.size)
 		depcache.install.forEach(function(ipkg) {
 			totalsize += ipkg.installsize || ipkg.size || 0;
 			totalpkgs++;
@@ -767,7 +770,7 @@ function handleInstall(ev)
 
 			i18n_tree = renderDependencies(i18n_packages, i18ncache, true);
 
-			if (i18ncache.install && i18ncache.install.length) {
+			if (i18ncache.install?.size) {
 				i18ncache.install.forEach(function(ipkg) {
 					suggestsize += ipkg.installsize || ipkg.size || 0;
 				});
@@ -1152,6 +1155,7 @@ function updateLists(data)
 
 	packages.available = { providers: {}, pkgs: {} };
 	packages.installed = { providers: {}, pkgs: {} };
+	pC = null;
 
 	return (data ? Promise.resolve(data) : downloadLists()).then(function(data) {
 		const pg = document.querySelector('.cbi-progressbar');
