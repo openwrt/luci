@@ -1074,7 +1074,7 @@ return view.extend({
 				ss.tab('encryption', _('Wireless Security'));
 				ss.tab('macfilter', _('MAC-Filter'));
 				ss.tab('advanced', _('Advanced Settings'));
-				ss.tab('roaming', _('WLAN roaming'), _('Settings for assisting wireless clients in roaming between multiple APs: 802.11r, 802.11k and 802.11v'));
+				ss.tab('roaming', _('WLAN Roaming'), _('Settings for assisting wireless clients in roaming between multiple APs: 802.11r, 802.11k and 802.11v'));
 
 				o = ss.taboption('general', form.ListValue, 'mode', _('Mode') , !have_mesh ? '<a id="installmesh" href="%s" target="_blank" rel="noreferrer">%s</a>'
 						.format(L.url('admin/system/package-manager') + '?query=wpad-mesh', _('802.11s? Install mesh wpad') ) : '');
