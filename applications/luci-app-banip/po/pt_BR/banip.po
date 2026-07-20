@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-05-26 08:42+0000\n"
-"Last-Translator: Volenski <volenski@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-07-17 03:02+0000\n"
+"Last-Translator: Janderson Vieira Santos <jandersonvs79@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsbanip/pt_BR/>\n"
 "Language: pt_BR\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:640
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:709
@@ -62,7 +62,7 @@ msgstr "<Endereço IP><Espaço><Máscara de rede>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
 msgid "<JSON Lines><IP-Address><JSON Lines>"
-msgstr ""
+msgstr "<Linhas JSON><Endereço IP><Linhas JSON>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
 msgid "<Suricata Syntax>"
@@ -239,7 +239,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:618
 msgid "Burst size in packets for the shared NFT log limit."
-msgstr ""
+msgstr "Tamanho do burst em pacotes para o limite compartilhado de log do NFT."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:327
 msgid "CPU Cores"
@@ -349,7 +349,7 @@ msgstr "Download inseguro"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:258
 msgid "Download Parameters"
-msgstr "Parâmetros de Download"
+msgstr "Parâmetros de download"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:273
 msgid "Download Retries"
@@ -424,6 +424,8 @@ msgid ""
 "Enable NFT counters for Set elements and chain rules. Required for the GeoIP "
 "Map and packet statistics in the Set Reporting."
 msgstr ""
+"Ativar contadores NFT para elementos de Set e regras de chain. Necessário "
+"para o Mapa GeoIP e para as estatísticas de pacotes no Relatório de Sets."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:644
 msgid "Enable Remote Logging"
@@ -680,7 +682,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:618
 msgid "Log Burst Limit"
-msgstr ""
+msgstr "Limite de Burst do Log"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:599
 msgid "Log Count"
@@ -704,7 +706,7 @@ msgstr "Registrar Prerouting"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:604
 msgid "Log Rate Limit"
-msgstr ""
+msgstr "Limite de Taxa do Log"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:198
 msgid "Log Settings"
@@ -791,8 +793,8 @@ msgid ""
 "Number of download attempts in case of an error (not supported by uclient-"
 "fetch)."
 msgstr ""
-"Quantidade de tentativas de download em caso de erro (não suportado pelo "
-"uclient-fetch)."
+"Número de tentativas de download em caso de erro (não suportado pelo uclient-"
+"fetch)."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:599
 msgid ""
@@ -855,6 +857,9 @@ msgid ""
 "utility. The output flag, e.g. '-o' for curl or '-O' for wget, must be the "
 "last parameter."
 msgstr ""
+"Sobrescreve as opções de download pré-configuradas para o utilitário de "
+"download selecionado. A flag de saída, ex: '-o' para o curl ou '-O' para o "
+"wget, deve ser o último parâmetro."
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:25
 msgid "Overview"
@@ -891,6 +896,10 @@ msgid ""
 "logged rules. Set to '0' to disable rate limiting entirely, e.g. when using "
 "ulogd or other userspace log handlers."
 msgstr ""
+"Taxa (por segundo) para o limite compartilhado de log do NFT, aplicada "
+"globalmente a todas as regras que geram log. Defina como '0' para desativar "
+"totalmente o limite de taxa, ex: ao usar o ulogd ou outros manipuladores de "
+"log em espaço do usuário (userspace)."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:672
 msgid "Receive E-Mail notifications with every banIP run."
@@ -931,7 +940,7 @@ msgstr "Diretório do Relatório"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:288
 msgid "Reporting Counters"
-msgstr ""
+msgstr "Contadores de Relatório"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:850
 msgid "Restrict the internet access from/to a small number of secure IPs."
@@ -1053,10 +1062,12 @@ msgid ""
 "Set the NFT chain priority within the banIP table, lower values means higher "
 "priority."
 msgstr ""
+"Define a prioridade da chain NFT dentro da tabela banIP; valores menores "
+"significam maior prioridade."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:457
 msgid "Set the NFT policy for banIP-related Sets."
-msgstr ""
+msgstr "Define a política NFT para os Sets relacionados ao banIP."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:558
 msgid "Set the syslog level for NFT logging."
