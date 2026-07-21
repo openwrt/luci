@@ -180,7 +180,7 @@ static bool parse_cidr(const char *dest, cidr_t *pp)
 {
 	char *p, *s, buf[INET6_ADDRSTRLEN * 2 + 2];
 
-	strncpy(buf, dest, sizeof(buf) - 1);
+	snprintf(buf, sizeof(buf), "%s", dest);
 
 	p = strchr(buf, '/');
 
@@ -264,7 +264,7 @@ static int format_cidr(lua_State *L, cidr_t *p)
 		}
 
 		if (p->bits < AF_BITS(p->family))
-			s += sprintf(s, "/%d", p->bits);
+			s += snprintf(s, buf + sizeof(buf) - s, "/%d", p->bits);
 
 		lua_pushstring(L, buf);
 	}
