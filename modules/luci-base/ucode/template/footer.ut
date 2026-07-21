@@ -3,8 +3,9 @@
  Licensed to the public under the Apache License 2.0.
 -#}
 
-{% const rollback = dispatcher.rollback_pending() %}
-{% if (rollback || trigger_apply || trigger_revert): %}
+{% const rollback = dispatcher.rollback_pending();
+	const own_rollback = (rollback && rollback.session === ctx.authsession) %}
+{% if (own_rollback || trigger_apply || trigger_revert): %}
 	<script>
 		document.addEventListener("luci-loaded", function() {
 			{% if (trigger_apply): %}
