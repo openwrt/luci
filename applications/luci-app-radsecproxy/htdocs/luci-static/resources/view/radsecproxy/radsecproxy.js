@@ -7,7 +7,7 @@
 'require ui';
 
 function writeFile(path, content) {
-    if (content) {
+    if (content != null) {
         var normalized = content.replaceAll('\r\n', '\n');
         fs.write(path, normalized);
     }
@@ -186,7 +186,7 @@ return view.extend({
         o.rows = 25;
         o.rmempty = true;
         o.cfgvalue = function(section_id) {
-            return fs.read(config_file);
+            return L.resolveDefault(fs.read(config_file), '');
         }
         o.write = function(section_id, value) {
             writeFile(config_file, value);
@@ -225,14 +225,14 @@ return view.extend({
         o.modalonly = true;
 
         // TLS configuration -> advanced
-        
+
         s.tab('advanced', _('Advanced'));
         o = s.taboption('advanced', form.Flag, 'CRLCheck', _('CRL Check'), _('Check the peer certificate against CRLs. Note that every CA must provide a CRL, and the CRLs must be download manually'));
         o.default = false;
         o.modalonly = true;
 
         o = s.taboption('advanced', form.Value, 'CACertificatePath', _('CA Certificate path'), _('Path to directory containing CA certificate(s) and CRLs.'));
-        o.datatype = 'integer';
+        o.datatype = 'string';
         o.rmempty = true;
         o.modalonly = true;
 
@@ -554,8 +554,8 @@ return view.extend({
         o.depends('type', 'dtls');
         o.rmempty = true;
         o.value('', 'Global default');
-        o.value('0', 'Enabled');
-        o.value('1', 'Disabled');
+        o.value('0', 'Disabled');
+        o.value('1', 'Enabled');
         o.modalonly = true;
 
         o = s.taboption('tls', form.Value, 'SNIservername', _('SNI Server Name'), _('Alternate server name to use for SNI'));
@@ -565,7 +565,7 @@ return view.extend({
         o.depends('type', 'dtls');
         o.modalonly = true;
 
-        o = s.taboption('tls', form.Flag, 'certificateNameCheck', _('CertificateNameCheck'), ('Check the name in the Certificate against the configured name / host. Disable this to use a custom name check.'));
+        o = s.taboption('tls', form.Flag, 'certificateNameCheck', _('CertificateNameCheck'), _('Check the name in the Certificate against the configured name / host. Disable this to use a custom name check.'));
         o.default = true;
         o.rmempty = false;
         o.depends('type', 'tls');
@@ -616,8 +616,8 @@ return view.extend({
         o = s.taboption('radius', form.ListValue, 'LoopPrevention', _('LoopPrevention'), _('Enable Loop Prevention for this specific server (overrides global default).'));
         o.rmempty = true;
         o.value('', 'Global default');
-        o.value('0', 'Enabled');
-        o.value('1', 'Disabled');
+        o.value('0', 'Disabled');
+        o.value('1', 'Enabled');
         o.modalonly = true;
 
         o = s.taboption('radius', form.Value, 'retryCount', _('RetryCount'), _('Amount of times radsecproxy should try to retransmit the packet if no answer was received.'));
