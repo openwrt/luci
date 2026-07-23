@@ -85,8 +85,8 @@ return view.extend({
 			_('Configuration is enabled or not'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, 'remote_gateway', _('Remote Endpoint'),
-			_('IP address or FQDN name of the tunnel remote endpoint.') + ' ' +
+		o = s.taboption('general', form.DynamicList, 'remote_addrs', _('Remote Endpoints'),
+			_('IP address or FQDN name of the tunnel remote endpoints.') + ' ' +
 			_('If no value is specified, "%any" is assumed.'));
 		o.datatype = 'or(hostname,ipaddr)';
 		o.placeholder = '%any';
