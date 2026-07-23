@@ -85,10 +85,11 @@ return view.extend({
 			_('Configuration is enabled or not'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, 'gateway', _('Gateway (Remote Endpoint)'),
-			_('IP address or FQDN name of the tunnel remote endpoint'));
+		o = s.taboption('general', form.Value, 'remote_gateway', _('Remote Endpoint'),
+			_('IP address or FQDN name of the tunnel remote endpoint.') + ' ' +
+			_('If no value is specified, "%any" is assumed.'));
 		o.datatype = 'or(hostname,ipaddr)';
-		o.rmempty = false;
+		o.placeholder = '%any';
 
 		o = s.taboption('general', form.Value, 'local_sourceip', _('Local Source IP'),
 			_('Virtual IP(s) to request in IKEv2 configuration payloads requests'));
