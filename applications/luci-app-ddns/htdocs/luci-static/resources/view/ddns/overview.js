@@ -164,8 +164,7 @@ return view.extend({
 	},
 
 	handleReloadDDnsRule(m, section_id, ev) {
-		return fs.exec('/etc/init.d/ddns',
-							[ 'restart', section_id ])
+		return fs.exec('/etc/init.d/ddns', [ 'restart', section_id ])
 			.then(L.bind(m.load, m))
 			.then(L.bind(m.render, m))
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
@@ -179,7 +178,7 @@ return view.extend({
 	},
 
 	handleToggleDDns(m, ev) {
-        let action = this.status['_enabled'];
+		let action = this.status['_enabled'];
 		return this.callInitAction('ddns', action ? 'disable' : 'enable')
 			.then(L.bind(function () { return this.callInitAction('ddns', action ? 'stop' : 'start')}, this))
 			.then(L.bind(m.render, m))
