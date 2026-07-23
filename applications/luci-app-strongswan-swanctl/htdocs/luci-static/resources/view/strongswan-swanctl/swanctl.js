@@ -90,11 +90,6 @@ return view.extend({
 		o.datatype = 'or(hostname,ipaddr)';
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, 'local_gateway', _('Local Gateway'),
-			_('IP address or FQDN of the tunnel local endpoint'));
-		o.datatype = 'or(hostname,ipaddr)';
-		o.modalonly = true;
-
 		o = s.taboption('general', form.Value, 'local_sourceip', _('Local Source IP'),
 			_('Virtual IP(s) to request in IKEv2 configuration payloads requests'));
 		o.datatype = 'ipaddr';
