@@ -260,11 +260,6 @@ return view.extend({
 		o.placeholder = '192.168.2.1/24';
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, 'local_nat', _('Local NAT'),
-			_('NAT range for tunnels with overlapping IP addresses'));
-		o.datatype = 'cidr';
-		o.modalonly = true;
-
 		o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
 			_('XFRM interface ID set on input and output interfaces'));
 		o.load = function (section_id) {
