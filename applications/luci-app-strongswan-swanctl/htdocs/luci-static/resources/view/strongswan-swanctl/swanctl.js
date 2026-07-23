@@ -91,13 +91,15 @@ return view.extend({
 		o.datatype = 'or(hostname,ipaddr)';
 		o.placeholder = '%any';
 
-		o = s.taboption('general', form.Value, 'local_sourceip', _('Local Source IP'),
-			_('Virtual IP(s) to request in IKEv2 configuration payloads requests'));
-		o.datatype = 'ipaddr';
+		o = s.taboption('general', form.DynamicList, 'local_addrs', _('Local Endpoints'),
+			_('IP address or FQDN name of the tunnel local endpoints.') + ' ' +
+			_('If no value is specified, "%any" is assumed.'));
+		o.datatype = 'or(hostname,ipaddr)';
+		o.placeholder = '%any';
 		o.modalonly = true;
 
-		o = s.taboption('general', form.Value, 'local_ip', _('Local IP'),
-			_('Local address(es) to use in IKE negotiation'));
+		o = s.taboption('general', form.Value, 'local_sourceip', _('Local Source IP'),
+			_('Virtual IP(s) to request in IKEv2 configuration payloads requests'));
 		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
