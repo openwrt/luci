@@ -231,6 +231,14 @@ return view.extend({
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Flag, 'encap', _('ESP Encapsulation'),
+			_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
+			_('This makes the peer believe that a NAT situation exist on the transmission path, forcing it to encapsulate ESP packets in UDP.') + '<br />' +
+			_('Usually this is not required but it can help to work around connectivity issues with too restrictive intermediary firewalls that block ESP packets.'));
+		o.modalonly = true;
+		o.default = '0';
+		o.rmempty = true;
+
 		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
 			_('Version of IKE for negotiation'));
 		o.value('ikev1', 'IKEv1 (%s)'.format(_('deprecated')));
