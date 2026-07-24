@@ -5,6 +5,7 @@
 			"file": {
 				"/etc/ocserv/*": [ "read" ],
 				"/proc/net/ipv6_route": [ "read" ],
+				"/proc/*/net/ipv6_route": [ "read" ],
 				"/usr/bin/certtool --hash sha256 --key-id --infile /etc/ocserv/server-cert.pem": ["exec"],
 				"/usr/bin/occtl show users": ["exec"],
 				"/usr/bin/occtl --json show users": ["exec"],
