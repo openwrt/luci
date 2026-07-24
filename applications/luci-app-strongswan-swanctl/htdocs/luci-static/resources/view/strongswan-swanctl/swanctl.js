@@ -191,6 +191,8 @@ return view.extend({
 			_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'));
 		o.default = '1';
 		o.modalonly = true;
+		o.depends('keyexchange', 'ikev2');
+		o.depends('keyexchange', 'ike');
 
 		o = s.taboption('advanced', form.ListValue, 'fragmentation', _('IKE Fragmentation'),
 			_('Use IKE fragmentation'));
