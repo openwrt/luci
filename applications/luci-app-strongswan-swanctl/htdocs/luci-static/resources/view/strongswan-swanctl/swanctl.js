@@ -205,19 +205,20 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'keyingtries', _('Keying Retries'),
 			_('Number of retransmissions attempts during initial negotiation'));
-		o.datatype = 'uinteger';
-		o.default = '3';
+		o.datatype = 'or(uinteger, "%forever")';
+		o.placeholder = '3';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'dpddelay', _('DPD Delay'),
 			_('Interval to check liveness of a peer'));
 		o.validate = validateTimeFormat;
-		o.default = '30s';
+		o.placeholder = '30s';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
 			_('Interval before closing an inactive CHILD_SA'));
 		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
