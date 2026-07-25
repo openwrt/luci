@@ -2,116 +2,369 @@
 <html>
 
 <head>
-	<title>banIP Map</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>banIP Map</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-	<style>
-		#map {
-			height: 97vh;
-			width: 100%;
-		}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-		.mono {
-			font-size: small;
-			font-family: monospace;
-			white-space: nowrap;
-			margin: 0.3em !important;
-		}
-	</style>
+<style>
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+}
+
+#toolbar {
+	flex: 0 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.6em;
+	padding: 0.5em 0.8em;
+	box-sizing: border-box;
+	background: #f7f7f7;
+	border-bottom: 1px solid #d0d0d0;
+	font-family: sans-serif;
+	font-size: 14px;
+}
+
+#feedSelect {
+	min-width: 260px;
+	max-width: 70vw;
+	padding: 0.25em;
+}
+
+#map {
+	flex: 1 1 auto;
+	min-height: 0;
+	width: 100%;
+}
+
+.popup-title {
+	display: block;
+	text-align: center;
+	font-weight: bold;
+}
+
+.mono {
+	font-size: small;
+	font-family: monospace;
+	white-space: nowrap;
+	margin: 0.3em !important;
+}
+</style>
 </head>
 
 <body>
-	<div id="map"></div>
+<div id="toolbar">
+	<label for="feedSelect">Feed:</label>
+	<select id="feedSelect">
+		<option value="">All active feeds - No filter</option>
+	</select>
+</div>
 
-	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-		integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-	<script>
-		'use strict';
+<div id="map"></div>
 
-		/* intialize map */
-		let map = L.map('map', {
-			zoom: 3,
-			minZoom: 2,
-			maxZoom: 18,
-			center: [50, 10]
-			}).setView([50, 10]);
-			L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
-		/* get mapData */
-		const mapData = sessionStorage.getItem('mapData');
-		if (mapData) {
-			let uniqueCoordinates = [];
-			let homeCoordinates = [];
-			const parsedData = JSON.parse(mapData);
-			parsedData.forEach(function (item, index) {
-				if (Object.keys(item).length !== 0) {
-					let keys = Object.keys(item);
-					keys.forEach(function (key) {
-						if (item[key] && item[key].lat && item[key].lon && item[key].query && item[key].as && item[key].city && item[key].countryCode) {
-							let coordObj = { lat: item[key].lat, lon: item[key].lon };
-							if (key === "homeIP" && !homeCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
-								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
-								homeCoordinates.push(coordObj);
-							}
-							if (key !== "homeIP" && !uniqueCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
-								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
-								uniqueCoordinates.push(coordObj);
-							}
-						}
-					});
-				}
+<script>
+'use strict';
+
+/*
+ * Number of map points shown when a single feed is selected.
+ * The unfiltered view intentionally shows every point, see
+ * renderBlockedMarkers().
+ */
+const TOP_N = 10;
+
+const MAX_IP_LEN = 38;
+const MAX_AS_LEN = 38;
+const MAX_CITY_LEN = 33;
+
+/* initialize map */
+const map = L.map('map', {
+	zoom: 3,
+	minZoom: 2,
+	maxZoom: 18,
+	center: [50, 10],
+	worldCopyJump: true
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+/* one layer group per marker kind, so redrawing is a single clearLayers() call */
+const homeLayer = L.layerGroup().addTo(map);
+const blockedLayer = L.layerGroup().addTo(map);
+
+/*
+ * The mapData format is an array like:
+ *
+ * [
+ *   {},
+ *   { "homeIP": { ... } },
+ *   { "country_ir.v4": { "query": "111.222.333.4", ... } },
+ *   { "cinsscore.v4": { "query": "555.666.777.8", ... } }
+ * ]
+ *
+ * Each external object key is the banIP set/feed name.
+ */
+const mapData = sessionStorage.getItem('mapData');
+const feedSelect = document.getElementById('feedSelect');
+
+/*
+ * GeoIP payloads are third party data, so everything that ends up
+ * inside a popup must be escaped before being injected as HTML.
+ */
+function escapeHtml(value) {
+	const entities = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#39;'
+	};
+
+	return String(value === undefined || value === null ? '' : value)
+		.replace(/[&<>"']/g, function(character) {
+			return entities[character];
+		});
+}
+
+function truncate(value, maxLength, fallback) {
+	const text = String(value === undefined || value === null ? '' : value).trim();
+
+	if (!text)
+		return fallback;
+
+	return text.length > maxLength ? text.slice(0, maxLength - 1) + '\u2026' : text;
+}
+
+/* A GeoIP object is usable when it resolved and carries finite coordinates. */
+function hasUsableGeo(geo) {
+	return !!geo &&
+		geo.status === 'success' &&
+		Number.isFinite(geo.lat) &&
+		Number.isFinite(geo.lon) &&
+		!!geo.query;
+}
+
+/*
+ * A feed key counts as blocked traffic when it has a name, is not the
+ * local homeIP marker and is not an allowlist.
+ */
+function isBlockedFeed(feed) {
+	const name = String(feed || '').toLowerCase();
+
+	return !!name &&
+		name !== 'homeip' &&
+		!name.startsWith('allowlist');
+}
+
+/*
+ * Returns:
+ *
+ * {
+ *   "country_ir.v4": [ geoObject, geoObject, ... ],
+ *   "cinsscore.v4":  [ geoObject, geoObject, ... ]
+ * }
+ *
+ * The original mapData order is retained. Consequently, the first
+ * TOP_N GeoIP entries generated for each feed are the ones displayed
+ * when that feed is selected.
+ */
+function groupEntriesByFeed(parsedData) {
+	return parsedData.reduce(function(feeds, item) {
+		if (!item || typeof item !== 'object')
+			return feeds;
+
+		Object.keys(item).forEach(function(feed) {
+			const geo = item[feed];
+
+			if (!isBlockedFeed(feed) || !hasUsableGeo(geo))
+				return;
+
+			if (!feeds[feed])
+				feeds[feed] = [];
+
+			feeds[feed].push(geo);
+		});
+
+		return feeds;
+	}, {});
+}
+
+function getActiveFeedNames(feeds) {
+	return Object.keys(feeds)
+		.filter(function(feed) {
+			return Array.isArray(feeds[feed]) && feeds[feed].length > 0;
+		})
+		.sort(function(a, b) {
+			return a.localeCompare(b);
+		});
+}
+
+function countAllEntries(feeds) {
+	return getActiveFeedNames(feeds).reduce(function(total, feed) {
+		return total + feeds[feed].length;
+	}, 0);
+}
+
+function addFeedOptions(feeds) {
+	const activeFeeds = getActiveFeedNames(feeds);
+
+	if (!activeFeeds.length) {
+		feedSelect.disabled = true;
+		feedSelect.options[0].textContent = 'No mappable banIP entries';
+
+		return;
+	}
+
+	feedSelect.options[0].textContent =
+	    'All active feeds - No filter - ' +
+	    countAllEntries(feeds) + ' map points';
+
+	activeFeeds.forEach(function(feed) {
+		const option = document.createElement('option');
+		const reported = feeds[feed].length;
+		const displayed = Math.min(reported, TOP_N);
+
+		option.value = feed;
+		option.textContent = feed +
+		    ' - Top ' + displayed +
+		    ' of ' + reported + ' map points';
+
+		feedSelect.appendChild(option);
+	});
+}
+
+function buildPopup(title, geo) {
+	return '<span class="popup-title">' + escapeHtml(title) + '</span>' +
+		'<p class="mono">' +
+		'City: ' + escapeHtml(truncate(geo.city, MAX_CITY_LEN, 'n/a')) +
+		' (' + escapeHtml(geo.countryCode || '--') + ')' +
+		'<br />Latitude : ' + escapeHtml(geo.lat) +
+		'<br />Longitude: ' + escapeHtml(geo.lon) +
+		'<br />IP: ' + escapeHtml(truncate(geo.query, MAX_IP_LEN, 'n/a')) +
+		'<br />AS: ' + escapeHtml(truncate(geo.as, MAX_AS_LEN, 'n/a')) +
+		'</p>';
+}
+
+function addBlockedMarker(feed, geo) {
+	L.circleMarker([geo.lat, geo.lon], {
+		color: '#C22121',
+		opacity: 1.0,
+		fillColor: '#C22121',
+		fillOpacity: 0.5,
+		radius: 3
+	})
+		.bindPopup(buildPopup('blocked IP by ' + feed, geo))
+		.addTo(blockedLayer);
+}
+
+/*
+ * selectedFeed === '':
+ *   Render every mappable point of every active feed.
+ *
+ * selectedFeed !== '':
+ *   Render only the first TOP_N points of that feed.
+ */
+function renderBlockedMarkers(feeds, selectedFeed) {
+	blockedLayer.clearLayers();
+
+	if (!selectedFeed) {
+		getActiveFeedNames(feeds).forEach(function(feed) {
+			feeds[feed].forEach(function(geo) {
+				addBlockedMarker(feed, geo);
 			});
+		});
 
-			/* render markers for local IPs, reset focus and zoom level */
-			homeCoordinates.forEach(function (coordObj) {
-				let latHome = coordObj.lat;
-				let lonHome = coordObj.lon;
-				let ipHome = coordObj.query.slice(0, 38);
-				let asHome = coordObj.as.slice(0, 38);
-				let cityHome = coordObj.city.slice(0, 33);
-				let ccHome = coordObj.cc;
+		return;
+	}
 
-				map.setView([latHome, lonHome], 6);
+	(feeds[selectedFeed] || []).slice(0, TOP_N).forEach(function(geo) {
+		addBlockedMarker(selectedFeed, geo);
+	});
+}
 
-				let circle = L.circleMarker([latHome, lonHome]).addTo(map);
-				circle.setStyle({ color: '#378242', opacity: 1.0, fillColor: '#378242', fillOpacity: 0.5, radius: 6 });
-				circle.bindPopup("<b><center>local IP</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + cityHome + " (" + ccHome + ")" +
-					"<br />Latitude : " + latHome +
-					"<br />Longitude: " + lonHome +
-					"<br />IP: " + ipHome +
-					"<br />AS: " + asHome +
-					"</p>");
-			});
+function renderHomeMarkers(parsedData) {
+	const seen = new Set();
+	const homeEntries = [];
 
-			/* render markers for blocked IPs */
-			uniqueCoordinates.forEach(function (coordObj) {
-				let key = coordObj.key.slice(0, -3);
-				let lat = coordObj.lat;
-				let lon = coordObj.lon;
-				let ip = coordObj.query.slice(0, 38);
-				let as = coordObj.as.slice(0, 38);
-				let city = coordObj.city.slice(0, 33);
-				let cc = coordObj.cc;
-				let circle = L.circleMarker([lat, lon]).addTo(map);
-				circle.setStyle({ color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 2 });
-				circle.bindPopup("<b><center>blocked IP by " + key + "</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + city + " (" + cc + ")" +
-					"<br />Latitude : " + lat +
-					"<br />Longitude: " + lon +
-					"<br />IP: " + ip +
-					"<br />AS: " + as +
-					"</p>");
-			});
-		}
-	</script>
+	parsedData.forEach(function(item) {
+		const geo = item && item.homeIP;
+
+		if (!hasUsableGeo(geo))
+			return;
+
+		const key = geo.lat + ',' + geo.lon;
+
+		if (seen.has(key))
+			return;
+
+		seen.add(key);
+		homeEntries.push(geo);
+	});
+
+	if (!homeEntries.length)
+		return;
+
+	homeEntries.forEach(function(geo) {
+		L.circleMarker([geo.lat, geo.lon], {
+			color: '#378242',
+			opacity: 1.0,
+			fillColor: '#378242',
+			fillOpacity: 0.5,
+			radius: 6
+		})
+			.bindPopup(buildPopup('local IP', geo))
+			.addTo(homeLayer);
+	});
+
+	/* center once on the local endpoint, or fit all of them when dual stack */
+	if (homeEntries.length === 1)
+		map.setView([homeEntries[0].lat, homeEntries[0].lon], 6);
+	else
+		map.fitBounds(homeLayer.getBounds(), { maxZoom: 6, padding: [30, 30] });
+}
+
+/* Load and render the data received from the LuCI banIP page */
+if (mapData) {
+	try {
+		const parsedData = JSON.parse(mapData);
+
+		if (!Array.isArray(parsedData))
+			throw new TypeError('mapData is not an array');
+
+		const feeds = groupEntriesByFeed(parsedData);
+
+		renderHomeMarkers(parsedData);
+		addFeedOptions(feeds);
+		renderBlockedMarkers(feeds, '');
+
+		feedSelect.addEventListener('change', function(event) {
+			renderBlockedMarkers(feeds, event.target.value);
+		});
+	} catch (error) {
+		console.error('Unable to parse banIP mapData:', error);
+
+		feedSelect.disabled = true;
+		feedSelect.options[0].textContent = 'Unable to load banIP map data';
+	}
+} else {
+	feedSelect.disabled = true;
+	feedSelect.options[0].textContent = 'No banIP map data available';
+}
+</script>
 </body>
 
 </html>
