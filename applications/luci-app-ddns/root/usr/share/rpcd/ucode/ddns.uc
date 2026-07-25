@@ -83,7 +83,7 @@ const methods = {
 		args: { service_name: 'service_name' },
 		call: function(request) {
 			let result = 'File not found or empty';
-			
+
 			// Get the log directory. Fall back to '/var/log/ddns' if not found
 			let logdir = uci.get('ddns', 'global', 'ddns_logdir') || ddns_log_path;
 
@@ -101,7 +101,7 @@ const methods = {
 			return { result: result };
 		}
 	},
-	
+
 	get_services_status: {
 		call: function() {
 			const rundir = uci.get('ddns', 'global', 'ddns_rundir') || ddns_run_path;
@@ -224,41 +224,41 @@ const methods = {
 			let res = {};
 			let cache = {};
 
-			const hasCommand = (command) => { return (system(`command -v ${command} 1>/dev/null`) == 0) ? true : false };
+			const hasCommand = function(command) { return (system(`command -v ${command} 1>/dev/null`) == 0) ? true : false };
 
-			const hasWget = () => {
+			const hasWget = function() {
 				return cache.has_wget ??= hasCommand('wget');
 			};
 
-			const hasWgetSsl = () => {
+			const hasWgetSsl = function() {
 				return cache.has_wgetssl ??= hasWget() && system(`wget 2>&1 | grep -iqF 'https'`) == 0 ? true : false;
 			};
 
-			const hasGNUWgetSsl = () => {
+			const hasGNUWgetSsl = function() {
 				return cache.has_gnuwgetssl ??= hasWget() && system(`wget -V 2>&1 | grep -iqF '+https'`) == 0 ? true : false;
 			};
 
-			const hasCurl = () => {
+			const hasCurl = function() {
 				return cache.has_curl ??= hasCommand('curl');
 			};
 
-			const hasCurlSsl = () => {
+			const hasCurlSsl = function() {
 				return cache.has_curl_ssl ??= system(`curl -V 2>&1 | grep -qF 'https'`) == 0 ? true : false;
 			};
 
-			const hasFetch = () => {
+			const hasFetch = function() {
 				return cache.has_fetch ??= hasCommand('uclient-fetch');
 			};
 
-			const hasFetchSsl = () => {
+			const hasFetchSsl = function() {
 				return cache.has_fetch_ssl ??= stat('/lib/libustream-ssl.so') ? true : false;
 			};
 
-			const hasCurlPxy = () => {
+			const hasCurlPxy = function() {
 				return cache.has_curl_proxy ??= system(`grep -i 'all_proxy' /usr/lib/libcurl.so*`) == 0 ? true : false;
 			};
 
-			const hasBbwget = () => {
+			const hasBbwget = function() {
 				return cache.has_bbwget ??= system(`wget -V 2>&1 | grep -iqF 'busybox'`) == 0 ? true : false;
 			};
 
@@ -271,7 +271,7 @@ const methods = {
 			res['has_forceip'] = hasGNUWgetSsl() || hasWgetSsl() || hasCurl() || hasFetch();
 			res['has_bindnet'] = hasCurl() || hasGNUWgetSsl();
 
-			const hasBindHost = () => {
+			const hasBindHost = function() {
 				if (cache['has_bindhost']) return cache['has_bindhost'];
 				const commands = ['host', 'khost', 'drill'];
 				for (let command in commands) {
@@ -287,17 +287,17 @@ const methods = {
 
 			res['has_bindhost'] = cache['has_bindhost'] || hasBindHost();
 
-			const hasHostIp = () => {
+			const hasHostIp = function() {
 				return hasCommand('hostip');
 			};
 
-			const hasNslookup = () => {
+			const hasNslookup = function() {
 				return hasCommand('nslookup');
 			};
 
 			res['has_dnsserver'] = cache['has_bindhost'] || hasNslookup() || hasHostIp() || hasBindHost();
 
-			const checkCerts = () => {
+			const checkCerts = function() {
 				let present = false;
 				for (let cert in glob('/etc/ssl/certs/*.crt', '/etc/ssl/certs/*.pem')) {
 					if (cert != null)
@@ -308,7 +308,7 @@ const methods = {
 
 			res['has_cacerts'] = checkCerts();
 
-			res['has_ipv6'] = (stat('/proc/net/ipv6_route')?.type == 'file' && 
+			res['has_ipv6'] = (stat('/proc/net/ipv6_route')?.type == 'file' &&
 				(stat('/usr/sbin/ip6tables')?.type == 'file' || stat('/usr/sbin/nft')?.type == 'file'));
 
 			return res;
