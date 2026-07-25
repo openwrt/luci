@@ -228,7 +228,7 @@ const methods = {
 
 			const hasWget = () => {
 				return cache.has_wget ??= hasCommand('wget');
-			}
+			};
 
 			const hasWgetSsl = () => {
 				return cache.has_wgetssl ??= hasWget() && system(`wget 2>&1 | grep -iqF 'https'`) == 0 ? true : false;
