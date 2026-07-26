@@ -9,6 +9,17 @@ import { connect } from 'ubus';
 
 const openvpn_dir = '/etc/openvpn';
 
+/* Key types accepted by "openvpn --genkey". Anything outside this set is
+ * rejected, so the value can never introduce shell metacharacters. */
+const keytypes = [
+	'secret',
+	'tls-crypt',
+	'tls-auth',
+	'auth-token',
+	'tls-crypt-v2-server',
+	'tls-crypt-v2-client'
+];
+
 function shellquote(s) {
 	return `'${replace(s, "'", "'\\''")}'`;
 }
@@ -40,6 +51,7 @@ const methods = {
 			const ts = time();
 
 			if (!kt) return { error: 'missing keytype' };
+			if (!(kt in keytypes)) return { error: 'invalid keytype' };
 
 			let dir;
 			let outfile = `${ifname}_${kt}_${ts}.key`;
@@ -71,7 +83,7 @@ const methods = {
 				cmd = `${openvpn} --tls-crypt-v2 ${shellquote(server_key)} --genkey tls-crypt-v2-client ${shellquote(path)} ${shellquote(req.args?.cl_meta)} 2>/dev/null`;
 			} else {
 				// basic genkey
-				cmd = `${openvpn} --genkey ${kt} ${shellquote(path)} 2>/dev/null`;
+				cmd = `${openvpn} --genkey ${shellquote(kt)} ${shellquote(path)} 2>/dev/null`;
 			}
 
 			const out = popen(cmd)?.read?.('all') || '';
