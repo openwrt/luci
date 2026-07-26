@@ -876,7 +876,6 @@ return view.extend({
 					o.modalonly = true;
 					o.multiple = false;
 					o.default = 'wan';
-					o.rmempty = false;
 					o.depends("ip_source", "web");
 					o.depends("ip_source", "script");
 					o.depends("ip_source", "interface");
