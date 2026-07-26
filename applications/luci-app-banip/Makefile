@@ -7,7 +7,7 @@ LUCI_TITLE:=LuCI support for banIP
 LUCI_DEPENDS:=+luci-base +banip
 
 PKG_VERSION:=1.8.10
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Dirk Brenken <dev@brenken.org>
 
