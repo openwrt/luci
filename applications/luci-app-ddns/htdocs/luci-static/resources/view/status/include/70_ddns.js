@@ -38,7 +38,7 @@ return baseclass.extend({
 				services[key].next_update ? _(services[key].next_update) : _('Unknown'),
 				uci.get('ddns',key,'lookup_host'),
 				services[key].ip ? services[key].ip : _('No Data'),
-				(uci.get('ddns',key,'use_ipv6') == '1' ? 'IPv6' : 'IPv4') + ' / ' + uci.get('ddns',key,'interface')
+				(uci.get('ddns',key,'use_ipv6') == '1' ? 'IPv6' : 'IPv4') + ' / ' + (uci.get('ddns',key,'interface') || 'wan')
 			];
 		}), E('em', _('There is no service configured.')));
 
