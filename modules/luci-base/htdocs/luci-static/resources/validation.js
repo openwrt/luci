@@ -1003,7 +1003,7 @@ const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFa
 			if (v == '.' || v == '..')
 				return this.assert(false, _('valid network device name, not "." or ".."'));
 
-			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
+			return this.assert(v.match(/^[^:\/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
 		},
 
 		/**

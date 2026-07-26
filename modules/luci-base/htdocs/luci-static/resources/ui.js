@@ -3370,7 +3370,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 	 * @returns {Promise}
 	 */
 	handleDelete(path, fileStat, ev) {
-		const parent = path.replace(/\/[^/]+$/, '') ?? '/';
+		const parent = path.replace(/\/[^\/]+$/, '') ?? '/';
 		const name = path.replace(/^.+\//, '');
 		let msg;
 
@@ -5088,7 +5088,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 				for (let i = 0; i < 2; i++)
 					for (let j = 0; j < ipaddrs.length; j++)
 						tasks.push(this.pingDevice(i ? 'https' : 'http', ipaddrs[j])
-							.then(ev => { reachable = ev.target.src.replace(/^(https?:\/\/[^/]+).*$/, '$1/') }, () => {}));
+							.then(ev => { reachable = ev.target.src.replace(/^(https?:\/\/[^\/]+).*$/, '$1/') }, () => {}));
 
 				return Promise.all(tasks).then(() => {
 					if (reachable) {

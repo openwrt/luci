@@ -44,7 +44,7 @@ function validateCert(priv, section_id, value) {
 	const beg = priv ? /^-----BEGIN (RSA )?PRIVATE KEY-----$/ : /^-----BEGIN CERTIFICATE-----$/;
 	const end = priv ? /^-----END (RSA )?PRIVATE KEY-----$/ : /^-----END CERTIFICATE-----$/;
 	const lines = value.trim().split(/[\r?\n]/);
-	const base64 = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+	const base64 = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/;
 	const errmsg = _('This does not look like a valid PEM file');
 
 
