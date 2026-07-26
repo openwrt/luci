@@ -22,6 +22,12 @@ function shellquote(value) {
 	return "'" + replace(value, "'", "'\\''") + "'";
 }
 
+/* A DDNS service name is a UCI section name, so restrict it to the characters
+ * UCI permits. This keeps path separators and ".." out of composed log paths. */
+function is_valid_service_name(name) {
+	return length(name) > 0 && match(name, /^[a-zA-Z0-9_-]+$/) != null;
+}
+
 function get_dateformat() {
 	return uci.get('ddns', 'global', 'ddns_dateformat') || '%F %R';
 }
@@ -92,8 +98,9 @@ const methods = {
 				logdir = ddns_log_path;
 			}
 
-			// Check if service_name is provided and log file exists
-			if (request.args && request.args.service_name && stat(`${logdir}/${request.args.service_name}.log`)?.type == 'file' ) {
+			// Check if service_name is valid and the log file exists
+			if (is_valid_service_name(request.args?.service_name) &&
+			    stat(`${logdir}/${request.args.service_name}.log`)?.type == 'file' ) {
 				result = readfile(`${logdir}/${request.args.service_name}.log`);
 			}
 
