@@ -9,9 +9,21 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
 		#map {
-			height: 97vh;
+			height: 100%;
 			width: 100%;
+		}
+
+		.title {
+			display: block;
+			text-align: center;
+			font-weight: bold;
 		}
 
 		.mono {
@@ -19,6 +31,10 @@
 			font-family: monospace;
 			white-space: nowrap;
 			margin: 0.3em !important;
+		}
+
+		.entry {
+			margin-top: 0.5em !important;
 		}
 	</style>
 </head>
@@ -31,86 +47,252 @@
 	<script>
 		'use strict';
 
-		/* intialize map */
-		let map = L.map('map', {
+		/* maximum display length of the free form GeoIP fields */
+		const MAX_IP_LEN = 38;
+		const MAX_AS_LEN = 38;
+		const MAX_CITY_LEN = 33;
+		const MAX_DOMAIN_LEN = 38;
+
+		/* maximum number of domains listed in a shared popup */
+		const MAX_DOMAINS = 5;
+
+		/* zoom level applied when the view is centered on a single point */
+		const POINT_ZOOM = 6;
+
+		/* mapData key holding the geo data of the local uplink(s) */
+		const HOME_KEY = 'homeIP';
+
+		const HOME_STYLE = { color: '#378242', opacity: 1.0, fillColor: '#378242', fillOpacity: 0.5, radius: 6 };
+		const BLOCKED_STYLE = { color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 3 };
+
+		/* initialize map */
+		const map = L.map('map', {
 			zoom: 3,
 			minZoom: 2,
 			maxZoom: 18,
 			center: [50, 10]
-			}).setView([50, 10]);
-			L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+		});
+
+		L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 		}).addTo(map);
 
-		/* get mapData */
+		/* feature groups, so getBounds() is available for the initial view */
+		const blockedLayer = L.featureGroup().addTo(map);
+		const homeLayer = L.featureGroup().addTo(map);
+
+		/* accept a coordinate only if it is a finite number in range */
+		function toLatLng(geo) {
+			const lat = Number(geo.lat);
+			const lon = Number(geo.lon);
+
+			if (geo.lat === null || geo.lat === undefined || geo.lat === '' ||
+				geo.lon === null || geo.lon === undefined || geo.lon === '')
+				return null;
+
+			if (!Number.isFinite(lat) || !Number.isFinite(lon))
+				return null;
+
+			if (lat < -90 || lat > 90 || lon < -180 || lon > 180)
+				return null;
+
+			return [lat, lon];
+		}
+
+		/* GeoIP lookups regularly return empty city/as fields, keep the entry anyway */
+		function fieldText(value, maxLength) {
+			const text = String(value === null || value === undefined ? '' : value).trim();
+
+			if (!text)
+				return 'n/a';
+
+			return text.length > maxLength ? text.slice(0, maxLength - 1) + '\u2026' : text;
+		}
+
+		function plural(count, noun) {
+			return count + ' ' + noun + (count === 1 ? '' : 's');
+		}
+
+		/*
+		 * Popups are built as DOM nodes, not as HTML strings, so neither the blocked
+		 * domain nor the third party GeoIP fields can be interpreted as markup.
+		 * Passing a function to bindPopup() defers this until the popup is opened.
+		 */
+		function buildPopup(title, blocks) {
+			const content = document.createElement('div');
+			const heading = document.createElement('span');
+
+			heading.className = 'title';
+			heading.textContent = title;
+			content.appendChild(heading);
+
+			blocks.forEach(function (lines, index) {
+				const body = document.createElement('p');
+
+				body.className = index ? 'mono entry' : 'mono';
+
+				lines.forEach(function (line, pos) {
+					if (pos)
+						body.appendChild(document.createElement('br'));
+
+					body.appendChild(document.createTextNode(line));
+				});
+
+				content.appendChild(body);
+			});
+
+			return content;
+		}
+
+		function locationLines(geo, latlng) {
+			return [
+				'City: ' + fieldText(geo.city, MAX_CITY_LEN) + ' (' + fieldText(geo.countryCode, 8) + ')',
+				'Latitude : ' + latlng[0],
+				'Longitude: ' + latlng[1]
+			];
+		}
+
+		function homePopup(entry) {
+			const geo = entry.items[0].geo;
+			const more = entry.items.length > 1 ? ' (+' + (entry.items.length - 1) + ' more)' : '';
+
+			return buildPopup('local IP', [locationLines(geo, entry.latlng).concat([
+				'IP: ' + fieldText(geo.query, MAX_IP_LEN) + more,
+				'AS: ' + fieldText(geo.as, MAX_AS_LEN)
+			])]);
+		}
+
+		/*
+		 * Blocked ad domains cluster heavily on a few CDN endpoints, so one coordinate
+		 * regularly carries several of them. List them instead of keeping the first one
+		 * and dropping the rest.
+		 */
+		function blockedPopup(entry) {
+			const items = entry.items;
+			const geo = items[0].geo;
+			const blocks = [locationLines(geo, entry.latlng)];
+
+			if (items.length === 1)
+				return buildPopup(items[0].name, [blocks[0].concat([
+					'IP: ' + fieldText(geo.query, MAX_IP_LEN),
+					'AS: ' + fieldText(geo.as, MAX_AS_LEN)
+				])]);
+
+			items.slice(0, MAX_DOMAINS).forEach(function (item) {
+				blocks.push([
+					fieldText(item.name, MAX_DOMAIN_LEN),
+					fieldText(item.geo.query, MAX_IP_LEN),
+					fieldText(item.geo.as, MAX_AS_LEN)
+				]);
+			});
+
+			if (items.length > MAX_DOMAINS)
+				blocks.push(['(+' + (items.length - MAX_DOMAINS) + ' more)']);
+
+			return buildPopup(plural(items.length, 'blocked domain'), blocks);
+		}
+
+		function addMarker(layer, entry, style, popupBuilder) {
+			L.circleMarker(entry.latlng, style)
+				.bindPopup(function () {
+					return popupBuilder(entry);
+				})
+				.addTo(layer);
+		}
+
+		/* markers sharing a coordinate become one marker carrying every entry */
+		function addEntry(list, index, name, geo, latlng) {
+			const key = latlng[0] + ',' + latlng[1];
+			const known = index.get(key);
+
+			if (known) {
+				known.items.push({ name: name, geo: geo });
+				return;
+			}
+
+			const entry = { latlng: latlng, items: [{ name: name, geo: geo }] };
+
+			index.set(key, entry);
+			list.push(entry);
+		}
+
+		/*
+		 * mapData is an array of single key objects, the key being either homeIP or
+		 * a blocked domain:
+		 *
+		 *   [ {}, { "homeIP": {...} }, { "ads.example.com": {...} }, ... ]
+		 */
+		function collectEntries(parsedData) {
+			const result = { home: [], blocked: [] };
+			const homeIndex = new Map();
+			const blockedIndex = new Map();
+
+			parsedData.forEach(function (item) {
+				if (!item || typeof item !== 'object')
+					return;
+
+				Object.keys(item).forEach(function (name) {
+					const geo = item[name];
+
+					if (!geo || typeof geo !== 'object')
+						return;
+
+					const latlng = toLatLng(geo);
+
+					if (!latlng)
+						return;
+
+					if (name === HOME_KEY)
+						addEntry(result.home, homeIndex, name, geo, latlng);
+					else
+						addEntry(result.blocked, blockedIndex, name, geo, latlng);
+				});
+			});
+
+			return result;
+		}
+
+		function fitLayer(layer) {
+			const layers = layer.getLayers();
+
+			if (!layers.length)
+				return false;
+
+			if (layers.length === 1)
+				map.setView(layers[0].getLatLng(), POINT_ZOOM);
+			else
+				map.fitBounds(layer.getBounds(), { maxZoom: POINT_ZOOM, padding: [30, 30] });
+
+			return true;
+		}
+
+		/* load the data handed over by the adblock report page */
 		const mapData = sessionStorage.getItem('mapData');
+		let parsedData = null;
+
 		if (mapData) {
-			let uniqueCoordinates = [];
-			let homeCoordinates = [];
-			const parsedData = JSON.parse(mapData);
-			parsedData.forEach(function (item, index) {
-				if (Object.keys(item).length !== 0) {
-					let keys = Object.keys(item);
-					keys.forEach(function (key) {
-						if (item[key] && item[key].lat && item[key].lon && item[key].query && item[key].as && item[key].city && item[key].countryCode) {
-							let coordObj = { lat: item[key].lat, lon: item[key].lon };
-							if (key === "homeIP" && !homeCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
-								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
-								homeCoordinates.push(coordObj);
-							}
-							if (key !== "homeIP" && !uniqueCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
-								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
-								uniqueCoordinates.push(coordObj);
-							}
-						}
-					});
-				}
+			try {
+				parsedData = JSON.parse(mapData);
+			} catch (error) {
+				console.error('adblock: unable to parse mapData,', error);
+			}
+		}
+
+		if (Array.isArray(parsedData)) {
+			const entries = collectEntries(parsedData);
+
+			/* blocked first, so the local uplink stays on top and clickable */
+			entries.blocked.forEach(function (entry) {
+				addMarker(blockedLayer, entry, BLOCKED_STYLE, blockedPopup);
 			});
 
-			/* render markers for local IPs, reset focus and zoom level */
-			homeCoordinates.forEach(function (coordObj) {
-				let latHome = coordObj.lat;
-				let lonHome = coordObj.lon;
-				let ipHome = coordObj.query.slice(0, 38);
-				let asHome = coordObj.as.slice(0, 38);
-				let cityHome = coordObj.city.slice(0, 33);
-				let ccHome = coordObj.cc;
-
-				map.setView([latHome, lonHome], 6);
-
-				/* render markers for local IPs */
-				let circle = L.circleMarker([latHome, lonHome]).addTo(map);
-				circle.setStyle({ color: '#378242', opacity: 1.0, fillColor: '#378242', fillOpacity: 0.5, radius: 6 });
-				circle.bindPopup("<b><center>local IP</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + cityHome + " (" + ccHome + ")" +
-					"<br />Latitude : " + latHome +
-					"<br />Longitude: " + lonHome +
-					"<br />IP: " + ipHome +
-					"<br />AS: " + asHome +
-					"</p>");
+			entries.home.forEach(function (entry) {
+				addMarker(homeLayer, entry, HOME_STYLE, homePopup);
 			});
 
-			/* render markers for blocked Domains */
-			uniqueCoordinates.forEach(function (coordObj) {
-				let key = coordObj.key;
-				let lat = coordObj.lat;
-				let lon = coordObj.lon;
-				let ip = coordObj.query.slice(0, 38);
-				let as = coordObj.as.slice(0, 38);
-				let city = coordObj.city.slice(0, 33);
-				let cc = coordObj.cc;
-				let circle = L.circleMarker([lat, lon]).addTo(map);
-				circle.setStyle({ color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 2 });
-				circle.bindPopup("<b><center>" + key + "</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + city + " (" + cc + ")" +
-					"<br />Latitude : " + lat +
-					"<br />Longitude: " + lon +
-					"<br />IP: " + ip +
-					"<br />AS: " + as +
-					"</p>");
-			});
+			/* center on the local uplink(s), fall back to the blocked domains */
+			if (!fitLayer(homeLayer))
+				fitLayer(blockedLayer);
 		}
 	</script>
 </body>
