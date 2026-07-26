@@ -9,8 +9,42 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 	<style>
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			color-scheme: light dark;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+		}
+
+		#toolbar {
+			flex: 0 0 auto;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.6em;
+			padding: 0.4em 0.8em;
+			box-sizing: border-box;
+			background: Canvas;
+			color: CanvasText;
+			border-bottom: 1px solid ButtonBorder;
+			font-family: sans-serif;
+			font-size: 14px;
+		}
+
+		#feedSelect {
+			min-width: 260px;
+			max-width: 70vw;
+			padding: 0.25em;
+		}
+
 		#map {
-			height: 97vh;
+			flex: 1 1 auto;
+			min-height: 0;
 			width: 100%;
 		}
 
@@ -24,6 +58,12 @@
 </head>
 
 <body>
+	<div id="toolbar">
+		<label for="feedSelect">Feed:</label>
+		<select id="feedSelect" disabled>
+			<option value="">All feeds</option>
+		</select>
+	</div>
 	<div id="map"></div>
 
 	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -44,6 +84,7 @@
 
 		/* get mapData */
 		const mapData = sessionStorage.getItem('mapData');
+		const feedSelect = document.getElementById('feedSelect');
 		if (mapData) {
 			let uniqueCoordinates = [];
 			let homeCoordinates = [];
@@ -90,25 +131,51 @@
 					"</p>");
 			});
 
-			/* render markers for blocked IPs */
+			/* populate the feed selector, one entry per banIP Set */
+			let feedCounts = {};
 			uniqueCoordinates.forEach(function (coordObj) {
-				let key = coordObj.key.slice(0, -3);
-				let lat = coordObj.lat;
-				let lon = coordObj.lon;
-				let ip = coordObj.query.slice(0, 38);
-				let as = coordObj.as.slice(0, 38);
-				let city = coordObj.city.slice(0, 33);
-				let cc = coordObj.cc;
-				let circle = L.circleMarker([lat, lon]).addTo(map);
-				circle.setStyle({ color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 2 });
-				circle.bindPopup("<b><center>blocked IP by " + key + "</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + city + " (" + cc + ")" +
-					"<br />Latitude : " + lat +
-					"<br />Longitude: " + lon +
-					"<br />IP: " + ip +
-					"<br />AS: " + as +
-					"</p>");
+				feedCounts[coordObj.key] = (feedCounts[coordObj.key] || 0) + 1;
+			});
+			Object.keys(feedCounts).sort().forEach(function (feed) {
+				let option = document.createElement('option');
+				option.value = feed;
+				option.textContent = feed + " (" + feedCounts[feed] + ")";
+				feedSelect.appendChild(option);
+			});
+			feedSelect.options[0].textContent = "All feeds (" + uniqueCoordinates.length + ")";
+			feedSelect.disabled = uniqueCoordinates.length === 0;
+
+			/* render markers for blocked IPs, an empty feed renders all of them */
+			let blockedLayer = L.layerGroup().addTo(map);
+			function renderBlockedMarkers(selectedFeed) {
+				blockedLayer.clearLayers();
+				uniqueCoordinates.forEach(function (coordObj) {
+					if (selectedFeed && coordObj.key !== selectedFeed) {
+						return;
+					}
+					let key = coordObj.key.slice(0, -3);
+					let lat = coordObj.lat;
+					let lon = coordObj.lon;
+					let ip = coordObj.query.slice(0, 38);
+					let as = coordObj.as.slice(0, 38);
+					let city = coordObj.city.slice(0, 33);
+					let cc = coordObj.cc;
+					let circle = L.circleMarker([lat, lon]).addTo(blockedLayer);
+					circle.setStyle({ color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 2 });
+					circle.bindPopup("<b><center>blocked IP by " + key + "</center></b>" +
+						"<p class=\"mono\">" +
+						"City: " + city + " (" + cc + ")" +
+						"<br />Latitude : " + lat +
+						"<br />Longitude: " + lon +
+						"<br />IP: " + ip +
+						"<br />AS: " + as +
+						"</p>");
+				});
+			}
+
+			renderBlockedMarkers("");
+			feedSelect.addEventListener('change', function (event) {
+				renderBlockedMarkers(event.target.value);
 			});
 		}
 	</script>
