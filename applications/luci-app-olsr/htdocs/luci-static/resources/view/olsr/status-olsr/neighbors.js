@@ -246,7 +246,8 @@ return olsr.olsrview.extend({
 								'</a></div>';
 						}
 						if (neigh.hn) {
-							s += '<div class="td cbi-section-table-cell left" style="background-color:' + neigh.dfgcolor + '"><a href="http://' + neigh.hn + '/cgi-bin-status.html">' + neigh.hn + '</a></div>';
+							s += '<div class="td cbi-section-table-cell left" style="background-color:' + neigh.dfgcolor +
+								'"><a href="http://%q/cgi-bin-status.html">%h</a></div>'.format(neigh.hn, neigh.hn);
 						} else {
 							s += '<div class="td cbi-section-table-cell left" style="background-color:' + neigh.dfgcolor + '">?</div>';
 						}
