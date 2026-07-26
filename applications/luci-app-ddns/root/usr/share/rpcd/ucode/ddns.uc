@@ -57,6 +57,16 @@ function epoch2date(epoch, format) {
 	if (!format || length(format) < 2) {
 		format = get_dateformat();
 	}
+
+	/* date(1) echoes anything that is not a conversion specifier verbatim, and
+	 * the status views render the result as HTML - see the '%n' expansion below.
+	 * Restrict the format to the characters strftime actually needs so that a
+	 * configured value cannot inject markup, and fall back to the default
+	 * otherwise, mirroring how an unsafe ddns_logdir is handled. */
+	if (match(format, /[^%A-Za-z0-9 :\/.,_+-]/)) {
+		format = '%F %R';
+	}
+
 	format = replace(format, /%n/g, '<br />'); // Replace '%n' with '<br />'
 	format = replace(format, /%t/g, '    ');   // Replace '%t' with four spaces
 
