@@ -129,7 +129,7 @@ function parse_cmdline(cmdid, args) {
 				push(argv, ...(parse_args(args) ?? []));
 		}
 
-		return map(argv, v => match(v, /[^\w.\/|-]/) ? `'${replace(v, "'", "'\\''")}'` : v);
+		return map(argv, v => match(v, /[^\w.\/-]/) ? `'${replace(v, "'", "'\\''")}'` : v);
 	}
 }
 
