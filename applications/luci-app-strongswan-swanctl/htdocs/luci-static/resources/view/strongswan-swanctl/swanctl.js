@@ -332,11 +332,6 @@ return view.extend({
 		o.datatype = 'file';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifetime', _('Lifetime'),
-			_('Maximum duration of the CHILD_SA before closing'));
-		o.validate = validateTimeFormat;
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.ListValue, 'dpdaction', _('DPD Action'),
 			_('Action when DPD timeout occurs'));
 		o.value('none');
@@ -347,8 +342,20 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
-			_('Duration of the CHILD_SA before rekeying'));
+			_('Interval before a CHILD_SA is rekeyed.') + ' ' +
+			_('Also used to derive lifetime (110% of this value).') + '<br />' +
+			_('If not configured, the default value is "1h".')
+		);
+		o.placeholder = '1h';
 		o.validate = validateTimeFormat;
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'lifetime', _('Life Time'),
+			_('Maximum time before the CHILD_SA gets closed, as a hard limit.')
+		);
+		o.validate = validateTimeFormat;
+		o.rmempty = true;
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'ipcomp', _('IPComp'),
