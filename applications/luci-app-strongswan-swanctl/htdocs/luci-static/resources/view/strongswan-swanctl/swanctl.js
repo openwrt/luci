@@ -98,8 +98,8 @@ return view.extend({
 		o.placeholder = '%any';
 		o.modalonly = true;
 
-		o = s.taboption('general', form.Value, 'local_sourceip', _('Local Source IP'),
-			_('Virtual IP(s) to request in IKEv2 configuration payloads requests'));
+		o = s.taboption('general', form.DynamicList, 'vips', _('Virtual IP addresses'),
+			_('Virtual IP addresses used as the source IP for outgoing traffic.'));
 		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
