@@ -138,6 +138,9 @@
 		{% else %}
 			<div class="commands">
 				{% for (let command in commands): %}
+					{%
+						const cmdid = (match(command.id, /^[A-Za-z0-9_]+$/) && !match(command.id, /s$/)) ? command.id : command['.name'];
+					-%}
 				<div class="commandbox">
 					<h3>{{ entityencode(command.name) }}</h3>
 					<p>{{ _('Command:') }} <code>{{ entityencode(command.command) }}</code></p>
@@ -145,13 +148,13 @@
 						<p><em>{{ entityencode(command.description) }}</em></p>
 					{% endif %}
 					{% if (command.param == "1"): %}
-						<p>{{ _('Arguments:') }} <input type="text" id="{{ command['.name'] }}" /></p>
+						<p>{{ _('Arguments:') }} <input type="text" id="{{ cmdid }}" /></p>
 					{% endif %}
 					<div>
-						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '{{ command['.name'] }}')">{{ _('Run') }}</button>
-						<button class="cbi-button cbi-button-download" onclick="command_download(event, '{{ command['.name'] }}')">{{ _('Download') }}</button>
+						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '{{ cmdid }}')">{{ _('Run') }}</button>
+						<button class="cbi-button cbi-button-download" onclick="command_download(event, '{{ cmdid }}')">{{ _('Download') }}</button>
 						{% if (command.public == "1"): %}
-							<button class="cbi-button cbi-button-link" onclick="command_link(event, '{{ command['.name'] }}')">{{ _('Link') }}</button>
+							<button class="cbi-button cbi-button-link" onclick="command_link(event, '{{ cmdid }}')">{{ _('Link') }}</button>
 						{% endif %}
 					</div>
 				</div>

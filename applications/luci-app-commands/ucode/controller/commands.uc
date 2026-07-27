@@ -117,20 +117,53 @@ function test_binary(str) {
 	return false;
 }
 
+// Resolve a command identifier as seen in a URL to the actual UCI
+// section name. If a "command" section carries a stable, user assigned
+// "id" option matching the requested identifier, that section is used.
+// Otherwise the identifier is tried verbatim, for backward compatibility
+// with links generated before the "id" option existed (it will match
+// the automatically assigned, but potentially unstable, section name).
+// An "id" ending in "s" is never honored here: the public URL handler
+// (action_public) uses a trailing "s" to distinguish its display and
+// download modes, so allowing a custom id to end in "s" would make
+// that encoding ambiguous.
+function resolve_command_id(cmdid) {
+	if (!cmdid)
+		return null;
+
+	let found = null;
+
+	uci.foreach('luci', 'command', s => {
+		if (found == null && s.id && substr(s.id, -1) != 's' && s.id == cmdid)
+			found = s['.name'];
+	});
+
+	if (found != null)
+		return found;
+
+	if (uci.get('luci', cmdid) == 'command')
+		return cmdid;
+
+	return null;
+}
+
 function parse_cmdline(cmdid, args) {
-	if (uci.get('luci', cmdid) == 'command') {
-		let cmd = uci.get_all('luci', cmdid);
-		let argv = parse_args(cmd?.command);
+	cmdid = resolve_command_id(cmdid);
 
-		if (cmd?.param == '1') {
-			if (length(args))
-				push(argv, ...(parse_args(urldecode(args)) ?? []));
-			else if (length(args = http.formvalue('args')))
-				push(argv, ...(parse_args(args) ?? []));
-		}
+	if (cmdid == null)
+		return;
 
-		return map(argv, v => match(v, /[^\w.\/|-]/) ? `'${replace(v, "'", "'\\''")}'` : v);
+	let cmd = uci.get_all('luci', cmdid);
+	let argv = parse_args(cmd?.command);
+
+	if (cmd?.param == '1') {
+		if (length(args))
+			push(argv, ...(parse_args(urldecode(args)) ?? []));
+		else if (length(args = http.formvalue('args')))
+			push(argv, ...(parse_args(args) ?? []));
 	}
+
+	return map(argv, v => match(v, /[^\w.\/|-]/) ? `'${replace(v, "'", "'\\''")}'` : v);
 }
 
 function execute_command(callback, ...args) {
@@ -240,9 +273,9 @@ return {
 			cmdid = substr(cmdid, 0, -1);
 		}
 
-		if (cmdid &&
-		    uci.get('luci', cmdid) == 'command' &&
-		    uci.get('luci', cmdid, 'public') == '1')
+		cmdid = resolve_command_id(cmdid);
+
+		if (cmdid != null && uci.get('luci', cmdid, 'public') == '1')
 		{
 			if (disp)
 				execute_command(return_html, cmdid, ...args);
