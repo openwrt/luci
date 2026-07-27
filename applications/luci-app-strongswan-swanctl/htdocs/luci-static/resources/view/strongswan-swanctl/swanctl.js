@@ -375,6 +375,44 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'rekeybytes', _('Rekey Bytes'),
+			_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
+			_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
+			_('Use "0" to disable byte based rekeying.')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'lifebytes', _('Life Bytes'),
+			_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
+			_('Use "0" to disable (default).')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'rekeypackets', _('Rekey Packets'),
+			_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
+			_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
+			_('Use "0" to disable packet based rekeying (default).')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'lifepackets', _('Life Packets'),
+			_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
+			_('Use "0" to disable (default).')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
 		// Crypto Proposals
 		s = m.section(form.GridSection, 'crypto_proposal',
 			_('Encryption Proposals'),
