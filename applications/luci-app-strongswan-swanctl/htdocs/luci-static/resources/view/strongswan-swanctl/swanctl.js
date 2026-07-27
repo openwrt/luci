@@ -186,6 +186,12 @@ return view.extend({
 		o.depends('authentication_method', 'pubkey');
 		o.modalonly = true;
 
+		o = s.taboption('authentication', form.DynamicList, 'remote_ca_certs', _('Remote CA Certificates'),
+			_('Restrict the remote peer\'s certificate to be issued by one of these CAs'));
+		o.datatype = 'file';
+		o.depends('authentication_method', 'pubkey');
+		o.optional = true;
+		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
 			_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'));
