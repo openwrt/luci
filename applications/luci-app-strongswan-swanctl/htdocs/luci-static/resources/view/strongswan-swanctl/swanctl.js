@@ -193,6 +193,16 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
+		o = s.taboption('authentication', form.ListValue, 'send_cert', _('Send Certificate'),
+			_('Whether to send our own certificate to the remote peer'));
+		o.value('always');
+		o.value('ifasked');
+		o.value('never');
+		o.default = 'ifasked';
+		o.depends('authentication_method', 'pubkey');
+		o.optional = true;
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
 			_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'));
 		o.default = '1';
