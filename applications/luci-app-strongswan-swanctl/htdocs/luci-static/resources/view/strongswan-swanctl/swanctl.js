@@ -203,6 +203,12 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
+		o = s.taboption('authentication', form.Flag, 'send_certreq', _('Send Certificate Request'),
+			_('Send certificate request payloads to offer trusted root CA certificates to the peer'));
+		o.default = '1';
+		o.depends('authentication_method', 'pubkey');
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
 			_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'));
 		o.default = '1';
