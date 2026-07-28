@@ -622,9 +622,9 @@ return view.extend({
 					'request',
 					'',
 					'',
-					'Use defaults for the safest update'
+					_('Use defaults for the safest update')
 				);
-				o = s.option(form.ListValue, 'version', 'Select firmware version');
+				o = s.option(form.ListValue, 'version', _('Select firmware version'));
 				for (let candidate of candidates) {
 					if (candidate[0] == version && candidate[1] == revision) {
 						o.value(
