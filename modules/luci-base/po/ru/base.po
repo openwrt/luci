@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2026-07-18 16:21+0000\n"
+"PO-Revision-Date: 2026-07-28 20:29+0000\n"
 "Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
@@ -642,12 +642,17 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>Автоматически</em> использовать идентификатор клиента, заданный ниже, "
+"стандартный DUID этого устройства или DUID-LL, полученный из MAC-адреса "
+"этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>Автоматически</em> использовать идентификатор клиента, заданный ниже, "
+"стандартный DUID этого устройства или MAC-адрес этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -655,21 +660,25 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>Стандартный DUID</em> всегда использует стандартный DUID этого "
+"устройства, даже если ниже задан идентификатор клиента."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>Аппаратный адрес</em> всегда использует DUID-LL, полученный из MAC-"
+"адреса этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
-msgstr ""
+msgstr "<em>Аппаратный адрес</em> всегда использует MAC-адрес этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>Нет</em>, не отправлять идентификатор клиента."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1331,6 +1340,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Предлагать парный шифр GCMP-256. Обязателен для Wi-Fi 7 (EHT) и "
+"рекомендуется в остальных случаях, но некоторые клиенты и чипсеты не могут "
+"подключиться при его предложении. Включён по умолчанию только в режиме "
+"совместимости Wi-Fi 7 (EHT), в остальных случаях отключён."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid ""
@@ -1340,6 +1353,11 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Предлагать AKM SAE-EXT-KEY (SAE с хешем, зависящим от группы). Обязателен "
+"для Wi-Fi 7 (EHT) и рекомендуется в остальных случаях, но некоторые клиенты "
+"работают некорректно при его предложении, особенно совместно с быстрым "
+"переходом 802.11r. Включён по умолчанию только в режиме совместимости Wi-Fi "
+"7 (EHT), в остальных случаях отключён."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1501,7 +1519,7 @@ msgstr "Разрешить приём на неактивных портах"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
-"Разрешить удаленным хостам подключаться к локальным перенаправляемым портам "
+"Разрешить удалённым хостам подключаться к локальным перенаправляемым портам "
 "<abbr title=\"Secure Shell\">SSH</abbr>"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:588
@@ -1840,7 +1858,7 @@ msgstr "Веб-интерфейс"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1145
 msgid "Auto negotiation"
-msgstr ""
+msgstr "Автосогласование"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:368
 msgid "Autofill listen addresses"
@@ -2923,11 +2941,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1172
 msgid "Controls the receive (RX) flow control"
-msgstr ""
+msgstr "Контроль потока приёма (RX)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1179
 msgid "Controls the transmission (TX) flow control"
-msgstr ""
+msgstr "Контроль потока передачи (TX)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5384
 msgid ""
@@ -3658,6 +3676,8 @@ msgstr "Отключить данную сеть"
 msgid ""
 "Disable to manually control the duplex and link speed of the network device."
 msgstr ""
+"Отключите для ручного управления дуплексом и скоростью соединения сетевого "
+"устройства."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1196
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1202
@@ -3741,7 +3761,7 @@ msgstr "Дисковое пространство"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:54
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:75
 msgid "Dismiss"
-msgstr "Отклонить"
+msgstr "Закрыть"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1040
 msgid "Distance Optimization"
@@ -4046,7 +4066,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1153
 msgid "Duplex"
-msgstr ""
+msgstr "Дуплекс"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:736
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -5419,7 +5439,7 @@ msgstr "Полное название часового пояса"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1158
 msgid "Full duplex"
-msgstr ""
+msgstr "Полный дуплекс"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:68
 msgctxt "nft nat flag fully-random"
@@ -5446,7 +5466,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2184
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "Парный шифр GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5797,7 +5817,7 @@ msgstr "Полу дуплекс"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1159
 msgid "Half duplex"
-msgstr ""
+msgstr "Полудуплекс"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1488
 msgid "Handling of authentication failures"
@@ -5814,7 +5834,7 @@ msgstr "Перезапустить"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "Аппаратный адрес"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -10332,7 +10352,7 @@ msgstr "Политика"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:20
 msgctxt "password policy"
 msgid "Policy"
-msgstr ""
+msgstr "Политика"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:350
 msgid "Policy level over usage of external programs and scripts"
@@ -10471,7 +10491,7 @@ msgstr "Предпочитать UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "Предпочитаемый идентификатор клиента"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -11884,7 +11904,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -12111,11 +12131,14 @@ msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"Выбор <abbr title=\"DHCP Unique Identifier\">DUID</abbr> отправки при "
+"запросе DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
 msgstr ""
+"Выбор идентификатора клиента (DHCP option 61) для отправки при запросе DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 msgid ""
@@ -12448,6 +12471,9 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Отключение перехода (WPA3 Specification v3.5 section 13), чтобы клиент, "
+"который подключился один раз, больше не понижал уровень безопасности для "
+"этой SSID. Рекламируемая битовая маска определяется режимом шифрования."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12859,7 +12885,7 @@ msgstr "Требуется ли от клиента предоставление
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1163
 msgid "Speed"
-msgstr ""
+msgstr "Скорость"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:222
 msgid "Speed: %d Mbit/s, Duplex: %s"
@@ -13824,12 +13850,12 @@ msgid ""
 "Often there is by default one Uplink port for a connection to the next "
 "greater network like the internet and other ports for a local network."
 msgstr ""
-"Сетевые порты этого устройства могут быть объединены в несколько <abbr "
-"title='Virtual Local Area Network'>VLAN</abbr>, в которых компьютеры могут "
-"напрямую связываться друг с другом. <abbr title='Virtual Local Area "
-"Network'>VLAN</abbr> часто используются для разделения разных сегментов "
-"сети. Обычно по умолчанию имеется один Uplink-порт для подключения к "
-"вышестоящей сети (например, к Интернету) и другие порты для локальной сети."
+"Сетевые порты этого устройства можно объединить в несколько <abbr "
+"title='Virtual Local Area Network'>VLAN</abbr>, внутри которых компьютеры "
+"обмениваются данными напрямую. <abbr title='Virtual Local Area Network'>"
+"VLAN</abbr> часто применяются для разделения различных сегментов сети. Как "
+"правило, по умолчанию один порт используется для подключения к вышестоящей "
+"сети (например, к интернету), а остальные — для локальной сети."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:182
 msgid "The peer key fingerprint"
@@ -14386,7 +14412,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2192
 msgid "Transition Disable"
-msgstr ""
+msgstr "Отключение перехода"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"
@@ -14918,6 +14944,9 @@ msgid ""
 "in the system setting a lower value, but one that is compatible with the "
 "network interface"
 msgstr ""
+"Используйте скорость, совместимую с вашим устройством. Принудительное "
+"задание более высокой скорости приведёт к тому, что система установит более "
+"низкое, но совместимое с сетевым интерфейсом значение"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:274
 msgid "Use as external overlay (/overlay)"
@@ -15098,7 +15127,7 @@ msgstr "Имя пользователя"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:79
 msgid "Username and password file (one per line)"
-msgstr ""
+msgstr "Файл с именами пользователей и паролями (одна запись на строку)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:141
 msgid "Utilise <strong>%h</strong> conntrack helper"

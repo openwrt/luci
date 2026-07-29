@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-18 12:01+0000\n"
+"PO-Revision-Date: 2026-07-25 16:02+0000\n"
 "Last-Translator: BoneNI <bounkirdni@gmail.com>\n"
 "Language-Team: Lao <https://hosted.weblate.org/projects/openwrt/luci/lo/>\n"
 "Language: lo\n"
@@ -186,6 +186,9 @@ msgid ""
 "selection). Optional labels for ports and VLANs are stored in the LuCI "
 "configuration and are for human reference only."
 msgstr ""
+". ເລືອກພອດ, ຈາກນັ້ນໃຊ້ T ແລະ U ໃນແຕ່ລະແຖວ VLAN ເພື່ອກຳນົດ ຫຼື ລຶບການເປັນສະມາຊິກແບບ tagged "
+"ຫຼື untagged (native) (ຫວ່າງເປົ່າ, ບາງສ່ວນ, ຫຼື ເຕັມສຳລັບການເລືອກປັດຈຸບັນ). ປ້າຍກຳກັບຕົວເລືອກສຳ"
+"ລັບພອດ ແລະ VLAN ຈະຖືກເກັບໄວ້ໃນການຕັ້ງຄ່າ LuCI ແລະ ມີໄວ້ເພື່ອການອ້າງອີງເທົ່ານັ້ນ."
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:59
 msgctxt "sstp log level value"
@@ -605,12 +608,16 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>ອັດຕະໂນມັດ</em> ຈະໃຊ້ ID ລູກຄ້າທີ່ຕັ້ງຄ່າໄວ້ຂ້າງລຸ່ມ, ຖ້າບໍ່ດັ່ງນັ້ນຈະໃຊ້ DUID ເລີ່ມຕົ້ນຂອງອຸປະກອນ"
+"ນີ້, ຖ້າບໍ່ດັ່ງນັ້ນຈະໃຊ້ DUID-LL ທີ່ໄດ້ມາຈາກທີ່ຢູ່ MAC ຂອງອິນເຕີເຟສນີ້."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>ອັດຕະໂນມັດ</em> ຈະໃຊ້ ID ລູກຄ້າທີ່ຕັ້ງຄ່າໄວ້ຂ້າງລຸ່ມ, ຖ້າບໍ່ດັ່ງນັ້ນຈະໃຊ້ DUID ເລີ່ມຕົ້ນຂອງອຸປະກອນ"
+"ນີ້, ຖ້າບໍ່ດັ່ງນັ້ນຈະໃຊ້ທີ່ຢູ່ MAC ຂອງອິນເຕີເຟສນີ້."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -618,21 +625,24 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>DUID ເລີ່ມຕົ້ນ</em> ຈະໃຊ້ DUID ເລີ່ມຕົ້ນຂອງອຸປະກອນນີ້ສະເໝີ, ເຖິງແມ່ນວ່າຈະມີການຕັ້ງຄ່າ ID ລູກຄ້າ"
+"ໄວ້ຂ້າງລຸ່ມກໍຕາມ."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>ທີ່ຢູ່ຮາດແວ</em> ຈະໃຊ້ DUID-LL ທີ່ໄດ້ມາຈາກທີ່ຢູ່ MAC ຂອງອິນເຕີເຟສນີ້ສະເໝີ."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
-msgstr ""
+msgstr "<em>ທີ່ຢູ່ຮາດແວ</em> ຈະໃຊ້ທີ່ຢູ່ MAC ຂອງອິນເຕີເຟສນີ້ສະເໝີ."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>ບໍ່ມີ</em> ຈະບໍ່ສົ່ງຕົວລະບຸຕົວຕົນຂອງລູກຂ່າຍໃດໆເລີຍ."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -685,11 +695,12 @@ msgid ""
 "A %s does not do anything by itself. It is a label that other directives "
 "test against."
 msgstr ""
+"%s ຢ່າງດຽວຈະບໍ່ເຮັດຫຍັງເລີຍ. ມັນເປັນປ້າຍກຳກັບທີ່ຄຳສັ່ງອື່ນໆໃຊ້ເພື່ອທົດສອບ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 msgctxt "A tag is an alphanumeric label"
 msgid "A %s is an alphanumeric label."
-msgstr ""
+msgstr "A %s ແມ່ນປ້າຍກຳກັບທີ່ເປັນຕົວເລກ ແລະ ຕົວອັກສອນ."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:86
 msgid ""
@@ -821,7 +832,7 @@ msgstr "ANSI T1.413"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js:66
 msgid "AP Isolation"
-msgstr ""
+msgstr "ການແຍກ AP"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:95
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:65
@@ -1261,6 +1272,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"ປະກາດລະຫັດການເຂົ້າລະຫັດແບບຄູ່ GCMP-256. ເປັນສິ່ງຈຳເປັນສຳລັບ Wi-Fi 7 (EHT) ແລະ ແນະນຳໃຫ້ໃຊ້ໃ"
+"ນກໍລະນີອື່ນໆ, ແຕ່ລູກຄ້າ ແລະ ຊິບເຊັດບາງອັນອາດຈະເຊື່ອມຕໍ່ບໍ່ໄດ້ເມື່ອມີການສະເໜີອັນນີ້. ເປີດໃຊ້ໂດຍເລີ່ມຕົ້ນສະເພ"
+"າະໃນໂໝດເຂົ້າກັນໄດ້ (Compatibility Mode) ຂອງຄື້ນວິທະຍຸ Wi-Fi 7 (EHT) ເທົັ້ນັ້ນ, ນອກນັ້ນແມ່ນປິດໄ"
+"ວ້."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid ""
@@ -1270,6 +1285,10 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"ປະກາດ SAE-EXT-KEY AKM (SAE ທີ່ໃຊ້ hash ຕາມກຸ່ມ). ເປັນສິ່ງຈຳເປັນສຳລັບ Wi-Fi 7 (EHT) ແລະ "
+"ແນະນຳໃຫ້ໃຊ້ໃນກໍລະນີອື່ນໆ, ແຕ່ລູກຄ້າບາງຄົນອາດມີບັນຫາເມື່ອມີການສະເໜີອັນນີ້, ໂດຍສະເພາະເມື່ອໃຊ້ຮ່ວມກັບ "
+"802.11r Fast Transition. ເປີດໃຊ້ໂດຍເລີ່ມຕົ້ນສະເພາະໃນໂໝດເຂົ້າກັນໄດ້ (Compatibility "
+"Mode) ຂອງຄື້ນວິທະຍຸ Wi-Fi 7 (EHT) ເທົັ້ນັ້ນ, ນອກນັ້ນແມ່ນປິດໄວ້."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1279,7 +1298,7 @@ msgstr "ຫຼັງຈາກເຮັດການປ່ຽນແປງເຄື
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:828
 msgid "Affected ports:"
-msgstr ""
+msgstr "ພອດທີ່ໄດ້ຮັບຜົນກະທົບ:"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:76
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:76
@@ -1640,11 +1659,11 @@ msgstr "ເປັນທາງເລືອກ DHCP; ສົ່ງແບບບໍ�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:672
 msgid "Assign VLAN %d as tagged on selected ports"
-msgstr ""
+msgstr "ກຳນົດ VLAN %d ເປັນ tagged ໃນພອດທີ່ເລືອກ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:678
 msgid "Assign VLAN %d as untagged (native) on selected ports"
-msgstr ""
+msgstr "ກຳນົດ VLAN %d ເປັນ untagged (native) ໃນພອດທີ່ເລືອກ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1271
 msgid ""
@@ -1653,7 +1672,7 @@ msgstr "ຈັດສັນບາງສ່ວນຂອງຄວາມຍາວທ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:459
 msgid "Assign membership"
-msgstr ""
+msgstr "ກຳນົດການເປັນສະມາຊິກ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1276
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -1731,7 +1750,7 @@ msgstr "ຕ້ອງການການອະນຸຍາດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1145
 msgid "Auto negotiation"
-msgstr ""
+msgstr "ການເຈລະຈາອັດຕະໂນມັດ"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:368
 msgid "Autofill listen addresses"
@@ -1908,7 +1927,7 @@ msgstr "ອິນເຕີເຟສ Batman"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js:11
 msgid "Batman VLAN Interface"
-msgstr ""
+msgstr "ອິນເຕີເຟສ Batman VLAN"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:81
 msgid ""
@@ -1940,6 +1959,9 @@ msgid ""
 "device (e.g. a serial or out-of-band connection) and review every change in "
 "\"Unsaved Changes\" before applying."
 msgstr ""
+"ກ່ອນທີ່ຈະເຮັດການປ່ຽນແປງ, ໃຫ້ແນ່ໃຈວ່າທ່ານມີວິທີອື່ນໃນການເຂົ້າເຖິງອຸປະກອນ (ເຊັ່ນ: ການເຊື່ອມຕໍ່ແບບ "
+"serial ຫຼື out-of-band) ແລະ ກວດສອບທຸກໆການປ່ຽນແປງໃນ \"ການປ່ຽນແປງທີ່ຍັງບໍ່ທັນໄດ້ບັນທຶກ\" ກ່ອນທີ່"
+"ຈະນຳໃຊ້."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:354
 msgid ""
@@ -2043,7 +2065,7 @@ msgstr "ການກັ່ນຕອງ VLAN ບຣິດຈ໌"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:58
 msgid "Bridge VLAN filtering dialog"
-msgstr ""
+msgstr "ກ່ອງໂຕ້ຕອບການກັ່ນຕອງ Bridge VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:470
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1750
@@ -2102,6 +2124,7 @@ msgid ""
 "CA certificate (PEM encoded. Use instead of system-wide store to verify the "
 "gateway certificate.)"
 msgstr ""
+"ໃບຢັ້ງຢືນ CA (ເຂົ້າລະຫັດແບບ PEM. ໃຊ້ແທນບ່ອນເກັບຂໍ້ມູນທົ່ວລະບົບເພື່ອຢືນຢັນໃບຢັ້ງຢືນເກດເວ.)"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:178
 msgid "CA certificate; if empty it will be saved after the first connection."
@@ -2301,7 +2324,7 @@ msgstr "Chain hook \"%h\""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:102
 msgid "Change password for rpcd user"
-msgstr ""
+msgstr "ປ່ຽນລະຫັດຜ່ານສຳລັບຜູ້ໃຊ້ rpcd"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:282
 msgid "Change process priority"
@@ -2334,10 +2357,12 @@ msgid ""
 "Changes have been staged. Use \"Save & Apply\" or the \"Unsaved Changes\" "
 "indicator to apply them."
 msgstr ""
+"ການປ່ຽນແປງໄດ້ຖືກກຽມໄວ້ແລ້ວ. ໃຊ້ \"ບັນທຶກ ແລະ ນຳໃຊ້\" ຫຼື ຕົວຊີ້ບອກ \"ການປ່ຽນແປງທີ່ຍັງບໍ່ທັນໄດ້ບັນທຶ"
+"ກ\" ເພື່ອນຳໃຊ້ພວກມັນ."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:92
 msgid "Changes the password for accessing the device as (rpcd) user"
-msgstr ""
+msgstr "ປ່ຽນລະຫັດຜ່ານສຳລັບການເຂົ້າເຖິງອຸປະກອນໃນນາມຜູ້ໃຊ້ (rpcd)"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:190
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
@@ -2425,7 +2450,7 @@ msgstr "ລ້າງ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:264
 msgid "Clear selection"
-msgstr ""
+msgstr "ລ້າງການເລືອກ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
 msgid ""
@@ -2571,7 +2596,7 @@ msgstr "ການຕັ້ງຄ່າລົ້ມເຫຼວ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:139
 msgid "Configure VLANs and per-port VLAN membership on bridge device"
-msgstr ""
+msgstr "ຕັ້ງຄ່າ VLAN ແລະ ການເປັນສະມາຊິກ VLAN ແຕ່ລະພອດໃນອຸປະກອນບຣິດ"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:39
 msgid "Configure client mode"
@@ -2751,11 +2776,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1172
 msgid "Controls the receive (RX) flow control"
-msgstr ""
+msgstr "ຄວບຄຸມການຮັບ (RX) flow control"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1179
 msgid "Controls the transmission (TX) flow control"
-msgstr ""
+msgstr "ຄວບຄຸມການສົ່ງ (TX) flow control"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5384
 msgid ""
@@ -3194,7 +3219,7 @@ msgstr "ການຮ້ອງຂໍລຶບລົ້ມເຫຼວ: %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js:146
 msgid "Delete this config"
-msgstr ""
+msgstr "ລຶບການຕັ້ງຄ່ານີ້"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:985
 msgid "Delete this network"
@@ -3461,7 +3486,7 @@ msgstr "ປິດໃຊ້ງານເຄືອຂ່າຍນີ້"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1146
 msgid ""
 "Disable to manually control the duplex and link speed of the network device."
-msgstr ""
+msgstr "ປິດໃຊ້ງານເພື່ອຄວບຄຸມ duplex ແລະ ຄວາມໄວຂອງລິ້ງອຸປະກອນເຄືອຂ່າຍດ້ວຍຕົນເອງ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1196
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1202
@@ -3542,7 +3567,7 @@ msgstr "ພື້ນທີ່ດິດ"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:54
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:75
 msgid "Dismiss"
-msgstr "ປິດ"
+msgstr "ປິດອອກ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1040
 msgid "Distance Optimization"
@@ -3828,7 +3853,7 @@ msgstr "Dump cache ເມື່ອໄດ້ຮັບ SIGUSR1, ລວມທັງ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1153
 msgid "Duplex"
-msgstr ""
+msgstr "Duplex"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:736
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -4055,6 +4080,11 @@ msgid ""
 "sure to enable additional wireless client isolation options ('isolate' and "
 "'bridge_isolate') for all associated wireless interfaces on all APs."
 msgstr ""
+"ເປີດໃຊ້ AP Isolation ເພື່ອແຍກລູກຄ້າໄຮ້ສາຍທີ່ເຊື່ອມຕໍ່ກັບ Batman VLAN ນີ້ໃນ AP ນີ້ ອອກຈາກລູກຄ້າໄຮ້ສ"
+"າຍທີ່ເຊື່ອມຕໍ່ກັບ Batman VLAN ນີ້ໃນ AP ອື່ນໆ. ເພື່ອແຍກລູກຄ້າໄຮ້ສາຍທັງໝົດທີ່ເຊື່ອມຕໍ່ກັບ Batman VLAN ນີ້ໃ"
+"ນທຸກໆ AP ອອກຈາກກັນ, ໃຫ້ແນ່ໃຈວ່າໄດ້ເປີດໃຊ້ຕົວເລືອກນີ້ໃນທຸກໆ AP, ແລະ ໃຫ້ແນ່ໃຈວ່າໄດ້ເປີດໃຊ້ຕົວເລືອກກາ"
+"ນແຍກລູກຄ້າໄຮ້ສາຍເພີ່ມເຕີມ ('isolate' ແລະ 'bridge_isolate') ສຳລັບທຸກໆອິນເຕີເຟສໄຮ້ສາຍທີ່ກ່ຽວຂ້"
+"ອງໃນທຸກໆ AP."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:279
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:495
@@ -4227,7 +4257,7 @@ msgstr "ເປີດໃຊ້ງານ Packet steering ຂ້າມ CPU. ອາ�
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:28
 msgid "Enable password policy"
-msgstr ""
+msgstr "ເປີດໃຊ້ນະໂຍບາຍລະຫັດຜ່ານ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1218
 msgid "Enable promiscuous mode"
@@ -4343,6 +4373,8 @@ msgid ""
 "Encountering chosen DHCP %s (or also its %s) from clients triggers dnsmasq "
 "to set alphanumeric %s."
 msgstr ""
+"ການພົບ DHCP %s ທີ່ເລືອກ (ຫຼື %s ຂອງມັນ) ຈາກລູກຄ້າ ຈະກະຕຸ້ນໃຫ້ dnsmasq ກຳນົດ %s ເປັນຕົວເລກ ແລ"
+"ະ ຕົວອັກສອນ."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1190
 msgid "Encrypt and authenticate all control channel packets with the key"
@@ -4561,7 +4593,7 @@ msgstr "ຄາດຫວັງ: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:161
 msgid "Experimental view"
-msgstr ""
+msgstr "ມຸມມອງແບບທົດລອງ"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1586
 msgid "Expert Settings"
@@ -4715,7 +4747,7 @@ msgstr "ການເລີ່ມຕົ້ນໂມເດັມລົ້ມເຫ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1089
 msgid "Failed to save configuration: %s"
-msgstr ""
+msgstr "ບັນທຶກການຕັ້ງຄ່າບໍ່ສຳເລັດ: %s"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:30
 msgid "Failed to set operating mode"
@@ -5100,7 +5132,7 @@ msgstr "ຊື່ເຂດເວລາເຕັມ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1158
 msgid "Full duplex"
-msgstr ""
+msgstr "Full duplex"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:68
 msgctxt "nft nat flag fully-random"
@@ -5127,7 +5159,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2184
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "ລະຫັດການເຂົ້າລະຫັດແບບຄູ່ GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5393,7 +5425,7 @@ msgstr "ອະນຸຍາດການເຂົ້າເຖິງຂໍ້ມູ
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:227
 msgid "Grant access to password policy configuration"
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ເຂົ້າເຖິງການຕັ້ງຄ່ານະໂຍບາຍລະຫັດຜ່ານ"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:52
 msgid "Grant access to port status display"
@@ -5476,7 +5508,7 @@ msgstr "Half Duplex"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1159
 msgid "Half duplex"
-msgstr ""
+msgstr "Half duplex"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1488
 msgid "Handling of authentication failures"
@@ -5493,7 +5525,7 @@ msgstr "ຕັດສາຍ"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "ທີ່ຢູ່ຮາດແວ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -5639,7 +5671,7 @@ msgstr "ລູກປະສົມ (Hybrid)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:179
 msgid "I understand, continue"
-msgstr ""
+msgstr "ຂ້ອຍເຂົ້າໃຈແລ້ວ, ດຳເນີນການຕໍ່"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:60
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:81
@@ -5842,7 +5874,7 @@ msgstr "ເຄືອຂ່າຍ IPv4 ໃນຮູບແບບທີ່ຢູ່
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:201
 msgid "IPv4 only"
-msgstr "ສະເພາະ IPv4"
+msgstr "IPv4 ເທົ່ານັ້ນ"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:10
@@ -5984,7 +6016,7 @@ msgstr "ເຄືອຂ່າຍ IPv6 ໃນຮູບແບບທີ່ຢູ່
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:145
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:202
 msgid "IPv6 only"
-msgstr "ສະເພາະ IPv6"
+msgstr "IPv6 ເທົ່ານັ້ນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 msgid "IPv6 preference"
@@ -6108,6 +6140,7 @@ msgid ""
 "If not listed, please open the drop-down list and type in the name of the "
 "Batman VLAN device in the 'custom' field."
 msgstr ""
+"ຖ້າບໍ່ມີລາຍຊື່, ກະລຸນາເປີດລາຍການແບບດຶງລົງ ແລະ ພິມຊື່ຂອງອຸປະກອນ Batman VLAN ໃນຊ່ອງ 'ກຳນົດເອງ'."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1293
 msgid ""
@@ -6249,12 +6282,12 @@ msgstr "ເພື່ອຕັ້ງຄ່າ Tag ນີ້"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:702
 msgid "In other words: \"%s these %s to set this %s\"."
-msgstr ""
+msgstr "ເວົ້າອີກຢ່າງໜຶ່ງ: \"%s ສິ່ງເຫຼົ່ານີ້ %s ເພື່ອກຳນົດ %s ນີ້\"."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:652
 msgctxt "this tag gets these options"
 msgid "In other words: \"This %s gets these %s\"."
-msgstr ""
+msgstr "ເວົ້າອີກຢ່າງໜຶ່ງ: \"%s ນີ້ ຈະໄດ້ຮັບ %s ເຫຼົ່ານີ້\"."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:152
 msgid "In seconds"
@@ -6520,7 +6553,7 @@ msgstr "ອິນເຕີເຟດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:74
 msgid "Interfaces → Devices"
-msgstr ""
+msgstr "ອິນເຕີເຟສ → ອຸປະກອນ"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:20
 msgid "Internal"
@@ -6528,7 +6561,7 @@ msgstr "ພາຍໃນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:704
 msgid "Internally, these configuration entries are called %s."
-msgstr ""
+msgstr "ພາຍໃນ, ລາຍການການຕັ້ງຄ່າເຫຼົ່ານີ້ຖືກເອີ້ນວ່າ %s."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:85
 msgid "International Mobile Station Equipment Identity"
@@ -6572,7 +6605,7 @@ msgstr "APN ທີ່ໃຫ້ມາບໍ່ຖືກຕ້ອງ"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:38
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:41
 msgid "Invalid Base64 key string"
-msgstr ""
+msgstr "ສາຍຄີ Base64 ບໍ່ຖືກຕ້ອງ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:751
 msgid ""
@@ -7062,7 +7095,7 @@ msgstr "ລິ້ງ ເປີດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1791
 msgid "Link Speed"
-msgstr ""
+msgstr "ຄວາມໄວລິ້ງ"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:83
 msgctxt "nft @ll,off,len"
@@ -7248,7 +7281,7 @@ msgstr "Local 7"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:171
 msgid "Local IP address"
-msgstr ""
+msgstr "ທີ່ຢູ່ IP ພາຍໃນ"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:12
 #: modules/luci-compat/luasrc/model/network.lua:30
@@ -7593,7 +7626,7 @@ msgstr "ຜູ້ຜະລິດ"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:485
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:569
 msgid "Mark VLAN as locally terminated on the bridge"
-msgstr ""
+msgstr "ໝາຍ VLAN ໃຫ້ສິ້ນສຸດພາຍໃນບຣິດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1247
 msgid "Master"
@@ -7605,7 +7638,7 @@ msgstr "Master (VLAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:708
 msgid "Match %s, Tag %s, sets a tag of the same name"
-msgstr ""
+msgstr "ກົງກັບ %s, ແທັກ %s, ກຳນົດແທັກທີ່ມີຊື່ດຽວກັນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1092
 msgid "Match Tag"
@@ -7679,7 +7712,7 @@ msgstr "ການຈະລາຈອນທີ່ຈັບຄູ່ໄດ້ຈະ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:705
 msgid "Matching option syntax: %s."
-msgstr ""
+msgstr "ໄວຍາກອນຕົວເລືອກທີ່ກົງກັນ: %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1008
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
@@ -7918,7 +7951,7 @@ msgstr "ພອດຕົ້ນທາງ Mirror"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js:78
 msgid "Missing plugin:"
-msgstr ""
+msgstr "ປລັກອິນທີ່ຫາຍໄປ:"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:120
 msgid "Mobile Country Code"
@@ -8026,6 +8059,8 @@ msgid ""
 "different VLAN than its untagged egress VLAN — a combination that is allowed "
 "by 802.1Q but very rarely intentional."
 msgstr ""
+"ສ່ວນຫຼາຍແລ້ວນີ້ໝາຍຄວາມວ່າພອດໃດໜຶ່ງມີ VLAN ຫຼັກ (PVID) ທີ່ກຳນົດໄວ້ເປັນ VLAN ອື່ນທີ່ຕ່າງຈາກ VLAN ຂາອ"
+"ອກແບບ untagged — ເຊິ່ງເປັນການລວມກັນທີ່ອະນຸຍາດໂດຍ 802.1Q ແຕ່ບໍ່ຄ່ອຍມີຄວາມຕັ້ງໃຈໃຫ້ເປັນແບບນັ້ນ."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:171
 msgid "Mount Point"
@@ -8421,6 +8456,10 @@ msgid ""
 "switch ports. Bridges containing wireless, tunnel, VLAN sub-interfaces or "
 "other virtual members are intentionally excluded."
 msgstr ""
+"ບໍ່ພົບອຸປະກອນບຣິດທີ່ເໝາະສົມສຳລັບການຕັ້ງຄ່າແບບສະວິດ. ມຸມມອງນີ້ຕ້ອງການບຣິດທີ່ເປີດໃຊ້ການກັ່ນຕອງ VLAN (ຢ່າ"
+"ງຊັດເຈນ ຫຼື ໂດຍທາງອ້ອມຜ່ານສ່ວນ bridge-vlan) ເຊິ່ງພອດສະມາຊິກທັງໝົດເປັນ ethernet ທາງກາຍະພາ"
+"ບ ຫຼື ພອດສະວິດ DSA. ບຣິດທີ່ມີໄຮ້ສາຍ, ທັນເນວ (tunnel), VLAN sub-interfaces ຫຼື ສະມາຊິກສະເໝື"
+"ອນອື່ນໆ ແມ່ນຖືກຍົກເວັ້ນໂດຍເຈດຕະນາ."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:70
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:93
@@ -8499,7 +8538,7 @@ msgstr "ບໍ່ມີຂໍ້ມູນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:70
 msgid "No managed switch found"
-msgstr ""
+msgstr "ບໍ່ພົບສະວິດທີ່ຈັດການໄດ້"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:116
 msgid "No master"
@@ -8535,7 +8574,7 @@ msgstr "ຍັງບໍ່ມີເພຍທີ່ກຳນົດໄວ້."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:258
 msgid "No ports are configured on this bridge."
-msgstr ""
+msgstr "ບໍ່ມີພອດຖືກຕັ້ງຄ່າໃນບຣິດນີ້."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:15
 msgid "No preferred mode configuration found."
@@ -8687,6 +8726,7 @@ msgstr ""
 msgctxt "invalid tag combinations may cause crashes"
 msgid "Note: invalid %s combinations may cause dnsmasq to crash silently."
 msgstr ""
+"ໝາຍເຫດ: ການປະສົມ %s ທີ່ບໍ່ຖືກຕ້ອງ ອາດເຮັດໃຫ້ dnsmasq ຢຸດເຮັດວຽກໂດຍບໍ່ແຈ້ງເຕືອນ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1154
 msgid ""
@@ -8805,7 +8845,7 @@ msgstr "ປິດ: ໃຊ້ທຸກໄຟລ໌ໃນໄດເລັກທໍ�
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:121
 msgid "Old Password"
-msgstr ""
+msgstr "ລະຫັດຜ່ານເກົ່າ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1246
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:19
@@ -8896,7 +8936,7 @@ msgstr "ເປີດລາຍການ..."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:63
 msgid "OpenConnect"
-msgstr ""
+msgstr "OpenConnect"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -8904,7 +8944,7 @@ msgstr "OpenConnect (CISCO AnyConnect)"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:63
 msgid "OpenFortivpn"
-msgstr ""
+msgstr "OpenFortivpn"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1625
 msgid "OpenVPN"
@@ -8997,7 +9037,7 @@ msgstr "ໝາຍເຫດທາງເລືອກ, ຕາມໃຈຊອບ ກ
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:149
 msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
-msgstr ""
+msgstr "ທາງເລືອກ, ເປັນວິນາທີ. ຖ້າຕັ້ງເປັນ '0', ຈະບໍ່ມີການພະຍາຍາມເຊື່ອມຕໍ່ໃໝ່."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid ""
@@ -9093,6 +9133,7 @@ msgstr ""
 msgid ""
 "Optional. Specify the realm if your VPN gateway uses custom login portals."
 msgstr ""
+"ທາງເລືອກ. ລະບຸຂອບເຂດ (realm) ຖ້າຫາກປະຕູເຊື່ອມຕໍ່ VPN ຂອງທ່ານນຳໃຊ້ໜ້າເຂົ້າສູ່ລະບົບແບບກຳນົດເອງ."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Optional. UDP port used for outgoing and incoming packets."
@@ -9120,7 +9161,7 @@ msgstr "ຕົວເລືອກ:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:703
 msgid "Or \"These %s set this %s\"."
-msgstr ""
+msgstr "ຫຼື \"%s ເຫຼົ່ານີ້ ກຳນົດ %s ນີ້\"."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:365
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:397
@@ -9474,7 +9515,7 @@ msgstr "ລະຫັດຜ່ານ"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:38
 msgid "Password Policy"
-msgstr ""
+msgstr "ນະໂຍບາຍລະຫັດຜ່ານ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
@@ -9672,7 +9713,7 @@ msgstr "ການຮັກສາການເຊື່ອມຕໍ່ (Keep Alive
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:149
 msgid "Persistent reconnect interval"
-msgstr ""
+msgstr "ໄລຍະຫ່າງການເຊື່ອມຕໍ່ໃໝ່ແບບຕໍ່ເນື່ອງ"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:310
 msgid "PersistentKeepAlive setting is invalid"
@@ -9707,7 +9748,7 @@ msgstr "ແພັກເກັດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:788
 msgid "Please enter a VLAN ID between %d and %d."
-msgstr ""
+msgstr "ກະລຸນາປ້ອນ ID ຂອງ VLAN ລະຫວ່າງ %d ແລະ %d."
 
 #: modules/luci-base/ucode/template/sysauth.ut:25
 msgid "Please enter your username and password."
@@ -9717,11 +9758,11 @@ msgstr "ກະລຸນາປ້ອນຊື່ຜູ້ໃຊ້ ແລະ ລ�
 msgid ""
 "Please open the drop-down list and select or type in the name of the Batman "
 "VLAN device."
-msgstr ""
+msgstr "ກະລຸນາເປີດລາຍການແບບດຶງລົງ ແລະ ເລືອກ ຫຼື ພິມຊື່ຂອງອຸປະກອນ Batman VLAN."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:57
 msgid "Please review the configuration via the legacy"
-msgstr ""
+msgstr "ກະລຸນາກວດສອບການຕັ້ງຄ່າຜ່ານທາງລະບົບເກົ່າ"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4930
 msgid "Please select the file to upload."
@@ -9771,7 +9812,7 @@ msgstr "ນະໂຍບາຍ"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:20
 msgctxt "password policy"
 msgid "Policy"
-msgstr ""
+msgstr "ນະໂຍບາຍ"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:350
 msgid "Policy level over usage of external programs and scripts"
@@ -9808,28 +9849,32 @@ msgstr "ພອດ (Port)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:923
 msgid "Port \"%s\" already has VLAN %d as its native (untagged) VLAN."
-msgstr ""
+msgstr "ພອດ \"%s\" ມີ VLAN %d ເປັນ VLAN ຫຼັກ (untagged) ຢູ່ແລ້ວ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:243
 msgid ""
 "Port \"%s\" has the primary VLAN flag together with tagged egress on VLAN %d "
 "(PVID ≠ untagged VLAN)."
 msgstr ""
+"ພອດ \"%s\" ມີແຟລັກ VLAN ຫຼັກ ຮ່ວມກັບ egress ແບບ tagged ໃນ VLAN %d (PVID ≠ VLAN ແບບ "
+"untagged)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:245
 msgid "Port \"%s\" is both tagged and untagged on VLAN %d."
-msgstr ""
+msgstr "ພອດ \"%s\" ມີທັງແບບ tagged ແລະ untagged ໃນ VLAN %d."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:251
 msgid ""
 "Port \"%s\" is configured as untagged on more than one VLAN (%d and %d)."
-msgstr ""
+msgstr "ພອດ \"%s\" ຖືກຕັ້ງຄ່າເປັນ untagged ໃນຫຼາຍກວ່າໜຶ່ງ VLAN (%d ແລະ %d)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:247
 msgid ""
 "Port \"%s\" is the primary VLAN on VLAN %d but has no untagged egress (PVID "
 "≠ untagged VLAN)."
 msgstr ""
+"ພອດ \"%s\" ແມ່ນ VLAN ຫຼັກໃນ VLAN %d ແຕ່ບໍ່ມີ egress ແບບ untagged (PVID ≠ VLAN ແບບ "
+"untagged)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:152
 msgctxt "WireGuard listen port"
@@ -9850,7 +9895,7 @@ msgstr "ບູລິມະສິດພອດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:235
 msgid "Port specification \"%s\" on VLAN %d cannot be parsed."
-msgstr ""
+msgstr "ຂໍ້ກຳນົດພອດ \"%s\" ໃນ VLAN %d ບໍ່ສາມາດວິເຄາະໄດ້."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:375
 msgid "Port status"
@@ -9900,7 +9945,7 @@ msgstr "ຕ້ອງການ UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "ID ລູກຄ້າທີ່ຕ້ອງການ"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -9912,7 +9957,7 @@ msgstr "ມອບໝາຍພຣີຟິກແລ້ວ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:706
 msgid "Prefix named (IPv6) options with %s."
-msgstr ""
+msgstr "ນຳໜ້າຕົວເລືອກທີ່ມີຊື່ (IPv6) ດ້ວຍ %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:217
 msgid "Prefix suppressor"
@@ -9924,6 +9969,8 @@ msgid ""
 "Prepend a %s with %s to invert their domain of application, e.g. to send "
 "options to a host lacking a %s."
 msgstr ""
+"ຕື່ມ %s ໃສ່ທາງໜ້າດ້ວຍ %s ເພື່ອປີ້ນກັບຂອບເຂດການນຳໃຊ້ຂອງພວກມັນ, ເຊັ່ນ: ເພື່ອສົ່ງຕົວເລືອກໄປຫາໂຮສທີ່ບໍ່ມີ "
+"%s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:115
 msgid "Present"
@@ -10350,7 +10397,7 @@ msgstr "ຕ້ອງການປ່ຽນໂປຣໂຕຄອນແທ້ບໍ
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:176
 msgid "Realm"
-msgstr ""
+msgstr "Realm"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:139
 msgid "Realtime Graphs"
@@ -10598,27 +10645,27 @@ msgstr "ລຶບຕົວເລືອກ Push"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:509
 msgid "Remove VLAN %d"
-msgstr ""
+msgstr "ລຶບ VLAN %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:675
 msgid "Remove VLAN %d as tagged from all selected ports"
-msgstr ""
+msgstr "ລຶບ VLAN %d ທີ່ເປັນ tagged ອອກຈາກທຸກພອດທີ່ເລືອກ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:674
 msgid "Remove VLAN %d as tagged from selected ports that have it"
-msgstr ""
+msgstr "ລຶບ VLAN %d ທີ່ເປັນ tagged ອອກຈາກພອດທີ່ເລືອກທີ່ມີມັນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:681
 msgid "Remove VLAN %d as untagged (native) from all selected ports"
-msgstr ""
+msgstr "ລຶບ VLAN %d ທີ່ເປັນ untagged (native) ອອກຈາກທຸກພອດທີ່ເລືອກ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:680
 msgid "Remove VLAN %d as untagged (native) from selected ports that have it"
-msgstr ""
+msgstr "ລຶບ VLAN %d ທີ່ເປັນ untagged (native) ອອກຈາກພອດທີ່ເລືອກທີ່ມີມັນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:826
 msgid "Remove VLAN %d?"
-msgstr ""
+msgstr "ລຶບ VLAN %d ບໍ່?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:701
 msgid ""
@@ -10713,11 +10760,11 @@ msgstr "ເວລາໝົດການຮ້ອງຂໍ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:32
 msgid "Require a minimum password length"
-msgstr ""
+msgstr "ຕ້ອງການຄວາມຍາວລະຫັດຜ່ານຂັ້ນຕ່ຳ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:38
 msgid "Require digits"
-msgstr ""
+msgstr "ຕ້ອງການຕົວເລກ"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1225
 msgid "Require explicit designation on certificate"
@@ -10748,11 +10795,11 @@ msgstr "ຕ້ອງການການໃຊ້ຄີແບບຂະຫຍາຍ
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:50
 msgid "Require special characters <br/> (e.g., !, @, #, $, %, &)"
-msgstr ""
+msgstr "ຕ້ອງການຕົວອັກສອນພິເສດ <br/> (ເຊັ່ນ: !, @, #, $, %, &)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:44
 msgid "Require upper/lower case"
-msgstr ""
+msgstr "ຕ້ອງການຕົວອັກສອນພິມໃຫຍ່/ພິມນ້ອຍ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1785
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2130
@@ -11126,7 +11173,7 @@ msgstr "ຄວາມສຳຄັນຂອງເຣົາເຕີ"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:115
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:127
 msgid "Router username"
-msgstr ""
+msgstr "ຊື່ຜູ້ໃຊ້ເຣົາເຕີ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:29
 msgid ""
@@ -11231,7 +11278,7 @@ msgstr "Rx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -11406,21 +11453,21 @@ msgstr ""
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js:52
 msgid "Select Batman VLAN device…"
-msgstr ""
+msgstr "ເລືອກອຸປະກອນ Batman VLAN…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:270
 msgid "Select all ports"
-msgstr ""
+msgstr "ເລືອກພອດທັງໝົດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:491
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:654
 msgid "Select all ports having VLAN %d assigned as tagged (%d)"
-msgstr ""
+msgstr "ເລືອກພອດທັງໝົດທີ່ມີການກຳນົດ VLAN %d ເປັນ tagged (%d)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:499
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:655
 msgid "Select all ports having VLAN %d assigned as untagged / native (%d)"
-msgstr ""
+msgstr "ເລືອກພອດທັງໝົດທີ່ມີການກຳນົດ VLAN %d ເປັນ untagged / native (%d)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3150
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3381
@@ -11436,26 +11483,27 @@ msgstr "ເລືອກໄຟລ໌…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:666
 msgid "Select one or more ports first"
-msgstr ""
+msgstr "ເລືອກໜຶ່ງພອດ ຫຼື ຫຼາຍພອດກ່ອນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:410
 msgid "Select one or more ports first."
-msgstr ""
+msgstr "ເລືອກໜຶ່ງພອດ ຫຼື ຫຼາຍພອດກ່ອນ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:458
 msgid "Select ports"
-msgstr ""
+msgstr "ເລືອກພອດ"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:42
 msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"ເລືອກ <abbr title=\"DHCP Unique Identifier\">DUID</abbr> ເພື່ອສົ່ງເມື່ອຮ້ອງຂໍ DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
-msgstr ""
+msgstr "ເລືອກຕົວລະບຸລູກຄ້າ (DHCP option 61) ເພື່ອສົ່ງເມື່ອຮ້ອງຂໍ DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 msgid ""
@@ -11761,6 +11809,9 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"ປິດໃຊ້ງານ Signal Transition (WPA3 Specification v3.5 ໝວດ 13) ເພື່ອໃຫ້ລູກຄ້າທີ່ເຄີຍເຊື່ອມຕໍ່"
+"ແລ້ວ ບໍ່ປ່ຽນໄປໃຊ້ໂໝດຄວາມປອດໄພທີ່ຕ່ຳກວ່າສຳລັບ SSID ນີ້. bitmap ທີ່ປະກາດແມ່ນໄດ້ມາຈາກໂໝດການເຂົ້າລະ"
+"ຫັດ."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12130,7 +12181,7 @@ msgstr "ລະບຸວ່າລູກຂ່າຍຈຳເປັນຕ້ອງ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1163
 msgid "Speed"
-msgstr ""
+msgstr "ຄວາມໄວ"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:222
 msgid "Speed: %d Mbit/s, Duplex: %s"
@@ -12296,7 +12347,7 @@ msgstr "ແນະນຳ: 128"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1820
 msgid "Supported link speeds: %s"
-msgstr ""
+msgstr "ຄວາມໄວລິ້ງທີ່ຮອງຮັບ: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:478
 msgid "Suppress logging"
@@ -12340,7 +12391,7 @@ msgstr "ສະວິດ %q ມີໂທໂປໂລຢີທີ່ບໍ່ຮ�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:68
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:137
 msgid "Switch / VLAN Configuration"
-msgstr ""
+msgstr "ການຕັ້ງຄ່າ ສະວິດ / VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3064
 #: modules/luci-compat/luasrc/model/network.lua:1426
@@ -12363,7 +12414,7 @@ msgstr "ສະຫຼັບໄປເປັນການບັນທຶກລາຍ
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
 msgid "Switch/VLAN config"
-msgstr ""
+msgstr "ຕັ້ງຄ່າ ສະວິດ/VLAN"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3203
 msgid "Symbolic link"
@@ -12488,7 +12539,7 @@ msgstr "TLS 1.3 ຫຼື ລະຫັດໃໝ່ກວ່າ"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1283
 msgid "TLS cert profile"
-msgstr ""
+msgstr "ໂປຣໄຟລ໌ໃບຢັ້ງຢືນ TLS"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1065
 msgid "TLS cipher"
@@ -12736,6 +12787,8 @@ msgid ""
 "experimental. Bugs in this view may result in network misconfiguration that "
 "can leave your device unreachable over the network."
 msgstr ""
+"ມຸມມອງການຕັ້ງຄ່າ ສະວິດ / VLAN ແມ່ນເປັນອັນໃໝ່ ແລະ ຍັງຖືວ່າຢູ່ໃນຂັ້ນຕອນການທົດລອງ. ຂໍ້ຜິດພາດໃນມຸມມອງນີ້"
+"ອາດຈະເຮັດໃຫ້ການຕັ້ງຄ່າເຄືອຂ່າຍຜິດພາດ ເຊິ່ງອາດເຮັດໃຫ້ອຸປະກອນຂອງທ່ານບໍ່ສາມາດເຂົ້າເຖິງໄດ້ຜ່ານເຄືອຂ່າຍ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1492
 msgid "The VLAN ID must be unique"
@@ -12779,7 +12832,7 @@ msgstr ""
 msgid ""
 "The bridge device \"%s\" has a VLAN configuration that this view cannot "
 "represent."
-msgstr ""
+msgstr "ອຸປະກອນບຣິດ \"%s\" ມີການຕັ້ງຄ່າ VLAN ທີ່ມຸມມອງນີ້ບໍ່ສາມາດສະແດງຜົນໄດ້."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:323
 msgid ""
@@ -13072,6 +13125,8 @@ msgid ""
 "one or more selected ports. No change was made; a port cannot have the same "
 "VLAN as both native and tagged."
 msgstr ""
+"ການປ່ຽນແປງທີ່ຮ້ອງຂໍນັ້ນຂັດແຍ້ງກັບການກຳນົດ VLAN ຫຼັກທີ່ມີຢູ່ຂອງໜຶ່ງພອດ ຫຼື ຫຼາຍພອດທີ່ເລືອກ. ບໍ່ມີການປ່ຽນແປງໃ"
+"ດໆ; ພອດໜຶ່ງບໍ່ສາມາດມີ VLAN ດຽວກັນເປັນທັງແບບ native ແລະ tagged ໄດ້."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:147
 msgid "The restore command failed with code %d"
@@ -13228,7 +13283,7 @@ msgstr "ບໍ່ມີການຕັ້ງລະຫັດຜ່ານໃນເ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 msgid "They filter which options apply to which hosts."
-msgstr ""
+msgstr "ພວກມັນກັ່ນຕອງວ່າຕົວເລືອກໃດຈະຖືກນຳໃຊ້ກັບ host ໃດ."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
 msgid "This IPv4 address of the relay"
@@ -13241,7 +13296,7 @@ msgstr "ປະເພດການຢັ້ງຢືນຕົວຕົນນີ້
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:48
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
 msgid "This does not look like a valid PEM file"
-msgstr ""
+msgstr "ອັນນີ້ເບິ່ງຄືວ່າບໍ່ແມ່ນໄຟລ໌ PEM ທີ່ຖືກຕ້ອງ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1862
 msgid ""
@@ -13541,7 +13596,7 @@ msgstr "ປ່ຽນຄຳຕອບທີ່ມີທີ່ຢູ່ ຫຼື �
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2192
 msgid "Transition Disable"
-msgstr ""
+msgstr "ປິດໃຊ້ງານ Transition"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"
@@ -13886,7 +13941,7 @@ msgstr "ຮູບແບບ URI ໃນ %s ບໍ່ຮອງຮັບ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:50
 msgid "Unsupported VLAN configuration"
-msgstr ""
+msgstr "ການຕັ້ງຄ່າ VLAN ທີ່ບໍ່ຮອງຮັບ"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
@@ -14053,6 +14108,8 @@ msgid ""
 "in the system setting a lower value, but one that is compatible with the "
 "network interface"
 msgstr ""
+"ໃຊ້ຄວາມໄວທີ່ເຂົ້າກັນໄດ້ກັບອຸປະກອນຂອງທ່ານ, ການບັງຄັບໃຫ້ໃຊ້ຄວາມໄວທີ່ສູງກວ່າຈະສົ່ງຜົນໃຫ້ລະບົບກຳນົດຄ່າທີ່ຕ່ຳກ"
+"ວ່າ, ແຕ່ເປັນຄ່າທີ່ເຂົ້າກັນໄດ້ກັບອິນເຕີເຟສເຄືອຂ່າຍ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:274
 msgid "Use as external overlay (/overlay)"
@@ -14129,11 +14186,11 @@ msgstr "ໃຊ້ໃບຢັ້ງຢືນຂອງລະບົບສຳລັ
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:656
 msgctxt "use the add button to add a new tag"
 msgid "Use the <em>%s</em> button to add a new %s."
-msgstr ""
+msgstr "ໃຊ້ປຸ່ມ <em>%s</em> ເພື່ອເພີ່ມ %s ໃໝ່."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:710
 msgid "Use the <em>Add</em> Button to add a new %s."
-msgstr ""
+msgstr "ໃຊ້ປຸ່ມ <em>ເພີ່ມ</em> ເພື່ອເພີ່ມ %s ໃໝ່."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
 msgid "Use the <em>Add</em> Button to add a new UC."
@@ -14222,7 +14279,7 @@ msgstr "ຊື່ຜູ້ໃຊ້"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:79
 msgid "Username and password file (one per line)"
-msgstr ""
+msgstr "ໄຟລ໌ຊື່ຜູ້ໃຊ້ ແລະ ລະຫັດຜ່ານ (ໜຶ່ງລາຍການຕໍ່ແຖວ)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:141
 msgid "Utilise <strong>%h</strong> conntrack helper"
@@ -14251,15 +14308,15 @@ msgstr "VEPA (ຕົວຮວບຮວມພອດອີເທີເນັດສ
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:544
 msgid "VLAN"
-msgstr ""
+msgstr "VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1016
 msgid "VLAN %d does not exist."
-msgstr ""
+msgstr "VLAN %d ບໍ່ມີຢູ່."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:794
 msgid "VLAN %d is already configured."
-msgstr ""
+msgstr "VLAN %d ຖືກຕັ້ງຄ່າໄວ້ແລ້ວ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:472
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1744
@@ -14279,11 +14336,11 @@ msgstr "VLAN ID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:226
 msgid "VLAN ID %s is outside the valid range %d–%d."
-msgstr ""
+msgstr "VLAN ID %s ຢູ່ນອກຊ່ວງທີ່ຖືກຕ້ອງ %d–%d."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:447
 msgid "VLANs"
-msgstr ""
+msgstr "VLANs"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:171
 msgid "VLANs on %q"
@@ -14310,7 +14367,7 @@ msgstr "ພອດທ້ອງຖິ່ນ VPN"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:94
 msgid "VPN Protocol"
-msgstr ""
+msgstr "ໂປຣໂຕຄໍ VPN"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:103
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
@@ -14321,11 +14378,11 @@ msgstr "ເຊີບເວີ VPN"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:154
 msgid "VPN Server certificate's SHA256 hash"
-msgstr ""
+msgstr "ຄ່າແຮຊ SHA256 ຂອງໃບຢັ້ງຢືນເຊີເວີ VPN"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:96
 msgid "VPN Server port"
-msgstr ""
+msgstr "ພອດເຊີເວີ VPN"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:141
 msgid "VPN Server's certificate SHA1 hash"
@@ -14610,7 +14667,7 @@ msgstr "ຄວາມກວ້າງ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:707
 msgid "Wildcards (%s) allowed."
-msgstr ""
+msgstr "ອະນຸຍາດໃຫ້ໃຊ້ Wildcards (%s)."
 
 #: protocols/luci-proto-wireguard/root/usr/share/luci/menu.d/luci-proto-wireguard.json:3
 msgid "WireGuard"
@@ -14720,10 +14777,12 @@ msgid ""
 "You are about to remove VLAN %d%s. This will also remove the VLAN from every "
 "port that currently has it assigned (tagged or untagged)."
 msgstr ""
+"ທ່ານກຳລັງຈະລຶບ VLAN %d%s. ສິ່ງນີ້ຈະລຶບ VLAN ອອກຈາກທຸກໆພອດທີ່ໄດ້ຮັບການກຳນົດໃນປັດຈຸບັນ (ແບບ "
+"tagged ຫຼື untagged)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:73
 msgid "You can enable VLAN filtering on a bridge from the"
-msgstr ""
+msgstr "ທ່ານສາມາດເປີດໃຊ້ການກັ່ນຕອງ VLAN ໃນບຣິດໄດ້ຈາກ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:112
 msgid ""
@@ -14788,6 +14847,7 @@ msgid ""
 "and either correct the unusual configuration or remove the offending VLAN "
 "assignments before returning here."
 msgstr ""
+"ແລະ ສາມາດແກ້ໄຂການຕັ້ງຄ່າທີ່ຜິດປົກກະຕິ ຫຼື ລຶບການກຳນົດ VLAN ທີ່ມີບັນຫາອອກ ກ່ອນທີ່ຈະກັບມາທີ່ນີ້."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:261
 msgid "and:"
@@ -14955,7 +15015,7 @@ msgctxt "when a specific tag is encountered"
 msgid ""
 "dnsmasq conditionally applies chosen DHCP options when a specific %s is "
 "encountered."
-msgstr ""
+msgstr "dnsmasq ຈະນຳໃຊ້ຕົວເລືອກ DHCP ທີ່ເລືອກຕາມເງື່ອນໄຂ ເມື່ອພົບ %s ສະເພາະ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:637
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:672
@@ -15105,11 +15165,11 @@ msgstr "l3miss: Layer 3 miss"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:291
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:468
 msgid "label"
-msgstr ""
+msgstr "ປ້າຍກຳກັບ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:553
 msgid "label (optional)"
-msgstr ""
+msgstr "ປ້າຍກຳກັບ (ຖ້າມີ)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:931
 msgid "managed config (M)"
@@ -15236,7 +15296,7 @@ msgstr "ແພັກເກັດ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:75
 msgid "page."
-msgstr ""
+msgstr "ໜ້າ."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
 msgctxt "packets, abbreviated"
@@ -15282,7 +15342,7 @@ msgstr "ຈັດເສັ້ນທາງແລ້ວ (routed)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:105
 msgid "rpcd username"
-msgstr ""
+msgstr "ຊື່ຜູ້ໃຊ້ rpcd"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:275
 msgid "searching"
@@ -15423,7 +15483,7 @@ msgstr "ບໍ່ມີແທັກ (untagged)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:239
 msgid "up"
-msgstr ""
+msgstr "ຂຶ້ນ"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:510
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:72
@@ -15578,6 +15638,8 @@ msgid ""
 "valid network device name between 1 and 15 characters not containing \":\", "
 "\"/\", \"%\" or spaces"
 msgstr ""
+"ຊື່ຂອງອຸປະກອນເຄືອຂ່າຍທີ່ຖືກຕ້ອງ ຕ້ອງມີຄວາມຍາວລະຫວ່າງ 1 ຫາ 15 ຕົວອັກສອນ ແລະ ບໍ່ມີ \":\", \"/"
+"\", \"%\" ຫຼື ຍະຫວ່າງ"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1004
 msgid "valid network device name, not \".\" or \"..\""
@@ -15688,7 +15750,7 @@ msgstr "« ກັບຄືນ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:926
 msgid "… and %d more."
-msgstr ""
+msgstr "… ແລະ ອີກ %d ອັນ."
 
 #~ msgid "Authenticate using username/password"
 #~ msgstr "ຢືນຢັນຕົວຕົນໂດຍໃຊ້ຊື່ຜູ້ໃຊ້/ລະຫັດຜ່ານ"
