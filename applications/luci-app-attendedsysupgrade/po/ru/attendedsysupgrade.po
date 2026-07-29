@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-24 15:13+0000\n"
+"PO-Revision-Date: 2026-07-25 16:02+0000\n"
 "Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.8.dev0\n"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:318
 msgid ""
@@ -77,7 +77,7 @@ msgstr "Проверять"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:40
 msgid "Check for upgrades"
-msgstr "Проверить наличие обновлений"
+msgstr "Проверять наличие обновлений"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
 msgid "Check for upgrades whenever the Status -> Overview page is loaded."
@@ -134,7 +134,7 @@ msgstr "Текущий"
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:655
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:770
 msgid "Currently running: %s - %s"
-msgstr "Сейчас работает: %s - %s"
+msgstr "Сейчас установлена версия: %s - %s"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:337
 msgid "Data copied!"
@@ -230,7 +230,7 @@ msgstr "Новое обновление прошивки доступно"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:263
 msgid "No sysupgrade image found"
-msgstr ""
+msgstr "Образ sysupgrade не найден"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:701
 msgid "No upgrade available"
@@ -249,7 +249,7 @@ msgid ""
 "Other ASU server instances that rebuild a requested image. Allows to compare "
 "checksums and verify that the results are the same."
 msgstr ""
-"Другие экземпляры сервера ASU, которые перестраивают запрошенный образ. "
+"Другие экземпляры сервера ASU, которые пересобирают запрошенный образ. "
 "Позволяет сравнить контрольные суммы и убедиться, что результаты совпадают."
 
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:15
@@ -266,7 +266,7 @@ msgstr "Вставьте содержимое буфера обмена в"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:267
 msgid "Please report this in"
-msgstr ""
+msgstr "Сообщите об этом здесь"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:199
 msgid "Profile"
@@ -282,7 +282,7 @@ msgstr "В очереди..."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:28
 msgid "Rebuilders"
-msgstr "Реконструкторы"
+msgstr "Серверы пересборки"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:217
 msgid "Rebuilds"
@@ -318,7 +318,7 @@ msgstr "Поиск обновлений прошивки"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
 msgid "Search for upgrades when opening the Attended Sysupgrade tab"
-msgstr "Искать обновления при открытии вкладки \"Обновление Системы\""
+msgstr "Искать обновления при открытии вкладки «Обновление системы»"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:49
 msgid "Search on opening"
@@ -373,8 +373,8 @@ msgid ""
 "The attended sysupgrade service allows to upgrade vanilla and custom "
 "firmware images easily."
 msgstr ""
-"Данная служба позволяет легко обновлять ванильные и пользовательские образы "
-"прошивки."
+"Данная служба позволяет легко обновлять оригинальные и пользовательские "
+"образы прошивки."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:195
 msgid ""
@@ -391,12 +391,15 @@ msgid ""
 "The image builder did not return a usable sysupgrade image for this device "
 "(image types: %s)."
 msgstr ""
+"Сборщик образов не вернул подходящий образ sysupgrade для этого устройства "
+"(типы образов: %s)."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:765
 msgid ""
 "This is done by building a new firmware on demand via an online service."
 msgstr ""
-"Это делается путём создания новой прошивки по требованию через онлайн-сервис."
+"Это делается путём создания новой прошивки по вашему требованию через онлайн-"
+"сервис."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:519
 msgid ""
