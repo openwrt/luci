@@ -14,6 +14,22 @@ const callNetworkRrdnsLookup = rpc.declare({
 	expect: { '': {} }
 });
 
+/* Okabe-Ito colour blind safe qualitative palette (minus its black entry,
+ * which would be a poor choice on the dark theme). Its colours are clearly
+ * distinguishable for most forms of colour blindness and are also a
+ * solid choice for everyone else. They will be re-used sequentially,
+ * which is standard practice for pie charts.
+ * See https://jfly.uni-koeln.de/color/ */
+const chartColors = [
+	'#e69f00', '#56b4e9', '#009e73', '#f0e442',
+	'#0072b2', '#d55e00', '#cc79a7'
+];
+
+/* We calculate the highlight colour for the table rows by appending an
+ * alpha channel to the segment colour, 0x59 translating to approx 35%
+ * opacity. */
+const chartRowAlpha = '59';
+
 const chartRegistry = {};
 let trafficPeriods = [];
 let trafficData = { columns: [], data: [] };
@@ -132,9 +148,15 @@ return view.extend({
 
 		for (let i = 0; i < data.length; i++) {
 			if (!data[i].color) {
-				const hue = 120 / (data.length-1) * i;
-				data[i].color = 'hsl(%u, 80%%, 50%%)'.format(hue);
-				data[i].label.push(hue);
+				let color = chartColors[i % chartColors.length];
+
+				/* Avoid repeating adjacent colours in the pie chart where
+				 * they would otherwise occur. */
+				if (i > 0 && i === data.length - 1 && color === data[0].color)
+					color = chartColors[(i + 1) % chartColors.length];
+
+				data[i].color = color;
+				data[i].label.push(color + chartRowAlpha);
 			}
 		}
 
@@ -747,10 +769,10 @@ return view.extend({
 			tooltipEl.style.top = pos[1] + tooltip.y - tooltip.caretHeight - tooltip.caretPadding + 'px';
 
 			const row = findParent(tooltip.text[1], '.tr');
-			const hue = tooltip.text[2];
+			const highlight = tooltip.text[2];
 
-			if (row && !isNaN(hue)) {
-				row.style.backgroundColor = 'hsl(%u, 100%%, 80%%)'.format(hue);
+			if (row && highlight) {
+				row.style.backgroundColor = highlight;
 				tooltipEl.row = row;
 			}
 		}, this);
