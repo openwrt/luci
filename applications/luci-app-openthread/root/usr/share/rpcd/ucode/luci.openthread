@@ -2,7 +2,8 @@
 // Copyright (c) 2026, The OpenThread Authors.
 'use strict';
 
-let ubus = require('ubus').connect();
+let ubusmod = require('ubus');
+let ubus = ubusmod.connect();
 
 function otbr(method, args) {
 	// On total ubus failure (otbr-agent not running), synthesize an error
@@ -16,6 +17,59 @@ function otbr(method, args) {
 	if (r.error == null && r.Error != null)
 		r.error = r.Error;
 	return r;
+}
+
+// A stock otbr-agent has no status method, so the overview's 2 s poll must not
+// keep paying for a call that will never succeed. Latch only on
+// STATUS_METHOD_NOT_FOUND: a missing *object* answers with a different status
+// and means otbr-agent is down, which is temporary and has to stay retryable.
+//
+// The latch lives in rpcd's per-script VM rather than in otbr-agent, so it
+// outlives an otbr-agent restart: installing a build that does have the method
+// leaves this on the getter path until rpcd is restarted too. The fallback is
+// correct there, only chattier, which is the price of not re-probing forever.
+let status_absent = false;
+
+function otbr_status() {
+	if (status_absent)
+		return null;
+	let r = ubus.call('otbr', 'status', {});
+	if (r == null) {
+		if (ubus.error(true) == ubusmod.STATUS_METHOD_NOT_FOUND)
+			status_absent = true;
+		return null;
+	}
+	return r;
+}
+
+function dataset_summary(tlvhex) {
+	// Active Operational Dataset TLVs: [type:1][length:1][value:length].
+	// Only the fields the overview shows are extracted.
+	if (type(tlvhex) != 'string' || length(tlvhex) < 4)
+		return null;
+	let out = null;
+	let i = 0;
+	let n = length(tlvhex);
+	while (i + 4 <= n) {
+		let t = hex(substr(tlvhex, i, 2));
+		let l = hex(substr(tlvhex, i + 2, 2));
+		let v = substr(tlvhex, i + 4, l * 2);
+		if (length(v) < l * 2)
+			break;
+		out ??= {};
+		if (t == 0 && l == 3)
+			out.channel = hex(substr(v, 2, 4));
+		else if (t == 1 && l == 2)
+			out.panid = '0x' + lc(v);
+		else if (t == 3) {
+			let name = '';
+			for (let k = 0; k < l * 2; k += 2)
+				name += chr(hex(substr(v, k, 2)));
+			out.networkname = name;
+		}
+		i += 4 + l * 2;
+	}
+	return out;
 }
 
 function radio_restart() {
@@ -48,24 +102,43 @@ function summarize_state() {
 		let leader = otbr('leaderdata').leaderdata;
 		if (leader) result.leaderdata = leader;
 	} else {
-		// A stopped network keeps its committed dataset, which the stock
-		// getters reflect even while Thread is disabled; report it so the
-		// UI can offer to enable the network rather than create one. An
-		// unprovisioned device reads as the broadcast PAN id.
-		// The stock ubus formats the PAN id "0x%04x", but parse rather
-		// than compare the spelling: a bare hex string or a plain number
-		// must not make a factory-fresh device read as provisioned, and
-		// anything unparseable counts as unprovisioned.
-		let raw = otbr('panid').PanId;
-		// ucode's numeric coercion handles "0xffff", "65535" and a plain
-		// number alike, and yields NaN for anything else; NaN != NaN, so
-		// an unparseable reply counts as unprovisioned.
-		let pan = +raw;
-		result.configured = (raw != null && pan == pan && pan != 0xffff);
-		if (result.configured) {
-			result.networkname = otbr('networkname').NetworkName;
-			result.panid = raw;
-			result.channel = otbr('channel').Channel;
+		// A stopped network keeps its committed dataset; report it so the
+		// UI can offer to enable the network rather than create one. The
+		// status method hands out the dataset TLVs directly; on a stock
+		// otbr-agent without it, fall back to the per-field getters, which
+		// reflect the committed dataset even while Thread is disabled.
+		// Apply the same test the fallback uses below: require the PAN id and
+		// reject the broadcast value. dataset_summary() returns a truthy {} as
+		// soon as the walk starts, and hex() yields NaN on a non-hex byte pair,
+		// so a garbage dataset -- or one carrying none of the fields shown here
+		// -- would otherwise report a configured network with every field null,
+		// hiding the Create button on a device that has nothing configured.
+		// Test the property rather than coercing it: unary + on null is 0 in
+		// ucode, not NaN, so an absent PAN id would pass a NaN check.
+		// NaN != NaN; the broadcast PAN id 0xffff means unprovisioned.
+		let ds = dataset_summary(otbr_status()?.ActiveDataset);
+		let pan = ds?.panid != null ? +ds.panid : NaN;
+		if (pan == pan && pan != 0xffff) {
+			result.configured = true;
+			result.networkname = ds.networkname;
+			result.panid = ds.panid;
+			result.channel = ds.channel;
+		} else {
+			// An unprovisioned device reads as the broadcast PAN id. The stock
+			// ubus formats it "0x%04x", but parse rather than compare the
+			// spelling: a bare hex string or a plain number must not make a
+			// factory-fresh device read as provisioned, and anything
+			// unparseable counts as unprovisioned. ucode's numeric coercion
+			// handles "0xffff", "65535" and a plain number alike and yields
+			// NaN otherwise; NaN != NaN.
+			let raw = otbr('panid').PanId;
+			let pan = +raw;
+			result.configured = (raw != null && pan == pan && pan != 0xffff);
+			if (result.configured) {
+				result.networkname = otbr('networkname').NetworkName;
+				result.panid = raw;
+				result.channel = otbr('channel').Channel;
+			}
 		}
 	}
 	result.interfacename = otbr('interfacename').InterfaceName;
