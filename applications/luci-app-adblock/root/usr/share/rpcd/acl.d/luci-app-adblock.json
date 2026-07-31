@@ -23,10 +23,16 @@
 				"/etc/adblock/adblock.custom.feeds": [
 					"write"
 				],
+				"/tmp/run/adblock/adblock.search": [
+					"write"
+				],
 				"/var/run/adblock/adblock.search": [
 					"write"
 				],
 				"/var/run/adblock/adblock.report": [
+					"write"
+				],
+				"/tmp/run/adblock/adblock.report": [
 					"write"
 				]
 			}
@@ -41,12 +47,23 @@
 					"read"
 				],
 				"/var/run/adblock/adblock.runtime.json": [
-					"read"
+					"read",
+					"list"
+				],
+				"/tmp/run/adblock/adblock.runtime.json": [
+					"read",
+					"list"
 				],
 				"/var/run/adblock/adblock.search": [
 					"read"
 				],
+				"/tmp/run/adblock/adblock.search": [
+					"read"
+				],
 				"/var/run/adblock/adblock.report": [
+					"read"
+				],
+				"/tmp/run/adblock/adblock.report": [
 					"read"
 				],
 				"/etc/init.d/adblock reload": [
