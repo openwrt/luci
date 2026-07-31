@@ -26,7 +26,13 @@
 				"/var/run/banIP/banIP.search": [
 					"write"
 				],
+				"/tmp/run/banIP/banIP.search": [
+					"write"
+				],
 				"/var/run/banIP/banIP.report": [
+					"write"
+				],
+				"/tmp/run/banIP/banIP.report": [
 					"write"
 				]
 			}
@@ -38,15 +44,27 @@
 			],
 			"file": {
 				"/etc/banip/*": [
-					"read"
+					"read",
+					"list"
 				],
 				"/var/run/banIP/banIP.runtime.json": [
-					"read"
+					"read",
+					"list"
+				],
+				"/tmp/run/banIP/banIP.runtime.json": [
+					"read",
+					"list"
 				],
 				"/var/run/banIP/banIP.search": [
 					"read"
 				],
+				"/tmp/run/banIP/banIP.search": [
+					"read"
+				],
 				"/var/run/banIP/banIP.report": [
+					"read"
+				],
+				"/tmp/run/banIP/banIP.report": [
 					"read"
 				],
 				"/usr/sbin/nft -tj list sets": [
