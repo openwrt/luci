@@ -35,6 +35,14 @@ function detailsBlock(title, content, pre) {
 
 /* -------------------------------------------------------------------------- */
 
+const ERR_OK = 0;
+const ERR_NO_INIT = 1;
+const ERR_INVALID_FILE = 2;
+const ERR_FILE_TOO_BIG = 3;
+const ERR_SERVER_FAILED = 4;
+const ERR_INIT_DISALLOWED = 5;
+const ERR_DISALLOWED_PATH = 6;
+
 const callPackagelist = rpc.declare({
 	object: 'rpc-sys',
 	method: 'packagelist',
@@ -532,14 +540,11 @@ return view.extend({
 			});
 	},
 
-	handleCheck: function (data, firmware) {
+	handleCheck: async function (data, firmware) {
 		this.request_hash.clear();
 		let { url, revision, advanced_mode, branch } = data;
 		let { version, target, profile, packages } = firmware;
 		let candidates = [];
-
-		const endpoint = version.endsWith('SNAPSHOT') ? `revision/${version}/${target}` : 'overview';
-		const request_url = `${url}/api/v1/${endpoint}`;
 
 		ui.showModal(_('Searching...'), [
 			E(
@@ -552,166 +557,265 @@ return view.extend({
 			),
 		]);
 
-		L.resolveDefault(request.get(request_url)).then((response) => {
-			if (!response.ok) {
-				ui.showModal(_('Error connecting to upgrade server'), [
-					E(
-						'p',
-						{},
-						_('Could not reach API at "%s". Please try again later.').format(
-							response.url
-						)
-					),
-					E('pre', {}, response.responseText),
-					E('div', { class: 'right' }, [
-						E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
-					]),
-				]);
-				return;
+		const is_snapshot = version.endsWith('SNAPSHOT');
+		const overview_url = `${url}/api/v1/overview`;
+		let promises = [L.resolveDefault(request.get(overview_url))];
+
+		if (is_snapshot) {
+			const snapshot_url = `${url}/api/v1/revision/${version}/${target}`;
+			promises.push(L.resolveDefault(request.get(snapshot_url)));
+		}
+
+		let results = await Promise.all(promises);
+
+		let response = results[is_snapshot ? 1 : 0];
+		if (!response.ok) {
+			ui.showModal(_('Error connecting to upgrade server'), [
+				E(
+					'p',
+					{},
+					_('Could not reach API at "%s". Please try again later.').format(
+						response.url
+					)
+				),
+				E('pre', {}, response.responseText),
+				E('div', { class: 'right' }, [
+					E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+				]),
+			]);
+			return;
+		}
+		if (is_snapshot) {
+			const remote_revision = response.json().revision;
+			if (
+				get_revision_count(revision) < get_revision_count(remote_revision)
+			) {
+				candidates.push([version, remote_revision]);
 			}
-			if (version.endsWith('SNAPSHOT')) {
-				const remote_revision = response.json().revision;
-				if (
-					get_revision_count(revision) < get_revision_count(remote_revision)
-				) {
-					candidates.push([version, remote_revision]);
+		} else {
+			const latest = response.json().latest;
+
+			// ensure order: newest to oldest release
+			latest.sort().reverse();
+
+			for (let remote_version of latest) {
+				let remote_branch = get_branch(remote_version);
+
+				// already latest version installed
+				if (version == remote_version) {
+					break;
 				}
+
+				candidates.unshift([remote_version, null]);
+
+				// don't offer branches older than the current
+				if (branch == remote_branch) {
+					break;
+				}
+			}
+		}
+
+		// allow to re-install running firmware in advanced mode
+		if (advanced_mode == 1) {
+			candidates.unshift([version, revision]);
+		}
+
+		if (!candidates.length) {
+			ui.showModal(_('No upgrade available'), [
+				E(
+					'p',
+					_('The device runs the latest firmware version %s - %s').format(
+						version,
+						revision
+					)
+				),
+				E('div', { class: 'right' }, [
+					E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+				]),
+			]);
+			return;
+		}
+
+		const server_info = results[0]?.ok ? results[0].json().server : null;
+		let init_script_error = ERR_NO_INIT;
+		let init_script_path = uci.get_first('attendedsysupgrade', 'owut', 'init_script') || '';
+		let init_script_contents = '';
+
+		if (init_script_path) {
+			if (!init_script_path.startsWith('/rom/etc/uci-defaults/') &&
+				!init_script_path.startsWith('/etc/uci-defaults/') &&
+				!init_script_path.startsWith('/root/')) {
+				init_script_error = ERR_DISALLOWED_PATH;
+			} else if (!server_info) {
+				init_script_error = ERR_SERVER_FAILED;
+			} else if (!server_info.allow_defaults || typeof server_info.max_defaults_length !== 'number') {
+				init_script_error = !server_info.allow_defaults ? ERR_INIT_DISALLOWED : ERR_SERVER_FAILED;
 			} else {
-				const latest = response.json().latest;
-
-				// ensure order: newest to oldest release
-				latest.sort().reverse();
-
-				for (let remote_version of latest) {
-					let remote_branch = get_branch(remote_version);
-
-					// already latest version installed
-					if (version == remote_version) {
-						break;
-					}
-
-					candidates.unshift([remote_version, null]);
-
-					// don't offer branches older than the current
-					if (branch == remote_branch) {
-						break;
-					}
-				}
-			}
-
-			// allow to re-install running firmware in advanced mode
-			if (advanced_mode == 1) {
-				candidates.unshift([version, revision]);
-			}
-
-			if (candidates.length) {
-				let s, o;
-
-				let mapdata = {
-					request: {
-						profile,
-						version: candidates[0][0],
-						packages: Object.keys(packages).sort(),
-					},
-				};
-
-				let map = new form.JSONMap(mapdata, '');
-
-				s = map.section(
-					form.NamedSection,
-					'request',
-					'',
-					'',
-					_('Use defaults for the safest update')
-				);
-				o = s.option(form.ListValue, 'version', _('Select firmware version'));
-				for (let candidate of candidates) {
-					if (candidate[0] == version && candidate[1] == revision) {
-						o.value(
-							candidate[0],
-							_('[installed] %s').format(
-								candidate[1]
-									? `${candidate[0]} - ${candidate[1]}`
-									: candidate[0]
-							)
-						);
+				let st = await fs.stat(init_script_path).catch(() => null);
+				if (!st || st.type !== 'file') {
+					init_script_error = ERR_INVALID_FILE;
+				} else if (st.size > server_info.max_defaults_length) {
+					init_script_error = ERR_FILE_TOO_BIG;
+				} else if (st.size == 0) {
+					init_script_error = ERR_OK;
+				} else {
+					init_script_contents = await fs.read(init_script_path).catch(() => null);
+					if (init_script_contents != null) {
+						init_script_error = ERR_OK;
 					} else {
-						o.value(
-							candidate[0],
-							candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]
-						);
+						init_script_error = ERR_INVALID_FILE;
 					}
 				}
-
-				if (advanced_mode == 1) {
-					o = s.option(form.Value, 'profile', _('Board Name / Profile'));
-					o = s.option(form.DynamicList, 'packages', _('Packages'));
-				}
-
-				L.resolveDefault(map.render()).then((form_rendered) => {
-					ui.showModal(_('New firmware upgrade available'), [
-						E(
-							'p',
-							_('Currently running: %s - %s').format(
-								version,
-								revision
-							)
-						),
-						form_rendered,
-						E('div', { class: 'right' }, [
-							E('div', { class: 'btn', click: ui.hideModal }, _('Cancel')),
-							' ',
-							E(
-								'button',
-								{
-									class: 'btn cbi-button cbi-button-positive important',
-									click: ui.createHandlerFn(this, function () {
-										map.save().then(() => {
-											this.applyPackageChanges({
-												url,
-												target,
-												version:  mapdata.request.version,
-												packages: mapdata.request.packages,
-											}).then((packages) => {
-												const content = {
-													...firmware,
-													packages: packages,
-													version: mapdata.request.version,
-													profile: mapdata.request.profile
-												};
-												this.pollFn = L.bind(function () {
-													this.handleRequest(url, true, content, data, firmware);
-												}, this);
-												poll.add(this.pollFn, 5);
-												poll.start();
-											})
-											.catch(error => {
-											    ui.addNotification(null, E('p', error.message));
-											    ui.hideModal();
-											});
-										});
-									}),
-								},
-								_('Request firmware image')
-							),
-						]),
-					]);
-				});
-			} else {
-				ui.showModal(_('No upgrade available'), [
-					E(
-						'p',
-						_('The device runs the latest firmware version %s - %s').format(
-							version,
-							revision
-						)
-					),
-					E('div', { class: 'right' }, [
-						E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
-					]),
-				]);
 			}
-		});
+		}
+
+		let s, o;
+
+		let mapdata = {
+			request: {
+				profile,
+				version: candidates[0][0],
+				packages: Object.keys(packages).sort(),
+				init_script_checked: '1'
+			},
+		};
+
+		let map = new form.JSONMap(mapdata, '');
+
+		s = map.section(
+			form.NamedSection,
+			'request',
+			'',
+			'',
+			_('Use defaults for the safest update')
+		);
+		o = s.option(form.ListValue, 'version', _('Select firmware version'));
+		for (let candidate of candidates) {
+			if (candidate[0] == version && candidate[1] == revision) {
+				o.value(
+					candidate[0],
+					_('[installed] %s').format(
+						candidate[1]
+							? `${candidate[0]} - ${candidate[1]}`
+							: candidate[0]
+					)
+				);
+			} else {
+				o.value(
+					candidate[0],
+					candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]
+				);
+			}
+		}
+
+		if (advanced_mode == 1) {
+			o = s.option(form.Value, 'profile', _('Board Name / Profile'));
+			o = s.option(form.DynamicList, 'packages', _('Packages'));
+		}
+
+		switch (init_script_error) {
+			case ERR_OK:
+				o = s.option(
+					form.Flag,
+					'init_script_checked',
+					_('Use init script'),
+					_('Include %s as init script (uci-defaults).').format(E('code', {}, init_script_path).outerHTML)
+				);
+				o.default = '1';
+				o.rmempty = false;
+				break;
+			case ERR_NO_INIT:
+				break;
+			default: {
+				o = s.option(
+					form.DummyValue,
+					'_warning',
+					_('Init script error')
+				);
+				let msg = _('Unknown error. File %s will not be included as init script (uci-defaults) in the built firmware.');
+				switch (init_script_error) {
+					case ERR_INVALID_FILE:
+						msg = _('File %s is invalid and won\'t be included as init script (uci-defaults) in the built firmware.');
+						break;
+					case ERR_FILE_TOO_BIG:
+						msg = _('File %s exceeds %s and won\'t be included as init script (uci-defaults) in the built firmware.');
+						break;
+					case ERR_SERVER_FAILED:
+						msg = _('Unable to fetch build server limits. File %s will not be included as init script (uci-defaults) in the built firmware.');
+						break;
+					case ERR_INIT_DISALLOWED:
+						msg = _('Chosen build server does not allow init scripts (uci-defaults). File %s will not be included as such in the built firmware.');
+						break;
+					case ERR_DISALLOWED_PATH:
+						msg = _('The path %s is not permitted. Only files in /rom/etc/uci-defaults/, /etc/uci-defaults/, or /root/ can be included.');
+						break;
+				}
+				let alertBox = E('div', { class: 'alert-message' });
+				if (init_script_error === ERR_FILE_TOO_BIG) {
+					const kib = (server_info.max_defaults_length / 1024).toFixed(2);
+					alertBox.innerHTML = msg.format(
+						E('code', {}, init_script_path).outerHTML,
+						E('b', {}, [ kib, ' KiB' ]).outerHTML,
+					);
+				} else {
+					alertBox.innerHTML = msg.format(E('code', {}, init_script_path).outerHTML);
+				}
+				o.default = alertBox;
+				break;
+			}
+		}
+
+		let form_rendered = await L.resolveDefault(map.render());
+		ui.showModal(_('New firmware upgrade available'), [
+			E(
+				'p',
+				_('Currently running: %s - %s').format(
+					version,
+					revision
+				)
+			),
+			form_rendered,
+			E('div', { class: 'right' }, [
+				E('div', { class: 'btn', click: ui.hideModal }, _('Cancel')),
+				' ',
+				E(
+					'button',
+					{
+						class: 'btn cbi-button cbi-button-positive important',
+						click: ui.createHandlerFn(this, function () {
+							map.save().then(() => {
+								this.applyPackageChanges({
+									url,
+									target,
+									version:  mapdata.request.version,
+									packages: mapdata.request.packages,
+								}).then((packages) => {
+									const content = {
+										...firmware,
+										packages: packages,
+										version: mapdata.request.version,
+										profile: mapdata.request.profile,
+										defaults: (init_script_error === ERR_OK && mapdata.request.init_script_checked === '1')
+											? init_script_contents
+											: undefined
+									};
+									this.pollFn = L.bind(function () {
+										this.handleRequest(url, true, content, data, firmware);
+									}, this);
+									poll.add(this.pollFn, 5);
+									poll.start();
+								})
+								.catch(error => {
+								    ui.addNotification(null, E('p', error.message));
+								    ui.hideModal();
+								});
+							});
+						}),
+					},
+					_('Request firmware image')
+				),
+			]),
+		]);
 	},
 
 	load: async function () {
