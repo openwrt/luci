@@ -5,6 +5,9 @@
 			"file": {
 				"/var/run/travelmate/travelmate.refresh": [
 					"write"
+				],
+				"/tmp/run/travelmate/travelmate.refresh": [
+					"write"
 				]
 			},
 			"uci": [
@@ -18,17 +21,33 @@
 				"exec"
 			],
 			"file": {
+				"/etc/travelmate": [
+					"list"
+				],
 				"/etc/travelmate/*.login": [
 					"list"
 				],
 				"/var/run/travelmate/travelmate.scan": [
 					"read"
 				],
-				"/var/run/travelmate/travelmate.refresh": [
+				"/tmp/run/travelmate/travelmate.scan": [
 					"read"
 				],
+				"/var/run/travelmate/travelmate.refresh": [
+					"read",
+					"list"
+				],
+				"/tmp/run/travelmate/travelmate.refresh": [
+					"read",
+					"list"
+				],
 				"/var/run/travelmate/travelmate.runtime.json": [
-					"read"
+					"read",
+					"list"
+				],
+				"/tmp/run/travelmate/travelmate.runtime.json": [
+					"read",
+					"list"
 				],
 				"/sbin/ifup *": [
 					"exec"
