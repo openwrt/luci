@@ -43,7 +43,7 @@ function trimnonewline(input) {
 }
 
 function get_date(seconds, format) {
-	return trimnonewline( popen(`date -d @${seconds} "+${format}" 2>/dev/null`, 'r')?.read?.('line') );
+	return trimnonewline( popen(`date -d @${seconds} +${shellquote(format)} 2>/dev/null`, 'r')?.read?.('line') );
 }
 
 // convert epoch date to given format
