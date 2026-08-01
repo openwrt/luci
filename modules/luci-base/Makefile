@@ -24,7 +24,6 @@ LUCI_DEPENDS:=\
 	+ucode-mod-log \
 	+ucode-mod-uci \
 	+ucode-mod-ubus \
-	+ucode-mod-math \
 	+ucode-mod-html \
 	+liblucihttp-ucode
 
