@@ -18,6 +18,13 @@ const opkg_info_path    = '/usr/lib/opkg/info';
 
 
 
+function shellquote(value) {
+	if (value == null)
+		value = '';
+
+	return "'" + replace(value, "'", "'\\''") + "'";
+}
+
 function get_dateformat() {
 	return uci.get('ddns', 'global', 'ddns_dateformat') || '%F %R';
 }
@@ -39,7 +46,7 @@ function trimnonewline(input) {
 }
 
 function get_date(seconds, format) {
-	return trimnonewline( popen(`date -d @${seconds} "+${format}" 2>/dev/null`, 'r')?.read?.('line') );
+	return trimnonewline( popen(`date -d @${seconds} +${shellquote(format)} 2>/dev/null`, 'r')?.read?.('line') );
 }
 
 // convert epoch date to given format
