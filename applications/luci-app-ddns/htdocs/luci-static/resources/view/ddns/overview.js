@@ -33,10 +33,10 @@ return view.extend({
 	}),
 
 	callInitAction: rpc.declare({
-		object: 'luci',
-		method: 'setInitAction',
+		object: 'rc',
+		method: 'init',
 		params: [ 'name', 'action' ],
-		expect: { result: false }
+		reject: true
 	}),
 
 	callDDnsGetStatus: rpc.declare({
@@ -187,7 +187,8 @@ return view.extend({
 
 	handleRestartDDns(m, ev) {
 		return this.callInitAction('ddns', 'restart')
-			.then(L.bind(m.render, m));
+			.then(L.bind(m.render, m))
+			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
 	poll_status(map, data) {

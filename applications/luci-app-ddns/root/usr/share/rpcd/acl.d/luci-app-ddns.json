@@ -3,8 +3,7 @@
 		"description": "Grant access to ddns procedures",
 		"read": {
 			"ubus": {
-				"luci.ddns": [ "get_services_status", "get_ddns_state", "get_env", "get_services_log" ],
-				"luci": [ "setInitAction" ]
+				"luci.ddns": [ "get_services_status", "get_ddns_state", "get_env", "get_services_log" ]
 			},
 			"file": {
 				"/usr/share/ddns/default": [ "list" ],
@@ -18,7 +17,10 @@
 			"uci": [ "ddns" ]
 		},
 		"write": {
-			"uci": [ "ddns" ]
+			"uci": [ "ddns" ],
+			"ubus": {
+				"rc": [ "init" ]
+			}
 		}
 	}
 }
