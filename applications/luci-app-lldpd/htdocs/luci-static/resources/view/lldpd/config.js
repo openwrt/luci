@@ -10,6 +10,7 @@
 'require form';
 'require lldpd';
 'require network';
+'require ui';
 'require uci';
 'require tools.widgets as widgets';
 
@@ -26,11 +27,14 @@ const callInitList = rpc.declare({
 });
 
 const callInitAction = rpc.declare({
-	object: 'luci',
-	method: 'setInitAction',
+	object: 'rc',
+	method: 'init',
 	params: [ 'name', 'action' ],
-	expect: { result: false }
+	reject: true
 });
+
+const reportInitFailure = (err) => ui.addNotification(null,
+	E('p', _('Failed to control the lldpd initscript: %s').format(err.message)), 'error');
 
 const usage = _('See syntax <a %s>here</a>.').format('href=https://lldpd.github.io/usage.html target="_blank"');
 
@@ -99,13 +103,13 @@ return L.view.extend({
 				// Enable and start
 				callInitAction('lldpd', 'enable').then(() => {
 					return callInitAction('lldpd', 'start');
-				});
+				}).catch(reportInitFailure);
 			}
 			else {
 				// Stop and disable
 				callInitAction('lldpd', 'stop').then(() => {
 					return callInitAction('lldpd', 'disable');
-				});
+				}).catch(reportInitFailure);
 			}
 		};
 
