@@ -2,7 +2,7 @@
 'use strict';
 
 import { popen, access, readfile, unlink } from 'fs';
-import { process_list, init_enabled, init_action } from 'luci.sys';
+import { process_list, init_enabled } from 'luci.sys';
 
 const BIN_DIR = '/usr/bin';
 const KEY_DIR = '/etc/rustdesk';
@@ -109,8 +109,7 @@ const methods = {
 				};
 			}
 
-			// Use luci.sys.init_action() for service control
-			let result = init_action('rustdesk-server', action);
+			let result = system([ '/etc/init.d/rustdesk-server', action ]);
 
 			return {
 				success: (result === 0),
@@ -135,8 +134,8 @@ const methods = {
 			let key_pub = KEY_DIR + '/id_ed25519.pub';
 
 			// Step 1: Stop the service first so keys are not in use
-			// init_action is synchronous - waits for service to fully stop
-			init_action('rustdesk-server', 'stop');
+			// system() is synchronous - waits for service to fully stop
+			system([ '/etc/init.d/rustdesk-server', 'stop' ]);
 
 			// Step 2: Remove existing keys
 			let priv_deleted = safeUnlink(key_priv);
