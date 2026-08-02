@@ -298,6 +298,13 @@ function is_local_subnet(ip) {
 	return false;
 }
 
+// Bucket failed attempts per account, not per address: behind a reverse proxy
+// every client shares one REMOTE_ADDR, and an address-only bucket would let any
+// one of them lock out everybody else. Mirrors luci-base's verify limiter.
+function rate_limit_key(user, ip) {
+	return `${user || '?'}|${ip || '?'}`;
+}
+
 // Load rate limit state
 function load_rate_limit_state() {
 	let content = readfile(RATE_LIMIT_FILE);
@@ -322,19 +329,19 @@ function cleanup_rate_limit_state(state, now, window, lockout) {
 	let original_entries = 0;
 	let cleaned_entries = 0;
 
-	for (let ip, ip_state in state) {
+	for (let key, bucket in state) {
 		original_entries++;
 
-		if (type(ip_state) != 'object') {
+		if (type(bucket) != 'object') {
 			changed = true;
 			continue;
 		}
 
-		let locked_until = int(ip_state.locked_until || 0);
+		let locked_until = int(bucket.locked_until || 0);
 		let attempts = [];
 
-		if (type(ip_state.attempts) == 'array') {
-			for (let attempt in ip_state.attempts) {
+		if (type(bucket.attempts) == 'array') {
+			for (let attempt in bucket.attempts) {
 				attempt = int(attempt);
 				if (attempt > min_attempt)
 					push(attempts, attempt);
@@ -342,7 +349,7 @@ function cleanup_rate_limit_state(state, now, window, lockout) {
 		}
 
 		if (locked_until > now || length(attempts) > 0) {
-			cleaned[ip] = { attempts, locked_until };
+			cleaned[key] = { attempts, locked_until };
 			cleaned_entries++;
 		}
 		else if (locked_until < stale_before) {
@@ -387,7 +394,7 @@ function unlock_rate_limit_state() {
 	RATE_LIMIT_LOCK_HANDLE = null;
 }
 
-function evaluate_rate_limit(ip, consume_attempt) {
+function evaluate_rate_limit(key, consume_attempt) {
 	let ctx = cursor();
 
 	let rate_limit_enabled = ctx.get('luci_plugins', PLUGIN_UUID, 'rate_limit_enabled');
@@ -409,61 +416,62 @@ function evaluate_rate_limit(ip, consume_attempt) {
 		save_rate_limit_state(state);
 	let result;
 
-	if (!state[ip]) {
-		state[ip] = { attempts: [], locked_until: 0 };
+	if (!state[key]) {
+		state[key] = { attempts: [], locked_until: 0 };
 	}
 
-	let ip_state = state[ip];
+	let bucket = state[key];
 
-	if (ip_state.locked_until > now) {
-		result = { allowed: false, remaining: 0, locked_until: ip_state.locked_until };
+	if (bucket.locked_until > now) {
+		result = { allowed: false, remaining: 0, locked_until: bucket.locked_until };
 		unlock_rate_limit_state();
 		return result;
 	}
 
 	let recent_attempts = [];
-	for (let attempt in ip_state.attempts) {
+	for (let attempt in bucket.attempts) {
 		if (attempt > (now - window))
 			push(recent_attempts, attempt);
 	}
-	ip_state.attempts = recent_attempts;
+	bucket.attempts = recent_attempts;
 
-	if (length(ip_state.attempts) >= max_attempts) {
-		ip_state.locked_until = now + lockout;
-		ip_state.attempts = [];
+	if (length(bucket.attempts) >= max_attempts) {
+		bucket.locked_until = now + lockout;
+		bucket.attempts = [];
 		save_rate_limit_state(state);
-		result = { allowed: false, remaining: 0, locked_until: ip_state.locked_until };
+		result = { allowed: false, remaining: 0, locked_until: bucket.locked_until };
 		unlock_rate_limit_state();
 		return result;
 	}
 
 	if (consume_attempt)
-		push(ip_state.attempts, now);
+		push(bucket.attempts, now);
 
 	save_rate_limit_state(state);
-	result = { allowed: true, remaining: max_attempts - length(ip_state.attempts), locked_until: 0 };
+	result = { allowed: true, remaining: max_attempts - length(bucket.attempts), locked_until: 0 };
 	unlock_rate_limit_state();
 	return result;
 }
 
 // Check rate limit
-function check_rate_limit(ip) {
-	return evaluate_rate_limit(ip, false);
+function check_rate_limit(user, ip) {
+	return evaluate_rate_limit(rate_limit_key(user, ip), false);
 }
 
 // Reserve a rate-limit attempt atomically before verification
-function consume_rate_limit_attempt(ip) {
-	return evaluate_rate_limit(ip, true);
+function consume_rate_limit_attempt(user, ip) {
+	return evaluate_rate_limit(rate_limit_key(user, ip), true);
 }
 
-// Clear rate limit for an IP
-function clear_rate_limit(ip) {
+// Clear rate limit for an account
+function clear_rate_limit(user, ip) {
 	if (!lock_rate_limit_state())
 		return;
 
+	let key = rate_limit_key(user, ip);
 	let state = load_rate_limit_state();
-	if (state[ip]) {
-		delete state[ip];
+	if (state[key]) {
+		delete state[key];
 		save_rate_limit_state(state);
 	}
 
@@ -560,21 +568,14 @@ function verify_otp(username, otp) {
 	}
 }
 
-// Get client IP from HTTP request
+// Get client IP from HTTP request. REMOTE_ADDR only: the caller has no way to
+// tell a proxy's X-Forwarded-For from one a client wrote itself, and the result
+// decides both the 2FA whitelist and the rate-limit bucket.
 function get_client_ip(http) {
 	let ip = null;
 
-	if (http && http.getenv) {
+	if (http && http.getenv)
 		ip = http.getenv('REMOTE_ADDR');
-
-		if (ip && (ip == '127.0.0.1' || ip == '::1')) {
-			let xff = http.getenv('HTTP_X_FORWARDED_FOR');
-			if (xff) {
-				let parts = split(xff, ',');
-				ip = trim(parts[0]);
-			}
-		}
-	}
 
 	return ip || '';
 }
@@ -591,17 +592,15 @@ return {
 			}
 
 			// Check rate limit
-			if (client_ip) {
-				let rate_check = check_rate_limit(client_ip);
-				if (!rate_check.allowed) {
-					let remaining_seconds = rate_check.locked_until - time();
-					return {
-						required: true,
-						blocked: true,
-						message: sprintf('Too many failed attempts. Please try again in %d seconds.', remaining_seconds),
-						fields: []
-					};
-				}
+			let rate_check = check_rate_limit(user, client_ip);
+			if (!rate_check.allowed) {
+				let remaining_seconds = rate_check.locked_until - time();
+				return {
+					required: true,
+					blocked: true,
+					message: sprintf('Too many failed attempts. Please try again in %d seconds.', remaining_seconds),
+					fields: []
+				};
 			}
 
 			if (!is_2fa_enabled(user)) {
@@ -666,19 +665,17 @@ return {
 			}
 
 			// Reserve rate limit attempt atomically
-			if (client_ip) {
-				let rate_check = consume_rate_limit_attempt(client_ip);
-				if (!rate_check.allowed) {
-					let remaining_seconds = rate_check.locked_until - time();
-					syslog(LOG_WARNING|LOG_AUTHPRIV,
-						sprintf("luci: 2FA blocked for %s from %s due to rate limit (%d seconds remaining)",
-							user || '?', client_ip || '?', remaining_seconds));
-					return {
-						success: false,
-						rate_limited: true,
-						message: sprintf('Too many failed attempts. Please try again in %d seconds.', remaining_seconds)
-					};
-				}
+			let rate_check = consume_rate_limit_attempt(user, client_ip);
+			if (!rate_check.allowed) {
+				let remaining_seconds = rate_check.locked_until - time();
+				syslog(LOG_WARNING|LOG_AUTHPRIV,
+					sprintf("luci: 2FA blocked for %s from %s due to rate limit (%d seconds remaining)",
+						user || '?', client_ip || '?', remaining_seconds));
+				return {
+					success: false,
+					rate_limited: true,
+					message: sprintf('Too many failed attempts. Please try again in %d seconds.', remaining_seconds)
+				};
 			}
 
 			let otp = http.formvalue('luci_otp');
@@ -709,7 +706,7 @@ return {
 			}
 
 			// Clear rate limit on successful login
-			if (client_ip) clear_rate_limit(client_ip);
+			clear_rate_limit(user, client_ip);
 
 			syslog(LOG_INFO|LOG_AUTHPRIV,
 				sprintf("luci: 2FA verification succeeded for %s from %s",
