@@ -668,6 +668,17 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_report', form.Value, 'adb_repfilter', _('Report Filter'), _('Optional tcpdump filter expression, logically ANDed to the internal port filter.'));
+		o.placeholder = 'not net 10.0.0.0/24';
+		o.optional = true;
+		o.rmempty = true;
+		o.validate = function (section_id, value) {
+			if (!value || /^[a-zA-Z0-9 \t.:\/()\[\]!&|<>=+*%\\-]+$/.test(value)) {
+				return true;
+			}
+			return _('Invalid characters in the tcpdump filter expression!');
+		};
+
 		o = s.taboption('adv_report', form.Flag, 'adb_represolve', _('Resolve IPs'), _('Resolve reporting IP addresses by using reverse DNS (PTR) lookups.'));
 		o.rmempty = true;
 
