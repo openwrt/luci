@@ -9,8 +9,31 @@ import { connect } from 'ubus';
 
 const openvpn_dir = '/etc/openvpn';
 
+/* Key types accepted by "openvpn --genkey". Anything outside this set is
+ * rejected, so the value can never introduce shell metacharacters or escape
+ * the key directory. */
+const keytypes = [
+	'secret',
+	'tls-crypt',
+	'tls-auth',
+	'auth-token',
+	'tls-crypt-v2-server',
+	'tls-crypt-v2-client'
+];
+
 function shellquote(s) {
 	return `'${replace(s, "'", "'\\''")}'`;
+}
+
+/* ifname is a UCI section name, so restrict it to the characters UCI allows.
+ * This keeps path separators and ".." out of the generated key paths. */
+function is_valid_iface(ifname) {
+	return length(ifname) > 0 && match(ifname, /^[a-zA-Z0-9_-]+$/) != null;
+}
+
+/* server_key is a plain file name inside the tls-crypt-v2-server directory. */
+function is_valid_keyfile(name) {
+	return length(name) > 0 && match(name, /^[a-zA-Z0-9._-]+$/) != null && index(name, '..') == -1;
 }
 
 function command(cmd) {
@@ -40,6 +63,8 @@ const methods = {
 			const ts = time();
 
 			if (!kt) return { error: 'missing keytype' };
+			if (!(kt in keytypes)) return { error: 'invalid keytype' };
+			if (!is_valid_iface(ifname)) return { error: 'invalid ifname' };
 
 			let dir;
 			let outfile = `${ifname}_${kt}_${ts}.key`;
@@ -61,17 +86,18 @@ const methods = {
 					const list = lsdir(serverDir);
 					if (length(list) > 0) server_key = serverDir + '/' + list[-1];
 				} else {
-					server_key = `${keyDir(ifname, 'tls-crypt-v2-server')}/${req.args?.server_key}`;
+					if (!is_valid_keyfile(server_key)) return { error: 'invalid server_key' };
+					server_key = `${keyDir(ifname, 'tls-crypt-v2-server')}/${server_key}`;
 				}
 
 				if (!server_key) return { error: 'missing server_key for tls-crypt-v2-client' };
 
 				// denote which server key this client key is derived from in the name
-				path = `${mkpath}/${ifname}_${kt}_${ts}-${req.args?.server_key}`;
+				path = `${mkpath}/${ifname}_${kt}_${ts}-${basename(server_key)}`;
 				cmd = `${openvpn} --tls-crypt-v2 ${shellquote(server_key)} --genkey tls-crypt-v2-client ${shellquote(path)} ${shellquote(req.args?.cl_meta)} 2>/dev/null`;
 			} else {
 				// basic genkey
-				cmd = `${openvpn} --genkey ${kt} ${shellquote(path)} 2>/dev/null`;
+				cmd = `${openvpn} --genkey ${shellquote(kt)} ${shellquote(path)} 2>/dev/null`;
 			}
 
 			const out = popen(cmd)?.read?.('all') || '';
@@ -93,7 +119,11 @@ const methods = {
 	getSKeys: {
 		args: { ifname: 'ifname' },
 		call: function(req) {
-			const serverDir = `${keyDir(req.args?.ifname, 'tls-crypt-v2-server')}`;
+			const ifname = req.args?.ifname;
+
+			if (!is_valid_iface(ifname)) return { error: 'invalid ifname' };
+
+			const serverDir = `${keyDir(ifname, 'tls-crypt-v2-server')}`;
 			const list = lsdir(serverDir);
 
 			return { skeys: list, path: serverDir };

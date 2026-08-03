@@ -117,6 +117,18 @@ function test_binary(str) {
 	return false;
 }
 
+// Join an argument vector into a shell command line, single quoting every
+// argument that is not made up entirely of harmless characters, so that shell
+// metacharacters cannot take effect.
+// Note that ucode expands the \w macro only outside of bracket expressions,
+// within one it stands for a literal 'w'. The set left unquoted is therefore
+// 'w', '.', '/' and '-', none of which mean anything to the shell.
+function shellquote(argv) {
+	return join(' ', map(argv, v => match(v, /[^\w.\/-]/) ? `'${replace(v, "'", "'\\''")}'` : v));
+}
+
+// Returns the unquoted argument vector, pass it through shellquote() before
+// handing it to the shell.
 function parse_cmdline(cmdid, args) {
 	if (uci.get('luci', cmdid) == 'command') {
 		let cmd = uci.get_all('luci', cmdid);
@@ -129,7 +141,7 @@ function parse_cmdline(cmdid, args) {
 				push(argv, ...(parse_args(args) ?? []));
 		}
 
-		return map(argv, v => match(v, /[^\w.\/|-]/) ? `'${replace(v, "'", "'\\''")}'` : v);
+		return argv;
 	}
 }
 
@@ -140,7 +152,7 @@ function execute_command(callback, ...args) {
 		let outfd = mkstemp();
 		let errfd = mkstemp();
 
-		const exitcode = system(`${join(' ', argv)} >&${outfd.fileno()} 2>&${errfd.fileno()}`);
+		const exitcode = system(`${shellquote(argv)} >&${outfd.fileno()} 2>&${errfd.fileno()}`);
 
 		outfd.seek(0);
 		errfd.seek(0);
@@ -155,7 +167,7 @@ function execute_command(callback, ...args) {
 
 		callback({
 			ok:      true,
-			command: join(' ', argv),
+			command: shellquote(argv),
 			stdout:  binary ? null : stdout,
 			stderr,
 			exitcode,
@@ -200,7 +212,7 @@ return {
 		const argv = parse_cmdline(...args);
 
 		if (argv) {
-			const fd = popen(`${join(' ', argv)} 2>/dev/null`);
+			const fd = popen(`${shellquote(argv)} 2>/dev/null`);
 
 			if (fd) {
 				let filename = replace(basename(argv[0]), /\W+/g, '.');

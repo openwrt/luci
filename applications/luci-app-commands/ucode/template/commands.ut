@@ -45,8 +45,11 @@
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			var options = field ? { query: { args: field.value } } : null;
-			L.Request.get(L.url('admin/system/commands/run', id), options).then(function(reply) {
+			var query = { token: L.env.token };
+			if (field)
+				query.args = field.value;
+
+			L.Request.request(L.url('admin/system/commands/run', id), { method: 'post', query: query }).then(function(reply) {
 				var st = reply.json();
 
 				if (st.binary)
@@ -71,12 +74,22 @@
 
 	function command_download(ev, id)
 	{
-		var args;
 		var field = document.getElementById(id);
-		if (field)
-			args = encodeURIComponent(field.value);
 
-		location.href = L.url('admin/system/commands/download', id) + (args ? '/' + args : '');
+		/* The download route is POST-only and CSRF protected, so submit a
+		   throwaway form instead of navigating to the URL. */
+		var form = E('form', {
+			method: 'post',
+			action: L.url('admin/system/commands/download', id),
+			enctype: 'application/x-www-form-urlencoded'
+		}, E('input', { type: 'hidden', name: 'token', value: L.env.token }));
+
+		if (field)
+			form.appendChild(E('input', { type: 'hidden', name: 'args', value: field.value }));
+
+		document.body.appendChild(form);
+		form.submit();
+		form.parentNode.removeChild(form);
 
 		ev.preventDefault();
 	}

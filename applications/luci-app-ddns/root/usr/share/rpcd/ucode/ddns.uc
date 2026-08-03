@@ -22,6 +22,12 @@ function shellquote(value) {
 	return "'" + replace(value, "'", "'\\''") + "'";
 }
 
+/* A DDNS service name is a UCI section name, so restrict it to the characters
+ * UCI permits. This keeps path separators and ".." out of composed log paths. */
+function is_valid_service_name(name) {
+	return length(name) > 0 && match(name, /^[a-zA-Z0-9_-]+$/) != null;
+}
+
 function get_dateformat() {
 	return uci.get('ddns', 'global', 'ddns_dateformat') || '%F %R';
 }
@@ -43,7 +49,7 @@ function trimnonewline(input) {
 }
 
 function get_date(seconds, format) {
-	return trimnonewline( popen(`date -d @${seconds} "+${format}" 2>/dev/null`, 'r')?.read?.('line') );
+	return trimnonewline( popen(`date -d @${int(seconds)} ${shellquote('+' + format)} 2>/dev/null`, 'r')?.read?.('line') );
 }
 
 // convert epoch date to given format
@@ -51,6 +57,16 @@ function epoch2date(epoch, format) {
 	if (!format || length(format) < 2) {
 		format = get_dateformat();
 	}
+
+	/* date(1) echoes anything that is not a conversion specifier verbatim, and
+	 * the status views render the result as HTML - see the '%n' expansion below.
+	 * Restrict the format to the characters strftime actually needs so that a
+	 * configured value cannot inject markup, and fall back to the default
+	 * otherwise, mirroring how an unsafe ddns_logdir is handled. */
+	if (match(format, /[^%A-Za-z0-9 :\/.,_+-]/)) {
+		format = '%F %R';
+	}
+
 	format = replace(format, /%n/g, '<br />'); // Replace '%n' with '<br />'
 	format = replace(format, /%t/g, '    ');   // Replace '%t' with four spaces
 
@@ -92,8 +108,9 @@ const methods = {
 				logdir = ddns_log_path;
 			}
 
-			// Check if service_name is provided and log file exists
-			if (request.args && request.args.service_name && stat(`${logdir}/${request.args.service_name}.log`)?.type == 'file' ) {
+			// Check if service_name is valid and the log file exists
+			if (is_valid_service_name(request.args?.service_name) &&
+			    stat(`${logdir}/${request.args.service_name}.log`)?.type == 'file' ) {
 				result = readfile(`${logdir}/${request.args.service_name}.log`);
 			}
 
