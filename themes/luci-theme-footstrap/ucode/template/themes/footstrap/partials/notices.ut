@@ -1,0 +1,36 @@
+{#
+ Top-of-content notices: no-root-password warning, initramfs recovery warning, the <noscript>
+ fallback, the #tabmenu container. include(…, { boardinfo, empty_password }) — empty_password
+ is computed in the header, which already imports luci.core.
+ The markup of a notice lives ONCE, in partials/notice.ut; this file decides only WHICH notices
+ there are and what they say.
+ The sentences carry no msgctxt on purpose: inheriting luci-base's translation is a feature in
+ the ~40 languages this theme has no catalogue for (see header.ut).
+ Licensed to the public under the Apache License 2.0.
+-#}
+{% if (empty_password): %}
+	{% include('themes/footstrap/partials/notice', {
+		title: _('No password set!'),
+		text: _('There is no password set on this router. Please configure a root password to protect the web interface.'),
+		path: "admin/system/admin",
+		label: _('Go to password configuration...')
+	}) %}
+{% endif %}
+
+{% if (boardinfo.rootfs_type == "initramfs"): %}
+	{% include('themes/footstrap/partials/notice', {
+		title: _('System running in recovery (initramfs) mode.'),
+		text: _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade'),
+		path: "admin/system/flash",
+		label: _('Go to firmware upgrade...')
+	}) %}
+{% endif %}
+
+<noscript>
+	{% include('themes/footstrap/partials/notice', {
+		title: _('JavaScript required!'),
+		text: _('You must enable JavaScript in your browser or LuCI will not work properly.')
+	}) %}
+</noscript>
+
+<div id="tabmenu" style="display:none"></div>

@@ -1,0 +1,19 @@
+{#
+ The page-search trigger (#fs-search-btn), wired by fs-search.js. It is a `.fs-themerow` — the
+ chrome's shared row/button class rather than a look of its own — so it is one of the right
+ cluster's square icon buttons in the bar and the rail, and a full-width labelled row in the
+ vertical sidebar, with no new CSS to keep in step. It sits between the poll pill (#indicators)
+ and Log out, which share `order: 2` with it, so the DOM order here IS the visual order. (The
+ Appearance trigger was the third member until the panel became a tab on System -> System; this is
+ the only .fs-themerow the document carries now.)
+
+ i18n: 'Search' is CHROME and deliberately carries no msgctxt — inheriting luci-base's translation
+ is a feature in the ~40 languages this theme ships no catalogue for. The palette's OWN strings
+ (fs-search.js: 'Search pages', 'Recently visited', …) do carry the `footstrap` context, because a
+ msgid is a GLOBAL name shared with every luci-app on the router — see header.ut.
+ Licensed to the public under the Apache License 2.0.
+-#}
+<button type="button" class="fs-themerow" id="fs-search-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="fs-search-ov" title="{{ _('Search') }}" aria-label="{{ _('Search') }}">
+	{% include('themes/footstrap/partials/icon', { body: '<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>' }) %}
+	<span class="fs-label">{{ _('Search') }}</span>
+</button>
