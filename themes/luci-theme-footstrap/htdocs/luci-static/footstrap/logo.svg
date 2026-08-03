@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-9 -1 100 100">
+	<!-- The OpenWrt mark, and it stays OpenWrt's on purpose: the tab icon says which DEVICE this
+	     is, not which theme is painting it. What it does not need is the flat cyan tile the mark
+	     used to be pasted on — that tile was the "outdated" part (issue #7), and it fought every
+	     browser's tab strip. Transparent now, so the icon sits in whatever the browser draws.
+
+	     Colours are the mark's own: cyan arcs, dark-blue ring. On a DARK tab strip that ring is
+	     nearly invisible, so it lightens under prefers-color-scheme — an SVG favicon is a live
+	     document and both Chrome and Firefox honour the query. logo_48.png cannot: it is the
+	     fallback for browsers with no SVG favicon support, and it carries the light variant. -->
+	<style>
+		@media (prefers-color-scheme: dark) { .ring { fill: #e6f4fb } }
+	</style>
+	<path d="m40.5 50.8a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2m-40.5-33.9 7 6.8a47.5 47.5 0 0 1 67.2 0l7-6.8a57.2 57.2 0 0 0-81.2 0" fill="#00b5e2"/>
+	<path d="m12.5 29.2 6.8 7a30 30 0 0 1 42.6 0l6.8-7a39.7 39.7 0 0 0-56.3 0" fill="#00b5e2"/>
+	<path d="m24.8 41.6 6.8 6.9a12.6 12.6 0 0 1 18 0l6.8-6.9a22.3 22.3 0 0 0-31.6 0" fill="#00b5e2"/>
+	<path class="ring" d="m64.9 39.7a30.2 30.2 0 1 1-48.7 0l-6.9-7a39.9 39.9 0 1 0 62.5 0z" fill="#002b49"/>
+</svg>
