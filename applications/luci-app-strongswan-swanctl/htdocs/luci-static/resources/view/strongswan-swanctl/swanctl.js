@@ -66,8 +66,8 @@ return view.extend({
 		if (error)
 			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
 
-		m = new form.Map('ipsec', _('Remote/Tunnel configuration'),
-			_('On this page, you can configure the IPsec tunnels and remotes.'));
+		m = new form.Map('ipsec', _('Connection configurations'),
+			_('On this page, you can configure the IPsec connections.'));
 		m.tabbed = true;
 
 		// Remote Configuration
