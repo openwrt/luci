@@ -759,7 +759,7 @@ function lookup(...segments) {
 			push(path, name);
 
 	for (let name in path) {
-		node = node.children[name];
+		node = node.children?.[name];
 
 		if (!node)
 			return null;
