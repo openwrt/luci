@@ -26,17 +26,128 @@ function handleAction(ev) {
 				return fs.exec_direct('/etc/init.d/adblock', [ev]);
 			});
 	} else {
-		if (ev !== 'stop') {
-			document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
-				btn.disabled = true;
-				btn.blur();
-			});
-			if (status && status.textContent.startsWith('paused')) {
-				ev = 'resume';
+		if (ev === 'stop') {
+			/* a resume after a stop makes no sense, reset the toggle right away */
+			const btnSuspend = document.getElementById('btn_suspend');
+			if (btnSuspend) {
+				btnSuspend.textContent = _('Suspend');
 			}
+		} else if (status && status.getAttribute('data-state') === 'paused') {
+			ev = 'resume';
 		}
+		document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
+			btn.disabled = true;
+			btn.blur();
+		});
 		return fs.exec_direct('/etc/init.d/adblock', [ev]);
 	}
+}
+
+/*
+	runtime string helpers
+
+	f_jsnup() packs several runtime fields into display strings of the form
+	"key: value, key: value, ...". Split them up again so they can be rendered
+	as chips and key/value rows instead of one long line.
+*/
+function parsePairs(text) {
+	const pairs = [];
+	(text || '').split(', ').forEach(function (item) {
+		const idx = item.indexOf(': ');
+		if (idx > 0) {
+			pairs.push([item.substring(0, idx), item.substring(idx + 2)]);
+		} else if (item.trim()) {
+			pairs.push([null, item.trim()]);
+		}
+	});
+	return pairs;
+}
+
+function pickValue(pairs, key) {
+	for (let i = 0; i < pairs.length; i++) {
+		if (pairs[i][0] === key) {
+			return pairs[i][1];
+		}
+	}
+	return '-';
+}
+
+/* expand grouped flags, e.g. "ext. DNS (std/prot/remote/bridge): ✘/✔/✘/✘" */
+function expandFlags(pairs) {
+	const flags = [];
+	pairs.forEach(function (pair) {
+		if (!pair[0]) {
+			return;
+		}
+		const group = pair[0].match(/^(.*?)\s*\(([^()]*\/[^()]*)\)$/);
+		if (group) {
+			const names = group[2].split('/');
+			const values = pair[1].split('/');
+			if (names.length === values.length) {
+				for (let i = 0; i < names.length; i++) {
+					flags.push([group[1] + ' ' + names[i], values[i]]);
+				}
+				return;
+			}
+		}
+		flags.push(pair);
+	});
+	return flags;
+}
+
+function flagChips(text) {
+	return expandFlags(parsePairs(text)).sort(function (a, b) {
+		return a[0].localeCompare(b[0]);
+	}).map(function (flag) {
+		const on = flag[1] === '\u2714';
+		return E('span', { 'class': 'adb-chip ' + (on ? 'adb-chip-on' : 'adb-chip-off') }, [
+			E('span', { 'class': 'adb-mark' }, [on ? '\u2714' : '\u2718']),
+			flag[0]
+		]);
+	});
+}
+
+function activeFeeds(feeds) {
+	return (Array.isArray(feeds) ? feeds : []).filter(function (feed) {
+		return feed && feed !== '-';
+	});
+}
+
+function feedChips(feeds) {
+	const chips = feeds.map(function (feed) {
+		return E('span', { 'class': 'adb-chip adb-chip-feed' }, [feed]);
+	});
+	return chips.length ? chips : ['-'];
+}
+
+/*
+	system_info is "cores: n, fetch: cmd, model, target, distribution version".
+	Keep the named entries and the board model, drop target and release.
+*/
+function sysPairs(text) {
+	let plain = 0;
+	return parsePairs(text).filter(function (pair) {
+		return pair[0] || ++plain === 1;
+	});
+}
+
+/*
+	The container is a two column grid, so the nodes are emitted flat rather
+	than wrapped per row - that is what keeps the values aligned across rows.
+	Entries without a key span both columns. The trailing space in the key is
+	invisible but keeps the text copyable as "key value".
+*/
+function stackNodes(pairs, mono) {
+	const nodes = [];
+	pairs.forEach(function (pair) {
+		if (pair[0]) {
+			nodes.push(E('span', { 'class': 'adb-key' }, [pair[0], ' ']));
+			nodes.push(E('span', { 'class': mono ? 'adb-mono' : '' }, [pair[1]]));
+		} else {
+			nodes.push(E('span', { 'class': mono ? 'adb-full adb-mono' : 'adb-full' }, [pair[1]]));
+		}
+	});
+	return nodes.length ? nodes : ['-'];
 }
 
 return view.extend({
@@ -71,7 +182,17 @@ return view.extend({
 		const setText = (id, value) => {
 			const el = document.getElementById(id);
 			if (el) {
-				el.textContent = value || '-';
+				el.textContent = (value === 0 || value) ? value : '-';
+			}
+		};
+
+		/*
+			set element content helper function
+		*/
+		const setNodes = (id, nodes) => {
+			const el = document.getElementById(id);
+			if (el) {
+				dom.content(el, nodes);
 			}
 		};
 
@@ -102,15 +223,19 @@ return view.extend({
 							poll.stop();
 						}
 						if (status) {
-							status.textContent = '-';
+							status.setAttribute('data-state', '');
+							setText('state', '-');
 							buttons.forEach(btn => btn.disabled = false);
 							status.classList.remove('spinning');
 						}
 						return;
 					}
 					if (status && info) {
-						status.textContent = `${info.adblock_status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
-						if (info.adblock_status === "processing") {
+						const state = info.adblock_status || '-';
+						status.setAttribute('data-state', state);
+						setText('state', state);
+						setText('versions', `${info.frontend_ver || '-'} / ${info.backend_ver || '-'}`);
+						if (state === "processing") {
 							buttons.forEach(function (btn) {
 								btn.disabled = true;
 								btn.blur();
@@ -122,8 +247,7 @@ return view.extend({
 							status.classList.remove("spinning");
 							const btnSuspend = document.getElementById('btn_suspend');
 							if (btnSuspend) {
-								if (info.adblock_status === 'paused') btnSuspend.textContent = _('Resume');
-								if (info.adblock_status === 'enabled') btnSuspend.textContent = _('Suspend');
+								btnSuspend.textContent = (state === 'paused') ? _('Resume') : _('Suspend');
 							}
 							buttons.forEach(function (btn) {
 								btn.disabled = false;
@@ -131,14 +255,18 @@ return view.extend({
 						}
 					}
 					if (info) {
+						const runPairs = parsePairs(info.last_run);
 						setText('domains', info.blocked_domains);
-						setText('feeds', info.active_feeds?.join(', '));
-						setText('backend', info.dns_backend);
-						setText('ifaces', info.run_ifaces);
-						setText('run', info.run_information);
-						setText('flags', info.run_flags);
-						setText('last', info.last_run);
-						setText('sys', info.system_info);
+						setText('backup', info.backup_cnt);
+						setText('last', pickValue(runPairs, 'date / time'));
+						setText('last_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
+						pickValue(runPairs, 'memory')].filter(v => v !== '-').join(', '));
+						setNodes('feeds', feedChips(activeFeeds(info.active_feeds)));
+						setNodes('flags', flagChips(info.run_flags));
+						setNodes('backend', stackNodes(parsePairs(info.dns_backend), false));
+						setNodes('ifaces', stackNodes(parsePairs(info.run_ifaces), false));
+						setNodes('sys', stackNodes(sysPairs(info.system_info), false));
+						setNodes('run', stackNodes(parsePairs(info.run_information), true));
 					}
 				});
 			});
@@ -149,43 +277,109 @@ return view.extend({
 		*/
 		s = m.section(form.NamedSection, 'global');
 		s.render = function (view, section_id) {
-			return E('div', { 'class': 'cbi-section' }, [
-				E('h3', _('Information')),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Status / Version')),
-					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;color:#37c;' }, '\xa0')
+			/*
+				scoped theme palette
+
+				Neutral surfaces are derived from translucent grey so they work on
+				top of any LuCI theme background. Only the semantic colors are
+				switched per color scheme, and both variants are chosen to stay
+				readable either way.
+			*/
+			const style = E('style', { 'type': 'text/css' }, [
+				'#adb-status {' +
+				'--adb-card-bg: rgba(128,128,128,.07);' +
+				'--adb-card-border: rgba(128,128,128,.28);' +
+				'--adb-muted: GrayText;' +
+				'--adb-ok: #1f8a5f;' +
+				'--adb-warn: #a8760a;' +
+				'--adb-err: #c0392b;' +
+				'--adb-info: #2f6fb0;' +
+				'--adb-ok-bg: rgba(31,138,95,.14);' +
+				'--adb-info-bg: rgba(47,111,176,.14);' +
+				'}' +
+				'@media (prefers-color-scheme: dark) {' +
+				'#adb-status {' +
+				'--adb-ok: #63c79b;' +
+				'--adb-warn: #d9ab4e;' +
+				'--adb-err: #e8897e;' +
+				'--adb-info: #7fb3e8;' +
+				'}}' +
+				'#adb-status .adb-grid { display: grid; gap: .75em; grid-template-columns: repeat(auto-fit, minmax(11em, 1fr)); margin-bottom: .75em; }' +
+				'#adb-status .adb-card { background: var(--adb-card-bg); border: 1px solid var(--adb-card-border); border-radius: 8px; padding: .7em .9em; min-width: 0; overflow-wrap: break-word; }' +
+				'#adb-status .adb-block { margin-bottom: .75em; }' +
+				'#adb-status .adb-label { font-size: .85em; color: var(--adb-muted); margin-bottom: .3em; }' +
+				'#adb-status .adb-sub { font-size: .8em; color: var(--adb-muted); margin-top: .3em; }' +
+				'#adb-status .adb-value { font-size: 1.5em; line-height: 1.3; font-variant-numeric: tabular-nums; }' +
+				'#adb-status .adb-state { display: flex; align-items: center; gap: .5em; }' +
+				'#adb-status .adb-dot { width: .6em; height: .6em; border-radius: 50%; background: var(--adb-muted); flex: 0 0 auto; }' +
+				'#adb-status .adb-state[data-state="enabled"] .adb-dot { background: var(--adb-ok); }' +
+				'#adb-status .adb-state[data-state="paused"] .adb-dot { background: var(--adb-warn); }' +
+				'#adb-status .adb-state[data-state="processing"] .adb-dot { background: var(--adb-info); }' +
+				'#adb-status .adb-state[data-state="error"] .adb-dot { background: var(--adb-err); }' +
+				'#adb-status .adb-title { font-weight: bold; margin-bottom: .6em; }' +
+				'#adb-status .adb-chips { display: flex; flex-wrap: wrap; gap: .35em; }' +
+				'#adb-status .adb-chip { font-size: .85em; padding: .15em .6em; border-radius: 6px; border: 1px solid transparent; }' +
+				'#adb-status .adb-chip-on { background: var(--adb-ok-bg); color: var(--adb-ok); }' +
+				'#adb-status .adb-chip-off { color: var(--adb-muted); border-color: var(--adb-card-border); }' +
+				'#adb-status .adb-chip-feed { background: var(--adb-info-bg); color: var(--adb-info); }' +
+				'#adb-status .adb-mark { margin-right: .35em; }' +
+				'#adb-status .adb-key { color: var(--adb-muted); }' +
+				'#adb-status .adb-mono { font-family: monospace; word-break: break-all; }' +
+				'#adb-status .adb-stack { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em .6em; }' +
+				'#adb-status .adb-stack .adb-full { grid-column: 1 / -1; }'
+			]);
+
+			return E('div', { 'class': 'cbi-section', 'id': 'adb-status' }, [
+				style,
+				E('div', { 'class': 'adb-grid' }, [
+					E('div', { 'class': 'adb-card' }, [
+						E('div', { 'class': 'adb-label' }, [_('Status')]),
+						E('div', { 'class': 'adb-state spinning', 'id': 'status', 'data-state': '' }, [
+							E('span', { 'class': 'adb-dot' }),
+							E('span', { 'class': 'adb-value', 'id': 'state' }, ['-'])
+						]),
+						E('div', { 'class': 'adb-sub' }, [
+							_('Version'), ': ', E('span', { 'id': 'versions' }, ['-'])
+						])
+					]),
+					E('div', { 'class': 'adb-card' }, [
+						E('div', { 'class': 'adb-label' }, [_('Blocked Domains')]),
+						E('div', { 'class': 'adb-value', 'id': 'domains' }, ['-']),
+						E('div', { 'class': 'adb-sub' }, [
+							_('Backup'), ': ', E('span', { 'id': 'backup' }, ['-'])
+						])
+					]),
+					E('div', { 'class': 'adb-card' }, [
+						E('div', { 'class': 'adb-label' }, [_('Last Run')]),
+						E('div', { 'class': 'adb-value', 'id': 'last' }, ['-']),
+						E('div', { 'class': 'adb-sub', 'id': 'last_sub' }, ['-'])
+					])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Blocked Domains')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'domains', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'adb-grid' }, [
+					E('div', { 'class': 'adb-card' }, [
+						E('div', { 'class': 'adb-title' }, [_('DNS Backend')]),
+						E('div', { 'class': 'adb-stack', 'id': 'backend' }, ['-'])
+					]),
+					E('div', { 'class': 'adb-card' }, [
+						E('div', { 'class': 'adb-title' }, [_('Run Interfaces')]),
+						E('div', { 'class': 'adb-stack', 'id': 'ifaces' }, ['-'])
+					]),
+					E('div', { 'class': 'adb-card' }, [
+						E('div', { 'class': 'adb-title' }, [_('System Info')]),
+						E('div', { 'class': 'adb-stack', 'id': 'sys' }, ['-'])
+					])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Feeds')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'feeds', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'adb-card adb-block' }, [
+					E('div', { 'class': 'adb-title' }, [_('Active Feeds')]),
+					E('div', { 'class': 'adb-chips', 'id': 'feeds' }, ['-'])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('DNS Backend')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'backend', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'adb-card adb-block' }, [
+					E('div', { 'class': 'adb-title' }, [_('Run Flags')]),
+					E('div', { 'class': 'adb-chips', 'id': 'flags' }, ['-'])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Interfaces')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'ifaces', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Flags')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('System Info')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'sys', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'adb-card adb-block' }, [
+					E('div', { 'class': 'adb-title' }, [_('Run Information')]),
+					E('div', { 'class': 'adb-stack', 'id': 'run' }, ['-'])
 				])
 			]);
 		};
@@ -673,7 +867,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 		o.validate = function (section_id, value) {
-			if (!value || /^[a-zA-Z0-9 \t.:\/()\[\]!&|<>=+*%\\-]+$/.test(value)) {
+			if (!value || /^[a-zA-Z0-9 \t.:/()[\]!&|<>=+*%\\-]+$/.test(value)) {
 				return true;
 			}
 			return _('Invalid characters in the tcpdump filter expression!');
