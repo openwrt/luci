@@ -9,6 +9,23 @@ let listNotMsg = false;
 let mapNotMsg = false;
 
 /*
+	build a domain lookup link as DOM node
+
+	Domain names originate from captured DNS traffic and are only stripped of
+	control characters by the backend, i.e. they may still contain markup
+	characters. Table cells are rendered via innerHTML by LuCI, so the link
+	has to be assembled as a DOM node to keep the domain properly escaped.
+*/
+function makeDomainLink(domain) {
+	return E('a', {
+		'href': 'https://ip-api.com/#' + encodeURIComponent(domain),
+		'target': '_blank',
+		'rel': 'noreferrer noopener',
+		'title': _('Domain Lookup')
+	}, [domain]);
+}
+
+/*
 	button handling
 */
 function handleAction(ev) {
@@ -215,7 +232,7 @@ function handleAction(ev) {
 				])
 			]),
 			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'search' }, []),
+				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'rep_filter' }, []),
 				'\xa0\xa0\xa0',
 				_('Filter criteria like date, domain or client (optional)')
 			]),
@@ -235,7 +252,7 @@ function handleAction(ev) {
 						this.classList.add('spinning');
 						const top_count = document.getElementById('top_count').value;
 						const res_count = document.getElementById('res_count').value;
-						const search = document.getElementById('search').value.trim().replace(/[^\w.\-:]/g, '') || '+';
+						const search = document.getElementById('rep_filter').value.trim().replace(/[^\w.\-:]/g, '') || '+';
 						L.resolveDefault(fs.write('/var/run/adblock/adblock.report', ''), '').then(function () {
 							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '');
 							let attempts = 0;
@@ -324,41 +341,134 @@ return view.extend({
 			content[0] = "";
 		}
 
-		let rows_top = [];
-		const tbl_top = E('table', { 'class': 'table', 'id': 'top_10' }, [
-			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th right' }, _('Count')),
-				E('th', { 'class': 'th' }, _('Clients')),
-				E('th', { 'class': 'th right' }, _('Count')),
-				E('th', { 'class': 'th' }, _('Domains')),
-				E('th', { 'class': 'th right' }, _('Count')),
-				E('th', { 'class': 'th' }, _('Blocked Domains'))
-			])
+		const total = Number(content[0].total || 0);
+		const blocked = Number(content[0].blocked || 0);
+		const allowed = Math.max(total - blocked, 0);
+		let percent = parseFloat(content[0].percent);
+		if (!isFinite(percent)) {
+			percent = total > 0 ? (blocked / total) * 100 : 0;
+		}
+
+		/*
+			scoped theme palette
+
+			Neutral surfaces are derived from translucent grey so they work on top
+			of any LuCI theme background. Only the semantic colors are switched per
+			color scheme, and both variants are chosen to stay readable either way.
+		*/
+		const style = E('style', { 'type': 'text/css' }, [
+			'#adb-dash {' +
+			'--adb-card-bg: rgba(128,128,128,.07);' +
+			'--adb-card-border: rgba(128,128,128,.28);' +
+			'--adb-track: rgba(128,128,128,.25);' +
+			'--adb-muted: GrayText;' +
+			'--adb-blocked: #c0392b;' +
+			'--adb-allowed: #1f8a5f;' +
+			'--adb-neutral: #2f6fb0;' +
+			'--adb-warn: #a8760a;' +
+			'--adb-blocked-bg: rgba(192,57,43,.14);' +
+			'--adb-allowed-bg: rgba(31,138,95,.14);' +
+			'--adb-warn-bg: rgba(168,118,10,.16);' +
+			'}' +
+			'@media (prefers-color-scheme: dark) {' +
+			'#adb-dash {' +
+			'--adb-blocked: #e8897e;' +
+			'--adb-allowed: #63c79b;' +
+			'--adb-neutral: #7fb3e8;' +
+			'--adb-warn: #d9ab4e;' +
+			'}}' +
+			'#adb-dash .adb-grid { display: grid; gap: .75em; margin-bottom: 1em; }' +
+			'#adb-dash .adb-kpis { grid-template-columns: repeat(auto-fit, minmax(min(9em, 100%), 1fr)); }' +
+			'#adb-dash .adb-tops { grid-template-columns: repeat(auto-fit, minmax(min(16em, 100%), 1fr)); }' +
+			'#adb-dash .adb-card { background: var(--adb-card-bg); border: 1px solid var(--adb-card-border); border-radius: 8px; padding: .7em .9em; min-width: 0; overflow-wrap: break-word; }' +
+			'#adb-dash .adb-label { font-size: .85em; color: var(--adb-muted); }' +
+			'#adb-dash .adb-value { font-size: 1.6em; line-height: 1.3; font-variant-numeric: tabular-nums; }' +
+			'#adb-dash .adb-head { display: flex; align-items: baseline; justify-content: space-between; gap: .75em; flex-wrap: wrap; margin: 0 0 .5em; }' +
+			'#adb-dash .adb-head h3 { margin: 0; }' +
+			'#adb-dash .adb-time { font-family: monospace; font-size: .85em; color: var(--adb-muted); }' +
+			'#adb-dash .adb-rate { display: flex; align-items: center; gap: .75em; }' +
+			'#adb-dash .adb-donut { width: 3.4em; height: 3.4em; flex: 0 0 auto; }' +
+			'#adb-dash .adb-arc { transition: stroke-dasharray .6s ease-out; }' +
+			'#adb-dash .adb-row { margin-bottom: .55em; }' +
+			'#adb-dash .adb-row:last-child { margin-bottom: 0; }' +
+			'#adb-dash .adb-row-top { display: flex; justify-content: space-between; gap: .75em; font-size: .9em; margin-bottom: .2em; }' +
+			'#adb-dash .adb-row-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }' +
+			'#adb-dash .adb-row-cnt { color: var(--adb-muted); font-variant-numeric: tabular-nums; }' +
+			'#adb-dash .adb-bar { height: 3px; background: var(--adb-track); border-radius: 2px; }' +
+			'#adb-dash .adb-bar > div { height: 3px; border-radius: 2px; }' +
+			'#adb-dash .adb-badge { display: inline-block; padding: 0 .5em; border-radius: 4px; font-size: .85em; }' +
+			'#adb-dash .adb-nx { background: var(--adb-blocked-bg); color: var(--adb-blocked); }' +
+			'#adb-dash .adb-ok { background: var(--adb-allowed-bg); color: var(--adb-allowed); }' +
+			'#adb-dash .adb-sf { background: var(--adb-warn-bg); color: var(--adb-warn); }' +
+			'@media (prefers-reduced-motion: reduce) { #adb-dash .adb-arc { transition: none; } }'
 		]);
 
-		let max = 0;
-		if (content[0].top_clients && content[0].top_domains && content[0].top_blocked) {
-			max = Math.max(content[0].top_clients.length, content[0].top_domains.length, content[0].top_blocked.length);
+		function fmtNum(num) {
+			return Number(num || 0).toLocaleString();
 		}
-		for (let i = 0; i < max; i++) {
-			let a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
-			if (content[0].top_clients[i]) {
-				a_cnt = content[0].top_clients[i].count;
-				a_addr = content[0].top_clients[i].address;
-			}
-			if (content[0].top_domains[i]) {
-				b_cnt = content[0].top_domains[i].count;
-				b_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_domains[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_domains[i].address + '</a>';
-			}
-			if (content[0].top_blocked[i]) {
-				c_cnt = content[0].top_blocked[i].count;
-				c_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_blocked[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_blocked[i].address + '</a>';
-			}
-			rows_top.push([a_cnt, a_addr, b_cnt, b_addr, c_cnt, c_addr]);
-		}
-		cbi_update_table(tbl_top, rows_top);
 
-		let rows_requests = [];
+		function kpiCard(label, value, color) {
+			return E('div', { 'class': 'adb-card' }, [
+				E('div', { 'class': 'adb-label' }, [label]),
+				E('div', { 'class': 'adb-value', 'style': color ? 'color:var(--adb-' + color + ')' : '' }, [value])
+			]);
+		}
+
+		/* SVG needs createElementNS, E() cannot be used here */
+		function makeDonut(pct) {
+			const ns = 'http://www.w3.org/2000/svg';
+			function svgNode(tag, attrs) {
+				const node = document.createElementNS(ns, tag);
+				for (const key in attrs) {
+					node.setAttribute(key, attrs[key]);
+				}
+				return node;
+			}
+			const svg = svgNode('svg', { 'class': 'adb-donut', 'viewBox': '0 0 42 42', 'role': 'img' });
+			const title = document.createElementNS(ns, 'title');
+			title.textContent = _('Block Rate') + ': ' + pct.toFixed(2) + '%';
+			svg.appendChild(title);
+			svg.appendChild(svgNode('circle', {
+				'cx': '21', 'cy': '21', 'r': '15.9155', 'fill': 'none',
+				'stroke': 'var(--adb-track)', 'stroke-width': '5'
+			}));
+			const arc = svgNode('circle', {
+				'class': 'adb-arc', 'cx': '21', 'cy': '21', 'r': '15.9155', 'fill': 'none',
+				'stroke': 'var(--adb-blocked)', 'stroke-width': '5',
+				'stroke-dasharray': '0 100', 'stroke-dashoffset': '25'
+			});
+			svg.appendChild(arc);
+			/* run once the node is attached, so the transition applies */
+			setTimeout(function () {
+				arc.setAttribute('stroke-dasharray', pct.toFixed(2) + ' ' + (100 - pct).toFixed(2));
+			}, 50);
+			return svg;
+		}
+
+		function topCard(title, list, color, linkify) {
+			const entries = Array.isArray(list) ? list : [];
+			const peak = entries.length ? Number(entries[0].count) || 0 : 0;
+			const rows = entries.map(function (entry) {
+				const count = Number(entry.count) || 0;
+				const width = peak > 0 ? Math.round((count / peak) * 100) : 0;
+				return E('div', { 'class': 'adb-row' }, [
+					E('div', { 'class': 'adb-row-top' }, [
+						E('span', { 'class': 'adb-row-name' }, [
+							linkify ? makeDomainLink(entry.address) : entry.address
+						]),
+						E('span', { 'class': 'adb-row-cnt' }, [fmtNum(count)])
+					]),
+					E('div', { 'class': 'adb-bar' }, [
+						E('div', { 'style': 'width:' + width + '%; background:var(--adb-' + color + ')' })
+					])
+				]);
+			});
+			return E('div', { 'class': 'adb-card' }, [
+				E('div', { 'class': 'adb-head' }, [E('h3', {}, [title])]),
+				rows.length ? E('div', {}, rows) : E('em', { 'class': 'adb-label' }, [_('No data.')])
+			]);
+		}
+
 		const tbl_requests = E('table', { 'class': 'table', 'id': 'requests' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Date')),
@@ -372,81 +482,100 @@ return view.extend({
 			])
 		]);
 
-		if (content[0].requests) {
-			max = content[0].requests.length;
-			for (let i = 0; i < max; i++) {
-				let button;
-				if (content[0].requests[i].rc === 'NX') {
+		const requests = Array.isArray(content[0].requests) ? content[0].requests : [];
+
+		function updateRequests(filter) {
+			const rows = [];
+			for (let i = 0; i < requests.length; i++) {
+				const request = requests[i];
+				if (filter) {
+					const haystack = [request.date, request.time, request.client,
+					request.iface, request.type, request.domain, request.rc].join(' ').toLowerCase();
+					if (haystack.indexOf(filter) === -1) {
+						continue;
+					}
+				}
+				let button, badge;
+				if (request.rc === 'NX') {
+					badge = E('span', { 'class': 'adb-badge adb-nx' }, [request.rc]);
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
 						'style': 'word-break: inherit',
 						'name': 'allowlist',
 						'title': 'Add to Allowlist',
-						'value': content[0].requests[i].domain,
+						'value': request.domain,
 						'click': handleAction
 					}, [_('Allowlist...')]);
 				} else {
+					badge = E('span', {
+						'class': 'adb-badge ' + (request.rc === 'SF' ? 'adb-sf' : 'adb-ok')
+					}, [request.rc]);
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-negative',
 						'style': 'word-break: inherit',
 						'name': 'blocklist',
 						'title': 'Add to Blocklist',
-						'value': content[0].requests[i].domain,
+						'value': request.domain,
 						'click': handleAction
 					}, [_('Blocklist...')]);
 				}
-				rows_requests.push([
-					content[0].requests[i].date,
-					content[0].requests[i].time,
-					content[0].requests[i].client,
-					content[0].requests[i].iface,
-					content[0].requests[i].type,
-					'<a href="https://ip-api.com/#' + encodeURIComponent(content[0].requests[i].domain) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].requests[i].domain + '</a>',
-					content[0].requests[i].rc,
+				rows.push([
+					request.date,
+					request.time,
+					request.client,
+					request.iface,
+					request.type,
+					makeDomainLink(request.domain),
+					badge,
 					button
 				]);
 			}
+			cbi_update_table(tbl_requests, rows, E('em', {}, [_('No matching DNS requests.')]));
 		}
-		cbi_update_table(tbl_requests, rows_requests);
+		updateRequests('');
 
-		const page = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
+		const timeframe = (content[0].start_date || '-') + ' ' + (content[0].start_time || '-') +
+			' \u2192 ' + (content[0].end_date || '-') + ' ' + (content[0].end_time || '-');
+
+		const page = E('div', { 'class': 'cbi-map', 'id': 'adb-dash' }, [
+			style,
 			E('div', { 'class': 'cbi-section' }, [
 				E('p', _('This tab displays the most recently generated DNS report. Use the \'Refresh\' button to update it.')),
-				E('div', { 'class': 'cbi-value', 'style': 'position:relative;min-height:220px' }, [
-					E('div', {
-						'style': 'position:absolute; top:0; right:0; text-align:center'
-					}, [
-						E('div', { 'style': 'font-size:12px; color:#37c; margin-bottom:8px; font-family:monospace; line-height:1.3; text-align:right' }, [
-							E('div', { 'style': 'font-size:12px; color:#37c; margin-bottom:8px' }, [
-								E('div', {}, 'Start: ' + (content[0].start_date || '-') + ' ' + (content[0].start_time || '-')),
-								E('div', {}, 'End: ' + (content[0].end_date || '-') + ' ' + (content[0].end_time || '-'))
-							])
-						]),
-						E('canvas', {
-							'id': 'dnsPie',
-							'width': 160,
-							'height': 160,
-							'style': 'max-width:160px; width:28vw; height:auto; cursor:pointer;'
-						}),
-						E('div', { 'style': 'margin-top:5px; font-size:12px' }, [
-							E('span', { 'style': 'color:#b04a4a' }, '■ Blocked'),
-							E('span', { 'style': 'margin-left:10px;color:#6a8f6a' }, '■ Allowed')
+				E('div', { 'class': 'adb-head' }, [
+					E('h3', {}, [_('Overview')]),
+					E('span', { 'class': 'adb-time' }, [timeframe])
+				]),
+				E('div', { 'class': 'adb-grid adb-kpis' }, [
+					kpiCard(_('Total'), fmtNum(total), null),
+					kpiCard(_('Blocked'), fmtNum(blocked), 'blocked'),
+					kpiCard(_('Allowed'), fmtNum(allowed), 'allowed'),
+					E('div', { 'class': 'adb-card adb-rate' }, [
+						makeDonut(percent),
+						E('div', {}, [
+							E('div', { 'class': 'adb-label' }, [_('Block Rate')]),
+							E('div', { 'class': 'adb-value' }, [percent.toFixed(2) + '%'])
 						])
 					])
-				])
-			]),
-			E('div', { 'class': 'cbi-section' }, [
-				E('div', { 'class': 'left' }, [
-					E('h3', { 'style': 'white-space:nowrap' }, _('Top Statistics')),
-					tbl_top
-				])
-			]),
-			E('br'),
-			E('div', { 'class': 'cbi-section' }, [
-				E('div', { 'class': 'left' }, [
-					E('h3', { 'style': 'white-space:nowrap' }, _('Latest DNS Requests')),
-					tbl_requests
-				])
+				]),
+				E('div', { 'class': 'adb-grid adb-tops' }, [
+					topCard(_('Top Clients'), content[0].top_clients, 'neutral', false),
+					topCard(_('Top Domains'), content[0].top_domains, 'allowed', true),
+					topCard(_('Top Blocked Domains'), content[0].top_blocked, 'blocked', true)
+				]),
+				E('div', { 'class': 'adb-head' }, [
+					E('h3', {}, [_('Latest DNS Requests')]),
+					E('input', {
+						'type': 'text',
+						'class': 'cbi-input-text',
+						'style': 'width:14em',
+						'spellcheck': 'false',
+						'placeholder': _('Filter'),
+						'keyup': function (ev) {
+							updateRequests(ev.target.value.trim().toLowerCase());
+						}
+					})
+				]),
+				tbl_requests
 			]),
 			E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
@@ -501,109 +630,6 @@ return view.extend({
 				btn.removeAttribute('disabled');
 			}
 		}
-
-		/* Draw Pie Chart with Tooltip */
-		let tooltipEl = document.getElementById('dnsPieTooltip');
-		if (tooltipEl) tooltipEl.remove();
-		tooltipEl = E('div', {
-			id: 'dnsPieTooltip',
-			style: 'position:absolute; padding:6px 10px; background:#333; color:#fff; border-radius:4px; font-size:12px; pointer-events:none; opacity:0; transition:opacity .15s; z-index:9999'
-		});
-		document.body.appendChild(tooltipEl);
-
-		setTimeout(function () {
-			const total = Number(content[0].total || 0);
-			const blocked = Number(content[0].blocked || 0);
-			const allowed = Math.max(total - blocked, 0);
-
-			const canvas = document.getElementById('dnsPie');
-			if (!canvas || total <= 0) return;
-
-			const ctx = canvas.getContext('2d');
-			const colors = { blocked: '#b04a4a', allowed: '#6a8f6a' };
-			let finalRot = 0;
-
-			function drawPie(rotation) {
-				const w = canvas.clientWidth;
-				canvas.width = w;
-				canvas.height = w;
-				const cx = w / 2, cy = w / 2, r = (w / 2) - 4;
-				const blockedAngle = (blocked / total) * 2 * Math.PI;
-				const allowedAngle = (allowed / total) * 2 * Math.PI;
-
-				ctx.clearRect(0, 0, w, w);
-				ctx.beginPath();
-				ctx.moveTo(cx, cy);
-				ctx.fillStyle = colors.blocked;
-				ctx.arc(cx, cy, r, rotation, rotation + blockedAngle);
-				ctx.fill();
-
-				ctx.beginPath();
-				ctx.moveTo(cx, cy);
-				ctx.fillStyle = colors.allowed;
-				ctx.arc(cx, cy, r, rotation + blockedAngle, rotation + blockedAngle + allowedAngle);
-				ctx.fill();
-
-				ctx.beginPath();
-				ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-				ctx.strokeStyle = '#fff';
-				ctx.lineWidth = 2;
-				ctx.stroke();
-			}
-
-			let rot = 0;
-			function animate() {
-				rot += 0.10;
-				drawPie(rot);
-				if (rot < Math.PI * 2) {
-					requestAnimationFrame(animate);
-				} else {
-					finalRot = rot % (2 * Math.PI);
-					drawPie(finalRot);
-				}
-			}
-			animate();
-
-			window.addEventListener('resize', function () {
-				drawPie(finalRot);
-			});
-
-			const tooltip = document.getElementById('dnsPieTooltip');
-			const blockedAngle = (blocked / total) * 2 * Math.PI;
-
-			canvas.addEventListener('mousemove', function (ev) {
-				const rect = canvas.getBoundingClientRect();
-				const x = ev.clientX - rect.left;
-				const y = ev.clientY - rect.top;
-				const cx = canvas.width / 2, cy = canvas.height / 2;
-				const dx = x - cx, dy = y - cy;
-				const dist = Math.sqrt(dx * dx + dy * dy);
-				if (dist > canvas.width / 2 - 4) {
-					tooltip.style.opacity = 0;
-					return;
-				}
-				/* normalise angle relative to finalRot so it matches the drawn slices */
-				let angle = Math.atan2(dy, dx) - finalRot;
-				if (angle < 0) angle += 2 * Math.PI;
-
-				let label, abs, pct;
-				if (angle < blockedAngle) {
-					label = 'Blocked'; abs = blocked;
-					pct = ((blocked / total) * 100).toFixed(1) + '%';
-				} else {
-					label = 'Allowed'; abs = allowed;
-					pct = ((allowed / total) * 100).toFixed(1) + '%';
-				}
-				tooltip.textContent = `${label}: ${abs} (${pct})`;
-				tooltip.style.left = ev.pageX + 12 + 'px';
-				tooltip.style.top = ev.pageY + 12 + 'px';
-				tooltip.style.opacity = 1;
-			});
-
-			canvas.addEventListener('mouseleave', function () {
-				tooltip.style.opacity = 0;
-			});
-		}, 0);
 
 		return page;
 	},
