@@ -227,6 +227,78 @@ return view.extend({
 		} else {
 			content[0] = "";
 		}
+		/*
+			derive the hit ratios from the per set nft counters
+
+			All three quotas share one denominator and one time window: the
+			counters reset on every reload, and they only exist when the
+			'count' option is enabled. An absent counter is an empty string,
+			which is what distinguishes "not counted" from "counted zero" -
+			without that distinction the quotas would silently report a
+			disabled feature as a perfect result.
+		*/
+		function hitStats(sets) {
+			const stats = { 'sets': 0, 'counted': 0, 'total': 0, 'hits': [], 'worst': [] };
+
+			Object.keys(sets || {}).forEach(function (key) {
+				const set = sets[key];
+				stats.sets++;
+				if (`${set.cnt_inbound ?? ''}${set.cnt_outbound ?? ''}` === '') {
+					return;
+				}
+				const count = (parseInt(set.cnt_inbound, 10) || 0) + (parseInt(set.cnt_outbound, 10) || 0);
+				const elements = parseInt(String(set.cnt_elements).replace(/\D/g, ''), 10) || 0;
+				stats.counted++;
+				stats.total += count;
+				/* 'value' carries the metric a list ranks and scales its bars by */
+				if (count > 0) {
+					stats.hits.push({ 'name': key, 'elements': elements, 'hits': count, 'value': count });
+				}
+				stats.worst.push({ 'name': key, 'elements': elements, 'hits': count, 'value': elements });
+			});
+			stats.hits.sort(function (a, b) { return b.value - a.value; });
+			/*
+				worst first: fewest hits, and among those the largest set. Two
+				ordinal keys rather than an elements per hit ratio, which would
+				need an invented smoothing term to survive a zero denominator.
+			*/
+			stats.worst.sort(function (a, b) { return (a.hits - b.hits) || (b.value - a.value); });
+			return stats;
+		}
+
+		/*
+			Two colour scales, because the same kind of number answers two
+			different questions here.
+
+			The flood and invalid packet counters measure attack traffic, so
+			zero is the good case - green, anything above it red.
+
+			The per set counters measure how much a feed actually catches, so
+			zero means the set earns nothing - red, while a set that matches is
+			working - blue. That matches the Top Sets and Worst Sets lists,
+			which rank exactly these numbers.
+		*/
+		function threatClass(value) {
+			return (String(value).trim() === '0') ? 'ban-zero' : 'ban-hit';
+		}
+
+		function setClass(value) {
+			return (String(value).trim() === '0') ? 'ban-idle' : 'ban-active';
+		}
+
+		/* "ON" plus the nft packet counter, only the counter is colour coded */
+		function dirNode(direction, count, bold) {
+			const attrs = bold ? { 'class': 'ban-nowrap', 'style': 'font-weight: bold' } : { 'class': 'ban-nowrap' };
+			if (!count) {
+				return E('em', attrs, [direction]);
+			}
+			return E('em', attrs, [
+				direction, bold ? ' (' : ': (',
+				E('span', { 'class': setClass(count) }, [fmtCount(count)]),
+				')'
+			]);
+		}
+
 		rowSets = [];
 		tblSets = E('table', { 'class': 'table', 'id': 'sets' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
@@ -240,73 +312,182 @@ return view.extend({
 		]);
 
 		if (content[0].sets) {
-			let cnt1, cnt2;
-
 			Object.keys(content[0].sets).sort().forEach(function (key) {
-				cnt1 = content[0].sets[key].cnt_inbound ? ': (' + content[0].sets[key].cnt_inbound + ')' : '';
-				cnt2 = content[0].sets[key].cnt_outbound ? ': (' + content[0].sets[key].cnt_outbound + ')' : '';
 				rowSets.push([
 					E('em', key),
-					E('em', { 'style': 'padding-right: 20px' }, content[0].sets[key].cnt_elements),
-					E('em', content[0].sets[key].inbound + cnt1),
-					E('em', content[0].sets[key].outbound + cnt2),
+					E('em', { 'class': 'ban-nowrap', 'style': 'padding-right: 20px' }, fmtCount(content[0].sets[key].cnt_elements)),
+					dirNode(content[0].sets[key].inbound, content[0].sets[key].cnt_inbound, false),
+					dirNode(content[0].sets[key].outbound, content[0].sets[key].cnt_outbound, false),
 					E('em', content[0].sets[key].port),
 					E('em', content[0].sets[key].set_elements.join(", "))
 				]);
 			});
 			rowSets.push([
 				E('em', { 'style': 'font-weight: bold' }, content[0].sum_sets),
-				E('em', { 'style': 'font-weight: bold; padding-right: 20px' }, content[0].sum_cntelements),
-				E('em', { 'style': 'font-weight: bold' }, content[0].sum_setinbound + ' (' + content[0].sum_cntinbound + ')'),
-				E('em', { 'style': 'font-weight: bold' }, content[0].sum_setoutbound + ' (' + content[0].sum_cntoutbound + ')'),
+				E('em', { 'class': 'ban-nowrap', 'style': 'font-weight: bold; padding-right: 20px' }, fmtCount(content[0].sum_cntelements)),
+				dirNode(content[0].sum_setinbound, content[0].sum_cntinbound, true),
+				dirNode(content[0].sum_setoutbound, content[0].sum_cntoutbound, true),
 				E('em', { 'style': 'font-weight: bold' }, content[0].sum_setports),
 				E('em', { 'style': 'font-weight: bold' }, content[0].sum_setelements)
 			]);
 		}
 		cbi_update_table(tblSets, rowSets);
 
-		const page = E('div', { 'class': 'cbi-map', 'id': 'cbimap' }, [
+		/*
+			scoped theme palette, kept in sync with the overview page
+		*/
+		const style = E('style', { 'type': 'text/css' }, [
+			'#ban-report {' +
+			'--ban-card-bg: rgba(128,128,128,.07);' +
+			'--ban-card-border: rgba(128,128,128,.28);' +
+			'--ban-muted: GrayText;' +
+			'--ban-ok: #1f8a5f;' +
+			'--ban-err: #c0392b;' +
+			'--ban-info: #2f6fb0;' +
+			'--ban-track: rgba(128,128,128,.25);' +
+			'}' +
+			'@media (prefers-color-scheme: dark) {' +
+			'#ban-report {' +
+			'--ban-ok: #63c79b;' +
+			'--ban-err: #e8897e;' +
+			'--ban-info: #7fb3e8;' +
+			'}}' +
+			'#ban-report .ban-grid { display: grid; gap: .75em; grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr)); margin-bottom: .75em; }' +
+			'#ban-report .ban-card { background: var(--ban-card-bg); border: 1px solid var(--ban-card-border); border-radius: 8px; padding: .7em .9em; min-width: 0; overflow-wrap: break-word; }' +
+			'#ban-report .ban-label { font-size: .85em; color: var(--ban-muted); margin-bottom: .3em; }' +
+			'#ban-report .ban-value { font-size: 1.5em; line-height: 1.3; font-variant-numeric: tabular-nums; }' +
+			'#ban-report .ban-title { font-weight: bold; margin-bottom: .6em; }' +
+			'#ban-report .ban-stack { display: grid; grid-template-columns: minmax(0, 1fr) max-content; gap: .25em .9em; font-size: .9em; }' +
+			'#ban-report .ban-key { color: var(--ban-muted); }' +
+			'#ban-report .ban-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }' +
+			'#ban-report .ban-zero { color: var(--ban-ok); }' +
+			'#ban-report .ban-hit { color: var(--ban-err); }' +
+			'#ban-report .ban-idle { color: var(--ban-err); }' +
+			'#ban-report .ban-active { color: var(--ban-info); }' +
+			'#ban-report .ban-nowrap { white-space: nowrap; }' +
+			'#ban-report .ban-hint { font-weight: normal; color: var(--ban-muted); margin-left: .4em; }' +
+			'#ban-report .ban-row { margin-bottom: .55em; }' +
+			'#ban-report .ban-row:last-child { margin-bottom: 0; }' +
+			'#ban-report .ban-row-top { display: flex; justify-content: space-between; gap: .75em; font-size: .9em; margin-bottom: .2em; }' +
+			'#ban-report .ban-row-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }' +
+			'#ban-report .ban-row-cnt { color: var(--ban-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }' +
+			'#ban-report .ban-bar { height: 3px; background: var(--ban-track); border-radius: 2px; }' +
+			'#ban-report .ban-bar > div { height: 3px; border-radius: 2px; }'
+		]);
+
+		/* group digits with spaces, the same way f_genstatus() formats its counts */
+		function fmtCount(value) {
+			const text = String(value ?? '').trim();
+			if (!/^\d+$/.test(text)) {
+				return text || '-';
+			}
+			return text.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+		}
+
+		/*
+			counter rows are colour coded: nothing blocked is the good case,
+			anything above zero is worth looking at
+		*/
+		function statRow(label, value, counter) {
+			const text = fmtCount(value);
+			let cls = 'ban-num';
+			if (counter && /^[\d ]+$/.test(text)) {
+				cls += ' ' + threatClass(text.replace(/ /g, ''));
+			}
+			return [
+				E('span', { 'class': 'ban-key' }, [label, ' ']),
+				E('span', { 'class': cls }, [text])
+			];
+		}
+
+		const sum = content?.[0] || {};
+		const hits = hitStats(sum.sets);
+
+		/*
+			ranked lists with relative bars
+
+			A quota only means something once the counters exist. The report
+			carries an empty string rather than a zero while the 'count' option
+			is off, which is what separates "not counted" from "counted zero".
+		*/
+		function topList(title, hint, entries, color, empty) {
+			const list = entries.slice(0, 10);
+			/* the worst list is not ordered by the bar metric, so take the max */
+			const peak = list.reduce(function (max, entry) {
+				return entry.value > max ? entry.value : max;
+			}, 0);
+			let note = empty;
+
+			if (hits.sets === 0) {
+				note = '-';
+			} else if (hits.counted === 0) {
+				note = _('packet counters disabled');
+			}
+			const rows = list.map(function (entry) {
+				const width = peak > 0 ? Math.round(entry.value / peak * 100) : 0;
+				return E('div', { 'class': 'ban-row' }, [
+					E('div', { 'class': 'ban-row-top' }, [
+						E('span', { 'class': 'ban-row-name' }, [entry.name]),
+						E('span', { 'class': 'ban-row-cnt' }, [
+							`${fmtCount(entry.elements)} / ${fmtCount(entry.hits)}`
+						])
+					]),
+					E('div', { 'class': 'ban-bar' }, [
+						E('div', { 'style': `width:${width}%; background:var(--ban-${color})` })
+					])
+				]);
+			});
+			return E('div', { 'class': 'ban-card' }, [
+				E('div', { 'class': 'ban-title' }, [
+					title, E('span', { 'class': 'ban-hint' }, [hint])
+				]),
+				rows.length ? E('div', {}, rows) : E('em', { 'class': 'ban-label' }, [note])
+			]);
+		}
+
+		const page = E('div', { 'class': 'cbi-map', 'id': 'ban-report' }, [
+			style,
 			E('div', { 'class': 'cbi-section' }, [
 				E('p', { 'style': 'margin-bottom:1em;' },
 					_('This report shows the latest NFT Set statistics, press the \'Refresh\' button to get a new one. \
 					You can also display the specific content of Sets, search for suspicious IPs and finally, these IPs can also be displayed on a map.')),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;width:230px;font-weight:bold;' }, _('Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.timestamp || '-')
+				E('div', { 'class': 'ban-grid' }, [
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-label' }, [_('Sets')]),
+						E('div', { 'class': 'ban-value' }, [fmtCount(sum.sum_sets)])
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-label' }, [_('Elements')]),
+						E('div', { 'class': 'ban-value' }, [fmtCount(sum.sum_cntelements)])
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-label' }, [_('Timestamp')]),
+						E('div', { 'class': 'ban-value' }, [sum.timestamp || '-'])
+					])
 				]),
-				E('hr'),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked syn-flood packets')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_synflood || '-')
+				E('div', { 'class': 'ban-grid' }, [
+					topList(_('Top Sets'), _('elements / packets'), hits.hits, 'info', _('no hits yet')),
+					topList(_('Worst Sets'), _('elements / packets'), hits.worst, 'err', '-')
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked udp-flood packets')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_udpflood || '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked icmp-flood packets')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_icmpflood || '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid ct packets')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_ctinvalid || '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid tcp packets')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_tcpinvalid || '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked bcp38 packets')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_bcp38 || '-')
-				]),
-				E('hr'),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to allowlist')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.autoadd_allow || '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to blocklist')),
-					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.autoadd_block || '-')
+				E('div', { 'class': 'ban-grid' }, [
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-title' }, [_('Blocked Packets')]),
+						E('div', { 'class': 'ban-stack' }, [].concat(
+							statRow(_('syn-flood'), sum.sum_synflood, true),
+							statRow(_('udp-flood'), sum.sum_udpflood, true),
+							statRow(_('icmp-flood'), sum.sum_icmpflood, true),
+							statRow(_('invalid ct'), sum.sum_ctinvalid, true),
+							statRow(_('invalid tcp'), sum.sum_tcpinvalid, true),
+							statRow(_('bcp38'), sum.sum_bcp38, true)
+						))
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-title' }, [_('Auto-added IPs')]),
+						E('div', { 'class': 'ban-stack' }, [].concat(
+							statRow(_('allowlist'), sum.autoadd_allow),
+							statRow(_('blocklist'), sum.autoadd_block)
+						))
+					])
 				])
 			]),
 			E('br'),

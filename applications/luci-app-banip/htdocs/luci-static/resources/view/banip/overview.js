@@ -24,6 +24,145 @@ function handleAction(ev) {
 	}
 }
 
+/*
+	runtime string helpers
+
+	f_genstatus() packs most runtime fields into display strings of the form
+	"key: value, key: value, ...". Split them up again so they can be rendered
+	as chips and key/value rows instead of one long line.
+*/
+function parsePairs(text) {
+	const pairs = [];
+	(text || '').split(', ').forEach(function (item) {
+		const idx = item.indexOf(': ');
+		if (idx > 0) {
+			pairs.push([item.substring(0, idx), item.substring(idx + 2)]);
+		} else if (item.trim()) {
+			pairs.push([null, item.trim()]);
+		}
+	});
+	return pairs;
+}
+
+function pickValue(pairs, key) {
+	for (let i = 0; i < pairs.length; i++) {
+		if (pairs[i][0] === key) {
+			return pairs[i][1];
+		}
+	}
+	return '-';
+}
+
+/*
+	expand grouped entries, e.g. "proto (4/6): ✔/✘" or
+	"limit (icmp/syn/udp): 10/10/10" into one entry per member
+*/
+function expandPairs(pairs) {
+	const result = [];
+	pairs.forEach(function (pair) {
+		if (!pair[0]) {
+			result.push(pair);
+			return;
+		}
+		const group = pair[0].match(/^(.*?)\s*\(([^()]*\/[^()]*)\)$/);
+		if (group) {
+			const names = group[2].split('/');
+			const values = pair[1].split('/');
+			if (names.length === values.length) {
+				for (let i = 0; i < names.length; i++) {
+					result.push([group[1] + ' ' + names[i], values[i]]);
+				}
+				return;
+			}
+		}
+		result.push(pair);
+	});
+	return result;
+}
+
+function flagChips(text) {
+	return expandPairs(parsePairs(text)).filter(function (pair) {
+		return pair[0];
+	}).sort(function (a, b) {
+		return a[0].localeCompare(b[0]);
+	}).map(function (flag) {
+		const on = flag[1] === '\u2714';
+		return E('span', { 'class': 'ban-chip ' + (on ? 'ban-chip-on' : 'ban-chip-off') }, [
+			E('span', { 'class': 'ban-mark' }, [on ? '\u2714' : '\u2718']),
+			flag[0]
+		]);
+	});
+}
+
+function feedChips(feeds) {
+	const chips = (Array.isArray(feeds) ? feeds : []).filter(function (feed) {
+		return feed && feed !== '-';
+	}).map(function (feed) {
+		return E('span', { 'class': 'ban-chip ban-chip-feed' }, [feed]);
+	});
+	return chips.length ? chips : ['-'];
+}
+
+/*
+	system_info is "cores: n, log: cmd, fetch: cmd, model, target, release".
+	Keep the named entries and the board model, drop target and release.
+*/
+function sysPairs(text) {
+	let plain = 0;
+	return parsePairs(text).filter(function (pair) {
+		return pair[0] || ++plain === 1;
+	});
+}
+
+/*
+	element_count is "<count> (chains: n, sets: n, rules: n)". The count itself
+	carries spaces as thousands separators, so it is cut at the parenthesis.
+*/
+function splitCount(text) {
+	const value = text || '';
+	const idx = value.indexOf(' (');
+	if (idx < 0) {
+		return { 'count': value || '-', 'detail': '-' };
+	}
+	return {
+		'count': value.substring(0, idx) || '-',
+		'detail': value.substring(idx + 2).replace(/\)$/, '') || '-'
+	};
+}
+
+/* active_uplink mixes both families, an IPv6 literal always carries a colon */
+function splitUplinks(list) {
+	const v4 = [], v6 = [];
+	(Array.isArray(list) ? list : []).forEach(function (addr) {
+		if (addr) {
+			(addr.indexOf(':') >= 0 ? v6 : v4).push(addr);
+		}
+	});
+	return {
+		'v4': v4.length ? v4.join(', ') : '-',
+		'v6': v6.length ? v6.join(', ') : '-'
+	};
+}
+
+/*
+	The container is a two column grid, so the nodes are emitted flat rather
+	than wrapped per row - that is what keeps the values aligned across rows.
+	Entries without a key span both columns. The trailing space in the key is
+	invisible but keeps the text copyable as "key value".
+*/
+function stackNodes(pairs, mono) {
+	const nodes = [];
+	pairs.forEach(function (pair) {
+		if (pair[0]) {
+			nodes.push(E('span', { 'class': 'ban-key' }, [pair[0], ' ']));
+			nodes.push(E('span', { 'class': mono ? 'ban-mono' : '' }, [pair[1]]));
+		} else {
+			nodes.push(E('span', { 'class': mono ? 'ban-full ban-mono' : 'ban-full' }, [pair[1]]));
+		}
+	});
+	return nodes.length ? nodes : ['-'];
+}
+
 return view.extend({
 	load: function () {
 		return Promise.all([
@@ -50,6 +189,13 @@ return view.extend({
 		/*
 			set text content helper function
 		*/
+		const setNodes = (id, nodes) => {
+			const el = document.getElementById(id);
+			if (el) {
+				dom.content(el, nodes);
+			}
+		};
+
 		const setText = (id, value) => {
 			const el = document.getElementById(id);
 			if (el) {
@@ -82,7 +228,8 @@ return view.extend({
 						info = null;
 						parseErrCount++;
 						if (status) {
-							status.textContent = '-';
+							status.setAttribute('data-state', '');
+							setText('state', '-');
 							buttons.forEach(function (btn) {
 								btn.disabled = false;
 							});
@@ -95,12 +242,11 @@ return view.extend({
 						return;
 					}
 					if (status && info) {
-						let statusText = info.status || '-';
-						if (actual) {
-							statusText += `: ${actual}`;
-						}
-						statusText += ` (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
-						status.textContent = statusText;
+						const state = info.status || '-';
+						status.setAttribute('data-state', state);
+						setText('state', state);
+						setText('versions', `${info.frontend_ver || '-'} / ${info.backend_ver || '-'}`);
+						setNodes('actual', actual ? flagChips(actual) : ['-']);
 						if (info.status === "processing") {
 							buttons.forEach(function (btn) {
 								btn.disabled = true;
@@ -119,18 +265,26 @@ return view.extend({
 						}
 					}
 					if (info) {
-						setText('elements', info.element_count);
-						setText('feeds', info.active_feeds?.join(', ') || '-');
-						setText('devices', `wan-dev: ${info.wan_devices?.join(', ') || '-'} /
-							wan-if: ${info.wan_interfaces?.join(', ') || '-'} /
-							vlan-allow: ${info.vlan_allow?.join(', ') || '-'} /
-							vlan-block: ${info.vlan_block?.join(', ') || '-'}`);
-						setText('uplink', info.active_uplink?.join(', ') || '-');
-						setText('nft', info.nft_info);
-						setText('run', info.run_info);
-						setText('flags', info.run_flags);
-						setText('last', info.last_run);
-						setText('sys', info.system_info);
+						const elements = splitCount(info.element_count);
+						const runPairs = parsePairs(info.last_run);
+						const join = list => (Array.isArray(list) && list.length) ? list.join(', ') : '-';
+						setText('elements', elements.count);
+						setText('elements_sub', elements.detail);
+						setText('last', pickValue(runPairs, 'date / time'));
+						setText('last_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
+						pickValue(runPairs, 'memory')].filter(v => v && v !== '-').join(', '));
+						setText('wan_dev', join(info.wan_devices));
+						setText('wan_if', join(info.wan_interfaces));
+						setText('vlan_allow', join(info.vlan_allow));
+						setText('vlan_block', join(info.vlan_block));
+						const uplinks = splitUplinks(info.active_uplink);
+						setText('uplink4', uplinks.v4);
+						setText('uplink6', uplinks.v6);
+						setNodes('nft', stackNodes(expandPairs(parsePairs(info.nft_info)), false));
+						setNodes('sys', stackNodes(sysPairs(info.system_info), false));
+						setNodes('feeds', feedChips(info.active_feeds));
+						setNodes('flags', flagChips(info.run_flags));
+						setNodes('run', stackNodes(parsePairs(info.run_info), true));
 					}
 				});
 			});
@@ -141,47 +295,121 @@ return view.extend({
 		*/
 		s = m.section(form.NamedSection, 'global');
 		s.render = function (view, section_id) {
-			return E('div', { 'class': 'cbi-section' }, [
-				E('h3', _('Information')),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Status')),
-					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;color:#37c;' }, '\xa0')
+			/*
+				scoped theme palette
+
+				Neutral surfaces are derived from translucent grey so they work on
+				top of any LuCI theme background. Only the semantic colors are
+				switched per color scheme, and both variants are chosen to stay
+				readable either way.
+			*/
+			const style = E('style', { 'type': 'text/css' }, [
+				'#ban-status {' +
+				'--ban-card-bg: rgba(128,128,128,.07);' +
+				'--ban-card-border: rgba(128,128,128,.28);' +
+				'--ban-muted: GrayText;' +
+				'--ban-ok: #1f8a5f;' +
+				'--ban-err: #c0392b;' +
+				'--ban-info: #2f6fb0;' +
+				'--ban-ok-bg: rgba(31,138,95,.14);' +
+				'--ban-info-bg: rgba(47,111,176,.14);' +
+				'}' +
+				'@media (prefers-color-scheme: dark) {' +
+				'#ban-status {' +
+				'--ban-ok: #63c79b;' +
+				'--ban-err: #e8897e;' +
+				'--ban-info: #7fb3e8;' +
+				'}}' +
+				'#ban-status .ban-grid { display: grid; gap: .75em; grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr)); margin-bottom: .75em; }' +
+				'#ban-status .ban-card { background: var(--ban-card-bg); border: 1px solid var(--ban-card-border); border-radius: 8px; padding: .7em .9em; min-width: 0; overflow-wrap: break-word; }' +
+				'#ban-status .ban-block { margin-bottom: .75em; }' +
+				'#ban-status .ban-label { font-size: .85em; color: var(--ban-muted); margin-bottom: .3em; }' +
+				'#ban-status .ban-sub { font-size: .8em; color: var(--ban-muted); margin-top: .3em; }' +
+				'#ban-status .ban-value { font-size: 1.5em; line-height: 1.3; font-variant-numeric: tabular-nums; }' +
+				'#ban-status .ban-state { display: flex; align-items: center; gap: .5em; }' +
+				'#ban-status .ban-dot { width: .6em; height: .6em; border-radius: 50%; background: var(--ban-muted); flex: 0 0 auto; }' +
+				'#ban-status .ban-state[data-state="active"] .ban-dot { background: var(--ban-ok); }' +
+				'#ban-status .ban-state[data-state="processing"] .ban-dot { background: var(--ban-info); }' +
+				'#ban-status .ban-state[data-state="error"] .ban-dot { background: var(--ban-err); }' +
+				'#ban-status .ban-title { font-weight: bold; margin-bottom: .6em; }' +
+				'#ban-status .ban-chips { display: flex; flex-wrap: wrap; gap: .35em; }' +
+				'#ban-status .ban-chips-sm { margin-top: .4em; }' +
+				'#ban-status .ban-chip { font-size: .85em; padding: .15em .6em; border-radius: 6px; border: 1px solid transparent; }' +
+				'#ban-status .ban-chip-on { background: var(--ban-ok-bg); color: var(--ban-ok); }' +
+				'#ban-status .ban-chip-off { color: var(--ban-muted); border-color: var(--ban-card-border); }' +
+				'#ban-status .ban-chip-feed { background: var(--ban-info-bg); color: var(--ban-info); }' +
+				'#ban-status .ban-mark { margin-right: .35em; }' +
+				'#ban-status .ban-stack { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em .6em; font-size: .9em; }' +
+				'#ban-status .ban-stack .ban-full { grid-column: 1 / -1; }' +
+				'#ban-status .ban-key { color: var(--ban-muted); }' +
+				'#ban-status .ban-mono { font-family: monospace; word-break: break-all; }'
+			]);
+
+			/* static labels, only the value nodes are updated by the poll */
+			function kvRow(label, id) {
+				return [
+					E('span', { 'class': 'ban-key' }, [label, ' ']),
+					E('span', { 'id': id }, ['-'])
+				];
+			}
+
+			return E('div', { 'class': 'cbi-section', 'id': 'ban-status' }, [
+				style,
+				E('div', { 'class': 'ban-grid' }, [
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-label' }, [_('Status')]),
+						E('div', { 'class': 'ban-state spinning', 'id': 'status', 'data-state': '' }, [
+							E('span', { 'class': 'ban-dot' }),
+							E('span', { 'class': 'ban-value', 'id': 'state' }, ['-'])
+						]),
+						E('div', { 'class': 'ban-chips ban-chips-sm', 'id': 'actual' }, ['-']),
+						E('div', { 'class': 'ban-sub' }, [
+							_('Version'), ': ', E('span', { 'id': 'versions' }, ['-'])
+						])
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-label' }, [_('Elements')]),
+						E('div', { 'class': 'ban-value', 'id': 'elements' }, ['-']),
+						E('div', { 'class': 'ban-sub', 'id': 'elements_sub' }, ['-'])
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-label' }, [_('Last Run')]),
+						E('div', { 'class': 'ban-value', 'id': 'last' }, ['-']),
+						E('div', { 'class': 'ban-sub', 'id': 'last_sub' }, ['-'])
+					])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Element Count')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'elements', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'ban-grid' }, [
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-title' }, [_('NFT Information')]),
+						E('div', { 'class': 'ban-stack', 'id': 'nft' }, ['-'])
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-title' }, [_('Interfaces')]),
+						E('div', { 'class': 'ban-stack' }, [].concat(
+							kvRow(_('wan-dev'), 'wan_dev'),
+							kvRow(_('wan-if'), 'wan_if'),
+							kvRow(_('vlan-allow'), 'vlan_allow'),
+							kvRow(_('vlan-block'), 'vlan_block'),
+							kvRow(_('uplink IPv4'), 'uplink4'),
+							kvRow(_('uplink IPv6'), 'uplink6')
+						))
+					]),
+					E('div', { 'class': 'ban-card' }, [
+						E('div', { 'class': 'ban-title' }, [_('System Info')]),
+						E('div', { 'class': 'ban-stack', 'id': 'sys' }, ['-'])
+					])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Feeds')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'feeds', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'ban-card ban-block' }, [
+					E('div', { 'class': 'ban-title' }, [_('Active Feeds')]),
+					E('div', { 'class': 'ban-chips', 'id': 'feeds' }, ['-'])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Devices')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'ban-card ban-block' }, [
+					E('div', { 'class': 'ban-title' }, [_('Run Flags')]),
+					E('div', { 'class': 'ban-chips', 'id': 'flags' }, ['-'])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Uplink')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'uplink', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('NFT Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'nft', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Flags')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('System Info')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'sys', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'ban-card ban-block' }, [
+					E('div', { 'class': 'ban-title' }, [_('Run Information')]),
+					E('div', { 'class': 'ban-stack', 'id': 'run' }, ['-'])
 				])
 			]);
 		};
