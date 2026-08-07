@@ -644,10 +644,138 @@ lease_next(void)
 }
 
 
+struct network_device_mtu_limit {
+	struct network_device_mtu_limit *next;
+	char name[IFNAMSIZ];
+	uint32_t min_mtu;
+	uint32_t max_mtu;
+};
+
+struct network_device_mtu_context {
+	struct network_device_mtu_limit *limits;
+	int pending;
+};
+
+static int
+rpc_luci_parse_network_device_mtu_limits(struct nl_msg *msg, void *arg)
+{
+	struct network_device_mtu_context *ctx = arg;
+	struct nlmsghdr *hdr = nlmsg_hdr(msg);
+	struct ifinfomsg *ifi = NLMSG_DATA(hdr);
+	struct network_device_mtu_limit *limit;
+	struct nlattr *tb[IFLA_MAX + 1];
+
+	if (hdr->nlmsg_type != RTM_NEWLINK)
+		return NL_SKIP;
+
+	nlmsg_parse(hdr, sizeof(*ifi), tb, IFLA_MAX, NULL);
+
+	if (!tb[IFLA_IFNAME] || (!tb[IFLA_MIN_MTU] && !tb[IFLA_MAX_MTU]))
+		return NL_SKIP;
+
+	limit = calloc(1, sizeof(*limit));
+	if (!limit)
+		return NL_SKIP;
+
+	snprintf(limit->name, sizeof(limit->name), "%s",
+	         nla_get_string(tb[IFLA_IFNAME]));
+
+	if (tb[IFLA_MIN_MTU])
+		limit->min_mtu = nla_get_u32(tb[IFLA_MIN_MTU]);
+
+	if (tb[IFLA_MAX_MTU])
+		limit->max_mtu = nla_get_u32(tb[IFLA_MAX_MTU]);
+
+	limit->next = ctx->limits;
+	ctx->limits = limit;
+
+	return NL_SKIP;
+}
+
+static int
+rpc_luci_network_device_mtu_done(struct nl_msg *msg, void *arg)
+{
+	struct network_device_mtu_context *ctx = arg;
+
+	ctx->pending = 0;
+	return NL_STOP;
+}
+
+static int
+rpc_luci_network_device_mtu_error(struct sockaddr_nl *nla,
+				  struct nlmsgerr *err, void *arg)
+{
+	struct network_device_mtu_context *ctx = arg;
+
+	ctx->pending = 0;
+	return NL_STOP;
+}
+
 static void
-rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
+rpc_luci_get_network_device_mtu_limits(struct network_device_mtu_context *ctx)
+{
+	struct ifinfomsg ifm = { .ifi_family = AF_UNSPEC };
+	struct nl_sock *sock = NULL;
+	struct nl_msg *msg = NULL;
+	struct nl_cb *cb = NULL;
+
+	sock = nl_socket_alloc();
+	if (!sock || nl_connect(sock, NETLINK_ROUTE))
+		goto out;
+
+	cb = nl_cb_alloc(NL_CB_DEFAULT);
+	if (!cb)
+		goto out;
+
+	msg = nlmsg_alloc_simple(RTM_GETLINK, NLM_F_REQUEST | NLM_F_DUMP);
+	if (!msg)
+		goto out;
+
+	nlmsg_append(msg, &ifm, sizeof(ifm), 0);
+	nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM,
+	          rpc_luci_parse_network_device_mtu_limits, ctx);
+	nl_cb_set(cb, NL_CB_FINISH, NL_CB_CUSTOM,
+	          rpc_luci_network_device_mtu_done, ctx);
+	nl_cb_err(cb, NL_CB_CUSTOM, rpc_luci_network_device_mtu_error, ctx);
+
+	ctx->pending = 1;
+
+	if (nl_send_auto_complete(sock, msg) < 0)
+		ctx->pending = 0;
+
+	while (ctx->pending && nl_recvmsgs(sock, cb) >= 0)
+		;
+
+out:
+	if (sock)
+		nl_socket_free(sock);
+
+	if (cb)
+		nl_cb_put(cb);
+
+	if (msg)
+		nlmsg_free(msg);
+}
+
+static struct network_device_mtu_limit *
+rpc_luci_find_network_device_mtu_limit(struct network_device_mtu_context *ctx,
+				       const char *name)
+{
+	struct network_device_mtu_limit *limit;
+
+	for (limit = ctx->limits; limit; limit = limit->next)
+		if (!strcmp(limit->name, name))
+			return limit;
+
+	return NULL;
+}
+
+static void
+rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr,
+				  struct network_device_mtu_context *mtu_ctx)
 {
 	char link[64], buf[512], *p;
+	struct network_device_mtu_limit *mtu_limit;
 	unsigned int ifa_flags = 0;
 	struct sockaddr_ll *sll;
 	struct ifaddrs *ifa;
@@ -714,6 +842,13 @@ rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
 	n = atoi(readstr("/sys/class/net/%s/mtu", name));
 	if (n > 0)
 		blobmsg_add_u32(&blob, "mtu", n);
+
+	mtu_limit = rpc_luci_find_network_device_mtu_limit(mtu_ctx, name);
+	if (mtu_limit && mtu_limit->min_mtu > 0)
+		blobmsg_add_u32(&blob, "min_mtu", mtu_limit->min_mtu);
+
+	if (mtu_limit && mtu_limit->max_mtu > 0)
+		blobmsg_add_u32(&blob, "max_mtu", mtu_limit->max_mtu);
 
 	n = atoi(readstr("/sys/class/net/%s/tx_queue_len", name));
 	if (n > 0)
@@ -863,11 +998,14 @@ rpc_luci_get_network_devices(struct ubus_context *ctx,
                              const char *method,
                              struct blob_attr *msg)
 {
+	struct network_device_mtu_context mtu_ctx = {};
+	struct network_device_mtu_limit *limit;
 	struct ifaddrs *ifaddr;
 	struct dirent *e;
 	DIR *d;
 
 	blob_buf_init(&blob, 0);
+	rpc_luci_get_network_device_mtu_limits(&mtu_ctx);
 
 	d = opendir("/sys/class/net");
 
@@ -882,13 +1020,20 @@ rpc_luci_get_network_devices(struct ubus_context *ctx,
 				break;
 
 			if (e->d_type != DT_DIR && e->d_type != DT_REG)
-				rpc_luci_parse_network_device_sys(e->d_name, ifaddr);
+				rpc_luci_parse_network_device_sys(e->d_name, ifaddr,
+				                                  &mtu_ctx);
 		}
 
 		if (ifaddr != NULL)
 			freeifaddrs(ifaddr);
 
 		closedir(d);
+	}
+
+	while (mtu_ctx.limits) {
+		limit = mtu_ctx.limits;
+		mtu_ctx.limits = limit->next;
+		free(limit);
 	}
 
 	ubus_send_reply(ctx, req, blob.head);
