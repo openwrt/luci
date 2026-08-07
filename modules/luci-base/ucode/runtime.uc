@@ -130,7 +130,16 @@ const Class = {
 		}
 		catch (ex) {
 			pop(this.scopes);
-			die(ex);
+
+			// To enable the scope bookkeeping right above,
+			// we catch and re-throw the exception, losing its original stacktrace.
+			// To keep the original stacktrace, we inject it into the message itself.
+			// The exception gets re-thrown multiple times from nested render calls,
+			// so if its message already contains a stacktrace, we don't do anything.
+			if (index(ex.message, "Near here") < 0)
+				die(`${ex.message}\n\n${ex.stacktrace[0].context}`);
+
+			die(ex)
 		}
 
 		pop(this.scopes);
