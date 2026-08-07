@@ -1,0 +1,42 @@
+{
+	"luci-app-wwand": {
+		"description": "Grant access to the wwand modem status page",
+		"read": {
+			"uci": [ "network" ],
+			"ubus": {
+				"wwand": [
+					"status",
+					"modem_signal",
+					"modem_cells",
+					"context_status",
+					"modem_get_settings",
+					"modem_plmn_lists",
+					"modem_sim_slots",
+					"modem_probe",
+					"modem_sms_list",
+					"modem_sms_read",
+					"modem_scan"
+				]
+			},
+			"file": {
+				"/sys/class/gpio/": [ "list" ]
+			}
+		},
+		"write": {
+			"uci": [ "network" ],
+			"ubus": {
+				"wwand": [
+					"modem_set_settings",
+					"modem_set_network_selection",
+					"modem_sim_switch_slot",
+					"modem_sim_pin_lock",
+					"modem_esim",
+					"modem_repower",
+					"modem_reset",
+					"modem_sim_pin_verify",
+					"modem_sms_delete"
+				]
+			}
+		}
+	}
+}
