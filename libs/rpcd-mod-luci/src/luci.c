@@ -703,7 +703,7 @@ rpc_luci_network_device_mtu_done(struct nl_msg *msg, void *arg)
 
 static int
 rpc_luci_network_device_mtu_error(struct sockaddr_nl *nla,
-				  struct nlmsgerr *err, void *arg)
+                                  struct nlmsgerr *err, void *arg)
 {
 	struct network_device_mtu_context *ctx = arg;
 
@@ -759,7 +759,7 @@ out:
 
 static struct network_device_mtu_limit *
 rpc_luci_find_network_device_mtu_limit(struct network_device_mtu_context *ctx,
-				       const char *name)
+                                       const char *name)
 {
 	struct network_device_mtu_limit *limit;
 
@@ -772,7 +772,7 @@ rpc_luci_find_network_device_mtu_limit(struct network_device_mtu_context *ctx,
 
 static void
 rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr,
-				  struct network_device_mtu_context *mtu_ctx)
+                                  struct network_device_mtu_context *mtu_ctx)
 {
 	char link[64], buf[512], *p;
 	struct network_device_mtu_limit *mtu_limit;
