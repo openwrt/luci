@@ -1,5 +1,5 @@
 {
-	"luci-app-nut-read": {
+	"luci-app-nut-standard": {
 		"description": "Grant limited UCI read access for luci-app-nut",
 		"read": {
 			"file": {
@@ -9,12 +9,21 @@
 				"/usr/bin/ldd /usr/sbin/upsd": ["exec"]
 			},
 			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
+		},
+		"write": {
+			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ],
+			"file": {
+				"/etc/luci-uploads/*": ["write"]
+			}
 		}
 	},
 	"luci-app-nut-admin": {
 		"description": "Grant admin UCI access for luci-app-nut",
+		"read": {
+			"uci": [ "nut_cgi_root", "nut_monitor_root", "nut_server_root" ]
+		},
 		"write": {
-			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
+			"uci": [ "nut_cgi_root", "nut_monitor_root", "nut_server_root" ]
 		}
 	}
 }
