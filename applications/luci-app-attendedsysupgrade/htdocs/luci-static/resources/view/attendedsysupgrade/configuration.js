@@ -1,8 +1,13 @@
 'use strict';
 'require view';
 'require form';
+'require uci';
 
 return view.extend({
+	load: function () {
+		return uci.load('attendedsysupgrade');
+	},
+
 	render: function () {
 		let m, s, o;
 
@@ -60,6 +65,20 @@ return view.extend({
 		);
 		o.default = '0';
 		o.rmempty = false;
+
+		// Only display if the owut section exists in uci (owut installed or section is manually added).
+		if (uci.get_first('attendedsysupgrade', 'owut') !== null) {
+			s = m.section(form.TypedSection, 'owut', _('OpenWrt Upgrade Tool'));
+			s.anonymous = true;
+
+			o = s.option(
+				form.Value,
+				'init_script',
+				_('Init script'),
+				_('Specify the path to the init script (e.g., <code>/rom/etc/uci-defaults/99-asu-defaults</code> inserted by the Firmware Selector).')
+			);
+			o.rmempty = true;
+		}
 
 		return m.render();
 	},
