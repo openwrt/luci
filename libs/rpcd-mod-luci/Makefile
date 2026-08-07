@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rpcd-mod-luci
 PKG_VERSION:=20240305
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
 PKG_LICENSE:=Apache-2.0
