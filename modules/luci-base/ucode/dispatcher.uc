@@ -350,6 +350,7 @@ function build_pagetree() {
 		action: 'object',
 		auth: 'object',
 		cors: 'bool',
+		css: 'string',
 		depends: 'object',
 		order: 'int',
 		setgroup: 'string',

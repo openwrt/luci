@@ -46,8 +46,8 @@
 <link rel="stylesheet" href="{{ media }}/cascade.css">
 <link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
 <link rel="icon" href="{{ media }}/logo.svg" sizes="any">
-{% if (node?.css): %}
-<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
+{% if (dispatched?.css): %}
+<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">
 {% endif %}
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>

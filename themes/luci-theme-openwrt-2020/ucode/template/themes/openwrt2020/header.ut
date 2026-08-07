@@ -19,6 +19,9 @@
 <link rel="stylesheet" media="screen" href="{{ media }}/cascade.css" />
 <link rel="icon" href="{{ media }}/logo.png" sizes="180x180">
 <link rel="icon" href="{{ media }}/logo.svg" sizes="any">
+{% if (dispatched?.css): %}
+<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">
+{% endif %}
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>
 <title>{{ striptags(`${boardinfo.hostname ?? '?'}${dispatched?.title ? ` | ${_(dispatched.title)}` : ''}`) }}</title>
