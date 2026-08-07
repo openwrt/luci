@@ -877,7 +877,6 @@ return view.extend({
 					o.modalonly = true;
 					o.multiple = false;
 					o.default = 'wan';
-					o.rmempty = false;
 					o.depends("ip_source", "web");
 					o.depends("ip_source", "script");
 					o.depends("ip_source", "interface");
@@ -889,12 +888,12 @@ return view.extend({
 					o.forcewrite = true;
 					o.modalonly = true;
 					o.cfgvalue = function(section_id) {
-						return uci.get('ddns', section_id, 'interface') || _('This will be autoset to the selected interface');
+						return uci.get('ddns', section_id, 'interface') || 'wan';
 					};
 					o.write = function(section_id) {
 						const opt = this.section.formvalue(section_id, 'ip_source');
 						const val = this.section.formvalue(section_id, 'ip_'+opt);
-						return uci.set('ddns', section_id, 'interface', val);
+						return uci.set('ddns', section_id, 'interface', val == 'wan' ? '' : val);
 					};
 
 					if (env['has_bindnet']) {
