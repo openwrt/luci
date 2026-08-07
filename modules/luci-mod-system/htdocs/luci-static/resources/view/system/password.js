@@ -159,9 +159,6 @@ return view.extend({
 			let rpcd = formData.data.rpcd;
 			let oldpw = formData.data.oldpw;
 
-			if (rpc_user && (oldpw == null || oldpw.length == 0))
-				return;
-
 			if (formData.data.pw1 == null || formData.data.pw1.length == 0)
 				return;
 

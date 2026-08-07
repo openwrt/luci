@@ -551,6 +551,7 @@ const methods = {
 				/*
 				 * create user to keep logic of luci-app-acl
 				 */
+				uci.load('rpcd');
 				const sid = uci.add('rpcd', 'login');
 				uci.set('rpcd', sid, 'username', user);
 				uci.commit('rpcd');
