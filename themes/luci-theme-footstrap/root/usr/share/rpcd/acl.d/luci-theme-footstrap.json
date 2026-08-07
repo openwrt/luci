@@ -1,0 +1,44 @@
+{
+	"luci-theme-footstrap": {
+		"description": "Footstrap Appearance router-wide defaults (Save as default) and the login background and pattern uploads",
+		"read": {
+			"uci": [
+				"footstrap"
+			]
+		},
+		"write": {
+			"ubus": {
+				"uci": [
+					"set",
+					"commit"
+				],
+				"file": [
+					"remove",
+					"exec"
+				]
+			},
+			"uci": [
+				"footstrap"
+			],
+			"cgi-io": [
+				"upload"
+			],
+			"file": {
+				"/etc/footstrap/login-bg": [
+					"write",
+					"remove"
+				],
+				"/bin/chmod 644 /etc/footstrap/login-bg": [
+					"exec"
+				],
+				"/etc/footstrap/pattern.svg": [
+					"write",
+					"remove"
+				],
+				"/bin/chmod 644 /etc/footstrap/pattern.svg": [
+					"exec"
+				]
+			}
+		}
+	}
+}

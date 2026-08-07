@@ -1,0 +1,16 @@
+{#
+ Shared brand block (logo + hostname wordmark). Included as
+ include('themes/footstrap/partials/brand', { boardinfo }); the look lives in
+ styles/theme/10-chrome.css.
+ Licensed to the public under the Apache License 2.0.
+-#}
+<a class="fs-brand" href="{{ dispatcher.build_url() }}">
+	<span class="fs-logo">
+		{# The OpenWrt mark, same as the tab favicon (logo.svg): cyan arcs are baked, the ring
+		   flips with the theme mode via the .fs-logo-ring rule in styles/theme/10-chrome.css —
+		   dark ring on the light UI, light ring on dark. It sits in a bordered box (no accent
+		   fill), matching the square buttons in the right cluster. #}
+		<svg aria-hidden="true" viewBox="-9 -1 100 100"><path d="m40.5 50.8a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2m-40.5-33.9 7 6.8a47.5 47.5 0 0 1 67.2 0l7-6.8a57.2 57.2 0 0 0-81.2 0" fill="#00b5e2"/><path d="m12.5 29.2 6.8 7a30 30 0 0 1 42.6 0l6.8-7a39.7 39.7 0 0 0-56.3 0" fill="#00b5e2"/><path d="m24.8 41.6 6.8 6.9a12.6 12.6 0 0 1 18 0l6.8-6.9a22.3 22.3 0 0 0-31.6 0" fill="#00b5e2"/><path class="fs-logo-ring" d="m64.9 39.7a30.2 30.2 0 1 1-48.7 0l-6.9-7a39.9 39.9 0 1 0 62.5 0z"/></svg>
+	</span>
+	<span class="fs-wordmark">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</span>
+</a>
