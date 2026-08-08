@@ -1,0 +1,25 @@
+{
+  "luci-app-wificalling-gateway": {
+    "description": "Manage Wi-Fi Calling Gateway",
+    "read": {
+      "uci": [ "wificalling-gateway" ],
+      "ubus": { "file": [ "read" ] },
+      "file": {
+        "/var/run/wificalling-gateway/status.json": [ "read" ],
+        "/var/run/wificalling-gateway/node-status.json": [ "read" ],
+        "/var/run/wificalling-gateway/events.log": [ "read" ],
+        "/tmp/run/wificalling-gateway/status.json": [ "read" ],
+        "/tmp/run/wificalling-gateway/node-status.json": [ "read" ],
+        "/tmp/run/wificalling-gateway/events.log": [ "read" ]
+      }
+    },
+    "write": {
+      "uci": [ "wificalling-gateway" ],
+      "ubus": { "file": [ "write" ] },
+      "file": {
+        "/var/run/wificalling-gateway/events.log": [ "write" ],
+        "/tmp/run/wificalling-gateway/events.log": [ "write" ]
+      }
+    }
+  }
+}

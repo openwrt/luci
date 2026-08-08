@@ -1,0 +1,71 @@
+#!/bin/sh /etc/rc.common
+USE_PROCD=1
+START=99
+STOP=10
+
+APP=wificalling-gateway
+RUNDIR=/var/run/$APP
+
+append_node() {
+	local s="$1" enabled label protocol server port password sni insecure alpn uuid congestion udp_mode public_key short_id fingerprint security transport path host flow alter_id credential auxiliary pin_sha256
+	config_get_bool enabled "$s" enabled 1
+	[ "$enabled" -eq 1 ] || return 0
+	config_get label "$s" label "$s"; config_get protocol "$s" protocol
+	config_get server "$s" server; config_get port "$s" port; config_get password "$s" password
+	config_get sni "$s" sni; config_get insecure "$s" insecure 0; config_get alpn "$s" alpn
+	config_get uuid "$s" uuid; config_get congestion "$s" congestion bbr; config_get udp_mode "$s" udp_mode native
+	config_get public_key "$s" public_key; config_get short_id "$s" short_id; config_get fingerprint "$s" fingerprint chrome
+	config_get security "$s" security; config_get transport "$s" transport; config_get path "$s" path; config_get host "$s" host
+	config_get pin_sha256 "$s" pin_sha256
+	config_get flow "$s" flow; config_get alter_id "$s" alter_id 0
+	case "$label$protocol$server$password$sni$uuid$public_key$short_id$host" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
+	credential=$password; auxiliary=$uuid
+	case "$protocol" in
+		vless|vmess) credential=$uuid; auxiliary=${flow:-$alter_id} ;;
+	esac
+	printf 'node|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n' "$s" "$protocol" "$server" "$port" "$credential" "$sni" "$insecure" "$alpn" "$auxiliary" "$congestion" "$udp_mode" "$public_key" "$short_id" "$fingerprint" "$security" "$transport" "$path" "$host" "$pin_sha256" >> "$RUNDIR/normalized.conf"
+	printf '%s|%s|%s|%s|%s\n' "$s" "$label" "$protocol" "$server" "$port" >> "$RUNDIR/nodes"
+}
+
+append_ip() { DEVICE_IPS="${DEVICE_IPS}${DEVICE_IPS:+,}$1"; }
+append_device() {
+	local s="$1" enabled label node route_mode
+	config_get_bool enabled "$s" enabled 1; [ "$enabled" -eq 1 ] || return 0
+	config_get label "$s" label "$s"; config_get node "$s" node; config_get route_mode "$s" route_mode independent
+	DEVICE_IPS=""; config_list_foreach "$s" source_ip append_ip
+	[ "$route_mode" = independent ] || return 0
+	printf 'device|%s|%s|%s\n' "$label" "$node" "$DEVICE_IPS" >> "$RUNDIR/normalized.conf"
+	IFS=,; for ip in $DEVICE_IPS; do printf '%s|%s|node-%s\n' "$label" "$ip" "$node" >> "$RUNDIR/clients"; done; unset IFS
+}
+
+start_service() {
+	chmod 600 "/etc/config/$APP" 2>/dev/null || true
+	config_load "$APP"; config_get_bool enabled main enabled 0; [ "$enabled" -eq 1 ] || return 0
+	mkdir -p "$RUNDIR"; chmod 700 "$RUNDIR"; : > "$RUNDIR/normalized.conf"; : > "$RUNDIR/clients"; : > "$RUNDIR/nodes"
+	config_get log_level main log_level warn; printf 'global|log_level|%s\n' "$log_level" >> "$RUNDIR/normalized.conf"
+	config_get event_interval main event_interval 60
+	config_get max_events_per_device main max_events_per_device 20
+	case "$event_interval" in ''|*[!0-9]*) event_interval=60;; esac
+	case "$max_events_per_device" in ''|*[!0-9]*) max_events_per_device=20;; esac
+	[ "$event_interval" -ge 30 ] && [ "$event_interval" -le 3600 ] || event_interval=60
+	[ "$max_events_per_device" -ge 1 ] && [ "$max_events_per_device" -le 500 ] || max_events_per_device=20
+	config_get_bool log_enabled main log_enabled 1
+	config_foreach append_node node; config_foreach append_device device
+	/usr/libexec/$APP/compiler.sh "$RUNDIR/normalized.conf" "$RUNDIR/sing-box.json" || return 1
+	/usr/bin/sing-box check -c "$RUNDIR/sing-box.json" || { logger -t "$APP" "sing-box rejected generated configuration"; return 1; }
+	/usr/libexec/$APP/firewall.sh start "$RUNDIR/clients"
+	procd_open_instance sing-box
+	procd_set_param command /usr/bin/sing-box run -c "$RUNDIR/sing-box.json"
+	procd_set_param respawn 3600 5 5
+	procd_set_param limits nofile="65535 65535"
+	procd_close_instance
+	procd_open_instance monitor
+	procd_set_param command /usr/libexec/$APP/monitor-loop.sh "$RUNDIR/clients" "$RUNDIR/status.json" "$RUNDIR/nodes" "$RUNDIR/node-status.json" "$RUNDIR/events.log" "$RUNDIR/monitor.state" "$event_interval" "$max_events_per_device" "$log_enabled"
+	procd_set_param respawn
+	procd_close_instance
+}
+
+stop_service() { /usr/libexec/$APP/firewall.sh stop "$RUNDIR/clients"; }
+reload_service() { restart; }
+
+service_triggers() { procd_add_reload_trigger "$APP"; }
