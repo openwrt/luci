@@ -1,0 +1,21 @@
+#!/bin/sh
+#
+# UCI defaults for luci-app-hh4xmodem
+#
+
+# Create config file with default settings
+touch /etc/config/hh4xmodem
+
+# Set default modem IP and port
+uci set hh4xmodem.settings=settings
+uci set hh4xmodem.settings.modem_ip='192.168.225.1'
+uci set hh4xmodem.settings.modem_port='2016'
+uci set hh4xmodem.settings.refresh_interval='3'
+uci commit hh4xmodem
+
+# Restart rpcd to load ucode plugin
+if pidof rpcd >/dev/null 2>&1; then
+	/etc/init.d/rpcd reload 2>/dev/null || /etc/init.d/rpcd restart 2>/dev/null
+fi
+
+exit 0
