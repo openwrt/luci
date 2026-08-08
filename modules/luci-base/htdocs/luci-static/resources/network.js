@@ -129,12 +129,15 @@ function getProtocolHandlers() {
 	});
 }
 
-function getWifiStateBySid(sid) {
+function getWifiStateBySid(sid, radioname) {
 	const s = uci.get('wireless', sid);
 
 	if (s != null && s['.type'] == 'wifi-iface') {
-		for (let radioname in _state.radios) {
-			for (let netstate of _state.radios[radioname].interfaces) {
+		for (let rname in _state.radios) {
+			if (radioname != null && rname != radioname)
+				continue;
+
+			for (let netstate of _state.radios[rname].interfaces) {
 
 				if (typeof(netstate.section) != 'string')
 					continue;
@@ -145,7 +148,7 @@ function getWifiStateBySid(sid) {
 					if (s2['.anonymous'] == false && netstate.section.charAt(0) == '@')
 						return null;
 
-					return [ radioname, _state.radios[radioname], netstate ];
+					return [ rname, _state.radios[rname], netstate ];
 				}
 			}
 		}
@@ -183,7 +186,7 @@ function getWifiSidByNetid(netid) {
 		const sections = uci.sections('wireless', 'wifi-iface');
 		let n = 0;
 		for (let s of sections) {
-			if (s.device != m[1])
+			if (L.toArray(s.device).indexOf(m[1]) == -1)
 				continue;
 
 			if (++n == +m[2])
@@ -208,15 +211,19 @@ function getWifiSidByIfname(ifname) {
 	return null;
 }
 
-function getWifiNetidBySid(sid) {
+function getWifiNetidBySid(sid, radioname) {
 	const s = uci.get('wireless', sid);
 	if (s != null && s['.type'] == 'wifi-iface') {
-		const radioname = s.device;
-		if (typeof(radioname) == 'string') {
+		const radionames = L.toArray(s.device);
+
+		if (radioname == null)
+			radioname = radionames[0];
+
+		if (typeof(radioname) == 'string' && radionames.indexOf(radioname) != -1) {
 			const sections = uci.sections('wireless', 'wifi-iface');
 			let n = 0;
 			for (let sec of sections) {
-				if (sec.device != radioname)
+				if (L.toArray(sec.device).indexOf(radioname) == -1)
 					continue;
 
 				n++;
@@ -224,7 +231,7 @@ function getWifiNetidBySid(sid) {
 				if (sec['.name'] != s['.name'])
 					continue;
 
-				return [ '%s.network%d'.format(s.device, n), s.device ];
+				return [ '%s.network%d'.format(radioname, n), radioname ];
 			}
 
 		}
@@ -1292,14 +1299,13 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 			const networkCount = {};
 
 			for (let wf_if of uciWifiIfaces) {
-				if (typeof(wf_if.device) != 'string')
-					continue;
+				for (let radioname of L.toArray(wf_if.device)) {
+					networkCount[radioname] = (networkCount[radioname] || 0) + 1;
 
-				networkCount[wf_if.device] = (networkCount[wf_if.device] || 0) + 1;
+					const netid = '%s.network%d'.format(radioname, networkCount[radioname]);
 
-				const netid = '%s.network%d'.format(wf_if.device, networkCount[wf_if.device]);
-
-				devices[netid] = this.instantiateDevice(netid);
+					devices[netid] = this.instantiateDevice(netid);
+				}
 			}
 
 			/* find uci declared devices */
@@ -1430,8 +1436,17 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 			const wifiIfaces = uci.sections('wireless', 'wifi-iface');
 			const rv = [];
 
-			for (let wf_if of wifiIfaces)
-				rv.push(this.lookupWifiNetwork(wf_if['.name']));
+			for (let wf_if of wifiIfaces) {
+				const radionames = L.toArray(wf_if.device);
+
+				if (radionames.length < 2) {
+					rv.push(this.lookupWifiNetwork(wf_if['.name']));
+					continue;
+				}
+
+				for (let radioname of radionames)
+					rv.push(this.lookupWifiNetwork(wf_if['.name'], radioname));
+			}
 
 			rv.sort(function(a, b) {
 				return L.naturalCompare(a.getID(), b.getID());
@@ -1687,15 +1702,21 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	},
 
 	/* private */
-	lookupWifiNetwork(netname) {
-		let sid, res, netid, radioname, radiostate, netstate;
+	lookupWifiNetwork(netname, radioname) {
+		let sid, res, netid, radiostate, netstate;
+
+		if (typeof(radioname) != 'string')
+			radioname = null;
 
 		sid = getWifiSidByNetid(netname);
 
 		if (sid != null) {
-			res        = getWifiStateBySid(sid);
+			const m = /^(\w+)\.network\d+$/.exec(netname);
+			const multiradio = (L.toArray(uci.get('wireless', sid, 'device')).length > 1);
+
+			res        = getWifiStateBySid(sid, (multiradio && m) ? m[1] : null);
 			netid      = netname;
-			radioname  = res ? res[0] : null;
+			radioname  = res ? res[0] : (m ? m[1] : null);
 			radiostate = res ? res[1] : null;
 			netstate   = res ? res[2] : null;
 		}
@@ -1707,20 +1728,20 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 				radiostate = res[1];
 				netstate   = res[2];
 				sid        = netstate.section;
-				netid      = L.toArray(getWifiNetidBySid(sid))[0];
+				netid      = L.toArray(getWifiNetidBySid(sid, radioname))[0];
 			}
 			else {
-				res = getWifiStateBySid(netname);
+				res = getWifiStateBySid(netname, radioname);
 
 				if (res != null) {
 					radioname  = res[0];
 					radiostate = res[1];
 					netstate   = res[2];
 					sid        = netname;
-					netid      = L.toArray(getWifiNetidBySid(sid))[0];
+					netid      = L.toArray(getWifiNetidBySid(sid, radioname))[0];
 				}
 				else {
-					res = getWifiNetidBySid(netname);
+					res = getWifiNetidBySid(netname, radioname);
 
 					if (res != null) {
 						netid     = res[0];
@@ -2779,19 +2800,19 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 		const uciWifiIfaces = uci.sections('wireless', 'wifi-iface');
 
 		for (let wf_if of uciWifiIfaces) {
-			if (typeof(wf_if.device) != 'string')
-				continue;
-
+			const radionames = L.toArray(wf_if.device);
 			const networks = L.toArray(wf_if.network);
 
 			for (let n of networks) {
 				if (n != this.sid)
 					continue;
 
-				const netid = getWifiNetidBySid(wf_if['.name']);
+				for (let radioname of radionames) {
+					const netid = getWifiNetidBySid(wf_if['.name'], radioname);
 
-				if (netid != null)
-					rv.push(Network.prototype.instantiateDevice(netid[0], this));
+					if (netid != null)
+						rv.push(Network.prototype.instantiateDevice(netid[0], this));
+				}
 			}
 		}
 
@@ -3602,7 +3623,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 		return Network.prototype.getWifiNetwork(network).then(L.bind(function(networkInstance) {
 			const uciWifiIface = (networkInstance.sid ? uci.get('wireless', networkInstance.sid) : null);
 
-			if (uciWifiIface == null || uciWifiIface['.type'] != 'wifi-iface' || uciWifiIface.device != this.sid)
+			if (uciWifiIface == null || uciWifiIface['.type'] != 'wifi-iface' || L.toArray(uciWifiIface.device).indexOf(this.sid) == -1)
 				return Promise.reject();
 
 			return networkInstance;
@@ -3679,7 +3700,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 				sid = getWifiSidByIfname(network);
 		}
 
-		if (sid == null || uci.get('wireless', sid, 'device') != this.sid)
+		if (sid == null || L.toArray(uci.get('wireless', sid, 'device')).indexOf(this.sid) == -1)
 			return Promise.resolve(false);
 
 		uci.remove('wireless', sid);
@@ -3895,7 +3916,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * or `null` if it cannot be determined.
 	 */
 	getWifiDeviceName() {
-		return this.ubus('radio') || this.get('device');
+		return this.ubus('radio') || L.toArray(this.get('device'))[0];
 	},
 
 	/**
