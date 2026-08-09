@@ -23,10 +23,12 @@ json_escape() {
 		else
 			case "$protocol" in
 				anytls|vless|vmess)
-					measurement=tcp
-					tcp_output=$(tcping -c 1 -t 1 -p "$port" "$server" 2>/dev/null || true)
-					latency=$(printf '%s\n' "$tcp_output" | sed -n 's/.*time=\([0-9][0-9.]*\)[[:space:]]*ms.*/\1/p' | head -n 1)
-					if [ -n "$latency" ]; then state=tcp_reachable; ping_json=$latency; else state=unreachable; fi
+					if command -v tcping >/dev/null 2>&1; then
+						measurement=tcp
+						tcp_output=$(tcping -c 1 -t 1 -p "$port" "$server" 2>/dev/null || true)
+						latency=$(printf '%s\n' "$tcp_output" | sed -n 's/.*time=\([0-9][0-9.]*\)[[:space:]]*ms.*/\1/p' | head -n 1)
+						if [ -n "$latency" ]; then state=tcp_reachable; ping_json=$latency; else state=unreachable; fi
+					fi
 					;;
 			esac
 		fi

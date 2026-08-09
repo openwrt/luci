@@ -99,8 +99,12 @@ return view.extend({
 		nodeQuality.textvalue = function(id) { return E('span', { id: 'wfc-node-quality-' + id }, quality(nodeById(id))); };
 		var secret = s.option(form.Value, 'password', _('Password'));
 		secret.password = true; secret.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
-		s.option(form.Value, 'uuid', _('UUID'));
+		var uuidField = s.option(form.Value, 'uuid', _('UUID'));
+		uuidField.password = true; uuidField.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
 		s.option(form.Value, 'sni', _('TLS server name'));
+		var securityOpt = s.option(form.ListValue, 'security', _('Security'));
+		securityOpt.value(''); securityOpt.value('tls'); securityOpt.value('reality');
+		securityOpt.depends('protocol', 'vless');
 		s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
 		s.option(form.Value, 'alpn', _('ALPN'));
 		s.option(form.Value, 'pin_sha256', _('TLS public-key SHA-256 (base64)'));
