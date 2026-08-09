@@ -64,7 +64,8 @@ function parseVmess(uri) {
 	var out = {
 		enabled: '1', protocol: 'vmess', label: raw.ps || 'VMess ' + raw.add,
 		server: raw.add, port: String(raw.port), uuid: raw.id, alter_id: String(raw.aid || 0),
-		sni: raw.sni || '', host: raw.host || '', path: raw.path || ''
+		sni: raw.sni || '', host: raw.host || '', path: raw.path || '',
+		security: raw.tls === 'tls' ? 'tls' : ''
 	};
 	if (raw.net === 'ws') out.transport = 'ws';
 	return out;

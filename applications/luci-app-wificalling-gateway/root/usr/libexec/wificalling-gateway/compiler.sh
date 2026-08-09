@@ -63,7 +63,7 @@ END {
     if (p=="vmess") {
       s=s ",\"uuid\":" q(f[6]) ",\"security\":\"auto\",\"alter_id\":" (f[10]~/^[0-9]+$/?f[10]:0)
       if (f[17]=="ws") s=s ",\"transport\":{\"type\":\"ws\",\"path\":" q(f[18]) ",\"headers\":{\"Host\":" q(f[19]) "}}"
-      if (f[7]!="") s=s ",\"tls\":" tls(f[7],f[8],f[9],f[20])
+      if (f[16]=="tls"||f[7]!="") s=s ",\"tls\":" tls(f[7],f[8],f[9],f[20])
     }
     s=s "}"; print "    " s ","
   }
