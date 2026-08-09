@@ -103,7 +103,7 @@ return view.extend({
 		uuidField.password = true; uuidField.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
 		s.option(form.Value, 'sni', _('TLS server name'));
 		var securityOpt = s.option(form.ListValue, 'security', _('Security'));
-		securityOpt.value(''); securityOpt.value('tls'); securityOpt.value('reality');
+		securityOpt.value('', _('None')); securityOpt.value('tls'); securityOpt.value('reality');
 		securityOpt.depends('protocol', 'vless');
 		s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
 		s.option(form.Value, 'alpn', _('ALPN'));
