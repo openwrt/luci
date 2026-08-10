@@ -60,12 +60,19 @@ END {
       s=s ",\"uuid\":" q(f[6])
       if (f[10]!="") s=s ",\"flow\":" q(f[10])
       if (f[16]=="reality") s=s ",\"tls\":{\"enabled\":true,\"server_name\":" q(f[7]) ",\"reality\":{\"enabled\":true,\"public_key\":" q(f[13]) ",\"short_id\":" q(f[14]) "},\"utls\":{\"enabled\":true,\"fingerprint\":" q(f[15]?f[15]:"chrome") "}}"
-      else if (f[16]=="tls"||f[7]!="") s=s ",\"tls\":" tls(f[7],f[8],f[9],f[20])
+      # TLS is decided by security/sni alone; only the server_name falls
+      # back to the WS Host (f[19]) when sni (f[7]) is empty, so a plain
+      # ws node with a Host header but no TLS never gains a tls block.
+      else if (f[16]=="tls"||f[7]!="") s=s ",\"tls\":" tls((f[7]!=""?f[7]:f[19]),f[8],f[9],f[20])
     }
     if (p=="vmess") {
       s=s ",\"uuid\":" q(f[6]) ",\"security\":\"auto\",\"alter_id\":" (f[10]~/^[0-9]+$/?f[10]:0)
       if (f[17]=="ws") s=s ",\"transport\":{\"type\":\"ws\",\"path\":" q(f[18]) ",\"headers\":{\"Host\":" q(f[19]) "}}"
-      if (f[16]=="tls"||f[7]!="") s=s ",\"tls\":" tls(f[7],f[8],f[9],f[20])
+      # Imported VMess links carry the TLS name in the WS Host (f[19]) when
+      # sni (f[7]) is empty and the server is a bare IP; fall back to it so
+      # certificate verification has a name to check.  Plain ws nodes with
+      # a Host header but no TLS stay cleartext.
+      if (f[16]=="tls"||f[7]!="") s=s ",\"tls\":" tls((f[7]!=""?f[7]:f[19]),f[8],f[9],f[20])
     }
     s=s "}"; print "    " s ","
   }

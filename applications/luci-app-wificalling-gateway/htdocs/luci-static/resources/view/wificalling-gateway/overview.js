@@ -106,6 +106,13 @@ return view.extend({
 		securityOpt.value('', _('None')); securityOpt.value('tls'); securityOpt.value('reality');
 		securityOpt.depends('protocol', 'vless');
 		securityOpt.depends('protocol', 'vmess');
+		// The compiler has no reality arm for VMess; selecting it would emit a
+		// cleartext outbound that sing-box check accepts. Reject it up front.
+		securityOpt.validate = function(section_id, value) {
+			if (value == 'reality' && this.map.getSectionValue(section_id, 'protocol') == 'vmess')
+				return false;
+			return true;
+		};
 		s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
 		s.option(form.Value, 'alpn', _('ALPN'));
 		s.option(form.Value, 'pin_sha256', _('TLS public-key SHA-256 (base64)'));

@@ -18,7 +18,7 @@ append_node() {
 	config_get security "$s" security; config_get transport "$s" transport; config_get path "$s" path; config_get host "$s" host
 	config_get pin_sha256 "$s" pin_sha256
 	config_get flow "$s" flow; config_get alter_id "$s" alter_id 0
-	case "$label$protocol$server$password$sni$uuid$public_key$short_id$host$flow" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
+	case "$label$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
 	credential=$password; auxiliary=$uuid
 	case "$protocol" in
 		vless) credential=$uuid; auxiliary=$flow ;;
@@ -43,7 +43,10 @@ append_device() {
 start_service() {
 	chmod 600 "/etc/config/$APP" 2>/dev/null || true
 	config_load "$APP"; config_get_bool enabled main enabled 0; [ "$enabled" -eq 1 ] || return 0
-	mkdir -p "$RUNDIR"; chmod 700 "$RUNDIR"; : > "$RUNDIR/normalized.conf"; : > "$RUNDIR/clients"; : > "$RUNDIR/nodes"; : > "$RUNDIR/status.json"; : > "$RUNDIR/monitor.state"
+	# Clear display state only.  monitor.state is the monitor's per-device
+	# baseline (old_wfc/old_sent/old_reply); truncating it would fabricate
+	# handshake_success events on the first tick after every restart.
+	mkdir -p "$RUNDIR"; chmod 700 "$RUNDIR"; : > "$RUNDIR/normalized.conf"; : > "$RUNDIR/clients"; : > "$RUNDIR/nodes"; : > "$RUNDIR/status.json"
 	config_get log_level main log_level warn; printf 'global|log_level|%s\n' "$log_level" >> "$RUNDIR/normalized.conf"
 	config_get event_interval main event_interval 60
 	config_get max_events_per_device main max_events_per_device 20
@@ -67,7 +70,12 @@ start_service() {
 	procd_close_instance
 }
 
-stop_service() { /usr/libexec/$APP/firewall.sh stop "$RUNDIR/clients"; }
+stop_service() {
+	/usr/libexec/$APP/firewall.sh stop "$RUNDIR/clients"
+	# Also drop the stale snapshot when the gateway is stopped/disabled so
+	# the status page does not keep rendering the last state indefinitely.
+	: > "$RUNDIR/status.json" 2>/dev/null || true
+}
 reload_service() { restart; }
 
 service_triggers() { procd_add_reload_trigger "$APP"; }
