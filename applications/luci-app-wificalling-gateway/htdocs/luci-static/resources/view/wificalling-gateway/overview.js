@@ -105,6 +105,7 @@ return view.extend({
 		var securityOpt = s.option(form.ListValue, 'security', _('Security'));
 		securityOpt.value('', _('None')); securityOpt.value('tls'); securityOpt.value('reality');
 		securityOpt.depends('protocol', 'vless');
+		securityOpt.depends('protocol', 'vmess');
 		s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
 		s.option(form.Value, 'alpn', _('ALPN'));
 		s.option(form.Value, 'pin_sha256', _('TLS public-key SHA-256 (base64)'));

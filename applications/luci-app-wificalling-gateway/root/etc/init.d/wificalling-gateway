@@ -18,7 +18,7 @@ append_node() {
 	config_get security "$s" security; config_get transport "$s" transport; config_get path "$s" path; config_get host "$s" host
 	config_get pin_sha256 "$s" pin_sha256
 	config_get flow "$s" flow; config_get alter_id "$s" alter_id 0
-	case "$label$protocol$server$password$sni$uuid$public_key$short_id$host" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
+	case "$label$protocol$server$password$sni$uuid$public_key$short_id$host$flow" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
 	credential=$password; auxiliary=$uuid
 	case "$protocol" in
 		vless) credential=$uuid; auxiliary=$flow ;;

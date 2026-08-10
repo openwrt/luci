@@ -16,7 +16,9 @@ function private4(ip, a) {
   return a[1]==10 || (a[1]==172 && a[2]>=16 && a[2]<=31) || (a[1]==192 && a[2]==168)
 }
 function tls(sni, insecure, alpn, pin, extra) {
-  extra="\"enabled\":true,\"server_name\":" q(sni) ",\"insecure\":" (insecure=="1"?"true":"false")
+  extra="\"enabled\":true"
+  if (sni!="") extra=extra ",\"server_name\":" q(sni)
+  extra=extra ",\"insecure\":" (insecure=="1"?"true":"false")
   if (alpn!="") extra=extra ",\"alpn\":[" q(alpn) "]"
   if (pin!="") extra=extra ",\"certificate_public_key_sha256\":[" q(pin) "]"
   return "{" extra "}"
