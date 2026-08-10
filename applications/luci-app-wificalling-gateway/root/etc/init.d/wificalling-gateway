@@ -43,7 +43,7 @@ append_device() {
 start_service() {
 	chmod 600 "/etc/config/$APP" 2>/dev/null || true
 	config_load "$APP"; config_get_bool enabled main enabled 0; [ "$enabled" -eq 1 ] || return 0
-	mkdir -p "$RUNDIR"; chmod 700 "$RUNDIR"; : > "$RUNDIR/normalized.conf"; : > "$RUNDIR/clients"; : > "$RUNDIR/nodes"
+	mkdir -p "$RUNDIR"; chmod 700 "$RUNDIR"; : > "$RUNDIR/normalized.conf"; : > "$RUNDIR/clients"; : > "$RUNDIR/nodes"; : > "$RUNDIR/status.json"; : > "$RUNDIR/monitor.state"
 	config_get log_level main log_level warn; printf 'global|log_level|%s\n' "$log_level" >> "$RUNDIR/normalized.conf"
 	config_get event_interval main event_interval 60
 	config_get max_events_per_device main max_events_per_device 20
