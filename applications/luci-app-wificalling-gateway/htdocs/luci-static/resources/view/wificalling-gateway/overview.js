@@ -42,12 +42,13 @@ return view.extend({
 		}
 		function latency(n) { return n && n.ping_ms != null ? n.ping_ms + ' ms (' + n.measurement + ')' : '-'; }
 		// Live DHCP lease map (IP -> MAC) and plugin-managed static bindings
-		// (wfc_ host sections) for the device policy status column.
+		// (wfc_ host sections) for the device policy status column.  dnsmasq
+		// lease lines are: expiry MAC IP hostname clientid.
 		var leaseMac = {};
 		(data[2] || '').split('\n').forEach(function(line) {
 			var p = line.split(/\s+/);
-			if (p.length >= 3 && /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(p[1]))
-				leaseMac[p[1]] = p[2];
+			if (p.length >= 3 && /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(p[2]))
+				leaseMac[p[2]] = p[1];
 		});
 		var wfcHost = {};
 		uci.sections('dhcp', 'host').forEach(function(h) {
@@ -168,7 +169,7 @@ return view.extend({
 		selectedNode.description = _('Save the node first, then reload this page to select it for a device.');
 		uci.sections('wificalling-gateway', 'node').forEach(function(node) { selectedNode.value(node['.name'], node.label || node['.name']); });
 		var ips = s.option(form.DynamicList, 'source_ip', _('LAN IPv4 addresses'));
-		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = '192.168.31.189';
+		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = '192.168.31.x';
 		var dhcpBinding = s.option(form.DummyValue, '_dhcp_binding', _('DHCP binding'));
 		dhcpBinding.textvalue = function(id) {
 			if ((uci.get('wificalling-gateway', id, 'route_mode') || 'independent') !== 'independent')

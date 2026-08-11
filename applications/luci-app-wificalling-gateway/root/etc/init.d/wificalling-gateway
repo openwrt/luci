@@ -30,7 +30,12 @@ append_node() {
 	config_get pin_sha256 "$s" pin_sha256
 	config_get flow "$s" flow; config_get alter_id "$s" alter_id 0
 	config_get private_key "$s" private_key; config_get local_address "$s" local_address; config_get reserved "$s" reserved; config_get mtu "$s" mtu
-	case "$label$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
+	# The delimiter guard covers every field interpolated into the
+	# | -delimited normalized.conf record.  label is deliberately excluded:
+	# subscription labels routinely contain '|' (e.g. "HK01|BGP|CMCU") and
+	# labels never reach normalized.conf — the nodes file (health checks)
+	# gets a sanitized copy instead.
+	case "$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
 	credential=$password; auxiliary=$uuid
 	case "$protocol" in
 		vless) credential=$uuid; auxiliary=$flow ;;
@@ -39,7 +44,8 @@ append_node() {
 		wireguard) credential=$private_key; auxiliary= ;;
 	esac
 	printf 'node|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n' "$s" "$protocol" "$server" "$port" "$credential" "$sni" "$insecure" "$alpn" "$auxiliary" "$congestion" "$udp_mode" "$public_key" "$short_id" "$fingerprint" "$security" "$transport" "$path" "$host" "$pin_sha256" "$private_key" "$local_address" "$reserved" "$mtu" >> "$RUNDIR/normalized.conf"
-	printf '%s|%s|%s|%s|%s\n' "$s" "$label" "$protocol" "$server" "$port" >> "$RUNDIR/nodes"
+	safe_label=$(printf '%s' "$label" | tr '|' ' ')
+	printf '%s|%s|%s|%s|%s\n' "$s" "$safe_label" "$protocol" "$server" "$port" >> "$RUNDIR/nodes"
 }
 
 append_ip() { DEVICE_IPS="${DEVICE_IPS}${DEVICE_IPS:+,}$1"; }
@@ -47,11 +53,12 @@ append_device() {
 	local s="$1" enabled label node route_mode
 	config_get_bool enabled "$s" enabled 1; [ "$enabled" -eq 1 ] || return 0
 	config_get label "$s" label "$s"; config_get node "$s" node; config_get route_mode "$s" route_mode independent
-	case "$label$node" in *'|'*) logger -t "$APP" "invalid delimiter in device $s"; return 1;; esac
+	case "$node" in *'|'*) logger -t "$APP" "invalid delimiter in device $s"; return 1;; esac
 	DEVICE_IPS=""; config_list_foreach "$s" source_ip append_ip
 	[ "$route_mode" = independent ] || return 0
-	printf 'device|%s|%s|%s\n' "$label" "$node" "$DEVICE_IPS" >> "$RUNDIR/normalized.conf"
-	IFS=,; for ip in $DEVICE_IPS; do printf '%s|%s|node-%s\n' "$label" "$ip" "$node" >> "$RUNDIR/clients"; done; unset IFS
+	safe_label=$(printf '%s' "$label" | tr '|' ' ')
+	printf 'device|%s|%s|%s\n' "$safe_label" "$node" "$DEVICE_IPS" >> "$RUNDIR/normalized.conf"
+	IFS=,; for ip in $DEVICE_IPS; do printf '%s|%s|node-%s\n' "$safe_label" "$ip" "$node" >> "$RUNDIR/clients"; done; unset IFS
 }
 
 start_service() {
