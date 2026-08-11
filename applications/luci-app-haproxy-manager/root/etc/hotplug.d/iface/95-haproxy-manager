@@ -1,0 +1,11 @@
+#!/bin/sh
+
+case "${ACTION:-}" in
+	ifup|ifupdate) ;;
+	*) exit 0 ;;
+esac
+
+[ "${INTERFACE:-}" = "$(uci -q get haproxy_manager.main.wan_interface 2>/dev/null || echo wan)" ] || exit 0
+[ -x /usr/libexec/haproxy-manager/recover ] || exit 0
+/usr/libexec/haproxy-manager/recover "$ACTION" "${INTERFACE:-unknown}" >/dev/null 2>&1 &
+exit 0

@@ -1,0 +1,49 @@
+{
+  "admin/services/haproxy-manager": {
+    "title": "HAProxy",
+    "i18n": "haproxy-manager",
+    "order": 60,
+    "action": {
+      "type": "firstchild"
+    },
+    "depends": {
+      "acl": [ "luci-app-haproxy-manager" ]
+    }
+  },
+  "admin/services/haproxy-manager/status": {
+    "title": "Status",
+    "i18n": "haproxy-manager",
+    "order": 20,
+    "action": {
+      "type": "view",
+      "path": "haproxy-manager/status"
+    }
+  },
+  "admin/services/haproxy-manager/routes": {
+    "title": "Services",
+    "i18n": "haproxy-manager",
+    "order": 10,
+    "action": {
+      "type": "view",
+      "path": "haproxy-manager/routes"
+    }
+  },
+  "admin/services/haproxy-manager/settings": {
+    "title": "Settings",
+    "i18n": "haproxy-manager",
+    "order": 30,
+    "action": {
+      "type": "view",
+      "path": "haproxy-manager/settings"
+    }
+  },
+  "admin/services/haproxy-manager/raw": {
+    "title": "Raw Config",
+    "i18n": "haproxy-manager",
+    "order": 40,
+    "action": {
+      "type": "view",
+      "path": "haproxy-manager/raw"
+    }
+  }
+}
