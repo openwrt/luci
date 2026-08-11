@@ -36,7 +36,7 @@ append_node() {
 	# subscription labels routinely contain '|' (e.g. "HK01|BGP|CMCU") and
 	# labels never reach normalized.conf — the nodes file (health checks)
 	# gets a sanitized copy instead.
-	case "$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
+	case "$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu$auxiliary$alter_id" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
 	credential=$password; auxiliary=$uuid
 	case "$protocol" in
 		vless) credential=$uuid; auxiliary=$flow ;;
