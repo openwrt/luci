@@ -170,22 +170,29 @@ return view.extend({
 		uci.sections('wificalling-gateway', 'node').forEach(function(node) { selectedNode.value(node['.name'], node.label || node['.name']); });
 		var ips = s.option(form.DynamicList, 'source_ip', _('LAN IPv4 addresses'));
 		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = '192.168.31.x';
-		var dhcpBinding = s.option(form.DummyValue, '_dhcp_binding', _('DHCP binding'));
-		function bindingState(id) {
-			if ((uci.get('wificalling-gateway', id, 'route_mode') || 'independent') !== 'independent')
-				return _('Following gateway');
-			var ipList = uci.get('wificalling-gateway', id, 'source_ip') || [];
-			if (!Array.isArray(ipList)) ipList = [ipList];
-			return ipList.map(function(ip) { return ip + ': ' + dhcpState(ip); }).join('<br>');
-		}
-		// Grid row renders via textvalue; the edit modal renders the widget
-		// with cfgvalue (always null for a DummyValue), so override
-		// renderWidget to show the same live state in both places.
-		dhcpBinding.rawhtml = true;
-		dhcpBinding.textvalue = function(id) { return bindingState(id); };
-		dhcpBinding.renderWidget = function(section_id, option_index, cfgvalue) {
-			return E('output', { 'for': this.cbid(section_id) }, bindingState(section_id));
-		};
+				var dhcpBinding = s.option(form.DummyValue, '_dhcp_binding', _('DHCP binding'));
+				// A DummyValue has no editable value: without rmempty the save
+				// parse rejects it as "must not be empty", silently breaking the
+				// "Save" button (Save & Apply still worked via the staged-changes
+				// fallback).  The grid row renders via textvalue; the edit modal
+				// renders the widget with cfgvalue (always null), so renderWidget
+				// is overridden to show the same live state in both places.
+				dhcpBinding.rmempty = true;
+				function bindingState(id) {
+					if ((uci.get('wificalling-gateway', id, 'route_mode') || 'independent') !== 'independent')
+						return _('Following gateway');
+					var ipList = uci.get('wificalling-gateway', id, 'source_ip') || [];
+					if (!Array.isArray(ipList)) ipList = [ipList];
+					return ipList.map(function(ip) { return ip + ': ' + dhcpState(ip); }).join('<br>');
+				}
+				// Grid row renders via textvalue; the edit modal renders the widget
+				// with cfgvalue (always null for a DummyValue), so override
+				// renderWidget to show the same live state in both places.
+				dhcpBinding.rawhtml = true;
+				dhcpBinding.textvalue = function(id) { return bindingState(id); };
+				dhcpBinding.renderWidget = function(section_id, option_index, cfgvalue) {
+					return E('output', { 'for': this.cbid(section_id) }, bindingState(section_id));
+				};
 
 		poll.add(function() {
 			return L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}').then(function(raw) {
@@ -197,6 +204,42 @@ return view.extend({
 				});
 			});
 		}, 5);
-		return m.render().then(function(formNode) { return E([], [importPanel, formNode]); });
+		this.mapInstance = m;
+		return m.render().then(function(formNode) {
+			var nodes = E([], [importPanel, formNode]);
+			// LuCI 24.10's footer "Save" button handler is resolved through
+			// the view prototype during footer creation; on this firmware it
+			// ends up unbound (the button does nothing, while "Save & Apply"
+			// still works via the staged-changes fallback).  Bind the form
+			// save directly once the footer exists.
+			window.setTimeout(function() {
+				var btn = document.querySelector('#view button.cbi-button-save');
+				if (btn && !btn._wfcSaveBound) {
+					btn._wfcSaveBound = true;
+					// The LuCI 24.10 default "Save" handler resolves the Map
+					// through a DOM instance lookup that fails on this
+					// firmware, and Map.save() alone never commits the
+					// session-scoped UCI changeset anyway (only apply does).
+					// Bind save + apply directly so plain "Save" persists
+					// the configuration like "Save & Apply".
+					btn.addEventListener('click', function(ev) {
+						ev.preventDefault();
+						ev.stopPropagation();
+						m.save().then(function() {
+							return ui.changes.apply(true);
+						}).catch(function() {});
+					});
+				}
+			}, 200);
+			return nodes;
+		});
+	},
+	handleSave: function(ev) {
+		// The LuCI 24.10 default resolves the Map through a DOM instance
+		// lookup that silently fails on this firmware, so the "Save"
+		// button did nothing while "Save & Apply" still worked (apply
+		// commits the staged changes as a fallback).  Save through the
+		// form instance directly instead.
+		return this.mapInstance ? this.mapInstance.save() : Promise.resolve();
 	}
 });
