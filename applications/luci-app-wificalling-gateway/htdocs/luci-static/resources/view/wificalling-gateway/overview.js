@@ -171,12 +171,20 @@ return view.extend({
 		var ips = s.option(form.DynamicList, 'source_ip', _('LAN IPv4 addresses'));
 		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = '192.168.31.x';
 		var dhcpBinding = s.option(form.DummyValue, '_dhcp_binding', _('DHCP binding'));
-		dhcpBinding.textvalue = function(id) {
+		function bindingState(id) {
 			if ((uci.get('wificalling-gateway', id, 'route_mode') || 'independent') !== 'independent')
 				return _('Following gateway');
 			var ipList = uci.get('wificalling-gateway', id, 'source_ip') || [];
 			if (!Array.isArray(ipList)) ipList = [ipList];
 			return ipList.map(function(ip) { return ip + ': ' + dhcpState(ip); }).join('<br>');
+		}
+		// Grid row renders via textvalue; the edit modal renders the widget
+		// with cfgvalue (always null for a DummyValue), so override
+		// renderWidget to show the same live state in both places.
+		dhcpBinding.rawhtml = true;
+		dhcpBinding.textvalue = function(id) { return bindingState(id); };
+		dhcpBinding.renderWidget = function(section_id, option_index, cfgvalue) {
+			return E('output', { 'for': this.cbid(section_id) }, bindingState(section_id));
 		};
 
 		poll.add(function() {
