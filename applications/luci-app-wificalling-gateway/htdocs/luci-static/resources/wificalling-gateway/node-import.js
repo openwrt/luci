@@ -57,7 +57,9 @@ function parseUrl(uri, protocol) {
 	} else if (protocol === 'wireguard') {
 		// wg://<peer_public_key>@<server>:<port>?private_key=…&local_address=…&reserved=…&mtu=…
 		out.public_key = decodeURIComponent(url.username || '');
-		out.private_key = p.get('private_key') || '';
+		// URLSearchParams decodes '+' to a space, which corrupts the
+		// base64 private key; base64 never contains spaces, so restore.
+		out.private_key = (p.get('private_key') || '').replace(/ /g, '+');
 		out.local_address = (p.get('local_address') || p.get('ip') || '').split(',')[0] || '';
 		out.reserved = p.get('reserved') || '';
 		out.mtu = p.get('mtu') || '';

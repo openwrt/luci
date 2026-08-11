@@ -11,6 +11,7 @@ RUNDIR=/var/run/$APP
 # wireguard ENDPOINT works from 1.11.0 on.  Emit the endpoint form for
 # 1.11+, and the legacy outbound only for ancient 1.10.x installs.
 wireguard_style() {
+	local ver major minor
 	ver=$(/usr/bin/sing-box version 2>/dev/null | sed -n 's/.*version[[:space:]]*\([0-9][0-9]*\)\.\([0-9][0-9]*\).*/\1.\2/p' | head -n 1)
 	major=${ver%%.*}; minor=${ver#*.}; minor=${minor%%.*}
 	case "$major" in ''|*[!0-9]*) printf 'endpoint'; return;; esac
@@ -44,6 +45,7 @@ append_node() {
 		wireguard) credential=$private_key; auxiliary= ;;
 	esac
 	printf 'node|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s|%s\n' "$s" "$protocol" "$server" "$port" "$credential" "$sni" "$insecure" "$alpn" "$auxiliary" "$congestion" "$udp_mode" "$public_key" "$short_id" "$fingerprint" "$security" "$transport" "$path" "$host" "$pin_sha256" "$private_key" "$local_address" "$reserved" "$mtu" >> "$RUNDIR/normalized.conf"
+	local safe_label
 	safe_label=$(printf '%s' "$label" | tr '|' ' ')
 	printf '%s|%s|%s|%s|%s\n' "$s" "$safe_label" "$protocol" "$server" "$port" >> "$RUNDIR/nodes"
 }
@@ -56,6 +58,7 @@ append_device() {
 	case "$node" in *'|'*) logger -t "$APP" "invalid delimiter in device $s"; return 1;; esac
 	DEVICE_IPS=""; config_list_foreach "$s" source_ip append_ip
 	[ "$route_mode" = independent ] || return 0
+	local safe_label
 	safe_label=$(printf '%s' "$label" | tr '|' ' ')
 	printf 'device|%s|%s|%s\n' "$safe_label" "$node" "$DEVICE_IPS" >> "$RUNDIR/normalized.conf"
 	IFS=,; for ip in $DEVICE_IPS; do printf '%s|%s|node-%s\n' "$safe_label" "$ip" "$node" >> "$RUNDIR/clients"; done; unset IFS

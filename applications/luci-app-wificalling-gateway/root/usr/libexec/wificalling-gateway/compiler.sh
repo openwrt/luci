@@ -29,6 +29,14 @@ $1=="node" {
   if (id=="" || seen_node[id]++) fail("duplicate or empty node id: " id)
   if (proto!="anytls" && proto!="hysteria2" && proto!="tuic" && proto!="vless" && proto!="vmess" && proto!="trojan" && proto!="wireguard") fail("unsupported protocol: " proto)
   if ($4=="" || $5 !~ /^[0-9]+$/ || $5<1 || $5>65535) fail("invalid server or port for node: " id)
+  # WireGuard requires a private key, peer public key and local address;
+  # reserved bytes and MTU must be numeric or the emitted JSON breaks
+  # (and sing-box check would fail for every node at once).
+  if (proto=="wireguard") {
+    if ($21=="" || $13=="" || $22=="") fail("wireguard node " id " is missing private_key, peer_public_key or local_address")
+    if ($23!="" && $23 !~ /^[0-9,]+$/) fail("wireguard node " id " reserved must be comma-separated numbers: " $23)
+    if ($24!="" && $24 !~ /^[0-9]+$/) fail("wireguard node " id " mtu must be a number: " $24)
+  }
   node[++nn]=$0; node_id[nn]=id; node_proto[id]=proto
   if (proto=="wireguard") wg_nodes[++nw]=nn
   next

@@ -13,7 +13,11 @@ set -eu
 # Usage: dhcp-sync.sh <clients>   (clients: label|ip|node per line)
 
 clients=${1:?clients file required}
-[ -f /tmp/dhcp.leases ] || exit 0
+# The dnsmasq lease file location is a UCI option; fall back to the
+# default path when unset.
+leasefile=$(uci -q get dhcp.@dnsmasq[0].leasefile 2>/dev/null || true)
+[ -n "$leasefile" ] || leasefile=/tmp/dhcp.leases
+[ -f "$leasefile" ] || exit 0
 # WFC_DNSMASQ overrides the dnsmasq init script (used by the test suite).
 dnsmasq_init=${WFC_DNSMASQ:-/etc/init.d/dnsmasq}
 
@@ -28,7 +32,10 @@ valid_ip() {
 want=
 while IFS='|' read -r label ip node; do
 	valid_ip "$ip" || continue
-	label=$(printf '%s' "$label" | tr -d "'\"\\")
+	# dhcp-host names must not contain quotes, commas, semicolons or
+	# spaces (dnsmasq would reject the whole host line); keep only a
+	# safe subset for the host name field.
+	label=$(printf '%s' "$label" | tr -d "'\"\\,; ")
 	want="$want $ip"
 	eval "want_label_$(printf '%s' "$ip" | tr '.' '_')=\$label"
 done < "$clients"
@@ -40,7 +47,7 @@ while read -r expiry mac ip hostname rest; do
 	valid_ip "$ip" || continue
 	case "$mac" in ''|*[!0-9A-Fa-f:]*|*..*) continue;; esac
 	ip2mac="$ip2mac $ip=$mac"
-done < /tmp/dhcp.leases
+done < "$leasefile"
 
 # 3) Sync the wfc_ hosts.  A host is created/updated only when the policy IP
 #    is actually in use by some device right now (that MAC is the one to pin);
