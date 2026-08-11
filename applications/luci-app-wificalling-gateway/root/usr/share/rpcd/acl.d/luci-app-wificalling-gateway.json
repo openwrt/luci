@@ -2,7 +2,7 @@
   "luci-app-wificalling-gateway": {
     "description": "Manage Wi-Fi Calling Gateway",
     "read": {
-      "uci": [ "wificalling-gateway" ],
+      "uci": [ "wificalling-gateway", "dhcp" ],
       "ubus": { "file": [ "read" ] },
       "file": {
         "/var/run/wificalling-gateway/status.json": [ "read" ],
@@ -10,7 +10,8 @@
         "/var/run/wificalling-gateway/events.log": [ "read" ],
         "/tmp/run/wificalling-gateway/status.json": [ "read" ],
         "/tmp/run/wificalling-gateway/node-status.json": [ "read" ],
-        "/tmp/run/wificalling-gateway/events.log": [ "read" ]
+        "/tmp/run/wificalling-gateway/events.log": [ "read" ],
+        "/tmp/dhcp.leases": [ "read" ]
       }
     },
     "write": {

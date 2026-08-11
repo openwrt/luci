@@ -12,7 +12,9 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}'),
-			uci.load('wificalling-gateway')
+			uci.load('wificalling-gateway'),
+			L.resolveDefault(fs.read('/tmp/dhcp.leases'), ''),
+			uci.load('dhcp')
 		]);
 	},
 	render: function(data) {
@@ -39,6 +41,26 @@ return view.extend({
 			return _('Unknown');
 		}
 		function latency(n) { return n && n.ping_ms != null ? n.ping_ms + ' ms (' + n.measurement + ')' : '-'; }
+		// Live DHCP lease map (IP -> MAC) and plugin-managed static bindings
+		// (wfc_ host sections) for the device policy status column.
+		var leaseMac = {};
+		(data[2] || '').split('\n').forEach(function(line) {
+			var p = line.split(/\s+/);
+			if (p.length >= 3 && /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(p[1]))
+				leaseMac[p[1]] = p[2];
+		});
+		var wfcHost = {};
+		uci.sections('dhcp', 'host').forEach(function(h) {
+			if ((h['.name'] || '').indexOf('wfc_') === 0 && h.ip)
+				wfcHost[h.ip] = { mac: h.mac || '', name: h.name || '' };
+		});
+		function dhcpState(ip) {
+			var mac = leaseMac[ip], host = wfcHost[ip];
+			if (host && host.mac && mac && host.mac.toLowerCase() === mac.toLowerCase()) return _('Bound');
+			if (host && host.mac && mac) return _('MAC changed, rebind on reconnect');
+			if (mac) return _('Not bound yet');
+			return _('Device offline');
+		}
 
 		var m = new form.Map('wificalling-gateway', _('Wi-Fi Calling Gateway settings'),
 			_('Configure proxy nodes and assign fixed LAN devices. Monitoring and logs are available from the submenu.'));
@@ -147,6 +169,14 @@ return view.extend({
 		uci.sections('wificalling-gateway', 'node').forEach(function(node) { selectedNode.value(node['.name'], node.label || node['.name']); });
 		var ips = s.option(form.DynamicList, 'source_ip', _('LAN IPv4 addresses'));
 		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = '192.168.31.189';
+		var dhcpBinding = s.option(form.DummyValue, '_dhcp_binding', _('DHCP binding'));
+		dhcpBinding.textvalue = function(id) {
+			if ((uci.get('wificalling-gateway', id, 'route_mode') || 'independent') !== 'independent')
+				return _('Following gateway');
+			var ipList = uci.get('wificalling-gateway', id, 'source_ip') || [];
+			if (!Array.isArray(ipList)) ipList = [ipList];
+			return ipList.map(function(ip) { return ip + ': ' + dhcpState(ip); }).join('<br>');
+		};
 
 		poll.add(function() {
 			return L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}').then(function(raw) {

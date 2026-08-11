@@ -71,6 +71,9 @@ start_service() {
 	[ "$max_events_per_device" -ge 1 ] && [ "$max_events_per_device" -le 500 ] || max_events_per_device=20
 	config_get_bool log_enabled main log_enabled 1
 	config_foreach append_node node; config_foreach append_device device
+	# Keep DHCP static leases (MAC -> IP) in sync with the independent
+	# device policies; harmless when no clients are configured.
+	/usr/libexec/$APP/dhcp-sync.sh "$RUNDIR/clients" || logger -t "$APP" "dhcp-sync failed"
 	/usr/libexec/$APP/compiler.sh "$RUNDIR/normalized.conf" "$RUNDIR/sing-box.json" || return 1
 	/usr/bin/sing-box check -c "$RUNDIR/sing-box.json" || { logger -t "$APP" "sing-box rejected generated configuration"; return 1; }
 	/usr/libexec/$APP/firewall.sh start "$RUNDIR/clients" || { logger -t "$APP" "firewall setup failed"; /usr/libexec/$APP/firewall.sh stop "$RUNDIR/clients"; return 1; }
