@@ -34,10 +34,16 @@ return view.extend({
 				default: return v || '-';
 			}
 		}
+		function meaningLabel(v) {
+			switch (v) {
+				case 'likely_call': return _('Call in progress (inferred from sustained encrypted traffic)');
+				default: return _('Encrypted activity; call/SMS unknown');
+			}
+		}
 		function rows(value) {
 			return lines(value).map(function(line) {
 				var f = line.split('|');
-				return E('tr', { class: 'tr' }, [when(Number(f[0])), f[1], f[2], wfcLabel(f[7]), activityLabel(f[3]), (f[4] || '0') + ' ↑ / ' + (f[5] || '0') + ' ↓', _('Encrypted activity; call/SMS unknown')].map(function(x) { return E('td', { class: 'td' }, String(x)); }));
+				return E('tr', { class: 'tr' }, [when(Number(f[0])), f[1], f[2], wfcLabel(f[7]), activityLabel(f[3]), (f[4] || '0') + ' ↑ / ' + (f[5] || '0') + ' ↓', meaningLabel(f[6])].map(function(x) { return E('td', { class: 'td' }, String(x)); }));
 			});
 		}
 		var body = E('tbody', {}, rows(raw));
@@ -51,7 +57,7 @@ return view.extend({
 		poll.add(function() { return L.resolveDefault(fs.read('/var/run/wificalling-gateway/events.log'), '').then(update); }, 5);
 		var children = [
 			E('h2', {}, _('Encrypted IMS activity log')),
-			E('p', {}, _('Records handshake success or failure and sustained encrypted communication such as ringing or calls. Brief traffic bursts are not logged. Phone numbers, message content, and whether an event is a call or SMS are not visible.'))
+			E('p', {}, _('Records handshake success or failure and sustained encrypted communication such as ringing or calls. Brief traffic bursts are not logged. The tunnel content is encrypted: a call is inferred from sustained bidirectional traffic, SMS cannot be distinguished, and phone numbers or message content are never visible.'))
 		];
 		if (logEnabled === '0')
 			children.push(E('div', { class: 'alert-message warning' }, _('Activity log recording is disabled. Enable it in Settings.')));

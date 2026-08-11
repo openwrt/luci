@@ -89,7 +89,10 @@ END {
         print now "|" label[i] "|" ip[i] "|handshake_failed|" ds "|" dr "|call_or_sms_unknown|" wfc > event_out
         old_event[i]=now; acc_sent=0; acc_reply=0
       } else if (sustained) {
-        print now "|" label[i] "|" ip[i] "|sustained_traffic|" acc_sent "|" acc_reply "|call_or_sms_unknown|" wfc > event_out
+        # Sustained bidirectional traffic after registration is the
+        # signature of a voice call (ringing or in-call RTP); the tunnel
+        # content stays encrypted, so this is an inference, not a decode.
+        print now "|" label[i] "|" ip[i] "|sustained_traffic|" acc_sent "|" acc_reply "|likely_call|" wfc > event_out
         old_event[i]=now; acc_sent=0; acc_reply=0
       }
     }
