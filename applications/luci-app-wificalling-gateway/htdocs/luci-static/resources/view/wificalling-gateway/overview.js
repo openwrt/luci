@@ -44,7 +44,7 @@ return view.extend({
 			_('Configure proxy nodes and assign fixed LAN devices. Monitoring and logs are available from the submenu.'));
 		var importPanel = E('div', { class: 'cbi-section' }, [
 			E('h3', {}, _('Import proxy node')),
-			E('p', {}, _('Paste one AnyTLS, Hysteria2/Hy2, TUIC, VLESS, or VMess link. It is parsed locally in this browser and is not sent to an external service.')),
+			E('p', {}, _('Paste one AnyTLS, Hysteria2/Hy2, TUIC, VLESS, VMess, Trojan, or WireGuard (wg://) link. It is parsed locally in this browser and is not sent to an external service.')),
 			E('button', { class: 'btn cbi-button-positive', click: function() {
 				var input = E('textarea', { class: 'cbi-input-textarea', rows: 6, style: 'width:100%', placeholder: 'anytls://…' });
 				ui.showModal(_('Import node link'), [input, E('div', { class: 'right' }, [
@@ -88,7 +88,7 @@ return view.extend({
 		nodeLabel.rmempty = false; nodeLabel.placeholder = _('Example: UK AnyTLS');
 		nodeLabel.description = _('This name is shown in the device node selector.');
 		var p = s.option(form.ListValue, 'protocol', _('Protocol'));
-		['anytls','hysteria2','tuic','vless','vmess'].forEach(function(x) { p.value(x); });
+		['anytls','hysteria2','tuic','vless','vmess','trojan','wireguard'].forEach(function(x) { p.value(x); });
 		s.option(form.Value, 'server', _('Server')).datatype = 'host';
 		s.option(form.Value, 'port', _('Port')).datatype = 'port';
 		var nodeStatus = s.option(form.DummyValue, '_node_status', _('Node status'));
@@ -126,6 +126,11 @@ return view.extend({
 		transport.value('', _('None')); transport.value('ws', _('WebSocket'));
 		s.option(form.Value, 'path', _('WebSocket path'));
 		s.option(form.Value, 'host', _('WebSocket Host'));
+		var wgKey = s.option(form.Value, 'private_key', _('WireGuard private key'));
+		wgKey.password = true; wgKey.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
+		s.option(form.Value, 'local_address', _('WireGuard local address'));
+		s.option(form.Value, 'reserved', _('WireGuard reserved (comma-separated)'));
+		s.option(form.Value, 'mtu', _('WireGuard MTU'));
 
 		s = m.section(form.GridSection, 'device', _('Device policies'));
 		s.addremove = true; s.nodescriptions = true; s.anonymous = true; s.addbtntitle = _('Add LAN device');

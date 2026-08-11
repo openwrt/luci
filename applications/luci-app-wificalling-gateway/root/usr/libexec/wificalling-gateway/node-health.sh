@@ -22,7 +22,7 @@ json_escape() {
 			state=reachable; ping_json=$latency
 		else
 			case "$protocol" in
-				anytls|vless|vmess)
+				anytls|vless|vmess|trojan)
 					if command -v tcping >/dev/null 2>&1; then
 						measurement=tcp
 						tcp_output=$(tcping -c 1 -t 1 -p "$port" "$server" 2>/dev/null || true)

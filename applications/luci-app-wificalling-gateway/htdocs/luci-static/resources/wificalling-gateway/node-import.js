@@ -27,7 +27,7 @@ function common(protocol, url) {
 
 function parseUrl(uri, protocol) {
 	var url = new URL(uri), p = url.searchParams, out = common(protocol, url);
-	if (protocol === 'anytls' || protocol === 'hysteria2') {
+	if (protocol === 'anytls' || protocol === 'hysteria2' || protocol === 'trojan') {
 		out.password = decodeURIComponent(url.username || '');
 		out.sni = p.get('peer') || p.get('sni') || '';
 		out.insecure = truthy(p.get('insecure') || p.get('allowInsecure'));
@@ -54,6 +54,13 @@ function parseUrl(uri, protocol) {
 		if (p.get('type') === 'ws') {
 			out.transport = 'ws'; out.path = p.get('path') || '/'; out.host = p.get('host') || '';
 		}
+	} else if (protocol === 'wireguard') {
+		// wg://<peer_public_key>@<server>:<port>?private_key=…&local_address=…&reserved=…&mtu=…
+		out.public_key = decodeURIComponent(url.username || '');
+		out.private_key = p.get('private_key') || '';
+		out.local_address = (p.get('local_address') || p.get('ip') || '').split(',')[0] || '';
+		out.reserved = p.get('reserved') || '';
+		out.mtu = p.get('mtu') || '';
 	}
 	return out;
 }
@@ -75,7 +82,8 @@ function parse(uri) {
 	var value = (uri || '').trim(), scheme = value.split(':', 1)[0].toLowerCase();
 	if (scheme === 'vmess') return parseVmess(value);
 	if (scheme === 'hy2') scheme = 'hysteria2';
-	if (['anytls', 'hysteria2', 'tuic', 'vless'].indexOf(scheme) < 0)
+	if (scheme === 'wg') scheme = 'wireguard';
+	if (['anytls', 'hysteria2', 'tuic', 'vless', 'trojan', 'wireguard'].indexOf(scheme) < 0)
 		throw new Error(_('Unsupported node link format'));
 	return parseUrl(value, scheme);
 }
