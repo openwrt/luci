@@ -309,7 +309,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 		const x = dom.elem(s) ? s : dom.parse(`<div>${s}</div>`);
 
 		x.querySelectorAll('br').forEach((br) => {
-			x.replaceChild(document.createTextNode('\n'), br);
+			br.parentNode.replaceChild(document.createTextNode('\n'), br);
 		});
 
 		return (x.textContent ?? x.innerText ?? '').replace(/([ \t]*\n)+/g, '\n');
