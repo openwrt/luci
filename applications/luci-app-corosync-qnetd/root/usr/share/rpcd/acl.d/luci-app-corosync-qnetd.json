@@ -1,0 +1,18 @@
+{
+	"luci-app-corosync-qnetd": {
+		"description": "View Corosync QNetd status",
+		"read": {
+			"ubus": {
+				"luci.qnetd": [ "status", "logs", "ca-pem" ],
+				"network.interface": [ "dump" ]
+			},
+			"uci": [ "corosync-qnetd", "firewall", "network" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.qnetd": [ "setup", "service", "rotate", "rollback", "purge-rollback" ]
+			},
+			"uci": [ "corosync-qnetd" ]
+		}
+	}
+}
