@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-02-25 07:43+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-08-13 09:17+0000\n"
+"Last-Translator: Jonatan Nyberg <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenwisp/sv/>\n"
 "Language: sv\n"
@@ -10,11 +10,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:17
 msgid "Advanced Settings"
-msgstr "Avancerade inställningar"
+msgstr "avancerade inställningar"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:82
 msgid "Boot Delay"
@@ -26,21 +26,23 @@ msgstr "CA-cert"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:97
 msgid "CA Path"
-msgstr "CA-genväg"
+msgstr "CA-sökväg"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:12
 msgid ""
 "Configure, start and stop the OpenWISP agent on this device. Read more about "
 "configuration values: %s."
 msgstr ""
+"Konfigurera, starta och stoppa OpenWISP-agenten på den här enheten. Läs mer "
+"om konfigurationsvärden: %s."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:87
 msgid "Connect Timeout"
-msgstr ""
+msgstr "Tidsgräns för anslutning"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:49
 msgid "Consistent Key"
-msgstr ""
+msgstr "Beständig nyckel"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:29
 msgid "Disabled"
@@ -52,7 +54,7 @@ msgstr "Aktivera"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:28
 msgid "Enable or disable the OpenWISP service."
-msgstr ""
+msgstr "Aktivera eller inaktivera OpenWISP-tjänsten."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:30
 msgid "Enabled"
@@ -60,19 +62,19 @@ msgstr "Aktiverad"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:16
 msgid "General Settings"
-msgstr "Generella inställningar"
+msgstr "Allmänna inställningar"
 
 #: applications/luci-app-openwisp/root/usr/share/rpcd/acl.d/luci-app-openwisp.json:3
 msgid "Grant access to luci-app-openwisp"
-msgstr ""
+msgstr "Ge åtkomst till luci-app-openwisp"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:74
 msgid "Hardware ID Key"
-msgstr ""
+msgstr "Nyckel för maskinvaru-ID"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:78
 msgid "Hardware ID Script"
-msgstr ""
+msgstr "Skript för maskinvaru-ID"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:60
 msgid ""
@@ -80,32 +82,36 @@ msgid ""
 "local configuration, the remote configuration takes precedence over local "
 "configuration."
 msgstr ""
+"Om detta väljs och en konfigurationspost finns i både fjärrkonfigurationen "
+"och den lokala konfigurationen har fjärrkonfigurationen företräde."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:66
 msgid ""
 "If the agent is unable to reach the controller after applying the downloaded "
 "config it will be reverted."
 msgstr ""
+"Om agenten inte kan nå styrenheten efter att den hämtade konfigurationen har "
+"tillämpats återställs konfigurationen."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:23
 msgid "Key"
-msgstr "Tangent"
+msgstr "Nyckel"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:53
 msgid "MAC Interface"
-msgstr ""
+msgstr "MAC-gränssnitt"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:56
 msgid "Management Interface"
-msgstr ""
+msgstr "Hanteringsgränssnitt"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:92
 msgid "Max Time"
-msgstr ""
+msgstr "Maximal tid"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:60
 msgid "Merge Config"
-msgstr ""
+msgstr "Slå samman konfiguration"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:11
 #: applications/luci-app-openwisp/root/usr/share/luci/menu.d/luci-app-openwisp.json:3
@@ -118,6 +124,10 @@ msgid ""
 "point to an executable script file. This hook is called each time openwisp-"
 "config applies a configuration, but after services are reloaded."
 msgstr ""
+"Sökväg till hook-skriptet som körs efter omladdning. Hooken anropas inte om "
+"sökvägen inte pekar på en körbar skriptfil. Hooken anropas varje gång "
+"openwisp-config tillämpar en konfiguration, men efter att tjänsterna har "
+"lästs om."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid ""
@@ -125,22 +135,25 @@ msgid ""
 "to an executable script file. This hook is called each time openwisp-config "
 "applies a configuration, but before services are reloaded."
 msgstr ""
+"Sökväg till hooken som körs före omladdning. Hooken anropas inte om sökvägen "
+"inte pekar på en körbar skriptfil. Hooken anropas varje gång openwisp-config "
+"tillämpar en konfiguration, men innan tjänsterna läses om."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:107
 msgid "Post-reload Hook"
-msgstr ""
+msgstr "Hook efter omladdning"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid "Pre-reload Hook"
-msgstr ""
+msgstr "Hook före omladdning"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:33
 msgid "Server URL"
-msgstr ""
+msgstr "Server-URL"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:36
 msgid "Shared Secret"
-msgstr ""
+msgstr "Delad hemlighet"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:64
 msgid "Tags"
@@ -148,39 +161,39 @@ msgstr "Taggar"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:64
 msgid "Tags applied to this device."
-msgstr ""
+msgstr "Taggar som tillämpas på den här enheten."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:66
 msgid "Test Config"
-msgstr ""
+msgstr "Testa konfiguration"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:70
 msgid "Test Script"
-msgstr ""
+msgstr "Testskript"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:23
 msgid "The Key of this device in the OpenWISP server."
-msgstr ""
+msgstr "Den här enhetens nyckel på OpenWISP-servern."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:33
 msgid "The URL to the OpenWISP server. Example: %s"
-msgstr ""
+msgstr "URL:en till OpenWISP-servern. Exempel: %s"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:20
 msgid "The UUID of this device in the OpenWISP server."
-msgstr ""
+msgstr "Den här enhetens UUID på OpenWISP-servern."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:53
 msgid "The interface to use for getting the MAC for this device."
-msgstr ""
+msgstr "Gränssnittet som ska användas för att hämta enhetens MAC-adress."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:56
 msgid "The interface to use for management and control."
-msgstr ""
+msgstr "Gränssnittet som ska användas för hantering och styrning."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:36
 msgid "The organization shared secret for auto enrollment."
-msgstr ""
+msgstr "Organisationens delade hemlighet för automatisk registrering."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:20
 msgid "UUID"
@@ -188,13 +201,15 @@ msgstr "UUID"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:39
 msgid "Update Interval"
-msgstr ""
+msgstr "Uppdateringsintervall"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:74
 msgid ""
 "Use a unique hardware ID for device identification, for example a serial "
 "number."
 msgstr ""
+"Använd ett unikt maskinvaru-ID för att identifiera enheten, till exempel ett "
+"serienummer."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:100
 msgid ""
@@ -202,26 +217,33 @@ msgid ""
 "must be in PEM format, and the directory must have been processed using the "
 "c_rehash utility supplied with openssl."
 msgstr ""
+"Använd den angivna certifikatkatalogen för att verifiera jämliken. "
+"Certifikaten måste vara i PEM-format och katalogen måste ha bearbetats med "
+"verktyget c_rehash som medföljer OpenSSL."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:97
 msgid ""
 "Use the specified certificate file to verify the peer. The file may contain "
 "multiple CA certificates. The certificate(s) must be in PEM format."
 msgstr ""
+"Använd den angivna certifikatfilen för att verifiera jämliken. Filen kan "
+"innehålla flera CA-certifikat. Certifikaten måste vara i PEM-format."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:92
 msgid ""
 "Value passed to curl --max-time argument, defaults to 30. Expressed in "
 "seconds."
 msgstr ""
+"Värde som skickas till argumentet curl --max-time. Standardvärdet är 30. "
+"Anges i sekunder."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:45
 msgid "Verify SSL"
-msgstr ""
+msgstr "Verifiera SSL"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:45
 msgid "Verify the server SSL certificate."
-msgstr ""
+msgstr "Verifiera serverns SSL-certifikat."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:49
 msgid ""
@@ -230,3 +252,7 @@ msgid ""
 "default, but must be enabled also in the controller application in order to "
 "work."
 msgstr ""
+"Vid automatisk registrering gör den här funktionen att enheter kan behålla "
+"samma konfiguration även efter återställning eller ominstallation av "
+"firmware. Funktionen är aktiverad som standard, men måste även aktiveras i "
+"styrenhetsprogrammet för att fungera."

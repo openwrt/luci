@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2026-08-05 02:02+0000\n"
-"Last-Translator: Volenski <volenski@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-08-10 20:14+0000\n"
+"Last-Translator: Janderson Vieira Santos <jandersonvs79@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.8.1.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:212
 msgid "!known (not known)"
@@ -630,12 +630,17 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>Automático</em> usa o ID de cliente configurado abaixo; caso contrário, "
+"o DUID padrão deste dispositivo, ou então um DUID-LL derivado do endereço "
+"MAC desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>Automático</em> usa o ID de cliente configurado abaixo; caso contrário, "
+"o DUID padrão deste dispositivo, ou então o endereço MAC desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -643,21 +648,26 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>DUID padrão</em> sempre usa o DUID padrão deste dispositivo, mesmo se um "
+"ID de cliente estiver configurado abaixo."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>Endereço de hardware</em> sempre usa um DUID-LL derivado do endereço MAC "
+"desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
 msgstr ""
+"<em>Endereço de hardware</em> sempre usa o endereço MAC desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>Nenhum</em> não envia nenhum identificador de cliente."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1309,6 +1319,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Anunciar a cifra em pares (pairwise) GCMP-256. Obrigatória para Wi-Fi 7 "
+"(EHT) e recomendada nos demais casos, mas alguns clientes e chipsets falham "
+"ao se associar quando ela é oferecida. Habilitada por padrão apenas no Modo "
+"de Compatibilidade em um rádio Wi-Fi 7 (EHT); caso contrário, desabilitada."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid ""
@@ -1318,6 +1332,11 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Anunciar o AKM SAE-EXT-KEY (SAE usando um hash dependente de grupo). "
+"Obrigatório para Wi-Fi 7 (EHT) e recomendado nos demais casos, mas alguns "
+"clientes apresentam mau funcionamento quando oferecido, em particular em "
+"conjunto com o 802.11r Fast Transition. Habilitado por padrão apenas no Modo "
+"de Compatibilidade em um rádio Wi-Fi 7 (EHT); caso contrário, desabilitado."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1803,7 +1822,7 @@ msgstr "Autenticação necessária"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1145
 msgid "Auto negotiation"
-msgstr ""
+msgstr "Autonegociação"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:368
 msgid "Autofill listen addresses"
@@ -2872,11 +2891,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1172
 msgid "Controls the receive (RX) flow control"
-msgstr ""
+msgstr "Gerencia o controle de fluxo de recepção (RX)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1179
 msgid "Controls the transmission (TX) flow control"
-msgstr ""
+msgstr "Gerencia o controle de fluxo de transmissão (TX)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5384
 msgid ""
@@ -3595,6 +3614,8 @@ msgstr "Desabilitar esta rede"
 msgid ""
 "Disable to manually control the duplex and link speed of the network device."
 msgstr ""
+"Desative para controlar manualmente o duplex e a velocidade do link do "
+"dispositivo de rede."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1196
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1202
@@ -3972,7 +3993,7 @@ msgstr "Despejar cache ao receber SIGUSR1, incluindo o IP solicitante."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1153
 msgid "Duplex"
-msgstr ""
+msgstr "Duplex"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:736
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -5301,7 +5322,7 @@ msgstr "Nome completo do fuso horário"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1158
 msgid "Full duplex"
-msgstr ""
+msgstr "Full duplex"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:68
 msgctxt "nft nat flag fully-random"
@@ -5328,7 +5349,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2184
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "Cifra em pares GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5680,7 +5701,7 @@ msgstr "Duplex Parcial"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1159
 msgid "Half duplex"
-msgstr ""
+msgstr "Half duplex"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1488
 msgid "Handling of authentication failures"
@@ -5697,7 +5718,7 @@ msgstr "Recarregar"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "Endereço de hardware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -6062,7 +6083,7 @@ msgstr "Rede IPv4 na notação de endereço/máscara de rede"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:201
 msgid "IPv4 only"
-msgstr "Apenas IPv4"
+msgstr "Somente IPv4"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:10
@@ -6204,7 +6225,7 @@ msgstr "Rede IPv6 na notação de endereço/máscara de rede"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:145
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:202
 msgid "IPv6 only"
-msgstr "Apenas IPv6"
+msgstr "Somente IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 msgid "IPv6 preference"
@@ -10115,7 +10136,7 @@ msgstr "Política"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:20
 msgctxt "password policy"
 msgid "Policy"
-msgstr ""
+msgstr "Política"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:350
 msgid "Policy level over usage of external programs and scripts"
@@ -10251,7 +10272,7 @@ msgstr "Preferir UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "ID de cliente preferencial"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -11632,7 +11653,7 @@ msgstr "Rx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -11858,11 +11879,15 @@ msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"Seleciona o <abbr title=\"DHCP Unique Identifier\">DUID</abbr> a ser enviado "
+"ao requisitar DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
 msgstr ""
+"Seleciona o identificador de cliente (opção DHCP 61) a ser enviado ao "
+"requisitar DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 msgid ""
@@ -12175,6 +12200,10 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Sinaliza a Desativação de Transição (Transition Disable - Especificação WPA3 "
+"v3.5 seção 13) para que um cliente que tenha se conectado uma vez não "
+"reverta (downgrade) para um modo de segurança mais fraco para este SSID. O "
+"bitmap anunciado é derivado do modo de criptografia."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12577,7 +12606,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1163
 msgid "Speed"
-msgstr ""
+msgstr "Velocidade"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:222
 msgid "Speed: %d Mbit/s, Duplex: %s"
@@ -14100,7 +14129,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2192
 msgid "Transition Disable"
-msgstr ""
+msgstr "Desativar Transição"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"
@@ -14620,6 +14649,9 @@ msgid ""
 "in the system setting a lower value, but one that is compatible with the "
 "network interface"
 msgstr ""
+"Use uma velocidade compatível com o seu dispositivo; forçar uma velocidade "
+"mais alta fará com que o sistema defina um valor mais baixo, mas que seja "
+"compatível com a interface de rede"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:274
 msgid "Use as external overlay (/overlay)"
@@ -14793,7 +14825,7 @@ msgstr "Nome de usuário"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:79
 msgid "Username and password file (one per line)"
-msgstr ""
+msgstr "Arquivo de usuário e senha (um por linha)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:141
 msgid "Utilise <strong>%h</strong> conntrack helper"
