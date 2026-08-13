@@ -80,7 +80,7 @@ Wi‑Fi Calling 的 ePDG/IPsec 隧道（UDP 4500 内）**全程加密**，路由
 
 | 项目 | 支持范围 |
 |---|---|
-| 固件 | OpenWrt / ImmortalWrt / iStoreOS（22.03+ / 23.05+ 系），nftables + TPROXY；**不支持 18.06/Lede**（源里没有 firewall4，通常也缺 nftables TPROXY 内核模块与 sing-box，详见[排错](docs/zh-CN/TROUBLESHOOTING.md)） |
+| 固件 | OpenWrt / ImmortalWrt / iStoreOS（22.03+ / 23.05+ 系），nftables + TPROXY；**18.06/Lede 有专包**（见下方「18.06 专包」） |
 | 24.10 系（opkg/IPK） | OpenWrt 24.10、ImmortalWrt 24.10、iStoreOS 24.10 共用一个 IPK，全部实测 |
 | 25.12 系（apk/APK） | OpenWrt / ImmortalWrt 25.12 共用一个 noarch APK，四种芯片全部实测 |
 | 25.12 芯片实测 | x86_64 ✅ aarch64 ✅ armv7 ✅ mipsel ✅（官方 25.12.3 rootfs + qemu 用户态模拟） |
@@ -96,26 +96,26 @@ Wi‑Fi Calling 的 ePDG/IPsec 隧道（UDP 4500 内）**全程加密**，路由
 
 ## 快速安装
 
-从 [Releases](../../releases) 下载最新稳定版（当前为 1.7.2），上传到路由器后安装。**24.10 全系用一个 `.ipk`，25.12 全系用一个 `.apk`（noarch，不分芯片）**。
+从 [Releases](../../releases) 下载最新稳定版（当前为 1.7.3），上传到路由器后安装。**24.10 全系用一个 `.ipk`，25.12 全系用一个 `.apk`（noarch，不分芯片）**。
 
 **OpenWrt / ImmortalWrt / iStoreOS 24.10.x（opkg / IPK）** —— 一个包通用，已实机验证：
 
 ```sh
 opkg update
-opkg install ./luci-app-wificalling-gateway_1.7.2-1_all.ipk
+opkg install ./luci-app-wificalling-gateway_1.7.3-1_all.ipk
 /etc/init.d/rpcd restart
 ```
 
 > iStoreOS 提示：部分 opkg 对 `./` 相对路径或上传位置会报误导性的 "No such file or directory"。请确认文件**真实上传成功**后再用绝对路径安装：
 >
 > ```sh
-> opkg install /root/luci-app-wificalling-gateway_1.7.2-1_all.ipk
+> opkg install /root/luci-app-wificalling-gateway_1.7.3-1_all.ipk
 > ```
 >
 > 若 iStoreOS 的定制 opkg 对本地文件报 `incompatible with the architectures configured`（已实测），可改用**解包安装**（24.10.7 完整固件实测通过）：
 >
 > ```sh
-> cd /tmp && tar xzf luci-app-wificalling-gateway_1.7.2-1_all.ipk && tar xzf data.tar.gz -C /
+> cd /tmp && tar xzf luci-app-wificalling-gateway_1.7.3-1_all.ipk && tar xzf data.tar.gz -C /
 > /etc/init.d/wificalling-gateway enable && /etc/init.d/wificalling-gateway start
 > ```
 
@@ -123,11 +123,26 @@ opkg install ./luci-app-wificalling-gateway_1.7.2-1_all.ipk
 
 ```sh
 apk update
-apk add --allow-untrusted ./luci-app-wificalling-gateway_1.7.2-r1_noarch.apk
+apk add --allow-untrusted ./luci-app-wificalling-gateway_1.7.3-r1_noarch.apk
 /etc/init.d/rpcd restart
 ```
 
 然后进入 **服务 → Wi‑Fi Calling Gateway**。先添加并保存节点，再添加设备策略。详细步骤见[安装说明](docs/zh-CN/INSTALL.md)和[配置说明](docs/zh-CN/CONFIGURATION.md)。
+
+### 18.06/Lede 专包
+
+18.06 的软件源没有 `firewall4`，也通常没有 sing-box 与 TPROXY 内核模块，通用包在 18.06 上装不上。Release 里的 **`luci-app-wificalling-gateway_1.7.3-1_18.06_all.ipk`** 专包只依赖 18.06 源自带的 `luci-base`、`nftables`、`ip-full`（官方 18.06.9 rootfs 实测安装成功）：
+
+```sh
+opkg update
+opkg install ./luci-app-wificalling-gateway_1.7.3-1_18.06_all.ipk
+/etc/init.d/wificalling-gateway enable
+```
+
+注意：
+
+- **LuCI 页面**依赖 19.07+ 的 JS 视图架构，18.06 的 Lua dispatcher 无法渲染，专包因此不注册菜单；配置请走命令行 UCI（`uci set wificalling-gateway.main.enabled=1` 等）。
+- **sing-box 与 TPROXY 内核模块**（内核 ≥ 4.11）需要你的源提供；缺失时服务启动会通过 `logread -e wificalling-gateway` 给出明确原因。
 
 ## 重要边界
 
