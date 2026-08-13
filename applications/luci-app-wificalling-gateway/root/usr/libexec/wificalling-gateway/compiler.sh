@@ -34,7 +34,7 @@ $1=="node" {
   # (and sing-box check would fail for every node at once).
   if (proto=="wireguard") {
     if ($21=="" || $13=="" || $22=="") fail("wireguard node " id " is missing private_key, peer_public_key or local_address")
-    if ($23!="" && $23 !~ /^[0-9,]+$/) fail("wireguard node " id " reserved must be comma-separated numbers: " $23)
+    if ($23!="" && $23 !~ /^[0-9]+(,[0-9]+)*$/) fail("wireguard node " id " reserved must be comma-separated numbers: " $23)
     if ($24!="" && $24 !~ /^[0-9]+$/) fail("wireguard node " id " mtu must be a number: " $24)
   }
   node[++nn]=$0; node_id[nn]=id; node_proto[id]=proto

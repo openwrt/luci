@@ -35,8 +35,10 @@ append_node() {
 	# | -delimited normalized.conf record.  label is deliberately excluded:
 	# subscription labels routinely contain '|' (e.g. "HK01|BGP|CMCU") and
 	# labels never reach normalized.conf — the nodes file (health checks)
-	# gets a sanitized copy instead.
-	case "$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu$auxiliary$alter_id" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
+	# gets a sanitized copy instead.  credential/auxiliary (f[6]/f[8]) are
+	# derived from password/uuid/flow/alter_id/private_key, all guarded
+	# here, so they need no separate check.
+	case "$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu$alter_id" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
 	credential=$password; auxiliary=$uuid
 	case "$protocol" in
 		vless) credential=$uuid; auxiliary=$flow ;;
@@ -67,6 +69,13 @@ append_device() {
 start_service() {
 	chmod 600 "/etc/config/$APP" 2>/dev/null || true
 	config_load "$APP"; config_get_bool enabled main enabled 0; [ "$enabled" -eq 1 ] || return 0
+	# Clear preflight: the transparent proxy is nftables-based and the
+	# config is compiled for sing-box.  Fail early with a readable message
+	# instead of the opaque opkg dependency errors older firmwares (e.g.
+	# 18.06, whose feed has no firewall4 and usually no nftables TPROXY
+	# kmods) hit at install time.
+	command -v nft >/dev/null 2>&1 || { logger -t "$APP" "nftables not found: this plugin needs OpenWrt 22.03+ / ImmortalWrt 23.05+ with nftables TPROXY support"; return 1; }
+	[ -x /usr/bin/sing-box ] || { logger -t "$APP" "sing-box not found: install sing-box from your feed before enabling the gateway"; return 1; }
 	# Clear display state only.  monitor.state is the monitor's per-device
 	# baseline (old_wfc/old_sent/old_reply); truncating it would fabricate
 	# handshake_success events on the first tick after every restart.

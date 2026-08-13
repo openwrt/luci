@@ -80,7 +80,7 @@ Wi‑Fi Calling 的 ePDG/IPsec 隧道（UDP 4500 内）**全程加密**，路由
 
 | 项目 | 支持范围 |
 |---|---|
-| 固件 | OpenWrt / ImmortalWrt / iStoreOS，firewall4 + nftables |
+| 固件 | OpenWrt / ImmortalWrt / iStoreOS（22.03+ / 23.05+ 系），nftables + TPROXY；**不支持 18.06/Lede**（源里没有 firewall4，通常也缺 nftables TPROXY 内核模块与 sing-box，详见[排错](docs/zh-CN/TROUBLESHOOTING.md)） |
 | 24.10 系（opkg/IPK） | OpenWrt 24.10、ImmortalWrt 24.10、iStoreOS 24.10 共用一个 IPK，全部实测 |
 | 25.12 系（apk/APK） | OpenWrt / ImmortalWrt 25.12 共用一个 noarch APK，四种芯片全部实测 |
 | 25.12 芯片实测 | x86_64 ✅ aarch64 ✅ armv7 ✅ mipsel ✅（官方 25.12.3 rootfs + qemu 用户态模拟） |
@@ -92,30 +92,30 @@ Wi‑Fi Calling 的 ePDG/IPsec 隧道（UDP 4500 内）**全程加密**，路由
 | 网络 | IPv4 LAN 策略；设备策略自动同步 DHCP 静态租约（增删设备自动绑定/清理 MAC-IP，兼容 iOS 私有 MAC 变化） |
 | 包架构 | IPK `all`（Shell 与 LuCI 资源）；APK `noarch`（25.12 apk 不接受 `all`，官方包按目标架构分发） |
 
-依赖：`luci-base`、`sing-box`、`firewall4`、`kmod-nft-tproxy`、`kmod-nft-socket`、`ip-full`。
+依赖：`luci-base`、`sing-box`、`nftables`、`kmod-nft-tproxy`、`kmod-nft-socket`、`ip-full`。（插件直接配置 nftables，不依赖 firewall4 守护进程；1.7.1 及更早依赖里写死的 `firewall4` 正是 18.06/Lede 上安装失败的根因，1.7.2 起已移除。）
 
 ## 快速安装
 
-从 [Releases](../../releases) 下载最新稳定版（当前为 1.7.1），上传到路由器后安装。**24.10 全系用一个 `.ipk`，25.12 全系用一个 `.apk`（noarch，不分芯片）**。
+从 [Releases](../../releases) 下载最新稳定版（当前为 1.7.2），上传到路由器后安装。**24.10 全系用一个 `.ipk`，25.12 全系用一个 `.apk`（noarch，不分芯片）**。
 
 **OpenWrt / ImmortalWrt / iStoreOS 24.10.x（opkg / IPK）** —— 一个包通用，已实机验证：
 
 ```sh
 opkg update
-opkg install ./luci-app-wificalling-gateway_1.7.1-1_all.ipk
+opkg install ./luci-app-wificalling-gateway_1.7.2-1_all.ipk
 /etc/init.d/rpcd restart
 ```
 
 > iStoreOS 提示：部分 opkg 对 `./` 相对路径或上传位置会报误导性的 "No such file or directory"。请确认文件**真实上传成功**后再用绝对路径安装：
 >
 > ```sh
-> opkg install /root/luci-app-wificalling-gateway_1.7.1-1_all.ipk
+> opkg install /root/luci-app-wificalling-gateway_1.7.2-1_all.ipk
 > ```
 >
 > 若 iStoreOS 的定制 opkg 对本地文件报 `incompatible with the architectures configured`（已实测），可改用**解包安装**（24.10.7 完整固件实测通过）：
 >
 > ```sh
-> cd /tmp && tar xzf luci-app-wificalling-gateway_1.7.1-1_all.ipk && tar xzf data.tar.gz -C /
+> cd /tmp && tar xzf luci-app-wificalling-gateway_1.7.2-1_all.ipk && tar xzf data.tar.gz -C /
 > /etc/init.d/wificalling-gateway enable && /etc/init.d/wificalling-gateway start
 > ```
 
@@ -123,7 +123,7 @@ opkg install ./luci-app-wificalling-gateway_1.7.1-1_all.ipk
 
 ```sh
 apk update
-apk add --allow-untrusted ./luci-app-wificalling-gateway_1.7.1-r1_noarch.apk
+apk add --allow-untrusted ./luci-app-wificalling-gateway_1.7.2-r1_noarch.apk
 /etc/init.d/rpcd restart
 ```
 

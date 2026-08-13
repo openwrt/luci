@@ -32,10 +32,13 @@ valid_ip() {
 want=
 while IFS='|' read -r label ip node; do
 	valid_ip "$ip" || continue
-	# dhcp-host names must not contain quotes, commas, semicolons or
-	# spaces (dnsmasq would reject the whole host line); keep only a
-	# safe subset for the host name field.
-	label=$(printf '%s' "$label" | tr -d "'\"\\,; ")
+	# dhcp-host names are interpolated into the dnsmasq config; anything
+	# outside a hostname's alphabet (spaces, quotes, commas, semicolons,
+	# '.', '#', control characters, a >63-char label) makes dnsmasq reject
+	# the whole host line and abort its config parse, taking LAN-wide
+	# DNS/DHCP down.  Allowlist the safe subset and cap the length; an
+	# empty result is harmless (dnsmasq.init omits an empty name field).
+	label=$(printf '%s' "$label" | tr -cd 'A-Za-z0-9_-' | cut -c1-63)
 	want="$want $ip"
 	eval "want_label_$(printf '%s' "$ip" | tr '.' '_')=\$label"
 done < "$clients"
@@ -89,5 +92,9 @@ done
 
 if [ "$changed" -eq 1 ]; then
 	uci commit dhcp
-	"$dnsmasq_init" restart
+	# A rejected dhcp-host line aborts dnsmasq's config parse (LAN-wide
+	# DNS/DHCP outage); surface a restart failure instead of hiding it.
+	if ! "$dnsmasq_init" restart; then
+		logger -t wificalling-gateway "dhcp-sync: dnsmasq restart failed after lease update; check the dhcp-host configuration"
+	fi
 fi

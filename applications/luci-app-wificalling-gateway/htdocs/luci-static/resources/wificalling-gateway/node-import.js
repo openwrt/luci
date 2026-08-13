@@ -32,7 +32,10 @@ function parseUrl(uri, protocol) {
 		out.sni = p.get('peer') || p.get('sni') || '';
 		out.insecure = truthy(p.get('insecure') || p.get('allowInsecure'));
 		out.alpn = p.get('alpn') || '';
-		out.pin_sha256 = p.get('pinSHA256') || '';
+		// URLSearchParams decodes '+' to a space; the SHA-256 pin is
+		// standard-alphabet base64 (every other link carries a '+'), so
+		// restore it like the WireGuard private_key below.
+		out.pin_sha256 = (p.get('pinSHA256') || '').replace(/ /g, '+');
 		out.fingerprint = p.get('fingerprint') || p.get('fp') || '';
 		out.udp = truthy(p.get('udp'));
 	} else if (protocol === 'tuic') {
@@ -44,12 +47,15 @@ function parseUrl(uri, protocol) {
 		out.congestion = p.get('congestion_control') || p.get('congestion') || 'bbr';
 		out.udp_mode = p.get('udp_relay_mode') || 'native';
 	} else if (protocol === 'vless') {
-		out.uuid = decodeURIComponent(url.username || '');
-		out.flow = p.get('flow') || '';
-		out.security = p.get('security') || '';
-		out.sni = p.get('sni') || '';
-		out.public_key = p.get('pbk') || p.get('publicKey') || '';
-		out.short_id = p.get('sid') || p.get('shortId') || '';
+			out.uuid = decodeURIComponent(url.username || '');
+			out.flow = p.get('flow') || '';
+			out.security = p.get('security') || '';
+			out.sni = p.get('sni') || '';
+			// pbk/sid are base64url in practice, but some generators emit
+			// standard base64, which URLSearchParams would corrupt the same
+			// way (see pinSHA256): restoring '+' is a no-op on base64url.
+			out.public_key = (p.get('pbk') || p.get('publicKey') || '').replace(/ /g, '+');
+			out.short_id = (p.get('sid') || p.get('shortId') || '').replace(/ /g, '+');
 		out.fingerprint = p.get('fp') || p.get('fingerprint') || 'chrome';
 		if (p.get('type') === 'ws') {
 			out.transport = 'ws'; out.path = p.get('path') || '/'; out.host = p.get('host') || '';
