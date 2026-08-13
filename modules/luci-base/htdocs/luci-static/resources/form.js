@@ -306,7 +306,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 		if (typeof(s) == 'string' && !s.match(/[<>&]/))
 			return s;
 
-		const x = dom.elem(s) ? s : dom.parse(`<div>${s}</div>`);
+		const x = dom.elem(s) ? s.cloneNode(true) : dom.parse(`<div>${s}</div>`);
 
 		x.querySelectorAll('br').forEach((br) => {
 			br.parentNode.replaceChild(document.createTextNode('\n'), br);
