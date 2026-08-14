@@ -147,6 +147,7 @@ return view.extend({
 		s = m.section(form.NamedSection, 'settings', 'upnpd', _('Service Settings'));
 		s.addremove = false;
 		s.tab('setup', _('Service Setup'));
+		s.tab('access_control', _('Access Control'));
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('igd', _('UPnP IGD Adjustments'));
 
@@ -161,6 +162,18 @@ return view.extend({
 		o.default = 'all';
 		o.widget = 'radio';
 
+		o = s.taboption('setup', widgets.NetworkSelect, 'internal_iface', _('Enable networks'),
+			_('Select local/internal (LAN) network interfaces to enable the service for'));
+		o.nocreate = true;
+		o.multiple = true;
+		o.rmempty = false;
+		o.filter = function(section_id, value) {
+			return (value == 'wan' || value == 'wan6') ? '' : value;
+		};
+		o.write = function(section_id, formvalue) {
+			uci.set('upnpd', section_id, 'internal_iface', Array.isArray(formvalue) ? formvalue.join(' ') : formvalue);
+		};
+
 		o = s.taboption('setup', form.ListValue, 'upnp_igd_compat', _('UPnP IGD compatibility'),
 			_('Set compatibility mode (act as device) to workaround IGDv2-incompatible clients; %s are known to only work with %s (or) <br />Emulate/report a specific/different device to workaround/support/handle/bypass/assist/mitigate... (Alternative text welcome)').format('Sony PS, Activision CoD…', 'IGDv1'));
 		o.value('igdv1', _('IGDv1 (IPv4 only)'));
@@ -168,6 +181,35 @@ return view.extend({
 		o.depends('enable_protocols', 'upnp-igd');
 		o.depends('enable_protocols', 'all');
 		o.retain = true;
+
+		o = s.taboption('access_control', form.ListValue, 'access_defaults', _('Access defaults'),
+			_('Set access control defaults for ports that all devices can map'));
+		o.value('', _('None / accept extra ports only'));
+		o.value('accept-high-ports', _('Accept ports >= 1024'));
+		o.value('accept-web+high-ports', _('Accept HTTP/HTTPS + ports >= 1024'));
+		o.value('accept-web-ports', _('Accept HTTP/HTTPS ports'));
+		o.value('accept-all-ports', _('Accept all ports'));
+
+		o = s.taboption('access_control', form.Value, 'accept_ports', _('Accept extra ports'));
+		o.datatype = 'list(portrange)';
+
+		o = s.taboption('access_control', form.Value, 'reject_ports', _('Reject ports'),
+			_('Reject unsafe/insecure/risky FTP/Telnet/DCE/NetBIOS/SMB/RDP ports by default; overrides other settings; use %s for none').format('<code>0</code>'));
+		o.datatype = 'list(portrange)';
+		o.placeholder = '21 23 135 137-139 445 3389';
+		o.modalonly = true;
+
+		o = s.taboption('access_control', form.Flag, 'check_acl', _('Check ACL'),
+			_('Extend or override access defaults by device-specific permissions using the access control list (ACL)') + '<br />' +
+			_('Sequence:') + ' 1. ' + _('Reject ports') + ', 2. ' + _('ACL entries (if checked)') + ', 3. ' + _('Access defaults') + ', 4. ' + _('Accept extra ports'));
+		o.default = '1';
+		o.onchange = function(ev, section_id, value) {
+			let acl = document.getElementById('cbi-upnpd-acl_entry');
+			value == 0 ? acl.style.display = 'none' : acl.style.display = 'block';
+		};
+
+		s.taboption('access_control', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'),
+			_('IPv6 is currently always accepted unless disabled'));
 
 		o = s.taboption('advanced', form.RichListValue, 'allow_cgnat', _('Allow %s/%s', 'Allow %s/%s (%s = CGNAT, %s = STUN)')
 			.format('<a href="https://en.wikipedia.org/wiki/Carrier-grade_NAT" target="_blank" rel="noreferrer"><abbr title="Carrier-grade NAT">CGNAT</abbr></a>',
@@ -198,8 +240,6 @@ return view.extend({
 		o.value('1', _('Enabled'));
 		o.value('upnp-igd', _('Enabled') + ' (' + _('UPnP IGD only') + ')');
 		o.value('pcp', _('Enabled') + ' (' + _('PCP only') + ')');
-
-		s.taboption('advanced', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'));
 
 		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'));
 		o.default = '1';
@@ -281,72 +321,16 @@ return view.extend({
 		o.depends('enable_protocols', 'all');
 		o.retain = true;
 
-		s = m.section(form.GridSection, 'internal_network', '<h5>' + _('Enable Networks / Access Control') + '</h5>',
-			_('Select local/internal (LAN) network interfaces to enable the service for.') + ' ' +
-			_('Set access control defaults for ports that all devices on a network can map.') + ' ' +
-			_('IPv6 is currently always accepted unless disabled. (Alternative text welcome)'));
-		s.anonymous = true;
-		s.addremove = true;
-		s.cloneable = true;
-		s.sortable = true;
-		s.nodescriptions = true;
-		s.modaltitle = _('UPnP IGD & PCP/NAT-PMP') + ' - ' + _('Edit Network Access Control Settings');
-
-		o = s.option(widgets.NetworkSelect, 'interface', _('Internal network'),
-			_('Select the local/internal (LAN) network interface to enable the service for'));
-		o.nocreate = true;
-		o.editable = true;
-		o.rmempty = false;
-		o.retain = true;
-		o.filter = function(section_id, value) {
-			return (value == 'wan' || value == 'wan6') ? '' : value;
-		};
-
-		o = s.option(form.ListValue, 'access_defaults', _('Access defaults'),
-			_('Set access control defaults for ports that all devices on the network can map'));
-		o.value('', _('None / accept extra ports only'));
-		o.value('accept-high-ports', _('Accept ports >= 1024'));
-		o.value('accept-web+high-ports', _('Accept HTTP/HTTPS + ports >= 1024'));
-		o.value('accept-web-ports', _('Accept HTTP/HTTPS ports'));
-		o.value('accept-all-ports', _('Accept all ports'));
-		o.editable = true;
-		o.retain = true;
-
-		o = s.option(form.Value, 'accept_ports', _('Accept extra ports'));
-		o.datatype = 'list(portrange)';
-		o.retain = true;
-
-		o = s.option(form.Value, 'reject_ports', _('Reject ports'),
-			_('Reject unsafe/insecure/risky FTP/Telnet/DCE/NetBIOS/SMB/RDP ports on the network by default; overrides other settings; use %s for none').format('<code>0</code>'));
-		o.datatype = 'list(portrange)';
-		o.placeholder = '21 23 135 137-139 445 3389';
-		o.modalonly = true;
-		o.retain = true;
-
-		o = s.option(form.Flag, 'check_acl', _('Check ACL'),
-			_('Extend or override access defaults by device-specific permissions using the access control list (ACL)') + '<br />' +
-			_('Sequence:') + ' 1. ' + _('Reject ports') + ', 2. ' + _('ACL entries (if checked)') + ', 3. ' + _('Access defaults') + ', 4. ' + _('Accept extra ports'));
-		o.default = '1';
-		o.editable = true;
-		o.retain = true;
-
 		s = m.section(form.GridSection, 'acl_entry', '<h5>' + _('Access Control List') + '</h5>',
 			_('The access control list (ACL) specifies which IP addresses and ports can be mapped.') + ' ' +
-			_('ACL entries are checked in order, then rejected if not matched and not accepted by access defaults. (should be part of extra tab)'));
+			_('ACL entries are checked in order, then rejected if not matched and not accepted by access defaults. (To do: should be part of access control tab)'));
 		s.anonymous = true;
 		s.addremove = true;
 		s.cloneable = true;
 		s.sortable = true;
 		s.modaltitle = _('UPnP IGD & PCP/NAT-PMP') + ' - ' + _('Edit ACL Entry');
-		// To do: ACL part of extra tab with dependency on option as immediately, and network section part of service setup tab
-		let acl_used = false;
-		for (let ifnr = 0; uci.get('upnpd', `@internal_network[${ifnr}]`, 'interface'); ifnr++) {
-			if (uci.get('upnpd', `@internal_network[${ifnr}]`, 'check_acl') != '0') {
-				acl_used = true;
-				break;
-			}
-		}
-		s.disable = !acl_used;
+		// To do: ACL part of access control tab and hide (or dependency on option) instead of disable as immediately, and to not break onchange function
+		s.disable = uci.get('upnpd', 'settings', 'check_acl') == '0';
 
 		o = s.option(form.Value, 'comment', _('Comment'));
 		o.default = _('unspecified');
