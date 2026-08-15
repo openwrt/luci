@@ -139,7 +139,7 @@ return view.extend({
 		// cleartext outbound that sing-box check accepts. Reject it up front.
 		securityOpt.validate = function(section_id, value) {
 			if (value == 'reality' && this.section.formvalue(section_id, 'protocol') == 'vmess')
-				return false;
+				return _('Reality security is not available for VMess nodes');
 			return true;
 		};
 		s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
