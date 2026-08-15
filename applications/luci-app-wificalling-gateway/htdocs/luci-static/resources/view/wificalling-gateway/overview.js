@@ -138,7 +138,7 @@ return view.extend({
 		// The compiler has no reality arm for VMess; selecting it would emit a
 		// cleartext outbound that sing-box check accepts. Reject it up front.
 		securityOpt.validate = function(section_id, value) {
-			if (value == 'reality' && this.map.getSectionValue(section_id, 'protocol') == 'vmess')
+			if (value == 'reality' && this.section.formvalue(section_id, 'protocol') == 'vmess')
 				return false;
 			return true;
 		};
