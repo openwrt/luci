@@ -42,7 +42,10 @@ $1=="node" {
   next
 }
 $1=="device" {
-  if (!node_proto[$3]) fail("device references unknown node: " $3)
+  # A stale device-policy node reference must not take down the whole
+  # gateway: skip the device so the rest keeps proxying (the stale
+  # device falls back to direct routing) and warn instead of failing.
+  if (!node_proto[$3]) { print "wificalling-gateway: device references unknown node " $3 "; skipping" > "/dev/stderr"; next }
   n=split($4, ips, ","); if (n<1 || $4=="") fail("device has no client IP: " $2)
   normalized=""
   for(i=1;i<=n;i++) {
@@ -70,8 +73,10 @@ END {
       s="{\"type\":\"wireguard\",\"tag\":" q("wg-" id) ",\"address\":[" q(f[22]) "],\"private_key\":" q(f[21])
       s=s ",\"peers\":[{\"address\":" q(f[4]) ",\"port\":" f[5] ",\"public_key\":" q(f[13]) ",\"allowed_ips\":[\"0.0.0.0/0\"]"
       if (f[23]!="") { nr=split(f[23],rv,","); rv_s=rv[1]; for(ri=2;ri<=nr;ri++) rv_s=rv_s "," rv[ri]; s=s ",\"reserved\":[" rv_s "]" }
+      if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
       s=s "}]"
       if (f[24]!="") s=s ",\"mtu\":" f[24]
+      if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
       s=s "}"; print "    " s (w<nw?",":"")
     }
     print "  ],"
@@ -112,6 +117,7 @@ END {
       s=s ",\"private_key\":" q(f[21]) ",\"peer_public_key\":" q(f[13]) ",\"local_address\":[" q(f[22]) "]"
       if (f[23]!="") { nr=split(f[23],rv,","); rv_s=rv[1]; for(ri=2;ri<=nr;ri++) rv_s=rv_s "," rv[ri]; s=s ",\"reserved\":[" rv_s "]" }
       if (f[24]!="") s=s ",\"mtu\":" f[24]
+      if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
     }
     s=s "}"; print "    " s ","
   }

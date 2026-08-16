@@ -17,9 +17,14 @@ return view.extend({
 			// lease file (e.g. to persist across reboots).
 			var leasefile = uci.get('dhcp', '@dnsmasq[0]', 'leasefile') || '/tmp/dhcp.leases';
 			return Promise.all([
-				L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}'),
+				// The node status file is exported under the uhttpd docroot
+				// and read with a plain GET: the /ubus JSON-RPC channel
+				// truncates larger replies on some firmwares, leaving the
+				// status blank.
+				L.resolveDefault(fetch('/wificalling-node-status.json').then(function(r) { return r.text(); }), '{}'),
 				uci.load('wificalling-gateway'),
-				L.resolveDefault(fs.read(leasefile), '')
+				L.resolveDefault(fs.read(leasefile), ''),
+				L.resolveDefault(fs.read('/proc/net/arp'), '')
 			]);
 		});
 	},
@@ -33,28 +38,52 @@ return view.extend({
 		}
 		function quality(n) {
 			if (!n) return '-';
+			if (n.state === 'handshake_ok') return _('Good');
+			if (n.state === 'handshake_failed') return _('Offline');
 			if (n.state === 'unreachable') return _('Offline');
-			if (n.ping_ms == null) return _('Unknown');
-			if (n.ping_ms <= 100) return _('Excellent');
-			if (n.ping_ms <= 200) return _('Good');
-			if (n.ping_ms <= 300) return _('Fair');
+			// ping_ms may arrive as a JSON number or a quoted string
+			// (WireGuard handshake rows carry the verified exit IP).
+			var ms = parseFloat(n.ping_ms);
+			if (isNaN(ms)) return _('Unknown');
+			if (ms <= 100) return _('Excellent');
+			if (ms <= 200) return _('Good');
+			if (ms <= 300) return _('Fair');
 			return _('Poor');
 		}
 		function nodeState(n) {
 			if (!n) return '-';
-			if (n.state === 'reachable' || n.state === 'tcp_reachable') return _('Alive');
-			if (n.state === 'unreachable') return _('Offline');
+			if (n.state === 'handshake_ok' || n.state === 'reachable' || n.state === 'tcp_reachable') return _('Alive');
+			if (n.state === 'handshake_failed' || n.state === 'unreachable') return _('Offline');
 			return _('Unknown');
 		}
-		function latency(n) { return n && n.ping_ms != null ? n.ping_ms + ' ms (' + n.measurement + ')' : '-'; }
+		function latency(n) {
+			if (!n) return '-';
+			// WireGuard handshake rows carry the verified exit IP instead
+			// of an ICMP latency.
+			if (n.measurement === 'wg_handshake') return n.ping_ms || '-';
+			return n.ping_ms != null ? n.ping_ms + ' ms (' + n.measurement + ')' : '-';
+		}
 		// Live DHCP lease map (IP -> MAC) and plugin-managed static bindings
 		// (wfc_ host sections) for the device policy status column.  dnsmasq
 		// lease lines are: expiry MAC IP hostname clientid.
-		var leaseMac = {};
+		var leaseMac = {}, leaseHost = {};
 		(data[2] || '').split('\n').forEach(function(line) {
 			var p = line.split(/\s+/);
-			if (p.length >= 3 && /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(p[2]))
+			if (p.length >= 4 && /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(p[2])) {
 				leaseMac[p[2]] = p[1];
+				if (p[3] && p[3] !== '*')
+					leaseHost[p[2]] = p[3];
+			}
+		});
+		// Devices seen in the ARP cache but not in the DHCP leases (static
+		// IPs, or a router that does not run DHCP at all) still show up in
+		// the connected-devices picker and count as online.
+		var arpDevices = {};
+		(data[3] || '').split('\n').slice(1).forEach(function(line) {
+			var p = line.trim().split(/\s+/);
+			if (p.length >= 4 && /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(p[0])
+				&& /^[0-9a-fA-F:]+$/.test(p[2]))
+				arpDevices[p[0]] = p[2];
 		});
 		var wfcHost = {};
 		uci.sections('dhcp', 'host').forEach(function(h) {
@@ -66,21 +95,98 @@ return view.extend({
 			if (host && host.mac && mac && host.mac.toLowerCase() === mac.toLowerCase()) return _('Bound');
 			if (host && host.mac && mac) return _('MAC changed, rebind on reconnect');
 			if (mac) return _('Not bound yet');
+			// No DHCP lease (static IP, or a router that does not run DHCP
+			// at all, e.g. a secondary/AP router): the ARP cache is the only
+			// liveness source, so a recently-seen device is online, not
+			// offline.  Only report offline when neither source knows it.
+			if (arpDevices[ip]) return _('Online (static IP)');
 			return _('Device offline');
+		}
+		// The router's LAN subnet hint for the IP placeholder, derived from
+		// the address the admin uses to reach LuCI (e.g. 192.168.31.x).
+		function lanSubnetHint() {
+			var host = location.hostname || '';
+			if (/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/.test(host)) {
+				var parts = host.split('.');
+				return parts.slice(0, 3).join('.') + '.x';
+			}
+			return '192.168.x.x';
+		}
+		// Connected LAN devices (DHCP hostname when known, ARP-only entries
+		// otherwise) for the add-device picker; the router itself and IPs
+		// already bound to a device policy are excluded.
+		var detected = {};
+		Object.keys(leaseHost).forEach(function(ip) {
+			detected[ip] = { name: leaseHost[ip], mac: leaseMac[ip] };
+		});
+		Object.keys(arpDevices).forEach(function(ip) {
+			if (!detected[ip])
+				detected[ip] = { name: '', mac: arpDevices[ip] };
+		});
+		var routerHost = (location.hostname || '').toLowerCase();
+		var boundIps = {};
+		uci.sections('wificalling-gateway', 'device').forEach(function(d) {
+			(d.source_ip || []).forEach(function(ip) { boundIps[ip] = true; });
+		});
+		var detectedDevices = Object.keys(detected)
+			.filter(function(ip) {
+				return ip !== routerHost && !boundIps[ip];
+			})
+			.map(function(ip) { return { ip: ip, name: detected[ip].name }; })
+			.sort(function(a, b) {
+				var na = (a.name || a.ip).toLowerCase(), nb = (b.name || b.ip).toLowerCase();
+				return na < nb ? -1 : (na > nb ? 1 : 0);
+			});
+
+		// Parse a standard WireGuard config block ([Interface]/[Peer]) into
+		// the same node object the link importer produces, so a conf file
+		// can be pasted directly instead of being converted to wg:// first.
+		function parseWireguardConf(text) {
+			var section = null, iface = {}, peer = {};
+			text.split('\n').forEach(function(line) {
+				var t = line.trim();
+				if (t === '[Interface]') { section = 'iface'; return; }
+				if (t === '[Peer]') { section = 'peer'; return; }
+				if (!section || !t || t.indexOf('#') === 0) return;
+				var eq = t.indexOf('=');
+				if (eq < 0) return;
+				var key = t.slice(0, eq).trim(), val = t.slice(eq + 1).trim();
+				if (section === 'iface') iface[key] = val; else peer[key] = val;
+			});
+			if (!iface.PrivateKey || !iface.Address || !peer.PublicKey || !peer.Endpoint)
+				throw new Error(_('WireGuard conf needs PrivateKey, Address, Peer PublicKey and Endpoint'));
+			var endpoint = peer.Endpoint.trim().split(':');
+			if (endpoint.length !== 2 || !/^[0-9]+$/.test(endpoint[1]))
+				throw new Error(_('Invalid WireGuard endpoint: ') + peer.Endpoint);
+			return {
+				enabled: '1', protocol: 'wireguard',
+				label: 'WireGuard ' + endpoint[0],
+				server: endpoint[0], port: endpoint[1],
+				public_key: peer.PublicKey,
+				private_key: iface.PrivateKey,
+				local_address: iface.Address.split(',')[0].trim(),
+				reserved: iface.Reserved || '',
+				mtu: iface.MTU || '',
+				pre_shared_key: peer.PresharedKey || ''
+			};
 		}
 
 		var m = new form.Map('wificalling-gateway', _('Wi-Fi Calling Gateway settings'),
 			_('Configure proxy nodes and assign fixed LAN devices. Monitoring and logs are available from the submenu.'));
 		var importPanel = E('div', { class: 'cbi-section' }, [
 			E('h3', {}, _('Import proxy node')),
-			E('p', {}, _('Paste one AnyTLS, Hysteria2/Hy2, TUIC, VLESS, VMess, Trojan, or WireGuard (wg://) link. It is parsed locally in this browser and is not sent to an external service.')),
+			E('p', {}, _('Paste one AnyTLS, Hysteria2/Hy2, TUIC, VLESS, VMess, Trojan, or WireGuard link (wg:// or an [Interface]/[Peer] config block). It is parsed locally in this browser and is not sent to an external service.')),
 			E('button', { class: 'btn cbi-button-positive', click: function() {
 				var input = E('textarea', { class: 'cbi-input-textarea', rows: 6, style: 'width:100%', placeholder: 'anytls://…' });
 				ui.showModal(_('Import node link'), [input, E('div', { class: 'right' }, [
 					E('button', { class: 'btn', click: ui.hideModal }, _('Cancel')),
 					E('button', { class: 'btn cbi-button-positive', click: function() {
 						var parsed;
-						try { parsed = nodeImport.parse(input.value); }
+						try {
+							parsed = /^\s*\[Interface\]/m.test(input.value)
+								? parseWireguardConf(input.value)
+								: nodeImport.parse(input.value);
+						}
 						catch (err) { ui.addNotification(null, E('p', {}, _('Unable to parse node link:') + ' ' + err.message), 'error'); return; }
 						var sid = uci.add('wificalling-gateway', 'node');
 						Object.keys(parsed).forEach(function(key) { if (parsed[key] !== '') uci.set('wificalling-gateway', sid, key, parsed[key]); });
@@ -160,6 +266,8 @@ return view.extend({
 		s.option(form.Value, 'local_address', _('WireGuard local address'));
 		s.option(form.Value, 'reserved', _('WireGuard reserved (comma-separated)'));
 		s.option(form.Value, 'mtu', _('WireGuard MTU'));
+		var wgPsk = s.option(form.Value, 'pre_shared_key', _('WireGuard preshared key'));
+		wgPsk.password = true; wgPsk.depends('protocol', 'wireguard');
 
 		s = m.section(form.GridSection, 'device', _('Device policies'));
 		s.addremove = true; s.nodescriptions = true; s.anonymous = true; s.addbtntitle = _('Add LAN device');
@@ -175,7 +283,40 @@ return view.extend({
 		selectedNode.description = _('Save the node first, then reload this page to select it for a device.');
 		uci.sections('wificalling-gateway', 'node').forEach(function(node) { selectedNode.value(node['.name'], node.label || node['.name']); });
 		var ips = s.option(form.DynamicList, 'source_ip', _('LAN IPv4 addresses'));
-		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = '192.168.31.x';
+		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = lanSubnetHint();
+		var devicePicker = s.option(form.DummyValue, '_device_picker', _('From connected devices'));
+		devicePicker.rmempty = true;
+		devicePicker.renderWidget = function(section_id) {
+			if (!detectedDevices.length)
+				return E('span', {}, _('No connected devices detected'));
+			var select = E('select', { class: 'cbi-input-select', change: function(ev) {
+				var ip = select.value; if (!ip) return;
+				var dev = detectedDevices.find(function(d) { return d.ip === ip; });
+				var labelInput = document.getElementById('cbid.wificalling-gateway.' + section_id + '.label');
+				if (labelInput) {
+					labelInput.value = (dev && dev.name) ? dev.name : '';
+					labelInput.dispatchEvent(new Event('input', { bubbles: true }));
+				}
+				var dynlist = document.getElementById('cbid.wificalling-gateway.' + section_id + '.source_ip');
+				if (dynlist) {
+					var existing = Array.prototype.map.call(
+						dynlist.querySelectorAll('.item input[type=hidden]'),
+						function(input) { return input.value; });
+					if (existing.indexOf(ip) < 0) {
+						var ipInput = document.getElementById('widget.cbid.wificalling-gateway.' + section_id + '.source_ip');
+						if (ipInput) {
+							ipInput.value = ip;
+							ipInput.dispatchEvent(new Event('input', { bubbles: true }));
+							var addBtn = dynlist.querySelector('.add-item .cbi-button-add');
+							if (addBtn) addBtn.click();
+						}
+					}
+				}
+			} }, detectedDevices.map(function(d) {
+				return E('option', { value: d.ip }, (d.name || d.ip) + ' (' + d.ip + ')');
+			}));
+			return E('span', {}, [select, E('em', { class: 'cbi-value-description' }, _('Pick a device to fill its label and IP.'))]);
+		};
 		var dhcpBinding = s.option(form.DummyValue, '_dhcp_binding', _('DHCP binding'));
 		// A DummyValue has no editable value: without rmempty the save
 		// parse rejects it as "must not be empty", silently breaking the
@@ -198,7 +339,7 @@ return view.extend({
 		};
 
 		poll.add(function() {
-			return L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}').then(function(raw) {
+			return L.resolveDefault(fetch('/wificalling-node-status.json').then(function(r) { return r.text(); }), '{}').then(function(raw) {
 				var current; try { current = JSON.parse(raw); } catch (e) { current = { nodes: [] }; }
 				(current.nodes || []).forEach(function(n) {
 					[['state', nodeState(n)], ['ping', latency(n)], ['quality', quality(n)]].forEach(function(v) {
