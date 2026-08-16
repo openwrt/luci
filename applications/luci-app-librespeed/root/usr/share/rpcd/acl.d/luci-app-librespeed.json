@@ -1,0 +1,42 @@
+{
+	"luci-app-librespeed": {
+		"description": "Grant access to LibreSpeed measurements",
+		"read": {
+			"ubus": {
+				"librespeed": [
+					"status",
+					"result",
+					"history",
+					"config"
+				],
+				"network.interface": [
+					"dump"
+				],
+				"network": [
+					"get_proto_handlers"
+				],
+				"luci-rpc": [
+					"getBoardJSON",
+					"getNetworkDevices",
+					"getWirelessDevices"
+				]
+			},
+			"uci": [
+				"librespeed",
+				"network",
+				"wireless"
+			]
+		},
+		"write": {
+			"ubus": {
+				"librespeed": [
+					"start",
+					"stop"
+				]
+			},
+			"uci": [
+				"librespeed"
+			]
+		}
+	}
+}
