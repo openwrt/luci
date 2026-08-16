@@ -28,7 +28,7 @@ return view.extend({
 			}
 		}
 
-		/* ---------- 服务状态 ---------- */
+		/* ---------- Service status ---------- */
 		var healthRaw = data[1];
 		function parseHealth(value) { try { return JSON.parse(value); } catch (e) { return {}; } }
 		function healthText(h) {
@@ -71,7 +71,7 @@ return view.extend({
 			return L.resolveDefault(fs.read('/var/run/wificalling-gateway/service-health.json'), '{}').then(renderHealth);
 		}, 30);
 
-		/* ---------- 设备隧道状态 ---------- */
+		/* ---------- Device tunnel status ---------- */
 		function rows(source) {
 			return (source.devices || []).map(function(d) {
 				var values = [d.label, d.ip, wfcLabel(d.wificalling || d.state), d.node || '-', d.epdg_ip || '-',

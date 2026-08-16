@@ -11,7 +11,7 @@
 set -eu
 
 output=${1:-/var/run/wificalling-gateway/service-health.json}
-node_status=${2:-/www/wificalling-node-status.json}
+node_status=${2:-/var/run/wificalling-gateway/node-status.json}
 rundir=${WFC_RUNDIR:-/var/run/wificalling-gateway}
 uci_config=${WFC_UCI_CONFIG:-/etc/config/wificalling-gateway}
 tmp="${output}.tmp.$$"
@@ -35,7 +35,10 @@ file_age() {
 
 monitor_pid=$(pgrep -f 'monitor-loop.sh' 2>/dev/null | head -n 1 || true)
 monitor_running=0; [ -n "$monitor_pid" ] && monitor_running=1
-sb_pid=$(pgrep -f '/usr/bin/sing-box run' 2>/dev/null | head -n 1 || true)
+# Match the gateway's own instance only: the temporary handshake-probe
+# sing-box (node-health.sh) would otherwise light this up while the real
+# one is dead, suppressing the alert this section exists for.
+sb_pid=$(pgrep -f "sing-box run -c $rundir/sing-box.json" 2>/dev/null | head -n 1 || true)
 sb_running=0; [ -n "$sb_pid" ] && sb_running=1
 
 sb_config=0; sb_config_valid=0; sb_config_age=-1; sb_config_stale=0

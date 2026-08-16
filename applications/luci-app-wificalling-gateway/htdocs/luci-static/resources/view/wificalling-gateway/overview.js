@@ -25,11 +25,7 @@ return view.extend({
 			// lease file (e.g. to persist across reboots).
 			var leasefile = uci.get('dhcp', '@dnsmasq[0]', 'leasefile') || '/tmp/dhcp.leases';
 			return Promise.all([
-				// The node status file is exported under the uhttpd docroot
-				// and read with a plain GET: the /ubus JSON-RPC channel
-				// truncates larger replies on some firmwares, leaving the
-				// status blank.
-				L.resolveDefault(fetch('/wificalling-node-status.json').then(function(r) { return r.text(); }), '{}'),
+				L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}'),
 				uci.load('wificalling-gateway'),
 				L.resolveDefault(fs.read(leasefile), ''),
 				L.resolveDefault(fs.read('/proc/net/arp'), '')
@@ -196,7 +192,7 @@ return view.extend({
 		var routerHost = (location.hostname || '').toLowerCase();
 		var boundIps = {};
 		uci.sections('wificalling-gateway', 'device').forEach(function(d) {
-			(d.source_ip || []).forEach(function(ip) { boundIps[ip] = true; });
+			L.toArray(d.source_ip).forEach(function(ip) { boundIps[ip] = true; });
 		});
 		var detectedDevices = Object.keys(detected)
 			.filter(function(ip) {
@@ -403,28 +399,21 @@ return view.extend({
 		devicePicker.renderWidget = function(section_id) {
 			if (!detectedDevices.length)
 				return E('span', {}, _('No connected devices detected'));
+			var self = this;
 			var select = E('select', { class: 'cbi-input-select', change: function(ev) {
 				var ip = select.value; if (!ip) return;
 				var dev = detectedDevices.find(function(d) { return d.ip === ip; });
-				var labelInput = document.getElementById('widget.cbid.wificalling-gateway.' + section_id + '.label');
-				if (labelInput) {
-					labelInput.value = (dev && dev.name) ? dev.name : '';
-					labelInput.dispatchEvent(new Event('input', { bubbles: true }));
-				}
-				var dynlist = document.getElementById('cbid.wificalling-gateway.' + section_id + '.source_ip');
-				if (dynlist) {
-					var existing = Array.prototype.map.call(
-						dynlist.querySelectorAll('.item input[type=hidden]'),
-						function(input) { return input.value; });
-					if (existing.indexOf(ip) < 0) {
-						var ipInput = document.getElementById('widget.cbid.wificalling-gateway.' + section_id + '.source_ip');
-						if (ipInput) {
-							ipInput.value = ip;
-							ipInput.dispatchEvent(new Event('input', { bubbles: true }));
-							var addBtn = dynlist.querySelector('.add-item .cbi-button-add');
-							if (addBtn) addBtn.click();
-						}
-					}
+				// Address the modal widgets through the form model
+				// (getUIElement), not DOM ids: inside a GridSection the
+				// row and the modal instantiate the same option twice.
+				var labelEl = self.section.getOption('label').getUIElement(section_id);
+				if (labelEl)
+					labelEl.setValue((dev && dev.name) ? dev.name : '');
+				var ipEl = self.section.getOption('source_ip').getUIElement(section_id);
+				if (ipEl) {
+					var vals = L.toArray(ipEl.getValue());
+					if (vals.indexOf(ip) < 0)
+						ipEl.setValue(vals.concat([ip]));
 				}
 			} }, detectedDevices.map(function(d) {
 				return E('option', { value: d.ip }, (d.name || d.ip) + ' (' + d.ip + ')');
@@ -442,9 +431,8 @@ return view.extend({
 		function bindingState(id) {
 			if ((uci.get('wificalling-gateway', id, 'route_mode') || 'independent') !== 'independent')
 				return _('Following gateway');
-			var ipList = uci.get('wificalling-gateway', id, 'source_ip') || [];
-			if (!Array.isArray(ipList)) ipList = [ipList];
-			return ipList.map(function(ip) { return ip + ': ' + dhcpState(ip); }).join('<br>');
+			return L.toArray(uci.get('wificalling-gateway', id, 'source_ip'))
+				.map(function(ip) { return ip + ': ' + dhcpState(ip); }).join('<br>');
 		}
 		dhcpBinding.rawhtml = true;
 		dhcpBinding.textvalue = function(id) { return bindingState(id); };
@@ -453,7 +441,7 @@ return view.extend({
 		};
 
 		poll.add(function() {
-			return L.resolveDefault(fetch('/wificalling-node-status.json').then(function(r) { return r.text(); }), '{}').then(function(raw) {
+			return L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}').then(function(raw) {
 				var current; try { current = JSON.parse(raw); } catch (e) { current = { nodes: [] }; }
 				(current.nodes || []).forEach(function(n) {
 					[['state', nodeState(n)], ['ping', latency(n)], ['quality', quality(n)]].forEach(function(v) {

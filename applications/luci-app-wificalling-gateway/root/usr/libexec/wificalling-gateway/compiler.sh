@@ -76,7 +76,6 @@ END {
       if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
       s=s "}]"
       if (f[24]!="") s=s ",\"mtu\":" f[24]
-      if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
       s=s "}"; print "    " s (w<nw?",":"")
     }
     print "  ],"

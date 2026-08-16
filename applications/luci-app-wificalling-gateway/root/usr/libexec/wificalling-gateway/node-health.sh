@@ -27,7 +27,7 @@ json_escape() {
 # the loop ticks every 5 s), and two instances racing on the same probe
 # port would hand each other the wrong exit IP.
 wg_handshake_test() {
-	id=$1; server=$2; port=$3
+	local id=$1 server=$2 port=$3 cache cache_ts age lock lock_pid priv pub local_addr psk mtu reserved lport cfg pid ip reason probe_url
 	cache="/tmp/wg-health-$id"
 	if [ -f "$cache" ]; then
 		cache_ts=$(sed -n '1p' "$cache" 2>/dev/null || echo 0)
@@ -71,21 +71,31 @@ wg_handshake_test() {
 	reserved=$(uci -q get "wificalling-gateway.$id.reserved") || true
 	lport=$((19000 + (0x$(printf '%s' "$id" | md5sum | cut -c1-4) % 1000))) 2>/dev/null || lport=19099
 	cfg="/tmp/wg-health-$id.json"
-	{
+	# The probe config carries the WG private key and PSK: create it mode
+	# 0600 and clean it (and the log) up on any exit, including signals.
+	( umask 077; {
 		printf '{"log":{"level":"warn"},"inbounds":[{"type":"http","tag":"probe","listen":"127.0.0.1","listen_port":%s}],' "$lport"
 		printf '"endpoints":[{"type":"wireguard","tag":"wg","address":[%s],"private_key":%s,"peers":[{"address":%s,"port":%s,"public_key":%s,"allowed_ips":["0.0.0.0/0"]' \
 			"\"$local_addr\"" "\"$priv\"" "\"$server\"" "$port" "\"$pub\""
 		[ -n "$psk" ] && printf ',"pre_shared_key":"%s"' "$psk"
 		[ -n "$reserved" ] && printf ',"reserved":[%s]' "$(printf '%s' "$reserved" | tr -d ' ')"
 		printf '}],"mtu":%s}],"outbounds":[{"type":"direct","tag":"direct"}],"route":{"final":"wg"}}' "${mtu:-1420}"
-	} > "$cfg"
+	} > "$cfg"; )
+	trap 'rm -f "$cfg" /tmp/wg-health-$id.log' EXIT HUP INT TERM
 	"$sing_box" run -c "$cfg" > /tmp/wg-health-$id.log 2>&1 &
 	pid=$!
 	sleep 2
-	# busybox wget honours http_proxy; the probe listens on 127.0.0.1.
-	ip=$(http_proxy="http://127.0.0.1:$lport" wget -qO- -T 6 'http://ip-api.com/json/?fields=query' 2>/dev/null | sed -n 's/.*"query":"\([0-9.]*\)".*/\1/p' || true)
+	# Verify the tunnel with an echo service through the probe.  The URL is
+	# UCI-configurable (main.probe_url) and HTTPS by default: plain HTTP
+	# would leak the exit IP and is a false-negative source when the host
+	# is unreachable.  busybox wget honours http_proxy and speaks HTTPS on
+	# 22.03+ builds.
+	probe_url=$(uci -q get wificalling-gateway.main.probe_url) || true
+	[ -n "$probe_url" ] || probe_url='https://ip-api.com/json/?fields=query'
+	ip=$(http_proxy="http://127.0.0.1:$lport" wget -qO- -T 6 "$probe_url" 2>/dev/null | sed -n 's/.*"query":"\([0-9.]*\)".*/\1/p' || true)
 	kill "$pid" 2>/dev/null || true
 	wait "$pid" 2>/dev/null || true
+	trap - EXIT HUP INT TERM
 	if [ -n "$ip" ]; then
 		rm -f "$cfg" /tmp/wg-health-$id.log
 		printf '%s\nok\n%s\n' "$(date +%s)" "$ip" > "$cache"
