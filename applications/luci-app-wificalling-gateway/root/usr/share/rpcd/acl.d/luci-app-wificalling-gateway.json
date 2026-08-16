@@ -18,7 +18,10 @@
     },
     "write": {
       "uci": [ "wificalling-gateway" ],
-      "ubus": { "file": [ "write" ] },
+      "ubus": {
+        "file": [ "write" ],
+        "luci.wificalling-gateway": [ "node_test" ]
+      },
       "file": {
         "/var/run/wificalling-gateway/events.log": [ "write" ],
         "/tmp/run/wificalling-gateway/events.log": [ "write" ]

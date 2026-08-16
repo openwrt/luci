@@ -30,7 +30,8 @@
 
 - 支持 **AnyTLS、Hysteria2、TUIC、VLESS Reality、VMess WebSocket、Trojan 与 WireGuard** 七种节点协议。
 - 支持直接粘贴 AnyTLS、Hysteria2/Hy2、TUIC、VLESS、VMess、Trojan (trojan://)、WireGuard (wg://) 分享链接，以及标准 WireGuard `[Interface]/[Peer]` 配置块；WireGuard 支持预共享密钥（PSK）。
-- **WireGuard 节点真实握手健康检查**：不用 ICMP 猜，临时起 sing-box endpoint 验证隧道握手并显示验证通过的出口 IP（60 秒缓存）。
+- **WireGuard 节点真实握手健康检查**：不用 ICMP 猜，临时起 sing-box endpoint 验证隧道握手并显示验证通过的出口 IP（60 秒缓存）；握手失败区分原因（配置缺失/超时/不可达），节点表格悬停可见。
+- **节点即时测试**：节点表格每行有「nodeTest」按钮——WireGuard 节点立即重做一次握手测试（绕过缓存），其他协议做 TCP 探测，结果横幅显示（含出口 IP 与失败原因）。
 - **DHCP 静态租约自动管理**：添加/删除设备策略时自动绑定/清理 MAC-IP 静态租约，兼容 iOS 私有 Wi-Fi 地址（MAC 随机变化）；设备策略表实时显示绑定状态（已绑定 / 待绑定 / MAC 已变化 / 设备未在线）。
 - **从已连接设备直接添加**：编辑设备策略时可从 DHCP/ARP 检测到的在线设备中选择，自动填写名称与 IP（静态 IP / 纯 AP 路由器场景由 ARP 兜底判断在线）。
 - **服务健康监控**：「Wi-Fi Calling 状态」页顶部显示 sing-box/monitor 进程、配置有效性、**配置过期告警**（改了配置没重启服务）、nftables 规则数、节点健康汇总。

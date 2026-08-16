@@ -6,7 +6,15 @@
 'require uci';
 'require dom';
 'require ui';
+'require rpc';
 'require wificalling-gateway.node-import as nodeImport';
+
+var nodeTestRpc = rpc.declare({
+	object: 'luci.wificalling-gateway',
+	method: 'node_test',
+	params: ['id'],
+	expect: {}
+});
 
 return view.extend({
 	load: function() {
@@ -55,6 +63,68 @@ return view.extend({
 			if (n.state === 'handshake_ok' || n.state === 'reachable' || n.state === 'tcp_reachable') return _('Alive');
 			if (n.state === 'handshake_failed' || n.state === 'unreachable') return _('Offline');
 			return _('Unknown');
+		}
+		// Short reason label and full explanation for failed WG handshakes
+		// (reason comes from node-health.sh's cache: config_missing /
+		// timeout / unreachable).
+		function wgFailReason(reason) {
+			if (reason === 'config_missing') return _('Missing config');
+			if (reason === 'timeout') return _('Timeout');
+			if (reason === 'unreachable') return _('Unreachable');
+			return reason || '';
+		}
+		function wgFailDetail(reason) {
+			if (reason === 'config_missing') return _('Missing key/address');
+			if (reason === 'timeout') return _('Handshake timed out (key/psk mismatch?)');
+			if (reason === 'unreachable') return _('Server unreachable');
+			return '';
+		}
+		// Banner-style notification with an optional tooltip detail.
+		function testNotify(message, kind, detail) {
+			var mc = document.querySelector('#maincontent') || document.body;
+			var msg = E('div', {
+				'class': 'alert-message fade-in ' + (kind || 'info'),
+				style: 'display:flex;align-items:center;padding:8px 12px',
+				title: detail || null
+			}, [
+				E('div', { style: 'flex:1' }, E('p', { style: 'margin:0' }, message)),
+				E('button', {
+					'class': 'btn',
+					click: function() { mc.removeChild(msg); }
+				}, '×')
+			]);
+			mc.insertBefore(msg, mc.firstChild);
+		}
+		// Manual connection test for one node: fresh WG handshake (bypasses
+		// the monitor's 60 s cache) or a TCP reachability probe.
+		function runNodeTest(id, btn) {
+			if (btn.disabled) return;
+			btn.disabled = true;
+			var original = btn.textContent;
+			btn.textContent = _('Testing…');
+			nodeTestRpc(id).then(function(r) {
+				btn.disabled = false;
+				btn.textContent = original;
+				if (r && r.state === 'handshake_ok') {
+					testNotify(_('Handshake OK') + ' — ' + r.exit_ip, 'info');
+				}
+				else if (r && r.state === 'handshake_failed') {
+					testNotify(_('Handshake failed') + ' (' + wgFailReason(r.reason) + ')', 'error', wgFailDetail(r.reason));
+				}
+				else if (r && r.state === 'tcp_reachable') {
+					testNotify(_('Alive') + (r.ping_ms ? ' — ' + r.ping_ms + ' ms' : ''), 'info');
+				}
+				else if (r && r.state === 'unreachable') {
+					testNotify(_('Offline'), 'error');
+				}
+				else {
+					testNotify(_('Unable to test node: ') + wgFailReason(r && r.reason), 'error');
+				}
+			}).catch(function(e) {
+				btn.disabled = false;
+				btn.textContent = original;
+				testNotify(_('Unable to test node: ') + String(e), 'error');
+			});
 		}
 		function latency(n) {
 			if (!n) return '-';
@@ -222,21 +292,33 @@ return view.extend({
 		var nodeLabel = s.option(form.Value, 'label', _('Node display name'));
 		nodeLabel.rmempty = false; nodeLabel.placeholder = _('Example: UK AnyTLS');
 		nodeLabel.description = _('This name is shown in the device node selector.');
+		// The GridSection already renders a Name column from the section
+		// title; showing the label field again would duplicate it.
+		nodeLabel.modalonly = true;
 		var p = s.option(form.ListValue, 'protocol', _('Protocol'));
 		['anytls','hysteria2','tuic','vless','vmess','trojan','wireguard'].forEach(function(x) { p.value(x); });
 		s.option(form.Value, 'server', _('Server')).datatype = 'host';
 		s.option(form.Value, 'port', _('Port')).datatype = 'port';
 		var nodeStatus = s.option(form.DummyValue, '_node_status', _('Node status'));
-		nodeStatus.textvalue = function(id) { return E('span', { id: 'wfc-node-state-' + id }, nodeState(nodeById(id))); };
+		nodeStatus.textvalue = function(id) {
+			var n = nodeById(id);
+			var detail = (n && n.state === 'handshake_failed') ? wgFailDetail(n.reason) : '';
+			return E('span', { id: 'wfc-node-state-' + id, title: detail || null }, nodeState(n));
+		};
 		var nodePing = s.option(form.DummyValue, '_node_ping', _('Ping / latency'));
 		nodePing.textvalue = function(id) { return E('span', { id: 'wfc-node-ping-' + id }, latency(nodeById(id))); };
 		var nodeQuality = s.option(form.DummyValue, '_node_quality', _('Quality'));
 		nodeQuality.textvalue = function(id) { return E('span', { id: 'wfc-node-quality-' + id }, quality(nodeById(id))); };
+		// Every remaining field stays editable in the per-node modal but
+		// is hidden from the table so rows stay compact (Edit shows them).
 		var secret = s.option(form.Value, 'password', _('Password'));
 		secret.password = true; secret.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
+		secret.modalonly = true;
 		var uuidField = s.option(form.Value, 'uuid', _('UUID'));
 		uuidField.password = true; uuidField.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
-		s.option(form.Value, 'sni', _('TLS server name'));
+		uuidField.modalonly = true;
+		var sniOpt = s.option(form.Value, 'sni', _('TLS server name'));
+		sniOpt.modalonly = true;
 		var securityOpt = s.option(form.ListValue, 'security', _('Security'));
 		securityOpt.value('', _('None')); securityOpt.value('tls'); securityOpt.value('reality');
 		securityOpt.depends('protocol', 'vless');
@@ -248,26 +330,57 @@ return view.extend({
 				return _('Reality security is not available for VMess nodes');
 			return true;
 		};
-		s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
-		s.option(form.Value, 'alpn', _('ALPN'));
-		s.option(form.Value, 'pin_sha256', _('TLS public-key SHA-256 (base64)'));
-		s.option(form.Value, 'flow', _('VLESS flow'));
-		s.option(form.Value, 'public_key', _('Reality public key'));
-		s.option(form.Value, 'short_id', _('Reality short ID'));
-		s.option(form.Value, 'fingerprint', _('Reality fingerprint'));
+		securityOpt.modalonly = true;
+		var insecureOpt = s.option(form.Flag, 'insecure', _('Allow insecure certificate'));
+		insecureOpt.modalonly = true;
+		var alpnOpt = s.option(form.Value, 'alpn', _('ALPN'));
+		alpnOpt.modalonly = true;
+		var pinOpt = s.option(form.Value, 'pin_sha256', _('TLS public-key SHA-256 (base64)'));
+		pinOpt.modalonly = true;
+		var flowOpt = s.option(form.Value, 'flow', _('VLESS flow'));
+		flowOpt.modalonly = true;
+		var pubKeyOpt = s.option(form.Value, 'public_key', _('Reality public key'));
+		pubKeyOpt.modalonly = true;
+		var shortIdOpt = s.option(form.Value, 'short_id', _('Reality short ID'));
+		shortIdOpt.modalonly = true;
+		var fpOpt = s.option(form.Value, 'fingerprint', _('Reality fingerprint'));
+		fpOpt.modalonly = true;
 		var udpMode = s.option(form.ListValue, 'udp_mode', _('TUIC UDP mode'));
 		udpMode.value('native', _('Native')); udpMode.value('quic', _('QUIC'));
+		udpMode.modalonly = true;
 		var transport = s.option(form.ListValue, 'transport', _('Transport'));
 		transport.value('', _('None')); transport.value('ws', _('WebSocket'));
-		s.option(form.Value, 'path', _('WebSocket path'));
-		s.option(form.Value, 'host', _('WebSocket Host'));
+		transport.modalonly = true;
+		var pathOpt = s.option(form.Value, 'path', _('WebSocket path'));
+		pathOpt.modalonly = true;
+		var hostOpt = s.option(form.Value, 'host', _('WebSocket Host'));
+		hostOpt.modalonly = true;
 		var wgKey = s.option(form.Value, 'private_key', _('WireGuard private key'));
 		wgKey.password = true; wgKey.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
-		s.option(form.Value, 'local_address', _('WireGuard local address'));
-		s.option(form.Value, 'reserved', _('WireGuard reserved (comma-separated)'));
-		s.option(form.Value, 'mtu', _('WireGuard MTU'));
+		wgKey.modalonly = true;
+		var localAddrOpt = s.option(form.Value, 'local_address', _('WireGuard local address'));
+		localAddrOpt.modalonly = true;
+		var reservedOpt = s.option(form.Value, 'reserved', _('WireGuard reserved (comma-separated)'));
+		reservedOpt.modalonly = true;
+		var mtuOpt = s.option(form.Value, 'mtu', _('WireGuard MTU'));
+		mtuOpt.modalonly = true;
 		var wgPsk = s.option(form.Value, 'pre_shared_key', _('WireGuard preshared key'));
 		wgPsk.password = true; wgPsk.depends('protocol', 'wireguard');
+		wgPsk.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
+		// The per-row connection test goes before the Edit/Delete buttons.
+		var nodeRowActions = s.renderRowActions;
+		s.renderRowActions = function(section_id, more_label, trEl) {
+			var tdEl = nodeRowActions.call(this, section_id, more_label, trEl);
+			if (!tdEl.lastElementChild) return tdEl;
+			var testBtn = E('button', {
+				'class': 'btn cbi-button cbi-button-action',
+				id: 'wfc-node-test-' + section_id,
+				title: _('Run a fresh connection test for this node'),
+				click: function() { runNodeTest(section_id, this); }
+			}, 'nodeTest');
+			tdEl.lastElementChild.insertBefore(testBtn, tdEl.lastElementChild.firstChild);
+			return tdEl;
+		};
 
 		s = m.section(form.GridSection, 'device', _('Device policies'));
 		s.addremove = true; s.nodescriptions = true; s.anonymous = true; s.addbtntitle = _('Add LAN device');
@@ -286,13 +399,14 @@ return view.extend({
 		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = lanSubnetHint();
 		var devicePicker = s.option(form.DummyValue, '_device_picker', _('From connected devices'));
 		devicePicker.rmempty = true;
+		devicePicker.textvalue = function() { return ''; };
 		devicePicker.renderWidget = function(section_id) {
 			if (!detectedDevices.length)
 				return E('span', {}, _('No connected devices detected'));
 			var select = E('select', { class: 'cbi-input-select', change: function(ev) {
 				var ip = select.value; if (!ip) return;
 				var dev = detectedDevices.find(function(d) { return d.ip === ip; });
-				var labelInput = document.getElementById('cbid.wificalling-gateway.' + section_id + '.label');
+				var labelInput = document.getElementById('widget.cbid.wificalling-gateway.' + section_id + '.label');
 				if (labelInput) {
 					labelInput.value = (dev && dev.name) ? dev.name : '';
 					labelInput.dispatchEvent(new Event('input', { bubbles: true }));
