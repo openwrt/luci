@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2026-07-18 16:21+0000\n"
+"PO-Revision-Date: 2026-07-24 15:14+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -593,12 +593,19 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>Automatyczne</em> używa identyfikatora klienta skonfigurowanego poniżej, "
+"w przeciwnym razie domyślnego identyfikatora DUID tego urządzenia, a w "
+"przypadku braku obu tych wartości – identyfikatora DUID-LL wygenerowanego na "
+"podstawie adresu MAC tego interfejsu."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>Automatyczne</em> używa identyfikatora klienta skonfigurowanego poniżej, "
+"w przeciwnym razie domyślnego identyfikatora DUID tego urządzenia, a w "
+"przypadku braku obu tych wartości – adresu MAC tego interfejsu."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -606,21 +613,26 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>Domyślny DUID</em> zawsze używa domyślnego DUID tego urządzenia, nawet "
+"jeśli poniżej skonfigurowano identyfikator klienta."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>Adres sprzętowy</em> zawsze wykorzystuje identyfikator DUID-LL "
+"wygenerowany na podstawie adresu MAC tego interfejsu."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
 msgstr ""
+"<em>Adres sprzętowy</em> zawsze wykorzystuje adres MAC tego interfejsu."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>Brak</em> nie wysyła żadnego identyfikatora klienta."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1239,6 +1251,11 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Anonsuj szyfr parowy GCMP-256. Jest to wymagane w przypadku Wi-Fi 7 (EHT) i "
+"zalecane w pozostałych przypadkach, jednak niektóre urządzenia klienckie i "
+"chipsety nie nawiązują połączenia, gdy opcja ta jest oferowana. Domyślnie "
+"włączona jest tylko w trybie zgodności w module radiowym Wi-Fi 7 (EHT), w "
+"pozostałych przypadkach jest wyłączona."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid ""
@@ -1248,6 +1265,12 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Anonsuj SAE-EXT-KEY AKM (SAE z hashem zależnym od grupy). Wymagane w "
+"przypadku Wi-Fi 7 (EHT) i zalecane w pozostałych przypadkach, jednak "
+"niektóre urządzenia klienckie mogą działać nieprawidłowo, gdy opcja ta jest "
+"udostępniona, zwłaszcza w połączeniu z funkcją 802.11r: Szybkie przejście. "
+"Domyślnie włączone tylko w trybie zgodności w module radiowym Wi-Fi 7 (EHT), "
+"w pozostałych przypadkach wyłączone."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -4838,7 +4861,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2183
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "Szyfr parowy GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5173,7 +5196,7 @@ msgstr "Rozłącz"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "Adres sprzętowy"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -9411,7 +9434,7 @@ msgstr "Preferuj UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "Preferowany identyfikator klienta"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -10594,7 +10617,7 @@ msgstr "Rx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -10786,11 +10809,15 @@ msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"Wybiera <abbr title=\"DHCP Unique Identifier\">DUID</abbr> do wysłania "
+"podczas żądania DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
 msgstr ""
+"Wybiera identyfikator klienta (opcja DHCP 61) do wysłania podczas żądania "
+"DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:873
 msgid ""
@@ -11029,6 +11056,10 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Wyłączenie przejścia sygnału (specyfikacja WPA3 v3.5, sekcja 13), dzięki "
+"czemu klient, który nawiązał połączenie, nie będzie już przechodził na "
+"słabszy tryb zabezpieczeń dla tego identyfikatora SSID. Anonsowana mapa "
+"bitowa jest uzyskiwana z trybu szyfrowania."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12819,7 +12850,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2191
 msgid "Transition Disable"
-msgstr ""
+msgstr "Wyłączenie przejścia"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"

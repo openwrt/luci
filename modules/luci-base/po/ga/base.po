@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-06-27 23:16+0000\n"
+"PO-Revision-Date: 2026-08-16 17:38+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/luci/ga/>\n"
 "Language: ga\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
 "(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.7.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:212
 msgid "!known (not known)"
@@ -596,12 +596,17 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"Úsáideann <em>Uathoibríoch</em> an ID cliant atá cumraithe thíos, nó DUID "
+"réamhshocraithe an ghléis seo, nó DUID-LL díorthaithe ó sheoladh MAC an "
+"chomhéadain seo."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"Úsáideann <em>Uathoibríoch</em> an ID cliant atá cumraithe thíos, nó DUID "
+"réamhshocraithe an ghléis seo, nó seoladh MAC an chomhéadain seo."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -609,21 +614,27 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"Úsáideann <em>DUID réamhshocraithe</em> DUID réamhshocraithe an ghléis seo i "
+"gcónaí, fiú má tá aitheantóir cliaint cumraithe thíos."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"Úsáideann <em>seoladh crua-earraí</em> DUID-LL i gcónaí atá díorthaithe ó "
+"sheoladh MAC an chomhéadain seo."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
 msgstr ""
+"Úsáideann <em>Seoladh crua-earraí</em> seoladh MAC an chomhéadain seo i "
+"gcónaí."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "Seolann <em>None</em> aon aitheantóir cliaint ar chor ar bith."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1026,7 +1037,7 @@ msgstr "Cothromú ualaigh tarchurtha oiriúnaitheach"
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:54
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:964
 msgid "Add"
-msgstr "Cuir"
+msgstr "Cuir leis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1876
 msgid "Add ATM Bridge"
@@ -1242,6 +1253,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Déan fógairt ar an gcód péireála GCMP-256. Éigeantach do Wi-Fi 7 (EHT) agus "
+"moltar ar shlí eile é, ach ní chomhcheanglaíonn roinnt cliant agus sceallóga "
+"nuair a thairgtear é. Cumasaithe de réir réamhshocraithe amháin i Mód "
+"Comhoiriúnachta ar raidió Wi-Fi 7 (EHT), díchumasaithe ar shlí eile."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid ""
@@ -1251,6 +1266,11 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Fógair an SAE-EXT-KEY AKM (SAE ag baint úsáide as hais grúpa-spleách). "
+"Éigeantach do Wi-Fi 7 (EHT) agus moltar ar shlí eile, ach bíonn drochiompar "
+"ag roinnt cliant nuair a thairgtear é, go háirithe i dteannta le Trasdul "
+"Tapa 802.11r. Cumasaithe de réir réamhshocraithe amháin i Mód "
+"Comhoiriúnachta ar raidió Wi-Fi 7 (EHT), díchumasaithe ar shlí eile."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -4843,7 +4863,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2183
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "Cóip péireála GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5177,7 +5197,7 @@ msgstr "Croch Suas"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "Seoladh crua-earraí"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -6016,7 +6036,7 @@ msgstr "Faisnéis"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:231
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:268
 msgid "Ingress"
-msgstr "Iontráil"
+msgstr "Dul Isteach"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:568
 msgid "Ingress QoS mapping"
@@ -9409,7 +9429,7 @@ msgstr "Is fearr UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "ID cliant is fearr leat"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -10584,7 +10604,7 @@ msgstr "Rx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -10674,7 +10694,7 @@ msgstr "Sábháil"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5216
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
-msgstr "Sábháil agus Cuir i bhFeidhm"
+msgstr "Sábháil & Cuir i bhFeidhm"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:629
 msgid "Save error"
@@ -10777,11 +10797,15 @@ msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"Roghnaíonn sé seo an <abbr title=\"DHCP Unique Identifier\">DUID</abbr> le "
+"seoladh nuair a iarrtar DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
 msgstr ""
+"Roghnaíonn sé seo an t-aitheantóir cliant (rogha DHCP 61) le seoladh nuair a "
+"iarrtar DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:873
 msgid ""
@@ -11019,6 +11043,10 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Díchumasaigh Aistriú Comhartha (Sonraíocht WPA3 v3.5 alt 13) ionas nach "
+"ndéanfaidh cliant a nascadh uair amháin ísliú a thuilleadh go modh slándála "
+"níos laige don SSID seo. Díorthaítear an giotánmap fógartha ón modh "
+"criptithe."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12824,7 +12852,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2191
 msgid "Transition Disable"
-msgstr ""
+msgstr "Díchumasaigh an tAistriú"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"

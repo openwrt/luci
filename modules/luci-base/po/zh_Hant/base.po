@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-07-20 06:36+0000\n"
+"PO-Revision-Date: 2026-07-28 20:29+0000\n"
 "Last-Translator: 加尼瑪空格把變數都破壞了！ "
 "<roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -575,34 +575,38 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"「自動」會優先使用下方設定的用戶端 ID；若未設定，則使用此裝置預設的 DUID；否"
+"則將使用由此介面 MAC 位址產生的 DUID-LL。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"「自動」會優先使用下方設定的用戶端 ID；若未設定，則使用此裝置預設的 DUID；否"
+"則將使用此介面的 MAC 位址。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
 msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
-msgstr ""
+msgstr "「預設 DUID」將始終使用此裝置的預設 DUID，即使下方已設定用戶端 ID。"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
-msgstr ""
+msgstr "「硬體位址」將始終使用由此介面 MAC 位址產生的 DUID-LL。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
-msgstr ""
+msgstr "「硬體位址」將始終使用此介面的 MAC 位址。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "「無」不會傳送用戶端 ID。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1199,6 +1203,9 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"公告 GCMP-256 成對加密演算法。此為 Wi-Fi 7 (EHT) 的強制規範，其餘情況下為建議"
+"使用，但部分用戶端與晶片組在公告此加密演算法時會無法連線。僅在 Wi-Fi 7 (EHT) "
+"相容模式下預設啟用，其餘情況下預設停用。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid ""
@@ -1208,6 +1215,10 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"公告 SAE-EXT-KEY AKM（使用群組相關雜湊值的 SAE）。此為 Wi-Fi 7 (EHT) 的強制規"
+"範，其餘情況下為建議使用，但部分用戶端在宣告此機制時會有異常行為，特別是與 "
+"802.11r 快速漫遊一同使用時。僅在 Wi-Fi 7 (EHT) 相容模式下預設啟用，其餘情況下"
+"預設停用。"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -4639,7 +4650,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2183
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "GCMP-256 成對加密演算法"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -4972,7 +4983,7 @@ msgstr "掛斷"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "硬體位址"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -9056,7 +9067,7 @@ msgstr "首選 UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "首選用戶端 ID"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -10186,7 +10197,7 @@ msgstr "Rx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -10374,12 +10385,12 @@ msgstr "選擇檔案…"
 msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
-msgstr ""
+msgstr "選擇請求 DHCPv6 時發送的 <abbr title=\"DHCP 唯一識別碼\">DUID</abbr>。"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
-msgstr ""
+msgstr "選擇請求 DHCP 時發送的用戶端 ID (DHCP 選項 61)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:873
 msgid ""
@@ -10607,6 +10618,8 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"訊號切換停用（WPA3 規範 v3.5 第 13 節），使已連線過一次的用戶端不再為此 SSID "
+"降級至較弱的安全模式，所公告的位元圖由加密模式決定。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12234,7 +12247,7 @@ msgstr "將包含指定位址或子網路的回應轉換為 {nxdomain} 回應。
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2191
 msgid "Transition Disable"
-msgstr ""
+msgstr "停用切換"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"

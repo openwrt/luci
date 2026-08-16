@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2026-07-17 03:01+0000\n"
+"PO-Revision-Date: 2026-08-10 20:14+0000\n"
 "Last-Translator: Janderson Vieira Santos <jandersonvs79@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:212
 msgid "!known (not known)"
@@ -598,12 +598,17 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>Automático</em> usa o ID de cliente configurado abaixo; caso contrário, "
+"o DUID padrão deste dispositivo, ou então um DUID-LL derivado do endereço "
+"MAC desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>Automático</em> usa o ID de cliente configurado abaixo; caso contrário, "
+"o DUID padrão deste dispositivo, ou então o endereço MAC desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -611,21 +616,26 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>DUID padrão</em> sempre usa o DUID padrão deste dispositivo, mesmo se um "
+"ID de cliente estiver configurado abaixo."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>Endereço de hardware</em> sempre usa um DUID-LL derivado do endereço MAC "
+"desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
 msgstr ""
+"<em>Endereço de hardware</em> sempre usa o endereço MAC desta interface."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>Nenhum</em> não envia nenhum identificador de cliente."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1246,6 +1256,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Anunciar a cifra em pares (pairwise) GCMP-256. Obrigatória para Wi-Fi 7 "
+"(EHT) e recomendada nos demais casos, mas alguns clientes e chipsets falham "
+"ao se associar quando ela é oferecida. Habilitada por padrão apenas no Modo "
+"de Compatibilidade em um rádio Wi-Fi 7 (EHT); caso contrário, desabilitada."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid ""
@@ -1255,6 +1269,11 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Anunciar o AKM SAE-EXT-KEY (SAE usando um hash dependente de grupo). "
+"Obrigatório para Wi-Fi 7 (EHT) e recomendado nos demais casos, mas alguns "
+"clientes apresentam mau funcionamento quando oferecido, em particular em "
+"conjunto com o 802.11r Fast Transition. Habilitado por padrão apenas no Modo "
+"de Compatibilidade em um rádio Wi-Fi 7 (EHT); caso contrário, desabilitado."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -3286,7 +3305,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:279
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:501
 msgid "Disable DNS lookups"
-msgstr "Desabilitar pesquisas de DNS"
+msgstr "Desativar resolução de DNS"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -3867,7 +3886,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:495
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:501
 msgid "Enable DNS lookups"
-msgstr "Ativar resoluções DNS"
+msgstr "Ativar resolução de DNS"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:157
 msgid "Enable Debugmode"
@@ -4739,7 +4758,7 @@ msgstr "Forçar link"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:283
 msgid "Force upgrade"
-msgstr "Atualização forçada"
+msgstr "Forçar atualização"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:90
 msgid "Force use of NAT-T"
@@ -4871,7 +4890,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2183
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "Cifra em pares GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5205,7 +5224,7 @@ msgstr "Recarregar"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "Endereço de hardware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -5557,7 +5576,7 @@ msgstr "Rede IPv4 na notação de endereço/máscara de rede"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:209
 msgid "IPv4 only"
-msgstr "Apenas IPv4"
+msgstr "Somente IPv4"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:10
@@ -5699,7 +5718,7 @@ msgstr "Rede IPv6 na notação de endereço/máscara de rede"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:145
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:210
 msgid "IPv6 only"
-msgstr "Apenas IPv6"
+msgstr "Somente IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1296
 msgid "IPv6 preference"
@@ -5920,7 +5939,7 @@ msgstr "Imagem"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:275
 msgid "Image check failed:"
-msgstr "A verificação da imagem falhou:"
+msgstr "Falha na verificação da imagem:"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:448
 msgid "Import as peer"
@@ -9445,7 +9464,7 @@ msgstr "Preferir UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "ID de cliente preferencial"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -10632,7 +10651,7 @@ msgstr "Rx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -10800,9 +10819,9 @@ msgid ""
 "fails. Use only if you are sure that the firmware is correct and meant for "
 "your device!"
 msgstr ""
-"Selecione 'Atualização forçada' para gravar a imagem ainda que a verificação "
-"do formato da imagem falhe. Use somente caso tenha certeza que o firmware "
-"está correto e é compatível com o seu dispositivo!"
+"Selecione 'Forçar atualização' para gravar a imagem mesmo se a verificação "
+"de formato falhar. Use apenas se tiver certeza de que o firmware está "
+"correto e é destinado ao seu dispositivo!"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js:52
 msgid "Select Batman VLAN device…"
@@ -10825,11 +10844,15 @@ msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"Seleciona o <abbr title=\"DHCP Unique Identifier\">DUID</abbr> a ser enviado "
+"ao requisitar DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
 msgstr ""
+"Seleciona o identificador de cliente (opção DHCP 61) a ser enviado ao "
+"requisitar DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:873
 msgid ""
@@ -11069,6 +11092,10 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Sinaliza a Desativação de Transição (Transition Disable - Especificação WPA3 "
+"v3.5 seção 13) para que um cliente que tenha se conectado uma vez não "
+"reverta (downgrade) para um modo de segurança mais fraco para este SSID. O "
+"bitmap anunciado é derivado do modo de criptografia."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -11094,7 +11121,7 @@ msgstr "Pular"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:259
 msgid "Skip from backup files that are equal to those in /rom"
-msgstr "Ignore os arquivos de backup que sejam iguais aos arquivos em /rom"
+msgstr "Ignorar arquivos de backup que sejam iguais aos de /rom"
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:33
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:37
@@ -12483,8 +12510,8 @@ msgid ""
 "The uploaded image file does not contain a supported format. Make sure that "
 "you choose the generic image format for your platform."
 msgstr ""
-"A imagem carregada não contém um formato suportado. Confirme que você "
-"escolheu uma imagem para a sua plataforma."
+"O arquivo de imagem enviado não contém um formato suportado. Certifique-se "
+"de escolher o formato de imagem genérico para a sua plataforma."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1747
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1759
@@ -12867,7 +12894,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2191
 msgid "Transition Disable"
-msgstr ""
+msgstr "Desativar Transição"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"

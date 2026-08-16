@@ -1,22 +1,22 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-08-26 11:25+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-08-13 09:16+0000\n"
+"Last-Translator: Jonatan Nyberg <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/sv/>\n"
 "Language: sv\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:40
 msgid "Allowed IP ranges"
-msgstr "Tillåtna IP-räckvidder"
+msgstr "Tillåtna IP-intervall"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:24
 msgid "Auto-detect upstream IP"
-msgstr "Upptäck automatiskt IP från uppströms"
+msgstr "Identifiera uppströms-IP automatiskt"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid ""
@@ -24,9 +24,9 @@ msgid ""
 "the configuration, adding an exception if so. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
-"Försöker att automatiskt upptäcka om IP uppströms kommer att blockeras av "
-"konfigurationen och lägga till ett undantag om den gör så. Om det inte "
-"fungerar korrekt så kan du lägga till undantag manuellt nedan."
+"Försök automatiskt identifiera om den uppströms IP-adressen blockeras av "
+"konfigurationen och lägg i så fall till ett undantag. Om detta inte fungerar "
+"korrekt kan du lägga till undantag manuellt nedan."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
@@ -39,7 +39,7 @@ msgstr "BCP38-konfiguration"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:37
 msgid "Blocked IP ranges"
-msgstr "Blockerad IP-räckvidd"
+msgstr "Blockerade IP-intervall"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:20
 msgid "Enable"
@@ -50,31 +50,37 @@ msgid ""
 "For IPv6, only source specific default routes are installed, so no BCP38 "
 "firewall routes are needed."
 msgstr ""
+"För IPv6 installeras endast källspecifika standardrutter, så inga BCP38-"
+"brandväggsrutter behövs."
 
 #: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
 msgid "Grant UCI access for luci-app-bcp38"
-msgstr "Godkänn UCI-åtkomst för luci-app-bcp38"
+msgstr "Ge luci-app-bcp38 UCI-åtkomst"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:30
 msgid "Interface name"
-msgstr "Namn på gränssnittet"
+msgstr "Gränssnittsnamn"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid ""
 "Interface to apply the blocking to (should be the upstream WAN interface)."
 msgstr ""
+"Gränssnitt som blockeringen ska tillämpas på (bör vara det uppströms WAN-"
+"gränssnittet)."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
-"Har företräde framför blockerade räckvidder. Använd för att vitlista ditt "
-"nätverk uppströms om du står bakom en dubbel-NAT och om den automatiska "
-"upptäckten inte fungerar."
+"Har företräde framför blockerade intervall. Använd detta för att lägga till "
+"ditt uppströmsnätverk i tillåtelselistan om du befinner dig bakom dubbel NAT "
+"och den automatiska identifieringen inte fungerar."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
 "This function blocks packets with private address destinations from going "
 "out onto the internet as per %s"
 msgstr ""
+"Den här funktionen blockerar paket med privata destinationsadresser från att "
+"skickas ut på internet enligt %s"

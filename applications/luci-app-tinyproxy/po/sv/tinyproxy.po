@@ -1,9 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-07-15 10:11+0000\n"
-"Last-Translator: Stefan Bjornelund the Gnome "
-"<stefan.bjornelund.gnome@gmail.com>\n"
+"PO-Revision-Date: 2026-08-13 09:16+0000\n"
+"Last-Translator: Jonatan Nyberg <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstinyproxy/sv/>\n"
 "Language: sv\n"
@@ -11,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:291
 msgid ""
@@ -19,15 +18,16 @@ msgid ""
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
 msgstr ""
-"<em>Via proxy</em>-rutternas förfrågningar till det givna målet via den "
-"angivna uppströmsproxyn, <em>Neka åtkomst</em> inaktiverar någon "
-"uppströmsproxy för det målet"
+"<em>Via proxy</em> routar begäranden till det angivna målet via den valda "
+"uppströmsproxyn. <em>Neka åtkomst</em> inaktiverar uppströmsproxy för målet."
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:180
 msgid ""
 "Adds an 'X-Tinyproxy' HTTP header with the client IP address to forwarded "
 "requests"
 msgstr ""
+"Lägger till HTTP-huvudet ”X-Tinyproxy” med klientens IP-adress i "
+"vidarebefordrade begäranden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:198
 msgid "Allowed clients"
@@ -35,7 +35,7 @@ msgstr "Tillåtna klienter"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:205
 msgid "Allowed connect ports"
-msgstr "Tillåtna portar för anslutning"
+msgstr "Tillåtna CONNECT-portar"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:119
 msgid "Bind address"
@@ -46,16 +46,16 @@ msgid ""
 "By default, basic POSIX expressions are used for filtering. Enable this to "
 "activate extended regular expressions"
 msgstr ""
-"Huvudsakliga POSIX-uttryck används för filtrering. Aktivera det här för att "
-"aktivera ordinarie förlängda uttryck"
+"Som standard används grundläggande POSIX-uttryck för filtrering. Aktivera "
+"detta för att använda utökade reguljära uttryck."
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:225
 msgid ""
 "By default, filter strings are treated as case-insensitive. Enable this to "
 "make the matching case-sensitive"
 msgstr ""
-"Filtrens strängar behandlas som skriftlägeskänsliga. Aktivera det här för "
-"att göra matchningen skriftlägeskänslig"
+"Som standard är filtersträngar inte skiftlägeskänsliga. Aktivera detta för "
+"att göra matchningen skiftlägeskänslig."
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:217
 msgid ""
@@ -70,14 +70,16 @@ msgid ""
 "By default, the filter rules act as blacklist. Enable this option to allow "
 "matched URLs or domain names only"
 msgstr ""
-"Filterreglerna agerar som en svartlista som standard. Aktivera det här "
-"alternativet för att endast tillåta matchade URL:er eller domännamn"
+"Som standard fungerar filterreglerna som en blockeringslista. Aktivera detta "
+"alternativ för att endast tillåta matchande URL:er eller domännamn."
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:298
 msgid ""
 "Can be either an IP address or range, a domain name or '.' for any host "
 "without domain"
 msgstr ""
+"Kan vara en IP-adress eller ett IP-intervall, ett domännamn eller ”.” för "
+"valfri värd utan domän"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:236
 msgid "Connection timeout"
@@ -93,7 +95,7 @@ msgstr "Aktivera Tinyproxy-server"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:127
 msgid "Error page"
-msgstr "Fel-sida"
+msgstr "Felsida"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:220
 msgid "Filter by RegExp"
@@ -105,11 +107,11 @@ msgstr "Filtrera efter URL:er"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:224
 msgid "Filter case-sensitive"
-msgstr "Filtrera skriftlägeskänslig"
+msgstr "Skiftlägeskänsligt filter"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:212
 msgid "Filter file"
-msgstr "Filtrera fil"
+msgstr "Filterfil"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:96
 msgid "Filtering and ACLs"
@@ -117,11 +119,11 @@ msgstr "Filtrering och ACL:er"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:94
 msgid "General settings"
-msgstr "Generella inställningar"
+msgstr "Allmänna inställningar"
 
 #: applications/luci-app-tinyproxy/root/usr/share/rpcd/acl.d/luci-app-tinyproxy.json:3
 msgid "Grant UCI access for luci-app-tinyproxy"
-msgstr ""
+msgstr "Ge luci-app-tinyproxy åtkomst till UCI"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:169
 msgid "Group"
@@ -129,26 +131,28 @@ msgstr "Grupp"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:135
 msgid "HTML template file to serve for stat host requests"
-msgstr ""
+msgstr "HTML-mallfil som ska användas för begäranden till statistikvärden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:128
 msgid "HTML template file to serve when HTTP errors occur"
-msgstr ""
+msgstr "HTML-mallfil som ska visas när HTTP-fel uppstår"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:190
 msgid "Header whitelist"
-msgstr ""
+msgstr "Tillåtelselista för huvuden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:199
 msgid ""
 "List of IP addresses or ranges which are allowed to use the proxy server"
-msgstr ""
+msgstr "Lista över IP-adresser eller intervall som får använda proxyservern"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:206
 msgid ""
 "List of allowed ports for the CONNECT method. A single value '0' disables "
 "CONNECT completely, an empty list allows all ports"
 msgstr ""
+"Lista över tillåtna portar för CONNECT-metoden. Ett enda värde ”0” "
+"inaktiverar CONNECT helt; en tom lista tillåter alla portar"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:111
 msgid "Listen address"
@@ -164,41 +168,43 @@ msgstr "Loggfil"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:146
 msgid "Log file to use for dumping messages"
-msgstr "Loggfil som ska användas för dumpningsmeddelanden"
+msgstr "Loggfil som ska användas för meddelanden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:152
 msgid "Log level"
-msgstr "Logg-nivå"
+msgstr "Loggnivå"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:153
 msgid "Logging verbosity of the Tinyproxy process"
-msgstr ""
+msgstr "Detaljnivå för Tinyproxy-processens loggning"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:244
 msgid "Max. clients"
-msgstr "Maximalt antalet klienter"
+msgstr "Maximalt antal klienter"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:272
 msgid "Max. requests per server"
-msgstr "Maximalt antalet förfrågningar per server"
+msgstr "Maximalt antal begäranden per server"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:258
 msgid "Max. spare servers"
-msgstr "Maximalt antalet reserv-servrar"
+msgstr "Maximalt antal reservservrar"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:245
 msgid "Maximum allowed number of concurrently connected clients"
-msgstr ""
+msgstr "Högsta tillåtna antal samtidigt anslutna klienter"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:273
 msgid ""
 "Maximum allowed number of requests per process. If it is exeeded, the "
 "process is restarted. Zero means unlimited."
 msgstr ""
+"Högsta tillåtna antal begäranden per process. Om gränsen överskrids startas "
+"processen om. Noll innebär obegränsat."
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:259
 msgid "Maximum number of prepared idle processes"
-msgstr ""
+msgstr "Maximalt antal förberedda inaktiva processer"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:237
 msgid "Maximum number of seconds an inactive connection is held open"
@@ -206,23 +212,24 @@ msgstr "Maximalt antal sekunder som en inaktiv anslutning hålls öppen"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:251
 msgid "Min. spare servers"
-msgstr ""
+msgstr "Minsta antal reservservrar"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:252
 msgid "Minimum number of prepared idle processes"
-msgstr ""
+msgstr "Minsta antal förberedda inaktiva processer"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:266
 msgid "Number of idle processes to start when launching Tinyproxy"
-msgstr ""
+msgstr "Antal inaktiva processer som ska startas när Tinyproxy startas"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:213
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
 msgstr ""
+"Klartextfil med URL:er eller domäner som ska filtreras. En post per rad"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:290
 msgid "Policy"
-msgstr "Villkor"
+msgstr "Policy"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:95
 msgid "Privacy settings"
@@ -234,44 +241,46 @@ msgstr "Neka åtkomst"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:35
 msgid "Reload settings into tinyproxy"
-msgstr ""
+msgstr "Läs om inställningarna i Tinyproxy"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:26
 msgid "Restart tinyproxy"
-msgstr ""
+msgstr "Starta om Tinyproxy"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:90
 msgid "Server Settings"
-msgstr "Server-inställningar"
+msgstr "Serverinställningar"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:97
 msgid "Server limits"
-msgstr "Gräns för server"
+msgstr "Servergränser"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:191
 msgid ""
 "Specifies HTTP header names which are allowed to pass-through, all others "
 "are discarded. Leave empty to disable header filtering"
 msgstr ""
+"Anger namn på HTTP-huvuden som får passera; alla andra tas bort. Lämna tomt "
+"för att inaktivera filtrering av huvuden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:104
 msgid "Specifies the HTTP port Tinyproxy is listening on for requests"
-msgstr "Anger HTTP-porten som Tinyproxy lyssnar med efter förfrågningar"
+msgstr "Anger HTTP-porten som Tinyproxy lyssnar på efter begäranden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:184
 msgid "Specifies the Tinyproxy hostname to use in the Via HTTP header"
-msgstr ""
+msgstr "Anger Tinyproxy-värdnamnet som ska användas i HTTP-huvudet Via"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:120
 msgid ""
 "Specifies the address Tinyproxy binds to for outbound forwarded requests"
 msgstr ""
 "Anger adressen som Tinyproxy binder till för utgående vidarebefordrade "
-"förfrågningar"
+"begäranden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:112
 msgid "Specifies the addresses Tinyproxy is listening on for requests"
-msgstr "Anger adresserna som Tinyproxy lyssnar på efter förfrågningar"
+msgstr "Anger adresserna som Tinyproxy lyssnar på efter begäranden"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:170
 msgid "Specifies the group name the Tinyproxy process is running as"
@@ -282,8 +291,8 @@ msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
 "<code>address:port</code> or <code>socks5 address:port</code>"
 msgstr ""
-"Anger uppströms-proxyn att använda för åtkomst till målvärden. Format är "
-"<code>adress:port </code> eller <code>socks5 adress:port </code>"
+"Anger uppströmsproxyn som ska användas för åtkomst till målvärden. Formatet "
+"är <code>address:port</code> eller <code>socks5 address:port</code>"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:164
 msgid "Specifies the user name the Tinyproxy process is running as"
@@ -291,7 +300,7 @@ msgstr "Anger användarnamnet som Tinyproxy-processen körs som"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:265
 msgid "Start spare servers"
-msgstr "Starta reserv-servrar"
+msgstr "Starta reservservrar"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:134
 msgid "Statistics page"
@@ -316,21 +325,23 @@ msgstr "Tinyproxy är en liten och snabb icke-cachande HTTP(S)-proxy"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:58
 msgid "Tinyproxy is disabled"
-msgstr ""
+msgstr "Tinyproxy är inaktiverat"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:283
 msgid "Upstream Proxies"
-msgstr "Proxy-servrar uppströms"
+msgstr "Uppströmsproxyer"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:284
 msgid ""
 "Upstream proxy rules define proxy servers to use when accessing certain IP "
 "addresses or domains."
 msgstr ""
+"Regler för uppströmsproxy anger vilka proxyservrar som ska användas vid "
+"åtkomst till vissa IP-adresser eller domäner."
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:141
 msgid "Use syslog"
-msgstr "Använd systemlogg"
+msgstr "Använd syslog"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:163
 msgid "User"
@@ -343,16 +354,16 @@ msgstr "Via värdnamn"
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:293
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:305
 msgid "Via proxy"
-msgstr "Via proxy-server"
+msgstr "Via proxy"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:56
 msgid "Waiting for data from url:"
-msgstr ""
+msgstr "Väntar på data från URL:"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:142
 msgid "Writes log messages to syslog instead of a log file"
-msgstr "Skriver loggmeddelanden till systemloggen istället för en logg-fil"
+msgstr "Skriver loggmeddelanden till syslog i stället för till en loggfil"
 
 #: applications/luci-app-tinyproxy/htdocs/luci-static/resources/view/tinyproxy/tinyproxy.js:179
 msgid "X-Tinyproxy header"
-msgstr "Header för X-Tinyproxy"
+msgstr "X-Tinyproxy-huvud"

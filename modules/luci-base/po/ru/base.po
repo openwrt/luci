@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2026-07-18 16:21+0000\n"
+"PO-Revision-Date: 2026-08-16 17:38+0000\n"
 "Last-Translator: SnIPeRSnIPeR "
 "<snipersniper@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -610,12 +610,17 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>Автоматически</em> использовать идентификатор клиента, заданный ниже, "
+"стандартный DUID этого устройства или DUID-LL, полученный из MAC-адреса "
+"этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>Автоматически</em> использовать идентификатор клиента, заданный ниже, "
+"стандартный DUID этого устройства или MAC-адрес этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -623,21 +628,26 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>Стандартный DUID</em> всегда использует стандартный DUID этого "
+"устройства, даже если ниже задан идентификатор клиента."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>Аппаратный адрес</em> всегда использует DUID-LL, полученный из MAC-"
+"адреса этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
 msgstr ""
+"<em>Аппаратный адрес</em> всегда использует MAC-адрес этого интерфейса."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>Нет</em>, не отправлять идентификатор клиента."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -972,7 +982,7 @@ msgstr "Действия"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:15
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:134
 msgid "Active"
-msgstr "Активный"
+msgstr "Активно"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:94
 msgid "Active Connections"
@@ -1268,6 +1278,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Предлагать парный шифр GCMP-256. Обязателен для Wi-Fi 7 (EHT) и "
+"рекомендуется в остальных случаях, но некоторые клиенты и чипсеты не могут "
+"подключиться при его предложении. Включён по умолчанию только в режиме "
+"совместимости Wi-Fi 7 (EHT), в остальных случаях отключён."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid ""
@@ -1277,6 +1291,11 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Предлагать AKM SAE-EXT-KEY (SAE с хешем, зависящим от группы). Обязателен "
+"для Wi-Fi 7 (EHT) и рекомендуется в остальных случаях, но некоторые клиенты "
+"работают некорректно при его предложении, особенно совместно с быстрым "
+"переходом 802.11r. Включён по умолчанию только в режиме совместимости Wi-Fi "
+"7 (EHT), в остальных случаях отключён."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1421,7 +1440,7 @@ msgstr "Разрешить приём на неактивных портах"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
-"Разрешить удаленным хостам подключаться к локальным перенаправляемым портам "
+"Разрешить удалённым хостам подключаться к локальным перенаправляемым портам "
 "<abbr title=\"Secure Shell\">SSH</abbr>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
@@ -1482,8 +1501,8 @@ msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
 "option does not comply with IEEE 802.11n-2009!"
 msgstr ""
-"Использовать каналы 40 МГц, даже если вторичный канал перекрывается, вопреки "
-"стандарту IEEE 802.11n-2009!"
+"Использовать каналы 40 МГц, даже если дополнительный канал перекрывается. "
+"Использование этой опции не соответствует стандарту IEEE 802.11n-2009!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1224
 msgid "Amount of Duplicate Address Detection probes to send"
@@ -1957,7 +1976,8 @@ msgstr "Открытый интерфейс"
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
 msgstr ""
-"Привязка только к настроенным адресам интерфейсов, вместо wildcard-адреса."
+"Привязываться только к настроенным адресам интерфейсов вместо wildcard-"
+"адреса."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:376
 msgid ""
@@ -2895,11 +2915,11 @@ msgstr "DNS-cерверы"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:299
 msgid "DNS query port"
-msgstr "<abbr title=\"Система доменных имён\">DNS</abbr>-порт запроса"
+msgstr "Порт <abbr title=\"Domain Name System\">DNS</abbr>-запросов"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:292
 msgid "DNS server port"
-msgstr "<abbr title=\"Domain Name System\">DNS</abbr>-порт сервера"
+msgstr "Порт <abbr title=\"Domain Name System\">DNS</abbr>-сервера"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:772
 msgid ""
@@ -3265,7 +3285,7 @@ msgstr "Устройства"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:197
 msgid "Devices &amp; Ports"
-msgstr "Устройства &amp; Порты"
+msgstr "Устройства &amp; порты"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:154
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:93
@@ -3445,7 +3465,7 @@ msgstr "Дисковое пространство"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:54
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:75
 msgid "Dismiss"
-msgstr "Отклонить"
+msgstr "Закрыть"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1039
 msgid "Distance Optimization"
@@ -3495,7 +3515,7 @@ msgstr "Не создавать маршрут к хосту (опциональ
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:442
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:286
 msgid "Do not listen on the specified interfaces."
-msgstr "Запретить прослушивание этих интерфейсов."
+msgstr "Не прослушивать на указанных интерфейсах."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1088
 msgid "Do not offer DHCPv6 service on this interface."
@@ -3778,7 +3798,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:513
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:981
 msgid "Edit"
-msgstr "Редактировать"
+msgstr "Изменить"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:832
 msgid "Edit IP set"
@@ -3824,7 +3844,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:979
 msgid "Edit this network"
-msgstr "Изменить эту сеть"
+msgstr "Редактировать"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:929
 msgid "Edit wireless network"
@@ -4306,7 +4326,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:441
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:285
 msgid "Exclude interfaces"
-msgstr "Исключить интерфейсы"
+msgstr "Исключаемые интерфейсы"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:155
 msgid ""
@@ -4720,8 +4740,8 @@ msgstr "Побеждает первый ответ."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:300
 msgid "Fixed source port for outbound DNS queries."
 msgstr ""
-"Фиксированный порт для исходящих <abbr title=\"Domain Name System\">DNS</"
-"abbr>-запросов."
+"Фиксированный порт источника для исходящих <abbr title=\"Domain Name "
+"System\">DNS</abbr>-запросов."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:314
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
@@ -4974,7 +4994,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2183
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "Парный шифр GCMP-256"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5139,19 +5159,19 @@ msgstr "Перейти в цепочку <strong><a href=\"#%q.%q\">%h</a></stro
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:51
 msgid "Grant access to DHCP configuration"
-msgstr "Предоставление доступа к конфигурации DHCP"
+msgstr "Предоставить доступ к конфигурации DHCP"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:33
 msgid "Grant access to DHCP status display"
-msgstr "Предоставление доступа к просмотру состояния DHCP"
+msgstr "Предоставить доступ к просмотру состояния DHCP"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:38
 msgid "Grant access to DNS configuration"
-msgstr "Предоставление доступа к настройке DNS"
+msgstr "Предоставить доступ к настройке DNS"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:43
 msgid "Grant access to DSL status display"
-msgstr "Предоставление доступа к просмотру состояния DSL"
+msgstr "Предоставить доступ к просмотру состояния DSL"
 
 #: protocols/luci-proto-openconnect/root/usr/share/rpcd/acl.d/luci-openconnect.json:3
 msgid "Grant access to LuCI OpenConnect procedures"
@@ -5171,17 +5191,16 @@ msgstr "Предоставить доступ к функциям LuCI для op
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:21
 msgid "Grant access to SSH configuration"
-msgstr "Предоставление доступа к конфигурации SSH"
+msgstr "Предоставить доступ к конфигурации SSH"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:44
 msgid "Grant access to Software Repository Public Key management"
 msgstr ""
-"Предоставление доступа к управлению публичными ключами программных "
-"репозиториев"
+"Предоставить доступ к управлению публичными ключами программных репозиториев"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:23
 msgid "Grant access to Storage and Mount status display"
-msgstr "Предоставление доступа к дисплею состояния хранилища и монтирования"
+msgstr "Предоставить доступ к отображению состояния хранилища и монтирования"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:12
 msgid "Grant access to basic LuCI procedures"
@@ -5189,80 +5208,80 @@ msgstr "Предоставить доступ к базовым функциям
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:93
 msgid "Grant access to crontab configuration"
-msgstr "Предоставление доступа к конфигурации crontab"
+msgstr "Предоставить доступ к конфигурации crontab"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:88
 msgid "Grant access to firewall status"
-msgstr "Предоставление доступа к состоянию межсетевого экрана"
+msgstr "Предоставить доступ к состоянию межсетевого экрана"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:146
 msgid "Grant access to flash operations"
-msgstr "Предоставление доступа к операциям с флеш-памятью"
+msgstr "Предоставить доступ к операциям с флеш-памятью"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:3
 msgid "Grant access to main status display"
-msgstr "Предоставление доступа к отображению основного состояния"
+msgstr "Предоставить доступ к главной странице состояния"
 
 #: protocols/luci-proto-modemmanager/root/usr/share/rpcd/acl.d/luci-proto-modemmanager.json:3
 msgid "Grant access to mmcli"
-msgstr "Предоставление доступа к mmcli"
+msgstr "Предоставить доступ к mmcli"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:114
 msgid "Grant access to mount configuration"
-msgstr "Предоставление доступа к конфигурации точек монтирования"
+msgstr "Предоставить доступ к конфигурации точек монтирования"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:3
 msgid "Grant access to network configuration"
-msgstr "Предоставление доступа к конфигурации сети"
+msgstr "Предоставить доступ к конфигурации сети"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:66
 msgid "Grant access to network diagnostic tools"
-msgstr "Предоставление доступа к сетевым диагностическим утилитам"
+msgstr "Предоставить доступ к сетевым диагностическим утилитам"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:37
 msgid "Grant access to network status information"
-msgstr "Предоставление доступа к информации о состоянии сети"
+msgstr "Предоставить доступ к информации о состоянии сети"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:52
 msgid "Grant access to port status display"
-msgstr "Предоставление доступа к отображению состояния порта"
+msgstr "Предоставить доступ к просмотру статуса портов"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:17
 msgid "Grant access to process status"
-msgstr "Предоставление доступа к состоянию процессов"
+msgstr "Предоставить доступ к состоянию процессов"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:3
 msgid "Grant access to realtime statistics"
-msgstr "Предоставление доступа к статистике в реальном времени"
+msgstr "Предоставить доступ к статистике в реальном времени"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:49
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:64
 msgid "Grant access to routing status"
-msgstr "Предоставление доступа к состоянию маршрутизации"
+msgstr "Предоставить доступ к состоянию маршрутизации"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:71
 msgid "Grant access to startup configuration"
-msgstr "Предоставление доступа к конфигурации запуска"
+msgstr "Предоставить доступ к конфигурации запуска"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:3
 msgid "Grant access to system configuration"
-msgstr "Предоставление доступа к конфигурации системы"
+msgstr "Предоставить доступ к конфигурации системы"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:34
 msgid "Grant access to system logs"
-msgstr "Предоставление доступа к системному журналу"
+msgstr "Предоставить доступ к системному журналу"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:60
 msgid "Grant access to uHTTPd configuration"
-msgstr "Предоставление доступа к настройке uHTTPd"
+msgstr "Предоставить доступ к настройке uHTTPd"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:79
 msgid "Grant access to wireless channel status"
-msgstr "Предоставление доступа к состоянию беспроводных каналов"
+msgstr "Предоставить доступ к состоянию беспроводных каналов"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:61
 msgid "Grant access to wireless status display"
-msgstr "Предоставление доступа к просмотру состояния беспроводных сетей"
+msgstr "Предоставить доступ к просмотру состояния беспроводных сетей"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:124
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:124
@@ -5309,7 +5328,7 @@ msgstr "Перезапустить"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
 msgid "Hardware address"
-msgstr ""
+msgstr "Аппаратный адрес"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:6
 msgid "Heartbeat interval (kernel: heartbeat)"
@@ -5631,7 +5650,7 @@ msgstr "Подключение IPv4 (внешняя сеть)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1016
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:111
 msgid "IPv4 address"
-msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-адрес"
+msgstr "IPv4-адрес"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1128
 msgid ""
@@ -5753,9 +5772,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:676
 msgid "IPv6 RA Settings"
-msgstr ""
-"Настройки <abbr title=\"Internet Protocol Version 6\">IPv6</abbr> <abbr "
-"title=\"Router Advertisement\">RA</abbr>"
+msgstr "Настройки IPv6 RA"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:261
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:313
@@ -5792,7 +5809,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:212
 msgid "IPv6 address"
-msgstr "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-адрес"
+msgstr "IPv6-адрес"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:79
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:170
@@ -6550,7 +6567,7 @@ msgid ""
 msgstr ""
 "Он периодически проверяет наличие активных сессий и автоматически "
 "устанавливает прямые пиринги через Интернет с удалёнными узлами, на которых "
-"работает Yggdrasil Jumper, не требуя настройки брандмауэра или портов."
+"работает Yggdrasil Jumper, не требуя настройки межсетевого экрана или портов."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:79
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:90
@@ -6965,7 +6982,7 @@ msgstr "Порт для входящих соединений"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:280
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:263
 msgid "Listen addresses"
-msgstr "Слушать адреса"
+msgstr "Адреса прослушивания"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:260
 msgid "Listen for peers"
@@ -6974,7 +6991,7 @@ msgstr "Слушатель для пиров"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:430
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:274
 msgid "Listen interfaces"
-msgstr "Интерфейс для входящих соединений"
+msgstr "Интерфейсы прослушивания"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid ""
@@ -6993,14 +7010,16 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:437
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:281
 msgid "Listen only on the specified addresses."
-msgstr "Слушать только по указанным адресам."
+msgstr "Прослушивать только на указанных адресах."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:431
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:275
 msgid ""
 "Listen only on the specified interfaces, and loopback if not excluded "
 "explicitly."
-msgstr "Ограничьте прослушивание этих интерфейсов и замыкание на себя."
+msgstr ""
+"Прослушивать только на указанных интерфейсах, включая loopback, если он не "
+"исключён явно."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:295
 msgid "Listen to multicast beacons"
@@ -7013,7 +7032,7 @@ msgstr "Неверная настройка параметра ListenPort"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:293
 msgid "Listening port for inbound DNS queries."
 msgstr ""
-"Фиксированный порт для входящих <abbr title=\"Domain Name System\">DNS</"
+"Порт для прослушивания входящих <abbr title=\"Domain Name System\">DNS</"
 "abbr>-запросов."
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:151
@@ -7530,7 +7549,7 @@ msgstr "Макс. строк:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:315
 msgid "Max valid value %s."
-msgstr "Максимальное допустимое значение %s."
+msgstr "Максимально допустимое значение %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:409
 msgid "Max. DHCP leases"
@@ -7725,7 +7744,7 @@ msgstr "Минимальное время хранения кэша"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:307
 msgid "Min valid value %s."
-msgstr "Минимальное допустимое значение %s."
+msgstr "Минимально допустимое значение %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1205
 msgid "Minimum ARP validity time"
@@ -8439,7 +8458,7 @@ msgstr "Шум:"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:423
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:267
 msgid "Non-wildcard"
-msgstr "Не использовать wildcard"
+msgstr "Без wildcard"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:46
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:906
@@ -8455,7 +8474,7 @@ msgstr "Отсутствует"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1035
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 msgid "Normal"
-msgstr "Нормально"
+msgstr "Норма"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:257
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:261
@@ -8943,7 +8962,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:72
 msgid "Options"
-msgstr "Опции"
+msgstr "Параметры"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:686
 msgid "Options to be added for this tag."
@@ -9308,7 +9327,7 @@ msgstr "С помощью пароля"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2051
 msgid "Password of Private Key"
-msgstr "Пароль к Приватному ключу"
+msgstr "Пароль закрытого ключа"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2109
 msgid "Password of inner Private Key"
@@ -9365,11 +9384,11 @@ msgstr "Путь к сертификату CA"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2045
 msgid "Path to Client-Certificate"
-msgstr "Путь к client-сертификату"
+msgstr "Путь к клиентскому сертификату"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2048
 msgid "Path to Private Key"
-msgstr "Путь к Приватному ключу"
+msgstr "Путь к закрытому ключу"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:833
 msgid "Path to a script to run each time the lease file changes."
@@ -9389,7 +9408,7 @@ msgstr "Путь к внутреннему Приватному ключу"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2745
 msgid "Paused"
-msgstr "Приостановлено"
+msgstr "На паузе"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:270
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:280
@@ -9642,7 +9661,7 @@ msgstr "Предпочитать UMTS"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:37
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:41
 msgid "Preferred client ID"
-msgstr ""
+msgstr "Предпочитаемый идентификатор клиента"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
@@ -10848,7 +10867,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid "SAE-EXT-KEY (SAE-GDH)"
-msgstr ""
+msgstr "SAE-EXT-KEY (SAE-GDH)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -11043,11 +11062,14 @@ msgid ""
 "Selects the <abbr title=\"DHCP Unique Identifier\">DUID</abbr> to send when "
 "requesting DHCPv6."
 msgstr ""
+"Выбор <abbr title=\"DHCP Unique Identifier\">DUID</abbr> отправки при "
+"запросе DHCPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:38
 msgid ""
 "Selects the client identifier (DHCP option 61) to send when requesting DHCP."
 msgstr ""
+"Выбор идентификатора клиента (DHCP option 61) для отправки при запросе DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:873
 msgid ""
@@ -11298,6 +11320,9 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Отключение перехода (WPA3 Specification v3.5 section 13), чтобы клиент, "
+"который подключился один раз, больше не понижал уровень безопасности для "
+"этой SSID. Рекламируемая битовая маска определяется режимом шифрования."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -11795,7 +11820,7 @@ msgstr "Максимально допустимое время бездейст�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1009
 #: modules/luci-mod-status/ucode/template/admin_status/index.ut:9
 msgid "Status"
-msgstr "Статус"
+msgstr "Состояние"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1803
 msgid "Steering flows (<abbr title=\"Receive Packet Steering\">RPS</abbr>)"
@@ -12572,12 +12597,12 @@ msgid ""
 "Often there is by default one Uplink port for a connection to the next "
 "greater network like the internet and other ports for a local network."
 msgstr ""
-"Сетевые порты этого устройства могут быть объединены в несколько <abbr "
-"title='Virtual Local Area Network'>VLAN</abbr>, в которых компьютеры могут "
-"напрямую связываться друг с другом. <abbr title='Virtual Local Area "
-"Network'>VLAN</abbr> часто используются для разделения разных сегментов "
-"сети. Обычно по умолчанию имеется один Uplink-порт для подключения к "
-"вышестоящей сети (например, к Интернету) и другие порты для локальной сети."
+"Сетевые порты этого устройства можно объединить в несколько <abbr "
+"title='Virtual Local Area Network'>VLAN</abbr>, внутри которых компьютеры "
+"обмениваются данными напрямую. <abbr title='Virtual Local Area "
+"Network'>VLAN</abbr> часто применяются для разделения различных сегментов "
+"сети. Как правило, по умолчанию один порт используется для подключения к "
+"вышестоящей сети (например, к интернету), а остальные — для локальной сети."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:230
 msgid "The private key for your Yggdrasil node"
@@ -12657,7 +12682,7 @@ msgstr "Представленный маркер безопасности не�
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:255
 msgid "The syslog output, pre-filtered for messages related to:"
 msgstr ""
-"Вывод syslog, предварительно отфильтрованный для сообщений, связанных с:"
+"Вывод syslog, предварительно отфильтрованный по сообщениям, связанным с:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:98
 msgid ""
@@ -13112,7 +13137,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2191
 msgid "Transition Disable"
-msgstr ""
+msgstr "Отключение перехода"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"
@@ -13676,7 +13701,7 @@ msgid ""
 "Use legacy MAP interface identifier format (draft-ietf-softwire-map-00) "
 "instead of RFC7597"
 msgstr ""
-"Использовать устаревший MAP формат идентификатора интерфейса (draft-ietf-"
+"Использовать устаревший MAP-формат идентификатора интерфейса (draft-ietf-"
 "softwire-map-00) вместо RFC7597"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:179
@@ -13745,7 +13770,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:307
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:315
 msgid "Useful for systems behind firewalls."
-msgstr "Полезно для систем, находящихся за брандмауэрами."
+msgstr "Полезно для систем за межсетевым экраном."
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:35
 msgid "User"
@@ -13908,7 +13933,7 @@ msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
-msgstr "Производитель (Vendor)"
+msgstr "Производитель"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:53
 msgid "Vendor Class to send when requesting DHCP"
@@ -15022,7 +15047,7 @@ msgstr "верное десятичное число"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:991
 msgid "valid fw4 zone name UCI identifier"
-msgstr "допустимое имя зоны UCI для fw4 (брандмауэра 4-го поколения)"
+msgstr "допустимое имя зоны UCI для fw4 (межсетевого экрана 4-го поколения)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:971
 msgid "valid hexadecimal WEP key"
