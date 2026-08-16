@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-03-22 17:11+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-08-13 09:16+0000\n"
+"Last-Translator: Jonatan Nyberg <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/sv/>\n"
 "Language: sv\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -22,22 +22,22 @@ msgstr "Aktiva OLSR-noder"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:252
 msgid "Active host net announcements"
-msgstr ""
+msgstr "Aktiva värdnätsannonser"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:128
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:126
 msgid "Advanced Settings"
-msgstr "Avancerade inställningar"
+msgstr "avancerade inställningar"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:69
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:69
 msgid "Allow gateways with NAT"
-msgstr ""
+msgstr "Tillåt gateways med NAT"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:69
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:69
 msgid "Allow the selection of an outgoing IPv4 gateway with NAT"
-msgstr ""
+msgstr "Tillåt val av en utgående IPv4-gateway med NAT"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:81
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:81
@@ -63,11 +63,11 @@ msgstr "Dålig (SNR < 5)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:17
 msgid "Both values must use the dotted decimal notation."
-msgstr ""
+msgstr "Båda värdena måste anges med punktseparerad decimalnotation."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:142
 msgid "Broadcast address"
-msgstr "Sändningsadress"
+msgstr "Broadcastadress"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:136
 msgid "Device"
@@ -80,7 +80,7 @@ msgstr "Visa"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:137
 msgid "Downlink"
-msgstr "Nerlänk"
+msgstr "Nedlänk"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:143
@@ -110,6 +110,8 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
+"Aktivera SmartGateway. Om det är inaktiverat ignoreras alla andra "
+"SmartGateway-parametrar. Standardvärdet är \"no\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:41
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:41
@@ -125,12 +127,12 @@ msgstr "Aktiverad"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:292
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:180
 msgid "Expected retransmission count"
-msgstr ""
+msgstr "Förväntat antal omsändningar"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:153
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:147
 msgid "FIB metric"
-msgstr ""
+msgstr "FIB-metrik"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:155
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:149
@@ -142,11 +144,18 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"FIBMetric styr metrikvärdet för värdrutterna som OLSRd skapar. \"flat\" "
+"innebär att metrikvärdet alltid är 2. Detta är det rekommenderade värdet "
+"eftersom det hjälper Linux-kärnans routning att rensa bort äldre rutter. "
+"\"correct\" använder antal hopp som metrikvärde. \"approx\" använder också "
+"antal hopp, men uppdaterar endast antalet hopp om nästa hopp också ändras. "
+"Standardvärdet är \"flat\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:209
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:203
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
+"Fisheye-mekanism för TC:er (markerad betyder på). Standardvärdet är \"on\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:132
 msgid "Gateway"
@@ -159,12 +168,12 @@ msgstr "Gateway"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:37
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:37
 msgid "General Settings"
-msgstr "Generella inställningar"
+msgstr "Allmänna inställningar"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:45
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:45
 msgid "General settings"
-msgstr "Generella inställningar"
+msgstr "Allmänna inställningar"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:542
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:296
@@ -180,11 +189,11 @@ msgstr "Bra (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
 msgid "Grant UCI access for luci-app-olsr"
-msgstr ""
+msgstr "Ge luci-app-olsr UCI-åtkomst"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr-unauthenticated.json:3
 msgid "Grant read access"
-msgstr ""
+msgstr "Ge läsåtkomst"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:541
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:550
@@ -204,14 +213,14 @@ msgstr "HNA"
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:29
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:71
 msgid "HNA Announcements"
-msgstr ""
+msgstr "HNA-annonser"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:449
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:428
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:215
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:199
 msgid "HNA interval"
-msgstr ""
+msgstr "HNA-intervall"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:460
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:439
@@ -223,21 +232,21 @@ msgstr "Giltighetstid för HNA"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:529
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:505
 msgid "Hello"
-msgstr "Hallå"
+msgstr "Hello"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:383
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:362
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:149
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:133
 msgid "Hello interval"
-msgstr "Hallå-intervall"
+msgstr "Hello-intervall"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:394
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:373
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:160
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:144
 msgid "Hello validity time"
-msgstr "Giltighetstid för Hallå"
+msgstr "Giltighetstid för Hello"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:17
 msgid "Hna4"
@@ -250,23 +259,27 @@ msgstr "Hna6"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:135
 msgid "Hops"
-msgstr ""
+msgstr "Hopp"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:271
 msgid "Hostname"
-msgstr "Värdnamn"
+msgstr "värdnamn"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:14
 msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA messages."
 msgstr ""
+"Värdar i ett OLSR-routat nätverk kan annonsera anslutning till externa "
+"nätverk med HNA-meddelanden."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:12
 msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA6 messages."
 msgstr ""
+"Värdar i ett OLSR-routat nätverk kan annonsera anslutning till externa "
+"nätverk med HNA6-meddelanden."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:218
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:212
@@ -275,6 +288,9 @@ msgid ""
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
 msgstr ""
+"Hysteres för länkdetektering (endast för hoppmetrik). Hysteres gör "
+"länkdetekteringen robustare men fördröjer registrering av grannar. "
+"Standardvärdet är \"yes\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:285
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:279
@@ -288,6 +304,8 @@ msgid ""
 "IP-version to use. If 6and4 is selected then one olsrd instance is started "
 "for each protocol."
 msgstr ""
+"IP-version som ska användas. Om 6and4 väljs startas en olsrd-instans för "
+"varje protokoll."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:138
 msgid "IPv4"
@@ -296,7 +314,7 @@ msgstr "IPv4"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:355
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:121
 msgid "IPv4 broadcast"
-msgstr ""
+msgstr "IPv4-broadcast"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:356
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:122
@@ -305,6 +323,9 @@ msgid ""
 "be 255.255.255.255. Default is \"0.0.0.0\", which triggers the usage of the "
 "interface broadcast IP."
 msgstr ""
+"IPv4-broadcastadress för utgående OLSR-paket. Ett användbart exempel är "
+"255.255.255.255. Standardvärdet är \"0.0.0.0\", vilket gör att gränssnittets "
+"broadcast-IP används."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:367
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:133
@@ -317,6 +338,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
+"IPv4-källadress för utgående OLSR-paket. Standardvärdet är \"0.0.0.0\", "
+"vilket gör att gränssnittets IP-adress används."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:139
 msgid "IPv6"
@@ -327,7 +350,7 @@ msgstr "IPv6"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:128
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:117
 msgid "IPv6 multicast"
-msgstr ""
+msgstr "IPv6-multicast"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:362
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:346
@@ -337,12 +360,16 @@ msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
 msgstr ""
+"IPv6-multicastadress. Standardvärdet är \"FF02::6D\", den länklokala "
+"multicastadressen för MANET-routrar."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
 msgid ""
 "IPv6 network must be given in full notation, prefix must be in CIDR notation."
 msgstr ""
+"IPv6-nätverk måste anges med fullständig notation och prefixet med CIDR-"
+"notation."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:376
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:355
@@ -360,11 +387,14 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
+"IPv6-källprefix. OLSRd väljer en av gränssnittets IP-adresser som matchar "
+"parameterns prefix. Standardvärdet är \"0::/0\", vilket gör att en IP-adress "
+"som inte är länklokal används."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:113
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:113
 msgid "IPv6-Prefix of the uplink"
-msgstr ""
+msgstr "IPv6-prefix för upplänken"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:257
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:251
@@ -375,12 +405,19 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
+"Om rutten till den aktuella gatewayen ska ändras multipliceras gatewayens "
+"ETX-värde med detta värde innan det jämförs med det nya. Parametern kan vara "
+"mellan 0,1 och 1,0 men bör ligga nära 1,0 om den ändras.<br /><b>VARNING:</"
+"b> Parametern bör inte användas tillsammans med metriken etx_ffeth!<br /"
+">Standardvärdet är \"1.0\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:93
 msgid ""
 "If this Node uses NAT for connections to the internet. Default is \"yes\"."
 msgstr ""
+"Om denna nod använder NAT för internetanslutningar. Standardvärdet är "
+"\"yes\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:33
@@ -400,21 +437,24 @@ msgid ""
 "ethernet interfaces. Valid modes are \"mesh\" and \"ether\". Default is "
 "\"mesh\"."
 msgstr ""
+"Gränssnittsläge används för att förhindra onödig paketvidarebefordran på "
+"switchade Ethernet-gränssnitt. Giltiga lägen är \"mesh\" och \"ether\". "
+"Standardvärdet är \"mesh\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:471
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:450
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:167
 msgid "Interfaces"
-msgstr "Gränssnitten"
+msgstr "Gränssnitt"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:280
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:274
 msgid "Interfaces Defaults"
-msgstr "Standard-gränssnitten"
+msgstr "Standardinställningar för gränssnitt"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:130
 msgid "Internet protocol"
-msgstr "Internet-protokoll"
+msgstr "Internetprotokoll"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:139
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:133
@@ -422,6 +462,8 @@ msgid ""
 "Interval to poll network interfaces for configuration changes (in seconds). "
 "Default is \"2.5\"."
 msgstr ""
+"Intervall för att kontrollera nätverksgränssnitt efter "
+"konfigurationsändringar (i sekunder). Standardvärdet är \"2.5\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:285
 msgid "Known OLSR routes"
@@ -434,7 +476,7 @@ msgstr "LQ"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:181
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:175
 msgid "LQ aging"
-msgstr ""
+msgstr "LQ-åldring"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:191
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:185
@@ -444,7 +486,7 @@ msgstr "LQ-algoritm"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:209
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:203
 msgid "LQ fisheye"
-msgstr ""
+msgstr "LQ-fisheye"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:171
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:165
@@ -459,13 +501,13 @@ msgstr "LQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:140
 msgid "Last hop"
-msgstr "Senaste hopp"
+msgstr "Senaste hoppet"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:534
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:288
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:176
 msgid "Legend"
-msgstr "Legend"
+msgstr "Teckenförklaring"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:58
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:287
@@ -477,7 +519,7 @@ msgstr "Bibliotek"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:49
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:49
 msgid "Link Quality Settings"
-msgstr "Inställningar för länkkvalité"
+msgstr "Inställningar för länkkvalitet"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:182
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:176
@@ -486,6 +528,9 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
+"Åldringsfaktor för länkkvalitet (endast för LQ-nivå 2). "
+"Finjusteringsparameter för etx_float och etx_fpm; lägre värden innebär "
+"långsammare ändringar av ETX-värdet. (Tillåtna värden är 0,01–1,0.)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:193
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:187
@@ -497,6 +542,13 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
+"Algoritm för länkkvalitet (endast för LQ-nivå 2).<br /><b>etx_float</b>: ETX "
+"med flyttal och exponentiell åldring<br /><b>etx_fpm</b>: samma som "
+"etx_float men med heltalsaritmetik<br /><b>etx_ff</b>: ETX Freifunk, en ETX-"
+"variant som använder all OLSR-trafik (i stället för endast hello-"
+"meddelanden) för ETX-beräkningen<br /><b>etx_ffeth</b>: inkompatibel variant "
+"av etx_ff som tillåter Ethernet-länkar med ETX 0.1.<br />Standardvärdet är "
+"\"etx_ff\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:172
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:166
@@ -505,13 +557,17 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
+"Nivån för länkkvalitet växlar mellan routning baserad på antal hopp och "
+"kostnadsbaserad routning (vanligen ETX).<br /><b>0</b> = använd inte "
+"länkkvalitet<br /><b>2</b> = använd länkkvalitet för MPR-val och "
+"routning<br />Standardvärdet är \"2\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:315
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:309
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:80
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:80
 msgid "LinkQuality Multiplicator"
-msgstr ""
+msgstr "Multiplikator för länkkvalitet"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:273
 msgid "Local interface IP"
@@ -535,7 +591,7 @@ msgstr "MID-intervall"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:204
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:188
 msgid "MID validity time"
-msgstr ""
+msgstr "Giltighetstid för MID"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:138
 msgid "MTU"
@@ -551,10 +607,12 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090, and accepts connections from \"127.0.0.1\"."
 msgstr ""
+"Kontrollera att OLSRd körs, att insticksmodulen \"jsoninfo\" är inläst och "
+"konfigurerad på port 9090 samt accepterar anslutningar från \"127.0.0.1\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:182
 msgid "Metric"
-msgstr "Metrisk"
+msgstr "Mått"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:288
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:524
@@ -573,6 +631,10 @@ msgid ""
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Multiplicera rutter med faktorn som anges här. Tillåtna värden är 0,01–1,0. "
+"Den används endast när LQ-nivån är större än 0. Exempel:<br />halvera LQ "
+"till 192.168.0.1: 192.168.0.1 0.5<br />minska LQ till alla noder på detta "
+"gränssnitt med 20 %: default 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:311
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:82
@@ -582,11 +644,15 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Multiplicera rutter med faktorn som anges här. Tillåtna värden är 0,01–1,0. "
+"Den används endast när LQ-nivån är större än 0. Exempel:<br />halvera LQ "
+"till fd91:662e:3c58::1: fd91:662e:3c58::1 0.5<br />minska LQ till alla noder "
+"på detta gränssnitt med 20 %: default 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:255
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:249
 msgid "NAT threshold"
-msgstr ""
+msgstr "NAT-tröskel"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:142
 msgid "NLQ"
@@ -600,7 +666,7 @@ msgstr "NLQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:270
 msgid "Neighbour IP"
-msgstr ""
+msgstr "Grannens IP-adress"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:10
 msgid "Neighbours"
@@ -627,7 +693,7 @@ msgstr "Nätverksadress"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:139
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:133
 msgid "Nic changes poll interval"
-msgstr ""
+msgstr "Avsökningsintervall för ändringar av nätverkskort"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:3
 msgid "OLSR"
@@ -635,41 +701,41 @@ msgstr "OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:14
 msgid "OLSR - Display Options"
-msgstr ""
+msgstr "OLSR – Visningsalternativ"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:14
 msgid "OLSR - HNA-Announcements"
-msgstr ""
+msgstr "OLSR – HNA-annonser"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:12
 msgid "OLSR - HNA6-Announcements"
-msgstr ""
+msgstr "OLSR – HNA6-annonser"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:46
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:261
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:44
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:259
 msgid "OLSR - Plugins"
-msgstr "OLSR - Insticksprogram"
+msgstr "OLSR – Insticksmoduler"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:35
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:35
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:8
 msgid "OLSR Daemon"
-msgstr "OLSR-demon"
+msgstr "OLSR-daemon"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:16
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:16
 msgid "OLSR Daemon - Interface"
-msgstr "OLSR-demon - Gränssnitt"
+msgstr "OLSR-daemon – Gränssnitt"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:3
 msgid "OLSR IPv4"
-msgstr ""
+msgstr "OLSR IPv4"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:45
 msgid "OLSR IPv6"
-msgstr ""
+msgstr "OLSR IPv6"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:531
 msgid "OLSR connections"
@@ -678,7 +744,7 @@ msgstr "OLSR-anslutningar"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:171
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:180
 msgid "OLSR gateway"
-msgstr ""
+msgstr "OLSR-gateway"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:122
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:139
@@ -696,58 +762,59 @@ msgstr "Orange"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:250
 msgid "Overview of currently active OLSR host net announcements"
-msgstr ""
+msgstr "Översikt över aktuella aktiva OLSR-värdnätsannonser"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:529
 msgid "Overview of currently established OLSR connections"
-msgstr ""
+msgstr "Översikt över aktuella etablerade OLSR-anslutningar"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:171
 msgid "Overview of currently known OLSR nodes"
-msgstr ""
+msgstr "Översikt över aktuella kända OLSR-noder"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:283
 msgid "Overview of currently known routes to other OLSR nodes"
-msgstr ""
+msgstr "Översikt över aktuella kända rutter till andra OLSR-noder"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:165
 msgid "Overview of interfaces where OLSR is running"
-msgstr ""
+msgstr "Översikt över gränssnitt där OLSR körs"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:150
 msgid "Overview of known multiple interface announcements"
-msgstr ""
+msgstr "Översikt över kända annonser för flera gränssnitt"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:129
 msgid "Overview of smart gateways in this network"
-msgstr ""
+msgstr "Översikt över smarta gateways i nätverket"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:47
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:45
 msgid "Plugin configuration"
-msgstr "Konfiguration av insticksprogram"
+msgstr "Konfiguration av insticksmodul"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:263
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:261
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:37
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:79
 msgid "Plugins"
-msgstr "Insticksprogram"
+msgstr "Insticksmoduler"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:128
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
 msgstr ""
+"Avsökningsintervall för OLSR-socketar i sekunder. Standardvärdet är 0,05."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:128
 msgid "Pollrate"
-msgstr "Opinionsundersökningsfrekvens"
+msgstr "Avsökningsfrekvens"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:227
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:221
 msgid "Port"
-msgstr "Port"
+msgstr "port"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:42
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:23
@@ -766,7 +833,7 @@ msgstr "Röd"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:22
 msgid "Resolve"
-msgstr ""
+msgstr "Slå upp"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:23
 msgid ""
@@ -774,6 +841,10 @@ msgid ""
 "if you use public IPs and have unstable DNS-Setup then those pages will load "
 "really slow. In this case disable it here."
 msgstr ""
+"Slå upp värdnamn på statussidor. Det är i allmänhet säkert att tillåta "
+"detta, men om du använder publika IP-adresser och har en instabil DNS-"
+"konfiguration kan sidorna laddas mycket långsamt. Inaktivera det här i så "
+"fall."
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:18
 msgid "Routes"
@@ -787,11 +858,11 @@ msgstr "SNR:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:122
 msgid "Secondary OLSR interfaces"
-msgstr "Andra OLSR-gränssnitt"
+msgstr "Sekundära OLSR-gränssnitt"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:133
 msgid "Selected"
-msgstr ""
+msgstr "Vald"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:237
 msgid ""
@@ -799,6 +870,9 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
+"Anger routerns huvudsakliga IP-adress (originator-IP). Denna IP-adress "
+"ändras ALDRIG medan olsrd körs. Standardvärdet är 0.0.0.0, vilket gör att IP-"
+"adressen för det första gränssnittet används."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:231
 msgid ""
@@ -806,12 +880,15 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
+"Anger routerns huvudsakliga IP-adress (originator-IP). Denna IP-adress "
+"ändras ALDRIG medan olsrd körs. Standardvärdet är ::, vilket gör att IP-"
+"adressen för det första gränssnittet används."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:547
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:189
 msgid "Signal Noise Ratio in dB"
-msgstr ""
+msgstr "Signal-brusförhållande i dB"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:59
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:59
@@ -821,15 +898,15 @@ msgstr "SmartGW"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:261
 msgid "SmartGW announcements"
-msgstr ""
+msgstr "SmartGW-annonser"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:273
 msgid "SmartGateway is not configured on this system"
-msgstr ""
+msgstr "SmartGateway är inte konfigurerat på systemet"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:140
 msgid "Source address"
-msgstr "Adress för källkod"
+msgstr "Källadress"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:102
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:102
@@ -837,15 +914,17 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
+"Anger upplänkens hastighet i kilobit/s. Den första parametern är uppströms "
+"och den andra nedströms. Standardvärdet är \"128 1024\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:102
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:102
 msgid "Speed of the uplink"
-msgstr ""
+msgstr "Upplänkens hastighet"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:137
 msgid "State"
-msgstr "Status"
+msgstr "Tillstånd"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:552
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:306
@@ -863,13 +942,13 @@ msgstr "Fortfarande användbar (4 < ETX < 10)"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:290
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:178
 msgid "Success rate of packages received from the neighbour"
-msgstr ""
+msgstr "Andel paket som tagits emot från grannen"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:537
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:291
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:179
 msgid "Success rate of packages sent to the neighbour"
-msgstr ""
+msgstr "Andel paket som skickats till grannen"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:536
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:512
@@ -921,11 +1000,13 @@ msgid ""
 "The fixed willingness to use. If not set willingness will be calculated "
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
+"Fast willingness-värde. Om det inte anges beräknas willingness dynamiskt "
+"utifrån batteri-/strömstatus. Standardvärdet är \"3\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:50
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:50
 msgid "The interface OLSRd should serve."
-msgstr ""
+msgstr "Gränssnittet som OLSRd ska betjäna."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:227
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:221
@@ -933,6 +1014,8 @@ msgid ""
 "The port OLSR uses. This should usually stay at the IANA assigned port 698. "
 "It can have a value between 1 and 65535."
 msgstr ""
+"Porten som OLSR använder. Den bör normalt vara den IANA-tilldelade porten "
+"698. Värdet kan vara 1–65535."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:115
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:115
@@ -942,13 +1025,17 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Detta kan användas för att signalera upplänkens externa IPv6-prefix till "
+"klienterna. Det kan göra det möjligt för en klient att ändra sin lokala IPv6-"
+"adress för att använda IPv6-gatewayen utan adressöversättning. Den längsta "
+"prefixlängden är 64 bitar. Standardvärdet är \"::/0\" (inget prefix)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:286
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:280
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:39
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:39
 msgid "Timing and Validity"
-msgstr ""
+msgstr "Tidsinställningar och giltighet"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:26
 msgid "Topology"
@@ -960,6 +1047,7 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
+"Tjänstetypvärde (ToS) för IP-huvudet i styrtrafik. Standardvärdet är \"16\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:9
 msgid "Unable to connect to the OLSR daemon!"
@@ -977,7 +1065,7 @@ msgstr "Upplänken använder NAT"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:217
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:211
 msgid "Use hysteresis"
-msgstr ""
+msgstr "Använd hysteres"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:172
 msgid "Validity Time"
@@ -987,13 +1075,13 @@ msgstr "Giltighetstid"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:295
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:183
 msgid "Very good (ETX < 2)"
-msgstr "Jättebra (ETX < 2)"
+msgstr "Mycket bra (ETX < 2)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:550
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:304
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:192
 msgid "Very good (SNR > 30)"
-msgstr "Jättebra (SNR > 30)"
+msgstr "Mycket bra (SNR > 30)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:139
 msgid "WLAN"
@@ -1005,8 +1093,8 @@ msgid ""
 "Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
 "work, please install it."
 msgstr ""
-"Varning: kmod-ipip är inte installerat. SmartGateway kommer inte att "
-"fungerautan kmod-ipip, vänligen installera det."
+"Varning: kmod-ipip är inte installerat. SmartGateway fungerar inte utan kmod-"
+"ipip. Installera det."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:298
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:292
@@ -1028,6 +1116,12 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
+"När det finns flera länkar mellan värdar används gränssnittets vikt för att "
+"avgöra vilken länk som ska användas. Normalt beräknas vikten automatiskt av "
+"olsrd utifrån gränssnittets egenskaper, men här kan du ange ett fast värde. "
+"Olsrd väljer länkar med lägst värde.<br /><b>Obs!</b> Gränssnittsvikt "
+"används endast när LinkQualityLevel är 0. För andra värden används "
+"gränssnittets ETX-värde i stället."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:82
 msgid ""
@@ -1035,6 +1129,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
+"Vilken typ av upplänk som exporteras till övriga meshnoder. En upplänk "
+"upptäcks genom att söka efter en lokal HNA för 0.0.0.0/0, ::ffff:0:0/96 "
+"eller 2000::/3. Standardinställningen är \"both\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:82
 msgid ""
@@ -1042,11 +1139,14 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
+"Vilken typ av upplänk som exporteras till övriga meshnoder. En upplänk "
+"upptäcks genom att söka efter en lokal HNA6 för ::ffff:0:0/96 eller "
+"2000::/3. Standardinställningen är \"both\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238
 msgid "Willingness"
-msgstr "Frivillighet"
+msgstr "Willingness"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:542
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:551
@@ -1059,7 +1159,7 @@ msgstr "Gul"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:153
 msgid "down"
-msgstr "ner"
+msgstr "nere"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:155
 msgid "no"
@@ -1067,7 +1167,7 @@ msgstr "nej"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:153
 msgid "up"
-msgstr "upp"
+msgstr "uppe"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:155
 msgid "yes"

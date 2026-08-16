@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-03-04 15:58+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-08-13 09:17+0000\n"
+"Last-Translator: Jonatan Nyberg <nickwick@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmosquitto/sv/>\n"
 "Language: sv\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:60
 msgid "Allow anonymous connections"
@@ -25,6 +25,8 @@ msgid ""
 "Attempt to notify the local and remote broker of connection status, defaults "
 "to $SYS/broker/connections/&lt;clientid&gt;/state"
 msgstr ""
+"Försök avisera den lokala och fjärranslutna brokern om anslutningsstatus. "
+"Standard är $SYS/broker/connections/&lt;clientid&gt;/state"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:179
 msgid "Automatic, but no restarts"
@@ -32,7 +34,7 @@ msgstr "Automatiskt, men inga omstarter"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:178
 msgid "Automatic, but stopped when not used"
-msgstr ""
+msgstr "Automatisk, men stoppas när den inte används"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:177
 msgid "Automatic, includes restarts"
@@ -45,6 +47,7 @@ msgstr "Intervall för automatisk sparning"
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:80
 msgid "Autosave interval applies to change counts instead of time"
 msgstr ""
+"Intervallet för automatisk sparning avser antal ändringar i stället för tid"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:80
 msgid "Autosave on changes"
@@ -52,11 +55,11 @@ msgstr "Spara automatiskt vid ändringar"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:206
 msgid "Bridge PSK"
-msgstr "Brygga PSK"
+msgstr "PSK för brygga"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:162
 msgid "Bridge connection states should only be published locally"
-msgstr ""
+msgstr "Bryggans anslutningstillstånd ska endast publiceras lokalt"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:139
 msgid "Bridges"
@@ -64,35 +67,37 @@ msgstr "Bryggor"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:109
 msgid "CA file path"
-msgstr ""
+msgstr "Sökväg till CA-fil"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:112
 msgid "CA path to search"
-msgstr ""
+msgstr "Sökväg där CA-filer ska sökas"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:131
 msgid "CRL to use if require_certificate is enabled"
-msgstr ""
+msgstr "CRL som ska användas om require_certificate är aktiverat"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:133
 msgid "Ciphers control. Should match 'openssl ciphers' format"
-msgstr ""
+msgstr "Styrning av chiffersviter. Ska följa formatet för 'openssl ciphers'"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:154
 msgid "Clean session"
-msgstr "Rensa sessionen"
+msgstr "Ren session"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:77
 msgid "Client expiration"
-msgstr ""
+msgstr "Klientens utgångstid"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:167
 msgid "Client id to use locally. Important when bridging to yourself"
 msgstr ""
+"Klient-ID som ska användas lokalt. Viktigt vid bryggning till den egna "
+"brokern."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:164
 msgid "Client id to use on remote end of this bridge connection"
-msgstr ""
+msgstr "Klient-ID som ska användas i fjärränden av brygganslutningen"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:144
 msgid "Connection name"
@@ -105,11 +110,11 @@ msgstr "Standard"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:122
 msgid "Depends on your openssl version, empty to support all"
-msgstr ""
+msgstr "Beror på OpenSSL-versionen. Lämna tomt för att stödja alla."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:223
 msgid "Directory to search for CA files"
-msgstr ""
+msgstr "Katalog där CA-filer ska sökas"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:10
 msgid "Disabled"
@@ -117,7 +122,7 @@ msgstr "Inaktiverad"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:53
 msgid "Disallow remote access to this broker"
-msgstr ""
+msgstr "Tillåt inte fjärråtkomst till denna broker"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:9
 msgid "Enabled"
@@ -125,23 +130,23 @@ msgstr "Aktiverad"
 
 #: applications/luci-app-mosquitto/root/usr/share/rpcd/acl.d/luci-app-mosquitto.json:3
 msgid "Grant UCI access for luci-app-mosquitto"
-msgstr ""
+msgstr "Ge luci-app-mosquitto UCI-åtkomst"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:185
 msgid "How long to wait before disconnecting"
-msgstr ""
+msgstr "Hur länge det ska väntas före frånkoppling"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:181
 msgid "How long to wait before reconnecting"
-msgstr ""
+msgstr "Hur länge det ska väntas före återanslutning"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:189
 msgid "How many messages to queue before restarting lazy bridge"
-msgstr ""
+msgstr "Hur många meddelanden som ska köas innan en lazy bridge startas om"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:174
 msgid "How should this bridge be started"
-msgstr ""
+msgstr "Hur denna brygga ska startas"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:203
 msgid "Identity for TLS-PSK"
@@ -152,10 +157,13 @@ msgid ""
 "If checked, mosquitto runs with a config generated from this page. If "
 "unchecked, mosquitto runs with the config in %s (and this page is ignored)."
 msgstr ""
+"Om detta är markerat kör Mosquitto med en konfiguration som genereras från "
+"den här sidan. Om det är avmarkerat används konfigurationen i %s (och den "
+"här sidan ignoreras)."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:170
 msgid "Keep-alive interval for this bridge"
-msgstr ""
+msgstr "Keep-alive-intervall för denna brygga"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:206
 msgid "Key for TLS-PSK"
@@ -163,19 +171,19 @@ msgstr "Nyckel för TLS-PSK"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:118
 msgid "Keyfile (PEM encoded)"
-msgstr "Nyckel-fil (PEM-kodad)"
+msgstr "Nyckelfil (PEM-kodad)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:62
 msgid "Limit for message allowed inflight"
-msgstr ""
+msgstr "Gräns för meddelanden under överföring"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:65
 msgid "Limit for message queue when offline"
-msgstr ""
+msgstr "Gräns för meddelandekö vid frånkoppling"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:68
 msgid "Limit for message queue when offline, zero to disable"
-msgstr ""
+msgstr "Gräns för meddelandekö vid frånkoppling, noll för att inaktivera"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:93
 msgid "Listeners"
@@ -183,7 +191,7 @@ msgstr "Lyssnare"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:46
 msgid "Log destination"
-msgstr "Loggens destination"
+msgstr "Loggdestination"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:102
 msgid "MQTT"
@@ -191,15 +199,15 @@ msgstr "MQTT"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:62
 msgid "Max Inflight Messages"
-msgstr ""
+msgstr "Högsta antal meddelanden under överföring"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:68
 msgid "Max Queued Bytes"
-msgstr "Maximalt antalet köade bytes"
+msgstr "Högsta antal köade byte"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:65
 msgid "Max Queued Messages"
-msgstr "Maximalt antal meddelanden lagda i kö"
+msgstr "Högsta antal köade meddelanden"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:43
 #: applications/luci-app-mosquitto/root/usr/share/luci/menu.d/luci-app-mosquitto.json:3
@@ -208,7 +216,7 @@ msgstr "Mosquitto"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:25
 msgid "Mosquitto MQTT Broker"
-msgstr ""
+msgstr "Mosquitto MQTT-broker"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:162
 msgid "Notifications local only"
@@ -219,88 +227,92 @@ msgid ""
 "Outbound bridges will still work, but this will make the primary listener "
 "only available from localhost"
 msgstr ""
+"Utgående bryggor fortsätter att fungera, men den primära lyssnaren blir "
+"endast tillgänglig från localhost."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:203
 msgid "PSK Bridge Identity"
-msgstr ""
+msgstr "PSK-identitet för brygga"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:136
 msgid "PSK Hint to provide to connecting clients"
-msgstr ""
+msgstr "PSK-ledtråd som ska ges till anslutande klienter"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:219
 msgid "Path to CA file"
-msgstr "Genväg till CA-fil"
+msgstr "Sökväg till CA-fil"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:231
 msgid "Path to PEM encoded keyfile"
-msgstr ""
+msgstr "Sökväg till PEM-kodad nyckelfil"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:227
 msgid "Path to PEM encoded server certificate file"
-msgstr ""
+msgstr "Sökväg till PEM-kodad servercertifikatfil"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:89
 msgid "Path to persistent file"
-msgstr ""
+msgstr "Sökväg till beständighetsfil"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:72
 msgid "Persistence"
-msgstr "Motstånd"
+msgstr "Beständighet"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:75
 msgid "Persistence enabled"
-msgstr "Motstånd aktiverat"
+msgstr "Beständig lagring aktiverad"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:86
 msgid "Persistent file name"
-msgstr ""
+msgstr "Namn på beständighetsfil"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:89
 msgid "Persistent file path (with trailing/)"
-msgstr ""
+msgstr "Sökväg till beständighetsfil (med avslutande /)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:97
 msgid "Port"
-msgstr "Port"
+msgstr "port"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:100
 msgid "Protocol to use when listening"
-msgstr ""
+msgstr "Protokoll som ska användas vid lyssning"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:199
 msgid "Remote password"
-msgstr "Lösenord för fjärrstyrning"
+msgstr "Fjärrlösenord"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:196
 msgid "Remote username"
-msgstr "Användarnamn för fjärrstyrning"
+msgstr "Fjärranvändarnamn"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:77
 msgid ""
 "Remove persistent clients if they haven't reconnected in this period, eg 6h, "
 "3d, 2w"
 msgstr ""
+"Ta bort beständiga klienter om de inte har återanslutit inom denna tid, "
+"t.ex. 6h, 3d, 2w"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:129
 msgid "Require clients to present a certificate"
-msgstr ""
+msgstr "Kräv att klienter presenterar ett certifikat"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:83
 msgid "Save persistence file after this many seconds or changes"
-msgstr ""
+msgstr "Spara beständighetsfilen efter detta antal sekunder eller ändringar"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:115
 msgid "Server certificate file (PEM encoded)"
-msgstr ""
+msgstr "Servercertifikatfil (PEM-kodad)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:57
 msgid "Set to zero to disable"
-msgstr ""
+msgstr "Ange noll för att inaktivera"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:75
 msgid "Should persistence to disk be enabled at all"
-msgstr ""
+msgstr "Aktivera beständig lagring på disk"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:121
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:211
@@ -312,18 +324,19 @@ msgid ""
 "The remote broker must support the same version of TLS for the connection to "
 "succeed."
 msgstr ""
+"Fjärrbrokern måste stödja samma TLS-version för att anslutningen ska lyckas."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:57
 msgid "Time in seconds between updates of the $SYS tree"
-msgstr ""
+msgstr "Tid i sekunder mellan uppdateringar av $SYS-trädet"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:159
 msgid "Topic to use for local+remote remote for notifications."
-msgstr ""
+msgstr "Ämne som ska användas lokalt och på fjärrbrokern för aviseringar."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:37
 msgid "Use this LuCI configuration page"
-msgstr ""
+msgstr "Använd den här LuCI-konfigurationssidan"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:103
 msgid "WebSockets"
@@ -331,15 +344,15 @@ msgstr "WebSockets"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:93
 msgid "You can configure additional listeners here"
-msgstr ""
+msgstr "Här kan du konfigurera ytterligare lyssnare"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:140
 msgid "You can configure multiple bridge connections here"
-msgstr ""
+msgstr "Här kan du konfigurera flera brygganslutningar"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:46
 msgid "You can have multiple, but 'none' will override all others"
-msgstr ""
+msgstr "Du kan ange flera, men 'none' åsidosätter alla andra"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:147
 msgid "address"
@@ -347,21 +360,23 @@ msgstr "adress"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:147
 msgid "address[:port] of remote broker"
-msgstr ""
+msgstr "adress[:port] till fjärrbroker"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:194
 msgid ""
 "attempt to notify the remote broker that this is a bridge, not all brokers "
 "support this."
 msgstr ""
+"försök meddela fjärrbrokern att detta är en brygga; inte alla brokers stöder "
+"detta."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:151
 msgid "full topic string for mosquitto.conf, eg: 'power/# out 2'"
-msgstr ""
+msgstr "fullständig ämnessträng för mosquitto.conf, t.ex. 'power/# out 2'"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:105
 msgid "http_dir to serve on websockets listeners"
-msgstr ""
+msgstr "http_dir som ska tillhandahållas på WebSocket-lyssnare"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:26
 msgid ""
@@ -381,4 +396,4 @@ msgstr "ämne"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:145
 msgid "unique name for this bridge configuration"
-msgstr ""
+msgstr "unikt namn för denna bryggkonfiguration"
