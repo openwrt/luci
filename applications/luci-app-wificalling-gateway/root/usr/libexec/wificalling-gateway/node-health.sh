@@ -41,21 +41,19 @@ wg_handshake_test() {
 	lock=/tmp/wg-health.lock
 	if ! mkdir "$lock" 2>/dev/null; then
 		# A tick killed mid-test (SIGHUP/reboot) can leave the lock
-		# behind; its holder PID is gone, so take it over.
+		# behind.  If its holder is still alive, use the cache as-is
+		# (even stale) instead of racing on the probe port; otherwise
+		# take the lock over.
 		lock_pid=$(cat "$lock/pid" 2>/dev/null || echo 0)
-		if ! kill -0 "$lock_pid" 2>/dev/null; then
-			rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
-			mkdir "$lock" 2>/dev/null || true
+		if [ "${lock_pid:-0}" -gt 0 ] && kill -0 "$lock_pid" 2>/dev/null; then
+			if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
+				sed -n '3p' "$cache"
+				return 0
+			fi
+			return 1
 		fi
-	fi
-	if ! [ -d "$lock" ]; then
-		# Another monitor tick is testing right now; use the cache
-		# as-is (even stale) instead of racing on the probe port.
-		if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
-			sed -n '3p' "$cache"
-			return 0
-		fi
-		return 1
+		rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
+		mkdir "$lock" 2>/dev/null || return 1
 	fi
 	echo $$ > "$lock/pid"
 	priv=$(uci -q get "wificalling-gateway.$id.private_key") || true
@@ -72,7 +70,10 @@ wg_handshake_test() {
 	lport=$((19000 + (0x$(printf '%s' "$id" | md5sum | cut -c1-4) % 1000))) 2>/dev/null || lport=19099
 	cfg="/tmp/wg-health-$id.json"
 	# The probe config carries the WG private key and PSK: create it mode
-	# 0600 and clean it (and the log) up on any exit, including signals.
+	# 0600.  The probe itself runs in a subshell that owns its EXIT trap,
+	# so the config/log cleanup stays local and the caller's trap is
+	# untouched (this function is shared with node-test.sh, which has its
+	# own cleanup).
 	( umask 077; {
 		printf '{"log":{"level":"warn"},"inbounds":[{"type":"http","tag":"probe","listen":"127.0.0.1","listen_port":%s}],' "$lport"
 		printf '"endpoints":[{"type":"wireguard","tag":"wg","address":[%s],"private_key":%s,"peers":[{"address":%s,"port":%s,"public_key":%s,"allowed_ips":["0.0.0.0/0"]' \
@@ -81,35 +82,51 @@ wg_handshake_test() {
 		[ -n "$reserved" ] && printf ',"reserved":[%s]' "$(printf '%s' "$reserved" | tr -d ' ')"
 		printf '}],"mtu":%s}],"outbounds":[{"type":"direct","tag":"direct"}],"route":{"final":"wg"}}' "${mtu:-1420}"
 	} > "$cfg"; )
-	trap 'rm -f "$cfg" /tmp/wg-health-$id.log' EXIT HUP INT TERM
-	"$sing_box" run -c "$cfg" > /tmp/wg-health-$id.log 2>&1 &
-	pid=$!
-	sleep 2
 	# Verify the tunnel with an echo service through the probe.  The URL is
-	# UCI-configurable (main.probe_url) and HTTPS by default: plain HTTP
-	# would leak the exit IP and is a false-negative source when the host
-	# is unreachable.  busybox wget honours http_proxy and speaks HTTPS on
-	# 22.03+ builds.
-	probe_url=$(uci -q get wificalling-gateway.main.probe_url) || true
-	[ -n "$probe_url" ] || probe_url='https://ip-api.com/json/?fields=query'
-	ip=$(http_proxy="http://127.0.0.1:$lport" wget -qO- -T 6 "$probe_url" 2>/dev/null | sed -n 's/.*"query":"\([0-9.]*\)".*/\1/p' || true)
-	kill "$pid" 2>/dev/null || true
-	wait "$pid" 2>/dev/null || true
-	trap - EXIT HUP INT TERM
-	if [ -n "$ip" ]; then
-		rm -f "$cfg" /tmp/wg-health-$id.log
+	# UCI-configurable (main.probe_url) and HTTPS by default.  curl is a
+	# hard dependency of the package and drives the probe via -x through
+	# the http inbound; wget (http_proxy) is the fallback for stripped
+	# images where /usr/bin/wget is busybox.
+	# The whole probe runs in a subshell that owns its EXIT trap, so the
+	# config/log cleanup stays local and the caller's trap is untouched
+	# (this function is shared with node-test.sh).  The verdict is
+	# produced inside the subshell too: the log is needed for the
+	# timeout/unreachable distinction and is gone by the time the trap
+	# fires.
+	result=$( (
+		trap 'rm -f "$cfg" /tmp/wg-health-$id.log' EXIT HUP INT TERM
+		"$sing_box" run -c "$cfg" > /tmp/wg-health-$id.log 2>&1 &
+		pid=$!
+		sleep 2
+		probe_url=$(uci -q get wificalling-gateway.main.probe_url) || true
+		[ -n "$probe_url" ] || probe_url='https://ip-api.com/json/?fields=query'
+		body=
+		if command -v curl >/dev/null 2>&1; then
+			body=$(curl -s --max-time 6 -x "http://127.0.0.1:$lport" "$probe_url" 2>/dev/null || true)
+		else
+			body=$(http_proxy="http://127.0.0.1:$lport" wget -qO- -T 6 "$probe_url" 2>/dev/null || true)
+		fi
+		kill "$pid" 2>/dev/null || true
+		wait "$pid" 2>/dev/null || true
+		if ip=$(printf '%s' "$body" | sed -n 's/.*"query":"\([0-9.]*\)".*/\1/p'); [ -n "$ip" ]; then
+			printf 'OK %s' "$ip"
+		elif grep -q 'handshake did not complete' /tmp/wg-health-$id.log 2>/dev/null; then
+			printf 'FAIL timeout'
+		else
+			printf 'FAIL unreachable'
+		fi
+	) )
+	case "$result" in
+		OK*) ip=${result#OK } ;;
+		FAIL*) reason=${result#FAIL } ;;
+	esac
+	if [ -n "${ip:-}" ]; then
 		printf '%s\nok\n%s\n' "$(date +%s)" "$ip" > "$cache"
 		rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
 		printf '%s' "$ip"
 		return 0
 	fi
-	if grep -q 'handshake did not complete' /tmp/wg-health-$id.log 2>/dev/null; then
-		reason=timeout
-	else
-		reason=unreachable
-	fi
-	rm -f "$cfg" /tmp/wg-health-$id.log
-	printf '%s\nfailed\n%s\n' "$(date +%s)" "$reason" > "$cache"
+	printf '%s\nfailed\n%s\n' "$(date +%s)" "${reason:-unreachable}" > "$cache"
 	rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
 	return 1
 }

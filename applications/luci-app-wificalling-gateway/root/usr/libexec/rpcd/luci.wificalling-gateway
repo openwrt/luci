@@ -27,6 +27,7 @@ case "$1" in
 	list)
 		json_init
 		json_add_object node_test
+			json_add_string 'id' 'id'
 		json_close_object
 		json_dump
 		;;

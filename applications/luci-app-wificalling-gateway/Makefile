@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-wificalling-gateway
-PKG_VERSION:=1.8.2
+PKG_VERSION:=1.8.3
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
@@ -14,7 +14,7 @@ LUCI_URL:=https://github.com/smthdagg/luci-app-wificalling-gateway
 # fail on 18.06-style feeds ("cannot find dependency firewall4").  Depend
 # on the actual runtime needs instead; init.d preflights nft/sing-box with
 # a readable message on firmwares that cannot run the gateway.
-LUCI_DEPENDS:=+luci-base +sing-box +nftables +kmod-nft-tproxy +kmod-nft-socket +ip-full
+LUCI_DEPENDS:=+luci-base +sing-box +curl +nftables +kmod-nft-tproxy +kmod-nft-socket +ip-full
 LUCI_PKGARCH:=all
 
 include $(TOPDIR)/feeds/luci/luci.mk

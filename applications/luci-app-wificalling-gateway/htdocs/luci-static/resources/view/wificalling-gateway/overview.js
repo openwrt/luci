@@ -75,24 +75,14 @@ return view.extend({
 			if (reason === 'unreachable') return _('Server unreachable');
 			return '';
 		}
-		// Banner-style notification with an optional tooltip detail.
-		function testNotify(message, kind, detail) {
-			var mc = document.querySelector('#maincontent') || document.body;
-			var msg = E('div', {
-				'class': 'alert-message fade-in ' + (kind || 'info'),
-				style: 'display:flex;align-items:center;padding:8px 12px',
-				title: detail || null
-			}, [
-				E('div', { style: 'flex:1' }, E('p', { style: 'margin:0' }, message)),
-				E('button', {
-					'class': 'btn',
-					click: function() { mc.removeChild(msg); }
-				}, '×')
-			]);
-			mc.insertBefore(msg, mc.firstChild);
-		}
 		// Manual connection test for one node: fresh WG handshake (bypasses
 		// the monitor's 60 s cache) or a TCP reachability probe.
+		function testNotify(message, kind, detail) {
+			var p = E('p', {}, message);
+			if (detail)
+				p.appendChild(E('em', {}, detail));
+			ui.addNotification(null, p, kind);
+		}
 		function runNodeTest(id, btn) {
 			if (btn.disabled) return;
 			btn.disabled = true;
@@ -363,6 +353,7 @@ return view.extend({
 		var wgPsk = s.option(form.Value, 'pre_shared_key', _('WireGuard preshared key'));
 		wgPsk.password = true; wgPsk.depends('protocol', 'wireguard');
 		wgPsk.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
+		wgPsk.modalonly = true;
 		// The per-row connection test goes before the Edit/Delete buttons.
 		var nodeRowActions = s.renderRowActions;
 		s.renderRowActions = function(section_id, more_label, trEl) {
@@ -373,7 +364,7 @@ return view.extend({
 				id: 'wfc-node-test-' + section_id,
 				title: _('Run a fresh connection test for this node'),
 				click: function() { runNodeTest(section_id, this); }
-			}, 'nodeTest');
+			}, _('Test'));
 			tdEl.lastElementChild.insertBefore(testBtn, tdEl.lastElementChild.firstChild);
 			return tdEl;
 		};
@@ -395,7 +386,7 @@ return view.extend({
 		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = lanSubnetHint();
 		var devicePicker = s.option(form.DummyValue, '_device_picker', _('From connected devices'));
 		devicePicker.rmempty = true;
-		devicePicker.textvalue = function() { return ''; };
+		devicePicker.modalonly = true;
 		devicePicker.renderWidget = function(section_id) {
 			if (!detectedDevices.length)
 				return E('span', {}, _('No connected devices detected'));

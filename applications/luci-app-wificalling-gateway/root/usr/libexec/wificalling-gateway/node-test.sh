@@ -38,7 +38,7 @@ if [ "$proto" = wireguard ]; then
 	. "$func"
 
 	# The monitor loop may be mid-test right now; wait for its lock so
-	# this run is authoritative (a handshake takes up to ~8 s, give it 20 s).
+	# this run is authoritative (a handshake takes up to ~8 s, give it 40 s).
 	n=0
 	while [ -d /tmp/wg-health.lock ]; do
 		n=$((n + 1))
