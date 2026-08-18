@@ -67,22 +67,25 @@ return view.extend({
 			if (reason === 'config_missing') return _('Missing config');
 			if (reason === 'timeout') return _('Timeout');
 			if (reason === 'unreachable') return _('Unreachable');
+			if (reason === 'busy') return _('Test in progress');
 			return reason || '';
 		}
 		function wgFailDetail(reason) {
 			if (reason === 'config_missing') return _('Missing key/address');
 			if (reason === 'timeout') return _('Handshake timed out (key/psk mismatch?)');
 			if (reason === 'unreachable') return _('Server unreachable');
+			if (reason === 'busy') return _('Another test is running right now');
 			return '';
 		}
-		// Manual connection test for one node: fresh WG handshake (bypasses
-		// the monitor's 60 s cache) or a TCP reachability probe.
+		// Banner-style notification with an optional detail suffix.
 		function testNotify(message, kind, detail) {
 			var p = E('p', {}, message);
 			if (detail)
-				p.appendChild(E('em', {}, detail));
+				p.appendChild(E('em', {}, ' — ' + detail));
 			ui.addNotification(null, p, kind);
 		}
+		// Manual connection test for one node: fresh WG handshake (bypasses
+		// the monitor's 60 s cache) or a TCP reachability probe.
 		function runNodeTest(id, btn) {
 			if (btn.disabled) return;
 			btn.disabled = true;

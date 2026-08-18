@@ -27,7 +27,7 @@ json_escape() {
 # the loop ticks every 5 s), and two instances racing on the same probe
 # port would hand each other the wrong exit IP.
 wg_handshake_test() {
-	local id=$1 server=$2 port=$3 cache cache_ts age lock lock_pid priv pub local_addr psk mtu reserved lport cfg pid ip reason probe_url
+	local id=$1 server=$2 port=$3 cache cache_ts age lock lock_pid lock_age held priv pub local_addr psk mtu reserved lport cfg pid ip reason probe_url result
 	cache="/tmp/wg-health-$id"
 	if [ -f "$cache" ]; then
 		cache_ts=$(sed -n '1p' "$cache" 2>/dev/null || echo 0)
@@ -38,21 +38,39 @@ wg_handshake_test() {
 			return 0
 		fi
 	fi
+	# Only the holder may release: a pidless/foreign lock belongs to a
+	# newer holder after a takeover, and deleting it would un-serialize.
+	release_lock() {
+		[ "$(cat "$1/pid" 2>/dev/null || true)" = "$$" ] || return 0
+		rm -rf "$1"
+	}
 	lock=/tmp/wg-health.lock
 	if ! mkdir "$lock" 2>/dev/null; then
-		# A tick killed mid-test (SIGHUP/reboot) can leave the lock
-		# behind.  If its holder is still alive, use the cache as-is
-		# (even stale) instead of racing on the probe port; otherwise
-		# take the lock over.
-		lock_pid=$(cat "$lock/pid" 2>/dev/null || echo 0)
-		if [ "${lock_pid:-0}" -gt 0 ] && kill -0 "$lock_pid" 2>/dev/null; then
+		# Contended.  A pidless lock is a normal transient state (between
+		# mkdir and echo $$, and during every release), not necessarily a
+		# stale one: treat it as held and only take it over once the
+		# directory is older than the probe budget.  A live pid means a
+		# real holder either way.
+		lock_pid=$(cat "$lock/pid" 2>/dev/null || true)
+		held=1
+		if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+			:
+		elif date -r "$lock" +%s >/dev/null 2>&1; then
+			lock_age=$(($(date +%s) - $(date -r "$lock" +%s)))
+			[ "$lock_age" -lt 60 ] 2>/dev/null || held=0
+		fi
+		if [ "$held" -eq 1 ]; then
 			if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
 				sed -n '3p' "$cache"
 				return 0
 			fi
-			return 1
+			# A test is in flight: report busy instead of a failed
+			# handshake so the status page does not claim the peer is
+			# unreachable when no probe was even attempted.
+			printf '%s\nfailed\nbusy\n' "$(date +%s)" > "$cache"
+			return 2
 		fi
-		rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
+		rm -rf "$lock"
 		mkdir "$lock" 2>/dev/null || return 1
 	fi
 	echo $$ > "$lock/pid"
@@ -61,7 +79,7 @@ wg_handshake_test() {
 	local_addr=$(uci -q get "wificalling-gateway.$id.local_address") || true
 	if [ -z "$priv" ] || [ -z "$pub" ] || [ -z "$local_addr" ]; then
 		printf '%s\nfailed\nconfig_missing\n' "$(date +%s)" > "$cache"
-		rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
+		release_lock "$lock"
 		return 1
 	fi
 	psk=$(uci -q get "wificalling-gateway.$id.pre_shared_key") || true
@@ -122,12 +140,12 @@ wg_handshake_test() {
 	esac
 	if [ -n "${ip:-}" ]; then
 		printf '%s\nok\n%s\n' "$(date +%s)" "$ip" > "$cache"
-		rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
+		release_lock "$lock"
 		printf '%s' "$ip"
 		return 0
 	fi
 	printf '%s\nfailed\n%s\n' "$(date +%s)" "${reason:-unreachable}" > "$cache"
-	rm -f "$lock/pid"; rmdir "$lock" 2>/dev/null || true
+	release_lock "$lock"
 	return 1
 }
 
