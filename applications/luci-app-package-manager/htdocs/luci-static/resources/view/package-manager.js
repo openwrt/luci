@@ -51,6 +51,11 @@ const css = '								\
 		white-space: nowrap;			\
 	}									\
 										\
+	/* bootstrap sets 15%; shrink */	\
+	#packages .td.cbi-section-actions {	\
+		width: auto;					\
+	}									\
+										\
 	ul.deps, ul.deps ul, ul.errors {	\
 		margin-left: 1em;				\
 	}									\
