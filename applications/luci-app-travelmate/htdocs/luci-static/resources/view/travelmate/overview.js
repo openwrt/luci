@@ -54,6 +54,16 @@ function handleAction(ev) {
 			.then(() => waitForIface(ifaceValue, 20000))
 			.then(() => fs.exec('/etc/init.d/travelmate', ['start']))
 	}
+	if (ev === 'stopService') {
+		return fs.exec('/etc/init.d/travelmate', ['stop'])
+			.then(function () {
+				if (!poll.active())
+					poll.start();
+			})
+			.catch(function (err) {
+				ui.addNotification(null, E('p', _('Unable to stop the travelmate service: %s').format(err)), 'error');
+			})
+	}
 	if (ev === 'restartTravelmate') {
 		const map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
@@ -282,20 +292,26 @@ function splitInterfaces(text) {
 }
 
 /*
-	travelmate_status is either "connected, <detail>", "processing" or
-	"program error". Only the leading word drives the state colour.
+	travelmate_status is either "connected, <detail>", "processing",
+	"not connected" or "program error". The backend only reports "processing"
+	while a run cycle is actually in progress, an idle daemon without uplink
+	reports "not connected". The state key drives the dot colour and decides
+	whether the action buttons are temporarily locked.
 */
 function splitStatus(text) {
 	const value = text || '';
-	if (value.indexOf('connected') === 0) {
-		const idx = value.indexOf(', ');
-		return { 'state': 'connected', 'label': _('connected'), 'detail': idx > 0 ? value.substring(idx + 2) : '-' };
-	}
 	if (value === 'processing') {
 		return { 'state': 'processing', 'label': _('processing'), 'detail': '-' };
 	}
+	if (value === 'not connected') {
+		return { 'state': 'idle', 'label': _('not connected'), 'detail': '-' };
+	}
 	if (value === 'program error') {
 		return { 'state': 'error', 'label': _('program error'), 'detail': '-' };
+	}
+	if (value.indexOf('connected') === 0) {
+		const idx = value.indexOf(', ');
+		return { 'state': 'connected', 'label': _('connected'), 'detail': idx > 0 ? value.substring(idx + 2) : '-' };
 	}
 	return { 'state': '', 'label': value || '-', 'detail': '-' };
 }
@@ -355,17 +371,55 @@ return view.extend({
 		};
 
 		/*
+			action button helper
+
+			Only lock the buttons while a run cycle is actually in progress. The
+			service button is never locked, it is the escape hatch out of a long
+			running or stuck cycle.
+		*/
+		const setButtons = (locked) => {
+			document.querySelectorAll('.cbi-page-actions button:not(#btn_stop)').forEach(function (btn) {
+				btn.disabled = locked;
+				if (locked) {
+					btn.blur();
+				}
+			});
+		};
+
+		/*
+			stop button helper
+
+			The backend truncates the runtime file on service stop, so an empty
+			or missing file means 'not running'. The button is only greyed out
+			in that state, 'Save & Restart' brings the service back up.
+		*/
+		const setStop = (running) => {
+			const btn = document.getElementById('btn_stop');
+			if (btn) {
+				btn.disabled = !running;
+			}
+		};
+
+		/*
 			poll runtime information
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
 			return L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.runtime.json'), null).then(function (stat) {
-				if (!stat) {
+				const status = document.getElementById('status');
+				if (!stat || !stat.size) {
+					parseErrCount = 0;
+					setStop(false);
+					setButtons(false);
+					if (status) {
+						status.classList.remove('spinning');
+						status.setAttribute('data-state', 'stopped');
+						setText('state', _('stopped'));
+						setText('connection', '-');
+					}
 					return;
 				}
 				return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.runtime.json'), null).then(function (res) {
-					const status = document.getElementById('status');
-					const buttons = document.querySelectorAll('.cbi-page-actions button');
 					let info = null;
 					try {
 						info = JSON.parse(res);
@@ -376,12 +430,11 @@ return view.extend({
 					} catch (e) {
 						info = null;
 						parseErrCount++;
+						setStop(true);
+						setButtons(false);
 						if (status) {
 							status.setAttribute('data-state', '');
 							setText('state', '-');
-							buttons.forEach(function (btn) {
-								btn.disabled = false;
-							});
 							status.classList.remove('spinning');
 							if (parseErrCount >= 5) {
 								ui.addNotification(null, E('p', _('Unable to parse the travelmate runtime information!')), 'error');
@@ -390,37 +443,20 @@ return view.extend({
 						}
 						return;
 					}
+					setStop(true);
 					if (status && info) {
 						const state = splitStatus(info.data.travelmate_status);
 						status.setAttribute('data-state', state.state);
 						setText('state', state.label);
 						setText('connection', state.detail);
 						setText('versions', `${info.data.frontend_ver || '-'} / ${info.data.backend_ver || '-'}`);
-						if (info.data.travelmate_status === 'processing') {
-							buttons.forEach(function (btn) {
-								btn.disabled = true;
-								btn.blur();
-							});
-							if (!status.classList.contains("spinning")) {
-								status.classList.add("spinning");
-							}
-						} else {
-							if (status.classList.contains("spinning")) {
-								status.classList.remove("spinning");
-							}
-							buttons.forEach(function (btn) {
-								btn.disabled = false;
-							});
-						}
+						setButtons(state.state === 'processing');
+						status.classList.toggle('spinning', state.state === 'processing');
 					} else if (status) {
 						status.setAttribute('data-state', '');
 						setText('state', '-');
-						if (status.classList.contains("spinning")) {
-							status.classList.remove("spinning");
-						}
-						buttons.forEach(function (btn) {
-							btn.disabled = false;
-						});
+						status.classList.remove('spinning');
+						setButtons(false);
 					}
 					if (info) {
 						const station = splitStationId(info.data.station_id);
@@ -464,6 +500,7 @@ return view.extend({
 				'--trm-ok: #1f8a5f;' +
 				'--trm-err: #c0392b;' +
 				'--trm-info: #2f6fb0;' +
+				'--trm-warn: #b7791f;' +
 				'--trm-ok-bg: rgba(31,138,95,.14);' +
 				'}' +
 				'@media (prefers-color-scheme: dark) {' +
@@ -471,6 +508,7 @@ return view.extend({
 				'--trm-ok: #63c79b;' +
 				'--trm-err: #e8897e;' +
 				'--trm-info: #7fb3e8;' +
+				'--trm-warn: #e0b35c;' +
 				'}}' +
 				'#trm-status .trm-grid { display: grid; gap: .75em; grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr)); margin-bottom: .75em; }' +
 				'#trm-status .trm-card { background: var(--trm-card-bg); border: 1px solid var(--trm-card-border); border-radius: 8px; padding: .7em .9em; min-width: 0; overflow-wrap: break-word; }' +
@@ -483,6 +521,8 @@ return view.extend({
 				'#trm-status .trm-dot { width: .6em; height: .6em; border-radius: 50%; background: var(--trm-muted); flex: 0 0 auto; }' +
 				'#trm-status .trm-state[data-state="connected"] .trm-dot { background: var(--trm-ok); }' +
 				'#trm-status .trm-state[data-state="processing"] .trm-dot { background: var(--trm-info); }' +
+				'#trm-status .trm-state[data-state="idle"] .trm-dot { background: var(--trm-warn); }' +
+				'#trm-status .trm-state[data-state="stopped"] .trm-dot { background: var(--trm-muted); }' +
 				'#trm-status .trm-state[data-state="error"] .trm-dot { background: var(--trm-err); }' +
 				'#trm-status .trm-title { font-weight: bold; margin-bottom: .6em; }' +
 				'#trm-status .trm-chips { display: flex; flex-wrap: wrap; gap: .35em; }' +
@@ -750,9 +790,18 @@ return view.extend({
 		s.render = function () {
 			return E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
+					'class': 'btn cbi-button cbi-button-reset important',
+					'style': 'float:none;margin-right:.4em;',
+					'title': _('Stop the travelmate service'),
+					'id': 'btn_stop',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction('stopService');
+					})
+				}, [_('Stop')]),
+				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Interface Setup',
+					'title': _('Interface Setup'),
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('setup');
 					})
@@ -760,7 +809,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Restart Interface',
+					'title': _('Restart Interface'),
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restartInterface');
 					})
@@ -768,8 +817,8 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'QRCode',
-					'id': 'btn_suspend',
+					'title': _('QR-Code'),
+					'id': 'btn_qrcode',
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('qrcode');
 					})
@@ -777,7 +826,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Save & Restart',
+					'title': _('Save & Restart'),
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restartTravelmate');
 					})
