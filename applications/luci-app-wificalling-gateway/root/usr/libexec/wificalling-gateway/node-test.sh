@@ -55,6 +55,10 @@ if [ "$proto" = wireguard ]; then
 
 	if exit_ip=$(wg_handshake_test "$id" "$server" "$port"); then
 		printf '{"state":"handshake_ok","exit_ip":"%s"}\n' "$exit_ip"
+	elif [ $? -eq 2 ]; then
+		# Contention with another test in flight: no probe was attempted,
+		# report busy rather than a failed handshake.
+		printf '{"state":"failed","reason":"busy"}\n'
 	else
 		reason=$(sed -n '3p' "/tmp/wg-health-$id" 2>/dev/null || echo unreachable)
 		printf '{"state":"handshake_failed","reason":"%s"}\n' "$reason"

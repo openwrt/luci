@@ -54,7 +54,7 @@ $1=="device" {
     if (owner[ip] && owner[ip]!=$2) fail("duplicate client IP assignment: " ip)
     owner[ip]=$2; normalized=normalized (normalized?",":"") ip
   }
-  dev[++nd]=$2; devnode[nd]=$3; devips[nd]=normalized; next
+  dev[++nd]=$2; devnode[nd]=$3; devips[nd]=normalized; used[$3]=1; next
 }
 END {
   if (nn<1) fail("at least one enabled node is required")
@@ -84,7 +84,11 @@ END {
   print "  \"inbounds\":[{\"type\":\"tproxy\",\"tag\":\"wfc-tcp\",\"listen\":\"0.0.0.0\",\"listen_port\":11441,\"network\":\"tcp\"},{\"type\":\"tproxy\",\"tag\":\"wfc-udp\",\"listen\":\"0.0.0.0\",\"listen_port\":11442,\"network\":\"udp\"}],"
   print "  \"outbounds\":["
   for(k=1;k<=nn;k++) {
-    split(node[k],f,"|"); id=f[2]; p=f[3]
+    split(node[k],f,"|"); id=f[2]
+    # Nodes not referenced by any device policy are skipped: they would
+    # produce outbounds that consume sing-box memory for nothing.
+    if (!used[id]) continue
+    p=f[3]
     if (p=="wireguard" && wg_style=="endpoint") continue
     s="{\"type\":" q(p) ",\"tag\":" q("node-" id) ",\"server\":" q(f[4]) ",\"server_port\":" f[5]
     if (p=="anytls") s=s ",\"password\":" q(f[6]) ",\"tls\":" tls(f[7],f[8],f[9],f[20])

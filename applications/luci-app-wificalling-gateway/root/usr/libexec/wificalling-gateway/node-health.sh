@@ -46,32 +46,32 @@ wg_handshake_test() {
 	}
 	lock=/tmp/wg-health.lock
 	if ! mkdir "$lock" 2>/dev/null; then
-	# Contended.  A pidless lock is a normal transient state (between
-	# mkdir and echo $$, and during every release), not necessarily a
-	# stale one: treat it as held and only take it over once the
-	# directory is older than the probe budget.  A live pid means a
-	# real holder; a dead pid (holder killed mid-hold, not in the
-	# transient windows) can be reclaimed immediately.
-	lock_pid=$(cat "$lock/pid" 2>/dev/null || true)
-	held=1
-	if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
-		:  # live holder → held
-	elif [ -n "$lock_pid" ]; then
-		# dead pid: holder killed mid-hold — reclaim immediately
-		held=0
-	elif date -r "$lock" +%s >/dev/null 2>&1; then
-		lock_age=$(($(date +%s) - $(date -r "$lock" +%s)))
-		[ "$lock_age" -lt 60 ] 2>/dev/null || held=0
-	fi
-	if [ "$held" -eq 1 ]; then
-		if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
-			sed -n '3p' "$cache"
-			return 0
+		# Contended.  A pidless lock is a normal transient state (between
+		# mkdir and echo $$, and during every release), not necessarily a
+		# stale one: treat it as held and only take it over once the
+		# directory is older than the probe budget.  A live pid means a
+		# real holder; a dead pid (holder killed mid-hold, not in the
+		# transient windows) can be reclaimed immediately.
+		lock_pid=$(cat "$lock/pid" 2>/dev/null || true)
+		held=1
+		if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+			:  # live holder → held
+		elif [ -n "$lock_pid" ]; then
+			# dead pid: holder killed mid-hold — reclaim immediately
+			held=0
+		elif date -r "$lock" +%s >/dev/null 2>&1; then
+			lock_age=$(($(date +%s) - $(date -r "$lock" +%s)))
+			[ "$lock_age" -lt 60 ] 2>/dev/null || held=0
 		fi
-		# A test is in flight: don't write the result cache (it would
-		# suppress probing for 60 s after the lock is released).
-		return 2
-	fi
+		if [ "$held" -eq 1 ]; then
+			if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
+				sed -n '3p' "$cache"
+				return 0
+			fi
+			# A test is in flight: don't write the result cache (it would
+			# suppress probing for 60 s after the lock is released).
+			return 2
+		fi
 		rm -rf "$lock"
 		mkdir "$lock" 2>/dev/null || return 1
 	fi
