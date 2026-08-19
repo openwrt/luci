@@ -46,30 +46,32 @@ wg_handshake_test() {
 	}
 	lock=/tmp/wg-health.lock
 	if ! mkdir "$lock" 2>/dev/null; then
-		# Contended.  A pidless lock is a normal transient state (between
-		# mkdir and echo $$, and during every release), not necessarily a
-		# stale one: treat it as held and only take it over once the
-		# directory is older than the probe budget.  A live pid means a
-		# real holder either way.
-		lock_pid=$(cat "$lock/pid" 2>/dev/null || true)
-		held=1
-		if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
-			:
-		elif date -r "$lock" +%s >/dev/null 2>&1; then
-			lock_age=$(($(date +%s) - $(date -r "$lock" +%s)))
-			[ "$lock_age" -lt 60 ] 2>/dev/null || held=0
+	# Contended.  A pidless lock is a normal transient state (between
+	# mkdir and echo $$, and during every release), not necessarily a
+	# stale one: treat it as held and only take it over once the
+	# directory is older than the probe budget.  A live pid means a
+	# real holder; a dead pid (holder killed mid-hold, not in the
+	# transient windows) can be reclaimed immediately.
+	lock_pid=$(cat "$lock/pid" 2>/dev/null || true)
+	held=1
+	if [ -n "$lock_pid" ] && kill -0 "$lock_pid" 2>/dev/null; then
+		:  # live holder → held
+	elif [ -n "$lock_pid" ]; then
+		# dead pid: holder killed mid-hold — reclaim immediately
+		held=0
+	elif date -r "$lock" +%s >/dev/null 2>&1; then
+		lock_age=$(($(date +%s) - $(date -r "$lock" +%s)))
+		[ "$lock_age" -lt 60 ] 2>/dev/null || held=0
+	fi
+	if [ "$held" -eq 1 ]; then
+		if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
+			sed -n '3p' "$cache"
+			return 0
 		fi
-		if [ "$held" -eq 1 ]; then
-			if [ -f "$cache" ] && [ "$(sed -n '2p' "$cache")" = ok ]; then
-				sed -n '3p' "$cache"
-				return 0
-			fi
-			# A test is in flight: report busy instead of a failed
-			# handshake so the status page does not claim the peer is
-			# unreachable when no probe was even attempted.
-			printf '%s\nfailed\nbusy\n' "$(date +%s)" > "$cache"
-			return 2
-		fi
+		# A test is in flight: don't write the result cache (it would
+		# suppress probing for 60 s after the lock is released).
+		return 2
+	fi
 		rm -rf "$lock"
 		mkdir "$lock" 2>/dev/null || return 1
 	fi
@@ -160,6 +162,11 @@ wg_handshake_test() {
 			measurement=wg_handshake
 			if exit_ip=$(wg_handshake_test "$id" "$server" "$port"); then
 				state=handshake_ok; ping_json="\"$exit_ip\""
+			elif [ $? -eq 2 ]; then
+				# Contention: no probe was attempted, don't claim the
+				# peer is down — report "testing" so the status page
+				# shows a neutral third state (review round 11).
+				state=testing; ping_json=null; reason_json=null
 			else
 				state=handshake_failed; ping_json=null
 				reason_json="\"$(sed -n '3p' "/tmp/wg-health-$id" 2>/dev/null || echo unreachable)\""

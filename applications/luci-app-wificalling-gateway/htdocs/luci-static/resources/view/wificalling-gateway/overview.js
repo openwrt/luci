@@ -57,6 +57,7 @@ return view.extend({
 		function nodeState(n) {
 			if (!n) return '-';
 			if (n.state === 'handshake_ok' || n.state === 'reachable' || n.state === 'tcp_reachable') return _('Alive');
+			if (n.state === 'testing') return _('Test in progress');
 			if (n.state === 'handshake_failed' || n.state === 'unreachable') return _('Offline');
 			return _('Unknown');
 		}
