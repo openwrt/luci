@@ -68,15 +68,22 @@ END {
   # routes straight to the endpoint tag, "legacy" keeps the old outbound.
   if (nw>0 && wg_style=="endpoint") {
     print "  \"endpoints\":["
+    first=1
     for(w=1;w<=nw;w++) {
       split(node[wg_nodes[w]],f,"|"); id=f[2]
+      # Same unused-node skip as the outbounds: an endpoint no policy
+      # routes to would only consume memory.
+      if (!used[id]) continue
       s="{\"type\":\"wireguard\",\"tag\":" q("wg-" id) ",\"address\":[" q(f[22]) "],\"private_key\":" q(f[21])
       s=s ",\"peers\":[{\"address\":" q(f[4]) ",\"port\":" f[5] ",\"public_key\":" q(f[13]) ",\"allowed_ips\":[\"0.0.0.0/0\"]"
       if (f[23]!="") { nr=split(f[23],rv,","); rv_s=rv[1]; for(ri=2;ri<=nr;ri++) rv_s=rv_s "," rv[ri]; s=s ",\"reserved\":[" rv_s "]" }
       if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
       s=s "}]"
       if (f[24]!="") s=s ",\"mtu\":" f[24]
-      s=s "}"; print "    " s (w<nw?",":"")
+      # Comma depends on whether anything was emitted before, not on the
+      # loop index: skipped endpoints must not leave a trailing comma.
+      s=s "}"; print "    " s (first?"":",")
+      first=0
     }
     print "  ],"
   }
