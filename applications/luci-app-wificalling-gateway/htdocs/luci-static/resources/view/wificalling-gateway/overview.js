@@ -107,6 +107,10 @@ return view.extend({
 				else if (r && r.state === 'unreachable') {
 					testNotify(_('Offline'), 'error');
 				}
+				else if (r && r.state === 'failed') {
+					// e.g. busy: no probe was attempted, explain why.
+					testNotify(_('Unable to test node: ') + wgFailReason(r.reason), 'error', wgFailDetail(r.reason));
+				}
 				else {
 					testNotify(_('Unable to test node: ') + wgFailReason(r && r.reason), 'error');
 				}

@@ -15,6 +15,14 @@ function private4(ip, a) {
   split(ip,a,"."); if (a[1]>255||a[2]>255||a[3]>255||a[4]>255) return 0
   return a[1]==10 || (a[1]==172 && a[2]>=16 && a[2]<=31) || (a[1]==192 && a[2]==168)
 }
+# WireGuard required-field validation, run in the emit loops where
+# used[] already exists: an unreferenced node (which is skipped anyway)
+# must not fail the whole compile.
+function wg_check(f, id) {
+  if (f[21]=="" || f[13]=="" || f[22]=="") fail("wireguard node " id " is missing private_key, peer_public_key or local_address")
+  if (f[23]!="" && f[23] !~ /^[0-9]+(,[0-9]+)*$/) fail("wireguard node " id " reserved must be comma-separated numbers: " f[23])
+  if (f[24]!="" && f[24] !~ /^[0-9]+$/) fail("wireguard node " id " mtu must be a number: " f[24])
+}
 function tls(sni, insecure, alpn, pin, extra) {
   extra="\"enabled\":true"
   if (sni!="") extra=extra ",\"server_name\":" q(sni)
@@ -32,11 +40,6 @@ $1=="node" {
   # WireGuard requires a private key, peer public key and local address;
   # reserved bytes and MTU must be numeric or the emitted JSON breaks
   # (and sing-box check would fail for every node at once).
-  if (proto=="wireguard") {
-    if ($21=="" || $13=="" || $22=="") fail("wireguard node " id " is missing private_key, peer_public_key or local_address")
-    if ($23!="" && $23 !~ /^[0-9]+(,[0-9]+)*$/) fail("wireguard node " id " reserved must be comma-separated numbers: " $23)
-    if ($24!="" && $24 !~ /^[0-9]+$/) fail("wireguard node " id " mtu must be a number: " $24)
-  }
   node[++nn]=$0; node_id[nn]=id; node_proto[id]=proto
   if (proto=="wireguard") wg_nodes[++nw]=nn
   next
@@ -74,16 +77,18 @@ END {
       # Same unused-node skip as the outbounds: an endpoint no policy
       # routes to would only consume memory.
       if (!used[id]) continue
+      wg_check(f, id)
       s="{\"type\":\"wireguard\",\"tag\":" q("wg-" id) ",\"address\":[" q(f[22]) "],\"private_key\":" q(f[21])
       s=s ",\"peers\":[{\"address\":" q(f[4]) ",\"port\":" f[5] ",\"public_key\":" q(f[13]) ",\"allowed_ips\":[\"0.0.0.0/0\"]"
       if (f[23]!="") { nr=split(f[23],rv,","); rv_s=rv[1]; for(ri=2;ri<=nr;ri++) rv_s=rv_s "," rv[ri]; s=s ",\"reserved\":[" rv_s "]" }
       if (f[25]!="") s=s ",\"pre_shared_key\":" q(f[25])
       s=s "}]"
       if (f[24]!="") s=s ",\"mtu\":" f[24]
-      # Comma depends on whether anything was emitted before, not on the
-      # loop index: skipped endpoints must not leave a trailing comma.
-      s=s "}"; print "    " s (first?"":",")
-      first=0
+      # Leading comma for every endpoint after the first emitted one:
+      # the loop index cannot tell the last emitted endpoint apart from
+      # skipped ones, and trailing commas break JSON.
+      s=s "}"
+      if (first) { print "    " s; first=0 } else { print "    ," s }
     }
     print "  ],"
   }
@@ -96,6 +101,8 @@ END {
     # produce outbounds that consume sing-box memory for nothing.
     if (!used[id]) continue
     p=f[3]
+    if (p=="wireguard" && wg_style=="endpoint") continue
+    if (p=="wireguard") wg_check(f, id)
     if (p=="wireguard" && wg_style=="endpoint") continue
     s="{\"type\":" q(p) ",\"tag\":" q("node-" id) ",\"server\":" q(f[4]) ",\"server_port\":" f[5]
     if (p=="anytls") s=s ",\"password\":" q(f[6]) ",\"tls\":" tls(f[7],f[8],f[9],f[20])
