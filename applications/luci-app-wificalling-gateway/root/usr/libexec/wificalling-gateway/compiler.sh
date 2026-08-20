@@ -37,9 +37,6 @@ $1=="node" {
   if (id=="" || seen_node[id]++) fail("duplicate or empty node id: " id)
   if (proto!="anytls" && proto!="hysteria2" && proto!="tuic" && proto!="vless" && proto!="vmess" && proto!="trojan" && proto!="wireguard") fail("unsupported protocol: " proto)
   if ($4=="" || $5 !~ /^[0-9]+$/ || $5<1 || $5>65535) fail("invalid server or port for node: " id)
-  # WireGuard requires a private key, peer public key and local address;
-  # reserved bytes and MTU must be numeric or the emitted JSON breaks
-  # (and sing-box check would fail for every node at once).
   node[++nn]=$0; node_id[nn]=id; node_proto[id]=proto
   if (proto=="wireguard") wg_nodes[++nw]=nn
   next
@@ -103,7 +100,6 @@ END {
     p=f[3]
     if (p=="wireguard" && wg_style=="endpoint") continue
     if (p=="wireguard") wg_check(f, id)
-    if (p=="wireguard" && wg_style=="endpoint") continue
     s="{\"type\":" q(p) ",\"tag\":" q("node-" id) ",\"server\":" q(f[4]) ",\"server_port\":" f[5]
     if (p=="anytls") s=s ",\"password\":" q(f[6]) ",\"tls\":" tls(f[7],f[8],f[9],f[20])
     if (p=="hysteria2") s=s ",\"password\":" q(f[6]) ",\"tls\":" tls(f[7],f[8],f[9],f[20])
