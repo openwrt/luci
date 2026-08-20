@@ -62,8 +62,7 @@ define Package/luci-theme-footstrap/postinst
 	# uci-defaults registers the theme; refresh rpcd + drop caches so LuCI sees it without a
 	# reboot. Calling it ourselves is belt-and-braces: OpenWrt's default_postinst also runs
 	# (then deletes) every /etc/uci-defaults/* we ship, so it executes twice per install. It is
-	# idempotent, and its fresh-vs-upgrade marker is written at the end of the first pass, so
-	# that pass still sees a fresh install.
+	# idempotent: the second pass finds the theme already registered and changes nothing.
 	[ -f /etc/uci-defaults/30_luci-theme-footstrap ] && \
 		sh /etc/uci-defaults/30_luci-theme-footstrap >/dev/null 2>&1 || true
 	rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/* >/dev/null 2>&1 || true
@@ -75,24 +74,13 @@ endef
 define Package/luci-theme-footstrap/postrm
 #!/bin/sh
 # opkg runs the OLD package's postrm with arg "upgrade" during a version upgrade and "remove" on a
-# real removal. On upgrade this script MUST change nothing: reverting mediaurlbase, wiping the
-# theme registration and deleting the marker here is what flipped every updating user back to
-# bootstrap, and it defeated uci-defaults' own upgrade guard as well — with the marker gone,
-# uci-defaults treated the next run as "fresh", yet postrm had already pointed mediaurlbase
-# elsewhere. apk never runs this on upgrade (it uses the new package's pre/post-upgrade), so
-# guarding on the arg is correct for both managers.
+# real removal. On upgrade this script MUST change nothing: reverting mediaurlbase and wiping the
+# theme registration here is what flipped every updating user back to bootstrap. apk never runs
+# this on upgrade (it uses the new package's pre/post-upgrade), so guarding on the arg is correct
+# for both managers.
 case "$$1" in *upgrade*) exit 0 ;; esac
 [ -n "$${IPKG_INSTROOT}" ] || {
-	# Every theme name this package has ever registered. postrm runs when uci-defaults is already
-	# deleted, so it cannot source the list.
-	LEGACY_THEMES="Footstrap FootstrapDark FootstrapLight FootstrapTop FootstrapTopDark FootstrapTopLight FootstrapSidebar FootstrapOnTop"
-	for t in $$LEGACY_THEMES; do
-		uci -q delete "luci.themes.$$t"
-	done
-	# The router's DEFAULT layout, set by uci-defaults when migrating an old top-nav install. It
-	# means nothing to any other theme, and left behind it would silently re-apply the top bar on
-	# a later reinstall.
-	uci -q delete luci.main.footstrap_layout
+	uci -q delete luci.themes.Footstrap
 	# Don't leave the active theme pointing at the media dir we just removed. A theme needs its
 	# media dir AND its ucode template to render, so a one-part check could hand the UI to a
 	# half-removed bootstrap — the blank page this branch exists to avoid.
@@ -103,7 +91,6 @@ case "$$1" in *upgrade*) exit 0 ;; esac
 				uci set luci.main.mediaurlbase=/luci-static/bootstrap ;;
 	esac
 	uci commit luci
-	rm -rf /usr/share/luci-theme-footstrap >/dev/null 2>&1 || true
 	# The admin-uploaded login background and pattern, kept out of the package on purpose so they
 	# survive an upgrade. A real removal is the one time they should go.
 	rm -rf /etc/footstrap >/dev/null 2>&1 || true

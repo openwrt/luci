@@ -31,7 +31,7 @@
 	/* The ROUTER's saved Appearance defaults (Appearance -> Save as default, in /etc/config/footstrap):
 	   head.ut stamps them before paint and the client's own localStorage overrides every one — the
 	   browser choice always wins. Layout falls back to the legacy migration seed
-	   luci.main.footstrap_layout=top, which uci-defaults sets for a router upgraded from the old
+	   luci.main.footstrap_layout=top, which an admin may set to give the router a default
 	   top-nav theme (a shell script cannot write localStorage). Absent = the built-in defaults.
 
 	   `uci` and `config` come from the render scope, which dispatcher.uc builds per request: `uci` is
@@ -77,7 +77,7 @@
 	for (let k in FS_AXES)
 		fs_defaults[k] = fsd[k] || '';
 	/* the one value with a fallback of its own: the legacy migration seed
-	   luci.main.footstrap_layout=top, which uci-defaults sets for a router upgraded from the old
+	   luci.main.footstrap_layout=top, which an admin may set to give the router a default
 	   top-nav theme (a shell script cannot write localStorage).
 
 	   `config.main?.` and not `config.main.`: ucode raises a hard reference error on a property read

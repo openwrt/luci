@@ -1,162 +1,36 @@
 #!/bin/sh
 
-# FRESH INSTALL OR UPGRADE? A fresh install may activate this theme; an upgrade must NEVER change
-# the theme the user is on. The guard used to be `[ "$PKG_UPGRADE" = 1 ]` alone — apk never sets
-# that and neither does postinst, so only dev-sync.sh (which exports it by hand) ever took the
-# upgrade branch: on a real router the guard was DEAD, and an upgrade that found an empty
-# mediaurlbase would activate this theme behind the user's back. The marker file is the state that
-# really tells the two apart — it exists iff this script has completed at least once.
-# `${PKG_UPGRADE:-}`, not `$PKG_UPGRADE`: the variable is unset on every real path (that is the
-# point of the paragraph above), and this file is `sh`-run by the Makefile today but sourced by
-# whatever runs uci-defaults tomorrow — under `set -u` a bare expansion aborts the script here,
-# the theme is never registered, and the Makefile's `>/dev/null 2>&1` swallows the reason.
-FS_MARKER=/usr/share/luci-theme-footstrap/.installed
-if [ "${PKG_UPGRADE:-}" = 1 ] || [ -f "$FS_MARKER" ]; then
-	PKG_UPGRADE=1
-else
-	PKG_UPGRADE=0
+# Registration, and the three symlinks that expose what the admin uploads. Nothing here migrates a
+# router off an older footstrap: OpenWrt expects a sysupgrade rather than a package upgrade, so
+# leftovers go with the image, and the cleanup that is worth doing is config rather than files.
+
+changed=0
+
+set_opt() {
+	uci -q get "luci.$1" >/dev/null 2>&1 && return
+	uci set "luci.$1=$2"
+	changed=1
+}
+
+set_opt themes.Footstrap /luci-static/footstrap
+
+# A fresh install may pick the theme; an upgrade must never move a router off the theme it is on.
+# `changed` is what tells the two apart — on an upgrade the entry is already there — and it carries
+# the decision on its own, because apk exports no PKG_UPGRADE.
+if [ "${PKG_UPGRADE:-}" != 1 ] && [ "$changed" = 1 ]; then
+	set_opt main.mediaurlbase /luci-static/footstrap
 fi
 
-# Every theme name this package has EVER registered — delete them all; the ONE surviving entry
-# is re-added below (layout, mode and palette are client-side axes on the Footstrap tab of
-# System -> System, so they are not theme entries). The Makefile's postrm must delete the same set (it runs when
-# this file is already gone, so it cannot source it) and the two lists had already drifted into a
-# different ORDER — which is how one of them would quietly lose a name. Only the assignment is
-# pinned: the Makefile writes `$$t` where this writes `$t`.
-# @mirror theme/legacy-names
-LEGACY_THEMES="Footstrap FootstrapDark FootstrapLight FootstrapTop FootstrapTopDark FootstrapTopLight FootstrapSidebar FootstrapOnTop"
-# @endmirror
-for t in $LEGACY_THEMES; do
-	uci -q delete "luci.themes.$t"
-done
+[ "$changed" = 1 ] && uci commit luci
 
-# WHETHER THE REGISTRATION ACTUALLY LANDED. Every uci WRITE below is checked into this flag, and a
-# run that ends with it set refuses to write the marker and exits non-zero — which is what makes the
-# failure survivable: OpenWrt's default_postinst deletes a uci-defaults script only when it exits 0
-# (`( . "$i" ) && rm -f "$i"`), so a non-zero run is retried on the next boot. Without this the
-# script reported success on a full or read-only overlay, on a locked /etc/config/luci and mid-
-# upgrade: the theme was never registered, the script was deleted so nothing retried it, AND the
-# marker was written anyway — so the next install took the upgrade branch, which never activates a
-# theme. One unwritable file turned into a permanently unthemed router, silently. Deletes are NOT
-# counted: `uci -q delete` on an absent entry exits 1 and that is the normal case here.
-fail=0
-
-# The ONE theme entry: sidebar and top bar are one template morphed by :root[data-layout].
-uci set luci.themes.Footstrap=/luci-static/footstrap || fail=1
-
-# Normalise the active theme. Every legacy media path below is now neither registered in
-# luci.themes nor on disk, so an install left pointing at one is stranded: the Design page does
-# not list it (it cannot be switched away from) and its media dir 404s. They all map onto the one
-# surviving path. Non-footstrap themes are left alone; a fresh install defaults to footstrap.
-#
-# MIGRATION — a router that was on the top-nav theme must STAY on the top bar. The layout lives
-# in the browser (localStorage 'fs-layout') and a shell script cannot write that, so carry it
-# server-side: footstrap_layout is the router's DEFAULT layout, which head.ut stamps onto
-# <html data-layout> and the client's own choice then overrides. Set only when the old path says
-# top-nav, and only if unset, so a re-run never clobbers a deliberate change.
-cur=$(uci -q get luci.main.mediaurlbase)
-new=$cur
-case "$cur" in
-	# was on the top-nav theme (incl. its legacy dark/light variants) -> keep the bar
-	/luci-static/footstrap-top*)
-		[ -n "$(uci -q get luci.main.footstrap_layout)" ] || \
-			uci set luci.main.footstrap_layout=top || fail=1
-		new=/luci-static/footstrap ;;
-	# any other footstrap path (incl. the legacy -dark/-light) -> the built-in default (the bar):
-	# this branch deliberately sets no footstrap_layout, and absent means top (head.ut)
-	/luci-static/footstrap*)          new=/luci-static/footstrap ;;
-	"") [ "$PKG_UPGRADE" = 1 ] || new=/luci-static/footstrap ;;
-esac
-
-# Last-resort guard against a blank UI: whatever stays active must be on disk — media dir AND
-# ucode template. If a partial upgrade or a hand-edited mediaurlbase points at neither, fall back
-# to stock bootstrap (a plain UI beats no UI); skipped if bootstrap is not installed either.
-#
-# SCOPED TO OUR OWN THEME, and the scoping is the point: `new` defaults to whatever the router
-# already had, so without the case this guard judged OTHER PEOPLE'S themes — installing footstrap
-# would inspect an active luci-theme-argon and, if its template dir was not named after its media
-# basename (or it was mid-upgrade), quietly rewrite mediaurlbase to bootstrap.
-case "$new" in
-	/luci-static/footstrap*)
-		theme=${new##*/}
-		if [ ! -d "/www/luci-static/$theme" ] ||
-		   [ ! -f "/usr/share/ucode/luci/template/themes/$theme/header.ut" ]; then
-			[ -d /www/luci-static/bootstrap ] &&
-			[ -f /usr/share/ucode/luci/template/themes/bootstrap/header.ut ] &&
-				new=/luci-static/bootstrap
-		fi
-		;;
-esac
-
-[ "$new" = "$cur" ] || uci set luci.main.mediaurlbase="$new" || fail=1
-
-uci commit luci || fail=1
-
-# Appearance "Save as default" writes the router-wide axis defaults into /etc/config/footstrap
-# through the scoped uci ACL (config 'footstrap' only). The rpcd uci `set` backend the browser
-# calls needs the section to ALREADY EXIST, so guarantee it here — the shipped conffile carries it,
-# but a router that installed a footstrap predating this feature has no such file. `uci set` refuses
-# to CREATE the config file (only the section within one), so touch it first. Idempotent.
-[ -f /etc/config/footstrap ] || touch /etc/config/footstrap
-if ! uci -q get footstrap.settings >/dev/null 2>&1; then
-	uci set footstrap.settings=footstrap || fail=1
-	uci commit footstrap || fail=1
-fi
-
-# Login/page background upload (Appearance -> Wallpaper -> File). cgi-upload writes the image to
-# /etc/footstrap/login-bg (a fixed, ACL-scoped path — kept in /etc so it survives a package upgrade
-# and, via lib/upgrade/keep.d, a sysupgrade). uhttpd serves only /www, so a symlink there exposes it
-# at /luci-static/footstrap/bg (uhttpd follows symlinks). Both are recreated on every install/upgrade
-# (postinst re-runs this script) and are idempotent; /www is repopulated from firmware on sysupgrade,
-# so recreating the symlink here rather than shipping it is what makes it reliable on both filesystems.
-mkdir -p /etc/footstrap 2>/dev/null
-[ -d /www/luci-static/footstrap ] && ln -sf /etc/footstrap/login-bg /www/luci-static/footstrap/bg 2>/dev/null
-# The uploaded PATTERN (Appearance -> Wallpaper -> Pattern) is the same arrangement, with ONE
-# difference that is not cosmetic: the exposed name KEEPS THE .svg EXTENSION. uhttpd types a
-# response by extension, and an SVG served as application/octet-stream is one no browser will
-# paint — as a CSS mask, as a background image or at all.
-[ -d /www/luci-static/footstrap ] && ln -sf /etc/footstrap/pattern.svg /www/luci-static/footstrap/pattern.svg 2>/dev/null
-# The admin-installed webfonts (/etc/footstrap/fonts, see partials/head.ut) are a whole DIRECTORY
-# rather than one file: the faces plus an @font-face sheet beside them. Same arrangement as the two
-# images above, and linking a directory has TWO traps, both of which end with `ln` exiting 0 and
-# the link sitting one level too deep, at .../fonts/fonts — where no browser looks, so the fonts
-# silently do not serve and nothing reports a thing:
-#   - the link already exists and points at a directory: `ln -sf` follows it. `-n` is the fix.
-#   - the path is a REAL directory, which every footstrap before 0.12.1 shipped here full of
-#     woff2 files. `-n` does not help — measured on a 25.12 router: exit 0, link created inside.
-# So clear the path first unless it is already the symlink we want. What is being deleted can only
-# be ours, and its contents are package files of a version that no longer exists.
-#
-# DO NOT DELETE THIS AS "an old migration". It is needed for every router whose last footstrap was
-# v0.12.0 or older, because that is where the package still SHIPPED files in that directory — and
-# there is no floor on how old an installed footstrap can be. Without it `ln -sfn` exits 0 with the
-# link planted one level down, the admin's webfonts stop serving, and footstrap.settings.fonts
-# points at a 404 with nothing reporting anything. The doodle cleanup below is the opposite case:
-# dropping it costs 200 kB of flash and nothing else.
+# uhttpd serves /www only, so the admin's own uploads live in /etc — where a sysupgrade keeps them
+# (lib/upgrade/keep.d) — and are reached through symlinks. The pattern keeps its .svg name: uhttpd
+# types a response by extension, and an SVG sent as octet-stream paints nowhere.
+mkdir -p /etc/footstrap
 if [ -d /www/luci-static/footstrap ]; then
-	[ ! -e /www/luci-static/footstrap/fonts ] || [ -L /www/luci-static/footstrap/fonts ] ||
-		rm -rf /www/luci-static/footstrap/fonts
-	ln -sfn /etc/footstrap/fonts /www/luci-static/footstrap/fonts 2>/dev/null
+	ln -sf /etc/footstrap/login-bg /www/luci-static/footstrap/bg
+	ln -sf /etc/footstrap/pattern.svg /www/luci-static/footstrap/pattern.svg
+	ln -sfn /etc/footstrap/fonts /www/luci-static/footstrap/fonts
 fi
-# The two doodle wallpapers earlier versions downloaded into /www on demand. They were never
-# package files, so no package manager will ever remove them, and nothing serves them any more —
-# the axis they belonged to now paints an admin-uploaded SVG. Left behind they are 200 kB of a
-# router's flash held by a feature that no longer exists.
-rm -f /www/luci-static/footstrap/cats.svg /www/luci-static/footstrap/dinos.svg 2>/dev/null
-
-# these caches embed theme paths — drop them so the switch applies on the next request
-rm -f /tmp/luci-indexcache* 2>/dev/null
-rm -rf /tmp/luci-modulecache 2>/dev/null
-
-# Write the marker LAST, so a run that dies half-way is still a fresh install next
-# time rather than an upgrade.
-if [ "$fail" = 1 ]; then
-	echo "luci-theme-footstrap: a uci write failed — not marking this install as complete;" >&2
-	echo "  this script stays in /etc/uci-defaults and runs again on the next boot." >&2
-	exit 1
-fi
-
-mkdir -p "$(dirname "$FS_MARKER")" 2>/dev/null
-: > "$FS_MARKER" 2>/dev/null
 
 exit 0
