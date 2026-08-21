@@ -108,9 +108,12 @@ return view.extend({
 					testNotify(_('Offline'), 'error');
 				}
 				else if (r && r.state === 'failed') {
-					// e.g. busy: no probe was attempted - informational,
-					// not a failure banner (round 14).
-					testNotify(wgFailReason(r.reason), 'info', wgFailDetail(r.reason));
+					// busy: no probe was attempted - informational, not a
+					// failure banner.  Every other failure reason is real.
+					if (r.reason === 'busy')
+						testNotify(wgFailReason(r.reason), 'info', wgFailDetail(r.reason));
+					else
+						testNotify(_('Unable to test node: ') + wgFailReason(r.reason), 'error', wgFailDetail(r.reason));
 				}
 				else {
 					testNotify(_('Unable to test node: ') + wgFailReason(r && r.reason), 'error');
