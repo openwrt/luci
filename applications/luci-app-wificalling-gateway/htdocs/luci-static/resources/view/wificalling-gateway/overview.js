@@ -66,16 +66,21 @@ return view.extend({
 		// timeout / unreachable).
 		function wgFailReason(reason) {
 			if (reason === 'config_missing') return _('Missing config');
+			if (reason === 'no_server') return _('Missing server/port');
 			if (reason === 'timeout') return _('Timeout');
 			if (reason === 'unreachable') return _('Unreachable');
 			if (reason === 'busy') return _('Test in progress');
+			if (reason === 'no_health_script') return _('Health check helper missing');
+			if (reason === 'no_tcp_probe') return _('No TCP probe available');
 			return reason || '';
 		}
 		function wgFailDetail(reason) {
 			if (reason === 'config_missing') return _('Missing key/address');
+			if (reason === 'no_server') return _('No server or port configured');
 			if (reason === 'timeout') return _('Handshake timed out (key/psk mismatch?)');
 			if (reason === 'unreachable') return _('Server unreachable');
 			if (reason === 'busy') return _('Another test is running right now');
+			if (reason === 'no_tcp_probe') return _('Install tcping or nc to probe this node');
 			return '';
 		}
 		// Banner-style notification with an optional detail suffix.

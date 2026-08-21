@@ -17,7 +17,7 @@ id=${1:?node id required}
 server=$(uci -q get "wificalling-gateway.$id.server") || true
 port=$(uci -q get "wificalling-gateway.$id.port") || true
 if [ -z "$server" ] || [ -z "$port" ]; then
-	printf '{"state":"failed","reason":"config_missing"}\n'
+	printf '{"state":"failed","reason":"no_server"}\n'
 	exit 0
 fi
 
