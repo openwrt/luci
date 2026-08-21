@@ -1,0 +1,45 @@
+{
+	"admin/services/nes-emulator": {
+		"title": "NES Emulator",
+		"order": 90,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-nes-emulator" ]
+		}
+	},
+	"admin/services/nes-emulator/overview": {
+		"title": "Overview",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "nes-emulator/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-nes-emulator" ]
+		}
+	},
+	"admin/services/nes-emulator/play": {
+		"title": "Play",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "nes-emulator/play"
+		},
+		"depends": {
+			"acl": [ "luci-app-nes-emulator" ]
+		}
+	},
+	"admin/services/nes-emulator/settings": {
+		"title": "Settings",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "nes-emulator/settings"
+		},
+		"depends": {
+			"acl": [ "luci-app-nes-emulator" ]
+		}
+	}
+}
