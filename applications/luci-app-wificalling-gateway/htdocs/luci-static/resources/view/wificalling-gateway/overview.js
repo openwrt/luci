@@ -61,9 +61,10 @@ return view.extend({
 			if (n.state === 'handshake_failed' || n.state === 'unreachable') return _('Offline');
 			return _('Unknown');
 		}
-		// Short reason label and full explanation for failed WG handshakes
-		// (reason comes from node-health.sh's cache: config_missing /
-		// timeout / unreachable).
+		// Short reason label and full explanation for a failed node test.
+		// Reasons come from node-health.sh's cache (config_missing /
+		// timeout / unreachable) and from node-test.sh (no_server /
+		// no_health_script / no_tcp_probe / busy).
 		function wgFailReason(reason) {
 			if (reason === 'config_missing') return _('Missing config');
 			if (reason === 'no_server') return _('Missing server/port');
@@ -110,7 +111,7 @@ return view.extend({
 					testNotify(_('Alive') + (r.ping_ms ? ' — ' + r.ping_ms + ' ms' : ''), 'info');
 				}
 				else if (r && r.state === 'unreachable') {
-					testNotify(_('Offline'), 'error');
+					testNotify(_('Offline'), 'error', wgFailDetail('unreachable'));
 				}
 				else if (r && r.state === 'failed') {
 					// busy: no probe was attempted - informational, not a
