@@ -254,15 +254,18 @@ return view.extend({
 				if (count > 0) {
 					stats.hits.push({ 'name': key, 'elements': elements, 'hits': count, 'value': count });
 				}
-				stats.worst.push({ 'name': key, 'elements': elements, 'hits': count, 'value': elements });
+				/*
+					worst ranks the cost of a set, not its idleness: how many
+					elements it carries per packet it actually catches. Ordering by
+					hits first would put a 38 element set with no hits above a
+					680k element set that caught 61 packets, which inverts what the
+					list is for. The add-one denominator keeps a zero hit set finite
+					and ranks it by its size, which is exactly its cost.
+				*/
+				stats.worst.push({ 'name': key, 'elements': elements, 'hits': count, 'value': elements / (count + 1) });
 			});
 			stats.hits.sort(function (a, b) { return b.value - a.value; });
-			/*
-				worst first: fewest hits, and among those the largest set. Two
-				ordinal keys rather than an elements per hit ratio, which would
-				need an invented smoothing term to survive a zero denominator.
-			*/
-			stats.worst.sort(function (a, b) { return (a.hits - b.hits) || (b.value - a.value); });
+			stats.worst.sort(function (a, b) { return b.value - a.value; });
 			return stats;
 		}
 
@@ -412,7 +415,7 @@ return view.extend({
 		*/
 		function topList(title, hint, entries, color, empty) {
 			const list = entries.slice(0, 10);
-			/* the worst list is not ordered by the bar metric, so take the max */
+			/* both lists are ranked by their bar metric, so the peak is the head */
 			const peak = list.reduce(function (max, entry) {
 				return entry.value > max ? entry.value : max;
 			}, 0);
@@ -467,7 +470,7 @@ return view.extend({
 				]),
 				E('div', { 'class': 'ban-grid' }, [
 					topList(_('Top Sets'), _('elements / packets'), hits.hits, 'info', _('no hits yet')),
-					topList(_('Worst Sets'), _('elements / packets'), hits.worst, 'err', '-')
+					topList(_('Worst Sets'), _('elements per packet'), hits.worst, 'err', '-')
 				]),
 				E('div', { 'class': 'ban-grid' }, [
 					E('div', { 'class': 'ban-card' }, [

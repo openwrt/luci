@@ -1079,6 +1079,10 @@ return view.extend({
 		o = s.taboption('feeds', form.Flag, 'ban_allowlistonly', _('Allowlist Only'), _('Restrict the internet access from/to a small number of secure IPs.'));
 		o.rmempty = false;
 
+		o = s.taboption('feeds', form.Flag, 'ban_monitorallowed', _('Monitor Local Allowlist'), _('The log monitor only honours the entries of the local allowlist, IPs which are merely covered by an external allowlist feed can be blocked.'));
+		o.depends('ban_allowlistonly', '1');
+		o.rmempty = false;
+
 		s = m.section(form.NamedSection, 'global');
 		s.render = L.bind(function () {
 			return E('div', { 'class': 'cbi-page-actions' }, [
