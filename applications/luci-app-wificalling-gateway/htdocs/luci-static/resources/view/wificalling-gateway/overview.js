@@ -64,7 +64,7 @@ return view.extend({
 		// Short reason label and full explanation for a failed node test.
 		// Reasons come from node-health.sh's cache (config_missing /
 		// timeout / unreachable) and from node-test.sh (no_server /
-		// no_health_script / no_tcp_probe / busy).
+		// no_health_script / no_tcp_probe / tcp_failed / busy).
 		function wgFailReason(reason) {
 			if (reason === 'config_missing') return _('Missing config');
 			if (reason === 'no_server') return _('Missing server/port');
@@ -82,6 +82,7 @@ return view.extend({
 			if (reason === 'unreachable') return _('Server unreachable');
 			if (reason === 'busy') return _('Another test is running right now');
 			if (reason === 'no_tcp_probe') return _('Install tcping or nc to probe this node');
+			if (reason === 'tcp_failed') return _('Server unreachable');
 			return '';
 		}
 		// Banner-style notification with an optional detail suffix.
@@ -111,7 +112,7 @@ return view.extend({
 					testNotify(_('Alive') + (r.ping_ms ? ' — ' + r.ping_ms + ' ms' : ''), 'info');
 				}
 				else if (r && r.state === 'unreachable') {
-					testNotify(_('Offline'), 'error', wgFailDetail('unreachable'));
+					testNotify(_('Offline'), 'error', wgFailDetail(r.reason));
 				}
 				else if (r && r.state === 'failed') {
 					// busy: no probe was attempted - informational, not a
