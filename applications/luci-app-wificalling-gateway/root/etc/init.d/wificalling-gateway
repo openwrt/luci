@@ -52,7 +52,18 @@ append_node() {
 	printf '%s|%s|%s|%s|%s\n' "$s" "$safe_label" "$protocol" "$server" "$port" >> "$RUNDIR/nodes"
 }
 
-append_ip() { DEVICE_IPS="${DEVICE_IPS}${DEVICE_IPS:+,}$1"; }
+append_ip() {
+	# The IP reaches the nftables clients4 set and the generated config
+	# verbatim; reject anything that is not a plain dotted quad so a
+	# hand-written UCI value cannot inject into either.
+	case "$1" in
+		''|*[!0-9.]*|*..*|.*|*.)
+			logger -t "$APP" "invalid client IP skipped: $1"
+			return
+			;;
+	esac
+	DEVICE_IPS="${DEVICE_IPS}${DEVICE_IPS:+,}$1"
+}
 append_device() {
 	local s="$1" enabled label node route_mode
 	config_get_bool enabled "$s" enabled 1; [ "$enabled" -eq 1 ] || return 0
