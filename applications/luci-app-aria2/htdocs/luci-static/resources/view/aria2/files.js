@@ -17,7 +17,7 @@ return view.extend({
 
 					res.file = res.file || '';
 					res.content = 'content' in res ? res.content.trim() : '';
-					res.rows = res.content.split('\n', 20).length;
+					res.rows = res.content.split('\n', 20).length + 1;
 					return res;
 				})
 			);
@@ -35,7 +35,7 @@ return view.extend({
 						'style': 'width: 100%',
 						'readonly': true,
 						'wrap': 'off',
-						'rows': data.rows >= 20 ? 20 : data.rows + 1
+						'rows': data.rows >= 20 ? data.rows + 1 : 20
 					}, data.content)
 				)
 			]);
