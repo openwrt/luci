@@ -527,7 +527,7 @@ const UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 			'placeholder': this.options.placeholder,
 			'style': style,
 			'cols': this.options.cols,
-			'rows': this.options.rows,
+			'rows': this.options.rows ? this.options.rows + 1 : this.options.rows,
 			'wrap': this.options.wrap ? 'soft' : 'off'
 		}, [ value ]));
 
