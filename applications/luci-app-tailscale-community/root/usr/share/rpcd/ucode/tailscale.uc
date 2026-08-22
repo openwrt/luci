@@ -232,6 +232,8 @@ methods.get_subroutes = {
 methods.setup_firewall = {
 	call: function() {
 		try {
+			uci.load('tailscale');
+
 			uci.load('network');
 			uci.load('firewall');
 
@@ -354,6 +356,19 @@ methods.setup_firewall = {
 		} catch (e) {
 			return { error: 'Exception in setup_firewall: ' + e + '\nStack: ' + (e.stacktrace || '') };
 		}
+	}
+};
+
+methods.get_logs = {
+	args: { lines: 200 },
+	call: function(request) {
+		let lines = int(request?.args?.lines) || 200;
+		let cmd = 'logread -l ' + lines + ' 2>/dev/null | grep -i -E "tailscale" || true';
+		let result = exec(cmd);
+		if (result.code == 0) {
+			return { logs: result.stdout };
+		}
+		return { logs: [], error: join(' ', result.stderr) };
 	}
 };
 

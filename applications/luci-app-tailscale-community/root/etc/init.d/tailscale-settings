@@ -81,7 +81,7 @@ apply_settings() {
 
 	local accept_routes advertise_exit_node exit_node exit_node_allow_lan_access
 	local ssh shields_up runwebclient nosnat hostname
-	local enable_relay relay_server_port
+	local enable_relay relay_server_port disable_fw_config
 
 	config_get accept_routes              settings accept_routes              '0'
 	config_get advertise_exit_node        settings advertise_exit_node        '0'
@@ -95,6 +95,7 @@ apply_settings() {
 	config_get hostname                   settings hostname                   ''
 	config_get enable_relay               settings enable_relay               '0'
 	config_get relay_server_port          settings relay_server_port          '40000'
+	config_get disable_fw_config          settings disable_fw_config          '0'
 
 	# Collect advertise_routes UCI list into comma-separated string
 	local routes=""
@@ -187,6 +188,11 @@ apply_settings() {
 		else
 			set -- "$@" "--relay-server-port="
 		fi
+	fi
+
+	# --netfilter-mode (only when disable_fw_config is enabled and tailscale init doesn't already handle it)
+	if [ "$disable_fw_config" = "1" ]; then
+		set -- "$@" --netfilter-mode=off
 	fi
 
 	logger -t "$NAME" "Applying settings"
