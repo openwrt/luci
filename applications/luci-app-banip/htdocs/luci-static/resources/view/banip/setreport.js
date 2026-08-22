@@ -408,12 +408,8 @@ return view.extend({
 
 		/*
 			ranked lists with relative bars
-
-			A quota only means something once the counters exist. The report
-			carries an empty string rather than a zero while the 'count' option
-			is off, which is what separates "not counted" from "counted zero".
 		*/
-		function topList(title, hint, entries, color, empty) {
+		function topList(title, hint, entries, color, empty, fmtValue) {
 			const list = entries.slice(0, 10);
 			/* both lists are ranked by their bar metric, so the peak is the head */
 			const peak = list.reduce(function (max, entry) {
@@ -426,13 +422,17 @@ return view.extend({
 			} else if (hits.counted === 0) {
 				note = _('packet counters disabled');
 			}
+			const pair = `${_('elements')} / ${_('packets')}`;
 			const rows = list.map(function (entry) {
 				const width = peak > 0 ? Math.round(entry.value / peak * 100) : 0;
 				return E('div', { 'class': 'ban-row' }, [
 					E('div', { 'class': 'ban-row-top' }, [
 						E('span', { 'class': 'ban-row-name' }, [entry.name]),
-						E('span', { 'class': 'ban-row-cnt' }, [
-							`${fmtCount(entry.elements)} / ${fmtCount(entry.hits)}`
+						E('span', {
+							'class': 'ban-row-cnt',
+							'title': `${fmtCount(entry.elements)} / ${fmtCount(entry.hits)} ${pair}`
+						}, [
+							fmtValue ? fmtValue(entry) : `${fmtCount(entry.elements)} / ${fmtCount(entry.hits)}`
 						])
 					]),
 					E('div', { 'class': 'ban-bar' }, [
@@ -470,7 +470,8 @@ return view.extend({
 				]),
 				E('div', { 'class': 'ban-grid' }, [
 					topList(_('Top Sets'), _('elements / packets'), hits.hits, 'info', _('no hits yet')),
-					topList(_('Worst Sets'), _('elements per packet'), hits.worst, 'err', '-')
+					topList(_('Worst Sets'), _('elements per packet'), hits.worst, 'err', '-',
+						function (entry) { return fmtCount(Math.round(entry.value)); })
 				]),
 				E('div', { 'class': 'ban-grid' }, [
 					E('div', { 'class': 'ban-card' }, [
