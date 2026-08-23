@@ -34,7 +34,7 @@ function validateBase64(section_id, value) {
 	if (value.length == 0)
 		return true;
 
-	if (value.length != 44 || !value.match(/^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/))
+	if (value.length != 44 || !value.match(/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/))
 		return _('Invalid Base64 key string');
 
 	if (value[43] != "=" )
@@ -816,7 +816,8 @@ return network.registerProtocol('wireguard', {
 							'click'(ev) {
 								ev.preventDefault();
 
-								const blob = new Blob([peer_config], { type: 'text/plain' });
+								const current_config = node.querySelector('.client-config').textContent;
+								const blob = new Blob([current_config], { type: 'text/plain' });
 								const url = URL.createObjectURL(blob);
 								const a = document.createElement('a');
 
