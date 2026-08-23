@@ -95,8 +95,9 @@ return view.extend({
 
 			// Filter by text
 			if (this.logTextFilter) {
+				const filter = this.logTextFilter.toLowerCase();
 				loglines = loglines.filter(({ text }) => {
-					const match = text.includes(this.logTextFilter);
+					const match = text.toLowerCase().includes(filter);
 					return this.invertLogTextSearch ? !match : match;
 				});
 			}
