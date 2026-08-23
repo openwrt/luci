@@ -157,7 +157,7 @@ function normalize_assets(uuid, assets) {
 		if (type(src) != 'string')
 			continue;
 
-		if (!match(src, sprintf("^/luci-static/plugins/%s/", uuid)))
+		if (index(src, sprintf("/luci-static/plugins/%s/", uuid)) != 0)
 			continue;
 
 		if (match(src, /\.\.|[\r\n\t ]/))
