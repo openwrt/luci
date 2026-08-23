@@ -53,16 +53,25 @@ append_node() {
 }
 
 append_ip() {
-	# The IP reaches the nftables clients4 set and the generated config
-	# verbatim; reject anything that is not a plain dotted quad so a
-	# hand-written UCI value cannot inject into either.
-	case "$1" in
-		''|*[!0-9.]*|*..*|.*|*.)
-			logger -t "$APP" "invalid client IP skipped: $1"
-			return
-			;;
+	# The IP reaches the nftables clients4 set and compiler.sh's
+	# private4() gate verbatim.  Mirror private4() here so a hand-written
+	# UCI value is skipped with a log line instead of failing the whole
+	# compile.
+	local ip="$1" a b c d
+	case "$ip" in
+		*.*.*.*.*|*[!0-9.]*|*..*|.*|*.|*[0-9][0-9][0-9][0-9]*) ip= ;;
+		*.*.*.*) ;;
+		*) ip= ;;
 	esac
-	DEVICE_IPS="${DEVICE_IPS}${DEVICE_IPS:+,}$1"
+	a=${ip%%.*}; b=${ip#*.}; b=${b%%.*}; c=${ip%.*}; c=${c##*.}; d=${ip##*.}
+	if [ -n "$ip" ] && [ "$a" -le 255 ] && [ "$b" -le 255 ] && [ "$c" -le 255 ] && [ "$d" -le 255 ] &&
+	   { [ "$a" -eq 10 ] ||
+	     { [ "$a" -eq 172 ] && [ "$b" -ge 16 ] && [ "$b" -le 31 ]; } ||
+	     { [ "$a" -eq 192 ] && [ "$b" -eq 168 ]; }; }; then
+		DEVICE_IPS="${DEVICE_IPS}${DEVICE_IPS:+,}$ip"
+	else
+		logger -t "$APP" "invalid client IP skipped: $1"
+	fi
 }
 append_device() {
 	local s="$1" enabled label node route_mode

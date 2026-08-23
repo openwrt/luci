@@ -71,6 +71,7 @@ return view.extend({
 			if (reason === 'timeout') return _('Timeout');
 			if (reason === 'unreachable') return _('Unreachable');
 			if (reason === 'busy') return _('Test in progress');
+			if (reason === 'tcp_failed') return _('Unreachable');
 			if (reason === 'no_health_script') return _('Health check helper missing');
 			if (reason === 'no_tcp_probe') return _('No TCP probe available');
 			return reason || '';
