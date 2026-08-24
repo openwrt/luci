@@ -226,15 +226,24 @@ function scrollTop() {
 }
 
 function scrolling() { return Date.now() < _movingUntil; }
+/* how many times the offset has moved in this stretch: >1 is a scroll, 1 is a compensation */
+let _steps = 0;
 
 function sampleMotion() {
 	const y = scrollTop();
 	if (_lastOffset === null || y !== _lastOffset) {
+		/* HOW MANY TIMES the offset has moved inside this stretch of movement, not just that it did.
+		 * One step is what a compensation looks like — the engine puts the offset somewhere and it
+		 * stays there. A scroll is a SERIES. `lateDrift()` is the only caller that needs to tell the
+		 * two apart, and this is the cheapest thing that can: it is counted in a loop that already
+		 * runs, from a value it already reads. */
+		if (_lastOffset !== null) _steps++;
 		_lastOffset = y;
 		_movingUntil = Date.now() + SCROLL_IDLE;
 	}
 	if (scrolling()) { requestAnimationFrame(sampleMotion); return; }
 	_sampling = false;
+	_steps = 0;
 	/* the reader has stopped: this is a still moment, so the floor and the reference both belong to
 	 * where the page now stands */
 	holdFloor();
@@ -242,9 +251,18 @@ function sampleMotion() {
 	/* the page has held still for SCROLL_IDLE: whatever was put off may run now */
 	if (_deferred) {
 		_deferred = false;
-		const ref = anchorRef();
+		/* NO CORRECTION FOR THIS BATCH, and that is deliberate. What runs here is work the fitters
+		 * put off because the reader was moving; the page they are about to change is a page the
+		 * reader has just scrolled through, and the two references available are both wrong for it.
+		 * A FRESH one describes the page after the scroll — against an offset WebKit may not have
+		 * laid out yet, which made the theme undo the reader's own move (measured at 1440, top,
+		 * Compact: parked at 591, put back to 0). The one from the last STILL page describes where
+		 * the reader was before the flick, and correcting to it drags them back there — the gate
+		 * caught exactly that as a 231px jump landing inside a scroll, on all three engines. Nothing
+		 * here is a poll tick: the fitters do not grow the page under anybody, they re-measure what
+		 * the scroll already showed. The next mutation corrects against a reference taken while the
+		 * page was still, which is the one that is true. */
 		run();
-		scheduleAnchor(ref);
 	}
 }
 
@@ -259,12 +277,26 @@ function noteMotion() {
  * and `scroll` does not bubble from an element — it only travels down the capture phase, which is
  * how the sidebar layout's inner scroller is seen as well as the document. The events only START
  * the sampler; whether the page is still moving is the sampler's answer, not theirs. */
+/* IS THE READER DRIVING, as opposed to the page moving?
+ *
+ * `scrolling()` above cannot tell those apart, and must not: every pass that reads layout has to
+ * stay out of a moving page whoever is moving it. `lateDrift()` asks the other question — a scroll
+ * offset that changed because the ENGINE compensated a mutation is precisely what it exists to
+ * inspect, and gating it on `scrolling()` made it fire never (measured: `late:busy` on every tick,
+ * because the engine's own correction starts the motion sampler). A gesture is what says the reader
+ * is driving, so the gesture is what it asks about. `mousedown` is in the list for the scrollbar
+ * thumb and `keydown` for Page Down, neither of which produces a wheel or a touch. */
+let _userUntil = 0;
+function noteUser() {
+	_userUntil = Date.now() + SCROLL_IDLE;
+	noteMotion();
+}
+
 (function watchMotion() {
 	const opts = { passive: true, capture: true };
 	window.addEventListener('scroll', noteMotion, opts);
-	window.addEventListener('wheel', noteMotion, opts);
-	window.addEventListener('touchstart', noteMotion, opts);
-	window.addEventListener('touchmove', noteMotion, opts);
+	for (const name of [ 'wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown' ])
+		window.addEventListener(name, noteUser, opts);
 })();
 
 /* Next frame, at most once per frame (rule 3). */
@@ -346,7 +378,9 @@ function watch(el) {
  * a drift under a pixel is rounding rather than movement. */
 /* DOES THE ENGINE ANCHOR AT ALL? Chromium and Firefox compensate a height change above the viewport
  * by themselves — the reader stays where they were and the scroll offset moves under them. WebKit
- * has never implemented it, so on Safari and on every iPhone the same poll tick moves the page:
+ * did not implement it until recently, so on an older Safari and on every iPhone of that vintage the
+ * same poll tick moves the page (a current WebKit anchors, and gets the COLLAPSE case wrong instead —
+ * lateDrift() below):
  * measured with the engine's anchoring suppressed, a 120px growth above the fold moves the reader
  * 120px, and 0px with it on.
  *
@@ -389,13 +423,24 @@ function forgetRest() {
 	_restPage = null;
 }
 function rememberRest() {
-	if (ENGINE_ANCHORS || scrolling()) return;
+	if (scrolling()) return;
+	/* A PAGE AT THE TOP HAS NOTHING TO BE PUT BACK TO, so it does not pay for a reference. Every
+	 * correction here gives back offset the reader lost; at offset 0 there is none to lose, and the
+	 * hit test plus rect that anchorRef() costs (0.2ms typical, 6ms worst on a poll-dirtied WebKit
+	 * layout, measured on the stands) buys nothing. The offset is still remembered — it is one read,
+	 * and `anchorFor()`'s clamp test is written in terms of it. */
+	if (ENGINE_ANCHORS && scrollTop() <= 0) {
+		_rest = null;
+		_restAt = 0;
+		_restPage = pageStamp();
+		return;
+	}
 	const ref = anchorRef();
 	/* the offset it was taken at travels with it: a reference is only about the page, and the page
 	 * moving under the reader is a different fact from the reader moving through it */
 	_restAt = scrollTop();
 	_restPage = pageStamp();
-	_rest = ref ? { el: ref.el, top: ref.top, at: _restAt } : null;
+	_rest = ref ? { el: ref.el, top: ref.top, at: _restAt, sec: ref.sec, secTop: ref.secTop } : null;
 }
 
 /* -> the reference to correct against: the pre-mutation one where the engine leaves that to us, the
@@ -428,8 +473,14 @@ function anchorFor() {
 	 * is shorter now, the browser clamps the write straight back and the reader keeps the offset they
 	 * already had. The element path below stays preferred where it survives, because it compensates
 	 * the height change the tick brought with it as well. */
-	if (!_rest || !_rest.el.isConnected)
-		return clamped ? { by: _restAt - at } : anchorRef();
+	if (!_rest || !_rest.el.isConnected) {
+		if (clamped) return { by: _restAt - at };
+		/* the element is gone but its section is not — see anchorRef() for why that is the common
+		 * case rather than an edge one */
+		if (_rest && _rest.sec && _rest.sec.isConnected && at === _restAt)
+			return { el: _rest.sec, top: _rest.secTop, slack: 0 };
+		return anchorRef();
+	}
 	/* THE READER MOVED, NOT THE PAGE. A reference taken at one offset says nothing about a document
 	 * seen from another: correcting against it would drag the page back to where the reader had
 	 * scrolled FROM. So an offset that is not the one the reference was captured at normally means
@@ -455,7 +506,15 @@ function anchorFor() {
 	 *
 	 * Measured on the same harness with the reader flicking while the swap lands: the theme writes
 	 * no offset at all, before this change and after it. */
-	if (at !== _rest.at && !clamped) return anchorRef();
+	/* THE READER MOVED, SO THERE IS NOTHING TO PUT BACK — and taking a fresh reference here is worse
+	 * than taking none. `anchorRef()` reads a rect, and a scroll that has only just landed leaves
+	 * WebKit reporting the NEW `scrollTop` against the OLD layout: the reference then describes the
+	 * page from before the scroll, the correction a frame later measures the scroll itself, and the
+	 * reader is dragged back to where they started. Measured on the 24.10 stand at 1440, top layout,
+	 * Compact density: parked at 591, put back to 0, every run, on both the engine-anchoring path and
+	 * the fallback. A tick that lands right after a scroll compensates nothing; the next still moment
+	 * takes a reference that is true. */
+	if (at !== _rest.at && !clamped) return null;
 	/* HOW MUCH OF THE DRIFT IS ALREADY ACCOUNTED FOR. applyAnchor() refuses a correction bigger than
 	 * a viewport because a drift that size normally means the view replaced its whole subtree and
 	 * the reference is describing a page that no longer exists. A clamp is the one drift that big
@@ -496,15 +555,65 @@ function anchorRef() {
 	let y = 1;
 	let el = document.elementFromPoint(x, y);
 	const chrome = el && el.closest ? el.closest('[data-fs-chrome]') : null;
-	if (chrome) {
-		y = Math.max(1, Math.round(chrome.getBoundingClientRect().bottom) + 1);
-		el = document.elementFromPoint(x, y);
-	}
-	if (!el || !host.contains(el)) return null;
+	if (chrome) y = Math.max(1, Math.round(chrome.getBoundingClientRect().bottom) + 1);
+
+	/* THE HIT IS A SEARCH, NOT A SINGLE PROBE, and neither the host nor anything outside it counts.
+	 *
+	 * `elementFromPoint` answers with whatever is topmost, and two of those answers are useless here.
+	 * `#view` itself comes back wherever the point lands in a GAP — the margin between two sections,
+	 * the gutter of the Overview's two-column grid — and the host's own top does not move when a poll
+	 * changes something inside it, so a drift measured against it is zero on every tick, for ever.
+	 * And a point above the first section answers with `.fs-content`, which is not inside the host at
+	 * all: the first version returned null there without trying anywhere else, so on 25.12's Overview
+	 * at 1440 the theme had no reference AT ALL and a 120px growth moved the page 120px.
+	 *
+	 * So: take the whole STACK at the point (what a gap belongs to is directly underneath it), and if
+	 * that yields nothing inside the host, step down the viewport and ask again. */
+	const floor = Math.max(1, Math.round(window.innerHeight || 800));
+	const pick = (yy) => {
+		if (typeof document.elementsFromPoint === 'function') {
+			for (const cand of document.elementsFromPoint(x, yy))
+				if (cand !== host && host.contains(cand)) return cand;
+			return null;
+		}
+		const one = document.elementFromPoint(x, yy);
+		return (one && one !== host && host.contains(one)) ? one : null;
+	};
+	el = null;
+	for (let step = 0; step < 5 && !el; step++)
+		el = pick(Math.min(floor - 1, y + (Math.round(floor * 0.12) * step)));
+	if (!el) return null;
 	const table = el.closest('.table.fs-dt');
-	if (table) el = table.parentElement;
-	if (!el || !host.contains(el)) return null;
-	return { el, top: el.getBoundingClientRect().top };
+	if (table) {
+		const up = table.parentElement;
+		el = (up && up !== host && host.contains(up)) ? up : table;
+	}
+	if (!el || el === host || !host.contains(el)) return null;
+	/* `getClientRects()`, not `offsetParent` plus a `getComputedStyle` fallback: the question is only
+	 * "is this box in the layout at all", an element the table gate is holding out of it has no rects,
+	 * and resolving style on every settled pass to learn that would cost more than the rect already
+	 * read above. A box with no rects reports a top of 0 — a reference to nowhere. */
+	if (!el.getClientRects().length) return null;
+	/* AND A SECOND REFERENCE THAT SURVIVES THE TICK. `dom.content()` replaces a section's CHILDREN,
+	 * so the element the hit landed on is usually gone by the time the correction runs — and where
+	 * the tick also grew the page, nothing was clamped either, so the "give back what the engine
+	 * took" path has no number and the theme takes a fresh reference and measures a drift of zero.
+	 * That is a section swap nobody compensates: measured on 25.12's Overview at 1440 with the
+	 * engine's anchoring suppressed, the page moved 136px under the reader.
+	 *
+	 * The wrapper is what survives — the stock poll refreshes a `.cbi-section` in place and never
+	 * rebuilds it — so it is kept alongside, and used only when the precise reference is gone. */
+	/* the nearest ANCESTOR that a tick does not replace — `closest()` on the element itself is not it:
+	 * where the hit already climbed to the `.cbi-section` (which is what happens on any page whose
+	 * section is one table), `closest('.cbi-section')` answers with that same element, and a fallback
+	 * that is the reference is no fallback at all. */
+	let keep = el.parentElement;
+	while (keep && keep !== host && !keep.classList.contains('cbi-section')
+			&& !keep.classList.contains('cbi-map') && !keep.classList.contains('fs-ovl'))
+		keep = keep.parentElement;
+	if (!keep || keep === host || !host.contains(keep)) keep = null;
+	return { el, top: el.getBoundingClientRect().top,
+		sec: keep, secTop: keep ? keep.getBoundingClientRect().top : 0 };
 }
 
 let _anchorPending = null;
@@ -517,6 +626,58 @@ function anchorEnabled() {
 	try { return localStorage.getItem('fsAnchor') !== 'off'; }
 	catch (e) { return true; }
 }
+/* ---- WHAT THE ENGINE'S OWN ANCHORING LEAVES BEHIND ----
+ *
+ * Scroll anchoring keeps a reference element still while things above it change size. It is not the
+ * same promise as "a section can vanish and come back": `dom.content()` — every LuCI poll — empties
+ * a container before it refills it, the offset is clamped into a document that is briefly shorter,
+ * and what the engine does on the way back is its own business. Chromium lands exactly where it
+ * started. WebKit OVERSHOOTS — measured on the 24.10 stand's Overview at 390 and at 1440, in both
+ * layouts: a swap that grew a section by 120px moved the offset by 180, so the reader ended 60px
+ * up the page on every tick. That is what a Safari user sees as the page creeping while they read.
+ *
+ * WHY THE OFFSET CANNOT ANSWER THIS, and why this is not a browser test. The first version compared
+ * the offset with what it had been and gave back the difference; it never fired, because the offset
+ * came back LARGER, not smaller. A `CSS.supports('overflow-anchor')` test cannot separate the two
+ * behaviours either — WebKit shipped the property, so every engine now claims it — and a synthetic
+ * probe that performs the collapse itself calls Firefox broken as well, because a real page puts
+ * layout and a frame between the collapse and the refill and a probe does not. Both were measured,
+ * both were wrong, and the second one cost Chromium and Firefox 15px of drift they did not have.
+ *
+ * So nothing is assumed: the element the reader was looking at is asked where it is now, TWO FRAMES
+ * after the mutation — long enough for the engine to have finished its own correction. An engine
+ * that got it right reports a drift of zero and this does nothing at all. What is left over is what
+ * nobody put back, and it is given back here. The same guards as the main correction: not while the
+ * reader scrolls, not across a navigation, and never more than a viewport — a drift that size means
+ * the reference is describing a page that no longer exists. */
+let _lateFrame = 0;
+function lateDrift(ref) {
+	/* the reference from BEFORE this tick, captured by the caller: `run()` re-remembers it on its way
+	 * through, and a reference taken after the mutation describes the page as the mutation left it —
+	 * the drift it would report is zero by construction */
+	if (_lateFrame || !ref) return;
+	_lateFrame = requestAnimationFrame(() => {
+		_lateFrame = requestAnimationFrame(() => {
+			_lateFrame = 0;
+			/* NOT `scrolling()`: the engine's own compensation moves the offset and therefore starts
+			 * the motion sampler, so gating on that skipped every tick this exists for (measured —
+			 * the check reported "busy" on all of them). Two narrower questions instead: is the
+			 * reader driving (a gesture), and is the offset STREAMING (moving repeatedly, which a
+			 * one-shot compensation never does but a scroll always does). Either one means hands off. */
+			if (!anchorEnabled() || Date.now() < _userUntil || (scrolling() && _steps > 1)) return;
+			if (!ref.el.isConnected || _restPage !== pageStamp()) return;
+			const drift = ref.el.getBoundingClientRect().top - ref.top;
+			if (Math.abs(drift) < 1) return;			/* the engine put it back */
+			if (Math.abs(drift) > (window.innerHeight || 800)) return;
+			const sc = scroller();
+			const at = sc ? sc.scrollTop : window.scrollY;
+			if (sc) sc.scrollTop = at + drift; else window.scrollTo(0, at + drift);
+			/* the write may have been clamped short; the reader is where they are now */
+			_restAt = scrollTop();
+		});
+	});
+}
+
 function scheduleAnchor(ref) {
 	if (!ref || !anchorEnabled()) return;
 	if (_anchorPending) return;
@@ -535,6 +696,13 @@ function scheduleAnchor(ref) {
 }
 function applyAnchor(ref) {
 	if (!ref) return;
+	/* NOT INTO A MOVING PAGE. The correction is scheduled from the mutation and applied a frame
+	 * later, and the reader can start scrolling in between — the reference is then describing a page
+	 * they have already left, and putting them back on it is the jump this whole file exists to
+	 * prevent. `anchorRef()` refuses to TAKE a reference during a flick for the same reason; nothing
+	 * refused to USE one, and the gate caught it as a 231px correction landing inside a scroll on
+	 * all three engines once the reference stopped being re-read at apply time. */
+	if (scrolling()) return;
 	/* through scroller(), not a second probe of its own: the two asked the same question in the
 	 * same two lines and could already answer differently within one frame */
 	const sc = scroller();
@@ -588,9 +756,28 @@ function observeContent() {
 		 * see anchorFor(): where the engine does no anchoring of its own that reference comes from
 		 * the last still moment, because by the time this callback runs the poll has already moved
 		 * the page */
-		const ref = anchorFor();
+		/* ONE CORRECTION PER ENGINE, and which one depends on whether the engine is doing the job.
+		 *
+		 * Where it anchors, the immediate correction is not just redundant, it is harmful: the
+		 * reference it uses is read HERE, in the same instant the poll mutated the page, and after a
+		 * scroll WebKit hands back the new `scrollTop` before the layout that goes with it. The drift
+		 * then measures the reader's own move and the correction undoes it — measured on the 24.10
+		 * stand at 1440 in the top layout at Compact: the page went back to 0 from 591, every run.
+		 * What that engine needs is the RESIDUE, two frames later, once its own anchoring has run
+		 * and the layout is settled — which is lateDrift().
+		 *
+		 * Where it does not anchor, nobody else will put the reader back within the frame, so the
+		 * immediate correction stays, measured against the reference from the last still page. */
+		const settled = _rest;
+		const ref = ENGINE_ANCHORS ? null : anchorFor();
 		run();
-		scheduleAnchor(ref);
+		/* one or the other, never a fallthrough from one to the other: where the engine does not
+		 * anchor, `anchorFor()` returning nothing means it has DECIDED not to correct this tick (the
+		 * reader moved, or there is no reference worth using), and handing that case to the deferred
+		 * path corrects it two frames later instead — measured as a 320px correction landing inside
+		 * a flick, on all three engines. */
+		if (ENGINE_ANCHORS) lateDrift(settled);
+		else scheduleAnchor(ref);
 	});
 	for (const host of [ document.getElementById('view') || document.body, document.getElementById('modal_overlay') ]) {
 		if (!host) continue;
@@ -637,6 +824,17 @@ return baseclass.extend({
 	 * read layout asks the first and calls the second; a pass that only writes does neither. */
 	scrolling,
 	deferMeasurement,
+
+	/* -> the offset this file last took a reference at, or null before it has taken one.
+	 *
+	 * FOR THE GATES, and it is not a convenience: every correction here is measured against a
+	 * reference captured while the page was still, so a probe that grows the page before that
+	 * reference exists measures the guard rather than the anchor. There is no way to ask that from
+	 * outside — "is it scrolling" answers a different question, and answers "no" both before the
+	 * motion sampler starts and after it finishes, which in WebKit are 1.5 seconds apart. Waiting a
+	 * flat interval instead made tools/scroll-anchor.mjs report a jump on every WebKit run and none
+	 * on the other two engines, with the theme identical on all three. */
+	restAt: () => _restAt,
 
 	/* "THE OFFSET IS MINE NOW, FORGET WHAT YOU REMEMBERED." Called by fs-router where it resets both
 	 * scrollers for an incoming page, and it is not a courtesy — without it the correction below

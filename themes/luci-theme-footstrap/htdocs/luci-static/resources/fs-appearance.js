@@ -124,9 +124,51 @@ function build() {
 		node.addEventListener('widget-change', () => apply(w.getValue()));
 		return node;
 	};
+	/* THE ONE WIDGET THIS THEME CANNOT ASSUME, and the reason 23.05 is a supported release again.
+	 *
+	 * `ui.RangeSlider` arrived in 24.10. On 23.05 it is simply not there, and because this whole
+	 * panel is built inside one try/catch the miss took the ENTIRE Appearance tab with it — a
+	 * console line and an empty tab, reported from the field rather than by a gate, because no gate
+	 * had ever opened a 23.05 router.
+	 *
+	 * So the widget is used where it exists and reproduced where it does not: same DOM, same class
+	 * names (`.cbi-range-slider` and its value/units children are what theme/60-inputs.css dresses),
+	 * same two events, and the same base class — `ui.AbstractElement` is the name LuCI exports on
+	 * BOTH 23.05 and master, which is what makes `setUpdateEvents`/`setChangeEvents` available to
+	 * the copy. Nothing below this line knows which of the two it got.
+	 *
+	 * Kept deliberately smaller than upstream's: `calculate` is not reproduced, because no axis on
+	 * this page uses it. If one ever does, use the real widget's shape rather than growing this. */
+	const RangeSlider = ui.RangeSlider || ui.AbstractElement.extend({
+		__init__(value, options) {
+			this.value = value;
+			this.options = Object.assign({ min: 0, max: 100, step: 1, calcunits: null }, options);
+		},
+		render() {
+			this.sliderEl = E('input', {
+				type: 'range', min: this.options.min, max: this.options.max,
+				step: this.options.step || 'any', value: this.value
+			});
+			this.valueEl = E('output', { class: 'cbi-range-slider-value' }, String(this.value));
+			const node = E('div', { class: 'cbi-range-slider' }, [
+				this.sliderEl,
+				this.valueEl,
+				this.options.calcunits ? E('span', { class: 'cbi-range-slider-calc-units' }, this.options.calcunits) : null
+			].filter(Boolean));
+			this.node = node;
+			this.setUpdateEvents(this.sliderEl, 'input', 'blur');
+			this.setChangeEvents(this.sliderEl, 'change');
+			this.sliderEl.addEventListener('input', () => { this.valueEl.textContent = this.sliderEl.value; });
+			dom.bindClassInstance(node, this);
+			return node;
+		},
+		getValue() { return this.sliderEl.value; },
+		setValue(value) { this.sliderEl.value = value; this.valueEl.textContent = value; }
+	});
+
 	const sliderCtl = (current, min, max, apply, label, opts) => {
 		const o = opts || {};
-		const w = new ui.RangeSlider(String(current), {
+		const w = new RangeSlider(String(current), {
 			min: min, max: max, step: o.step || 1, calcunits: o.unit || null
 		});
 		const node = w.render();
