@@ -403,7 +403,24 @@ return view.extend({
 		selectedNode.description = _('Save the node first, then reload this page to select it for a device.');
 		uci.sections('wificalling-gateway', 'node').forEach(function(node) { selectedNode.value(node['.name'], node.label || node['.name']); });
 		var ips = s.option(form.DynamicList, 'source_ip', _('LAN IPv4 addresses'));
-		ips.datatype = 'ip4addr'; ips.rmempty = false; ips.placeholder = lanSubnetHint();
+		ips.datatype = 'ip4addr';
+		ips.rmempty = false;
+		ips.placeholder = lanSubnetHint();
+		// Only RFC1918 can reach the nftables set and the generated config:
+		// reject public/CGNAT addresses at input time with a readable hint.
+		ips.validate = function(section_id, value) {
+			var m = /^\s*(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\s*$/.exec(value || '');
+			if (!m) return _('Invalid IPv4 address');
+			for (var i = 1; i <= 4; i++) {
+				var octet = m[i];
+				if (+octet > 255 || (octet.length > 1 && octet.charAt(0) === '0'))
+					return _('Invalid IPv4 address');
+			}
+			var a = +m[1], b = +m[2];
+			if (a === 10 || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168))
+				return true;
+			return _('Only private IPv4 addresses (RFC1918) are supported');
+		};
 		var devicePicker = s.option(form.DummyValue, '_device_picker', _('From connected devices'));
 		devicePicker.rmempty = true;
 		devicePicker.modalonly = true;

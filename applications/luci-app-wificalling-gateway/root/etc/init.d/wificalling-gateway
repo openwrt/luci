@@ -79,6 +79,13 @@ append_device() {
 	config_get label "$s" label "$s"; config_get node "$s" node; config_get route_mode "$s" route_mode independent
 	case "$node" in *'|'*) logger -t "$APP" "invalid delimiter in device $s"; return 1;; esac
 	DEVICE_IPS=""; config_list_foreach "$s" source_ip append_ip
+	if [ -z "$DEVICE_IPS" ]; then
+		# Every source_ip was rejected by the validation: skip the device
+		# (it falls back to direct routing) instead of failing the whole
+		# gateway - mirrors the stale-node skip in compiler.sh.
+		logger -t "$APP" "device $s has no valid client IP, skipping"
+		return 0
+	fi
 	[ "$route_mode" = independent ] || return 0
 	local safe_label
 	safe_label=$(printf '%s' "$label" | tr '|' ' ')
