@@ -356,10 +356,14 @@ return view.extend({
 		udpMode.modalonly = true;
 		var transport = s.option(form.ListValue, 'transport', _('Transport'));
 		transport.value('', _('None')); transport.value('ws', _('WebSocket'));
+		// Imported links can carry grpc/httpupgrade; the select must declare
+		// them or ui.Select falls back to None and the first Save silently
+		// drops the transport.  Technical names stay English (no _()).
+		transport.value('grpc', 'gRPC'); transport.value('httpupgrade', 'HTTPUpgrade');
 		transport.modalonly = true;
-		var pathOpt = s.option(form.Value, 'path', _('WebSocket path'));
+		var pathOpt = s.option(form.Value, 'path', _('Transport path'));
 		pathOpt.modalonly = true;
-		var hostOpt = s.option(form.Value, 'host', _('WebSocket Host'));
+		var hostOpt = s.option(form.Value, 'host', _('Transport host'));
 		hostOpt.modalonly = true;
 		var wgKey = s.option(form.Value, 'private_key', _('WireGuard private key'));
 		wgKey.password = true; wgKey.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
@@ -409,7 +413,11 @@ return view.extend({
 		// Only RFC1918 can reach the nftables set and the generated config:
 		// reject public/CGNAT addresses at input time with a readable hint.
 		ips.validate = function(section_id, value) {
-			var m = /^\s*(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\s*$/.exec(value || '');
+			// The DynamicList container validator and the cleared add-item
+			// input both call this with ''; the "at least one address" rule
+			// is enforced by rmempty, so an empty value is not an error here.
+			if (!value) return true;
+			var m = /^\s*(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\s*$/.exec(value);
 			if (!m) return _('Invalid IPv4 address');
 			for (var i = 1; i <= 4; i++) {
 				var octet = m[i];

@@ -117,14 +117,16 @@ END {
       # mis-imported node fails the compile with a readable reason.
       if (f[17]=="xhttp") fail("xhttp transport is not supported by sing-box")
       if (f[17]=="ws") s=s ",\"transport\":{\"type\":\"ws\",\"path\":" q(f[18]) ",\"headers\":{\"Host\":" q(f[19]) "}}"
-      else if (f[17]=="grpc") s=s ",\"transport\":{\"type\":\"grpc\",\"service_name\":" q(f[18]!=""?f[18]:"/") "}"
+      # service_name is the service half of the gRPC method path; keep a
+      # blank link blank instead of inventing "/" (which dials "///Tun").
+      else if (f[17]=="grpc") s=s ",\"transport\":{\"type\":\"grpc\",\"service_name\":" q(f[18]) "}"
       else if (f[17]=="httpupgrade") s=s ",\"transport\":{\"type\":\"httpupgrade\",\"path\":" q(f[18]) ",\"host\":" q(f[19]) "}"
     }
     if (p=="vmess") {
       s=s ",\"uuid\":" q(f[6]) ",\"security\":\"auto\",\"alter_id\":" (f[10]~/^[0-9]+$/?f[10]:0)
       if (f[17]=="xhttp") fail("xhttp transport is not supported by sing-box")
       if (f[17]=="ws") s=s ",\"transport\":{\"type\":\"ws\",\"path\":" q(f[18]) ",\"headers\":{\"Host\":" q(f[19]) "}}"
-      else if (f[17]=="grpc") s=s ",\"transport\":{\"type\":\"grpc\",\"service_name\":" q(f[18]!=""?f[18]:"/") "}"
+      else if (f[17]=="grpc") s=s ",\"transport\":{\"type\":\"grpc\",\"service_name\":" q(f[18]) "}"
       else if (f[17]=="httpupgrade") s=s ",\"transport\":{\"type\":\"httpupgrade\",\"path\":" q(f[18]) ",\"host\":" q(f[19]) "}"
       # Imported VMess links carry the TLS name in the WS Host (f[19]) when
       # sni (f[7]) is empty and the server is a bare IP; fall back to it so

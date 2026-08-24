@@ -35,6 +35,7 @@ FILENAME==state_file {
 		old_wfc[i]=$3; old_sent[i]=$4+0; old_reply[i]=$5+0; old_last[i]=$6+0
 		old_event[i]=$7+0; old_streak[i]=$8+0; old_acc_sent[i]=$9+0; old_acc_reply[i]=$10+0
 		old_traffic_since[i]=($11!="" ? $11+0 : 0)
+		old_hs[i]=($12!="" ? $12+0 : 0)
   }
   next
 }
@@ -82,15 +83,19 @@ END {
     printf "\"epdg_ip\":%s,\"ike_seen\":%s,\"nat_t_seen\":%s,\"assured\":%s,", q(epdg[i]),(ike[i]?"true":"false"),(natt[i]?"true":"false"),(assured[i]?"true":"false")
     printf "\"sent_packets\":%d,\"reply_packets\":%d,\"delta_sent\":%d,\"delta_reply\":%d,\"last_activity\":%d,\"activity_evidence\":%s}", sent[i]+0,reply[i]+0,ds,dr,last,q(activity)
     if (log_enabled) {
-      if (handshake_success && now-old_event[i]>=15) {
+      # Handshake events use their own debounce clock (old_hs): a
+      # sustained_traffic line must not suppress a genuine drop-off that
+      # follows the call within 15 s.  Both timestamps are reset on a
+      # handshake event so sustained still waits for event_interval.
+      if (handshake_success && now-old_hs[i]>=15) {
         print now "|" label[i] "|" ip[i] "|handshake_success|" ds "|" dr "|call_or_sms_unknown|" wfc > event_out
-        old_event[i]=now; acc_sent=0; acc_reply=0
-      } else if (handshake_failed && now-old_event[i]>=15) {
+        old_hs[i]=now; old_event[i]=now; acc_sent=0; acc_reply=0
+      } else if (handshake_failed && now-old_hs[i]>=15) {
         # A flapping device state (registered <-> not_detected within a
         # second) used to write a handshake event on every flip, flooding
         # the log. Debounce to at most one handshake event per 15s.
         print now "|" label[i] "|" ip[i] "|handshake_failed|" ds "|" dr "|call_or_sms_unknown|" wfc > event_out
-        old_event[i]=now; acc_sent=0; acc_reply=0
+        old_hs[i]=now; old_event[i]=now; acc_sent=0; acc_reply=0
       } else if (sustained) {
         # Sustained bidirectional traffic after registration is the
         # signature of a voice call (ringing or in-call RTP); the tunnel
@@ -99,7 +104,7 @@ END {
         old_event[i]=now; acc_sent=0; acc_reply=0
       }
     }
-    print label[i] "|" ip[i] "|" wfc "|" sent[i]+0 "|" reply[i]+0 "|" last "|" old_event[i]+0 "|" streak "|" acc_sent "|" acc_reply "|" traffic_since+0 > state_out
+    print label[i] "|" ip[i] "|" wfc "|" sent[i]+0 "|" reply[i]+0 "|" last "|" old_event[i]+0 "|" streak "|" acc_sent "|" acc_reply "|" traffic_since+0 "|" old_hs[i]+0 > state_out
   }
   print "]}"
 }
