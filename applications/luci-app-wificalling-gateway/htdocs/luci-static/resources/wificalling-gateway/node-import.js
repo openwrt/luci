@@ -57,8 +57,20 @@ function parseUrl(uri, protocol) {
 			out.public_key = (p.get('pbk') || p.get('publicKey') || '').replace(/ /g, '+');
 			out.short_id = (p.get('sid') || p.get('shortId') || '').replace(/ /g, '+');
 		out.fingerprint = p.get('fp') || p.get('fingerprint') || 'chrome';
-		if (p.get('type') === 'ws') {
-			out.transport = 'ws'; out.path = p.get('path') || '/'; out.host = p.get('host') || '';
+		var vless_type = p.get('type') || '';
+		if (vless_type === 'xhttp') {
+			// XHTTP is a clash/mihomo transport; sing-box has no xhttp
+			// transport, so the node would never connect here.
+			throw new Error(_('xhttp transport is not supported by sing-box (use ws/grpc/httpupgrade)'));
+		}
+		if (vless_type === 'ws' || vless_type === 'grpc' || vless_type === 'httpupgrade') {
+			out.transport = vless_type;
+			out.host = p.get('host') || '';
+			// grpc carries no path; its service_name goes in the path slot
+			// (the UCI/normalized.conf layout has no separate field).
+			out.path = (vless_type === 'grpc')
+				? (p.get('serviceName') || p.get('service_name') || '/')
+				: (p.get('path') || '/');
 		}
 	} else if (protocol === 'wireguard') {
 		// wg://<peer_public_key>@<server>:<port>?private_key=…&local_address=…&reserved=…&mtu=…
@@ -82,7 +94,18 @@ function parseVmess(uri) {
 		sni: raw.sni || '', host: raw.host || '', path: raw.path || '',
 		security: raw.tls === 'tls' ? 'tls' : ''
 	};
-	if (raw.net === 'ws') out.transport = 'ws';
+	var raw_net = raw.net || '';
+	if (raw_net === 'xhttp') {
+		// XHTTP is a clash/mihomo transport; sing-box has no xhttp
+		// transport, so the node would never connect here.
+		throw new Error(_('xhttp transport is not supported by sing-box (use ws/grpc/httpupgrade)'));
+	}
+	if (raw_net === 'ws' || raw_net === 'grpc' || raw_net === 'httpupgrade') {
+		out.transport = raw_net;
+		out.host = raw.host || '';
+		// grpc: service_name goes in the path slot.
+		out.path = raw.path || '/';
+	}
 	return out;
 }
 

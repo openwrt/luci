@@ -82,10 +82,13 @@ END {
     printf "\"epdg_ip\":%s,\"ike_seen\":%s,\"nat_t_seen\":%s,\"assured\":%s,", q(epdg[i]),(ike[i]?"true":"false"),(natt[i]?"true":"false"),(assured[i]?"true":"false")
     printf "\"sent_packets\":%d,\"reply_packets\":%d,\"delta_sent\":%d,\"delta_reply\":%d,\"last_activity\":%d,\"activity_evidence\":%s}", sent[i]+0,reply[i]+0,ds,dr,last,q(activity)
     if (log_enabled) {
-      if (handshake_success) {
+      if (handshake_success && now-old_event[i]>=15) {
         print now "|" label[i] "|" ip[i] "|handshake_success|" ds "|" dr "|call_or_sms_unknown|" wfc > event_out
         old_event[i]=now; acc_sent=0; acc_reply=0
-      } else if (handshake_failed) {
+      } else if (handshake_failed && now-old_event[i]>=15) {
+        # A flapping device state (registered <-> not_detected within a
+        # second) used to write a handshake event on every flip, flooding
+        # the log. Debounce to at most one handshake event per 15s.
         print now "|" label[i] "|" ip[i] "|handshake_failed|" ds "|" dr "|call_or_sms_unknown|" wfc > event_out
         old_event[i]=now; acc_sent=0; acc_reply=0
       } else if (sustained) {
