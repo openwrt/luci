@@ -17,6 +17,19 @@ LUCI_MAINTAINER?=OpenWrt LuCI community
 LUCI_MINIFY_LUA?=1
 LUCI_MINIFY_CSS?=1
 LUCI_MINIFY_JS?=1
+LUCI_MINIFY_UT?=1
+# The oldest runtime that reads the bytecode format the host compiler emits. ucode compares that
+# format byte for equality and refuses anything else, so a package shipping precompiled templates
+# depends on a runtime that speaks the same format. Format 0x02 arrived in ucode 2026-02-27; bump
+# this line when the format byte changes again, and keep it OLDER than the ucode in tree: opkg
+# sorts the ~hash suffix below the bare version, so a floor equal to the installed version is
+# unsatisfiable there. The constraint has to stay one word: FormatDepends reads it with $(word 2),
+# so a space after >= drops the version.
+LUCI_UT_MIN_UCODE?=2026.02.27
+# ucode/host is built without the extensions a target runtime carries, and luci.core is not on the
+# host at all, so an import of one of them cannot be resolved while compiling. Force those to a
+# runtime import; the interpreter line is dead weight on a file nothing executes.
+LUCI_UT_CFLAGS?=no-interp,dynlink=luci.core,dynlink=digest,dynlink=log,dynlink=nl80211,dynlink=resolv,dynlink=rtnl,dynlink=ubus,dynlink=uci,dynlink=uloop
 
 #LUCI_LANG_START
 LUCI_LANG.ar=العربية (Arabic)
@@ -114,8 +127,15 @@ endef
 PKG_NAME?=$(LUCI_NAME)
 PKG_RELEASE?=1
 PKG_INSTALL:=$(if $(realpath src/Makefile),1)
-PKG_BUILD_DEPENDS += lua/host luci-base/host LUCI_CSSTIDY:csstidy/host LUCI_SRCDIET:luasrcdiet/host $(LUCI_BUILD_DEPENDS)
-PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET CONFIG_LUCI_JSMIN CONFIG_LUCI_CSSTIDY
+PKG_BUILD_DEPENDS += lua/host luci-base/host LUCI_CSSTIDY:csstidy/host LUCI_SRCDIET:luasrcdiet/host LUCI_UTMIN:ucode/host $(LUCI_BUILD_DEPENDS)
+PKG_CONFIG_DEPENDS += CONFIG_LUCI_SRCDIET CONFIG_LUCI_JSMIN CONFIG_LUCI_CSSTIDY CONFIG_LUCI_UTMIN
+
+ifeq ($(CONFIG_LUCI_UTMIN)$(LUCI_MINIFY_UT),y1)
+  ifneq ($(wildcard ${CURDIR}/ucode/template),)
+    # EXTRA_DEPENDS is comma separated and FormatDepends keeps only the first two words of an item
+    LUCI_EXTRA_DEPENDS := $(strip $(if $(LUCI_EXTRA_DEPENDS),$(LUCI_EXTRA_DEPENDS)$(comma)) ucode (>=$(LUCI_UT_MIN_UCODE)))
+  endif
+endif
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
@@ -216,6 +236,7 @@ define Package/$(PKG_NAME)/install
 	  $(INSTALL_DIR) $(1)$(UCODE_LIBRARYDIR)
 	  cp -pR $(PKG_BUILD_DIR)/ucode/* $(1)$(UCODE_LIBRARYDIR)/
 	  $(call SubstituteVersion,$(1)$(UCODE_LIBRARYDIR)/)
+	  $(if $(CONFIG_LUCI_UTMIN),$(call UtMin,$(1)$(UCODE_LIBRARYDIR)/),true)
  endif
  ifneq ($(wildcard ${CURDIR}/htdocs),)
 	$(INSTALL_DIR) $(1)$(HTDOCS)
@@ -284,6 +305,19 @@ else
   endef
 endif
 
+ifeq ($(LUCI_MINIFY_UT),1)
+  define UtMin
+	$(FIND) $(1) -type f -name '*.ut' | while read src; do \
+		ucode -T, -s -c$(LUCI_UT_CFLAGS) -o "$$$$src.o" "$$$$src" || exit 1; \
+		mv "$$$$src.o" "$$$$src" && chmod 0644 "$$$$src"; \
+	done
+  endef
+else
+  define UtMin
+	$$(call MESSAGE,$$(LUCI_NAME) does not support ucode template precompilation)
+  endef
+endif
+
 define SubstituteVersion
 	$(FIND) $(1) -type f -name '*.htm' | while read src; do \
 		$(SED) 's/<%# *\([^ ]*\)PKG_VERSION *%>/\1$(if $(PKG_VERSION),$(PKG_VERSION),$(PKG_SRC_VERSION))/g' \
@@ -310,6 +344,10 @@ ifeq ($(PKG_NAME),luci-base)
 
    config LUCI_CSSTIDY
 	bool "Minify CSS files"
+	default y
+
+   config LUCI_UTMIN
+	bool "Precompile ucode templates"
 	default y
 
    menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),$(if $(LUCI_LANG.$(lang)),
