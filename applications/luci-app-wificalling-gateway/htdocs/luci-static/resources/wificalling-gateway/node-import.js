@@ -47,15 +47,15 @@ function parseUrl(uri, protocol) {
 		out.congestion = p.get('congestion_control') || p.get('congestion') || 'bbr';
 		out.udp_mode = p.get('udp_relay_mode') || 'native';
 	} else if (protocol === 'vless') {
-			out.uuid = decodeURIComponent(url.username || '');
-			out.flow = p.get('flow') || '';
-			out.security = p.get('security') || '';
-			out.sni = p.get('sni') || '';
-			// pbk/sid are base64url in practice, but some generators emit
-			// standard base64, which URLSearchParams would corrupt the same
-			// way (see pinSHA256): restoring '+' is a no-op on base64url.
-			out.public_key = (p.get('pbk') || p.get('publicKey') || '').replace(/ /g, '+');
-			out.short_id = (p.get('sid') || p.get('shortId') || '').replace(/ /g, '+');
+		out.uuid = decodeURIComponent(url.username || '');
+		out.flow = p.get('flow') || '';
+		out.security = p.get('security') || '';
+		out.sni = p.get('sni') || '';
+		// pbk/sid are base64url in practice, but some generators emit
+		// standard base64, which URLSearchParams would corrupt the same
+		// way (see pinSHA256): restoring '+' is a no-op on base64url.
+		out.public_key = (p.get('pbk') || p.get('publicKey') || '').replace(/ /g, '+');
+		out.short_id = (p.get('sid') || p.get('shortId') || '').replace(/ /g, '+');
 		out.fingerprint = p.get('fp') || p.get('fingerprint') || 'chrome';
 		var vless_type = p.get('type') || '';
 		if (vless_type === 'xhttp') {
