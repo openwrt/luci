@@ -78,11 +78,11 @@ append_device() {
 	config_get_bool enabled "$s" enabled 1; [ "$enabled" -eq 1 ] || return 0
 	config_get label "$s" label "$s"; config_get node "$s" node; config_get route_mode "$s" route_mode independent
 	case "$node" in *'|'*) logger -t "$APP" "invalid delimiter in device $s"; return 1;; esac
-	DEVICE_IPS=""; config_list_foreach "$s" source_ip append_ip
 	# A follow_gateway device is never intercepted and its source_ip values
-	# are unused, so return before the empty-IP check can log a misleading
-	# "skipping" line for it.
+	# are unused, so return before they are parsed: neither append_ip's
+	# per-address warning nor the empty-IP "skipping" line applies to it.
 	[ "$route_mode" = independent ] || return 0
+	DEVICE_IPS=""; config_list_foreach "$s" source_ip append_ip
 	if [ -z "$DEVICE_IPS" ]; then
 		# Every source_ip was rejected by the validation: skip the device
 		# (it falls back to direct routing) instead of failing the whole

@@ -63,15 +63,15 @@ function parseUrl(uri, protocol) {
 			// transport, so the node would never connect here.
 			throw new Error(_('xhttp transport is not supported by sing-box (use ws/grpc/httpupgrade)'));
 		}
-			if (vless_type === 'ws' || vless_type === 'grpc' || vless_type === 'httpupgrade') {
-				out.transport = vless_type;
-				out.host = p.get('host') || '';
-				// grpc carries no path; its service_name goes in the path slot
-				// (the UCI/normalized.conf layout has no separate field).
-				out.path = (vless_type === 'grpc')
-					? (p.get('serviceName') || p.get('service_name') || '')
-					: (p.get('path') || '/');
-			}
+		if (vless_type === 'ws' || vless_type === 'grpc' || vless_type === 'httpupgrade') {
+			out.transport = vless_type;
+			out.host = p.get('host') || '';
+			// grpc carries no path; its service_name goes in the path slot
+			// (the UCI/normalized.conf layout has no separate field).
+			out.path = (vless_type === 'grpc')
+				? (p.get('serviceName') || p.get('service_name') || '')
+				: (p.get('path') || '/');
+		}
 	} else if (protocol === 'wireguard') {
 		// wg://<peer_public_key>@<server>:<port>?private_key=…&local_address=…&reserved=…&mtu=…
 		out.public_key = decodeURIComponent(url.username || '');
