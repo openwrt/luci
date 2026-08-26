@@ -296,6 +296,7 @@ to{opacity:1;transform:none}
 [data-darkmode="true"] [data-page="admin-statistics-graphs"] [data-plugin] img{filter:invert(100%) hue-rotate(180deg)}
 #view div[style] > svg{background-color:var(--fs-panel)}
 #view div[style] > svg line[style]{stroke:var(--fs-text) !important}
+#view div[style] > svg > text[style]{fill:var(--fs-text) !important;text-shadow:none !important;font-weight:var(--fs-weight-bold)}
 }
 @layer theme{:where([data-fs-chrome]:not([data-fs-chrome] *)){font-style:normal;font-variant:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;text-indent:0;text-align:start;cursor:auto}
 .fs-brand{display:flex;align-items:center;gap:var(--fs-space-2-5);color:var(--fs-text);font-weight:var(--fs-weight-bold)}
@@ -952,9 +953,10 @@ input,textarea,select,.cbi-dropdown > ul > li{font-size:var(--fs-type-lg)}
 }
 }
 @layer page{.fs-login{width:min(400px,calc(100% - 32px));margin:7vh auto var(--fs-space-10);background:var(--fs-panel);border:var(--fs-hairline);border-radius:var(--fs-radius-lg);padding:var(--fs-space-6) var(--fs-space-6) var(--fs-space-6);box-shadow:var(--fs-shadow-pop)}
+.fs-login-host{margin:0 0 var(--fs-space-6);text-align:center;font-size:var(--fs-type-lg);font-weight:var(--fs-weight-bold);color:var(--fs-dim);overflow-wrap:anywhere}
 .fs-login .cbi-map,.fs-login .cbi-section,.fs-login .cbi-section-node{background:none;border:0;padding:0;margin:0;box-shadow:none}
-.fs-login .cbi-map > h2,.fs-login .cbi-map-descr{background:none;border:0;border-radius:0;box-shadow:none;padding:0}
-.fs-login .cbi-map > h2{font-size:var(--fs-type-xl);font-weight:var(--fs-weight-bold);letter-spacing:-.01em;margin:0 0 var(--fs-space-1-5)}
+.fs-login .cbi-map > h1,.fs-login .cbi-map-descr{background:none;border:0;border-radius:0;box-shadow:none;padding:0}
+.fs-login .cbi-map > h1{font-size:var(--fs-type-xl);font-weight:var(--fs-weight-bold);letter-spacing:-.01em;margin:0 0 var(--fs-space-1-5)}
 .fs-login .cbi-map-descr{color:var(--fs-dim);font-size:var(--fs-type);margin:0 0 var(--fs-space-5)}
 .fs-login .cbi-value{display:block;border:0;padding:0 0 var(--fs-space-4);margin:0}
 .fs-login .cbi-value-title{display:block;text-align:start;width:auto;max-width:none;padding:0 0 var(--fs-space-1-5);font-size:var(--fs-type-xs);font-weight:var(--fs-eyebrow-weight);letter-spacing:var(--fs-eyebrow-tracking);text-transform:uppercase;color:var(--fs-eyebrow-color)}
