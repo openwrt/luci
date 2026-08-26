@@ -24,10 +24,36 @@ const getPackages = rpc.declare({
 function handleAction(ev) {
 	if (ev === 'restart') {
 		const map = document.querySelector('.cbi-map');
+
 		return dom.callClassMethod(map, 'save')
-			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
+				return Promise.all([
+					uci.changes(),
+					fs.exec('/etc/init.d/shunt', ['running'])
+				]);
+			})
+			.then(function (res) {
+				const pending = res[0] && Object.keys(res[0]).length;
+				const running = res[1] && res[1].code === 0;
+
+				if (pending && running) {
+					L.bind(ui.changes.apply, ui.changes)();
+					return null;
+				}
+
+				if (pending) {
+					return uci.apply().then(function () {
+						if (ui.changes.setIndicator) {
+							ui.changes.setIndicator(0);
+						}
+						return fs.exec_direct('/etc/init.d/shunt', [ev]);
+					});
+				}
 				return fs.exec_direct('/etc/init.d/shunt', [ev]);
+			})
+			.catch(function (e) {
+				ui.addNotification(null,
+					E('p', {}, [_('Apply failed: %s').format(e)]), 'error');
 			});
 	}
 	return fs.exec_direct('/etc/init.d/shunt', [ev]);
