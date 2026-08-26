@@ -24,12 +24,45 @@
  catalogue for.
 -#}
 
+{%
+	/* WHICH ROUTER THIS IS — requested as openwrt/luci#8961, by an admin coming from
+	   luci-theme-material, which prints the hostname in the top bar and therefore also on its login
+	   page. This one had no chrome at all (blank_page below), so the only place the name appeared
+	   was the browser TAB.
+
+	   A SECOND `ubus.call('system', 'board')`: header.ut makes its own inside its own scope and an
+	   include cannot hand a local back, so the choice is one extra ubus round trip on the login
+	   render or threading `boardinfo` out through a global. One call, on the one page that renders
+	   once per session, is the cheaper of the two.
+
+	   It discloses nothing new. The same `boardinfo.hostname` already reaches an unauthenticated
+	   browser through <title> (partials/head.ut) — as it does in every stock theme — so this moves
+	   a string that was always on the wire into the place a reader looks. */
+	const boardinfo = ubus.call('system', 'board') ?? {};
+-%}
+
 {% include('header', { blank_page: true }) %}
 
 {# The class is what 10-login.css hooks: the form used to be found by
    `form:has(> .cbi-map input[name="luci_username"])` — 49 characters written 17 times, ~0.8 KB —
    because the markup was assumed to be stock LuCI's. It is OURS: name the form instead. #}
 <form method="post" class="fs-login">
+	{#
+	 The router's name, above everything else in the card — an admin with three of these open has no
+	 other way to tell the tabs apart once the form is focused. `?? 'OpenWrt'` is the fallback
+	 partials/head.ut and partials/brand.ut already use, so the line never renders empty; the
+	 striptags/entityencode pair is theirs too, and load-bearing: the hostname is admin-controlled
+	 text printed to an UNAUTHENTICATED page, and one containing `&` broke entity parsing here
+	 before it broke anything else (see the <title> note in partials/head.ut).
+
+	 A <p> and NOT a heading: the card's h1 is `Authorization Required` and stays the page's one
+	 heading. An outline is about the page's SUBJECT, and a heading above that one would announce
+	 the login form as two sections — a screen reader walking the headings would hear the router's
+	 name as a section title with the form nested under it. It is printed above the h1 and centred
+	 (10-login.css) because that is where a reader looks for "which box is this", not because it
+	 outranks anything.
+	-#}
+	<p class="fs-login-host">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</p>
 	{#
 	 TWO INDEPENDENT ALERTS, because neither variable on its own says which of the two dispatcher
 	 branches rendered this page — and each of the two spellings in the tree picks one and gets the
@@ -67,7 +100,19 @@
 	{% endif %}
 
 	<div class="cbi-map">
-		<h2 name="content">{{ _('Authorization Required') }}</h2>
+		{#
+		 An h1, where every other LuCI theme leaves this an h2. The login page has no chrome
+		 (blank_page above), so header.ut's `.fs-title-main` h1 never renders here and the document
+		 went out with its top-level heading MISSING — the one sentence saying where you are, and
+		 the heading a screen reader's `1` shortcut jumps to. Stock's h2 is a copy of a page that
+		 does have a title bar above it; this one does not, so the card's heading IS the page title.
+
+		 `name="content"` is upstream's legacy anchor and travels with the element, not with its
+		 level. The card's own type scale is in 10-login.css: an h1 is 26px in the ramp
+		 (theme/45-misc.css) and this one is set back to the h2's 20px, because the SIZE was never
+		 what was wrong — only the level.
+		-#}
+		<h1 name="content">{{ _('Authorization Required') }}</h1>
 		<div class="cbi-map-descr">
 			{{ _('Please enter your username and password.') }}
 		</div>
