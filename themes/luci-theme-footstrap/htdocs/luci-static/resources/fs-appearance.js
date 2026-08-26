@@ -104,8 +104,9 @@ function build() {
 	 * Every enum axis is a `ui.Select` and every number is a `ui.RangeSlider` — the same widgets the
 	 * form on the other tabs is built from, so a dropdown here is the dropdown an admin already knows
 	 * and the theme's own stylesheet already dresses (`select` in base/30-forms.css,
-	 * `.cbi-range-slider` in theme/60-inputs.css). Both classes exist on the whole range this theme
-	 * supports — checked against luci's own openwrt-24.10 branch, not only against master.
+	 * `.cbi-range-slider` in theme/60-inputs.css). Both classes exist on every release this theme
+	 * supports — checked against luci's own openwrt-24.10 branch, not only against master, because
+	 * `ui.RangeSlider` is exactly the widget that did not exist further back.
 	 *
 	 * What this replaces is two primitives of ours: a segmented radiogroup with a roving tabindex and
 	 * a range wrapper with a live readout. They were written when this page was a floating popover
@@ -124,10 +125,11 @@ function build() {
 		node.addEventListener('widget-change', () => apply(w.getValue()));
 		return node;
 	};
+
 	const sliderCtl = (current, min, max, apply, label, opts) => {
 		const o = opts || {};
 		const w = new ui.RangeSlider(String(current), {
-			min: min, max: max, step: o.step || 1, calcunits: o.unit || null
+			min: min, max: max, step: o.step || 1
 		});
 		const node = w.render();
 		node.setAttribute('aria-label', label);
@@ -193,7 +195,7 @@ function build() {
 		}, bump(prefs.applyDensity), label)),
 
 		group(_('Rounding', 'footstrap'),
-			(label) => sliderCtl(prefs.currentRadius(), 0, 20, bump(prefs.applyRadius), label, { unit: 'px' })),
+			(label) => sliderCtl(prefs.currentRadius(), 0, 20, bump(prefs.applyRadius), label)),
 
 		/* The top layout has no accordion (its sections are hover dropdowns, already exclusive), so
 		 * this switch is meaningless there. ALWAYS BUILT, HIDDEN BY CSS (:root[data-layout="top"]
@@ -230,8 +232,7 @@ function build() {
 		 * apart. */
 		group(_('Tint strength', 'footstrap'),
 			(label) => sliderCtl(prefs.currentTintStrength(), 0, 200, bump(repaint(prefs.applyTintStrength)), label, {
-				step: 5,
-				unit: '%'
+				step: 5
 			}), { cls: 'fs-ap-tint fs-ap-tintstr' }),
 
 		/* recolours the accented CONTROLS (buttons/toggles/sliders/focus rings), not the canvas the
@@ -355,9 +356,9 @@ function build() {
 				() => E('div', { 'class': 'fs-ap-bgrow' }, [ patChoose, patRemove ]),
 				{ extra: [ patInput, patPreview, patErr ] }),
 			group(scaleLabel, (lbl) => sliderCtl(prefs.currentPatternSize(), 40, 1600,
-				bump(prefs.applyPatternSize), lbl, { step: 20, unit: 'px' })),
+				bump(prefs.applyPatternSize), lbl, { step: 20 })),
 			group(strengthLabel, (lbl) => sliderCtl(prefs.currentPatternStrength(), 0, 100,
-				bump(prefs.applyPatternStrength), lbl, { step: 5, unit: '%' })),
+				bump(prefs.applyPatternStrength), lbl, { step: 5 })),
 			group(inkLabel, (lbl) => selectCtl(prefs.currentPatternInk(), {
 				theme:    _('Theme', 'footstrap'),
 				original: _('As in file', 'footstrap')
@@ -369,7 +370,7 @@ function build() {
 				() => E('div', { 'class': 'fs-ap-bgrow' }, [ chooseBtn, removeBtn ]),
 				{ extra: [ fileInput, preview, err ] }),
 			group(dimLabel, (lbl) => sliderCtl(prefs.currentPhotoDim(), 0, 100,
-				bump(prefs.applyPhotoDim), lbl, { step: 5, unit: '%' }))
+				bump(prefs.applyPhotoDim), lbl, { step: 5 }))
 		];
 
 		function reflect(tok) {
@@ -762,11 +763,35 @@ function tabGroup(view) {
  * Idempotent through the marker: an observer fires for every mutation, and the form's own
  * construction is a mutation. Without the check it would append itself for as long as it kept
  * noticing itself. */
+/* WHAT WAKES THIS UP WHEN NOTHING ELSE WILL.
+ *
+ * The observer below fires on mutations, and the tab group's readiness is not always one: a map
+ * redraw (Save, without Apply) takes the pane and the tab away with the old group and builds a new
+ * one, and `ui.tabs` stamps `data-initialized` on it as an ATTRIBUTE change that can land after the
+ * last childList change. mount() then found no group, returned, and nothing mutated #view again —
+ * the tab was simply missing until the next navigation. Reported from the field on 25.12.5, on
+ * Chrome and on iOS, as "sometimes it disappears after Save" (openwrt/luci#8903).
+ *
+ * Two answers, because the attribute alone would still depend on ui.tabs stamping it that way: the
+ * observer now watches that attribute, AND a miss schedules a few retries on a widening delay. The
+ * retries stop as soon as the tab is up, and they cost nothing on the path where the first attempt
+ * works — which is every path measured before this. */
+const RETRIES = [ 0, 60, 150, 300, 600, 1200 ];
+let _retryTimer = 0, _retryAt = 0;
+function retryMount() {
+	if (_retryTimer) return;
+	if (_retryAt >= RETRIES.length) return;
+	const delay = RETRIES[_retryAt++];
+	_retryTimer = window.setTimeout(() => { _retryTimer = 0; mount(); }, delay);
+}
+
 function mount() {
 	const view = document.getElementById('view');
-	if (!view || view.querySelector('.' + MARK) || _building) return;
+	if (!view || !onPage()) return;
+	if (view.querySelector('.' + MARK)) { _retryAt = 0; return; }
+	if (_building) return;
 	const tabs = tabGroup(view);
-	if (!tabs) return;
+	if (!tabs) { retryMount(); return; }
 	_building = true;
 	render()
 		.then((form) => {
@@ -809,7 +834,12 @@ function watch() {
 	if (_viewObserver || !view || !onPage()) return;
 	_observedView = view;
 	_viewObserver = new MutationObserver(mount);
-	_viewObserver.observe(view, { childList: true, subtree: true });
+	/* `data-initialized` is in the filter because it is the moment the group becomes usable, and it
+	 * is not always accompanied by a childList change (see retryMount above). */
+	_viewObserver.observe(view, {
+		childList: true, subtree: true,
+		attributes: true, attributeFilter: [ 'data-initialized' ],
+	});
 	mount();
 	/* A DEADLINE on the one failure that is otherwise perfectly silent. tabGroup() reads three
 	 * private ui.tabs facts — the `data-initialized` marker, the `cbi-tabmenu` class on the menu it
@@ -821,6 +851,11 @@ function watch() {
 	window.setTimeout(() => {
 		const v = document.getElementById('view');
 		if (!onPage() || !v || v.querySelector('.' + MARK) || _building) return;
+		/* one last attempt before saying it cannot be done: the complaint below is about ui.tabs
+		 * having changed shape, and that is only true if a fresh look still finds no group */
+		_retryAt = 0;
+		mount();
+		if (v.querySelector('.' + MARK) || _building || tabGroup(v)) return;
 		console.error('footstrap: the Appearance tab could not be attached — this page has tabs, but '
 			+ 'ui.tabs no longer marks them the way fs-appearance.js looks for. Every Appearance axis '
 			+ 'is unreachable until that is updated.');
