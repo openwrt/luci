@@ -165,7 +165,7 @@ wg_handshake_test() {
 			elif [ $? -eq 2 ]; then
 				# Contention: no probe was attempted, don't claim the
 				# peer is down — report "testing" so the status page
-				# shows a neutral third state (review round 11).
+				# shows a neutral third state.
 				state=testing; ping_json=null; reason_json=null
 			else
 				state=handshake_failed; ping_json=null

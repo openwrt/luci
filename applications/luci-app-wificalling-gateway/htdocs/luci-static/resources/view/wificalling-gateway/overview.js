@@ -367,7 +367,7 @@ return view.extend({
 		var hostOpt = s.option(form.Value, 'host', _('Transport host'));
 		// host is also the TLS server_name fallback for VLESS/VMess when
 		// sni is empty, so it must stay active for every transport: hiding
-		// it via depends() would drop the value from UCI on save (round 22).
+		// it via depends() would drop the value from UCI on save.
 		hostOpt.modalonly = true;
 		var wgKey = s.option(form.Value, 'private_key', _('WireGuard private key'));
 		wgKey.password = true; wgKey.textvalue = function(id) { return this.cfgvalue(id) ? _('Set') : _('Not set'); };
