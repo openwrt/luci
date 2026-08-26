@@ -53,6 +53,34 @@ function sectionTitle(sec) {
 /* the wrapper we built, so the poll-tick fast path costs one property read */
 let _wrapEl = null;
 
+/* A PORT NAME THE CARD HAD TO CUT IS STILL READABLE ON HOVER.
+ *
+ * styles/pages/20-overview.css cuts a port card's name at one line with an ellipsis (`white-space:
+ * nowrap` comes from base/95-luci.css; what the page rule adds is `min-width: 0` and the pair that
+ * makes the overflow readable) — that is what lets every card take the width the row can spare
+ * instead of the width of the longest interface name on the device. The name is the one thing on
+ * the card that cannot be guessed from the rest of it, so the element carries its own full text as
+ * a native tooltip.
+ *
+ * NOTHING HERE READS LAYOUT. Asking "was this one actually truncated?" means `scrollWidth` against
+ * `clientWidth` per card, i.e. a forced synchronous layout inside the path a poll tick lands on
+ * every five seconds — and 29_ports.js REBUILDS these tiles on each of those ticks, so the question
+ * would be asked again every time. A title on a name that fits costs a tooltip repeating what is
+ * already on screen; a layout read here costs the page.
+ *
+ * It runs BEFORE arrange()'s fast path, and that is the point: the fast path returns as soon as the
+ * grid is intact, while the tiles under it are new elements with no attribute on them. */
+function nameTooltips(view) {
+	for (const icon of view.querySelectorAll('img[src*="/port_"]')) {
+		const head = icon.closest('.ifacebox')?.firstElementChild;
+		const name = head ? head.textContent.trim() : '';
+		/* `!==` so an unchanged name is not written back on every tick — a title write is cheap,
+		 * but a mutation of a node inside the tree we are observing is not. */
+		if (name && head.title !== name)
+			head.title = name;
+	}
+}
+
 function arrange() {
 	/* the SPA nav can leave this _observer wired while another page renders into #view — detach as
 	 * soon as the route stops being the overview. Both the server template and the SPA router
@@ -64,6 +92,8 @@ function arrange() {
 	}
 	const view = document.getElementById('view');
 	if (!view) return;
+
+	nameTooltips(view);
 
 	/* Fast path — the poll lands here once a second, forever. The stock poll never rebuilds the
 	 * .cbi-section wrappers, so the grid survives and there is nothing to do; proving that used
