@@ -1566,13 +1566,10 @@ return baseclass.extend({
 	/* exported for the unit suite in the theme's own repository (tests/router-contract.test.mjs —
 	 * it is not part of the package, which ships no tests), where it is driven against a
 	 * hand-broken `L`: the one way to see the OFF branch without a router that ships one */
-	contractBreaks,
 	/* likewise, and likewise out-of-package: interval-pause.test.mjs drives the navigation sweep
 	 * around a visibilitychange and session-expiry.test.mjs reads the verdict the interceptors
 	 * reached. navigate() is the real caller of the first and `_expired` gates the second — nothing
 	 * else may call either. */
-	clearViewIntervals,
-	sessionExpired,
 	/* fs-search warms the pages this admin actually uses (its recents) and the arrow-key-highlighted
 	 * result, both of which the pointer/focus triggers above cannot see. The edge points that way
 	 * round — search → router — because the router must keep no dependency on the palette. */
