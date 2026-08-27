@@ -12,7 +12,7 @@ const startupConf = [
 	[widgets.GroupSelect, 'group', _('Run daemon as group')],
 	[form.Flag, 'respawn', _('Respawn when crashed')],
 	[form.DynamicList, 'env', _('Environment variable'), _('OS environments pass to frp for config file template, see %s'.format(`<a href="https://github.com/fatedier/frp#configuration-file-template">frp README</a>`)), {placeholder: 'ENV_NAME=value'}],
-	[form.DynamicList, 'conf_inc', _('Additional configs'), _('Config files include in temporary config file'), {placeholder: '/etc/frp/frps.d/frps_full.ini'}]
+	[form.DynamicList, 'conf_inc', _('Additional configs'), _('Config files include in temporary config file'), {placeholder: '/etc/frp/frps.d/frps_full.toml'}]
 ];
 
 const commonConf = [
@@ -25,13 +25,13 @@ const commonConf = [
 	[form.Value, 'vhost_http_port', _('Vhost HTTP port'), _('VhostHttpPort specifies the port that the server listens for HTTP Vhost requests. If this value is 0, the server will not listen for HTTP requests.<br />By default, this value is 0.'), {datatype: 'port'}],
 	[form.Value, 'vhost_https_port', _('Vhost HTTPS port'), _('VhostHttpsPort specifies the port that the server listens for HTTPS Vhost requests. If this value is 0, the server will not listen for HTTPS requests.<br />By default, this value is 0.'), {datatype: 'port'}],
 	[form.Value, 'vhost_http_timeout', _('Vhost HTTP timeout'), _('VhostHttpTimeout specifies the response header timeout for the Vhost HTTP server, in seconds.<br />By default, this value is 60.'), {datatype: 'uinteger'}],
-	[form.Value, 'dashboard_addr', _('Dashboard address'), _('DashboardAddr specifies the address that the dashboard binds to.<br />By default, this value is "0.0.0.0".'), {datatype: 'ipaddr'}],
-	[form.Value, 'dashboard_port', _('Dashboard port'), _('DashboardPort specifies the port that the dashboard listens on. If this value is 0, the dashboard will not be started.<br />By default, this value is 0.'), {datatype: 'port'}],
-	[form.Value, 'dashboard_user', _('Dashboard user'), _('DashboardUser specifies the username that the dashboard will use for login.<br />By default, this value is "admin".')],
-	[form.Value, 'dashboard_pwd', _('Dashboard password'), _('DashboardPwd specifies the password that the dashboard will use for login.<br />By default, this value is "admin".'), {password: true}],
-	[form.Flag, 'dashboard_tls_mode', _('Dashboard TLS mode'), _('Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is used for secure communication.'), {datatype: 'bool'}],
-	[form.Value, 'dashboard_tls_cert_file', _('Dashboard TLS certificate'), _('Dashboard TLS Cert File specifies the path to the TLS certificate file for enabling HTTPS access.<br />Required if HTTPS is enabled.'), {datatype: 'filepath'}],
-    [form.Value, 'dashboard_tls_key_file', _('Dashboard TLS private key'), _('Dashboard TLS Key File specifies the path to the TLS private key file for enabling HTTPS access.<br />Required if HTTPS is enabled.'), {datatype: 'filepath'}],
+	[form.Value, 'admin_addr', _('Dashboard address'), _('Dashboard address specifies the address that the dashboard binds to.<br />By default, this value is "0.0.0.0".'), {datatype: 'ipaddr'}],
+	[form.Value, 'admin_port', _('Dashboard port'), _('Dashboard port specifies the port that the dashboard listens on. If this value is 0, the dashboard will not be started.<br />By default, this value is 0.'), {datatype: 'port'}],
+	[form.Value, 'admin_user', _('Dashboard user'), _('Dashboard user specifies the username that the dashboard will use for login.<br />By default, this value is "admin".')],
+	[form.Value, 'admin_pwd', _('Dashboard password'), _('Dashboard password specifies the password that the dashboard will use for login.<br />By default, this value is "admin".'), {password: true}],
+	[form.Flag, 'admin_tls_enable', _('Dashboard TLS mode'), _('Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is used for secure communication.'), {datatype: 'bool'}],
+	[form.Value, 'admin_tls_cert_file', _('Dashboard TLS certificate'), _('Dashboard TLS certificate specifies the path to the TLS certificate file for enabling HTTPS access.<br />Required if HTTPS is enabled.'), {datatype: 'filepath'}],
+    [form.Value, 'admin_tls_key_file', _('Dashboard TLS private key'), _('Dashboard TLS private key specifies the path to the TLS private key file for enabling HTTPS access.<br />Required if HTTPS is enabled.'), {datatype: 'filepath'}],
 	[form.Value, 'assets_dir', _('Assets dir'), _('AssetsDir specifies the local directory that the dashboard will load resources from. If this value is "", assets will be loaded from the bundled executable using statik.<br />By default, this value is "".')],
 	[form.Value, 'log_file', _('Log file'), _('LogFile specifies a file where logs will be written to. This value will only be used if LogWay is set appropriately.<br />By default, this value is "console".')],
 	[form.ListValue, 'log_level', _('Log level'), _('LogLevel specifies the minimum log level. Valid values are "trace", "debug", "info", "warn", and "error".<br />By default, this value is "info".'), {values: ['trace', 'debug', 'info', 'warn', 'error']}],
