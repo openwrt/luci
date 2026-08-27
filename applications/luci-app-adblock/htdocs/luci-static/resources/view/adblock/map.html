@@ -9,6 +9,25 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 	<style>
+		html {
+			color-scheme: light dark;
+			--adb-water: #d6e3ec;
+			--adb-land: #f4f1ea;
+			--adb-coast: #a9a396;
+			--adb-grid: #c2d2de;
+			--adb-label: #97a3ad;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			html {
+				--adb-water: #151b21;
+				--adb-land: #2a3138;
+				--adb-coast: #4d5862;
+				--adb-grid: #232b33;
+				--adb-label: #5d6a75;
+			}
+		}
+
 		html,
 		body {
 			height: 100%;
@@ -18,6 +37,22 @@
 		#map {
 			height: 100%;
 			width: 100%;
+		}
+
+		.leaflet-container {
+			background: var(--adb-water);
+		}
+
+		/* Leaflet positions the icon element itself, so center on the inner span */
+		.continent span {
+			position: absolute;
+			transform: translate(-50%, -50%);
+			white-space: nowrap;
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--adb-label);
 		}
 
 		.title {
@@ -56,8 +91,31 @@
 		/* maximum number of domains listed in a shared popup */
 		const MAX_DOMAINS = 5;
 
-		/* zoom level applied when the view is centered on a single point */
-		const POINT_ZOOM = 6;
+		/* zoom level of the initial view */
+		const OVERVIEW_ZOOM = 3;
+
+		/* continent labels are dropped as soon as the outlines carry the orientation */
+		const LABEL_ZOOM = 4;
+
+		/* The outlines are shipped without attributes, so the labels are placed here */
+		const CONTINENTS = [
+			{ name: 'North America', latlng: [48, -100] },
+			{ name: 'South America', latlng: [-13, -58] },
+			{ name: 'Europe', latlng: [56, 26] },
+			{ name: 'Africa', latlng: [4, 20] },
+			{ name: 'Asia', latlng: [46, 92] },
+			{ name: 'Oceania', latlng: [-25, 137] },
+			{ name: 'Antarctica', latlng: [-72, 15] }
+		];
+
+		/* country outlines shipped with the package, Natural Earth 1:110m, public domain */
+		const WORLD_FILE = 'world.json';
+
+		/* optional higher detail outlines, not shipped, see the adblock README */
+		const WORLD_FILE_HD = 'world-50m.json';
+
+		/* spacing of the graticule in degrees */
+		const GRID_STEP = 20;
 
 		/* mapData key holding the geo data of the local uplink(s) */
 		const HOME_KEY = 'homeIP';
@@ -69,13 +127,113 @@
 		const map = L.map('map', {
 			zoom: 3,
 			minZoom: 2,
-			maxZoom: 18,
+			maxZoom: 6,
 			center: [50, 10]
 		});
 
-		L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
+		map.attributionControl.addAttribution('<a href="https://www.naturalearthdata.com">Natural Earth</a>');
+
+		/* the basemap is drawn from local country outlines instead of a tile service */
+		map.createPane('basemap');
+		map.getPane('basemap').style.zIndex = 200;
+
+		const basemapRenderer = L.canvas({ pane: 'basemap' });
+
+		function cssColor(name) {
+			return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+		}
+
+		function landStyle() {
+			return { color: cssColor('--adb-coast'), weight: 0.7, opacity: 1.0, fillColor: cssColor('--adb-land'), fillOpacity: 1.0 };
+		}
+
+		function gridStyle() {
+			return { color: cssColor('--adb-grid'), weight: 0.6, opacity: 1.0 };
+		}
+
+		/* the empty ocean is hard to read at low zoom levels, so add a plain graticule */
+		function graticule() {
+			const lines = [];
+			let value;
+
+			for (value = -80; value <= 80; value += GRID_STEP)
+				lines.push([[value, -180], [value, 180]]);
+
+			for (value = -180; value <= 180; value += GRID_STEP)
+				lines.push([[-85, value], [85, value]]);
+
+			return lines;
+		}
+
+		const gridLayer = L.polyline(graticule(), Object.assign({
+			pane: 'basemap',
+			renderer: basemapRenderer,
+			interactive: false
+		}, gridStyle())).addTo(map);
+
+		let landLayer = null;
+
+		const labelLayer = L.layerGroup(CONTINENTS.map(function (item) {
+			return L.marker(item.latlng, {
+				pane: 'basemap',
+				interactive: false,
+				keyboard: false,
+				icon: L.divIcon({
+					className: 'continent',
+					html: '<span>' + item.name + '</span>',
+					iconSize: [0, 0]
+				})
+			});
+		}));
+
+		function updateLabels() {
+			const wanted = map.getZoom() <= LABEL_ZOOM;
+
+			if (wanted !== map.hasLayer(labelLayer))
+				wanted ? labelLayer.addTo(map) : labelLayer.remove();
+		}
+
+		map.on('zoomend', updateLabels);
+		updateLabels();
+
+		function loadWorld(file) {
+			return fetch(file).then(function (response) {
+				if (!response.ok)
+					throw new Error(file + ': HTTP ' + response.status);
+
+				return response.json();
+			});
+		}
+
+		/* prefer the optional outlines, their absence is the normal case */
+		loadWorld(WORLD_FILE_HD)
+			.catch(function () {
+				return loadWorld(WORLD_FILE);
+			})
+			.then(function (world) {
+				landLayer = L.geoJSON(world, {
+					pane: 'basemap',
+					renderer: basemapRenderer,
+					interactive: false,
+					smoothFactor: 1.2,
+					style: landStyle
+				}).addTo(map);
+			})
+			.catch(function (error) {
+				/* the markers stay usable on the plain background */
+				console.error('adblock: unable to load the basemap,', error);
+			});
+
+		/* restyle in place when the browser switches between the light and dark scheme */
+		const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+		if (colorScheme.addEventListener)
+			colorScheme.addEventListener('change', function () {
+				gridLayer.setStyle(gridStyle());
+
+				if (landLayer)
+					landLayer.setStyle(landStyle());
+			});
 
 		/* feature groups, so getBounds() is available for the initial view */
 		const blockedLayer = L.featureGroup().addTo(map);
@@ -252,20 +410,6 @@
 			return result;
 		}
 
-		function fitLayer(layer) {
-			const layers = layer.getLayers();
-
-			if (!layers.length)
-				return false;
-
-			if (layers.length === 1)
-				map.setView(layers[0].getLatLng(), POINT_ZOOM);
-			else
-				map.fitBounds(layer.getBounds(), { maxZoom: POINT_ZOOM, padding: [30, 30] });
-
-			return true;
-		}
-
 		/* load the data handed over by the adblock report page */
 		const mapData = sessionStorage.getItem('mapData');
 		let parsedData = null;
@@ -290,9 +434,13 @@
 				addMarker(homeLayer, entry, HOME_STYLE, homePopup);
 			});
 
-			/* center on the local uplink(s), fall back to the blocked domains */
-			if (!fitLayer(homeLayer))
-				fitLayer(blockedLayer);
+			/* The overall view stays zoomed out, center on the local uplink(s) */
+			const home = homeLayer.getLayers();
+
+			if (home.length)
+				map.setView(home[0].getLatLng(), OVERVIEW_ZOOM);
+			else if (blockedLayer.getLayers().length)
+				map.setView(blockedLayer.getBounds().getCenter(), OVERVIEW_ZOOM);
 		}
 	</script>
 </body>
