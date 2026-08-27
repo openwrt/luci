@@ -263,7 +263,7 @@ return view.extend({
 
 		m = new form.Map('shunt', 'shunt',
 			_('Policy based routing by mac, source, destination and domain. For further information please check the %s.')
-				.format(`<a style="color:#37c;font-weight:bold;" href="https://github.com/openwrt/packages/blob/master/net/shunt/files/README.md" target="_blank" rel="noreferrer noopener" >${_('online documentation')}</a>`));
+				.format(`<a style="color:#37c;font-weight:bold;" href="https://github.com/openwrt/packages/blob/master/net/shunt/README.md" target="_blank" rel="noreferrer noopener" >${_('online documentation')}</a>`));
 		const style = E('style', { 'type': 'text/css' },
 			'#shunt-status {' +
 			'--shunt-card-bg: rgba(128,128,128,.07);' +
