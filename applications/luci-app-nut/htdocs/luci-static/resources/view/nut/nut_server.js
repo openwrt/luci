@@ -5,7 +5,6 @@
 
 const driver_path = '/usr/libexec/nut/';
 const old_driver_path = '/lib/nut/';
-const ups_daemon = '/usr/sbin/upsd';
 
 function resolveDriverList(path) {
 	return Promise.resolve(L.resolveDefault(fs.list(path), []).then(function(entries) {
@@ -24,11 +23,6 @@ function resolveDriverList(path) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/usr/bin/ldd', [ups_daemon]), []).catch(function(err) {
-				throw new Error(_('Unable to run ldd: %s').format(err.message));
-			}).then(function(stdout) {
-				return stdout.includes('libssl.so');
-			}),
 			resolveDriverList(driver_path),
 			resolveDriverList(old_driver_path),
 		])
@@ -36,39 +30,11 @@ return view.extend({
 
 	render: function(loaded_promises) {
 		let m, s, o;
-		const have_ssl_support = loaded_promises[0];
-		const driver_list = (loaded_promises[1].length > 0) ? loaded_promises[1] : loaded_promises[2];
+
+		const driver_list = (loaded_promises[0].length > 0) ? loaded_promises[0] : loaded_promises[1];
 
 		m = new form.Map('nut_server', _('NUT Server'),
 			_('Network UPS Tools Server Configuration'));
-
-		// User settings
-		s = m.section(form.TypedSection, 'user', _('NUT Users'));
-		s.addremove = true;
-		s.anonymous = true;
-
-		o = s.option(form.Value, 'username', _('Username'));
-		o.optional = false;
-
-		o = s.option(form.Value, 'password', _('Password'));
-		o.password = true;
-		o.optional = false;
-
-		o = s.option(form.MultiValue, 'actions', _('Allowed actions'));
-		// o.widget = 'select'
-		o.value('set', _('Set variables'));
-		o.value('fsd', _('Forced Shutdown'));
-		o.optional = true;
-
-		o = s.option(form.DynamicList, 'instcmd', _('Instant commands'), _('Use %s to see full list of commands your UPS supports (requires %s package)'.format('<code>upscmd -l</code>', '<code>upscmd</code>')));
-		o.optional = true;
-
-		o = s.option(form.ListValue, 'upsmon', _('Role'));
-		o.value('secondary', _('Auxiliary'));
-		o.value('primary', _('Primary'));
-		o.value('slave', _('Auxiliary (Deprecated)'));
-		o.value('master', _('Primary (Deprecated)'));
-		o.optional = false;
 
 		// Listen settings
 		s = m.section(form.TypedSection, 'listen_address', _('Addresses on which to listen'));
@@ -98,11 +64,6 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'uinteger'
 		o.placeholder = 24;
-
-		if (have_ssl_support) {
-			o = s.option(form.Value, 'certfile', _('Certificate file (SSL)'));
-			o.optional = true;
-		}
 
 		// Drivers global settings
 		s = m.section(form.NamedSection, 'driver_global', 'driver_global', _('Driver Global Settings'));
