@@ -1,6 +1,14 @@
 {
-	"admin/services/frps": {
-		"title": "frp Server",
+	"admin/services/frp": {
+		"order": 80,
+		"title": "frp",
+		"action": {
+			"type": "firstchild"
+		}
+	},
+	"admin/services/frp/server": {
+		"order": 10,
+		"title": "Server",
 		"action": {
 			"type": "view",
 			"path": "frps"
