@@ -1896,7 +1896,8 @@ return view.extend({
 		o.datatype = 'uinteger';
 
 		if (dslModemType != null) {
-			s = m.section(form.TypedSection, 'dsl', _('DSL'));
+			s = m.section(form.TypedSection, 'dsl', _('DSL'),
+				_('xDSL line settings such as annex, tone and transfer mode. Changes take effect the next time the DSL service is restarted.'));
 			s.anonymous = true;
 
 			o = s.option(form.ListValue, 'annex', _('Annex'));
@@ -1940,16 +1941,191 @@ return view.extend({
 				o.value('adsl', _('ADSL'));
 				o.value('vdsl', _('VDSL'));
 
-				o = s.option(form.ListValue, 'ds_snr_offset', _('Downstream SNR offset'));
-				o.default = '0';
+				if (L.hasSystemFeature('dsl', 'snr_offset')) {
+					o = s.option(form.ListValue, 'ds_snr_offset', _('Downstream SNR offset'));
+					o.default = '0';
 
-				for (let i = -100; i <= 100; i += 5)
-					o.value(i, _('%.1f dB').format(i / 10));
+					for (let i = -100; i <= 100; i += 5)
+						o.value(i, _('%.1f dB').format(i / 10));
+				}
 			}
 
-			s.option(form.Value, 'firmware', _('Firmware File'));
-		}
+			if (L.hasSystemFeature('dsl', 'bitswap')) {
+				o = s.option(form.Flag, 'bitswap', _('Bitswap'));
+				o.default = '1';
+			}
 
+			if (L.hasSystemFeature('dsl', 'sra')) {
+				o = s.option(form.Flag, 'sra', _('Seamless Rate Adaptation'));
+				o.default = '1';
+			}
+
+			if (L.hasSystemFeature('dsl', 'firmware'))
+				s.option(form.Value, 'firmware', _('Firmware File'));
+
+			// Data Links section, embedded in the DSL tab. The container
+			// is a NamedSection bound to the existing 'dsl' section with
+			// its own sectiontype: on a tabbed map the DOM id derives
+			// from the section type, so reusing 'dsl' would collide with
+			// the DSL section itself.
+			if (L.hasSystemFeature('dsl', 'datalink_ptm') || L.hasSystemFeature('dsl', 'datalink_atm')) {
+				const dslParent = uci.get('network', 'dsl', 'config_iface')?.replace(/\..*$/, '');
+				const dslTransport = dslParent
+					? '%s.2000 + index'.format(dslParent)
+					: _('the xDSL transport interface');
+
+				/* PTM and ATM links share a single index space (0-7);
+				 * find the lowest index not used by any of them */
+				const nextFreeLinkIndex = function() {
+					const used = {};
+
+					for (let s of uci.sections('network', 'ptm').concat(uci.sections('network', 'atm'))) {
+						const index = +s.index;
+
+						if (!isNaN(index) && index >= 0 && index <= 7)
+							used[index] = true;
+					}
+
+					for (let i = 0; i < 8; i++)
+						if (!used[i])
+							return i;
+
+					return null;
+				};
+
+				o = s.option(form.SectionValue, 'data_links',
+					form.NamedSection, 'dsl', 'data-links', _('Data Links'),
+					_('Configure how the connection is carried: PTM/ATM data links terminated by the xDSL board. Each configured link is exposed as a virtual network interface that can be used by WAN interfaces.'));
+
+				const dls = o.subsection;
+
+				if (L.hasSystemFeature('dsl', 'datalink_atm')) {
+					dls.tab('atm', _('ATM Links'));
+
+					o = dls.taboption('atm', form.SectionValue, 'atm_links',
+						form.TypedSection, 'atm', _('xDSL ATM Data Links'),
+						_('ATM data links carry the xDSL connection as PVCs terminated by the xDSL board. Each link is exposed as <code>%s</code> on this device and can be used as device for WAN interfaces. Up to 8 links (PTM and ATM combined) are supported.').format(dslTransport));
+
+					const ss = o.subsection;
+
+					ss.addremove = true;
+					ss.anonymous = false;
+					ss.addbtntitle = _('Add ATM Data Link');
+
+					ss.handleAdd = function(ev, name) {
+						if (!name)
+							return;
+
+						if (uci.get('network', name)) {
+							ui.addNotification(null,
+								E('p', _('A section named "%s" already exists.').format(name)),
+								'warning');
+							return;
+						}
+
+						const index = nextFreeLinkIndex();
+
+						if (index == null) {
+							ui.addNotification(null,
+								E('p', _('No free data link index: all 8 links (PTM and ATM combined) are already in use.')),
+								'error');
+							return;
+						}
+
+						return this.map.save(function() {
+							const sid = uci.add('network', 'atm', name);
+
+							uci.set('network', sid, 'index', index);
+							uci.set('network', sid, 'vpi', 8);
+							uci.set('network', sid, 'vci', 35);
+							uci.set('network', sid, 'encaps', 'llc');
+							uci.set('network', sid, 'payload', 'bridged');
+						});
+					};
+
+					o = ss.option(form.Value, 'index', _('Data link index'),
+						_('Determines the transport interface on this device (%s). Must be unique across all PTM and ATM data links.').format(dslTransport));
+					o.datatype = 'and(uinteger, min(0), max(7))';
+					o.rmempty = false;
+
+					o = ss.option(form.Value, 'vpi', _('ATM Virtual Path Identifier (VPI)'));
+					o.datatype = 'and(uinteger, min(0), max(255))';
+					o.default = '8';
+					o.rmempty = false;
+
+					o = ss.option(form.Value, 'vci', _('ATM Virtual Channel Identifier (VCI)'));
+					o.datatype = 'and(uinteger, min(1), max(65535))';
+					o.default = '35';
+					o.rmempty = false;
+
+					o = ss.option(form.ListValue, 'encaps', _('Encapsulation mode'));
+					o.value('llc', _('LLC'));
+					o.value('vcmux', _('VC-Mux'));
+					o.default = 'llc';
+
+					o = ss.option(form.ListValue, 'payload', _('Payload type'));
+					o.value('bridged', _('Bridged'));
+					o.value('routed', _('Routed'));
+					o.default = 'bridged';
+				}
+
+				if (L.hasSystemFeature('dsl', 'datalink_ptm')) {
+					dls.tab('ptm', _('PTM Links'));
+
+					o = dls.taboption('ptm', form.SectionValue, 'ptm_links',
+						form.TypedSection, 'ptm', _('xDSL PTM Data Links'),
+						_('PTM data links carry the xDSL connection as VLAN interfaces provided by the xDSL board. Each link is exposed as <code>%s</code> on this device and can be used as device for WAN interfaces. Up to 8 links (PTM and ATM combined) are supported; at most one link may be untagged.').format(dslTransport));
+
+					const ss = o.subsection;
+
+					ss.addremove = true;
+					ss.anonymous = false;
+					ss.addbtntitle = _('Add PTM Data Link');
+
+					ss.handleAdd = function(ev, name) {
+						if (!name)
+							return;
+
+						if (uci.get('network', name)) {
+							ui.addNotification(null,
+								E('p', _('A section named "%s" already exists.').format(name)),
+								'warning');
+							return;
+						}
+
+						const index = nextFreeLinkIndex();
+
+						if (index == null) {
+							ui.addNotification(null,
+								E('p', _('No free data link index: all 8 links (PTM and ATM combined) are already in use.')),
+								'error');
+							return;
+						}
+
+						return this.map.save(function() {
+							const sid = uci.add('network', 'ptm', name);
+
+							uci.set('network', sid, 'index', index);
+							uci.set('network', sid, 'pbit', 0);
+						});
+					};
+
+					o = ss.option(form.Value, 'index', _('Data link index'),
+						_('Determines the transport interface on this device (%s). Must be unique across all PTM and ATM data links.').format(dslTransport));
+					o.datatype = 'and(uinteger, min(0), max(7))';
+					o.rmempty = false;
+
+					o = ss.option(form.Value, 'vid', _('Service VLAN ID'),
+						_('Service VLAN tagged by the xDSL board. Leave empty for an untagged link; only one untagged link is allowed.'));
+					o.datatype = 'and(uinteger, min(1), max(4094))';
+
+					o = ss.option(form.ListValue, 'pbit', _('802.1p priority'));
+					for (let i = 0; i <= 7; i++)
+						o.value(i);
+					o.default = '0';
+				}
+			}
+		}
 
 		// Show ATM bridge section if we have the capabilities
 		if (L.hasSystemFeature('br2684ctl')) {
