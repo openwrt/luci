@@ -731,7 +731,15 @@ return view.extend({
 
 		let raw;
 		try {
-			raw = await callFwlivePoll({ addresses: [ String(constants.FETCH_LINES_MAX) ] });
+			/* Raw logd lines, not post-filter rows. Fetch a multiple of the
+			 * display limit so mixed syslog still fills the table; pause
+			 * reads the ring cap so the buffer can catch up. */
+			const fetchLines = this.paused
+				? constants.FETCH_LINES_MAX
+				: Math.min(Math.max(this.rowLimit * 4, 100), constants.FETCH_LINES_MAX);
+			raw = await callFwlivePoll({
+				addresses: [ String(fetchLines) ]
+			});
 		} catch (e) {
 			this.lastPollError = true;
 			return;

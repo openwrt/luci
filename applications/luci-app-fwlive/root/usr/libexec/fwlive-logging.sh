@@ -22,6 +22,36 @@ NF_LOG_IPV6='/proc/sys/net/netfilter/nf_log/10'
 WAN_LOG_LOCK_FILE="${FWLIVE_WAN_LOG_LOCK_FILE:-/etc/fwlive/logging.lock}"
 WAN_LOG_BASELINE_FILE="${FWLIVE_WAN_LOG_BASELINE_FILE:-/etc/fwlive/wan-log-baseline}"
 
+# RFC 8259 string escape. Lives here so prerm can source this file
+# standalone (#222). rpcd sources us and must not redefine this.
+json_escape() {
+	# Escape for JSON string content per RFC 8259 (including remaining C0 controls).
+	awk 'BEGIN {
+		RS = ""; ORS = ""
+		for (n = 1; n < 128; n++)
+			ord[sprintf("%c", n)] = n
+	}
+	{
+		for (i = 1; i <= length($0); i++) {
+			c = substr($0, i, 1)
+			if (c == "\\") printf "\\\\"
+			else if (c == "\"") printf "\\\""
+			else if (c == "\t") printf "\\t"
+			else if (c == "\r") printf "\\r"
+			else if (c == "\n") printf "\\n"
+			else {
+				o = ord[c] + 0
+				if (o > 0 && o < 32)
+					printf "\\u%04x", o
+				else if (o == 127)
+					printf "\\u007f"
+				else
+					printf "%s", c
+			}
+		}
+	}'
+}
+
 # Production lock dir must be root-owned with no group/other write (#204).
 wan_log_lock_dir_safe() {
 	dir="$1"

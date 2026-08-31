@@ -32,9 +32,23 @@ No `luasrc/` — modern JS-only app.
 
 ## Dependencies
 
-- `luci-base`, `logd` (`rpcd` via `luci-base`; no hard `firewall4` dependency)
+- `luci-base`, `logd`, `jsonfilter` (declared in `LUCI_DEPENDS`; `rpcd` via `luci-base`)
+- Optional reverse DNS uses BusyBox `nslookup` (stock image; not a package depend)
+- No hard `firewall4` dependency
 - Menu depends on ACL only (no `fs` AND of `nft`+`iptables` — that hid the entry on stock fw3 and fw4)
 - Runtime backend detection selects **fw4/nft** (22.03+) or **iptables LOG** (21.02 fw3); best-effort iptables when nft absent
+
+## Maintenance
+
+Development home is [lucas-albers-lz4/fwlive](https://github.com/lucas-albers-lz4/fwlive).
+The copy in `openwrt/luci` is a snapshot. On conflict, the next snapshot from
+that repository replaces the luci copy — land fixes upstream of this tree
+first.
+
+A `PKG_SOURCE` tarball package was considered and declined: LuCI applications
+are in-tree under `applications/`, Weblate owns `po/<lang>/` after merge, and a
+tarball would still leave a copy to update on every release. The signed binary
+feed stays for non-snapshot users.
 
 ## Documentation
 

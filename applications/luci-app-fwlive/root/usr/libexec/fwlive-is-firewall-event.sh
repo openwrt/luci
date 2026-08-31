@@ -4,71 +4,117 @@
 # Snapshot from the fwlive monorepo (lucas-albers-lz4/fwlive). Do not edit by hand.
 # CLASSIFY_SPEC parity with htdocs/.../fwlive/log.js — regenerate upstream of this tree.
 # Shared isFirewallEvent parity logic (shell). Sourced by fwlive-log-filter.sh and tests.
+# One awk process classifies a batch (MODE=json) or one message (default).
 
-normalize_nf_msg() {
-	printf '%s' "$1" | sed \
-		-e 's/\([^[:space:]]\)\(IN=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(OUT=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(SRC=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(DST=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(PROTO=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(SPT=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(DPT=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(LEN=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(MAC=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(TYPE=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(CODE=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(TTL=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(TOS=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(PREC=\)/\1 \2/g' \
-		-e 's/\([^[:space:]]\)\(DF=\)/\1 \2/g'
+_fwlive_run_classify() {
+	awk -v MODE="${1:-msg}" "$(cat <<'AWK'
+function normalize(s, keys, n, i, k) {
+	n = split("IN OUT SRC DST PROTO SPT DPT LEN MAC TYPE CODE TTL TOS PREC DF", keys, " ")
+	for (i = 1; i <= n; i++) {
+		k = keys[i]
+		while (match(s, "[^[:space:]]" k "="))
+			s = substr(s, 1, RSTART) " " substr(s, RSTART + 1)
+	}
+	return s
 }
-
-_detect_action() {
-	msg="$1"
-	action=$(printf '%s' "$msg" | grep -ioE '(^|[^A-Za-z0-9_])(ACCEPT|ALLOW|PASS|DROP|REJECT|DENY|BLOCK)([^A-Za-z0-9_]|$)' \
-		| head -1 | sed 's/^[^A-Za-z]*//;s/[^A-Za-z]*$//')
-	[ -n "$action" ] || action=UNKNOWN
-	printf '%s' "$action"
+function trim(s) {
+	sub(/^[[:space:]]+/, "", s)
+	sub(/[[:space:]]+$/, "", s)
+	return s
 }
-
-_has_kv() {
-	printf '%s' "$1" | grep -qE "(^|[^A-Za-z0-9_])$2="
+function has_kv(s, key) {
+	return s ~ "(^|[^A-Za-z0-9_])" key "="
 }
-
-_has_firewall_hint() {
-	printf '%s' "$1" | grep -qiE '(^|[^A-Za-z0-9_])(fw4|nft|iptables|kernel|firewall)([^A-Za-z0-9_]|$)'
+function has_hint(s, lc) {
+	lc = tolower(s)
+	return lc ~ "(^|[^a-z0-9_])(fw4|nft|iptables|kernel|firewall)([^a-z0-9_]|$)"
+}
+function non_fw_prefix(s, lc) {
+	lc = tolower(s)
+	return lc ~ "^(dnsmasq|procd|ubusd|netifd|odhcpd|logd|dropbear|uhttpd|hostapd|wpad)([^a-z0-9_]|$)"
+}
+function detect_action(s, words, n, i, w, wl, lc, start, pos, before, afterc, best, bestpos) {
+	n = split("ACCEPT ALLOW PASS DROP REJECT DENY BLOCK", words, " ")
+	lc = tolower(s)
+	best = ""
+	bestpos = length(s) + 1
+	for (i = 1; i <= n; i++) {
+		w = words[i]
+		wl = tolower(w)
+		start = 1
+		while (start <= length(lc) && match(substr(lc, start), wl)) {
+			pos = start + RSTART - 1
+			before = (pos == 1) ? " " : substr(lc, pos - 1, 1)
+			afterc = substr(lc, pos + length(wl), 1)
+			if (before !~ /[a-z0-9_]/ && (afterc == "" || afterc !~ /[a-z0-9_]/)) {
+				if (pos < bestpos) { bestpos = pos; best = w }
+				break
+			}
+			start = pos + 1
+		}
+	}
+	return best == "" ? "UNKNOWN" : best
+}
+function json_get_msg(obj, s, i, c, esc, out) {
+	if (!match(obj, /"msg"[[:space:]]*:[[:space:]]*"/)) return ""
+	s = substr(obj, RSTART + RLENGTH)
+	out = ""
+	esc = 0
+	for (i = 1; i <= length(s); i++) {
+		c = substr(s, i, 1)
+		if (esc) {
+			if (c == "n") out = out "\n"
+			else if (c == "t") out = out "\t"
+			else if (c == "r") out = out "\r"
+			else out = out c
+			esc = 0
+		} else if (c == "\\") {
+			esc = 1
+		} else if (c == "\"") {
+			return out
+		} else {
+			out = out c
+		}
+	}
+	return out
+}
+function is_fw(s, action) {
+	s = trim(normalize(s))
+	if (s == "") return 0
+	if (non_fw_prefix(s)) return 0
+	action = detect_action(s)
+	if (has_kv(s, "SRC") && has_kv(s, "DST")) return 1
+	if ((has_kv(s, "IN") || has_kv(s, "OUT")) && (has_kv(s, "SRC") || has_kv(s, "DST") || has_kv(s, "PROTO") || has_kv(s, "SPT") || has_kv(s, "DPT"))) return 1
+	if (action != "UNKNOWN" && (has_kv(s, "IN") || has_kv(s, "OUT") || has_kv(s, "PROTO") || has_kv(s, "SRC") || has_kv(s, "DST"))) return 1
+	if (has_hint(s) && action != "UNKNOWN") return 1
+	if (has_hint(s) && (has_kv(s, "IN") || has_kv(s, "OUT") || has_kv(s, "SRC") || has_kv(s, "DST") || has_kv(s, "PROTO"))) return 1
+	return 0
+}
+BEGIN { if (MODE != "json") ORS = "" }
+{
+	if (MODE == "json") {
+		msg = json_get_msg($0)
+		if (is_fw(msg)) {
+			if (out_n++) printf ","
+			printf "%s", $0
+		}
+		next
+	}
+	buf = (NR == 1) ? $0 : buf "\n" $0
+}
+END {
+	if (MODE != "json")
+		print is_fw(buf) ? 1 : 0
+}
+AWK
+)"
 }
 
 is_firewall_event_msg() {
-	msg=$(normalize_nf_msg "$1")
-	msg=$(printf '%s' "$msg" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
-	[ -n "$msg" ] || return 1
+	_r=$(printf '%s' "$1" | _fwlive_run_classify msg)
+	[ "$_r" = 1 ]
+}
 
-	msg_lc=$(printf '%s' "$msg" | tr '[:upper:]' '[:lower:]')
-	case "$msg_lc" in
-		dnsmasq|dnsmasq[!A-Za-z0-9_]*|procd|procd[!A-Za-z0-9_]*|ubusd|ubusd[!A-Za-z0-9_]*|netifd|netifd[!A-Za-z0-9_]*|odhcpd|odhcpd[!A-Za-z0-9_]*|logd|logd[!A-Za-z0-9_]*|dropbear|dropbear[!A-Za-z0-9_]*|uhttpd|uhttpd[!A-Za-z0-9_]*|hostapd|hostapd[!A-Za-z0-9_]*|wpad|wpad[!A-Za-z0-9_]*) return 1 ;;
-	esac
-
-	action=$(_detect_action "$msg")
-
-	if _has_kv "$msg" SRC && _has_kv "$msg" DST; then
-		return 0
-	fi
-	if { _has_kv "$msg" IN || _has_kv "$msg" OUT; } && { _has_kv "$msg" SRC || _has_kv "$msg" DST || _has_kv "$msg" PROTO || _has_kv "$msg" SPT || _has_kv "$msg" DPT; }; then
-		return 0
-	fi
-	if [ "$action" != "UNKNOWN" ] && { _has_kv "$msg" IN || _has_kv "$msg" OUT || _has_kv "$msg" PROTO || _has_kv "$msg" SRC || _has_kv "$msg" DST; }; then
-		return 0
-	fi
-
-	if _has_firewall_hint "$msg" && [ "$action" != "UNKNOWN" ]; then
-		return 0
-	fi
-
-	if _has_firewall_hint "$msg" && { _has_kv "$msg" IN || _has_kv "$msg" OUT || _has_kv "$msg" SRC || _has_kv "$msg" DST || _has_kv "$msg" PROTO; }; then
-		return 0
-	fi
-
-	return 1
+_fwlive_filter_json_entries() {
+	_fwlive_run_classify json
 }
