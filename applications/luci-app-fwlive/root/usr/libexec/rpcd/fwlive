@@ -132,7 +132,8 @@ run_with_timeout() {
 	if command -v timeout >/dev/null 2>&1; then
 		timeout "$secs" "$@" 2>/dev/null
 	else
-		"$@" 2>/dev/null
+		# Fail closed (#229): never run unbounded when timeout is absent.
+		return 127
 	fi
 }
 

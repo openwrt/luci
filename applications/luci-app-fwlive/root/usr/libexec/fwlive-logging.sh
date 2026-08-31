@@ -99,7 +99,12 @@ acquire_wan_log_lock() {
 	chmod 0600 "$WAN_LOG_LOCK_FILE" 2>/dev/null || true
 	chown 0:0 "$WAN_LOG_LOCK_FILE" 2>/dev/null || true
 	[ -L "$WAN_LOG_LOCK_FILE" ] && return 1
-	exec 9>"$WAN_LOG_LOCK_FILE" 2>/dev/null || return 1
+	# Probe in a subshell first: a failed `exec` redirection aborts a POSIX
+	# non-interactive shell outright, so `|| return 1` on the real exec would
+	# never run — and `2>/dev/null` on the same exec would permanently
+	# silence this process's stderr on the success path (#244).
+	( exec 9>>"$WAN_LOG_LOCK_FILE" ) 2>/dev/null || return 1
+	exec 9>>"$WAN_LOG_LOCK_FILE"
 	flock 9 2>/dev/null || {
 		exec 9>&-
 		return 1

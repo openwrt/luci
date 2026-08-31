@@ -113,6 +113,7 @@ return view.extend({
 	resolveInFlight: false,
 	resolveGeneration: 0,
 	lastPollError: false,
+	lastRulesError: null,
 	lastRenderedRowCount: 0,
 	lastRenderedHeadId: '',
 	followLive: true,
@@ -492,11 +493,17 @@ return view.extend({
 			const res = await callFwliveRules();
 			this.rulesMap = (res && res.rules) || {};
 			this.firewallBackend = (res && res.backend) || 'nft';
+			/* Bounds / mktemp failures are reply.error — same idea as poll (#245). */
+			this.lastRulesError = (res && res.error) || null;
+			if (this.lastRulesError)
+				console.warn('fwlive rules map error:', this.lastRulesError);
 		} catch (e) {
 			this.rulesMap = {};
 			this.firewallBackend = 'nft';
+			this.lastRulesError = 'rules_unavailable';
 		}
 		this.updateBackendUi();
+		this.updateStatus();
 	},
 
 	backendDisplayLabel() {
@@ -921,6 +928,17 @@ return view.extend({
 			return;
 		}
 
+		if (this.lastRulesError) {
+			status.className = 'fwlive-status fwlive-status-error';
+			if (this.lastRulesError === 'rules_truncated')
+				status.textContent = _('Rule labels incomplete — map truncated') + suffix;
+			else if (this.lastRulesError === 'mktemp_failed')
+				status.textContent = _('Rule labels unavailable — temp file failed') + suffix;
+			else
+				status.textContent = _('Rule labels unavailable') + suffix;
+			return;
+		}
+
 		status.className = this.paused
 			? 'fwlive-status fwlive-status-paused'
 			: 'fwlive-status';
@@ -1145,7 +1163,8 @@ return view.extend({
 			if (gen !== this.resolveGeneration)
 				return;
 
-			const names = (res && res.names) || {};
+			/* rpc.declare expect: { names: {} } already unwraps — res IS the map (#243). */
+			const names = res || {};
 			let updated = false;
 
 			for (let i = 0; i < need.length; i++) {
