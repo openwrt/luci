@@ -55,7 +55,18 @@ function detect_action(s, words, n, i, w, wl, lc, start, pos, before, afterc, be
 	}
 	return best == "" ? "UNKNOWN" : best
 }
-function json_get_msg(obj, s, i, c, esc, out) {
+function json_unhex4(h, n, i, c, v) {
+	n = 0
+	h = tolower(h)
+	for (i = 1; i <= 4; i++) {
+		c = substr(h, i, 1)
+		v = index("0123456789abcdef", c)
+		if (v == 0) return -1
+		n = n * 16 + v - 1
+	}
+	return n
+}
+function json_get_msg(obj, s, i, c, esc, out, hex, n) {
 	if (!match(obj, /"msg"[[:space:]]*:[[:space:]]*"/)) return ""
 	s = substr(obj, RSTART + RLENGTH)
 	out = ""
@@ -66,7 +77,15 @@ function json_get_msg(obj, s, i, c, esc, out) {
 			if (c == "n") out = out "\n"
 			else if (c == "t") out = out "\t"
 			else if (c == "r") out = out "\r"
-			else out = out c
+			else if (c == "b") out = out "\b"
+			else if (c == "f") out = out "\f"
+			else if (c == "u") {
+				hex = substr(s, i + 1, 4)
+				n = (length(hex) == 4) ? json_unhex4(hex) : -1
+				if (n >= 1 && n <= 255) out = out sprintf("%c", n)
+				else if (n < 0) out = out "u"
+				if (n >= 0) i += 4
+			} else out = out c
 			esc = 0
 		} else if (c == "\\") {
 			esc = 1

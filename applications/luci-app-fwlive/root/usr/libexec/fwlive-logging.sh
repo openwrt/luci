@@ -26,14 +26,24 @@ WAN_LOG_BASELINE_FILE="${FWLIVE_WAN_LOG_BASELINE_FILE:-/etc/fwlive/wan-log-basel
 # standalone (#222). rpcd sources us and must not redefine this.
 json_escape() {
 	# Escape for JSON string content per RFC 8259 (including remaining C0 controls).
-	awk 'BEGIN {
-		RS = ""; ORS = ""
+	# Slurp stdin as one string. Default awk RS is newline — RS="" is
+	# paragraph mode and drops blank-line separators (a\n\nb → ab). A
+	# sentinel is appended so a leading, trailing, or lone newline is kept.
+	{ cat; printf '%s' '_'; } | awk '
+	BEGIN {
+		ORS = ""
 		for (n = 1; n < 128; n++)
 			ord[sprintf("%c", n)] = n
 	}
 	{
-		for (i = 1; i <= length($0); i++) {
-			c = substr($0, i, 1)
+		if (NR > 1) buf = buf "\n"
+		buf = buf $0
+	}
+	END {
+		if (length(buf) > 0)
+			buf = substr(buf, 1, length(buf) - 1)
+		for (i = 1; i <= length(buf); i++) {
+			c = substr(buf, i, 1)
 			if (c == "\\") printf "\\\\"
 			else if (c == "\"") printf "\\\""
 			else if (c == "\t") printf "\\t"

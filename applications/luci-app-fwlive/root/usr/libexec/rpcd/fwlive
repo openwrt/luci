@@ -208,15 +208,31 @@ detect_firewall_backend() {
 	printf '%s' unknown
 }
 
+_fwlive_tmp_dir_ok() {
+	# Fail closed unless the dump dir is a real directory with the sticky
+	# bit. Without sticky, another uid can unlink a just-created mktemp
+	# file and replace it with a symlink before we reopen with `>` as
+	# root (same class as #204). Optional $1 is for CLI tests; production
+	# always uses /tmp.
+	dir="${1:-/tmp}"
+	[ -n "$dir" ] || return 1
+	[ -L "$dir" ] && return 1
+	[ -d "$dir" ] || return 1
+	# POSIX XCU `test -k`; BusyBox/dash implement it. shellcheck SC3065
+	# incorrectly treats -k as non-POSIX (and `stat -c` is not on OpenWrt).
+	# shellcheck disable=SC3065
+	[ -k "$dir" ]
+}
+
 _fwlive_mktemp() {
 	# Secure temp file for ruleset dumps. Uses mktemp only -- no
 	# predictable fallback (symlink arbitrary-write primitive when
 	# running as root under rpcd). Uses /tmp explicitly and does not
-	# honour TMPDIR (fixed sticky directory is safer when running as
-	# root under rpcd where environment is not user-controlled). Never
-	# rm+reuse, never touch/chmod into existence, template stays inside /tmp.
-	prefix="$1"
-	_mk_file=$(mktemp "/tmp/${prefix}.XXXXXX" 2>/dev/null) || return 1
+	# honour TMPDIR. /tmp must be sticky (checked). Never rm+reuse,
+	# never touch/chmod into existence, template stays inside /tmp.
+	_fwlive_tmp_dir_ok || return 1
+	_mk_prefix="$1"
+	_mk_file=$(mktemp "/tmp/${_mk_prefix}.XXXXXX" 2>/dev/null) || return 1
 	[ -n "$_mk_file" ] || return 1
 	printf '%s' "$_mk_file"
 }
@@ -347,11 +363,14 @@ fetch_firewall_logs() {
 
 	# Do not swallow a filter failure into a silent empty table (#220).
 	# If the filter exits non-zero but still printed JSON, keep it.
+	# Empty success is not valid poll JSON — the shipped filter always
+	# prints {"log":[...]}, but a stub/regression must not emit a blank body.
 	if ! out=$(printf '%s' "$raw" | "$FILTER_SH"); then
 		if [ -z "$out" ]; then
 			out='{"log":[],"error":"filter_failed"}'
 		fi
 	fi
+	[ -n "$out" ] || out='{"log":[]}'
 	printf '%s' "$out"
 }
 
@@ -378,8 +397,9 @@ parse_nslookup_name() {
 		}
 		NF == 0 { in_answer = 1; next }
 		in_answer && $1 == "Address" && $2 ~ /^[0-9]+:/ && NF >= 4 {
-			print $4
-			exit
+			host = $4
+			gsub(/\.$/, "", host)
+			if (host != "") { print host; exit }
 		}
 	'
 }
@@ -560,6 +580,15 @@ run_selftest() {
 		return 1
 	fi
 
+	# Blank lines are data (paragraph-mode RS="" used to drop them).
+	input=$(printf 'a\n\nb')
+	escaped=$(printf '%s' "$input" | json_escape)
+	expected=$(printf 'a\\n\\nb')
+	if [ "$escaped" != "$expected" ]; then
+		echo "json_escape blank line: expected $expected got $escaped" >&2
+		return 1
+	fi
+
 	if is_resolvable_address 'not an ip'; then
 		echo 'is_resolvable_address: expected reject for spaces' >&2
 		return 1
@@ -668,6 +697,45 @@ run_selftest() {
 		return 1
 	fi
 
+	if ! _fwlive_tmp_dir_ok; then
+		echo "_fwlive_tmp_dir_ok: /tmp must be a sticky directory" >&2
+		return 1
+	fi
+
+	got=$(parse_nslookup_name "Server: 127.0.0.1
+Address: 127.0.0.1:53
+
+8.8.8.8.in-addr.arpa	name = dns.google.")
+	if [ "$got" != "dns.google" ]; then
+		echo "parse_nslookup_name: bind-style expected dns.google got '$got'" >&2
+		return 1
+	fi
+	got=$(parse_nslookup_name "Server:		127.0.0.1
+Address:	127.0.0.1:53
+
+Address 1: 8.8.8.8 dns.google.")
+	if [ "$got" != "dns.google" ]; then
+		echo "parse_nslookup_name: busybox Address N expected dns.google got '$got'" >&2
+		return 1
+	fi
+	got=$(parse_nslookup_name "Server: 192.168.1.1
+Address 1: 192.168.1.1 router.lan
+
+Name: 8.8.8.8
+Address 1: 8.8.8.8 dns.google")
+	if [ "$got" != "dns.google" ]; then
+		echo "parse_nslookup_name: mini nslookup must skip resolver Address N, got '$got'" >&2
+		return 1
+	fi
+	got=$(parse_nslookup_name "Server: 127.0.0.1
+Address: 127.0.0.1:53")
+	if [ -n "$got" ]; then
+		echo "parse_nslookup_name: server-only expected empty got '$got'" >&2
+		return 1
+	fi
+
+	run_logging_selftest || return 1
+
 	if ! command -v jshn >/dev/null 2>&1; then
 		echo "skip: jshn not available (poll cap via jshn not tested)" >&2
 		return 0
@@ -710,40 +778,6 @@ run_selftest() {
 		return 1
 	fi
 
-	got=$(parse_nslookup_name "Server: 127.0.0.1
-Address: 127.0.0.1:53
-
-8.8.8.8.in-addr.arpa	name = dns.google.")
-	if [ "$got" != "dns.google" ]; then
-		echo "parse_nslookup_name: bind-style expected dns.google got '$got'" >&2
-		return 1
-	fi
-	got=$(parse_nslookup_name "Server:		127.0.0.1
-Address:	127.0.0.1:53
-
-Address 1: 8.8.8.8 dns.google")
-	if [ "$got" != "dns.google" ]; then
-		echo "parse_nslookup_name: busybox Address N expected dns.google got '$got'" >&2
-		return 1
-	fi
-	got=$(parse_nslookup_name "Server: 192.168.1.1
-Address 1: 192.168.1.1 router.lan
-
-Name: 8.8.8.8
-Address 1: 8.8.8.8 dns.google")
-	if [ "$got" != "dns.google" ]; then
-		echo "parse_nslookup_name: mini nslookup must skip resolver Address N, got '$got'" >&2
-		return 1
-	fi
-	got=$(parse_nslookup_name "Server: 127.0.0.1
-Address: 127.0.0.1:53")
-	if [ -n "$got" ]; then
-		echo "parse_nslookup_name: server-only expected empty got '$got'" >&2
-		return 1
-	fi
-
-	run_logging_selftest || return 1
-
 	return 0
 }
 
@@ -761,6 +795,10 @@ case "$1" in
 		poll_clamp_lines "$2"
 		exit $?
 		;;
+	__tmp_dir_ok)
+		_fwlive_tmp_dir_ok "$2"
+		exit $?
+		;;
 	__resolve_one)
 		if name=$(resolve_hostname "$2"); then
 			printf '%s\n' "$name"
@@ -769,9 +807,13 @@ case "$1" in
 		exit 1
 		;;
 	__parse_nslookup)
-		parse_nslookup_name "$2"
+		name=$(parse_nslookup_name "$2")
+		if [ -n "$name" ]; then
+			printf '%s\n' "$name"
+			exit 0
+		fi
 		printf '\n'
-		exit $?
+		exit 1
 		;;
 	list)
 		# Method names only — args objects describe call parameters.
