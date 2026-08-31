@@ -21,8 +21,8 @@
 const callFwlivePoll = rpc.declare({
 	object: 'fwlive',
 	method: 'poll',
-	params: [ 'addresses' ],
-	expect: { log: [] }
+	params: [ 'addresses' ]
+	/* Full reply object kept so reply.error reaches fetchEntries (#233). */
 });
 
 const callFwliveRules = rpc.declare({
@@ -729,7 +729,7 @@ return view.extend({
 		if (!this.sessionSeen)
 			this.sessionSeen = new Set();
 
-		let raw;
+		let reply;
 		try {
 			/* Raw logd lines, not post-filter rows. Fetch a multiple of the
 			 * display limit so mixed syslog still fills the table; pause
@@ -737,13 +737,23 @@ return view.extend({
 			const fetchLines = this.paused
 				? constants.FETCH_LINES_MAX
 				: Math.min(Math.max(this.rowLimit * 4, 100), constants.FETCH_LINES_MAX);
-			raw = await callFwlivePoll({
+			reply = await callFwlivePoll({
 				addresses: [ String(fetchLines) ]
 			});
 		} catch (e) {
 			this.lastPollError = true;
 			return;
 		}
+		/* Full poll object (no rpc expect strip). error → banner; log → rows. */
+		if (!reply || typeof reply !== 'object' || Array.isArray(reply)) {
+			this.lastPollError = true;
+			return;
+		}
+		if (reply.error) {
+			this.lastPollError = true;
+			return;
+		}
+		const raw = reply.log;
 		if (!Array.isArray(raw)) {
 			this.lastPollError = true;
 			return;

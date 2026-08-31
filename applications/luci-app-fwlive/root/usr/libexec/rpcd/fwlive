@@ -44,6 +44,13 @@ slug_key() {
 	echo "$1" | tr '[:upper:]' '[:lower:]' | tr ' _' '--'
 }
 
+# Cap rules JSON size so a huge ruleset cannot unbound an rpcd reply (#229).
+RULES_MAP_MAX_KEYS=512
+RULES_MAP_MAX_BYTES=65536
+# Same wall-clock bound as nft for iptables-save / ip6tables-save (#229).
+# Overridable for host tests (e.g. FWLIVE_IPTABLES_TIMEOUT=1).
+IPTABLES_TIMEOUT="${FWLIVE_IPTABLES_TIMEOUT:-5}"
+
 map_add() {
 	key="$1"
 	val="$2"
@@ -54,10 +61,21 @@ map_add() {
 	# Uses anchored pattern "\"<key>\":" to avoid substring false positives
 	# ("foo" vs "foobar") and value false positives ("see foo").
 	# Quoting "$esc_key" makes the match literal (no glob escaping needed).
+	# Callers apply UCI, then labeled (!fw4:) prefixes, then unlabeled
+	# cosmetics so first-wins prefers authoritative names (#230).
 	case "$OUT" in
 		*"\"$esc_key\":"*) return 0 ;;
 	esac
 	esc_val=$(printf '%s' "$val" | json_escape)
+	_pair_len=$(( ${#esc_key} + ${#esc_val} + 5 ))
+	_next_len=$(( ${#OUT} + _pair_len ))
+	[ -n "$OUT" ] && _next_len=$((_next_len + 1))
+	if [ "${_map_keys:-0}" -ge "$RULES_MAP_MAX_KEYS" ] || \
+		[ "$_next_len" -gt "$RULES_MAP_MAX_BYTES" ]; then
+		_map_overflow=1
+		return 0
+	fi
+	_map_keys=$(( ${_map_keys:-0} + 1 ))
 	if [ -n "$OUT" ]; then
 		OUT="${OUT},"
 	fi
@@ -121,15 +139,18 @@ run_with_timeout() {
 map_log_prefix_entry() {
 	prefix="$1"
 	comment="$2"
+	pass="${3:-all}"
 	label=''
 
 	if [ -n "$comment" ] && is_uci_style_name "$comment"; then
 		label="$comment"
 	fi
 
-	# Single normalization site is map_prefix_with_label; idempotent so
-	# double-normalization is safe but this redundant call is removed.
 	[ -n "$prefix" ] || return 0
+	case "$pass" in
+		labeled) [ -n "$label" ] || return 0 ;;
+		unlabeled) [ -z "$label" ] || return 0 ;;
+	esac
 
 	map_prefix_with_label "$prefix" "$label"
 }
@@ -154,7 +175,10 @@ $(uci_rule_names)
 EOF
 }
 
+# pass=labeled|unlabeled|all — labeled before unlabeled so !fw4: beats
+# an earlier cosmetic for the same prefix under first-wins (#230).
 map_from_nft_stream() {
+	pass="${1:-all}"
 	while IFS= read -r line; do
 		# Capture [^"]* plus escaped-quote units (\"...) so a log prefix or
 		# comment containing an escaped quote is not truncated at the quote.
@@ -172,14 +196,22 @@ map_from_nft_stream() {
 		esac
 
 		if [ -n "$prefix" ]; then
+			case "$pass" in
+				labeled) [ -n "$label" ] || continue ;;
+				unlabeled) [ -z "$label" ] || continue ;;
+			esac
 			map_prefix_with_label "$prefix" "$label"
 		elif [ -n "$label" ]; then
+			case "$pass" in
+				unlabeled) continue ;;
+			esac
 			map_prefix_with_label "$label" "$label"
 		fi
 	done
 }
 
 map_from_iptables_save_stream() {
+	pass="${1:-all}"
 	while IFS= read -r line; do
 		case "$line" in
 			-*) ;;
@@ -188,7 +220,7 @@ map_from_iptables_save_stream() {
 		prefix=$(echo "$line" | sed -n 's/.*--log-prefix "\([^"\\]*\(\\.[^"\\]*\)*\)".*/\1/p')
 		comment=$(echo "$line" | sed -n 's/.*--comment "\([^"\\]*\(\\.[^"\\]*\)*\)".*/\1/p')
 		[ -n "$prefix" ] || continue
-		map_log_prefix_entry "$prefix" "$comment"
+		map_log_prefix_entry "$prefix" "$comment" "$pass"
 	done
 }
 
@@ -239,65 +271,85 @@ _fwlive_mktemp() {
 
 build_rules_map() {
 	OUT=''
+	_map_keys=0
+	_map_overflow=''
+	_enrich_error=''
 	backend=$(detect_firewall_backend)
 
+	# UCI first, then labeled stream prefixes, then unlabeled cosmetics
+	# (#230). First-wins keeps UCI over nft and !fw4: over cosmetic.
 	map_uci_rule_names
 
 	case "$backend" in
 		nft)
-			_tmp=$(_fwlive_mktemp fwlive-nft) || _tmp=''
-			if [ -n "$_tmp" ]; then
-				# nft ruleset write to /tmp (tmpfs on OpenWrt, RAM) is
-				# duration-bounded by NFT_TIMEOUT (5s) for nft only;
-				# iptables-save/ip6tables-save below run with no timeout.
-				# Size is not bounded by code; typical firewall ruleset
-				# dumps are <100KB and the file is removed immediately
-				# after parsing so RAM impact is negligible in practice.
-				# No pipeline subshell: accumulation stays in main shell via
-				# redirect for global first-wins dedup.
-				if nft_list_ruleset >"$_tmp" 2>/dev/null; then
-					map_from_nft_stream <"$_tmp"
+			_rules_dump=$(_fwlive_mktemp fwlive-nft) || _rules_dump=''
+			if [ -n "$_rules_dump" ]; then
+				# Dumps land on /tmp (tmpfs). Duration bounded by
+				# NFT_TIMEOUT / IPTABLES_TIMEOUT; key/byte caps in map_add.
+				if nft_list_ruleset >"$_rules_dump" 2>/dev/null; then
+					map_from_nft_stream labeled <"$_rules_dump"
+					map_from_nft_stream unlabeled <"$_rules_dump"
 				fi
-				rm -f "$_tmp"
+				rm -f "$_rules_dump"
+			else
+				_enrich_error='mktemp_failed'
 			fi
 			;;
 		iptables)
-			_tmp=$(_fwlive_mktemp fwlive-ipt) || _tmp=''
-			if [ -n "$_tmp" ]; then
-				if iptables-save >"$_tmp" 2>/dev/null; then
-					map_from_iptables_save_stream <"$_tmp"
+			_rules_dump=$(_fwlive_mktemp fwlive-ipt) || _rules_dump=''
+			if [ -n "$_rules_dump" ]; then
+				if run_with_timeout "$IPTABLES_TIMEOUT" iptables-save >"$_rules_dump" 2>/dev/null; then
+					map_from_iptables_save_stream labeled <"$_rules_dump"
+					map_from_iptables_save_stream unlabeled <"$_rules_dump"
 				fi
-				rm -f "$_tmp"
+				rm -f "$_rules_dump"
+			else
+				_enrich_error='mktemp_failed'
 			fi
 			if command -v ip6tables-save >/dev/null 2>&1; then
-				_tmp=$(_fwlive_mktemp fwlive-ip6t) || _tmp=''
-				if [ -n "$_tmp" ]; then
-					if ip6tables-save >"$_tmp" 2>/dev/null; then
-						map_from_iptables_save_stream <"$_tmp"
+				_rules_dump=$(_fwlive_mktemp fwlive-ip6t) || _rules_dump=''
+				if [ -n "$_rules_dump" ]; then
+					if run_with_timeout "$IPTABLES_TIMEOUT" ip6tables-save >"$_rules_dump" 2>/dev/null; then
+						map_from_iptables_save_stream labeled <"$_rules_dump"
+						map_from_iptables_save_stream unlabeled <"$_rules_dump"
 					fi
-					rm -f "$_tmp"
+					rm -f "$_rules_dump"
+				elif [ -z "$_enrich_error" ]; then
+					_enrich_error='mktemp_failed'
 				fi
 			fi
 			;;
 	esac
 
-	printf '{"backend":"%s","rules":{%s}}' "$backend" "$OUT"
+	_rules_json="{\"backend\":\"$backend\",\"rules\":{$OUT}"
+	if [ -n "$_enrich_error" ]; then
+		_rules_json="${_rules_json},\"error\":\"${_enrich_error}\""
+	elif [ -n "$_map_overflow" ]; then
+		_rules_json="${_rules_json},\"error\":\"rules_truncated\""
+	fi
+	printf '%s}' "$_rules_json"
 }
 
 rulesmap_from_iptables_file() {
 	file="$1"
 	OUT=''
+	_map_keys=0
+	_map_overflow=''
 	[ "$file" = "$RULESMAP_IPTABLES_FILE" ] || return 1
 	[ -f "$file" ] || return 1
-	map_from_iptables_save_stream < "$file"
-	printf '{"backend":"iptables","rules":{%s}}' "$OUT"
+	map_from_iptables_save_stream labeled < "$file"
+	map_from_iptables_save_stream unlabeled < "$file"
+	_rules_json="{\"backend\":\"iptables\",\"rules\":{$OUT}"
+	if [ -n "$_map_overflow" ]; then
+		_rules_json="${_rules_json},\"error\":\"rules_truncated\""
+	fi
+	printf '%s}' "$_rules_json"
 }
 
 poll_clamp_lines() {
 	# Contract: non-digit input returns default 50; digit strings are
-	# clamped to 1..POLL_LINES_MAX with leading zeros stripped. The
-	# caller (poll_lines_from_input) already filters non-digits, but this
-	# helper is now directly testable so it validates itself.
+	# clamped to 1..POLL_LINES_MAX with leading zeros stripped. Validates
+	# itself so __selftest can call it without jshn.
 	_val="$1"
 	case "$_val" in
 		''|*[!0-9]*)
@@ -305,19 +357,19 @@ poll_clamp_lines() {
 			return 0
 			;;
 	esac
-	_tmp=$(printf '%s' "$_val" | sed 's/^0*//')
-	if [ -z "$_tmp" ]; then
+	_digits=$(printf '%s' "$_val" | sed 's/^0*//')
+	if [ -z "$_digits" ]; then
 		printf '%s' "50"
 		return 0
 	fi
-	if [ "${#_tmp}" -gt "${#POLL_LINES_MAX}" ]; then
+	if [ "${#_digits}" -gt "${#POLL_LINES_MAX}" ]; then
 		printf '%s' "$POLL_LINES_MAX"
 		return 0
 	fi
-	if [ "$_tmp" -gt "$POLL_LINES_MAX" ]; then
+	if [ "$_digits" -gt "$POLL_LINES_MAX" ]; then
 		printf '%s' "$POLL_LINES_MAX"
 	else
-		printf '%s' "$_tmp"
+		printf '%s' "$_digits"
 	fi
 }
 

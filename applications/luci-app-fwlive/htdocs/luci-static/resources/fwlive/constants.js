@@ -7,7 +7,7 @@
  */
 return baseclass.extend({
 	/* Keep in sync with Makefile PKG_VERSION. */
-	APP_VERSION: '0.1.36',
+	APP_VERSION: '0.1.37',
 	ROW_LIMIT_OPTIONS: [ 25, 50, 100, 250, 500, 1000, 2000 ],
 	DEFAULT_ROW_LIMIT: 100,
 	/* Row pass/deny tint (#40): classic green/red default; accessible teal/orange */

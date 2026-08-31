@@ -23,5 +23,8 @@ input="$(cat)"
 [ -n "$input" ] || input='{"log":[]}'
 
 printf '%s' '{"log":['
-jsonfilter -s "$input" -e '@.log[*]' 2>/dev/null | _fwlive_filter_json_entries
+# Prefer stdin over -s: Linux MAX_ARG_STRLEN is 128KiB; a raised logd ring
+# (or paused FETCH_LINES_MAX poll) can exceed that and make jsonfilter fail
+# while this script still printed {"log":[]} and exited 0 (#234).
+printf '%s' "$input" | jsonfilter -e '@.log[*]' 2>/dev/null | _fwlive_filter_json_entries
 printf '%s' ']}'
