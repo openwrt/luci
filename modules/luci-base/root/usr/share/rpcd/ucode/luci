@@ -284,6 +284,21 @@ const methods = {
 				mptcp:      access('/proc/sys/net/mptcp/enabled'),
 			};
 
+			const has_rbctl_dsl = access('/usr/sbin/rbctl-dsl') == true;
+			const has_dsl_cpe_control = access('/sbin/dsl_cpe_control') == true;
+			const has_vdsl_cpe_control = access('/sbin/vdsl_cpe_control') == true;
+
+			if (has_rbctl_dsl || has_dsl_cpe_control || has_vdsl_cpe_control) {
+				result.dsl = {
+					datalink_ptm: has_rbctl_dsl,
+					datalink_atm: has_rbctl_dsl,
+					bitswap:      has_rbctl_dsl,
+					sra:          has_rbctl_dsl,
+					snr_offset:   has_vdsl_cpe_control,
+					firmware:     has_dsl_cpe_control || has_vdsl_cpe_control,
+				};
+			}
+
 			const wifi_features = [ 
 				'11ac',
 				'11ax',
