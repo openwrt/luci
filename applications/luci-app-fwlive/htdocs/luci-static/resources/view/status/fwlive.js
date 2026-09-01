@@ -503,7 +503,6 @@ return view.extend({
 			this.lastRulesError = 'rules_unavailable';
 		}
 		this.updateBackendUi();
-		this.updateStatus();
 	},
 
 	backendDisplayLabel() {
@@ -520,8 +519,20 @@ return view.extend({
 			map.setAttribute('data-backend', this.firewallBackend || 'unknown');
 
 		const label = document.getElementById('fwlive-backend');
-		if (label)
-			label.textContent = this.backendDisplayLabel();
+		if (label) {
+			let text = this.backendDisplayLabel();
+			if (this.lastRulesError) {
+				let err = '';
+				if (this.lastRulesError === 'rules_truncated')
+					err = _('Rule labels incomplete — map truncated');
+				else if (this.lastRulesError === 'mktemp_failed')
+					err = _('Rule labels unavailable — temp file failed');
+				else
+					err = _('Rule labels unavailable');
+				text = text ? text + ' \u00b7 ' + err : err;
+			}
+			label.textContent = text;
+		}
 
 		this.updateEmptyStateUi();
 	},
@@ -925,17 +936,6 @@ return view.extend({
 		if (this.lastPollError) {
 			status.className = 'fwlive-status fwlive-status-error';
 			status.textContent = _('Connection lost — retrying…') + suffix;
-			return;
-		}
-
-		if (this.lastRulesError) {
-			status.className = 'fwlive-status fwlive-status-error';
-			if (this.lastRulesError === 'rules_truncated')
-				status.textContent = _('Rule labels incomplete — map truncated') + suffix;
-			else if (this.lastRulesError === 'mktemp_failed')
-				status.textContent = _('Rule labels unavailable — temp file failed') + suffix;
-			else
-				status.textContent = _('Rule labels unavailable') + suffix;
 			return;
 		}
 

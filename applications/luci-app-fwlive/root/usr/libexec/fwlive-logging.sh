@@ -143,31 +143,106 @@ wan_zone_log_value() {
 	uci -q get "firewall.${zone}.log" 2>/dev/null
 }
 
+# True when two firewall section ids refer to the same WAN zone (issue #239).
+wan_firewall_zone_same() {
+	_a="$1"
+	_b="$2"
+	[ -n "$_a" ] && [ -n "$_b" ] || return 1
+	[ "$_a" = "$_b" ] && return 0
+	_na=$(uci -q get "firewall.${_a}.name" 2>/dev/null) || return 1
+	_nb=$(uci -q get "firewall.${_b}.name" 2>/dev/null) || return 1
+	_ta=$(uci -q get "firewall.${_a}" 2>/dev/null) || return 1
+	_tb=$(uci -q get "firewall.${_b}" 2>/dev/null) || return 1
+	[ "$_na" = "wan" ] && [ "$_nb" = "wan" ] && [ "$_ta" = "zone" ] && [ "$_tb" = "zone" ]
+}
+
+wan_log_staged_line_section() {
+	_line="$1"
+	case "$_line" in
+		firewall.*.log=*)
+		_rest=${_line#firewall.}
+		printf '%s' "${_rest%%.log=*}"
+		;;
+		-firewall.*.log)
+		_rest=${_line#-firewall.}
+		printf '%s' "${_rest%.log}"
+		;;
+		"- firewall."*.log)
+		_rest=${_line#- firewall.}
+		printf '%s' "${_rest%.log}"
+		;;
+	esac
+}
+
+# Zone ids that may appear in `uci changes` for firewall.<id>.log (issue #239).
+wan_log_staged_zone_ids() {
+	_zone="$1"
+	_staged="$2"
+	_seen="|${_zone}|"
+	printf '%s\n' "$_zone"
+	while IFS= read -r _line || [ -n "$_line" ]; do
+		[ -n "$_line" ] || continue
+		_sid=$(wan_log_staged_line_section "$_line")
+		[ -n "$_sid" ] || continue
+		case "$_seen" in *"|${_sid}|"*) continue ;; esac
+		wan_firewall_zone_same "$_zone" "$_sid" || continue
+		_seen="${_seen}${_sid}|"
+		printf '%s\n' "$_sid"
+	done <<EOF
+$_staged
+EOF
+}
+
 # Match only firewall.<zone>.log deltas in `uci changes` — not log_limit.
 wan_log_foreign_staged_lines() {
 	_zone="$1"
 	_staged="$2"
-	_ours_prefix="firewall.${_zone}.log="
-	_del="-firewall.${_zone}.log"
-	_del_sp="- firewall.${_zone}.log"
-	printf '%s\n' "$_staged" | awk -v p="$_ours_prefix" -v d="$_del" -v ds="$_del_sp" '
+	_ids=$(wan_log_staged_zone_ids "$_zone" "$_staged")
+	printf '%s\n' "$_staged" | awk -v ids="$_ids" '
+		BEGIN {
+			n = split(ids, id, "\n")
+			for (i = 1; i <= n; i++) {
+				if (id[i] == "") continue
+				np++
+				p[np] = "firewall." id[i] ".log="
+				d[np] = "-firewall." id[i] ".log"
+				ds[np] = "- firewall." id[i] ".log"
+			}
+		}
 		NF == 0 { next }
-		index($0, p) == 1 { next }
-		$0 == d || $0 == ds { next }
-		{ print }
+		{
+			ours = 0
+			for (i = 1; i <= np; i++) {
+				if (index($0, p[i]) == 1) { ours = 1; break }
+				if ($0 == d[i] || $0 == ds[i]) { ours = 1; break }
+			}
+			if (!ours) print
+		}
 	'
 }
 
 wan_log_count_our_staged_lines() {
 	_zone="$1"
 	_staged="$2"
-	_ours_prefix="firewall.${_zone}.log="
-	_del="-firewall.${_zone}.log"
-	_del_sp="- firewall.${_zone}.log"
-	printf '%s\n' "$_staged" | awk -v p="$_ours_prefix" -v d="$_del" -v ds="$_del_sp" '
+	_ids=$(wan_log_staged_zone_ids "$_zone" "$_staged")
+	printf '%s\n' "$_staged" | awk -v ids="$_ids" '
+		BEGIN {
+			n = split(ids, id, "\n")
+			for (i = 1; i <= n; i++) {
+				if (id[i] == "") continue
+				np++
+				p[np] = "firewall." id[i] ".log="
+				d[np] = "-firewall." id[i] ".log"
+				ds[np] = "- firewall." id[i] ".log"
+			}
+		}
 		NF == 0 { next }
-		index($0, p) == 1 { c++; next }
-		$0 == d || $0 == ds { c++; next }
+		{
+			for (i = 1; i <= np; i++) {
+				if (index($0, p[i]) == 1) { c++; break }
+				if ($0 == d[i] || $0 == ds[i]) { c++; break }
+			}
+		}
 		END { print c+0 }
 	'
 }
@@ -307,6 +382,8 @@ collect_logging_blockers() {
 	[ -n "$zone" ] || logging_blockers_append 'no_wan_zone'
 	check_nf_log_ipv4 || logging_blockers_append 'nf_log_ipv4_missing'
 	check_nf_log_ipv6 || logging_blockers_append 'nf_log_ipv6_missing'
+	# rpcd/fwlive run_with_timeout fail-closes to 127 without timeout (#229): surface as blocker.
+	command -v timeout >/dev/null 2>&1 || logging_blockers_append 'timeout_missing'
 
 	[ -n "$LOGGING_BLOCKERS" ] || return 0
 	return 1
