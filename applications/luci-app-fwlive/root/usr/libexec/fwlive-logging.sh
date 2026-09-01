@@ -160,17 +160,17 @@ wan_log_staged_line_section() {
 	_line="$1"
 	case "$_line" in
 		firewall.*.log=*)
-		_rest=${_line#firewall.}
-		printf '%s' "${_rest%%.log=*}"
-		;;
+			_rest=${_line#firewall.}
+			printf '%s' "${_rest%%.log=*}"
+			;;
 		-firewall.*.log)
-		_rest=${_line#-firewall.}
-		printf '%s' "${_rest%.log}"
-		;;
+			_rest=${_line#-firewall.}
+			printf '%s' "${_rest%.log}"
+			;;
 		"- firewall."*.log)
-		_rest=${_line#- firewall.}
-		printf '%s' "${_rest%.log}"
-		;;
+			_rest=${_line#- firewall.}
+			printf '%s' "${_rest%.log}"
+			;;
 	esac
 }
 
@@ -375,6 +375,16 @@ logging_blockers_append() {
 	LOGGING_BLOCKERS="${LOGGING_BLOCKERS}\"${esc}\""
 }
 
+logging_warnings_append() {
+	warning="$1"
+	[ -n "$warning" ] || return 0
+	esc=$(printf '%s' "$warning" | json_escape)
+	if [ -n "$LOGGING_WARNINGS" ]; then
+		LOGGING_WARNINGS="${LOGGING_WARNINGS},"
+	fi
+	LOGGING_WARNINGS="${LOGGING_WARNINGS}\"${esc}\""
+}
+
 collect_logging_blockers() {
 	zone="$1"
 	LOGGING_BLOCKERS=''
@@ -382,10 +392,19 @@ collect_logging_blockers() {
 	[ -n "$zone" ] || logging_blockers_append 'no_wan_zone'
 	check_nf_log_ipv4 || logging_blockers_append 'nf_log_ipv4_missing'
 	check_nf_log_ipv6 || logging_blockers_append 'nf_log_ipv6_missing'
-	# rpcd/fwlive run_with_timeout fail-closes to 127 without timeout (#229): surface as blocker.
-	command -v timeout >/dev/null 2>&1 || logging_blockers_append 'timeout_missing'
 
 	[ -n "$LOGGING_BLOCKERS" ] || return 0
+	return 1
+}
+
+collect_logging_warnings() {
+	LOGGING_WARNINGS=''
+
+	# rpcd/fwlive run_with_timeout fail-closes to 127 without timeout (#229).
+	# Warnings are diagnostics only — do not gate the enable-logging CTA.
+	command -v timeout >/dev/null 2>&1 || logging_warnings_append 'timeout_missing'
+
+	[ -n "$LOGGING_WARNINGS" ] || return 0
 	return 1
 }
 
@@ -415,6 +434,8 @@ build_logging_status_json() {
 
 	collect_logging_blockers "$zone"
 	blockers="[${LOGGING_BLOCKERS:-}]"
+	collect_logging_warnings
+	warnings="[${LOGGING_WARNINGS:-}]"
 
 	ready=false
 	if [ -n "$zone" ] && [ "$wan_log" = true ] && [ "$nf4" = true ] && [ "$nf6" = true ]; then
@@ -424,8 +445,8 @@ build_logging_status_json() {
 	zone_json=$(json_null_or_string "$zone")
 	limit_json=$(json_null_or_string "$limit_val")
 
-	printf '{"wan_zone":%s,"wan_log":%s,"wan_log_limit":%s,"nf_log_ipv4":%s,"nf_log_ipv6":%s,"ready":%s,"blockers":%s}' \
-		"$zone_json" "$wan_log" "$limit_json" "$nf4" "$nf6" "$ready" "$blockers"
+	printf '{"wan_zone":%s,"wan_log":%s,"wan_log_limit":%s,"nf_log_ipv4":%s,"nf_log_ipv6":%s,"ready":%s,"blockers":%s,"warnings":%s}' \
+		"$zone_json" "$wan_log" "$limit_json" "$nf4" "$nf6" "$ready" "$blockers" "$warnings"
 }
 
 reload_firewall() {

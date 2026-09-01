@@ -531,6 +531,11 @@ return view.extend({
 					err = _('Rule labels unavailable');
 				text = text ? text + ' \u00b7 ' + err : err;
 			}
+			const warnings = (this.loggingStatus && this.loggingStatus.warnings) || [];
+			if (warnings.indexOf('timeout_missing') >= 0) {
+				const warn = _('Limited diagnostics — timeout command missing');
+				text = text ? text + ' \u00b7 ' + warn : warn;
+			}
 			label.textContent = text;
 		}
 
@@ -543,6 +548,7 @@ return view.extend({
 		} catch (e) {
 			this.loggingStatus = null;
 		}
+		this.updateBackendUi();
 		this.updateLoggingToolbarUi();
 		this.updateEmptyStateUi();
 	},
