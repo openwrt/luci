@@ -541,11 +541,7 @@ return view.extend({
 				degraded = true;
 			}
 			label.textContent = text;
-			/* add/remove — classList.toggle(name, force) is unsupported on some 21.02-era browsers */
-			if (degraded)
-				label.classList.add('fwlive-backend-warn');
-			else
-				label.classList.remove('fwlive-backend-warn');
+			label.classList.toggle('fwlive-backend-warn', degraded);
 		}
 
 		this.updateEmptyStateUi();
@@ -1306,14 +1302,9 @@ return view.extend({
 		const wrapBtn = document.getElementById('fwlive-msg-wrap');
 		const onelineBtn = document.getElementById('fwlive-msg-oneline');
 		if (scroll) {
-			/* add/remove — classList.toggle(name, force) is unsupported on some 21.02-era browsers */
-			if (this.messageLayout === 'oneline') {
-				scroll.classList.add('fwlive-msg-oneline');
-				scroll.classList.remove('fwlive-msg-wrap');
-			} else {
-				scroll.classList.add('fwlive-msg-wrap');
-				scroll.classList.remove('fwlive-msg-oneline');
-			}
+			const onelineLayout = this.messageLayout === 'oneline';
+			scroll.classList.toggle('fwlive-msg-oneline', onelineLayout);
+			scroll.classList.toggle('fwlive-msg-wrap', !onelineLayout);
 		}
 		const oneline = this.messageLayout === 'oneline';
 		if (wrapBtn)
