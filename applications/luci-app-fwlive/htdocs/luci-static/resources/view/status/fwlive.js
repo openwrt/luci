@@ -47,7 +47,8 @@ const callFwliveLoggingStatus = rpc.declare({
 		nf_log_ipv4: false,
 		nf_log_ipv6: false,
 		ready: false,
-		blockers: []
+		blockers: [],
+		warnings: []
 	} }
 });
 
@@ -521,6 +522,7 @@ return view.extend({
 		const label = document.getElementById('fwlive-backend');
 		if (label) {
 			let text = this.backendDisplayLabel();
+			let degraded = false;
 			if (this.lastRulesError) {
 				let err = '';
 				if (this.lastRulesError === 'rules_truncated')
@@ -530,13 +532,20 @@ return view.extend({
 				else
 					err = _('Rule labels unavailable');
 				text = text ? text + ' \u00b7 ' + err : err;
+				degraded = true;
 			}
 			const warnings = (this.loggingStatus && this.loggingStatus.warnings) || [];
 			if (warnings.indexOf('timeout_missing') >= 0) {
 				const warn = _('Limited diagnostics — timeout command missing');
 				text = text ? text + ' \u00b7 ' + warn : warn;
+				degraded = true;
 			}
 			label.textContent = text;
+			/* add/remove — classList.toggle(name, force) is unsupported on some 21.02-era browsers */
+			if (degraded)
+				label.classList.add('fwlive-backend-warn');
+			else
+				label.classList.remove('fwlive-backend-warn');
 		}
 
 		this.updateEmptyStateUi();
