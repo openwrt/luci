@@ -1,0 +1,18 @@
+{#
+ The chrome's ONE inline-SVG wrapper, server side. Every icon the templates draw is the same 24x24
+ stroked outline and differs only in its path data, but the wrapper was written out at each call
+ site — header.ut's rail toggle plus search and logout — so `stroke-width` and the two
+ linecap attributes were independent copies of a value that is meant to make one icon SET.
+ fs-widgets.js's svgIcon() is the same wrapper for the icons the JS builds; the two are the server
+ and client halves of one look.
+
+ `body` is the shape, and it is emitted RAW on purpose: it is author-written markup from the caller
+ (paths and circles), never anything a request can influence, and `{{ }}` in a ucode template does
+ not escape — escaping here would print the path data as visible text. `cls` is optional and
+ defaults to the icon class every chrome control uses.
+
+ aria-hidden: each of these sits beside its own label (or in a control that carries one), and an
+ unlabelled <svg> would otherwise be announced as a graphic in its own right.
+ Licensed to the public under the Apache License 2.0.
+-#}
+<svg class="{{ cls ?? 'fs-ico' }}" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">{{ body }}</svg>
