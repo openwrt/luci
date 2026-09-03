@@ -1301,12 +1301,11 @@ return view.extend({
 		const scroll = document.getElementById('fwlive-scroll');
 		const wrapBtn = document.getElementById('fwlive-msg-wrap');
 		const onelineBtn = document.getElementById('fwlive-msg-oneline');
-		if (scroll) {
-			const onelineLayout = this.messageLayout === 'oneline';
-			scroll.classList.toggle('fwlive-msg-oneline', onelineLayout);
-			scroll.classList.toggle('fwlive-msg-wrap', !onelineLayout);
-		}
 		const oneline = this.messageLayout === 'oneline';
+		if (scroll) {
+			scroll.classList.toggle('fwlive-msg-oneline', oneline);
+			scroll.classList.toggle('fwlive-msg-wrap', !oneline);
+		}
 		if (wrapBtn)
 			wrapBtn.setAttribute('aria-pressed', oneline ? 'false' : 'true');
 		if (onelineBtn)
