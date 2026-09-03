@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-08-09 01:51+0000\n"
+"PO-Revision-Date: 2026-08-28 17:27+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/"
 ">\n"
@@ -169,12 +169,12 @@ msgstr "-- 사용자 정의 --"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:250
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:356
 msgid "-- match by label --"
-msgstr "-- label로 지정 --"
+msgstr "-- 레이블로 지정 --"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:236
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:340
 msgid "-- match by uuid --"
-msgstr "-- uuid로 지정 --"
+msgstr "-- UUID로 지정 --"
 
 #: modules/luci-compat/luasrc/view/cbi/firewall_zonelist.htm:27
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:44
@@ -896,6 +896,11 @@ msgstr "미감지"
 msgid "Absent Interface"
 msgstr "인터페이스 미인식"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:241
+msgctxt "footstrap"
+msgid "Accent"
+msgstr "강조"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:618
 msgid "Accept DNS queries only from hosts whose address is on a local subnet."
 msgstr "로컬 서브넷에 주소가 있는 호스트의 DNS 질의만 허용합니다."
@@ -1576,6 +1581,11 @@ msgid "As DHCP-Options; send unsolicited (dnsmasq only)."
 msgstr ""
 "DHCP 옵션과 동일하지만, 요청에 상관없이 무조건 전송합니다. (dnsmasq 전용)"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:364
+msgctxt "footstrap"
+msgid "As in file"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1247
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
@@ -1652,8 +1662,19 @@ msgstr "권위 부여(Authoritative)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:17
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:11
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:115
 msgid "Authorization Required"
 msgstr "인증이 필요합니다"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:174
+msgctxt "footstrap"
+msgid "Auto"
+msgstr "자동"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:209
+msgctxt "footstrap"
+msgid "Auto-collapse"
+msgstr "자동 접기"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:368
 msgid "Autofill listen addresses"
@@ -1780,6 +1801,11 @@ msgstr "피어 설정으로 돌아가기"
 msgid "Back to settings"
 msgstr "설정으로 돌아가기"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:659
+msgctxt "footstrap"
+msgid "Background"
+msgstr "배경"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:908
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1225
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
@@ -1804,6 +1830,11 @@ msgstr "대역"
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:160
 msgid "Bandwidth"
 msgstr "대역폭"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:269
+msgctxt "footstrap"
+msgid "Barely visible %s"
+msgstr "희미하게 보이는 %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:489
 msgid "Base device"
@@ -1937,6 +1968,11 @@ msgstr "본딩 정책"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:451
 msgid "Bonding/Aggregation device"
 msgstr "본딩/통합 장치"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:297
+msgctxt "footstrap"
+msgid "Borders"
+msgstr "테두리"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:522
 msgid "Both \"Relay from\" and \"Relay to address\" must be specified."
@@ -2119,6 +2155,11 @@ msgctxt "Chain hook: ingress"
 msgid "Capture packets directly after the NIC received them"
 msgstr "NIC 수신 직후 패킷 캡처"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:278
+msgctxt "footstrap"
+msgid "Cards"
+msgstr "카드"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:93
 msgid "Carrier"
 msgstr "연결 신호"
@@ -2261,9 +2302,19 @@ msgstr "아카이브 확인 중…"
 msgid "Checking image…"
 msgstr "이미지 확인 중…"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:334
+msgctxt "footstrap"
+msgid "Choose SVG"
+msgstr "SVG 선택"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:677
 msgid "Choose a unique name."
 msgstr "중복되지 않는 이름을 입력하세요."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:327
+msgctxt "footstrap"
+msgid "Choose image"
+msgstr "이미지 선택"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:425
 msgid "Choose mtdblock"
@@ -2296,6 +2347,11 @@ msgstr "암호 알고리즘"
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:91
 msgid "Cisco UDP encapsulation"
 msgstr "Cisco UDP 캡슐화"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:268
+msgctxt "footstrap"
+msgid "Clearly visible %s"
+msgstr "명확히 보이는 %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
 msgid ""
@@ -2355,6 +2411,11 @@ msgstr ""
 "콜드 스탠바이(Cold standby): 다른 인터페이스를 사용할 수 없을 때만 연결을 수"
 "립합니다. (느린 전환)"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-chrome.js:494
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/header.ut:150
+msgid "Collapse menu"
+msgstr "메뉴 접기"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:64
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:85
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2676
@@ -2369,6 +2430,12 @@ msgstr "데이터 수집 중..."
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:303
 msgid "Collisions seen"
 msgstr "충돌 감지"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:347
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:656
+msgctxt "footstrap"
+msgid "Colours"
+msgstr "색상"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:71
 msgid "Command"
@@ -2390,6 +2457,11 @@ msgstr "설명"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:202
 msgid "Common name or numeric ID of the %s in which this route is found"
 msgstr "이 경로가 포함된 %s의 일반 이름 또는 숫자 ID"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:192
+msgctxt "footstrap"
+msgid "Compact"
+msgstr "좁게"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2180
 msgid ""
@@ -2493,6 +2565,11 @@ msgstr "설정…"
 msgid "Confirm disconnect"
 msgstr "연결 해제 확인"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:548
+msgctxt "footstrap"
+msgid "Confirm reset"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:55
 msgid "Confirmation"
 msgstr "다시 확인"
@@ -2574,6 +2651,16 @@ msgctxt "nft continue action"
 msgid "Continue to next rule"
 msgstr "다음 규칙으로 진행"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:278
+msgctxt "footstrap"
+msgid "Contrast %s:1 (WCAG AA wants %s:1 here)"
+msgstr "명암비 %s:1 (최소 %s:1 필요 - WCAG AA 기준)"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:284
+msgctxt "footstrap"
+msgid "Controls"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1010
 msgid ""
 "Controls retransmitted Neighbor Solicitation messages; published in <abbr "
@@ -2583,6 +2670,12 @@ msgstr ""
 "<abbr title=\"라우터 광고(Router Advertisement)\">RA</abbr> 메시지를 통해 전"
 "파됩니다."
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1099
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1101
+msgctxt "footstrap"
+msgid "Could not process the image."
+msgstr "이미지를 처리할 수 없습니다."
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5370
 msgid ""
 "Could not regain access to the device after applying the configuration "
@@ -2591,6 +2684,11 @@ msgid ""
 msgstr ""
 "설정 변경 후 장치에 접근할 수 없습니다. IP 주소나 무선 보안 인증 정보 등 네트"
 "워크 관련 설정을 변경하면, 변경된 설정으로 다시 연결해야 합니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:524
+msgctxt "footstrap"
+msgid "Could not save the default. Reload the page and try again."
+msgstr "기본값을 저장하지 못했습니다. 페이지를 새로고침한 후 다시 시도하세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:731
 msgid "Count"
@@ -2875,6 +2973,16 @@ msgstr "DUID/IAID"
 msgid "Daemon"
 msgstr "데몬(Daemon)"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:259
+msgctxt "footstrap"
+msgid "Danger"
+msgstr "위험"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:176
+msgctxt "footstrap"
+msgid "Dark"
+msgstr "어둡게"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:29
 msgid "Data Rate"
 msgstr "전송 속도"
@@ -2928,6 +3036,11 @@ msgstr "기본 라우터"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:12
 msgid "Default state"
 msgstr "기본 상태 유지"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:660
+msgctxt "footstrap"
+msgid "Defaults"
+msgstr "기본값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:853
 msgid "Defaults to IPv4+6."
@@ -3009,6 +3122,11 @@ msgstr "네트워크 삭제"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1267
 msgid "Delivery Traffic Indication Message Interval"
 msgstr "전달 트래픽 지시 메시지 전송 간격"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:191
+msgctxt "footstrap"
+msgid "Density"
+msgstr "간격"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:340
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:134
@@ -3167,6 +3285,11 @@ msgstr ""
 "노드가 상대방으로부터 도달 가능성을 확인한 후 해당 이웃을 도달 가능 상태로 간"
 "주하는 시간을 결정합니다. 이 값은 <abbr title=\"라우터 광고(Router "
 "Advertisement)\">RA</abbr> 메시지를 통해 전파됩니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:344
+msgctxt "footstrap"
+msgid "Dim"
+msgstr "어둡기"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:140
 msgid "Dir"
@@ -3630,6 +3753,11 @@ msgid ""
 msgstr ""
 "저장소(공식 또는 제3자)의 각 소프트웨어 공개 키는 패키지 관리자가 해당 키로 "
 "서명된 목록을 검증 후 패키지를 설치할 수 있도록 합니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:271
+msgctxt "footstrap"
+msgid "Easy to read %s"
+msgstr "읽기 쉬운 %s"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3230
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3233
@@ -4165,6 +4293,10 @@ msgstr "기존 장치"
 msgid "Expand hosts"
 msgstr "hosts 이름 확장"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-chrome.js:494
+msgid "Expand menu"
+msgstr "메뉴 펼치기"
+
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:114
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:114
 msgid "Expect netlink reply to add MAC address into VXLAN FDB"
@@ -4387,6 +4519,12 @@ msgstr "URL에서 키 가져오는 중…"
 msgid "File"
 msgstr "파일"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:369
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:454
+msgctxt "footstrap"
+msgid "File"
+msgstr "파일"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:683
 msgid ""
 "File listing upstream resolvers, optionally domain-specific, e.g. "
@@ -4557,6 +4695,12 @@ msgstr "설치 중…"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:843
 msgid "Follow"
 msgstr "추종(Follow)"
+
+#: themes/luci-theme-footstrap/root/usr/share/rpcd/acl.d/luci-theme-footstrap.json:3
+msgid ""
+"Footstrap Appearance router-wide defaults (Save as default) and the login "
+"background and pattern uploads"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:447
 msgid "For VRF, install %s"
@@ -4772,7 +4916,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2183
 msgid "GCMP-256 pairwise cipher"
-msgstr ""
+msgstr "GCMP-256 페어와이즈 암호"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -4910,6 +5054,7 @@ msgid "Global network options"
 msgstr "전역 네트워크 옵션"
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:72
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:25
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:83
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:65
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:83
@@ -4917,6 +5062,7 @@ msgid "Go to firmware upgrade..."
 msgstr "펌웨어 업데이트로 이동..."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:62
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:16
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:73
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:55
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:73
@@ -4929,6 +5075,11 @@ msgstr "암호 설정으로 이동..."
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
 msgstr "관련 설정 페이지로 이동"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:247
+msgctxt "footstrap"
+msgid "Good"
+msgstr "정상"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:105
 msgctxt "nft goto action"
@@ -5101,6 +5252,11 @@ msgstr "핸드오버"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:46
 msgid "Hang Up"
 msgstr "중단"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:273
+msgctxt "footstrap"
+msgid "Hard to read %s — large text only"
+msgstr "읽기 어려운 %s — 큰 텍스트 전용"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:45
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:48
@@ -6039,6 +6195,11 @@ msgstr ""
 msgid "Interface"
 msgstr "인터페이스"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:655
+msgctxt "footstrap"
+msgid "Interface"
+msgstr "인터페이스"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:799
 msgid "Interface \"%h\" is already marked as designated master."
 msgstr "\"%h\" 인터페이스가 이미 주 인터페이스로 설정되어 있습니다."
@@ -6229,6 +6390,7 @@ msgstr "잘못된 서버 URL"
 
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:93
 msgid "Invalid username and/or password! Please try again."
 msgstr "사용자 이름 또는 암호가 잘못되었습니다! 다시 시도하세요."
 
@@ -6269,6 +6431,7 @@ msgid ""
 msgstr ""
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:79
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:31
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:90
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:63
 msgid "JavaScript required!"
@@ -6297,6 +6460,11 @@ msgstr "Jumper"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:187
 msgid "Jumps to another rule specified by its priority value"
 msgstr "지정한 우선순위 값에 해당하는 규칙으로 이동합니다"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:208
+msgctxt "footstrap"
+msgid "Keep open"
+msgstr "펼친 상태 유지"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:230
 msgid "Keep settings and retain the current configuration"
@@ -6440,6 +6608,11 @@ msgstr "언어"
 msgid "Language and Style"
 msgstr "언어 및 스타일"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:194
+msgctxt "footstrap"
+msgid "Large"
+msgstr "넓게"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:341
 msgid ""
 "Larger weights (of the same prio) are given a proportionately higher "
@@ -6480,6 +6653,11 @@ msgstr "레이어 2+3"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:680
 msgid "Layer 3+4"
 msgstr "레이어 3+4"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:168
+msgctxt "footstrap"
+msgid "Layout"
+msgstr "레이아웃"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:21
 msgid "Leaf"
@@ -6553,6 +6731,11 @@ msgstr "레거시 규칙 감지"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5199
 msgid "Legend:"
 msgstr "범례:"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:175
+msgctxt "footstrap"
+msgid "Light"
+msgstr "밝게"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:768
 msgid "Limit"
@@ -6923,6 +7106,7 @@ msgstr "로그 분류(Facility)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:38
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:36
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:187
 msgid "Log in"
 msgstr "로그인"
 
@@ -6940,6 +7124,8 @@ msgid "Log level of the <code>odhcpd</code> daemon."
 msgstr "<code>odhcpd</code> 데몬의 로그 수준을 설정합니다."
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:81
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/logout.ut:11
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/logout.ut:19
 msgid "Log out"
 msgstr "로그아웃"
 
@@ -6991,6 +7177,7 @@ msgid "Lowest leased address as offset from the network address."
 msgstr "임대 주소의 시작점을 지정합니다. 네트워크 주소 기준 오프셋 값입니다."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/footer.ut:12
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/footer.ut:27
 msgid "Lua compatibility mode active"
 msgstr "Lua 호환성 모드 활성"
 
@@ -7325,12 +7512,18 @@ msgid "Medium"
 msgstr "보통"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:24
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-overview.js:32
 msgid "Memory"
 msgstr "메모리"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:73
 msgid "Memory usage (%)"
 msgstr "메모리 사용량 (%)"
+
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/header.ut:147
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/header.ut:158
+msgid "Menu"
+msgstr "메뉴"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:164
 msgid "Mesh ID"
@@ -7917,6 +8110,7 @@ msgid "No allowed mode configuration found."
 msgstr ""
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:70
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:23
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:81
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:63
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:81
@@ -8004,7 +8198,13 @@ msgstr "부정 캐싱 비활성화"
 msgid "No nftables ruleset loaded."
 msgstr "설정된 nftables 규칙이 없습니다."
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:327
+msgctxt "footstrap"
+msgid "No pages found"
+msgstr ""
+
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:59
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:13
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:70
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:52
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:70
@@ -8094,6 +8294,11 @@ msgstr "없음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1035
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
+msgid "Normal"
+msgstr "보통"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:193
+msgctxt "footstrap"
 msgid "Normal"
 msgstr "보통"
 
@@ -8255,6 +8460,11 @@ msgstr "IPv6 주소 취득"
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:345
 msgid "Off"
 msgstr "사용 안 함"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:452
+msgctxt "footstrap"
+msgid "Off"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1784
 msgid ""
@@ -8870,6 +9080,17 @@ msgstr "값을 초과하는 패킷은 단편화될 수 있습니다"
 msgid "Packets per slave"
 msgstr "슬레이브당 패킷"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:244
+msgctxt "footstrap"
+msgid "Pages"
+msgstr "페이지 목록"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:179
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:226
+msgctxt "footstrap"
+msgid "Palette"
+msgstr "팔레트"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:367
 msgid "Part of network:"
 msgid_plural "Part of networks:"
@@ -8895,6 +9116,7 @@ msgstr "패스스루 (물리 장치의 모든 트래픽을 단일 MACVLAN에 전
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:301
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:19
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:127
 msgid "Password"
 msgstr "암호"
 
@@ -8979,6 +9201,12 @@ msgstr "내부 클라이언트 인증서 경로"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2106
 msgid "Path to inner Private Key"
 msgstr "내부 개인 키 경로"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:355
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:453
+msgctxt "footstrap"
+msgid "Pattern"
+msgstr "패턴"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2745
 msgid "Paused"
@@ -9109,7 +9337,19 @@ msgstr "Ping"
 msgid "Pkts."
 msgstr "패킷"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:945
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:947
+msgctxt "footstrap"
+msgid "Please choose an SVG file."
+msgstr "SVG 파일을 선택해 주세요."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1131
+msgctxt "footstrap"
+msgid "Please choose an image file."
+msgstr "이미지 파일을 선택해 주세요."
+
 #: modules/luci-base/ucode/template/sysauth.ut:19
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:117
 msgid "Please enter your username and password."
 msgstr "사용자 이름과 암호를 입력해 주세요."
 
@@ -9697,6 +9937,11 @@ msgstr "수신 멀티캐스트"
 msgid "Received packets"
 msgstr "수신 패킷"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:326
+msgctxt "footstrap"
+msgid "Recently visited"
+msgstr "최근 방문"
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "권장 사항. WireGuard 인터페이스의 IP 주소."
@@ -9850,6 +10095,12 @@ msgstr "원격 VTEP"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:986
 msgid "Remove"
 msgstr "삭제"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:329
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:336
+msgctxt "footstrap"
+msgid "Remove"
+msgstr "제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:642
 msgid "Remove IPv4 addresses from the results and only return IPv6 addresses."
@@ -10084,9 +10335,21 @@ msgstr "집계 초기화"
 msgid "Reset filters"
 msgstr "필터 초기화"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:486
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:559
+msgctxt "footstrap"
+msgid "Reset to default"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:402
 msgid "Reset to defaults"
 msgstr "기본값으로 초기화"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:481
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:558
+msgctxt "footstrap"
+msgid "Reset to saved"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:204
 msgid "Resolv &amp; Hosts Files"
@@ -10257,6 +10520,11 @@ msgstr ""
 msgid "Round robin"
 msgstr "라운드 로빈"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:197
+msgctxt "footstrap"
+msgid "Rounding"
+msgstr "모서리 둥글기"
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:629
 msgid "Route Allowed IPs"
 msgstr ""
@@ -10290,6 +10558,11 @@ msgstr "라우터 암호"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:897
 msgid "Router Priority"
 msgstr "라우터 우선순위"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:575
+msgctxt "footstrap"
+msgid "Router default"
+msgstr "라우터 기본값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:29
 msgid ""
@@ -10471,6 +10744,13 @@ msgstr "저장"
 msgid "Save & Apply"
 msgstr "저장 및 적용"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:475
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:506
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:513
+msgctxt "footstrap"
+msgid "Save as default"
+msgstr "기본값으로 저장"
+
 #: modules/luci-base/htdocs/luci-static/resources/form.js:629
 msgid "Save error"
 msgstr "저장 오류"
@@ -10482,6 +10762,16 @@ msgstr "mtdblock 저장"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:422
 msgid "Save mtdblock contents"
 msgstr "mtdblock 내용 저장"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:513
+msgctxt "footstrap"
+msgid "Saved as default"
+msgstr "기본값으로 저장됨"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:345
+msgctxt "footstrap"
+msgid "Scale"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:959
 msgid "Scan"
@@ -10512,9 +10802,25 @@ msgctxt "scroll to bottom (the tail) of the log file"
 msgid "Scroll to tail"
 msgstr "맨 아래로 스크롤"
 
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/search.ut:16
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/search.ut:18
+msgid "Search"
+msgstr "검색"
+
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:41
 msgid "Search domain"
 msgstr "검색 도메인"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:238
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:265
+msgctxt "footstrap"
+msgid "Search pages"
+msgstr "페이지 검색"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:239
+msgctxt "footstrap"
+msgid "Search pages…"
+msgstr "페이지 검색…"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:39
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:62
@@ -10781,6 +11087,16 @@ msgstr "원시 데이터 표시"
 msgid "Shutdown this interface"
 msgstr "이 인터페이스 폐쇄하기"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:169
+msgctxt "footstrap"
+msgid "Sidebar"
+msgstr "사이드바"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:290
+msgctxt "footstrap"
+msgid "Sidebar and bar"
+msgstr "사이드바 및 바"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:64
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:71
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:196
@@ -10840,6 +11156,7 @@ msgstr "건너뛰기"
 msgid "Skip from backup files that are equal to those in /rom"
 msgstr "/rom 내 원본과 동일한 파일은 백업에서 제외"
 
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/header.ut:126
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:33
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:37
 msgid "Skip to content"
@@ -11207,6 +11524,11 @@ msgstr "시작 우선순위"
 msgid "Start refresh"
 msgstr "새로 고침 시작"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-search.js:327
+msgctxt "footstrap"
+msgid "Start typing to find a page"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5464
 msgid "Starting configuration apply…"
 msgstr "구성 적용 시작하는 중…"
@@ -11291,8 +11613,14 @@ msgid "Stop refresh"
 msgstr "새로 고침 중지"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/25_storage.js:38
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-overview.js:32
 msgid "Storage"
 msgstr "저장 공간"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:346
+msgctxt "footstrap"
+msgid "Strength"
+msgstr "강도"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1167
 msgid "Strict filtering"
@@ -11305,6 +11633,11 @@ msgstr "순차적 질의(Strict Order)"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:33
 msgid "Strong"
 msgstr "안전"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:206
+msgctxt "footstrap"
+msgid "Submenus"
+msgstr "하위 메뉴"
 
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:61
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2555
@@ -11322,6 +11655,11 @@ msgstr "로그 기록 억제"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:479
 msgid "Suppress logging of the routine operation for the DHCP protocol."
 msgstr "DHCP 프로토콜의 일반적인 동작에 대한 로그 기록을 억제합니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:657
+msgctxt "footstrap"
+msgid "Surfaces"
+msgstr "표면"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:558
 msgid "Svc Parameters"
@@ -11418,6 +11756,7 @@ msgstr "시스템 로그(Syslog)"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:29
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:108
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:3
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-overview.js:32
 msgid "System"
 msgstr "시스템"
 
@@ -11441,6 +11780,7 @@ msgid "System log buffer size"
 msgstr "시스템 로그 버퍼 크기"
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:69
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:22
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:80
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:62
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:80
@@ -11508,6 +11848,7 @@ msgstr "TX 대기열 길이"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:239
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:259
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:276
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-select.js:813
 msgid "Table"
 msgstr "테이블"
 
@@ -11558,6 +11899,39 @@ msgstr "임시 공간"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:50
 msgid "Terminate"
 msgstr "종료"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:893
+msgctxt "footstrap"
+msgid ""
+"That SVG contains script or external references, which this theme will not "
+"install."
+msgstr ""
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:917
+msgctxt "footstrap"
+msgid "That file could not be read."
+msgstr "파일을 읽을 수 없습니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1103
+msgctxt "footstrap"
+msgid "That file is not a readable image."
+msgstr "읽을 수 있는 이미지 파일이 아닙니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:889
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:892
+msgctxt "footstrap"
+msgid "That file is not an SVG image."
+msgstr "SVG 이미지 파일이 아닙니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:948
+msgctxt "footstrap"
+msgid "That file is too large."
+msgstr "파일 용량이 너무 큽니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1133
+msgctxt "footstrap"
+msgid "That image is too large."
+msgstr "이미지 용량이 너무 큽니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1065
 msgid ""
@@ -12037,6 +12411,11 @@ msgstr ""
 "이 잦은 네트워크라면 이 값을 높여 연결 안정성을 높이세요. IGMP는 (설정값-1)회"
 "의 연속된 패킷 손실을 허용합니다"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1026
+msgctxt "footstrap"
+msgid "The router refused to delete the file (ubus status %d)."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:171
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:203
 msgid "The routing protocol identifier of this route"
@@ -12155,6 +12534,12 @@ msgid ""
 "the network with its protocol information."
 msgstr ""
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:173
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:363
+msgctxt "footstrap"
+msgid "Theme"
+msgstr "테마"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:779
 msgid ""
 "There are legacy iptables rules present on the system. Mixing iptables and "
@@ -12173,6 +12558,7 @@ msgid "There are no changes to apply"
 msgstr "변경된 사항이 없습니다"
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:60
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:14
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:71
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:53
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:71
@@ -12194,6 +12580,14 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2071
 msgid "This authentication type is not applicable to the selected EAP method."
 msgstr "이 인증 유형은 선택한 EAP 방식에 적용할 수 없습니다."
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:507
+msgctxt "footstrap"
+msgid ""
+"This browser is not storing preferences (site data is blocked), so a change "
+"here lasts until you reload. Saving as default still works and applies to "
+"every browser."
+msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:48
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
@@ -12398,6 +12792,16 @@ msgstr "링크 단절 시 토폴로지 업데이트를 대기하는 최대 시�
 msgid "Timezone"
 msgstr "시간대"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:218
+msgctxt "footstrap"
+msgid "Tint (router identification)"
+msgstr "색조 (라우터 식별)"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:233
+msgctxt "footstrap"
+msgid "Tint strength"
+msgstr "색조 강도"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:164
 msgid "To"
 msgstr "목적지"
@@ -12430,6 +12834,16 @@ msgstr "DHCPv6로 IPv6 PD를 활성화합니다."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1841
 msgid "Tone"
 msgstr "신호 방식(Tone)"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-widgets.js:274
+msgctxt "footstrap"
+msgid "Too faint to read %s"
+msgstr "흐려서 읽을 수 없는 %s"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:170
+msgctxt "footstrap"
+msgid "Top"
+msgstr "상단"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:35
 msgid "Total Available"
@@ -12861,6 +13275,15 @@ msgstr ""
 msgid "Upload archive..."
 msgstr "아카이브 업로드..."
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:960
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:963
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1043
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1144
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1147
+msgctxt "footstrap"
+msgid "Upload failed."
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3448
 msgid "Upload file"
 msgstr "파일 업로드"
@@ -12882,6 +13305,12 @@ msgstr "업로드 요청 실패: %s"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4988
 msgid "Uploading file…"
 msgstr "파일 업로드 중…"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:405
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:435
+msgctxt "footstrap"
+msgid "Uploading…"
+msgstr "업로드 중…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:870
 msgid ""
@@ -13102,6 +13531,7 @@ msgstr "사용자 키 (PEM 인코딩)"
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:121
 msgid "Username"
 msgstr "사용자 이름"
 
@@ -13338,6 +13768,11 @@ msgstr "WPS 상태"
 msgid "Waiting for device..."
 msgstr "장치 응답 대기 중..."
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:450
+msgctxt "footstrap"
+msgid "Wallpaper"
+msgstr "배경화면"
+
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:347
 msgid "Warn"
 msgstr "경고(Warn)"
@@ -13349,6 +13784,11 @@ msgstr "경고(Warn)"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:161
 msgid "Warning"
 msgstr "경고(Warning)"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:253
+msgctxt "footstrap"
+msgid "Warning"
+msgstr "경고"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:26
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
@@ -13584,6 +14024,7 @@ msgid "You may add multiple unique Relay To on the same Listen addr."
 msgstr "동일한 수신 주소에 여러 개의 고유한 릴레이 대상을 추가할 수 있습니다."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:80
+#: themes/luci-theme-footstrap/ucode/template/themes/footstrap/partials/notices.ut:32
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:91
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:64
 msgid ""
@@ -13877,6 +14318,11 @@ msgstr "하이브리드 모드"
 msgid "ignore"
 msgstr "지정 안 함(ignore)"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:293
+msgctxt "footstrap"
+msgid "in the sidebar"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:269
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:277
 msgid "including:"
@@ -14007,9 +14453,29 @@ msgstr "odhcpd"
 msgid "off"
 msgstr "꺼짐"
 
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:244
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:250
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:256
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:262
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:281
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:300
+msgctxt "footstrap"
+msgid "on a card"
+msgstr ""
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:287
+msgctxt "footstrap"
+msgid "on a control"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
 msgid "on available prefix"
 msgstr "사용 가능한 접두사 존재 시"
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:223
+msgctxt "footstrap"
+msgid "on the canvas"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1510
 msgid "open network"
@@ -14136,6 +14602,12 @@ msgstr ""
 msgid ""
 "the source VNI Network Identifier (or VXLAN Segment ID) this entry belongs "
 "to. Used only when the VXLAN device is in external or collect metadata mode"
+msgstr ""
+
+#: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-prefs.js:1121
+msgctxt "footstrap"
+msgid ""
+"the uploaded file could not be removed either; it is still on the router."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1917

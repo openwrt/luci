@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-04-18 17:10+0000\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"PO-Revision-Date: 2026-08-31 20:56+0000\n"
+"Last-Translator: Martin Olmer <m_iv@seznam.cz>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17.1-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:134
 msgid "%s is currently disabled"
@@ -30,6 +30,9 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"İşlemin tamamı, hâlâ devam ediyor olsa bile belirtilen saniyeden uzun "
+"sürerse indirmeyi iptal edin. Devre dışı bırakmak için boş bırakın. Şu an "
+"için yalnızca curl ile desteklenmektedir."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -93,7 +96,7 @@ msgstr "İzin ver"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:729
 msgid "Allow insecure downloads"
-msgstr ""
+msgstr "Güvensiz indirmelere izin ver"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:986
 msgid "Allowed Domains"
@@ -111,7 +114,7 @@ msgstr "Otomatik Yapılandırma Güncellemesi"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:505
 msgid "Automatic List Update"
-msgstr ""
+msgstr "Otomatik Liste Güncellemesi"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:203
 msgid "Basic Configuration"
@@ -165,7 +168,7 @@ msgstr "Yapılandırma (%s) doğrulama hatası!"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "Bağlantı zaman aşımı süresi (saniye cinsinden)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -176,10 +179,12 @@ msgid ""
 "Cron daemon is not available. If BusyBox crond is present, enable it with: "
 "%s; otherwise install another cron daemon."
 msgstr ""
+"Cron daemon (arka plan servisi) mevcut değil. Eğer BusyBox crond mevcutsa, "
+"%s ile etkinleştirin; aksi takdirde başka bir cron servisi kurun."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:117
 msgid "Cron service is not enabled or running. Enable it with: %s."
-msgstr ""
+msgstr "Cron servisi etkin değil yada çalışmıyor. %s ile etkinleştirin."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:765
 msgid "Curl download retry"
@@ -191,7 +196,7 @@ msgstr "Curl azami dosya boyutu (bayt cinsinden)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:206
 msgid "DNS Query Log"
-msgstr ""
+msgstr "DNS Sorgu Günlüğü"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:287
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/status/include/70_adblock-fast.js:41
@@ -204,15 +209,15 @@ msgstr "DNS çözümleme seçeneği, ayrıntılar için %sREADME%s bakın."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:525
 msgid "Daily"
-msgstr ""
+msgstr "Günlük"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:604
 msgid "Day of Month"
-msgstr ""
+msgstr "Ayın Günü"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:581
 msgid "Day of Week"
-msgstr ""
+msgstr "Haftanın Günü"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:803
 msgid "Directory for compressed cache file"
@@ -238,7 +243,7 @@ msgstr "Hata Ayıklamayı Devre Dışı Bırak"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:936
 msgid "Disable Logging"
-msgstr ""
+msgstr "Günlük Kaydını Devre Dışı Bırak"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:485
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:782
@@ -267,6 +272,9 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"'%s' için indirme zaman aşımına uğradı. Sunucu çok yavaş olabilir — "
+"download_timeout, download_connect_timeout veya download_max_time "
+"değerlerini artırmayı düşünün"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -292,35 +300,41 @@ msgstr "Hata ayıklamayı etkinleştir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:918
 msgid "Enable Logging"
-msgstr ""
+msgstr "Günlük kaydını etkinleştir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:833
 msgid ""
 "Enable RFC 1123 compliant domain validation for dnsmasq block-lists to "
 "remove invalid entries."
 msgstr ""
+"Geçersiz girdileri kaldırmak için dnsmasq engelleme listelerinde RFC 1123 "
+"uyumlu alan adı doğrulamasını etkinleştirin."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:831
 msgid "Enable dnsmasq domain validation"
-msgstr ""
+msgstr "dnsmasq alan adı doğrulamasını etkinleştir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:818
 msgid "Enable dnsmasq sanity check"
-msgstr ""
+msgstr "dnsmasq bağlantı kontrolünü etkinleştir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:820
 msgid ""
 "Enable sanity check for dnsmasq block-list processing to detect and report "
 "issues."
 msgstr ""
+"Sorunları tespit etmek ve bildirmek için dnsmasq engelleme listesi işleme "
+"kontrolünü etkinleştir."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:506
 msgid "Enable scheduled list redownloads via /etc/init.d/adblock-fast dl."
 msgstr ""
+"/etc/init.d/adblock-fast dl aracılığıyla listelerin zamanlanmış olarak "
+"yeniden indirilmesini etkinleştir."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:900
 msgid "Enabled"
-msgstr ""
+msgstr "Etkinleştirildi"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:845
 msgid "Enables debug output to /tmp/adblock-fast.log."
@@ -337,12 +351,12 @@ msgstr "Hatalarla karşılaşıldı, lütfen %sREADME%s dosyasını kontrol edin
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:528
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:543
 msgid "Every N days"
-msgstr ""
+msgstr "Her N günde bir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:529
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:562
 msgid "Every N hours"
-msgstr ""
+msgstr "Her N saate bir"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:153
 msgid "Failed to access shared memory"
@@ -372,7 +386,7 @@ msgstr "Çıktı/önbellek/gzip dosya dizini oluşturulamadı"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:176
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "%s için biçim algılama başarısız oldu"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:169
 msgid "Failed to download %s"
@@ -440,7 +454,7 @@ msgstr "Sıkıştırılmış önbellek paketi açılamadı"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1161
 msgid "Failed to update cron schedule."
-msgstr ""
+msgstr "Cron zamanlaması güncellenemedi."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/status/include/70_adblock-fast.js:44
 msgid "Force DNS Ports"
@@ -479,11 +493,11 @@ msgstr ""
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:589
 msgid "Friday"
-msgstr ""
+msgstr "Cuma"
 
 #: applications/luci-app-adblock-fast/root/usr/share/rpcd/acl.d/adblock-fast-api.json:3
 msgid "Grant API access for adblock-fast remote control"
-msgstr ""
+msgstr "adblock-fast uzaktan kontrolü için API erişim izni ver"
 
 #: applications/luci-app-adblock-fast/root/usr/share/rpcd/acl.d/luci-app-adblock-fast.json:3
 msgid "Grant UCI and file access for luci-app-adblock-fast"
@@ -806,7 +820,7 @@ msgstr "Durum"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:737
 msgid "Stop"
-msgstr "Dur"
+msgstr "Durdur"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:695
 msgid "Stop the download if it is stalled for set number of seconds."
@@ -973,7 +987,7 @@ msgstr "Ayrıntılı çıktı"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/status/include/70_adblock-fast.js:40
 msgid "Version"
-msgstr "Versiyon"
+msgstr "Sürüm"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:473
 msgid "Version %s"
