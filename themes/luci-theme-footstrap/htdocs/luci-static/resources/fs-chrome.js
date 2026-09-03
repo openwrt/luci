@@ -580,6 +580,5 @@ return baseclass.extend({
 	 * tests ship in the package): the cut is pure arithmetic over a handful of measured numbers, and
 	 * driving it directly is the only way to hold every combination of layout, rail and width
 	 * without a browser */
-	columnWidth,
 	wireRail
 });

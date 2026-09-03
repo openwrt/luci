@@ -864,7 +864,6 @@ return baseclass.extend({
 	 * motion sampler starts and after it finishes, which in WebKit are 1.5 seconds apart. Waiting a
 	 * flat interval instead made tools/scroll-anchor.mjs report a jump on every WebKit run and none
 	 * on the other two engines, with the theme identical on all three. */
-	restAt: () => _restAt,
 
 	/* "THE OFFSET IS MINE NOW, FORGET WHAT YOU REMEMBERED." Called by fs-router where it resets both
 	 * scrollers for an incoming page, and it is not a courtesy — without it the correction below
