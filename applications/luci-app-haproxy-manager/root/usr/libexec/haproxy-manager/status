@@ -1,0 +1,56 @@
+#!/bin/sh
+. /usr/libexec/haproxy-manager/common.sh
+
+enabled="$(uci_get main enabled 0)"
+wan="$(wan_ip 2>/dev/null || echo unknown)"
+version="not-available"
+service="stopped"
+backup_count=0
+auto_recovery="$(uci_get main auto_recover 1)"
+mode="$(active_mode)"
+last_incident=""
+last_incident_result="none"
+last_incident_interface=""
+
+if command -v haproxy >/dev/null 2>&1; then
+	version="$(haproxy -v 2>/dev/null | sed -n '1s/^HAProxy version \([^ ]*\).*/\1/p')"
+	[ -n "$version" ] || version="unknown"
+fi
+
+if [ -x /etc/init.d/haproxy ] && /etc/init.d/haproxy status >/dev/null 2>&1; then
+	service="running"
+fi
+
+backup_count="$(/usr/libexec/haproxy-manager/backups 2>/dev/null | wc -l | tr -d ' ')"
+
+INCIDENT_BASE="$(incident_dir)"
+if [ -d "$INCIDENT_BASE" ]; then
+	INCIDENT_BASE="$(resolve_storage_dir "$INCIDENT_BASE")" || INCIDENT_BASE=""
+fi
+if [ -f "$INCIDENT_BASE/LAST" ]; then
+	last_incident="$(sed -n '1p' "$INCIDENT_BASE/LAST")"
+	if is_valid_backup_id "$last_incident" && [ -d "$INCIDENT_BASE/$last_incident" ]; then
+		last_incident_result="$(sed -n '1p' "$INCIDENT_BASE/$last_incident/result" 2>/dev/null || echo detected)"
+		last_incident_interface="$(sed -n 's/^interface=//p' "$INCIDENT_BASE/$last_incident/meta" 2>/dev/null | head -1)"
+	else
+		last_incident=""
+		last_incident_result="none"
+	fi
+fi
+
+printf 'enabled\t%s\n' "$enabled"
+printf 'wan_ip\t%s\n' "$wan"
+printf 'version\t%s\n' "$version"
+printf 'service\t%s\n' "$service"
+printf 'backup_count\t%s\n' "$backup_count"
+printf 'auto_recovery\t%s\n' "$auto_recovery"
+printf 'active_mode\t%s\n' "$mode"
+printf 'last_incident\t%s\n' "$last_incident"
+printf 'last_incident_result\t%s\n' "$last_incident_result"
+printf 'last_incident_interface\t%s\n' "$last_incident_interface"
+
+netstat -lntp 2>/dev/null | awk '
+	NR > 2 && $6 == "LISTEN" && ($7 ~ /haproxy/ || $7 ~ /uhttpd/) {
+		printf "listener\t%s\t%s\t%s\n", $1, $4, $7
+	}
+'
