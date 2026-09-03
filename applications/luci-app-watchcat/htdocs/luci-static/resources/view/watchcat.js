@@ -18,6 +18,12 @@ return view.extend({
 
 		s.tab('general', _('General Settings'));
 
+		o = s.taboption('general', form.Flag, 'enabled',
+			_('Enabled'),
+			_('Enable or disable this Watchcat instance'));
+		o.default = '1';
+		o.rmempty = false;
+
 		o = s.taboption('general', form.ListValue, 'mode',
 			_('Mode'),
 			_("Ping Reboot: Reboot this device if a ping to a specified host fails for a specified duration of time. <br /> \
