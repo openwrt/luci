@@ -10,7 +10,7 @@
 	Powered by {{ version.luciname }} ({{ version.luciversion }})
 </p>
 
-<script>L.require('menu-openwrt2020')</script>
+<script nonce="{{ ctx?.csp_nonce }}">L.require('menu-openwrt2020')</script>
 
 </body>
 </html>

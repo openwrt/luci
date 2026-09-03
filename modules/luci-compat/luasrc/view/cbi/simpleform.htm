@@ -45,16 +45,16 @@
 			%><div class="cbi-page-actions"><%
 
 			if display_back then
-				%><input class="btn cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" onclick="location.href='<%=pcdata(redirect)%>'" /> <%
+				%><input class="btn cbi-button cbi-button-link" type="button" value="<%:Back to Overview%>" data-href="<%=pcdata(redirect)%>" /> <%
 			end
 
 			if display_cancel then
 				local label = pcdata(self.cancel or translate("Cancel"))
-				%><input class="btn cbi-button cbi-button-link" type="button" value="<%=label%>" onclick="cbi_submit(this, 'cbi.cancel')" /> <%
+				%><input class="btn cbi-button cbi-button-link" type="button" value="<%=label%>" data-cbi-submit="cbi.cancel" /> <%
 			end
 
 			if display_skip then
-				%><input class="btn cbi-button cbi-button-neutral" type="button" value="<%:Skip%>" onclick="cbi_submit(this, 'cbi.skip')" /> <%
+				%><input class="btn cbi-button cbi-button-neutral" type="button" value="<%:Skip%>" data-cbi-submit="cbi.skip" /> <%
 			end
 
 			if display_submit then
@@ -74,4 +74,4 @@
 	end
 %>
 
-<script>cbi_init();</script>
+<script nonce="<%=csp_nonce%>">cbi_init();</script>
