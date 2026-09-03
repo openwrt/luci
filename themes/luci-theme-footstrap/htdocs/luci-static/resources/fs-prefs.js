@@ -350,7 +350,7 @@ function propAxis(key, sdKey, prop, min, max, dfl, fmt) {
  *
  * Legacy 'rvht'/'roman'/'github' are migrated to explicit values by head.ut before paint, so they
  * never reach currentPalette() on a loaded page; the stray fallthrough covers them anyway. */
-const PALETTES = [ 'hicontrast', 'bootstrap' ];	/* the non-default values; 'footstrap' = bare :root */
+const PALETTES = [ 'hicontrast', 'bootstrap', '2020' ];	/* the non-default values; 'footstrap' = bare :root */
 function paletteDefault() {
 	const d = sd('palette');
 	return (PALETTES.indexOf(d) >= 0) ? d : 'footstrap';
