@@ -11,8 +11,8 @@
 # ubus -S call luci.https-dns-proxy getProviders '{"name": "https-dns-proxy" }'
 
 readonly packageName="https-dns-proxy"
-readonly providersDir="/usr/share/${packageName}/providers"
-readonly providersJson="/usr/share/${packageName}/providers.json"
+readonly providersDir="${_LUCI_PROVIDERS_DIR:-/usr/share/${packageName}/providers}"
+readonly providersJson="${_LUCI_PROVIDERS_JSON:-/usr/share/${packageName}/providers.json}"
 
 . "${IPKG_INSTROOT}/lib/functions.sh"
 . "${IPKG_INSTROOT}/usr/share/libubox/jshn.sh"
@@ -103,15 +103,17 @@ get_platform_support() {
 }
 
 get_providers() {
-	local f
+	local f first=1
 	echo '{"https-dns-proxy":'
 	if [ -s "$providersJson" ]; then
 		cat "$providersJson"
 	else
 		echo '['
-		for f in "$providersDir"/*; do
+		for f in "$providersDir"/*.json; do
+			[ -f "$f" ] || continue
+			[ "$first" = "1" ] || printf ','
+			first=0
 			cat "$f"
-			echo ','
 		done
 		echo ']'
 	fi
