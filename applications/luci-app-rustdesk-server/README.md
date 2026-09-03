@@ -29,8 +29,7 @@ luci-app-rustdesk-server/
 └── root/
     ├── etc/
     │   ├── config/rustdesk-server        # UCI configuration
-    │   ├── init.d/rustdesk-server        # procd init script
-    │   └── uci-defaults/50-luci-rustdesk-server  # First-run setup
+    │   └── init.d/rustdesk-server        # procd init script
     └── usr/share/
         ├── luci/menu.d/luci-app-rustdesk-server.json  # Menu entry
         └── rpcd/
