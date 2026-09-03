@@ -1,0 +1,59 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+print_status() {
+	status_has_plan=0
+	status_product_name=''
+	status_expires_at=''
+	status_payload=''
+
+	if [ -s /var/lib/51ddns/status.json ]; then
+		status_payload="$(cat /var/lib/51ddns/status.json 2>/dev/null)"
+		json_load "$status_payload" 2>/dev/null
+
+		if json_select plan >/dev/null 2>&1; then
+			status_has_plan=1
+			json_get_var status_product_name product_name
+			json_get_var status_expires_at expires_at
+		fi
+		json_cleanup
+	fi
+
+	json_init
+	if [ "$status_has_plan" = 1 ]; then
+		json_add_object plan
+		json_add_string product_name "$status_product_name"
+		json_add_string expires_at "$status_expires_at"
+		json_close_object
+	fi
+	json_dump
+	json_cleanup
+}
+
+case "$1" in
+	list)
+		echo '{"status":{},"info":{}}'
+		;;
+	call)
+		case "$2" in
+			status)
+				print_status
+				;;
+			info)
+				version="$(/usr/bin/51ddns-agent --version 2>/dev/null | head -n 1)"
+				json_init
+				json_add_string version "$version"
+				json_dump
+				json_cleanup
+				;;
+			*)
+				echo '{"error":"method not found"}'
+				exit 1
+				;;
+		esac
+		;;
+	*)
+		exit 1
+		;;
+esac
