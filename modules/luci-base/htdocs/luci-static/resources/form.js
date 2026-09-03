@@ -5825,7 +5825,7 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 			browser: this.browser,
 			show_hidden: this.show_hidden,
 			directory_create: this.directory_create,
-			directory_select: this.directory_select,
+			select: this.directory_select ? ['dir'] : ['file'],
 			enable_upload: this.enable_upload,
 			enable_remove: this.enable_remove,
 			enable_download: this.enable_download,
