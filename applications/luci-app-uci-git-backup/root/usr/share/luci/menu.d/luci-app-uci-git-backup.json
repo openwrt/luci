@@ -1,0 +1,32 @@
+{
+	"admin/services/uci-git-backup": {
+		"title": "UCI Git Backup",
+		"order": 60,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/uci-git-backup/settings"
+		},
+		"depends": {
+			"acl": ["luci-app-uci-git-backup"],
+			"uci": { "uci_git_backup": true }
+		}
+	},
+
+	"admin/services/uci-git-backup/settings": {
+		"title": "Settings",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "uci-git-backup/settings"
+		}
+	},
+
+	"admin/services/uci-git-backup/restore": {
+		"title": "Restore",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "uci-git-backup/restore"
+		}
+	}
+}
