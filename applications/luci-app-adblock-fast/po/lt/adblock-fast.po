@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-05-27 22:33+0000\n"
+"PO-Revision-Date: 2026-08-27 11:45+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/lt/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.6.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:134
 msgid "%s is currently disabled"
@@ -33,6 +33,9 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"Nutraukti atsisiuntimą, jei visas perkėlimas trunka ilgiau nei nurodytas "
+"sekundžių skaičius, net jei jis vis dar vyksta. Palikite tuščią, kad "
+"išjungtumėte/išgalintumėte. Šiuo metu įgyvendinta tik su „curl“."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -96,7 +99,7 @@ msgstr "Leisti"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:729
 msgid "Allow insecure downloads"
-msgstr ""
+msgstr "Leisti nesaugius atsiuntimus"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:986
 msgid "Allowed Domains"
@@ -169,7 +172,7 @@ msgstr "Konfigūracijos (%s) patikrinimas nepavyko!"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "Prisijungimo pasibaigusios užklausos laikas (sekundėmis)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -256,7 +259,7 @@ msgstr "Išjungti/Išgalinti žurnalinimą"
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:782
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:900
 msgid "Disabled"
-msgstr "Išjungta/Neįgalinta (-s/-i)"
+msgstr "Išjungtas/Išgalintas"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:769
 msgid "Disabling %s service"
@@ -279,6 +282,9 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"„%s“ atsiuntimui pasibaigė užklausos laikas; serveris gali būti per lėtas – "
+"pabandykite padidinti – „download_timeout“, „download_connect_timeout“ arba "
+"„download_max_time“"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -338,7 +344,7 @@ msgstr ""
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:900
 msgid "Enabled"
-msgstr "Įjungta/Įgalinta (-s/-i)"
+msgstr "Įjungtas/Įgalintas"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:845
 msgid "Enables debug output to /tmp/adblock-fast.log."
@@ -388,7 +394,7 @@ msgstr "Nepavyko sukurti „output/cache/gzip“ failo vietovės katalogą"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:176
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "Nepavyko aptikti %s formato"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:169
 msgid "Failed to download %s"
@@ -576,13 +582,16 @@ msgstr "Išvardyti atnaujinimų tvarkaraštį"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:716
 msgid "Maximum download time (in seconds)"
-msgstr ""
+msgstr "Maksimalus atsisiuntimo laikas (sekundėmis)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:779
 msgid ""
 "Maximum number of block lists to download and process at the same time (0 "
 "disables). Automatically reduced when free memory is low."
 msgstr ""
+"Maksimalus vienu metu atsisiunčiamų ir apdorojamų blokų sąrašų skaičius (0-"
+"is išjungia/išgalina). Automatiškai sumažinamas, kai trūksta laisvos "
+"atminties."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:648
 msgid ""
@@ -645,6 +654,8 @@ msgstr "Išvesties išsamumo/daugiažodiškumo nustatymas"
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:123
 msgid "Parallel downloads reduced to %s due to low free memory"
 msgstr ""
+"Lygiagrečių atsisiuntimų skaičius sumažėjo iki %s dėl mažo laisvos atminties "
+"kiekio"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:672
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:694
@@ -786,7 +797,7 @@ msgstr "Tarnybos klaidos"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:470
 msgid "Service Status"
-msgstr "Tarnybos būsena"
+msgstr "Tarnybos būklė/būsena"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:570
 msgid "Service Warnings"
@@ -824,6 +835,9 @@ msgid ""
 "default for compatibility with self-signed or otherwise untrusted "
 "certificates."
 msgstr ""
+"Praleisti „SSL“ sertifikato patvirtinimą atsisiunčiant blokavimo sąrašus. "
+"Įjungta/Įgalinta pagal numatytuosius nustatymus, kad būtų suderinama su "
+"savarankiškai pasirašytais arba kitaip nepatikimais sertifikatais."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:480
 msgid "Some output"
@@ -858,6 +872,8 @@ msgid ""
 "Stop the download if the connection cannot be established within this many "
 "seconds. Supported by curl and GNU wget only."
 msgstr ""
+"Sustabdykite atsisiuntimą, jei nepavyksta užmegzti ryšio per nurodytą "
+"sekundžių skaičių. Palaiko tik „curl“ ir „GNU wget“."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:79
 msgid "Stopped"
@@ -936,6 +952,8 @@ msgid ""
 "Tip: install the %sAdBlock-Fast Controller Chrome extension%s to control "
 "this router from your browser toolbar."
 msgstr ""
+"Patarimas: įdiekite „Chrome“ plėtinį %s„AdBlock-Fast Controller“, kad "
+"galėtumėte valdyti šį maršrutizatorių naršyklės Jūsų įrankių juostoje."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:857
 msgid ""
