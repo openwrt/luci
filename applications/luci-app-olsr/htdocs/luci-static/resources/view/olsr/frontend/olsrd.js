@@ -483,6 +483,7 @@ return view.extend({
 		};
 
 		ifs.handleAdd = function (ev) {
+			uci.add('olsrd', 'Interface');
 			uci
 				.save()
 				.then(function () {
