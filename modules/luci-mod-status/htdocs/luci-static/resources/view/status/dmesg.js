@@ -252,7 +252,7 @@ return view.extend({
 
 		return E([], [
 			E('h2', {}, [ _('Kernel Log') ]),
-			E('div', { 'id': 'content_syslog' }, [
+			E('div', { 'id': 'content_syslog', 'class': 'cbi-section' }, [
 				E('div', { 'style': 'margin-bottom:10px' }, [
 					E('label', { 'for': 'invertLogFacilitySearch', 'style': 'margin-right:5px' }, _('Not')),
 					rangeTimeInvert,
