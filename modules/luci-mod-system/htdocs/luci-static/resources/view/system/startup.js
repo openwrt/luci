@@ -108,11 +108,11 @@ return view.extend({
 		var view = E('div', {}, [
 			E('h2', _('Startup')),
 			E('div', {}, [
-				E('div', { 'data-tab': 'init', 'data-tab-title': _('Initscripts') }, [
+				E('div', { 'class': 'cbi-section', 'data-tab': 'init', 'data-tab-title': _('Initscripts') }, [
 					E('p', {}, _('You can enable or disable installed init scripts here. Changes will be applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like "network", your device might become inaccessible!</strong>')),
 					table
 				]),
-				E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
+				E('div', { 'class': 'cbi-section', 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
 					E('p', {}, _('This is the content of /etc/rc.local. Insert your own commands here (in front of \'exit 0\') to execute them at the end of the boot process.')),
 					E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20, 'disabled': isReadonlyView }, [ (rcLocal != null ? rcLocal : '') ])),
 					E('div', { 'class': 'cbi-page-actions' }, [
