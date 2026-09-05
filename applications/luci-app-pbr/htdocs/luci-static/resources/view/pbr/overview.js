@@ -113,6 +113,8 @@ return view.extend({
 			text
 		);
 		o.value("none", _("Disabled"));
+		o.default = "none";
+		o.rmempty = false;
 		if (reply.platform.adguardhome_ipset_support) {
 			o.value("adguardhome.ipset", _("AdGuardHome ipset"));
 			o.default = "adguardhome.ipset";
