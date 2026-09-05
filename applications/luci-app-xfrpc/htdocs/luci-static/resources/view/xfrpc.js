@@ -81,17 +81,12 @@ return view.extend({
 			sent to the server. The server must have a matching token for authorization to succeed.'), 
 			_('By default, this value is "".')));
 
-		o = s.taboption('init', form.SectionValue, 'init', form.TypedSection, 
-			'xfrp', _('Startup Settings'));
-		s = o.subsection;
-		s.anonymous = true;
-		s.dynamic = true;
-
-		o = s.option(form.Flag, 'disabled', _('Disabled xfrpc service'));
+		o = s.taboption('init', form.Flag, 'enabled', _('Enable xfrpc service'));
 		o.datatype = 'bool';
-		o.optional = true;
+		o.default = '1';
+		o.rmempty = false;
 
-		o = s.option(form.ListValue, 'loglevel', _('Log level'), 
+		o = s.taboption('init', form.ListValue, 'loglevel', _('Log level'), 
 			'%s <br /> %s'.format(_('LogLevel specifies the minimum log level. Valid values are "Debug", "Info", \
 			"Notice", "Warning", "Error", "Critical", "Alert" and "Emergency".'),
 			_('By default, this value is "Info".')));
@@ -104,6 +99,17 @@ return view.extend({
 		o.value(2, _('Alert'))
 		o.value(1, _('Emergency'))
 
+		/*
+		 * Proxy sections grid.
+		 *
+		 * GridSection type is "xfrpc". The init script (xfrpc.init) generates the
+		 * xfrpc.ini file from all UCI sections. It first processes type-specific
+		 * sections (tcp, http, https, socks5) via config_foreach, then falls back
+		 * to handling "xfrpc"-typed sections by reading the "type" option.
+		 *
+		 * This ensures proxies added here via LuCI work correctly regardless of
+		 * whether the user's init script has the fallback fix applied.
+		 */
 		s = m.section(form.GridSection, 'xfrpc', _('Proxy Settings'));
 		s.addremove = true;
 		s.filter = function(s) { return s !== 'common'; };
