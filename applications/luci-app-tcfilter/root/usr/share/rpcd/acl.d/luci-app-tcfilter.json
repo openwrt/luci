@@ -1,0 +1,14 @@
+{
+	"luci-app-tcfilter": {
+		"description": "Grant access to the tcfilter configuration and status",
+		"read": {
+			"uci": [ "tcfilter" ],
+			"file": {
+				"/sbin/tc -s -j filter show dev * ingress": [ "exec" ]
+			}
+		},
+		"write": {
+			"uci": [ "tcfilter" ]
+		}
+	}
+}
