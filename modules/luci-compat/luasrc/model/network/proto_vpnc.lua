@@ -1,4 +1,3 @@
--- Copyright 2015 Daniel F. Dickinson <dfdpublic@wildtechgarden.ca>
 -- Licensed to the public under the Apache License 2.0.
 
 local netmod = luci.model.network
