@@ -2,6 +2,7 @@
 'require view';
 'require poll';
 'require fs';
+'require dom';
 'require ui';
 'require uci';
 'require form';
@@ -44,6 +45,113 @@ function resolveCipher(cipherRaw) {
 */
 function normBssid(bssid) {
 	return (bssid || '').toUpperCase();
+}
+
+/*
+	identity of all networks already configured as travelmate uplink
+*/
+function configuredUplinks(iface) {
+	const sections = uci.sections('wireless', 'wifi-iface');
+	const list = [];
+
+	for (let i = 0; i < sections.length; i++) {
+		if (sections[i].network === iface && sections[i].mode === 'sta') {
+			list.push({
+				device: sections[i].device || '',
+				ssid: sections[i].ssid || '',
+				bssid: normBssid(sections[i].bssid)
+			});
+		}
+	}
+	return list;
+}
+
+/*
+	check whether a scanned network is already configured, an uplink
+	without bssid matches every bssid of the same ssid
+*/
+function isConfigured(list, radio, ssid, bssid) {
+	for (let i = 0; i < list.length; i++) {
+		if (list[i].device !== radio || list[i].ssid !== ssid) {
+			continue;
+		}
+		if (!list[i].bssid || list[i].bssid === normBssid(bssid)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+/*
+	scan dialog styles, aligned with the overview page
+*/
+function scanStyle() {
+	return E('style', { 'type': 'text/css' }, [
+		'#trm-scan {' +
+		'--trm-card-bg: rgba(128,128,128,.07);' +
+		'--trm-card-border: rgba(128,128,128,.28);' +
+		'--trm-muted: GrayText;' +
+		'--trm-ok: #1f8a5f;' +
+		'--trm-err: #c0392b;' +
+		'--trm-warn: #b7791f;' +
+		'}' +
+		'@media (prefers-color-scheme: dark) {' +
+		'#trm-scan {' +
+		'--trm-ok: #63c79b;' +
+		'--trm-err: #e8897e;' +
+		'--trm-warn: #e0b35c;' +
+		'}}' +
+		'#trm-scan .trm-list { display: grid; gap: .5em; margin-bottom: .75em; }' +
+		'#trm-scan .trm-card { display: grid; gap: .4em; background: var(--trm-card-bg); border: 1px solid var(--trm-card-border); border-radius: 8px; padding: .6em .8em; min-width: 0; }' +
+		'#trm-scan .trm-head { display: flex; align-items: baseline; gap: .6em; }' +
+		'#trm-scan .trm-ssid { flex: 1 1 auto; min-width: 0; font-size: 1.1em; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }' +
+		'#trm-scan .trm-qual { flex: 0 0 auto; font-variant-numeric: tabular-nums; }' +
+		'#trm-scan .trm-bar { height: .35em; border-radius: 3px; background: var(--trm-card-border); overflow: hidden; }' +
+		'#trm-scan .trm-bar-fill { height: 100%; background: var(--trm-muted); }' +
+		'#trm-scan .trm-card[data-signal="good"] .trm-qual { color: var(--trm-ok); }' +
+		'#trm-scan .trm-card[data-signal="good"] .trm-bar-fill { background: var(--trm-ok); }' +
+		'#trm-scan .trm-card[data-signal="weak"] .trm-qual { color: var(--trm-warn); }' +
+		'#trm-scan .trm-card[data-signal="weak"] .trm-bar-fill { background: var(--trm-warn); }' +
+		'#trm-scan .trm-card[data-signal="low"] .trm-qual { color: var(--trm-err); }' +
+		'#trm-scan .trm-card[data-signal="low"] .trm-bar-fill { background: var(--trm-err); }' +
+		'#trm-scan .trm-foot { display: flex; flex-wrap: wrap; align-items: center; gap: .35em .6em; font-size: .85em; color: var(--trm-muted); }' +
+		'#trm-scan .trm-mono { font-family: monospace; }' +
+		'#trm-scan .trm-chip { padding: .1em .5em; border-radius: 6px; border: 1px solid var(--trm-card-border); }' +
+		'#trm-scan .trm-chip-open { color: var(--trm-warn); border-color: var(--trm-warn); }' +
+		'#trm-scan .trm-act { margin-left: auto; }' +
+		'#trm-scan .trm-known { color: var(--trm-ok); }' +
+		'#trm-scan .trm-empty { color: var(--trm-muted); padding: .5em 0; }'
+	]);
+}
+
+/*
+	render a single scan result card
+*/
+function scanCard(quality, minQuality, ssidNode, channel, bssid, encLabel, encOpen, action) {
+	const value = isNaN(quality) ? 0 : Math.max(0, Math.min(100, quality));
+	let signal = 'low';
+
+	if (value >= Math.min(100, minQuality + 25)) {
+		signal = 'good';
+	} else if (value >= minQuality) {
+		signal = 'weak';
+	}
+
+	return E('div', { 'class': 'trm-card', 'data-signal': signal }, [
+		E('div', { 'class': 'trm-head' }, [
+			E('div', { 'class': 'trm-ssid' }, [ssidNode]),
+			E('span', { 'class': 'trm-qual' }, [value + ' %'])
+		]),
+		E('div', { 'class': 'trm-bar' }, [
+			E('div', { 'class': 'trm-bar-fill', 'style': 'width:' + value + '%' })
+		]),
+		E('div', { 'class': 'trm-foot' }, [
+			E('span', { 'class': 'trm-chip' + (encOpen ? ' trm-chip-open' : '') }, [encLabel]),
+			E('span', {}, [_('Channel') + ' ' + channel]),
+			E('span', { 'class': 'trm-mono' }, [bssid]),
+			E('div', { 'class': 'trm-act' }, [action])
+		])
+	]);
 }
 
 /*
@@ -626,6 +734,29 @@ return view.extend({
 			return handleSectionsVal('set', section_id, 'macaddr', value);
 		}
 
+		o = s.taboption('travelmate', form.ListValue, '_revive', _('Revive Uplink'),
+			_('Re-enable this uplink after the selected number of run cycles if it has been disabled by the retry limit. The number of revivals is limited by the global retry limit.'));
+		o.modalonly = true;
+		o.uciconfig = 'travelmate';
+		o.ucisection = 'uplink';
+		o.ucioption = 'revive';
+		o.nocreate = false;
+		o.rmempty = true;
+		o.default = '0';
+		o.value('0', _('disabled'));
+		o.value('10', _('10 run cycles'));
+		o.value('30', _('30 run cycles'));
+		o.value('60', _('60 run cycles'));
+		o.cfgvalue = function (section_id) {
+			return handleSectionsVal('get', section_id, 'revive');
+		}
+		o.write = function (section_id, value) {
+			return handleSectionsVal('set', section_id, 'revive', value);
+		}
+		o.remove = function (section_id, value) {
+			return handleSectionsVal('set', section_id, 'revive', value);
+		}
+
 		o = s.taboption('travelmate', form.FileUpload, '_script', _('Auto Login Script'),
 			_('External script reference which will be called for automated captive portal logins.'));
 		o.root_directory = '/etc/travelmate';
@@ -761,20 +892,14 @@ return view.extend({
 		*/
 		s.handleScan = function (radio) {
 			poll.stop();
-			let table = E('table', { 'class': 'table' }, [
-				E('tr', { 'class': 'tr table-titles' }, [
-					E('th', { 'class': 'th col-1 middle left' }, _('Strength')),
-					E('th', { 'class': 'th col-1 middle left hide-xs' }, _('Channel')),
-					E('th', { 'class': 'th col-2 middle left' }, _('SSID')),
-					E('th', { 'class': 'th col-2 middle left' }, _('BSSID')),
-					E('th', { 'class': 'th col-3 middle left' }, _('Encryption')),
-					E('th', { 'class': 'th cbi-section-actions right' }, '\xa0')
-				])
+			const minQuality = parseInt(uci.get('travelmate', 'global', 'trm_minquality') || '35', 10);
+			const uplinks = configuredUplinks(iface);
+			let list = E('div', { 'class': 'trm-list' }, [
+				E('em', { 'class': 'spinning' }, _('Starting wireless scan on \'%s\'...').format(radio))
 			]);
-			cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan on \'%s\'...').format(radio)));
 
 			let md = ui.showModal(_('Wireless Scan'), [
-				table,
+				E('div', { 'id': 'trm-scan' }, [scanStyle(), list]),
 				E('div', { 'class': 'right' }, [
 					E('button', {
 						'class': 'btn',
@@ -820,7 +945,7 @@ return view.extend({
 											SSID preparation
 										*/
 										if (ssid === 'hidden') {
-											tbl_ssid = "<em>hidden</em>";
+											tbl_ssid = E('em', {}, [_('hidden')]);
 										} else {
 											ssid = ssid.replace(/^"(.*)"$/, '$1');
 											tbl_ssid = ssid;
@@ -894,28 +1019,23 @@ return view.extend({
 										}
 
 										/*
-											push result row into table
+											push result card into the list
 										*/
-										rows.push([
-											strength,
-											channel,
-											tbl_ssid,
-											bssid,
-											tbl_encryption,
-											E('div', { 'class': 'right' },
-												E('button', {
-													'class': 'cbi-button cbi-button-action',
-													'click': ui.createHandlerFn(this, 'handleAdd', radio, iface, ssid, bssid, encryption)
-												}, _('Add Uplink...'))
-											)
-										]);
+										const known = isConfigured(uplinks, radio, ssid, bssid);
+										const action = known
+											? E('span', { 'class': 'trm-known' }, [_('Configured')])
+											: E('button', {
+												'class': 'cbi-button cbi-button-action',
+												'click': ui.createHandlerFn(this, 'handleAdd', radio, iface, ssid, bssid, encryption)
+											}, _('Add Uplink...'));
+										rows.push(scanCard(parseInt(strength, 10), minQuality, tbl_ssid, channel, bssid, tbl_encryption, encryption === 'none', action));
 									}
 								}
 							} else {
-								rows.push([_('Empty resultset')]);
+								rows.push(E('div', { 'class': 'trm-empty' }, [_('Empty resultset')]));
 							}
 
-							cbi_update_table(table, rows);
+							dom.content(list, rows);
 							document.getElementById('scan-btn').disabled = false;
 							poll.start();
 						}, this));
