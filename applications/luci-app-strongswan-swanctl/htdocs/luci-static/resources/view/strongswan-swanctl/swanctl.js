@@ -36,15 +36,14 @@ function sectionNameCheck(extra_class) {
 		nameEl = el.querySelector('.cbi-section-create-name');
 	ui.addValidator(nameEl, 'uciname', true, function(v) {
 		let sections = [
-			...uci.sections('ipsec', 'remote'),
-			...uci.sections('ipsec', 'tunnel'),
+			...uci.sections('ipsec', 'child'),
 			...uci.sections('ipsec', 'crypto_proposal'),
 		];
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Remotes, Encryption Proposals and Tunnels may not share the same names.') + ' ' + 
-				_('Use combinations like tunnel1_phase1 that do not exceed 15 characters.');
+			return _('Remotes, Encryption Proposals and Childrens may not share the same names.') + ' ' +
+				_('Use combinations like child1_phase1 that do not exceed 15 characters.');
 		}
 		if (v.length > 15) return _('Name length shall not exceed 15 characters');
 		return true;
@@ -124,18 +123,18 @@ return view.extend({
 		};
 		o.rmempty = false;
 
-		o = s.taboption('general', form.MultiValue, 'tunnel', _('Tunnel'),
-			_('The Tunnel containing the ESP (phase 2) section'));
+		o = s.taboption('general', form.MultiValue, 'child', _('Children'),
+			_('The Children containing the ESP (phase 2) section'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'tunnel');
+			var sections = uci.sections('ipsec', 'child');
 			if (sections.length == 0) {
-				this.value('', _('Please create a Tunnel first'));
+				this.value('', _('Please create a Children first'));
 			} else {
 				sections.forEach(L.bind(function (section) {
-					this.value(section['.name']);
+					this.value(section['.name'], '%s (%s)'.format(section['.name'], section['mode']));
 				}, this));
 			}
 
@@ -269,15 +268,21 @@ return view.extend({
 		o.default = 'ikev2';
 		o.modalonly = true;
 
-		// Tunnel Configuration
-		s = m.section(form.GridSection, 'tunnel', _('Tunnel Configuration'),
-			_('Define Connection Children to be used as Tunnels in Remote Configurations.'));
+		// Children Configuration
+		s = m.section(form.GridSection, 'child', _('Children Configuration'),
+			_('Define Connection Children to be used in Remote Configurations.'));
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
 
 		o = s.tab('general', _('General'));
 		o = s.tab('advanced', _('Advanced'));
+
+		o = s.taboption('general', form.ListValue, 'mode', _('Child mode'));
+		o.rmempty = false;
+		o.value('tunnel', _('Tunnel'));
+		o.value('transport', _('Transport'));
+		o.default = 'tunnel';
 
 		o = s.taboption('general', form.DynamicList, 'local_subnet', _('Local Subnet'),
 			_('Local network(s)'));
