@@ -6,8 +6,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI support for banIP
 LUCI_DEPENDS:=+luci-base +banip
 
-PKG_VERSION:=1.8.12
-PKG_RELEASE:=4
+PKG_VERSION:=1.8.13
+PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Dirk Brenken <dev@brenken.org>
 
