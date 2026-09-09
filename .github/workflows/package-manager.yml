@@ -1,0 +1,30 @@
+---
+name: "Package manager regression tests"
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - 'applications/luci-app-package-manager/**'
+      - '.github/workflows/package-manager.yml'
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - 'applications/luci-app-package-manager/**'
+      - '.github/workflows/package-manager.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  package-manager:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Run regression tests
+        run: sh applications/luci-app-package-manager/tests/run_tests.sh
