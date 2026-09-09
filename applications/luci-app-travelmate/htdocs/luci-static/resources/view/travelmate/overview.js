@@ -332,9 +332,9 @@ return view.extend({
 
 	render: function (result) {
 		/*
-			basic result check
+			basic config check
 		*/
-		if (!result[0] || result[0].length === 0) {
+		if (!uci.get('travelmate', 'global')) {
 			ui.addNotification(null, E('p', _('No travelmate config found!')), 'error');
 			return;
 		} else if (!result[1] || result[1].length === 0) {
@@ -347,7 +347,7 @@ return view.extend({
 		*/
 		let m, s, o;
 		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
-			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' +
+			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' +
 			_('<b><em>Please note:</em></b> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
 
 		/*
@@ -472,7 +472,7 @@ return view.extend({
 						setNodes('run_flags', flagChips(info.data.run_flags));
 						setText('run', pickValue(runPairs, 'date / time'));
 						setText('run_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
-							pickValue(runPairs, 'memory')].filter(v => v !== '-').join(', '));
+						pickValue(runPairs, 'memory')].filter(v => v !== '-').join(', '));
 						setNodes('sys', stackNodes(sysPairs(info.data.system_info)));
 					}
 				});
