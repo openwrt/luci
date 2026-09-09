@@ -11,8 +11,9 @@ return view.extend({
 			_('On this page, you can configure the IPsec service.'));
 		m.tabbed = true;
 
-		// strongSwan General Settings
-		s = m.section(form.NamedSection, 'globals', 'ipsec', _('General Settings'));
+		// general settings
+		s = m.section(form.NamedSection, 'globals', 'globals', _('General Settings'),
+			_('Configure global service parameters.'));
 
 		o = s.option(widgets.NetworkSelect, 'interface', _('Listening Interfaces'),
 			_('Interfaces that accept VPN traffic.') + '<br /> ' +
