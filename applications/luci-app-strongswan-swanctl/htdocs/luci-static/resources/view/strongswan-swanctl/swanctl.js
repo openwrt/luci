@@ -458,13 +458,26 @@ return view.extend({
 		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
 			_('Whether this is an ESP (phase 2) proposal or not'));
 
+		o = s.option(form.Flag, 'use_custom_proposal', _('Use custom proposal'),
+			_('When enabled, you can specify your own proposal string.'));
+		o.default = '0';
+		o.rmempty = true;
+
+		o = s.option(form.Value, 'custom_proposal', _('Custom proposal'),
+			_('Using this option only if you know exactly what you are doing.') + '<br />' +
+			_('Manually defining a proposal can break compatibility with peers or cause connection failures.') + '<br />' +
+			_('Using this setting may prevent future updates or migrations.') + '<br />' +
+			_('You are responsible for maintaining compatibility!'));
+		o.depends('use_custom_proposal', '1');
+		o.rmempty = false;
+
 		o = s.option(form.ListValue, 'encryption_algorithm',
 			_('Encryption Algorithm'),
 			_('Algorithms marked with * are considered insecure'));
 		o.default = 'aes256gcm128';
+		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.encryption);
 		addAlgorithms(o, algorithms.aead);
-
 
 		const encryptionAlgorithmNames = algorithms.encryption?.map(algorithm => algorithm.name);
 		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
@@ -474,11 +487,13 @@ return view.extend({
 		});
 		o.default = 'sha512';
 		o.rmempty = false;
+		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.integrity);
 
 		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
 			_('Algorithms marked with * are considered insecure'));
 		o.default = 'modp3072';
+		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
 
 		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
@@ -494,7 +509,7 @@ return view.extend({
 			return true;
 		};
 		o.optional = true;
-		o.depends('is_esp', '0');
+		o.depends({'is_esp': '0', 'use_custom_proposal': '0'});
 		addAlgorithms(o, algorithms.prf);
 
 		return m.render();
