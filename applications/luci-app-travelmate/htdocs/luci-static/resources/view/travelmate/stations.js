@@ -390,14 +390,14 @@ return view.extend({
 		]);
 	},
 
-	render: function (result) {
+	render: function () {
 		/*
-			basic result check
+			basic config check
 		*/
-		if (!result[0] || result[0].length === 0) {
+		if (!uci.sections('wireless', 'wifi-device').length) {
 			ui.addNotification(null, E('p', _('No wireless config / radio found!')), 'error');
 			return;
-		} else if (!result[1] || result[1].length === 0) {
+		} else if (!uci.get('travelmate', 'global')) {
 			ui.addNotification(null, E('p', _('No travelmate config found!')), 'error');
 			return;
 		}
