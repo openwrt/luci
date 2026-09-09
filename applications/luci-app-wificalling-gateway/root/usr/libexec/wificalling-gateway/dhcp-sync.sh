@@ -11,6 +11,26 @@ set -eu
 # user-managed hosts are left alone.
 #
 # Usage: dhcp-sync.sh <clients>   (clients: label|ip|node per line)
+#        dhcp-sync.sh clear       (remove every plugin-managed wfc_ lease;
+#                                 run on service stop/disable — a restart
+#                                 re-creates them from the live lease table)
+
+# WFC_DNSMASQ overrides the dnsmasq init script (used by the test suite).
+dnsmasq_init=${WFC_DNSMASQ:-/etc/init.d/dnsmasq}
+
+if [ "${1:-}" = clear ]; then
+	changed=0
+	for host in $(uci show dhcp 2>/dev/null | sed -n 's/^dhcp\.\(wfc_[^=]*\)=host$/\1/p'); do
+		uci -q delete "dhcp.$host"; changed=1
+	done
+	if [ "$changed" -eq 1 ]; then
+		uci commit dhcp
+		if ! "$dnsmasq_init" restart; then
+			logger -t wificalling-gateway "dhcp-sync: dnsmasq restart failed after lease cleanup; check the dhcp-host configuration"
+		fi
+	fi
+	exit 0
+fi
 
 clients=${1:?clients file required}
 # The dnsmasq lease file location is a UCI option; fall back to the
@@ -18,8 +38,6 @@ clients=${1:?clients file required}
 leasefile=$(uci -q get dhcp.@dnsmasq[0].leasefile 2>/dev/null || true)
 [ -n "$leasefile" ] || leasefile=/tmp/dhcp.leases
 [ -f "$leasefile" ] || exit 0
-# WFC_DNSMASQ overrides the dnsmasq init script (used by the test suite).
-dnsmasq_init=${WFC_DNSMASQ:-/etc/init.d/dnsmasq}
 
 valid_ip() {
 	case "$1" in

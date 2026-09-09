@@ -35,7 +35,7 @@ append_node() {
 	# | -delimited normalized.conf record.  label is deliberately excluded:
 	# subscription labels routinely contain '|' (e.g. "HK01|BGP|CMCU") and
 	# labels never reach normalized.conf — the nodes file (health checks)
-	# gets a sanitized copy instead.  credential/auxiliary (f[6]/f[8]) are
+	# gets a sanitized copy instead.  credential/auxiliary (f[6]/f[10]) are
 	# derived from password/uuid/flow/alter_id/private_key, all guarded
 	# here, so they need no separate check.
 	case "$protocol$server$password$sni$uuid$public_key$short_id$host$flow$alpn$path$fingerprint$pin_sha256$security$transport$congestion$udp_mode$private_key$local_address$reserved$mtu$alter_id$pre_shared_key" in *'|'*) logger -t "$APP" "invalid delimiter in node $s"; return 1;; esac
@@ -150,6 +150,14 @@ start_service() {
 
 stop_service() {
 	/usr/libexec/$APP/firewall.sh stop "$RUNDIR/clients"
+	# Drop the plugin-managed static leases when the gateway is disabled or
+	# stopped for good, so no dnsmasq side effects outlive the service.  On
+	# a plain restart the enabled check keeps the bindings in place and the
+	# start path re-syncs them instead — the clear branch only runs when
+	# the service is actually going away.
+	config_load "$APP"
+	config_get_bool enabled main enabled 0
+	[ "$enabled" -eq 1 ] || /usr/libexec/$APP/dhcp-sync.sh clear || logger -t "$APP" "dhcp lease cleanup failed"
 	# Also drop the stale snapshot when the gateway is stopped/disabled so
 	# the status page does not keep rendering the last state indefinitely.
 	: > "$RUNDIR/status.json" 2>/dev/null || true

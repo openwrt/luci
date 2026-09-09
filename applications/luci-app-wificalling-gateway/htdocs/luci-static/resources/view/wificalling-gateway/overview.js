@@ -495,18 +495,28 @@ return view.extend({
 			return E([], [importPanel, formNode]);
 		});
 	},
-	handleSave: function(ev) {
-		// On LuCI 24.10 Map.save() only stages a session-scoped UCI
-		// changeset; the changes are committed by ui.changes.apply()
-		// (upstream's own Save & Apply path), and the default handler's
-		// #maincontent .cbi-map lookup also fails under out-of-tree
-		// themes.  Save through the form instance and commit+apply so the
-		// plain "Save" button persists.  Older LuCI applies inside
-		// Map.save() and has no ui.changes, hence the guard.
+	// Single commit+apply path shared by both footer buttons.  On LuCI
+	// 24.10 Map.save() only stages a session-scoped UCI changeset; the
+	// changes are committed by ui.changes.apply() (older LuCI applies
+	// inside Map.save() and has no ui.changes, hence the guard).  The
+	// inherited handleSaveApply calls handleSave() and then applies again,
+	// so keeping an apply inside handleSave fired two overlapping
+	// apply_rollback posts and two modals — Save and Save & Apply both
+	// route through here, so exactly one apply runs per click.  mode
+	// mirrors the upstream ComboButton values: '0' is Save & Apply
+	// (checked), '1' is Apply unchecked — pass mode == '0' to
+	// ui.changes.apply() exactly like the stock footer does.
+	commitAndApply: function(mode) {
 		var m = this.mapInstance;
 		if (!m) return Promise.resolve();
 		return m.save().then(function() {
-			if (ui.changes) return ui.changes.apply(true);
+			if (ui.changes) return ui.changes.apply(mode == '0');
 		});
+	},
+	handleSave: function(ev) {
+		return this.commitAndApply('0');
+	},
+	handleSaveApply: function(ev, mode) {
+		return this.commitAndApply(mode == null ? '0' : mode);
 	}
 });

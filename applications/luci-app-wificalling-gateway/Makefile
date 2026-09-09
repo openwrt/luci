@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-wificalling-gateway
-PKG_VERSION:=1.9.5
+PKG_VERSION:=1.9.6
 PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
@@ -17,4 +17,15 @@ LUCI_URL:=https://github.com/smthdagg/luci-app-wificalling-gateway
 LUCI_DEPENDS:=+luci-base +sing-box +curl +nftables +kmod-nft-tproxy +kmod-nft-socket +ip-full
 LUCI_PKGARCH:=all
 
-include $(TOPDIR)/feeds/luci/luci.mk
+# Without this declaration the shipped /etc/config/wificalling-gateway is a
+# plain payload file: opkg/apk upgrade replaces every node credential and
+# device policy with the package defaults.  luci.mk supplies nothing here
+# implicitly; the other apps that ship a real /etc/config file declare it.
+define Package/luci-app-wificalling-gateway/conffiles
+/etc/config/wificalling-gateway
+endef
+
+# Relative include, like the other applications in this tree: an absolute
+# $(TOPDIR)/feeds/luci path breaks when the feed is checked out under a
+# different name in feeds.conf.
+include ../../luci.mk
