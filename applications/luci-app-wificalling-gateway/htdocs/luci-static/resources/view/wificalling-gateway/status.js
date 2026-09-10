@@ -74,10 +74,11 @@ return view.extend({
 		}, 30);
 
 		/* ---------- Device tunnel status ---------- */
-		function nodeLabel(id) {
-			// d.node is the UCI section id (e.g. cfgABCD); show the
-			// friendly label the user assigned instead.
-			return uci.get('wificalling-gateway', id, 'label') || id;
+		function nodeLabel(tag) {
+			// The status file carries the sing-box outbound tag
+			// (node-<section id>); show the friendly label instead.
+			var id = String(tag || '').replace(/^node-/, '');
+			return (id ? uci.get('wificalling-gateway', id, 'label') : null) || id || '-';
 		}
 		function rows(source) {
 			return (source.devices || []).map(function(d) {

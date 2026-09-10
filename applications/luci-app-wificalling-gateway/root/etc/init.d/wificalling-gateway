@@ -150,14 +150,14 @@ start_service() {
 
 stop_service() {
 	/usr/libexec/$APP/firewall.sh stop "$RUNDIR/clients"
-	# Drop the plugin-managed static leases when the gateway is disabled or
-	# stopped for good, so no dnsmasq side effects outlive the service.  On
-	# a plain restart the enabled check keeps the bindings in place and the
-	# start path re-syncs them instead — the clear branch only runs when
-	# the service is actually going away.
-	config_load "$APP"
-	config_get_bool enabled main enabled 0
-	[ "$enabled" -eq 1 ] || /usr/libexec/$APP/dhcp-sync.sh clear || logger -t "$APP" "dhcp lease cleanup failed"
+	# Always drop the plugin-managed static leases.  This hook cannot tell a
+	# restart from a stop (both arrive with enabled=1), so gating the clear on
+	# the enabled flag left `wfc_` host sections in /etc/config/dhcp behind on
+	# an explicit stop and on package removal, where nothing else would ever
+	# remove them.  start_service re-syncs the bindings, so a restart only
+	# pays one extra UCI commit and dnsmasq reload; clear is a no-op when
+	# there is nothing to remove.
+	/usr/libexec/$APP/dhcp-sync.sh clear || logger -t "$APP" "dhcp lease cleanup failed"
 	# Also drop the stale snapshot when the gateway is stopped/disabled so
 	# the status page does not keep rendering the last state indefinitely.
 	: > "$RUNDIR/status.json" 2>/dev/null || true

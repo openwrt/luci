@@ -24,13 +24,17 @@ return view.extend({
 			// contradicts the actual bindings on routers that move the
 			// lease file (e.g. to persist across reboots).
 			var leasefile = uci.get('dhcp', '@dnsmasq[0]', 'leasefile') || '/tmp/dhcp.leases';
-			var leaseRead = L.resolveDefault(fs.read(leasefile), '');
 			// rpcd only allows lease files whose basename is dhcp.leases
-			// (any directory); a custom filename is refused and resolved
-			// to ''.  Fall back to the default file so the binding column
-			// keeps working on routers that point leasefile elsewhere.
-			if (leasefile !== '/tmp/dhcp.leases')
-				leaseRead = leaseRead.then(function(v) { return v || L.resolveDefault(fs.read('/tmp/dhcp.leases'), ''); });
+			// (any directory); a custom filename is refused.  Fall back to
+			// the default file so the binding column keeps working on
+			// routers that point leasefile elsewhere.  The fallback keys
+			// off the rejection, not an empty read: a configured lease
+			// file that is simply empty must stay authoritative.
+			var leaseRead = fs.read(leasefile).catch(function() {
+				return leasefile !== '/tmp/dhcp.leases'
+					? L.resolveDefault(fs.read('/tmp/dhcp.leases'), '')
+					: '';
+			});
 			return Promise.all([
 				L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}'),
 				uci.load('wificalling-gateway'),
@@ -71,7 +75,8 @@ return view.extend({
 		// Short reason label and full explanation for a failed node test.
 		// Reasons come from node-health.sh's cache (config_missing /
 		// timeout / unreachable) and from node-test.sh (no_server /
-		// no_health_script / no_tcp_probe / tcp_failed / busy).
+		// no_health_script / no_tcp_probe / tcp_failed / invalid_id /
+		// busy).
 		function wgFailReason(reason) {
 			if (reason === 'config_missing') return _('Missing config');
 			if (reason === 'no_server') return _('Missing server/port');
@@ -81,6 +86,7 @@ return view.extend({
 			if (reason === 'tcp_failed') return _('Unreachable');
 			if (reason === 'no_health_script') return _('Health check helper missing');
 			if (reason === 'no_tcp_probe') return _('No TCP probe available');
+			if (reason === 'invalid_id') return _('Invalid node id');
 			return reason || '';
 		}
 		function wgFailDetail(reason) {
@@ -91,6 +97,7 @@ return view.extend({
 			if (reason === 'busy') return _('Another test is running right now');
 			if (reason === 'no_tcp_probe') return _('Install tcping or nc to probe this node');
 			if (reason === 'tcp_failed') return _('Server unreachable');
+			if (reason === 'invalid_id') return _('Node id contains unsupported characters');
 			return '';
 		}
 		// Banner-style notification with an optional detail suffix.

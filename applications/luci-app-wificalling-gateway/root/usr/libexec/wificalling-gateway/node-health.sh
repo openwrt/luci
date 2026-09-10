@@ -159,7 +159,11 @@ wg_handshake_test() {
 	printf '{"generated_at":%s,"nodes":[' "$(date +%s)"
 	first=1
 	while IFS='|' read -r id label protocol server port; do
-		[ -n "$id" ] || continue
+		# Ids are UCI section names; one outside that shape would land in
+		# the /tmp/wg-health-* paths below unvalidated, and would be
+		# reported as an ordinary handshake_failed/unreachable node rather
+		# than rejected.  Skip it here so neither happens.
+		case "$id" in ''|*[!A-Za-z0-9_]*) continue;; esac
 		state=no_icmp_reply; ping_json=null; measurement=icmp; reason_json=null
 		# WireGuard nodes are validated by a real handshake, not ICMP.
 		if [ "$protocol" = wireguard ]; then
