@@ -3,12 +3,14 @@
 'require fs';
 'require poll';
 'require dom';
+'require uci';
 
 return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.read('/var/run/wificalling-gateway/status.json'), '{}'),
-			L.resolveDefault(fs.read('/var/run/wificalling-gateway/service-health.json'), '{}')
+			L.resolveDefault(fs.read('/var/run/wificalling-gateway/service-health.json'), '{}'),
+			uci.load('wificalling-gateway')
 		]);
 	},
 	render: function(data) {
@@ -72,9 +74,14 @@ return view.extend({
 		}, 30);
 
 		/* ---------- Device tunnel status ---------- */
+		function nodeLabel(id) {
+			// d.node is the UCI section id (e.g. cfgABCD); show the
+			// friendly label the user assigned instead.
+			return uci.get('wificalling-gateway', id, 'label') || id;
+		}
 		function rows(source) {
 			return (source.devices || []).map(function(d) {
-				var values = [d.label, d.ip, wfcLabel(d.wificalling || d.state), d.node || '-', d.epdg_ip || '-',
+				var values = [d.label, d.ip, wfcLabel(d.wificalling || d.state), nodeLabel(d.node), d.epdg_ip || '-',
 					(d.ike_seen ? '500' : '-') + ' / ' + (d.nat_t_seen ? '4500' : '-'),
 					d.assured ? _('Yes') : _('No'), d.sent_packets + ' ↑ / ' + d.reply_packets + ' ↓', when(d.last_activity)];
 				return E('tr', { class: 'tr' }, values.map(function(x) { return E('td', { class: 'td' }, String(x)); }));

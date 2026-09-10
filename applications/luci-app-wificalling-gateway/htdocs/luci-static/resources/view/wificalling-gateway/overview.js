@@ -24,10 +24,17 @@ return view.extend({
 			// contradicts the actual bindings on routers that move the
 			// lease file (e.g. to persist across reboots).
 			var leasefile = uci.get('dhcp', '@dnsmasq[0]', 'leasefile') || '/tmp/dhcp.leases';
+			var leaseRead = L.resolveDefault(fs.read(leasefile), '');
+			// rpcd only allows lease files whose basename is dhcp.leases
+			// (any directory); a custom filename is refused and resolved
+			// to ''.  Fall back to the default file so the binding column
+			// keeps working on routers that point leasefile elsewhere.
+			if (leasefile !== '/tmp/dhcp.leases')
+				leaseRead = leaseRead.then(function(v) { return v || L.resolveDefault(fs.read('/tmp/dhcp.leases'), ''); });
 			return Promise.all([
 				L.resolveDefault(fs.read('/var/run/wificalling-gateway/node-status.json'), '{}'),
 				uci.load('wificalling-gateway'),
-				L.resolveDefault(fs.read(leasefile), ''),
+				leaseRead,
 				L.resolveDefault(fs.read('/proc/net/arp'), '')
 			]);
 		});

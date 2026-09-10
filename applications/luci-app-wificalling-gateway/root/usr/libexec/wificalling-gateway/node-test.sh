@@ -13,6 +13,10 @@
 set -eu
 
 id=${1:?node id required}
+# The id reaches /tmp filenames via wg_handshake_test and the cache
+# delete below; only UCI section names are legit.  Reject anything
+# else before any path is touched (mirrors node-health.sh's guard).
+case "$id" in ''|*[!A-Za-z0-9_]*) printf '{"state":"failed","reason":"invalid_id"}\n'; exit 0;; esac
 
 server=$(uci -q get "wificalling-gateway.$id.server") || true
 port=$(uci -q get "wificalling-gateway.$id.port") || true

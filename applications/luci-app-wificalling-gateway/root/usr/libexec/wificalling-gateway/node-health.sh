@@ -28,6 +28,10 @@ json_escape() {
 # port would hand each other the wrong exit IP.
 wg_handshake_test() {
 	local id=$1 server=$2 port=$3 cache cache_ts age lock lock_pid lock_age held priv pub local_addr psk mtu reserved lport cfg pid ip reason probe_url result
+	# The id interpolates into /tmp filenames below; only UCI section
+	# names (cfgNNNN / user letters) are legit.  Reject anything else
+	# before any path is ever touched.
+	case "$id" in ''|*[!A-Za-z0-9_]*) return 1;; esac
 	cache="/tmp/wg-health-$id"
 	if [ -f "$cache" ]; then
 		cache_ts=$(sed -n '1p' "$cache" 2>/dev/null || echo 0)

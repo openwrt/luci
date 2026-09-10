@@ -75,8 +75,11 @@ END {
       streak=0; traffic_since=0
     }
     acc_sent=old_acc_sent[i]+ds; acc_reply=old_acc_reply[i]+dr
-    handshake_success=(old_wfc[i]!="registered" && wfc=="registered")
-    handshake_failed=(wfc=="not_detected" && (old_wfc[i]=="registered" || old_wfc[i]=="connecting"))
+    # A pristine monitor.state (fresh install) has no baseline: emit
+    # neither a false handshake_success nor a false handshake_failed on
+    # the first tick - the state file is built from this run snapshot.
+    handshake_success=(old_wfc[i]!="" && old_wfc[i]!="registered" && wfc=="registered")
+    handshake_failed=(old_wfc[i]!="" && wfc=="not_detected" && (old_wfc[i]=="registered" || old_wfc[i]=="connecting"))
     sustained=(!handshake_success && wfc=="registered" && streak>=1 && traffic_since>0 && now-traffic_since>=3 && now-old_event[i]>=event_interval)
     printf "%s{", (i>1?",":"")
     printf "\"label\":%s,\"ip\":%s,\"node\":%s,\"state\":%s,\"wificalling\":%s,", q(label[i]),q(ip[i]),q(node[i]),q(legacy),q(wfc)
