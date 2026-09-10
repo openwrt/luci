@@ -371,7 +371,7 @@ function getCipherAKM() {
 	for (const wlan in Localinfo) {		
 		fs.stat('/usr/sbin/hostapd_cli').then(stat => {
 			if (!stat || stat.type !== 'file') { return; }
-			fs.exec_direct('/usr/sbin/hostapd_cli', ['-i', wlan.split('.')[1], 'all_sta'])
+			fs.exec_direct('/usr/sbin/hostapd_cli', ['-i', wlan.split('.').slice(1).join('.'), 'all_sta'])
 				.then(res => { parseAllSta(res); })
 				.catch(err => {});
 		}).catch (function (){return null;});
