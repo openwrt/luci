@@ -25,7 +25,7 @@ return olsr.olsrview.extend({
 						if (a.proto === b.proto) {
 							return a.genmask < b.genmask;
 						} else {
-							return a.proto < b.proto;
+							return a.proto < b.proto ? -1 : a.proto > b.proto ? 1 : 0;
 						}
 					}
 					let modifiedData;
@@ -173,7 +173,7 @@ return olsr.olsrview.extend({
 				let statusOlsrCommonJs = null;
 
 				if (has_v4 && has_v6) {
-					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('common/common_js.js') });
+					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('olsr/common_js.js') });
 				}
 
 				const fresult = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrCommonJs]);

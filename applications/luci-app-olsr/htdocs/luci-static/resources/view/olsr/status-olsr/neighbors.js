@@ -20,7 +20,7 @@ return olsr.olsrview.extend({
 				if (a.proto === b.proto) {
 					return a.linkCost < b.linkCost;
 				} else {
-					return a.proto < b.proto;
+					return a.proto < b.proto ? -1 : a.proto > b.proto ? 1 : 0;
 				}
 			}
 
@@ -171,11 +171,11 @@ return olsr.olsrview.extend({
 				const rv = [];
 				for (let link of neigh_res) {
 					link.linkCost = (link.linkCost).toFixed(3) || 0;
-					if (link.linkCost === 4194304) {
+					if (link.linkCost == 4194304) {
 						link.linkCost = 0;
 					}
-					const color = etx_color(link.linkCost);
-					const snr_color = snr_colors(link.snr);
+					const color = olsr.etx_color(link.linkCost);
+					const snr_color = olsr.snr_colors(link.snr);
 					let defaultgw_color = '';
 					if (link.defaultgw === 1) {
 						defaultgw_color = '#ffff99';
@@ -299,8 +299,8 @@ return olsr.olsrview.extend({
 						link.linkCost = 0;
 					}
 
-					const color = etx_color(link.linkCost);
-					const snr_color = snr_colors(link.snr);
+					const color = olsr.etx_color(link.linkCost);
+					const snr_color = olsr.snr_colors(link.snr);
 
 					if (link.snr === 0) {
 						link.snr = '?';
@@ -449,7 +449,7 @@ return olsr.olsrview.extend({
 				if (has_v4 && has_v6) {
 					statusOlsrCommonJs = E('script', {
 						type: 'text/javascript',
-						src: L.resource('common/common_js.js'),
+						src: L.resource('olsr/common_js.js'),
 					});
 				}
 

@@ -33,6 +33,19 @@ load_hosts() {
 	json_dump
 }
 
+json_stringescape() {
+	awk '
+		NR>1 { r = r "\\n" }
+		{
+			gsub(/["\\]/, "\\\\&");
+			gsub(/\t/, "\\t");
+			gsub(/\r/, "\\r");
+			r = r $0
+		}
+		END  { print r }
+	' | tr -d '\n'
+}
+
 case "$1" in
 list)
 	json_init
@@ -56,13 +69,13 @@ call)
 		json_get_var v4_port v4_port
 		json_get_var v6_port v6_port
 
-		jsonreq4=$(echo "/${otable}" | nc 127.0.0.1 "${v4_port}" | sed -n '/^[}{ ]/p' 2>/dev/null)
-		jsonreq6=$(echo "/${otable}" | nc ::1 "${v6_port}" | sed -n '/^[}{ ]/p' 2>/dev/null)
-
-		json_init
-		json_add_string "jsonreq4" "$jsonreq4"
-		json_add_string "jsonreq6" "$jsonreq6"
-		json_dump
+		{
+			printf '{"jsonreq4":"'
+			echo "/${otable}" | nc 127.0.0.1 "${v4_port}" | sed -n '/^[}{ ]/p' | json_stringescape
+			printf '","jsonreq6":"'
+			echo "/${otable}" | nc ::1 "${v6_port}" | sed -n '/^[}{ ]/p' | json_stringescape
+			printf '"}\n'
+		} 2>/dev/null
 		;;
 	hasipip)
 		result=$(ls /etc/modules.d/ | grep -E "[0-9]*-ipip")
