@@ -1,16 +1,90 @@
 #!/bin/sh
-# Remove leftover qosify qdiscs/ifb devices after stop
-for ifb in /sys/class/net/ifb-*; do
-	[ -e "$ifb" ] || continue
-	ifb="${ifb##*/}"; dev="${ifb#ifb-}"
+# SPDX-License-Identifier: MIT
+#
+# Remove qosify qdiscs and ifb devices left behind by an unclean exit.
+#
+# A clean stop already does this itself: procd sends SIGTERM, qosify's main()
+# calls qosify_iface_stop() and interface_clear_qdisc() removes the root qdisc,
+# the bpf filters and the ifb device. This script only matters after a crash, a
+# SIGKILL or a respawn loop, so it deliberately only touches devices qosify is
+# configured for -- never a qdisc this package did not create.
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+
+# The lock is an flock on an open fd, not a directory plus an EXIT trap: rpcd
+# SIGKILLs this script at its exec timeout (rpc_file_exec_timeout_cb() in
+# file.c), the trap never runs, and the leftover directory would then make every
+# later run exit 0 without doing anything. The kernel drops an flock on process
+# exit however the process dies. The path differs from the old directory so a
+# stale one left by an earlier version cannot break the redirect. Without
+# busybox flock, run unlocked rather than not at all -- the worst a concurrent
+# run can do is repeat a tc delete.
+LOCK="/var/lock/qosify-luci-cleanup.lock"
+
+mkdir -p /var/lock
+exec 9>"$LOCK"
+command -v flock >/dev/null && { flock -n 9 || exit 0; }
+
+# Mirrors interface_ifb_name() in qosify: "ifb-<dev>" while strlen(dev) + 4 is
+# below IFNAMSIZ. Longer names take a different branch upstream which we do not
+# try to reproduce here.
+ifb_name() {
+	[ "${#1}" -lt 12 ] || return 1
+	echo "ifb-$1"
+}
+
+clear_dev() {
+	local dev="$1"
+	local ifb
+
+	[ -n "$dev" ] || return 0
+	[ -e "/sys/class/net/$dev" ] || return 0
+
 	tc qdisc del dev "$dev" clsact 2>/dev/null
 	tc qdisc del dev "$dev" root 2>/dev/null
+
+	ifb="$(ifb_name "$dev")" || return 0
+	[ -e "/sys/class/net/$ifb" ] || return 0
+
+	ip link set "$ifb" down 2>/dev/null
+	ip link del "$ifb" 2>/dev/null
+}
+
+# `config interface` names a netifd interface, not a device; qosify resolves it
+# to the l3 device before touching tc, so resolve it the same way.
+clear_interface() {
+	local cfg="$1"
+	local name dev
+
+	config_get name "$cfg" name
+	[ -n "$name" ] || return 0
+
+	network_get_device dev "$name" || dev=""
+	clear_dev "$dev"
+}
+
+# `config device` names a netdev directly.
+clear_device() {
+	local cfg="$1"
+	local name
+
+	config_get name "$cfg" name
+	clear_dev "$name"
+}
+
+config_load qosify
+config_foreach clear_interface interface
+config_foreach clear_device device
+
+# Orphaned ifb devices: qosify is the only thing that creates ifb-* names
+# (sqm-scripts uses ifb4*), and removing the device on its own cannot disturb a
+# qdisc belonging to anything else.
+for ifb in /sys/class/net/ifb-*; do
+	[ -e "$ifb" ] || continue
+	ifb="${ifb##*/}"
 	ip link set "$ifb" down 2>/dev/null
 	ip link del "$ifb" 2>/dev/null
 done
-for dev in $(uci -q get qosify.wan.name) $(uci -q get qosify.wandev.name) pppoe-wan; do
-	[ -n "$dev" ] || continue
-	tc qdisc del dev "$dev" clsact 2>/dev/null
-	tc qdisc del dev "$dev" root 2>/dev/null
-done
+
 exit 0

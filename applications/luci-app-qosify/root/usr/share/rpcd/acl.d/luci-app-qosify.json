@@ -3,31 +3,31 @@
 		"description": "Grant access to LuCI app qosify",
 		"read": {
 			"ubus": {
-				"luci": [ "setInitAction" ],
+				"qosify": [ "status" ],
+				"rc": [ "list" ],
 				"service": [ "list" ],
-				"file": [ "read", "stat", "list" ]
+				"file": [ "read", "stat" ]
 			},
 			"uci": [ "qosify" ],
 			"file": {
-				"/etc/config/qosify": [ "read" ],
-				"/etc/qosify/00-defaults.conf": [ "read" ],
-				"/etc/init.d/qosify": [ "read", "exec" ],
-				"/usr/sbin/qosify": [ "read" ],
-				"/usr/sbin/qosify-status": [ "exec" ],
-				"/usr/share/qosify-luci/cleanup": [ "exec" ],
+				"/etc/config/qosify": [ "read", "list" ],
+				"/etc/qosify/00-defaults.conf": [ "read", "list" ],
 				"/usr/share/qosify-luci/qosify": [ "read" ],
 				"/usr/share/qosify-luci/00-defaults.conf": [ "read" ]
 			}
 		},
 		"write": {
 			"ubus": {
-				"file": [ "write", "exec" ],
-				"uci": [ "revert" ]
+				"rc": [ "init" ],
+				"uci": [ "revert" ],
+				"file": [ "write", "exec" ]
 			},
 			"uci": [ "qosify" ],
 			"file": {
 				"/etc/config/qosify": [ "write" ],
-				"/etc/qosify/00-defaults.conf": [ "write" ]
+				"/etc/qosify/00-defaults.conf": [ "write" ],
+				"/usr/sbin/qosify-status": [ "exec" ],
+				"/usr/share/qosify-luci/cleanup": [ "exec" ]
 			}
 		}
 	}
