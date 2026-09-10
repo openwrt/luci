@@ -359,12 +359,13 @@ return view.extend({
 		o.datatype = 'file';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.ListValue, 'dpdaction', _('DPD Action'),
+		o = s.taboption('advanced', form.ListValue, 'dpd_action', _('DPD Action'),
 			_('Action when DPD timeout occurs'));
-		o.value('none');
-		o.value('clear');
+		o.value('', '%s (%s)'.format('clear', _('default')));
 		o.value('trap');
 		o.value('start');
+		o.default = 'clear';
+		o.rmempty = true;
 		o.optional = true;
 		o.modalonly = true;
 
