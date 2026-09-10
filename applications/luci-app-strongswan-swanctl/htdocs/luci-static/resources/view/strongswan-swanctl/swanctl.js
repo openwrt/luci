@@ -324,12 +324,14 @@ return view.extend({
 		o.default = 'trap';
 		o.modalonly = true;
 
-		o = s.taboption('general', form.ListValue, 'closeaction', _('Close Action'),
+		o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
 			_('Action when CHILD_SA is closed'));
-		o.value('none');
+		o.value('', '%s (%s)'.format('none', _('default')));
 		o.value('trap');
 		o.value('start');
 		o.optional = true;
+		o.default = '';
+		o.rmempty = true;
 		o.modalonly = true;
 
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal',
@@ -364,7 +366,7 @@ return view.extend({
 		o.value('', '%s (%s)'.format('clear', _('default')));
 		o.value('trap');
 		o.value('start');
-		o.default = 'clear';
+		o.default = '';
 		o.rmempty = true;
 		o.optional = true;
 		o.modalonly = true;
