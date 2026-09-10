@@ -316,12 +316,14 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('general', form.ListValue, 'startaction', _('Start Action'),
+		o = s.taboption('general', form.ListValue, 'start_action', _('Start Action'),
 			_('Action on initial configuration load'));
-		o.value('none');
+		o.value('', '%s (%s)'.format('none', _('default')));
 		o.value('trap');
 		o.value('start');
-		o.default = 'trap';
+		o.optional = true;
+		o.default = '';
+		o.rmempty = true;
 		o.modalonly = true;
 
 		o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
