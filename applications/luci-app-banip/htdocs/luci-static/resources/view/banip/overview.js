@@ -516,7 +516,7 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'ban_nftcount', _('Reporting Counters'), _('Enable NFT counters for Set elements and chain rules. Required for the GeoIP Map and packet statistics in the Set Reporting.'));
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'ban_map', _('Enable GeoIP Map'), _('Enable a GeoIP Map with suspicious Set elements. This requires external requests to get the map tiles and geolocation data.'));
+		o = s.taboption('general', form.Flag, 'ban_map', _('Enable GeoIP Map'), _('Enable a GeoIP Map with suspicious Set elements. This requires external requests to load the Leaflet library and to fetch the geolocation data.'));
 		o.depends('ban_nftcount', '1');
 		o.optional = true;
 		o.rmempty = true;
