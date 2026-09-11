@@ -358,7 +358,7 @@ return view.extend({
 				o.description = render_port_status(E('small', {
 					'data-switch': switch_name,
 					'data-port': portspec.num
-				}), portstate);
+				}), portstate).outerHTML;
 
 				port_opts.push(o);
 			}
