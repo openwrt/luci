@@ -497,8 +497,17 @@ return baseclass.extend({
 
 			statsContent.push(E('span', { 'class': 'cbi-tooltip' }, formatStats(port.netdev, pse)));
 
-			return E('div', { 'class': 'ifacebox', 'style': 'margin:.25em;min-width:70px;max-width:100px' }, [
-				E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:bold' }, [ port.netdev.getName() ]),
+			const devSect = uci.sections('network', 'device').find(s => s.name === port.device);
+			const portDesc = devSect ? devSect.description : null;
+
+			const ifaceboxChildren = [
+				E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:bold' }, [ port.netdev.getName() ])
+			];
+
+			if (portDesc)
+				ifaceboxChildren.push(E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:normal;font-size:80%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis', 'title': portDesc }, portDesc));
+
+			ifaceboxChildren.push(
 				E('div', { 'class': 'ifacebox-body' }, [
 					E('img', { 'src': L.resource('icons/port_%s.svg').format(portIcon) }),
 					E('br'),
@@ -516,7 +525,9 @@ return baseclass.extend({
 				E('div', { 'class': 'ifacebox-body' }, [
 					E('div', { 'class': 'cbi-tooltip-container', 'style': 'text-align:left;font-size:80%' }, statsContent)
 				])
-			]);
+			);
+
+			return E('div', { 'class': 'ifacebox', 'style': 'margin:.25em;min-width:70px;max-width:100px' }, ifaceboxChildren);
 		}));
 	}
 });
