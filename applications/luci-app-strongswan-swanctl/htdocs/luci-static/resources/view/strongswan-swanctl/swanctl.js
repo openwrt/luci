@@ -242,7 +242,7 @@ return view.extend({
 		o.placeholder = '0s';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
+		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
 			_('IKEv2 interval to refresh keying material; also used to compute lifetime'));
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
