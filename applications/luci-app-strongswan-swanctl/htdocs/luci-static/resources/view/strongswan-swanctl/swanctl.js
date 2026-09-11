@@ -443,7 +443,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifepackets', _('Life Packets'),
+		o = s.taboption('advanced', form.Value, 'life_packets', _('Life Packets'),
 			_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
 			_('Use "0" to disable (default).')
 		);
