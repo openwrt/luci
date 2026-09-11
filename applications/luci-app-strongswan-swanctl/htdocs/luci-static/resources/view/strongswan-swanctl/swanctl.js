@@ -425,7 +425,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifebytes', _('Life Bytes'),
+		o = s.taboption('advanced', form.Value, 'life_bytes', _('Life Bytes'),
 			_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
 			_('Use "0" to disable (default).')
 		);
