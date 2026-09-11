@@ -35,6 +35,14 @@ function detailsBlock(title, content, pre) {
 
 /* -------------------------------------------------------------------------- */
 
+const ERR_OK = 0;
+const ERR_NO_INIT = 1;
+const ERR_INVALID_FILE = 2;
+const ERR_FILE_TOO_BIG = 3;
+const ERR_SERVER_FAILED = 4;
+const ERR_INIT_DISALLOWED = 5;
+const ERR_DISALLOWED_PATH = 6;
+
 const callPackagelist = rpc.declare({
 	object: 'rpc-sys',
 	method: 'packagelist',
@@ -82,6 +90,23 @@ function get_branch(version) {
  */
 function get_revision_count(revision) {
 	return parseInt(revision.substring(1).split('-')[0]);
+}
+
+/**
+ * Resolves relative path segments (`.` and `..`) and normalizes repeated
+ * slashes in a POSIX filesystem path.
+ *
+ * @param {string} path
+ * The input path to normalize
+ * @returns {string}
+ * The resolved, normalized path
+ */
+function resolve_path(path) {
+	return '/' + path.split('/').reduce((acc, part) => {
+		if (part === '..') acc.pop();
+		else if (part && part !== '.') acc.push(part);
+		return acc;
+	}, []).join('/');
 }
 
 return view.extend({
@@ -538,9 +563,6 @@ return view.extend({
 		let { version, target, profile, packages } = firmware;
 		let candidates = [];
 
-		const endpoint = version.endsWith('SNAPSHOT') ? `revision/${version}/${target}` : 'overview';
-		const request_url = `${url}/api/v1/${endpoint}`;
-
 		ui.showModal(_('Searching...'), [
 			E(
 				'p',
@@ -552,7 +574,17 @@ return view.extend({
 			),
 		]);
 
-		L.resolveDefault(request.get(request_url)).then((response) => {
+		const is_snapshot = version.endsWith('SNAPSHOT');
+		const overview_url = `${url}/api/v1/overview`;
+		let promises = [L.resolveDefault(request.get(overview_url))];
+
+		if (is_snapshot) {
+			const snapshot_url = `${url}/api/v1/revision/${version}/${target}`;
+			promises.push(L.resolveDefault(request.get(snapshot_url)));
+		}
+
+		Promise.all(promises).then(async (results) => {
+			let response = results[is_snapshot ? 1 : 0];
 			if (!response.ok) {
 				ui.showModal(_('Error connecting to upgrade server'), [
 					E(
@@ -569,7 +601,7 @@ return view.extend({
 				]);
 				return;
 			}
-			if (version.endsWith('SNAPSHOT')) {
+			if (is_snapshot) {
 				const remote_revision = response.json().revision;
 				if (
 					get_revision_count(revision) < get_revision_count(remote_revision)
@@ -605,6 +637,42 @@ return view.extend({
 			}
 
 			if (candidates.length) {
+				const server_info = results[0]?.ok ? results[0].json().server : null;
+				let init_script_error = ERR_NO_INIT;
+				let init_script_path = uci.get('attendedsysupgrade', 'owut', 'init_script') || '';
+				let init_script_contents = '';
+
+				if (init_script_path) {
+					init_script_path = resolve_path(init_script_path);
+					if (!init_script_path.startsWith('/rom/etc/uci-defaults/') &&
+						!init_script_path.startsWith('/etc/uci-defaults/') &&
+						!init_script_path.startsWith('/root/')) {
+						init_script_error = ERR_DISALLOWED_PATH;
+					} else if (!server_info) {
+						init_script_error = ERR_SERVER_FAILED;
+					} else if (!server_info.allow_defaults) {
+						init_script_error = ERR_INIT_DISALLOWED;
+					} else if (typeof server_info.max_defaults_length !== 'number') {
+						init_script_error = ERR_SERVER_FAILED;
+					} else {
+						let st = await fs.stat(init_script_path).catch(() => null);
+						if (!st || st.type !== 'file') {
+							init_script_error = ERR_INVALID_FILE;
+						} else if (st.size > server_info.max_defaults_length) {
+							init_script_error = ERR_FILE_TOO_BIG;
+						} else if (st.size == 0) {
+							init_script_error = ERR_OK;
+						} else {
+							init_script_contents = await fs.read(init_script_path).catch(() => null);
+							if (init_script_contents != null) {
+								init_script_error = ERR_OK;
+							} else {
+								init_script_error = ERR_INVALID_FILE;
+							}
+						}
+					}
+				}
+
 				let s, o;
 
 				let mapdata = {
@@ -612,6 +680,7 @@ return view.extend({
 						profile,
 						version: candidates[0][0],
 						packages: Object.keys(packages).sort(),
+						init_script_checked: '1'
 					},
 				};
 
@@ -648,6 +717,58 @@ return view.extend({
 					o = s.option(form.DynamicList, 'packages', _('Packages'));
 				}
 
+				switch (init_script_error) {
+					case ERR_OK:
+						o = s.option(
+							form.Flag,
+							'init_script_checked',
+							_('Use init script'),
+							_('Include %s as init script (uci-defaults).').format(E('code', {}, init_script_path).outerHTML)
+						);
+						o.default = '1';
+						o.rmempty = false;
+						break;
+					case ERR_NO_INIT:
+						break;
+					default: {
+						o = s.option(
+							form.DummyValue,
+							'_warning',
+							_('Init script error')
+						);
+						let msg = _('Unknown error. File %s will not be included as init script (uci-defaults) in the built firmware.');
+						switch (init_script_error) {
+							case ERR_INVALID_FILE:
+								msg = _('File %s is invalid and won\'t be included as init script (uci-defaults) in the built firmware.');
+								break;
+							case ERR_FILE_TOO_BIG:
+								msg = _('File %s exceeds %s and won\'t be included as init script (uci-defaults) in the built firmware.');
+								break;
+							case ERR_SERVER_FAILED:
+								msg = _('Unable to fetch build server limits. File %s will not be included as init script (uci-defaults) in the built firmware.');
+								break;
+							case ERR_INIT_DISALLOWED:
+								msg = _('Chosen build server does not allow init scripts (uci-defaults). File %s will not be included as such in the built firmware.');
+								break;
+							case ERR_DISALLOWED_PATH:
+								msg = _('The path %s is not permitted. Only files in /rom/etc/uci-defaults/, /etc/uci-defaults/, or /root/ can be included.');
+								break;
+						}
+						let alertBox = E('div', { class: 'alert-message' });
+						if (init_script_error === ERR_FILE_TOO_BIG) {
+							const kib = (server_info.max_defaults_length / 1024).toFixed(2);
+							alertBox.innerHTML = msg.format(
+								E('code', {}, init_script_path).outerHTML,
+								E('b', {}, [ kib, ' KiB' ]).outerHTML,
+							);
+						} else {
+							alertBox.innerHTML = msg.format(E('code', {}, init_script_path).outerHTML);
+						}
+						o.default = alertBox;
+						break;
+					}
+				}
+
 				L.resolveDefault(map.render()).then((form_rendered) => {
 					ui.showModal(_('New firmware upgrade available'), [
 						E(
@@ -679,6 +800,9 @@ return view.extend({
 													version: mapdata.request.version,
 													profile: mapdata.request.profile
 												};
+												if (init_script_error === ERR_OK && mapdata.request.init_script_checked === '1') {
+													content.defaults = init_script_contents;
+												}
 												this.pollFn = L.bind(function () {
 													this.handleRequest(url, true, content, data, firmware);
 												}, this);
