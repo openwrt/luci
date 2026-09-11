@@ -433,7 +433,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeypackets', _('Rekey Packets'),
+		o = s.taboption('advanced', form.Value, 'rekey_packets', _('Rekey Packets'),
 			_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
 			_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
 			_('Use "0" to disable packet based rekeying (default).')
