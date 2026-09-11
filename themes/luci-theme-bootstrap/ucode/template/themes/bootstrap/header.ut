@@ -20,7 +20,7 @@
 		<meta charset="utf-8">
 		<title>{{ striptags(`${boardinfo.hostname ?? '?'}${dispatched?.title ? ` | ${_(dispatched.title)}` : ''}`) }}</title>
 		{% if (!darkpref): %}
-			<script>
+			<script nonce="{{ ctx?.csp_nonce }}">
 				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
 				    rootElement = document.querySelector(':root'),
 				    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };

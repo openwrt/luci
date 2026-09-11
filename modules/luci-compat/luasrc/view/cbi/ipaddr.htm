@@ -1,15 +1,4 @@
 <%+cbi/valueheader%>
-	<script>
-		function switchToCIDRList(ev) {
-			var input = ev.target.previousElementSibling,
-			    usecidr = document.getElementById(input.id + '_usecidr');
-
-			ev.preventDefault();
-
-			usecidr.value = '1';
-			cbi_d_update();
-		}
-	</script>
 	<input data-update="change"<%=
 		attr("id", cbid) ..
 		attr("name", cbid) ..
@@ -23,5 +12,5 @@
 		ifattr(self.combobox_manual, "data-manual", self.combobox_manual) ..
 		ifattr(#self.keylist > 0, "data-choices", { self.keylist, self.vallist })
 	%> /><!--
-	--><button class="btn cbi-button cbi-button-neutral" title="<%:Switch to CIDR list notation%>" aria-label="<%:Switch to CIDR list notation%>" onclick="switchToCIDRList(event)">…</button>
+	--><button class="btn cbi-button cbi-button-neutral cbi-cidr-toggle" title="<%:Switch to CIDR list notation%>" aria-label="<%:Switch to CIDR list notation%>">…</button>
 <%+cbi/valuefooter%>

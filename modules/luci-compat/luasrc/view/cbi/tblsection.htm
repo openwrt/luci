@@ -148,18 +148,18 @@ end
 				<td class="td cbi-section-table-cell nowrap cbi-section-actions">
 					<div>
 						<%- if self.sortable then -%>
-							<input class="btn cbi-button cbi-button-up" type="button" value="<%:Up%>" onclick="return cbi_row_swap(this, true, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move up%>" />
-							<input class="btn cbi-button cbi-button-down" type="button" value="<%:Down%>" onclick="return cbi_row_swap(this, false, 'cbi.sts.<%=self.config%>.<%=self.sectiontype%>')" title="<%:Move down%>" />
+							<input class="btn cbi-button cbi-button-up" type="button" value="<%:Up%>" data-cbi-rowswap="up" data-cbi-sortstore="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" title="<%:Move up%>" />
+							<input class="btn cbi-button cbi-button-down" type="button" value="<%:Down%>" data-cbi-rowswap="down" data-cbi-sortstore="cbi.sts.<%=self.config%>.<%=self.sectiontype%>" title="<%:Move down%>" />
 						<% end; if self.extedit then -%>
 							<input class="btn cbi-button cbi-button-edit" type="button" value="<%:Edit%>"
 							<%- if type(self.extedit) == "string" then
-							%> onclick="location.href='<%=self.extedit:format(section)%>'"
+							%> data-href="<%=self.extedit:format(section)%>"
 							<%- elseif type(self.extedit) == "function" then
-							%> onclick="location.href='<%=self:extedit(section)%>'"
+							%> data-href="<%=self:extedit(section)%>"
 							<%- end
 							%> alt="<%:Edit%>" title="<%:Edit%>" />
 						<% end; if self.addremove then %>
-							<input class="btn cbi-button cbi-button-remove" type="submit" value="<%:Delete%>"  onclick="this.form.cbi_state='del-section'; return true" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
+							<input class="btn cbi-button cbi-button-remove" type="submit" value="<%:Delete%>" data-cbi-state="del-section" name="cbi.rts.<%=self.config%>.<%=k%>" alt="<%:Delete%>" title="<%:Delete%>" />
 						<%- end -%>
 					</div>
 				</td>
@@ -192,9 +192,9 @@ end
 					<div class="cbi-section-error"><%:Invalid%></div>
 				<%- end %>
 				<div>
-					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" data-type="uciname" data-optional="true" onkeyup="cbi_validate_named_section_add(this)"/>
+					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>.<%=section%>" data-type="uciname" data-optional="true" />
 				</div>
-				<input class="btn cbi-button cbi-button-add" type="submit" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" title="<%:Add%>" disabled="" />
+				<input class="btn cbi-button cbi-button-add" type="submit" data-cbi-state="add-section" value="<%:Add%>" title="<%:Add%>" disabled="" />
 			<% end %>
 		</div>
 		<%- end %>

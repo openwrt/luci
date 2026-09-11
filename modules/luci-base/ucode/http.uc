@@ -513,7 +513,7 @@ const Class = {
 		/* http header plugins */
 		let log_class = 'http.uc';
 		openlog(log_class);
-		for (let plugin_id, p_output in run_plugins('/luci/plugins/http/headers', 'http_headers_enabled')) {
+		for (let plugin_id, p_output in run_plugins('/luci/plugins/http/headers', 'http_headers_enabled', { csp_nonce: this.csp_nonce })) {
 
 			/* header plugins shall return e.g.: ['X-Header', 'foo'] */
 			if (type(p_output) !== 'array' || length(p_output) !== 2)

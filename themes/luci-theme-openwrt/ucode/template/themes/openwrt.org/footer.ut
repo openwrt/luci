@@ -12,7 +12,7 @@
 	Powered by {{ version.luciname }} ({{ version.luciversion }})
 </p>
 
-<script>L.require('menu-openwrt')</script>
+<script nonce="{{ ctx?.csp_nonce }}">L.require('menu-openwrt')</script>
 
 </body>
 </html>
