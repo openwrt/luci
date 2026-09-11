@@ -414,7 +414,7 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeybytes', _('Rekey Bytes'),
+		o = s.taboption('advanced', form.Value, 'rekey_bytes', _('Rekey Bytes'),
 			_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
 			_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
 			_('Use "0" to disable byte based rekeying.')
