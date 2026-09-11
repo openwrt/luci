@@ -1,0 +1,259 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+umask 077
+
+ACTION="$(printf '%s' "${1:-network}" | tr -cd 'A-Za-z0-9_.:-')"
+INTERFACE="$(printf '%s' "${2:-unknown}" | tr -cd 'A-Za-z0-9_.:-')"
+RECOVER_LOCK=/var/lock/haproxy-manager.recover
+APPLY_LOCK=/var/lock/haproxy-manager.apply
+APPLY_LOCK_HELD=0
+TMP_CFG="/tmp/haproxy-manager-recover.$$"
+INCIDENT=""
+BASE=""
+DIAGNOSTICS=/dev/null
+
+[ -n "$ACTION" ] || ACTION=network
+[ -n "$INTERFACE" ] || INTERFACE=unknown
+[ "$(uci_get main auto_recover 1)" = 1 ] || exit 0
+[ "$(uci_get main enabled 0)" = 1 ] || exit 0
+RECONCILE_GENERATED=0
+case "$ACTION" in
+	ifup|ifupdate)
+		[ "$INTERFACE" = "$(wan_interface)" ] || exit 0
+		RECONCILE_GENERATED=1
+	;;
+esac
+[ -x /etc/init.d/haproxy ] || exit 0
+/etc/init.d/haproxy enabled >/dev/null 2>&1 || exit 0
+
+MODE="$(active_mode)"
+case "$MODE" in
+	generated|raw) ;;
+	*) exit 0 ;;
+esac
+
+cleanup() {
+	rm -f "$TMP_CFG"
+	[ "$APPLY_LOCK_HELD" != 1 ] || operation_lock_release "$APPLY_LOCK"
+	operation_lock_release "$RECOVER_LOCK"
+}
+
+trim_incidents() {
+	local count old
+	count=0
+	for old in $(find "$BASE" -maxdepth 1 -type d -name '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]' 2>/dev/null | sort -r); do
+		count=$((count + 1))
+		[ "$count" -le "$INCIDENT_LIMIT" ] && continue
+		case "$old" in
+			"$BASE"/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9])
+				rm -f "$old/meta" "$old/result" "$old/diagnostics.log"
+				rmdir "$old" 2>/dev/null || true
+			;;
+		esac
+	done
+}
+
+create_incident() {
+	local reason="$1" id attempt target_ip requested_base
+	requested_base="$(incident_dir)" || return 1
+	umask 077
+	mkdir -p "$requested_base" || {
+		logger -t haproxy-manager "Cannot create incident report directory: $requested_base"
+		return 1
+	}
+	BASE="$(resolve_storage_dir "$requested_base")" || {
+		logger -t haproxy-manager "Incident directory resolves outside /root or /mnt"
+		return 1
+	}
+	id="$(date +%Y%m%d-%H%M%S)"
+	INCIDENT="$BASE/$id"
+	attempt=1
+	while ! mkdir "$INCIDENT" 2>/dev/null; do
+		[ "$attempt" -lt 5 ] || {
+			logger -t haproxy-manager "Cannot create incident report in $BASE"
+			return 1
+		}
+		sleep 1
+		attempt=$((attempt + 1))
+		id="$(date +%Y%m%d-%H%M%S)"
+		INCIDENT="$BASE/$id"
+	done
+	chmod 700 "$BASE" "$INCIDENT" 2>/dev/null || true
+	target_ip="$(wan_ip 2>/dev/null || echo unknown)"
+	cat > "$INCIDENT/meta" <<EOF || return 1
+created=$id
+action=$ACTION
+interface=$INTERFACE
+reason=$reason
+target_ip=$target_ip
+EOF
+	printf 'detected\n' > "$INCIDENT/result" || return 1
+	printf '%s\n' "$id" > "$BASE/LAST" || return 1
+	trim_incidents
+	DIAGNOSTICS="$INCIDENT/diagnostics.log"
+	if [ "$reason" = wan-address-change ]; then
+		{
+			printf 'HAProxy Manager WAN listener reconciliation\n'
+			printf 'Incident: %s\nAction: %s\nInterface: %s\nReason: %s\nTarget WAN address: %s\n' \
+				"$id" "$ACTION" "$INTERFACE" "$reason" "$target_ip"
+		} > "$DIAGNOSTICS" 2>&1
+		return 0
+	fi
+	{
+		printf 'HAProxy Manager automatic recovery\n'
+		printf 'Incident: %s\nAction: %s\nInterface: %s\nReason: %s\nTarget WAN address: %s\n\n' \
+			"$id" "$ACTION" "$INTERFACE" "$reason" "$target_ip"
+		printf '== Time and uptime ==\n'
+		date || true
+		uptime || true
+		printf '\n== Memory ==\n'
+		free || true
+		printf '\n== IPv4 addresses ==\n'
+		ip -4 addr show || true
+		printf '\n== HAProxy procd state ==\n'
+		ubus call service list '{"name":"haproxy","verbose":true}' || true
+		printf '\n== Network interfaces ==\n'
+		ubus call network.interface dump || true
+		printf '\n== Recent HAProxy, procd, and OOM messages ==\n'
+		logread | grep -iE 'haproxy|procd.*instance|out of memory|oom|killed process' | tail -n 160 || true
+		printf '\n== Kernel OOM messages ==\n'
+		dmesg | grep -Ei 'oom|out of memory|killed process|haproxy' | tail -n 80 || true
+	} > "$DIAGNOSTICS" 2>&1
+}
+
+set_result() {
+	local result="$1" id reason
+	if [ -z "$INCIDENT" ] || [ ! -d "$INCIDENT" ]; then
+		logger -t haproxy-manager "Recovery result without incident report: $result"
+		return 0
+	fi
+	if ! printf '%s\n' "$result" > "$INCIDENT/result"; then
+		logger -t haproxy-manager "Could not update incident report with result: $result"
+		INCIDENT=""
+		DIAGNOSTICS=/dev/null
+		return 0
+	fi
+	id="${INCIDENT##*/}"
+	reason="$(sed -n 's/^reason=//p' "$INCIDENT/meta" 2>/dev/null | head -1)"
+	(
+		if ! /usr/libexec/haproxy-manager/notify "$id" "$result" "$ACTION" "$INTERFACE" "$reason"; then
+			logger -t haproxy-manager "Webhook notification failed for incident $id"
+		fi
+	) >/dev/null 2>&1 &
+}
+
+operation_lock_acquire "$RECOVER_LOCK" || exit 0
+trap cleanup EXIT
+
+# Let netifd finish installing addresses and routes before comparing listeners.
+sleep 2
+operation_lock_acquire "$APPLY_LOCK" || exit 0
+APPLY_LOCK_HELD=1
+
+CONFIG_CHANGED=0
+GENERATION_FAILED=0
+VALIDATION_FAILED=0
+if [ "$RECONCILE_GENERATED" = 1 ] && [ "$MODE" = generated ] &&
+	[ "$(uci_get main wan_bind_ip auto)" = auto ]; then
+	if /usr/libexec/haproxy-manager/generate "$TMP_CFG" >/dev/null 2>&1; then
+		if /usr/libexec/haproxy-manager/validate "$TMP_CFG" >/dev/null 2>&1; then
+			cmp -s "$TMP_CFG" "$HAPROXY_CFG" || CONFIG_CHANGED=1
+		else
+			VALIDATION_FAILED=1
+		fi
+	else
+		GENERATION_FAILED=1
+	fi
+fi
+
+if [ "$GENERATION_FAILED" != 1 ] && [ "$VALIDATION_FAILED" != 1 ] &&
+	[ "$CONFIG_CHANGED" != 1 ] && /etc/init.d/haproxy status >/dev/null 2>&1; then
+	exit 0
+fi
+
+if [ "$GENERATION_FAILED" = 1 ]; then
+	REASON=wan-address-unavailable
+elif [ "$VALIDATION_FAILED" = 1 ]; then
+	REASON=invalid-generated-config
+elif [ "$CONFIG_CHANGED" = 1 ]; then
+	REASON=wan-address-change
+else
+	REASON=service-stopped
+fi
+if ! create_incident "$REASON"; then
+	logger -t haproxy-manager "Incident report could not be stored; recovery will continue"
+	INCIDENT=""
+	DIAGNOSTICS=/dev/null
+fi
+logger -t haproxy-manager "HAProxy recovery started after $ACTION on $INTERFACE ($REASON)"
+
+if [ "$GENERATION_FAILED" = 1 ]; then
+	set_result address-unavailable
+	logger -t haproxy-manager "Automatic recovery stopped: WAN address is unavailable"
+	exit 1
+fi
+
+if [ "$VALIDATION_FAILED" = 1 ]; then
+	set_result invalid-generated-config
+	logger -t haproxy-manager "Automatic recovery stopped: generated configuration is invalid"
+	exit 1
+fi
+
+if [ "$CONFIG_CHANGED" = 1 ]; then
+	BACKUP_PATH=""
+	if ! BACKUP_PATH="$(/usr/libexec/haproxy-manager/backup 2>> "$DIAGNOSTICS")"; then
+		set_result backup-failed
+		logger -t haproxy-manager "Automatic recovery stopped: snapshot creation failed"
+		exit 1
+	fi
+	printf '\nRecovery point: %s\n' "${BACKUP_PATH##*/}" >> "$DIAGNOSTICS" || true
+	if ! atomic_install_file "$TMP_CFG" "$HAPROXY_CFG"; then
+		set_result install-failed
+		logger -t haproxy-manager "Automatic recovery stopped: HAProxy configuration could not be installed"
+		exit 1
+	fi
+	if /etc/init.d/haproxy restart >> "$DIAGNOSTICS" 2>&1 &&
+		/etc/init.d/haproxy status >/dev/null 2>&1; then
+		set_result reconciled
+		logger -t haproxy-manager "HAProxy listeners reconciled with the current WAN address"
+		exit 0
+	fi
+
+	if /usr/libexec/haproxy-manager/rollback --sync "${BACKUP_PATH##*/}" >> "$DIAGNOSTICS" 2>&1; then
+		set_result rolled-back
+		logger -t haproxy-manager "WAN listener reconciliation failed and was rolled back"
+	else
+		set_result rollback-failed
+		logger -t haproxy-manager "WAN listener reconciliation and rollback both failed"
+	fi
+	exit 1
+fi
+
+if ! /etc/init.d/haproxy check >> "$DIAGNOSTICS" 2>&1; then
+	set_result invalid-config
+	logger -t haproxy-manager "Automatic recovery stopped: HAProxy configuration is invalid"
+	exit 1
+fi
+
+attempt=1
+while [ "$attempt" -le 5 ]; do
+	printf '\n== Start attempt %s ==\n' "$attempt" >> "$DIAGNOSTICS" || true
+	/etc/init.d/haproxy restart >> "$DIAGNOSTICS" 2>&1 || true
+	sleep $((attempt + 1))
+	if /etc/init.d/haproxy status >/dev/null 2>&1; then
+		set_result recovered
+		{
+			printf '\n== Recovered listeners ==\n'
+			ps w | grep '[h]aproxy' || true
+			netstat -lntp 2>/dev/null | grep haproxy || true
+		} >> "$DIAGNOSTICS" 2>&1
+		logger -t haproxy-manager "HAProxy recovered after $attempt attempt(s)"
+		exit 0
+	fi
+	attempt=$((attempt + 1))
+done
+
+set_result failed
+logger -t haproxy-manager "HAProxy automatic recovery failed after 5 attempts"
+exit 1

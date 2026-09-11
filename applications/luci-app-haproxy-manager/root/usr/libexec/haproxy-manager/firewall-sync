@@ -1,0 +1,106 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+umask 077
+
+CHECK_ONLY=0
+FORCE_DISABLED=0
+case "${1:-}" in
+	'') ;;
+	--check) CHECK_ONLY=1 ;;
+	--disable) FORCE_DISABLED=1 ;;
+	*) echo "Usage: firewall-sync [--check|--disable]" >&2; exit 1 ;;
+esac
+
+ZONE="$(uci_get main firewall_zone wan)"
+MODE="$(uci_get main firewall_conflict_mode warn)"
+MANAGED="$(uci_get main manage_firewall 0)"
+[ "$FORCE_DISABLED" != 1 ] || MANAGED=0
+PLAN=/tmp/haproxy-manager-firewall-plan.$$
+/usr/libexec/haproxy-manager/firewall-plan > "$PLAN"
+trap 'rm -f "$PLAN"' EXIT
+
+CONFLICTS="$(sed -n 's/^conflicts[[:space:]]*//p' "$PLAN")"
+if [ "$MANAGED" = 1 ] && [ "${CONFLICTS:-0}" -gt 0 ] && [ "$MODE" != disable ]; then
+	echo "Enabled firewall port forwards conflict with HAProxy listeners:" >&2
+	awk -F '\t' '$1 == "conflict" { printf "- %s (WAN %s -> %s:%s)\n", $3, $4, $5, $6 }' "$PLAN" >&2
+	echo "Choose automatic conflict resolution in Settings or disable the redirects manually." >&2
+	exit 3
+fi
+
+[ "$CHECK_ONLY" != 1 ] || { cat "$PLAN"; exit 0; }
+
+PORTS=""
+[ "$MANAGED" != 1 ] || PORTS="$(sed -n 's/^port[[:space:]]*//p' "$PLAN")"
+CHANGED=0
+
+for redirect in $(uci -q show firewall | sed -n 's/^firewall\.\(@redirect\[[0-9][0-9]*\]\)=redirect/\1/p'); do
+	name="$(uci -q get "firewall.$redirect.name" 2>/dev/null || true)"
+	case "$name" in
+		"$FIREWALL_DISABLED_PREFIX"*) managed_disabled=1 ;;
+		*) managed_disabled=0 ;;
+	esac
+	[ "$managed_disabled" = 1 ] || continue
+	spec="$(uci -q get "firewall.$redirect.src_dport" 2>/dev/null || true)"
+	still_needed=0
+	for port in $PORTS; do
+		port_spec_contains "$spec" "$port" || continue
+		still_needed=1
+		break
+	done
+	[ "$still_needed" = 1 ] && continue
+	uci set "firewall.$redirect.enabled=1"
+	CHANGED=1
+	name="${name#"$FIREWALL_DISABLED_PREFIX"}"
+	if [ -n "$name" ]; then
+		uci set "firewall.$redirect.name=$name"
+	else
+		uci -q delete "firewall.$redirect.name" || true
+	fi
+done
+
+if [ "$MANAGED" = 1 ] && [ "$MODE" = disable ]; then
+	for redirect in $(awk -F '\t' '$1 == "conflict" { print $2 }' "$PLAN"); do
+		[ -n "$redirect" ] || continue
+		name="$(uci -q get "firewall.$redirect.name" 2>/dev/null || true)"
+		case "$name" in
+			"$FIREWALL_DISABLED_PREFIX"*) ;;
+			*) uci set "firewall.$redirect.name=$FIREWALL_DISABLED_PREFIX$name" ;;
+		esac
+		uci set "firewall.$redirect.enabled=0"
+		CHANGED=1
+	done
+fi
+
+for index in $(uci -q show firewall | sed -n 's/^firewall\.@rule\[\([0-9][0-9]*\)\]=rule/\1/p' | sort -rn); do
+	rule="@rule[$index]"
+	name="$(uci -q get "firewall.$rule.name" 2>/dev/null || true)"
+	if [ "$name" = "$FIREWALL_RULE_NAME" ]; then
+		uci -q delete "firewall.$rule" || true
+		CHANGED=1
+	fi
+done
+
+if [ -n "$PORTS" ]; then
+	rule="$(uci add firewall rule)"
+	uci set "firewall.$rule.name=$FIREWALL_RULE_NAME"
+	uci set "firewall.$rule.src=$ZONE"
+	uci set "firewall.$rule.proto=tcp"
+	uci set "firewall.$rule.target=ACCEPT"
+	uci set "firewall.$rule.family=ipv4"
+	for port in $PORTS; do
+		uci add_list "firewall.$rule.dest_port=$port"
+	done
+	CHANGED=1
+fi
+
+if [ "$CHANGED" = 1 ]; then
+	uci commit firewall
+	/etc/init.d/firewall reload
+fi
+
+if [ "$MANAGED" = 1 ]; then
+	echo "Firewall rules synchronized"
+else
+	echo "Firewall automation disabled; managed rules removed"
+fi

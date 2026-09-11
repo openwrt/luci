@@ -1,0 +1,124 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+
+SYNC=0
+LOCK_DIR=/var/lock/haproxy-manager.apply
+LOCK_HELD=0
+
+if [ "${1:-}" = --sync ]; then
+	[ "$#" -eq 2 ] || { echo "Usage: rollback [--sync] [last|YYYYMMDD-HHMMSS]" >&2; exit 1; }
+	SYNC=1
+	TARGET="$2"
+else
+	[ "$#" -le 1 ] || { echo "Usage: rollback [--sync] [last|YYYYMMDD-HHMMSS]" >&2; exit 1; }
+	TARGET="${1:-last}"
+fi
+
+release_lock() {
+	[ "$LOCK_HELD" != 1 ] || operation_lock_release "$LOCK_DIR"
+}
+
+if [ "$SYNC" != 1 ]; then
+	attempt=0
+	while ! operation_lock_acquire "$LOCK_DIR"; do
+		[ "$attempt" -lt 15 ] || { echo "Another HAProxy Manager operation is still running." >&2; exit 1; }
+		attempt=$((attempt + 1))
+		sleep 1
+	done
+	LOCK_HELD=1
+	trap 'status=$?; release_lock; exit "$status"' EXIT
+fi
+
+BASE="$(backup_dir)"
+[ ! -d "$BASE" ] || BASE="$(resolve_storage_dir "$BASE")" || {
+	echo "Recovery point directory resolves outside /root or /mnt" >&2
+	exit 1
+}
+
+if [ "$TARGET" = last ]; then
+	[ -f "$BASE/LAST" ] || { echo "No LAST backup marker found" >&2; exit 1; }
+	TARGET="$(basename "$(cat "$BASE/LAST")")"
+fi
+
+is_valid_backup_id "$TARGET" || { echo "Invalid backup identifier" >&2; exit 1; }
+TARGET_DIR="$BASE/$TARGET"
+[ -d "$TARGET_DIR" ] || { echo "Backup not found: $TARGET" >&2; exit 1; }
+
+firewall_changed=0
+uhttpd_changed=0
+state_failed=0
+
+if [ -f "$TARGET_DIR/firewall" ] && ! cmp -s "$TARGET_DIR/firewall" /etc/config/firewall; then
+	atomic_install_file "$TARGET_DIR/firewall" /etc/config/firewall
+	firewall_changed=1
+fi
+if [ -f "$TARGET_DIR/uhttpd" ] && ! cmp -s "$TARGET_DIR/uhttpd" /etc/config/uhttpd; then
+	atomic_install_file "$TARGET_DIR/uhttpd" /etc/config/uhttpd
+	uhttpd_changed=1
+fi
+[ -f "$TARGET_DIR/haproxy_manager" ] && atomic_install_file "$TARGET_DIR/haproxy_manager" /etc/config/haproxy_manager
+[ -f "$TARGET_DIR/haproxy.cfg" ] && atomic_install_file "$TARGET_DIR/haproxy.cfg" "$HAPROXY_CFG"
+
+if [ "$firewall_changed" = 1 ] && ! /etc/init.d/firewall restart >/dev/null 2>&1; then
+	logger -t haproxy-manager "Firewall restart failed while restoring $TARGET"
+	state_failed=1
+fi
+
+haproxy_enabled=1
+haproxy_running=1
+if [ -f "$TARGET_DIR/haproxy.state" ]; then
+	haproxy_enabled="$(sed -n 's/^enabled=//p' "$TARGET_DIR/haproxy.state" | head -1)"
+	haproxy_running="$(sed -n 's/^running=//p' "$TARGET_DIR/haproxy.state" | head -1)"
+fi
+
+if [ "$haproxy_enabled" = 1 ]; then
+	if ! /etc/init.d/haproxy enable >/dev/null 2>&1; then
+		logger -t haproxy-manager "Could not enable HAProxy while restoring $TARGET"
+		state_failed=1
+	fi
+else
+	if ! /etc/init.d/haproxy disable >/dev/null 2>&1; then
+		logger -t haproxy-manager "Could not disable HAProxy while restoring $TARGET"
+		state_failed=1
+	fi
+fi
+
+restore_services() {
+	local failed="$state_failed"
+	if [ "$uhttpd_changed" = 1 ] && ! /etc/init.d/uhttpd restart >/dev/null 2>&1; then
+		logger -t haproxy-manager "LuCI restart failed while restoring $TARGET"
+		failed=1
+	fi
+	if [ "$haproxy_running" = 1 ]; then
+		if ! /etc/init.d/haproxy restart >/dev/null 2>&1 ||
+			! /etc/init.d/haproxy status >/dev/null 2>&1; then
+			logger -t haproxy-manager "HAProxy restart failed while restoring $TARGET"
+			failed=1
+		fi
+	else
+		if ! /etc/init.d/haproxy stop >/dev/null 2>&1 ||
+			/etc/init.d/haproxy status >/dev/null 2>&1; then
+			logger -t haproxy-manager "HAProxy stop failed while restoring $TARGET"
+			failed=1
+		fi
+	fi
+	return "$failed"
+}
+
+if [ "$SYNC" = 1 ]; then
+	restore_services || exit 1
+else
+	LOCK_HELD=0
+	trap - EXIT
+	(
+		sleep 2
+		if ! restore_services; then
+			logger -t haproxy-manager "Service restoration failed for recovery point $TARGET"
+		fi
+		operation_lock_release "$LOCK_DIR"
+	) >/dev/null 2>&1 &
+	operation_lock_set_pid "$LOCK_DIR" "$!"
+fi
+
+echo "Restored backup $TARGET. Affected services will reload shortly."

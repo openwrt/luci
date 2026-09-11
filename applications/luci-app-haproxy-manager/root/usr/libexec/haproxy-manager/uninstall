@@ -1,0 +1,70 @@
+#!/bin/sh
+set -u
+. /usr/libexec/haproxy-manager/common.sh
+
+LOCK_DIR=/var/lock/haproxy-manager.apply
+LOCK_HELD=0
+UHTTPD_CHANGED=0
+MODE="$(active_mode)"
+FAILED=0
+
+attempt=0
+while ! operation_lock_acquire "$LOCK_DIR"; do
+	[ "$attempt" -lt 15 ] || {
+		logger -t haproxy-manager "Package removal could not acquire the operation lock"
+		exit 1
+	}
+	attempt=$((attempt + 1))
+	sleep 1
+done
+LOCK_HELD=1
+trap '[ "$LOCK_HELD" != 1 ] || operation_lock_release "$LOCK_DIR"' EXIT
+
+/usr/libexec/haproxy-manager/backup >/dev/null 2>&1 ||
+	logger -t haproxy-manager "Could not create a final recovery point before package removal"
+
+if ! restore_uhttpd_bindings; then
+	logger -t haproxy-manager "Could not restore the original LuCI listener bindings"
+	FAILED=1
+fi
+if [ "$UHTTPD_CHANGED" = 1 ] && ! uci commit uhttpd; then
+	logger -t haproxy-manager "Could not commit the restored LuCI listener bindings"
+	FAILED=1
+fi
+
+if ! /usr/libexec/haproxy-manager/firewall-sync --disable >/dev/null 2>&1; then
+	logger -t haproxy-manager "Could not remove owned firewall state"
+	FAILED=1
+fi
+
+case "$MODE" in
+	generated|raw)
+		if ! /etc/init.d/haproxy stop >/dev/null 2>&1 ||
+			/etc/init.d/haproxy status >/dev/null 2>&1; then
+			logger -t haproxy-manager "Could not stop HAProxy during package removal"
+			FAILED=1
+		fi
+		if ! /etc/init.d/haproxy disable >/dev/null 2>&1; then
+			logger -t haproxy-manager "Could not disable HAProxy during package removal"
+			FAILED=1
+		fi
+	;;
+esac
+
+if [ "$UHTTPD_CHANGED" = 1 ]; then
+	/etc/init.d/uhttpd restart >/dev/null 2>&1 ||
+		{ logger -t haproxy-manager "Could not restart LuCI after restoring its listeners"; FAILED=1; }
+fi
+
+if [ "$FAILED" != 0 ]; then
+	logger -t haproxy-manager "Package runtime cleanup is incomplete; removal was stopped"
+	exit 1
+fi
+
+uci set "$CONFIG.main.active_mode=none"
+uci commit "$CONFIG"
+
+LOCK_HELD=0
+operation_lock_release "$LOCK_DIR"
+logger -t haproxy-manager "Removed package-owned HAProxy, firewall, and LuCI runtime state"
+exit 0
