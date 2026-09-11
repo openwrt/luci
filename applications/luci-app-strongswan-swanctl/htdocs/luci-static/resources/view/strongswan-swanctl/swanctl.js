@@ -383,7 +383,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifetime', _('Life Time'),
+		o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
 			_('Maximum time before the CHILD_SA gets closed, as a hard limit.')
 		);
 		o.validate = validateTimeFormat;
