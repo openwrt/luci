@@ -247,7 +247,7 @@ return view.extend({
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'overtime', _('Overtime'),
+		o = s.taboption('advanced', form.Value, 'over_time', _('Overtime'),
 			_('Limit on time to complete rekeying/reauthentication'));
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
