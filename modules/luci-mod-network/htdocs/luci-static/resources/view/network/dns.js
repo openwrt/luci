@@ -93,7 +93,7 @@ return view.extend({
 	load() {
 		return Promise.all([
 			callHostHints(),
-			uci.load('firewall')
+			L.resolveDefault(uci.load('firewall'))
 		]);
 	},
 
