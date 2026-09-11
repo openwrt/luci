@@ -1,0 +1,15 @@
+{
+	"luci-app-51sdwan": {
+		"description": "Access the local 51SDWAN edge agent",
+		"read": {
+			"ubus": {
+				"51sdwan": [ "status", "login_status" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"51sdwan": [ "login_start", "connect", "disconnect", "set_mode", "logout" ]
+			}
+		}
+	}
+}
