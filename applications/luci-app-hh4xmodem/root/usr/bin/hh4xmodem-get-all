@@ -1,0 +1,81 @@
+#!/bin/sh
+# hh4xmodem-get-all - Run pack methods in parallel batches and combine results
+# Usage:
+#   hh4xmodem-get-all              - core methods (Status page, 1 batch, ~4s)
+#   hh4xmodem-get-all full         - all methods (About+Network, 2-3 batches)
+
+core_methods="GetNetworkInfo GetSystemInfo GetSystemStatus GetConnectionState GetSimStatus GetUsageRecord"
+batch2="GetAutoValidatePinState GetSMSSettings GetSMSStorageState GetLanSettings GetUpnpSettings GetCurrentLanguage"
+batch3="GetNetworkSettings GetNetworkRegisterState GetConnectionSettings GetProfileList getCurrentProfile"
+
+if [ "${1:-}" = "full" ]; then
+    all_methods="$core_methods $batch2 $batch3"
+else
+    all_methods="$core_methods"
+fi
+
+TMPDIR=$(mktemp -d /tmp/hh4xall.XXXXXX 2>/dev/null)
+trap "rm -rf \"$TMPDIR\"" EXIT
+
+run_batch() {
+    for method in "$@"; do
+        (
+            /usr/bin/hh4xmodem-pack "$method" > "$TMPDIR/$method.raw" 2>/dev/null
+        ) &
+    done
+    wait
+}
+
+if [ "${1:-}" = "full" ]; then
+    run_batch $core_methods
+    run_batch $batch2
+    run_batch $batch3
+else
+    run_batch $core_methods
+fi
+
+# Clean each response: extract only the JSON object
+for method in $all_methods; do
+    if [ -f "$TMPDIR/$method.raw" ]; then
+        CLEAN=$(awk '
+        {
+            line = $0
+            start = index(line, "{")
+            if (start > 0) {
+                rest = substr(line, start)
+                depth = 0
+                result = ""
+                for (i = 1; i <= length(rest); i++) {
+                    c = substr(rest, i, 1)
+                    if (c == "{") depth++
+                    if (c == "}") {
+                        depth--
+                        if (depth == 0) {
+                            result = result c
+                            break
+                        }
+                    }
+                    result = result c
+                }
+                if (depth == 0 && length(result) > 0) {
+                    print result
+                }
+            }
+        }' "$TMPDIR/$method.raw" 2>/dev/null)
+        echo "$CLEAN" > "$TMPDIR/$method.json"
+    fi
+done
+
+echo '{'
+first=true
+for method in $all_methods; do
+    if [ -f "$TMPDIR/$method.json" ] && [ -s "$TMPDIR/$method.json" ]; then
+        content=$(cat "$TMPDIR/$method.json" | tr -d '\n\r')
+        if [ -n "$content" ]; then
+            if $first; then first=false; else echo ','; fi
+            printf '"%s": %s' "$method" "$content"
+        fi
+    fi
+done
+echo ''
+echo '}'

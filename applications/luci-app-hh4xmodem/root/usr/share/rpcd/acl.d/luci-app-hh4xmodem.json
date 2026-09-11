@@ -1,0 +1,73 @@
+{
+	"luci-app-hh4xmodem": {
+		"description": "Grant access to HH40V/HH41V modem management RPC methods",
+		"read": {
+			"ubus": {
+				"hh4xmodem": [
+					"get_system_info",
+					"get_status",
+					"get_signal",
+					"get_network_settings",
+					"get_usage",
+					"get_usage_settings",
+					"get_connection_state",
+					"get_sim_status",
+					"get_sms_storage",
+					"get_sms_settings",
+					"get_lan_settings",
+					"get_upnp",
+					"get_language",
+					"get_connection_settings",
+					"get_registration_state",
+					"get_profile_list",
+					"get_current_profile",
+					"get_pin_state",
+					"get_sms_data",
+					"get_sms_list",
+					"get_single_sms",
+					"get_send_sms_result",
+					"get_calllog_data",
+					"get_call_log_list",
+					"get_call_log_count",
+					"get_dashboard",
+					"get_all",
+					"get_all_full"
+				]
+			},
+			"uci": [
+				"hh4xmodem"
+			]
+		},
+		"write": {
+			"ubus": {
+				"hh4xmodem": [
+					"set_network_mode",
+					"send_connect",
+					"disconnect_modem",
+					"unlock_sim",
+					"unlock_pin",
+					"unlock_puk",
+					"change_pin",
+					"change_pin_state",
+					"clear_usage",
+					"clear_call_log",
+					"send_ussd",
+					"ussd_end_session",
+					"set_usage_settings",
+					"send_sms",
+					"delete_sms",
+					"delete_sms_bulk",
+					"reboot_modem",
+					"reset_modem",
+					"set_connection_settings",
+					"edit_profile",
+					"delete_profile",
+					"set_default_profile"
+				]
+			},
+			"uci": [
+				"hh4xmodem"
+			]
+		}
+	}
+}

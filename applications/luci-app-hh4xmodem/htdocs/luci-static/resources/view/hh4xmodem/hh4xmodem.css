@@ -1,0 +1,791 @@
+/*
+ * hh4xmodem.css - Modern UI styles for HH4xModem LuCI app
+ * Fully compatible with LuCI bootstrap-dark theme via official CSS variables.
+ * Copyright (C) 2026 HH4xModem
+ */
+
+/* ---- Page Layout ---- */
+.hh4x-dashboard,
+.hh4x-page {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.hh4x-page-header {
+	margin-bottom: 1.5em;
+	padding-bottom: 1em;
+	border-bottom: 1px solid var(--border-color-low);
+}
+
+.hh4x-page-title {
+	font-size: 1.6em;
+	font-weight: 600;
+	color: var(--text-color-high);
+	background: none;
+	margin: 0 0 0.3em 0;
+	line-height: 1.3;
+}
+
+.hh4x-page-desc {
+	color: var(--text-color-medium);
+	font-size: 0.95em;
+	margin: 0;
+}
+
+/* ---- Card Grid ---- */
+.hh4x-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.2em;
+	margin-bottom: 1.2em;
+}
+
+.hh4x-row-2col > .cbi-section {
+	flex: 1 1 calc(50% - 0.6em);
+	min-width: 320px;
+}
+
+@media (max-width: 800px) {
+	.hh4x-row-2col > .cbi-section {
+		flex: 1 1 100%;
+	}
+}
+
+/* ---- Card ---- */
+/* Use --background-color-low for cards - in light mode it's slightly darker than bg,
+   in dark mode it's slightly lighter than the dark bg, creating a subtle card effect */
+.hh4x-card {
+	background: var(--background-color-low);
+	border: 1px solid var(--border-color-low);
+	border-radius: 8px;
+	padding: 0;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+	transition: box-shadow 0.2s ease;
+}
+
+.hh4x-card:hover {
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.hh4x-card-header {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	padding: 1em 1.2em 0.6em;
+	border-bottom: 1px solid var(--border-color-low);
+}
+
+.hh4x-card-icon {
+	font-size: 1.2em;
+	line-height: 1;
+}
+
+.hh4x-card-title {
+	font-size: 1.1em;
+	font-weight: 600;
+	color: var(--text-color-high);
+	background: none;
+	margin: 0;
+	padding: 0;
+	line-height: 1.3;
+}
+
+.hh4x-card-body {
+	padding: 0.8em 1.2em 1.2em;
+	color: var(--text-color-high);
+	background: none;
+}
+
+/* ---- Connection Status ---- */
+.hh4x-status-indicator {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	padding: 0.6em 0.8em;
+	margin-bottom: 0.8em;
+	border-radius: 6px;
+	font-size: 1.1em;
+	font-weight: 500;
+}
+
+.status-connected {
+	background: color-mix(in srgb, var(--success-color-medium) 20%, transparent);
+	color: var(--success-color-high);
+}
+
+.status-disconnected {
+	background: color-mix(in srgb, var(--error-color-medium) 20%, transparent);
+	color: var(--error-color-high);
+}
+
+.hh4x-status-dot {
+	font-size: 1.4em;
+	line-height: 1;
+}
+
+/* ---- Info Rows ---- */
+.hh4x-info-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.4em 0;
+	border-bottom: 1px solid var(--border-color-low);
+	font-size: 0.92em;
+}
+
+.hh4x-info-row:last-child {
+	border-bottom: none;
+}
+
+.hh4x-info-label {
+	color: var(--text-color-high);
+	font-weight: 500;
+	flex: 0 0 45%;
+	opacity: 0.85;
+	max-width: 45%;
+}
+
+.hh4x-info-value {
+	color: var(--text-color-high);
+	background: none;
+	font-weight: 600;
+	text-align: right;
+	flex: 0 0 52%;
+	word-break: break-all;
+}
+
+/* ---- Signal Quality ---- */
+.hh4x-signal-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4em;
+	margin-bottom: 0.6em;
+}
+
+.hh4x-signal-row {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	padding: 0.3em 0;
+}
+
+.hh4x-signal-label {
+	font-size: 0.85em;
+	font-weight: 600;
+	color: var(--text-color-medium);
+	min-width: 3.5em;
+}
+
+.hh4x-signal-bar-bg {
+	flex: 1;
+	height: 8px;
+	background: var(--border-color-low);
+	border-radius: 4px;
+	overflow: hidden;
+	min-width: 60px;
+}
+
+.hh4x-signal-bar {
+	height: 100%;
+	border-radius: 4px;
+	transition: width 0.3s ease, background 0.3s ease;
+}
+
+.hh4x-signal-value {
+	font-size: 0.85em;
+	font-weight: 600;
+	min-width: 5em;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+	color: var(--text-color-high);
+	background: none;
+}
+
+/* Signal Colors - bar background only */
+.signal-good {
+	background: var(--success-color-high);
+}
+
+.signal-fair {
+	background: var(--warn-color-high);
+}
+
+.signal-poor {
+	background: var(--error-color-high);
+}
+
+.signal-unknown {
+	background: var(--border-color-low);
+}
+
+/* Signal text values inherit --text-color-high by default,
+   but we tint them slightly for visual cue */
+.hh4x-signal-value.signal-good {
+	background: none;
+	color: var(--success-color-high);
+}
+.hh4x-signal-value.signal-fair {
+	background: none;
+	color: var(--warn-color-high);
+}
+.hh4x-signal-value.signal-poor {
+	background: none;
+	color: var(--error-color-high);
+}
+.hh4x-signal-value.signal-unknown {
+	background: none;
+	color: var(--text-color-medium);
+}
+
+/* ---- Divider ---- */
+.hh4x-divider {
+	border: none;
+	border-top: 1px solid var(--border-color-low);
+	margin: 0.8em 0;
+}
+
+/* ---- Network Mode ---- */
+.hh4x-current-mode {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	padding: 0.6em 0;
+}
+
+.hh4x-mode-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5em;
+	height: 2.5em;
+	border-radius: 50%;
+	background: var(--primary-color-high);
+	color: var(--on-primary-color);
+	font-size: 1.1em;
+	font-weight: 700;
+}
+
+.hh4x-mode-label {
+	font-size: 1em;
+	font-weight: 500;
+	color: var(--text-color-high);
+	background: none;
+}
+
+/* ---- Warning ---- */
+.hh4x-warning {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5em;
+	padding: 0.7em 0.9em;
+	background: color-mix(in srgb, var(--warn-color-medium) 20%, transparent);
+	border: 1px solid var(--warn-color-low);
+	border-radius: 6px;
+	color: var(--warn-color-high);
+	font-size: 0.9em;
+	line-height: 1.4;
+}
+
+.hh4x-warning-icon {
+	font-size: 1.2em;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+/* ---- Form Elements ---- */
+.hh4x-form-group {
+	margin: 0.5em 0;
+}
+
+.hh4x-form-label {
+	display: block;
+	font-size: 0.9em;
+	font-weight: 500;
+	color: var(--text-color-high);
+	background: none;
+	margin-bottom: 0.4em;
+}
+
+.hh4x-input-group {
+	display: flex;
+	gap: 0.6em;
+	align-items: center;
+}
+
+/* ---- USSD Output ---- */
+.ussd-output {
+	margin-top: 1em;
+	padding: 1em;
+	border-radius: 6px;
+	font-family: monospace;
+	font-size: 0.95em;
+	line-height: 1.6;
+	white-space: pre-wrap;
+	word-break: break-word;
+	background: var(--background-color-medium);
+	border: 1px solid var(--border-color-medium);
+	color: var(--text-color-high);
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+/* ---- Data Usage ---- */
+.hh4x-usage-main {
+	text-align: center;
+	padding: 1em 0 0.5em;
+}
+
+.hh4x-usage-big-number {
+	font-size: 2em;
+	font-weight: 700;
+	color: var(--text-color-high);
+	background: none;
+	line-height: 1.2;
+}
+
+.hh4x-usage-sub {
+	font-size: 0.85em;
+	color: var(--text-color-medium);
+	margin-top: 0.3em;
+}
+
+.hh4x-usage-bar-group {
+	margin: 0.8em 0;
+}
+
+.hh4x-usage-bar-row {
+	display: flex;
+	justify-content: space-between;
+	font-size: 0.85em;
+	margin-bottom: 0.3em;
+}
+
+.hh4x-usage-bar-label {
+	color: var(--text-color-medium);
+}
+
+.hh4x-usage-bar-pct {
+	font-weight: 600;
+	color: var(--text-color-high);
+	background: none;
+}
+
+.hh4x-usage-bar-bg {
+	height: 12px;
+	background: var(--border-color-low);
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.hh4x-usage-bar {
+	height: 100%;
+	border-radius: 6px;
+	transition: width 0.5s ease;
+}
+
+.usage-good {
+	background: var(--success-color-high);
+}
+
+.usage-warn {
+	background: var(--warn-color-high);
+}
+
+.usage-critical {
+	background: var(--error-color-high);
+}
+
+/* ---- Call Log Styles ---- */
+.hh4x-summary-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 0.8em;
+	padding: 0.5em 0;
+}
+
+.hh4x-summary-item {
+	text-align: center;
+	padding: 0.8em 0.3em;
+	background: var(--background-color-medium);
+	border-radius: 6px;
+}
+
+.hh4x-summary-count {
+	display: block;
+	font-size: 1.6em;
+	font-weight: 700;
+	color: var(--text-color-high);
+}
+
+.hh4x-summary-label {
+	display: block;
+	font-size: 0.85em;
+	color: var(--text-color-medium);
+	margin-top: 0.2em;
+}
+
+.hh4x-call-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.hh4x-call-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.6em 0.5em;
+	border-bottom: 1px solid var(--border-color-low);
+	gap: 0.8em;
+}
+
+.hh4x-call-row:last-child {
+	border-bottom: none;
+}
+
+.hh4x-call-left {
+	display: flex;
+	align-items: center;
+	gap: 0.6em;
+	flex: 1;
+	min-width: 0;
+}
+
+.hh4x-call-right {
+	display: flex;
+	align-items: center;
+	gap: 0.8em;
+	flex-shrink: 0;
+}
+
+.hh4x-call-type-badge {
+	padding: 0.15em 0.5em;
+	border-radius: 3px;
+	font-size: 0.75em;
+	font-weight: 600;
+	text-transform: uppercase;
+	min-width: 4.5em;
+	text-align: center;
+}
+
+.hh4x-call-type-badge.call-incoming {
+	background: var(--background-color-medium);
+	color: var(--success-color-high);
+}
+
+.hh4x-call-type-badge.call-outgoing {
+	background: var(--background-color-medium);
+	color: var(--primary-color-high);
+}
+
+.hh4x-call-type-badge.call-missed {
+	background: var(--background-color-medium);
+	color: var(--error-color-high);
+}
+
+.hh4x-call-number {
+	font-weight: 600;
+	color: var(--text-color-high);
+	font-size: 0.95em;
+}
+
+.hh4x-call-date {
+	font-size: 0.85em;
+	color: var(--text-color-medium);
+	white-space: nowrap;
+}
+
+.hh4x-call-duration {
+	font-size: 0.85em;
+	color: var(--text-color-medium);
+	min-width: 5em;
+	text-align: right;
+}
+
+/* ---- SMS Styles ---- */
+.hh4x-sms-toolbar {
+	display: flex;
+	align-items: center;
+	gap: 1em;
+	padding: 0.5em 0.5em 0.7em;
+	border-bottom: 1px solid var(--border-color-low);
+}
+
+.hh4x-sms-toolbar-label {
+	display: flex;
+	align-items: center;
+	gap: 0.3em;
+	font-size: 0.9em;
+	color: var(--text-color-medium);
+	cursor: pointer;
+	user-select: none;
+}
+
+.hh4x-sms-toolbar-label input[type="checkbox"] {
+	margin: 0;
+}
+
+.hh4x-sms-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.hh4x-sms-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.5em;
+	padding: 0.7em 0.5em;
+	border-bottom: 1px solid var(--border-color-low);
+	cursor: pointer;
+	transition: background 0.15s ease;
+}
+
+.hh4x-sms-check-cell {
+	flex-shrink: 0;
+	padding-top: 0.2em;
+}
+
+.hh4x-sms-check-cell input[type="checkbox"] {
+	margin: 0;
+	cursor: pointer;
+}
+
+.hh4x-sms-body {
+	flex: 1;
+	min-width: 0;
+}
+
+.hh4x-sms-row:hover {
+	background: var(--background-color-medium);
+}
+
+.hh4x-sms-row:last-child {
+	border-bottom: none;
+}
+
+.hh4x-sms-unread {
+	border-left: 3px solid var(--primary-color-high);
+}
+
+.hh4x-sms-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.3em;
+}
+
+.hh4x-sms-sender {
+	font-weight: 600;
+	color: var(--text-color-high);
+	font-size: 0.95em;
+}
+
+.hh4x-sms-date {
+	font-size: 0.8em;
+	color: var(--text-color-medium);
+}
+
+.hh4x-sms-preview {
+	font-size: 0.88em;
+	color: var(--text-color-medium);
+	line-height: 1.4;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.hh4x-sms-id {
+	font-size: 0.75em;
+	color: var(--text-color-dim);
+	margin-top: 0.2em;
+}
+
+/* ---- SMS Modal ---- */
+.hh4x-modal-overlay {
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background: rgba(0,0,0,0.55);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em;
+}
+
+.hh4x-modal {
+	background: var(--background-color);
+	border-radius: 6px;
+	box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+	max-width: 600px;
+	width: 100%;
+	max-height: 80vh;
+	overflow-y: auto;
+}
+
+.hh4x-modal-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.8em 1em;
+	border-bottom: 1px solid var(--border-color-low);
+}
+
+.hh4x-modal-title {
+	font-size: 1em;
+	font-weight: 600;
+	color: var(--text-color-high);
+}
+
+.hh4x-modal-close {
+	padding: 0.3em 0.8em !important;
+	font-size: 0.85em !important;
+}
+
+.hh4x-modal-body {
+	padding: 1em;
+}
+
+.hh4x-modal-meta {
+	margin-bottom: 1em;
+	padding-bottom: 0.8em;
+	border-bottom: 1px solid var(--border-color-low);
+}
+
+.hh4x-modal-info {
+	display: flex;
+	gap: 0.3em;
+	margin-bottom: 0.3em;
+	font-size: 0.9em;
+}
+
+.hh4x-modal-label {
+	color: var(--text-color-medium);
+	font-weight: 500;
+}
+
+.hh4x-modal-value {
+	color: var(--text-color-high);
+}
+
+.hh4x-modal-content {
+	font-size: 0.95em;
+	line-height: 1.6;
+	color: var(--text-color-high);
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.hh4x-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5em;
+	margin-top: 1em;
+	padding-top: 0.8em;
+	border-top: 1px solid var(--border-color-low);
+}
+
+.hh4x-delete-btn {
+	padding: 0.4em 1em !important;
+	font-size: 0.88em !important;
+}
+
+@media (max-width: 600px) {
+	.hh4x-summary-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	.hh4x-call-row {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.hh4x-call-right {
+		width: 100%;
+		justify-content: space-between;
+	}
+	.hh4x-modal {
+		max-height: 90vh;
+		margin: 0.5em;
+	}
+}
+
+/* ---- Buttons ---- */
+.hh4x-card .cbi-button {
+	border-radius: 4px;
+	font-weight: 500;
+	padding: 0.45em 1.2em;
+	transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+.hh4x-card .cbi-button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* ---- Tables inside cards ---- */
+.hh4x-card .table {
+	margin: 0;
+	width: 100%;
+}
+
+.hh4x-card .tr {
+	border-bottom: 1px solid var(--border-color-low);
+}
+
+/* ---- Responsive tweaks ---- */
+@media (max-width: 600px) {
+	.hh4x-row-2col > .cbi-section {
+		min-width: 100%;
+	}
+
+	.hh4x-info-row {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.15em;
+	}
+
+	.hh4x-info-label,
+	.hh4x-info-value {
+		flex: auto;
+		max-width: 100%;
+		text-align: left;
+	}
+
+	.hh4x-signal-row {
+		flex-wrap: wrap;
+	}
+}
+
+/* ---- CBI section overrides for smooth integration ---- */
+.hh4x-card.cbi-section {
+	margin-bottom: 0;
+}
+
+.hh4x-card .cbi-section-node {
+	border: none;
+	padding: 0;
+	margin: 0;
+	background: none;
+}
+
+.hh4x-card .cbi-value {
+	border: none;
+	padding: 0;
+	margin: 0;
+	background: none;
+}
+
+/* ---- SMS Tabs ---- */
+.hh4x-sms-tabs {
+	display: flex;
+	gap: 0.3em;
+	margin-bottom: 0.8em;
+}
+
+.hh4x-sms-tab {
+	padding: 0.4em 1em;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+
+.hh4x-sms-tab-active {
+	font-weight: 600;
+}
