@@ -754,7 +754,7 @@ return view.extend({
 		}
 
 		if (Initscript.includes('band_steering_signal_threshold')) {
-			o = s.taboption('settings', form.Value, 'band_steering_signal_threshold ', _('Band steering signal threshold'), 
+			o = s.taboption('settings', form.Value, 'band_steering_signal_threshold', _('Band steering signal threshold'), 
 				_('SNR difference that the signal must be better compared to signal was on connection to node.')+' '+
 				_('Avoids conflicts between roaming and band-steering policies.')+' '+
 				_('A value of 0 disables threshold.')
