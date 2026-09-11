@@ -61,9 +61,7 @@ return L.view.extend({
 
 		// Inject CSS
 		const head = document.getElementsByTagName('head')[0];
-		const css = E('link', { 'href':
-			L.resource('lldpd/lldpd.css')
-				+ '?v=#PKG_VERSION', 'rel': 'stylesheet' });
+		const css = E('link', { 'href': L.resource('lldpd/lldpd.css'), 'rel': 'stylesheet' });
 
 		head.appendChild(css);
 	},
