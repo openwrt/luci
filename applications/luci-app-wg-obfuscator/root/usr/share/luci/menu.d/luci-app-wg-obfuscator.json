@@ -1,0 +1,14 @@
+{
+	"admin/services/wg-obfuscator": {
+		"title": "WireGuard Obfuscator",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "wg-obfuscator/settings"
+		},
+		"depends": {
+			"acl": [ "luci-app-wg-obfuscator" ],
+			"fs": { "/usr/bin/wg-obfuscator": "executable" }
+		}
+	}
+}
