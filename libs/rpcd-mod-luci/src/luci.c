@@ -345,6 +345,7 @@ static struct {
 	struct {
 		FILE *fh;
 		bool odhcpd;
+		bool has_relative_leasetime;
 	} *files;
 } lease_state = { };
 
@@ -386,6 +387,9 @@ add_leasefile(const char *path, bool is_odhcpd)
 	lease_state.files = ptr;
 	lease_state.files[lease_state.num].fh = fh;
 	lease_state.files[lease_state.num].odhcpd = is_odhcpd;
+	if (!is_odhcpd) {
+		lease_state.files[lease_state.num].has_relative_leasetime = dnsmasq_has_no_rtc();
+	}
 	lease_state.num++;
 
 	return true;
@@ -472,6 +476,24 @@ lease_open(void)
 	uci_free_context(uci);
 }
 
+static int
+dnsmasq_has_no_rtc(void)
+{
+    FILE *fd = popen("dnsmasq --version 2>/dev/null", "r");
+    if (!fd)
+        return 0;
+
+    char buf[8192] = {0};
+    char line[1024];
+
+    while (fgets(line, sizeof(line), fd))
+        strncat(buf, line, sizeof(buf) - strlen(buf) - 1);
+
+    pclose(fd);
+
+    return strstr(buf, "no-RTC") != NULL;
+}
+
 static struct lease_entry *
 lease_next(void)
 {
@@ -523,12 +545,13 @@ lease_next(void)
 					continue;
 
 				n = strtol(p, NULL, 10);
-				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
-				else if (n >= 0)
-					e.expire = 0;
-				else
-					e.expire = -1;
+				if (n < 0) {
+					e.expire = -1;  // unlimited
+				} else if (n > lease_state.now)
+					e.expire = n - lease_state.now;  // convert absolute to relative timestamp
+				} else {
+					e.expire = 0;  // expired
+				}
 
 				strtok(NULL, " \t\n"); /* id */
 
@@ -566,12 +589,20 @@ lease_next(void)
 
 				n = strtol(p, NULL, 10);
 
-				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
-				else if (n > 0)
-					e.expire = 0;
-				else
-					e.expire = -1;
+				if (n < 0) {
+					e.expire = -1;  // unlimited
+				} else {
+					if (lease_state.files[lease_state.off].has_relative_leasetime) {
+						// If RTC is disabled, n is a relative duration
+						e.expire = n;
+					} else {
+						// If hardware times are trusted, n is an absolute timestamp
+						if (n > lease_state.now)
+							e.expire = n - lease_state.now;  // convert absolute to relative timestamp
+						else if (n >= 0)
+							e.expire = 0;  // expired, cap at 0
+					}
+				}
 
 				p = strtok(NULL, " \t\n");
 
