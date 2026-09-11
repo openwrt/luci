@@ -230,7 +230,7 @@ return view.extend({
 		o.placeholder = '3';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'dpddelay', _('DPD Delay'),
+		o = s.taboption('advanced', form.Value, 'dpd_delay', _('DPD Delay'),
 			_('Interval to check liveness of a peer'));
 		o.validate = validateTimeFormat;
 		o.placeholder = '30s';
