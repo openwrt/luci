@@ -69,6 +69,12 @@ const callLuciHostHints = rpc.declare({
 	expect: { '': {} }
 });
 
+const callLuciWifiIftypes = rpc.declare({
+	object: 'luci.wifi',
+	method: 'iftypes',
+	expect: { '': {} }
+});
+
 const callIwinfoAssoclist = rpc.declare({
 	object: 'iwinfo',
 	method: 'assoclist',
@@ -360,16 +366,18 @@ function initNetworkState(refresh) {
 			L.resolveDefault(callLuciBoardJSON(), {}),
 			L.resolveDefault(callLuciNetworkDevices(), {}),
 			L.resolveDefault(callLuciWirelessDevices(), {}),
+			hasWifi ? L.resolveDefault(callLuciWifiIftypes(), {}) : L.resolveDefault({}),
 			L.resolveDefault(callLuciHostHints(), {}),
 			getProtocolHandlers(),
 			L.resolveDefault(uci.load('network')),
 			hasWifi ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
 			L.resolveDefault(uci.load('luci'))
-		]).then(function([netifd_ifaces, board_json, luci_devs, radios, hosts]) {
+		]).then(function([netifd_ifaces, board_json, luci_devs, radios, wifi_iftypes, hosts]) {
 
 			const s = {
 				isTunnel: {}, isBridge: {}, isSwitch: {}, isWifi: {},
 				ifaces: netifd_ifaces, radios: radios, hosts: hosts,
+				wifi_iftypes: wifi_iftypes,
 				netdevs: {}, bridges: {}, switches: {}, hostapd: {}
 			};
 
@@ -3721,6 +3729,49 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 				return null;
 
 		return v;
+	},
+
+	/**
+	 * Check whether a given UCI wireless `mode` value is supported
+	 * by the underlying PHY.
+	 *
+	 * @param {string} mode
+	 * The UCI `mode` value to test.
+	 *
+	 * @returns {boolean}
+	 * Returns `true` if supported, or if support information is
+	 * unavailable; `false` only when the driver explicitly does not
+	 * advertise the matching iftype.
+	 */
+	isModeSupported: function(mode) {
+		const uciModeToIftype = {
+			ap:        'ap',
+			'ap-wds':  'ap',
+			sta:       'managed',
+			'sta-wds': 'managed',
+			adhoc:     'ibss',
+			ahdemo:    'ibss',
+			mesh:      'mesh_point',
+			monitor:   'monitor',
+			wds:       'wds'
+		};
+
+		const want = uciModeToIftype[mode];
+		if (want == null)
+			return true;
+
+		const radioname = this.ubus('radio');
+		const dev = radioname ? _state.radios[radioname] : null;
+		const phy = (dev && L.isObject(dev.iwinfo)) ? dev.iwinfo.phy : null;
+
+		if (!phy || !L.isObject(_state.wifi_iftypes))
+			return true;
+
+		const entry = _state.wifi_iftypes[phy];
+		if (!L.isObject(entry) || !Array.isArray(entry.iftypes))
+			return true;
+
+		return entry.iftypes.includes(want);
 	},
 
 	/**
