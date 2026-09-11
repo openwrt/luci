@@ -1,0 +1,10 @@
+#!/bin/sh
+# uci-defaults: runs once after package install to initialize vpn_toggle config
+
+# Only initialize if config is completely empty (no sections at all)
+if ! uci -q get vpn_toggle > /dev/null 2>&1 || \
+   [ -z "$(uci -q show vpn_toggle 2>/dev/null)" ]; then
+    touch /etc/config/vpn_toggle
+fi
+
+exit 0
