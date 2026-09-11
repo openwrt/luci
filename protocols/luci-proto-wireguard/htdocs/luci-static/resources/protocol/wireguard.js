@@ -816,7 +816,8 @@ return network.registerProtocol('wireguard', {
 							'click'(ev) {
 								ev.preventDefault();
 
-								const blob = new Blob([peer_config], { type: 'text/plain' });
+								const current_config = node.querySelector('.client-config').textContent;
+								const blob = new Blob([current_config], { type: 'text/plain' });
 								const url = URL.createObjectURL(blob);
 								const a = document.createElement('a');
 
