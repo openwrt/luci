@@ -459,6 +459,88 @@ else
 fi
 
 ###############################################################################
+#                     04: getProviders JSON output                            #
+###############################################################################
+
+printf "\n##\n## 04: getProviders JSON output\n##\n\n"
+
+if [ -f "$RPC_SCRIPT" ] && [ -d "$PROVIDERS_DIR" ]; then
+	_tmp_stubs="$(mktemp -d)"
+	_tmp_empty="$(mktemp -d)"
+	mkdir -p "$_tmp_stubs/lib" "$_tmp_stubs/usr/share/libubox"
+
+	cat > "$_tmp_stubs/lib/functions.sh" << 'STUB'
+#!/bin/sh
+STUB
+
+	cat > "$_tmp_stubs/usr/share/libubox/jshn.sh" << 'STUB'
+#!/bin/sh
+json_init() { :; }
+json_load() { :; }
+json_get_var() { :; }
+json_cleanup() { :; }
+STUB
+
+	# ── directory fallback returns valid JSON ──
+	n_tests=$((n_tests + 1))
+	_fallback_out="$(
+		IPKG_INSTROOT="$_tmp_stubs" \
+		_LUCI_PROVIDERS_DIR="$PROVIDERS_DIR" \
+		_LUCI_PROVIDERS_JSON="/nonexistent/providers.json" \
+		bash "$RPC_SCRIPT" call getProviders <<< '{"name":"https-dns-proxy"}' 2>/dev/null
+	)"
+	if echo "$_fallback_out" | python3 -m json.tool >/dev/null 2>&1; then
+		pass "getProviders dir-fallback returns valid JSON"
+	else
+		fail "getProviders dir-fallback returns invalid JSON (trailing comma bug?)" \
+		     "$(echo "$_fallback_out" | tail -3)"
+	fi
+
+	# ── directory fallback includes all providers ──
+	n_tests=$((n_tests + 1))
+	_expected_count="$(find "$PROVIDERS_DIR" -maxdepth 1 -name '*.json' | wc -l | tr -d ' ')"
+	_actual_count="$(echo "$_fallback_out" | python3 -c "
+import json,sys
+try:
+    d=json.load(sys.stdin)
+    print(len(d.get('https-dns-proxy',[])))
+except Exception:
+    print(0)
+" 2>/dev/null)"
+	if [ "$_actual_count" = "$_expected_count" ]; then
+		pass "getProviders dir-fallback: all $_expected_count providers present"
+	else
+		fail "getProviders dir-fallback: expected $_expected_count providers, got ${_actual_count:-0}"
+	fi
+
+	# ── empty providers directory returns valid empty array ──
+	n_tests=$((n_tests + 1))
+	_empty_out="$(
+		IPKG_INSTROOT="$_tmp_stubs" \
+		_LUCI_PROVIDERS_DIR="$_tmp_empty" \
+		_LUCI_PROVIDERS_JSON="/nonexistent/providers.json" \
+		bash "$RPC_SCRIPT" call getProviders <<< '{"name":"https-dns-proxy"}' 2>/dev/null
+	)"
+	_empty_count="$(echo "$_empty_out" | python3 -c "
+import json,sys
+try:
+    d=json.load(sys.stdin)
+    print(len(d.get('https-dns-proxy',[])))
+except Exception:
+    print(-1)
+" 2>/dev/null)"
+	if [ "$_empty_count" = "0" ]; then
+		pass "getProviders empty dir-fallback: valid empty array"
+	else
+		fail "getProviders empty dir-fallback: expected 0 providers, got ${_empty_count:-invalid JSON}"
+	fi
+
+	rm -rf "$_tmp_stubs" "$_tmp_empty"
+else
+	echo "  SKIP: RPC script or providers directory not found"
+fi
+
+###############################################################################
 #                         SHELL SCRIPT SYNTAX                                 #
 ###############################################################################
 
