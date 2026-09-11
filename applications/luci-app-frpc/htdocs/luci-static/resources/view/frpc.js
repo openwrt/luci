@@ -184,7 +184,7 @@ return view.extend({
 				});
 			});
 
-			return E('div', { class: 'cbi-map' },
+			return E('div', {},
 				E('fieldset', { class: 'cbi-section'}, [
 					E('p', { id: 'service_status' },
 						_('Collecting data ...'))
