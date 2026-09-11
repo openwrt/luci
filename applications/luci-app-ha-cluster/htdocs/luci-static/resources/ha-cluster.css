@@ -1,0 +1,114 @@
+/* SPDX-License-Identifier: Apache-2.0
+ * Copyright (c) 2025-2026 Pierre Gaufillet <pierre.gaufillet@bergamote.eu>
+ */
+
+/* HA Cluster Status Styles */
+
+.ha-cluster-status-overview {
+	display: flex;
+	justify-content: space-around;
+	margin: 1em 0;
+}
+
+.ha-cluster-status-card {
+	flex: 1;
+	padding: 1em;
+	margin: 0 0.5em;
+	background: #f8f9fa;
+	border-radius: 4px;
+	border-left: 4px solid #007bff;
+	text-align: center;
+}
+
+.ha-cluster-status-card h4 {
+	margin: 0 0 0.5em 0;
+	color: #6c757d;
+	font-size: 0.9em;
+	text-transform: uppercase;
+}
+
+.ha-cluster-status-value {
+	font-size: 2em;
+	font-weight: bold;
+}
+
+.ha-cluster-state-master {
+	color: #28a745;
+}
+
+.ha-cluster-state-backup {
+	color: #ffc107;
+}
+
+.ha-cluster-state-fault {
+	color: #dc3545;
+}
+
+.ha-cluster-state-unknown {
+	color: #6c757d;
+}
+
+.ha-cluster-peer-online {
+	color: #28a745;
+}
+
+.ha-cluster-peer-offline {
+	color: #dc3545;
+}
+
+.ha-cluster-service-running {
+	color: #28a745;
+}
+
+.ha-cluster-service-stopped {
+	color: #dc3545;
+}
+
+/* Simple form hints */
+.ha-cluster-hint {
+	display: block;
+	margin-top: 0.5em;
+	padding: 0.5em;
+	background: #e7f3ff;
+	border-left: 3px solid #2196f3;
+	font-size: 0.9em;
+}
+
+.ha-cluster-warning {
+	background: #fff3cd;
+	border-left-color: #ffc107;
+	color: #856404;
+}
+
+.ha-cluster-error {
+	background: #f8d7da;
+	border-left-color: #dc3545;
+	color: #721c24;
+}
+
+.ha-cluster-success {
+	background: #d4edda;
+	border-left-color: #28a745;
+	color: #155724;
+}
+
+/* Status indicators */
+.ha-cluster-indicator {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	margin-right: 0.5em;
+}
+
+.ha-cluster-indicator.online {
+	background-color: #28a745;
+}
+
+.ha-cluster-indicator.offline {
+	background-color: #dc3545;
+}
+
+.ha-cluster-indicator.warning {
+	background-color: #ffc107;
+}

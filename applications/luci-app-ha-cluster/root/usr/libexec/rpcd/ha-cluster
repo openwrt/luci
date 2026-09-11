@@ -1,0 +1,488 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2025-2026 Pierre Gaufillet <pierre.gaufillet@bergamote.eu>
+
+. /usr/share/libubox/jshn.sh
+
+case "$1" in
+	list)
+		# List available methods and their parameters
+		json_init
+		json_add_object "generate_key"
+		json_close_object
+		json_add_object "status"
+		json_close_object
+		json_add_object "apply"
+		json_close_object
+		json_add_object "get_source_for_peer"
+		json_add_string peer_address "str"
+		json_close_object
+		json_dump
+		;;
+	call)
+		case "$2" in
+			generate_key)
+				# Generate secure 256-bit encryption key
+				key=$(hexdump -n 32 -v -e '1/1 "%02x"' /dev/urandom 2>/dev/null)
+
+				if [ -z "$key" ] || [ ${#key} -ne 64 ]; then
+					json_init
+					json_add_boolean success 0
+					json_add_string error "Failed to generate key"
+					json_dump
+					exit 1
+				fi
+
+				json_init
+				json_add_boolean success 1
+				json_add_string key "$key"
+				json_dump
+				;;
+
+			status)
+				# Get comprehensive cluster status
+
+				# Initialize variables
+				node_role="UNKNOWN"
+				cluster_state="STOPPED"
+				services_ok=1
+				peers_online=0
+				peers_total=0
+				instance_roles=""
+
+				# Check if ha-cluster is enabled
+				ha_enabled=$(uci -q get ha-cluster.config.enabled)
+
+				if [ "$ha_enabled" != "1" ]; then
+					cluster_state="STOPPED"
+				else
+					# Get keepalived status via ubus
+					keepalived_data=$(ubus call keepalived dump 2>/dev/null)
+
+					if [ -n "$keepalived_data" ]; then
+						# Parse per-instance VRRP state (in subshell to avoid state pollution)
+						# Output format: instance_name:STATE per line
+						instance_roles=$(
+							. /usr/share/libubox/jshn.sh
+							json_load "$keepalived_data" 2>/dev/null || exit 1
+							json_select status 2>/dev/null || exit 1
+							json_get_keys instances
+
+							for instance in $instances; do
+								json_select "$instance" || continue
+
+								inst_role="UNKNOWN"
+								json_get_var vrrp_state state 2>/dev/null
+								if [ -n "$vrrp_state" ]; then
+									case "$vrrp_state" in
+										[Mm][Aa][Ss][Tt][Ee][Rr]) inst_role="MASTER" ;;
+										[Bb][Aa][Cc][Kk][Uu][Pp]) inst_role="BACKUP" ;;
+										[Ff][Aa][Uu][Ll][Tt]) inst_role="FAULT" ;;
+									esac
+								else
+									# Fallback: infer state from statistics
+									json_select stats 2>/dev/null
+									if [ $? -eq 0 ]; then
+										json_get_var become_master become_master
+										json_get_var release_master release_master
+										if [ "$become_master" -gt "$release_master" ]; then
+											inst_role="MASTER"
+										else
+											inst_role="BACKUP"
+										fi
+										json_select ..
+									fi
+								fi
+
+								echo "$instance:$inst_role"
+								json_select ..
+							done
+						)
+
+						# Compute aggregate role from per-instance roles
+						has_fault=0
+						has_master=0
+						has_backup=0
+						instance_count=0
+						for entry in $instance_roles; do
+							role_val="${entry##*:}"
+							case "$role_val" in
+								FAULT) has_fault=1 ;;
+								MASTER) has_master=1 ;;
+								BACKUP) has_backup=1 ;;
+							esac
+							instance_count=$((instance_count + 1))
+						done
+
+						if [ "$has_fault" -eq 1 ]; then
+							node_role="FAULT"
+						elif [ "$has_master" -eq 1 ] && [ "$has_backup" -eq 0 ]; then
+							node_role="MASTER"
+						elif [ "$has_backup" -eq 1 ] && [ "$has_master" -eq 0 ]; then
+							node_role="BACKUP"
+						elif [ "$has_master" -eq 1 ] && [ "$has_backup" -eq 1 ]; then
+							node_role="MIXED"
+						elif [ "$instance_count" -eq 0 ]; then
+							node_role="UNKNOWN"
+						fi
+					else
+						node_role="FAULT"
+						services_ok=0
+					fi
+
+					# Ensure node_role is always set (fallback if parsing failed)
+					node_role="${node_role:-UNKNOWN}"
+
+					# Check critical services based on configuration
+					# keepalived is always mandatory
+					if ! pgrep "keepalived" >/dev/null 2>&1; then
+						services_ok=0
+					fi
+
+					# owsync is only required if sync_method='owsync'
+					sync_method=$(uci -q get ha-cluster.config.sync_method)
+					if [ "$sync_method" = "owsync" ]; then
+						if ! pgrep "owsync" >/dev/null 2>&1; then
+							services_ok=0
+						fi
+					fi
+
+					# lease-sync is required if any service has sync_leases='1'
+					lease_sync_required=0
+					for svc_section in $(uci show ha-cluster 2>/dev/null | grep "=service$" | cut -d. -f2 | cut -d= -f1); do
+						sync_leases=$(uci -q get "ha-cluster.$svc_section.sync_leases")
+						if [ "$sync_leases" = "1" ]; then
+							lease_sync_required=1
+							break
+						fi
+					done
+					if [ "$lease_sync_required" -eq 1 ]; then
+						if ! pgrep "lease-sync" >/dev/null 2>&1; then
+							services_ok=0
+						fi
+					fi
+
+
+				fi
+
+				# Get sync statistics (MVP: timestamps only)
+				config_last_sync=0
+				lease_last_sync=0
+
+				# Check owsync database for last sync timestamp
+				# BusyBox doesn't support stat -c, use date -r instead
+				if [ -f /etc/owsync/owsync.db ]; then
+					config_last_sync=$(date -r /etc/owsync/owsync.db +%s 2>/dev/null || echo 0)
+				fi
+
+				# Check dnsmasq lease file for last sync timestamp
+				# Get leasefile location from UCI (default: /tmp/dhcp.leases)
+				leasefile=$(uci -q get dhcp.@dnsmasq[0].leasefile)
+				leasefile=${leasefile:-/tmp/dhcp.leases}
+				if [ -f "$leasefile" ]; then
+					lease_last_sync=$(date -r "$leasefile" +%s 2>/dev/null || echo 0)
+				fi
+
+				# Build peer list and check connectivity in a single pass
+				json_init
+				json_add_string role "$node_role"
+
+				# Add per-instance roles
+				json_add_object instances
+				for entry in $instance_roles; do
+					inst_name="${entry%%:*}"
+					inst_role="${entry##*:}"
+					# Validate values
+					case "$inst_role" in
+						MASTER|BACKUP|FAULT|UNKNOWN) ;;
+						*) inst_role="UNKNOWN" ;;
+					esac
+					json_add_string "$inst_name" "$inst_role"
+				done
+				json_close_object
+
+				json_add_array peers
+				for peer_section in $(uci show ha-cluster 2>/dev/null | grep "=peer$" | cut -d. -f2 | cut -d= -f1); do
+					peer_name=$(uci -q get "ha-cluster.$peer_section.name")
+					peer_addr=$(uci -q get "ha-cluster.$peer_section.address")
+					if [ -n "$peer_addr" ]; then
+						peers_total=$((peers_total + 1))
+						peer_online=0
+						case "$peer_addr" in
+							*:*) ping_cmd="ping6" ;;
+							*) ping_cmd="ping" ;;
+						esac
+						if $ping_cmd -c 1 -W 1 "$peer_addr" >/dev/null 2>&1; then
+							peer_online=1
+							peers_online=$((peers_online + 1))
+							last_seen="Just now"
+						else
+							last_seen="Unreachable"
+						fi
+
+						json_add_object
+						json_add_string name "${peer_name:-$peer_section}"
+						json_add_string address "$peer_addr"
+						json_add_boolean online "$peer_online"
+						json_add_string last_seen "$last_seen"
+						json_close_object
+					fi
+				done
+				json_close_array
+
+				# Calculate cluster health (after single-pass peer ping)
+				if [ "$ha_enabled" != "1" ]; then
+					cluster_state="STOPPED"
+				elif [ "$services_ok" -eq 0 ]; then
+					cluster_state="FAULTY"
+				elif [ "$peers_online" -lt "$peers_total" ] && [ "$peers_total" -gt 0 ]; then
+					cluster_state="DEGRADED"
+				elif [ "$services_ok" -eq 1 ]; then
+					cluster_state="HEALTHY"
+				fi
+				json_add_string state "$cluster_state"
+
+
+				# Add service status for frontend display with required flag
+				# Determine which services are required based on config
+				sync_method=$(uci -q get ha-cluster.config.sync_method)
+				lease_sync_required=0
+				for svc_check in $(uci show ha-cluster 2>/dev/null | grep "=service$" | cut -d. -f2 | cut -d= -f1); do
+					if [ "$(uci -q get ha-cluster.$svc_check.sync_leases)" = "1" ]; then
+						lease_sync_required=1
+						break
+					fi
+				done
+
+				json_add_object services
+
+				# keepalived - always required
+				json_add_object "keepalived"
+				json_add_boolean required 1
+				svc_pid=$(pgrep -o "keepalived" 2>/dev/null)
+				if [ -n "$svc_pid" ]; then
+					json_add_boolean running 1
+					json_add_int pid "$svc_pid"
+					start_time=$(awk '{print $22}' /proc/$svc_pid/stat 2>/dev/null)
+					if [ -n "$start_time" ]; then
+						uptime_jiffies=$(awk '{print $1 * 100}' /proc/uptime 2>/dev/null)
+						uptime_sec=$(awk "BEGIN{print int(($uptime_jiffies - $start_time) / 100)}")
+						json_add_int uptime "$uptime_sec"
+					else
+						json_add_int uptime 0
+					fi
+				else
+					json_add_boolean running 0
+					json_add_int pid 0
+					json_add_int uptime 0
+				fi
+				json_close_object
+
+				# owsync - required only if sync_method='owsync'
+				json_add_object "owsync"
+				if [ "$sync_method" = "owsync" ]; then
+					json_add_boolean required 1
+				else
+					json_add_boolean required 0
+				fi
+				svc_pid=$(pgrep -o "owsync" 2>/dev/null)
+				if [ -n "$svc_pid" ]; then
+					json_add_boolean running 1
+					json_add_int pid "$svc_pid"
+					start_time=$(awk '{print $22}' /proc/$svc_pid/stat 2>/dev/null)
+					if [ -n "$start_time" ]; then
+						uptime_jiffies=$(awk '{print $1 * 100}' /proc/uptime 2>/dev/null)
+						uptime_sec=$(awk "BEGIN{print int(($uptime_jiffies - $start_time) / 100)}")
+						json_add_int uptime "$uptime_sec"
+					else
+						json_add_int uptime 0
+					fi
+				else
+					json_add_boolean running 0
+					json_add_int pid 0
+					json_add_int uptime 0
+				fi
+				json_close_object
+
+				# lease-sync - required if any service has sync_leases='1'
+				json_add_object "lease-sync"
+				if [ "$lease_sync_required" -eq 1 ]; then
+					json_add_boolean required 1
+				else
+					json_add_boolean required 0
+				fi
+				svc_pid=$(pgrep -o "lease-sync" 2>/dev/null)
+				if [ -n "$svc_pid" ]; then
+					json_add_boolean running 1
+					json_add_int pid "$svc_pid"
+					start_time=$(awk '{print $22}' /proc/$svc_pid/stat 2>/dev/null)
+					if [ -n "$start_time" ]; then
+						uptime_jiffies=$(awk '{print $1 * 100}' /proc/uptime 2>/dev/null)
+						uptime_sec=$(awk "BEGIN{print int(($uptime_jiffies - $start_time) / 100)}")
+						json_add_int uptime "$uptime_sec"
+					else
+						json_add_int uptime 0
+					fi
+				else
+					json_add_boolean running 0
+					json_add_int pid 0
+					json_add_int uptime 0
+				fi
+				json_close_object
+
+				json_close_object
+
+				json_add_object sync
+				json_add_int config_last_sync "$config_last_sync"
+				json_add_int lease_last_sync "$lease_last_sync"
+				json_close_object
+
+				json_dump
+				;;
+
+			get_source_for_peer)
+				# Get recommended source address for reaching a peer
+				# Uses kernel route resolution, filters out VIPs
+
+				# Parse input
+				json_load "$3"
+				json_get_var peer_address peer_address
+
+				if [ -z "$peer_address" ]; then
+					json_init
+					json_add_boolean success 0
+					json_add_string error "peer_address required"
+					json_dump
+					exit 1
+				fi
+
+				# Validate peer_address (prevent injection)
+				case "$peer_address" in
+					*[!0-9a-fA-F.:]*)
+						json_init
+						json_add_boolean success 0
+						json_add_string error "Invalid peer address"
+						json_dump
+						exit 1
+						;;
+				esac
+
+				# Detect address family (IPv6 contains colons)
+				case "$peer_address" in
+					*:*) addr_family="6" ;;
+					*)   addr_family="4" ;;
+				esac
+
+				# Get kernel's preferred source via ip route get
+				if [ "$addr_family" = "6" ]; then
+					route_output=$(ip -6 route get "$peer_address" 2>/dev/null)
+				else
+					route_output=$(ip -4 route get "$peer_address" 2>/dev/null)
+				fi
+				if [ -z "$route_output" ]; then
+					json_init
+					json_add_boolean success 0
+					json_add_string error "No route to peer"
+					json_dump
+					exit 1
+				fi
+
+				# Parse: "192.168.1.2 via 10.0.0.1 dev eth0 src 10.0.0.2"
+				# or: "192.168.1.2 dev eth0 src 192.168.1.1"
+				kernel_src=$(echo "$route_output" | grep -oE 'src [0-9a-fA-F.:]+' | head -1 | cut -d' ' -f2)
+				route_dev=$(echo "$route_output" | grep -oE 'dev [^ ]+' | head -1 | cut -d' ' -f2)
+
+				if [ -z "$kernel_src" ] || [ -z "$route_dev" ]; then
+					json_init
+					json_add_boolean success 0
+					json_add_string error "Could not determine source"
+					json_dump
+					exit 1
+				fi
+
+				# Build VIP set from UCI
+				vip_list=""
+				for vip_section in $(uci show ha-cluster 2>/dev/null | grep "=vip$" | cut -d. -f2 | cut -d= -f1); do
+					vip_addr=$(uci -q get "ha-cluster.$vip_section.address")
+					if [ -n "$vip_addr" ]; then
+						vip_list="$vip_list $vip_addr"
+					fi
+				done
+
+				# Check if kernel_src is a VIP
+				is_vip=0
+				for vip in $vip_list; do
+					if [ "$kernel_src" = "$vip" ]; then
+						is_vip=1
+						break
+					fi
+				done
+
+				recommended_src="$kernel_src"
+
+				if [ "$is_vip" -eq 1 ]; then
+					# Find alternative address on same interface, same address family
+					# Get addresses on route_dev matching the peer's address family
+					alt_src=""
+					if [ "$addr_family" = "6" ]; then
+						addr_list=$(ip -6 -o addr show dev "$route_dev" 2>/dev/null | awk '{print $4}' | cut -d/ -f1)
+					else
+						addr_list=$(ip -4 -o addr show dev "$route_dev" 2>/dev/null | awk '{print $4}' | cut -d/ -f1)
+					fi
+					for addr in $addr_list; do
+						# Skip loopback, link-local
+						case "$addr" in
+							127.*|::1|fe80:*) continue ;;
+						esac
+						# Skip VIPs
+						skip=0
+						for vip in $vip_list; do
+							if [ "$addr" = "$vip" ]; then
+								skip=1
+								break
+							fi
+						done
+						if [ "$skip" -eq 0 ]; then
+							alt_src="$addr"
+							break
+						fi
+					done
+
+					if [ -n "$alt_src" ]; then
+						recommended_src="$alt_src"
+					fi
+				fi
+
+				json_init
+				json_add_boolean success 1
+				json_add_string source "$recommended_src"
+				json_add_string interface "$route_dev"
+				json_add_boolean is_vip_filtered "$is_vip"
+				json_dump
+				;;
+
+			apply)
+				# Reload ha-cluster service
+				if /etc/init.d/ha-cluster reload >/dev/null 2>&1; then
+					json_init
+					json_add_boolean success 1
+					json_dump
+				else
+					json_init
+					json_add_boolean success 0
+					json_add_string error "Failed to reload service"
+					json_dump
+					exit 1
+				fi
+				;;
+
+			*)
+				json_init
+				json_add_boolean success 0
+				json_add_string error "Unknown method: $2"
+				json_dump
+				exit 1
+				;;
+		esac
+		;;
+esac
