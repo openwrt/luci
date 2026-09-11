@@ -1,0 +1,15 @@
+{
+	"luci-mod-notification": {
+		"description": "Grant access system notification",
+		"read": {
+			"ubus": {
+				"system.notification": [ "remove", "list", "flush" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"system.notification": [ "remove", "flush" ]
+			}
+		}
+	}
+}
