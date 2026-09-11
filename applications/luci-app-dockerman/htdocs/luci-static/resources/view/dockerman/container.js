@@ -1190,7 +1190,7 @@ return dm2.dv.extend({
 				]),
 				E('div', {
 					'id': 'container-logs-text',
-					'style': 'width: 100%; font-family: monospace; padding: 10px; border: 1px solid #ccc; overflow: auto;',
+					'style': 'width: 100%; font-family: monospace; padding: 10px; border: 1px solid #ccc; overflow: auto; white-space: pre-wrap;',
 					'innerHTML': ''
 				})
 			]);
