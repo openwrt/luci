@@ -373,7 +373,7 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
+		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
 			_('Interval before a CHILD_SA is rekeyed.') + ' ' +
 			_('Also used to derive lifetime (110% of this value).') + '<br />' +
 			_('If not configured, the default value is "1h".')
