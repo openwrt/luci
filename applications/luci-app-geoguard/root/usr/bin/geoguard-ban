@@ -1,0 +1,103 @@
+#!/bin/sh
+# geoguard-ban: LuCI + SSH 登入防爆破（參數全讀 UCI，無寫死）
+# 免封三層：① ban_exempt 清單（UI 可改，預含保留段）② 白名單檔 ③ ddns state
+# 由 /etc/init.d/geoguard-ban（procd，間隔讀 ban_interval）呼叫
+SET=geoguard_ban
+CFG=geoguard
+nft list set inet fw4 $SET >/dev/null 2>&1 || exit 0
+
+g() { uci get $CFG.main."$1" 2>/dev/null; }
+num() { case "$1" in ''|*[!0-9]*) echo "$2" ;; *) echo "$1" ;; esac; }
+
+EN=$(g ban_enabled); [ -z "$EN" ] && EN=1
+[ "$EN" = "0" ] && exit 0
+
+# guard 自癒：wan 介面漂移（任何存檔路徑漏了重產都自動修，每 60 秒對一次）
+GWANT=$(g ban_wan_if)
+if [ -z "$GWANT" ]; then
+  for zi in $(uci show firewall 2>/dev/null | grep -oE '@zone\[[0-9]+\]=zone' | grep -oE '[0-9]+'); do
+    if [ "$(uci -q get firewall.@zone[$zi].name 2>/dev/null)" = "wan" ]; then
+      ZNET=$(uci -q get firewall.@zone[$zi].network 2>/dev/null | awk '{print $1}')
+      break
+    fi
+  done
+  [ -n "$ZNET" ] && GWANT=$(ubus call "network.interface.$ZNET" status 2>/dev/null | jsonfilter -e '@.l3_device' 2>/dev/null)
+  [ -z "$GWANT" ] && GWANT=$(ip route show default 2>/dev/null | sed -n 's/.*dev \([^ ]*\).*/\1/p' | head -n 1)
+fi
+if [ -n "$GWANT" ]; then
+  GHAVE=$(grep -oE 'iifname "[^"]*"' /etc/nftables.d/10-geoguard-guard.nft 2>/dev/null | head -n 1 | cut -d'"' -f2)
+  [ "$GWANT" != "$GHAVE" ] && /usr/bin/geoguard-ban-guard >/dev/null 2>&1
+fi
+MAX=$(num "$(g ban_maxretry)" 8)
+FIND=$(num "$(g ban_findtime)" 5)
+BANH=$(num "$(g ban_bantime)" 2)
+WEB=$(g ban_web); [ -z "$WEB" ] && WEB=1
+SSHO=$(g ban_ssh); [ -z "$SSHO" ] && SSHO=1
+WHITE=$(g white_name); [ -z "$WHITE" ] && WHITE=CustomAllow
+WLFILE="/etc/luci-uploads/$WHITE.cidr"
+STATE="/etc/luci-uploads/company-ddns.list"
+
+# CIDR 成員判斷（awk，stdin 逐行：CIDR 或裸 IP）
+in_list() {
+  # $1=ip, stdin=list
+  awk -v ip="$1" '
+  function i2n(a, p, n) { n = split(a, p, "."); return p[1]*16777216+p[2]*65536+p[3]*256+p[4]; }
+  BEGIN { needle = i2n(ip); }
+  { line = $1;
+    if (line ~ /\//) { split(line, a, "/"); b = i2n(a[1]); m = a[2]+0;
+      if (m == 0) next;
+      if (rshift(needle, 32-m) == rshift(b, 32-m)) { found = 1; exit; } }
+    else if (line == ip) { found = 1; exit; } }
+  END { exit (found ? 0 : 1); }'
+}
+
+in_exempt() {
+  EX=$(g ban_exempt)
+  [ -z "$EX" ] && return 1
+  # shellcheck disable=SC2086
+  printf '%s\n' $EX | in_list "$1"
+}
+
+in_ddns() {
+  [ -f "$STATE" ] || return 1
+  awk -v ip="$1" '$2 == ip { found = 1; exit; } END { exit (found ? 0 : 1); }' "$STATE"
+}
+
+# N 分鐘時間窗
+WIN=/tmp/geoguard-ban-window
+: > "$WIN"
+i=0
+while [ $i -lt "$FIND" ]; do
+  T=$(date -d "@$(( $(date +%s) - i * 60 ))" '+%b %e %H:%M' 2>/dev/null | tr -s ' ')
+  [ -n "$T" ] && echo "$T" >> "$WIN"
+  i=$((i + 1))
+done
+[ -s "$WIN" ] || exit 0
+
+ban_ip() {
+  ip="$1"; tag="$2"
+  case "$ip" in ""|0.0.0.0) return 0 ;; esac
+  in_exempt "$ip" && return 0
+  [ -f "$WLFILE" ] && in_list "$ip" < "$WLFILE" && return 0
+  in_ddns "$ip" && return 0
+  if ! nft get element inet fw4 $SET "{ $ip }" >/dev/null 2>&1; then
+    nft add element inet fw4 $SET "{ $ip timeout ${BANH}h }" \
+      && logger -t geoguard-ban "banned $ip for ${BANH}h ($tag brute force)"
+  fi
+}
+
+LOG=$(logread 2>/dev/null | tr -s ' ')
+
+if [ "$WEB" = "1" ]; then
+  echo "$LOG" | grep 'failed login' | grep -F -f "$WIN" \
+    | sed -n 's/.* from \([0-9][0-9.]*\)[^0-9.]*$/\1/p' \
+    | sort | uniq -c | awk -v max="$MAX" '$1>=max{print $2}' \
+    | while read -r ip; do ban_ip "$ip" "LuCI"; done
+fi
+
+if [ "$SSHO" = "1" ]; then
+  echo "$LOG" | grep -E 'bad password attempt|Login attempt for nonexistent' | grep -F -f "$WIN" \
+    | sed -n 's/.* from \([0-9][0-9.]*\)[: ].*$/\1/p' \
+    | sort | uniq -c | awk -v max="$MAX" '$1>=max{print $2}' \
+    | while read -r ip; do ban_ip "$ip" "SSH"; done
+fi

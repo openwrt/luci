@@ -1,0 +1,248 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-geoguard\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Invalid format: enter a single IP (e.g. 203.0.113.10), CIDR (e.g. 203.0.113.0/24) or range (e.g. 203.0.113.10-203.0.113.50)"
+msgstr "格式錯誤：請輸入單一 IP（如 203.0.113.10）、CIDR（如 203.0.113.0/24）或範圍（如 203.0.113.10-203.0.113.50）"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Login Guard"
+msgstr "登入防護"
+
+msgid "IP Sets"
+msgstr "IPs 設定"
+
+msgid "Log"
+msgstr "記錄"
+
+msgid "Selected:"
+msgstr "已勾選："
+
+msgid "(none selected)"
+msgstr "（尚未勾選）"
+
+msgid "Search, e.g. TW 台灣 TAIWAN"
+msgstr "搜尋，如 TW 台灣 TAIWAN"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Select all"
+msgstr "全選"
+
+msgid "Clear selected"
+msgstr "清除已選"
+
+msgid "Code"
+msgstr "編碼"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Select countries"
+msgstr "選擇國家"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Add"
+msgstr "新增"
+
+msgid "Whitelist beyond countries: IP / CIDR / Range"
+msgstr "除國家外要包含的 白名單：IP / CIDR / 範圍"
+
+msgid "Formats: single IP, CIDR, A-B range. No country + IPs = pure whitelist."
+msgstr "格式：單一 IP、CIDR、A-B 範圍。國家全空＋有 IP＝純白名單。"
+
+msgid "{cc} becomes the lowercase code, {CC} uppercase."
+msgstr "{cc} 會換成國碼小寫，{CC} 大寫。"
+
+msgid "Falls back on failure; keeps the old file if both fail."
+msgstr "失敗改抓備用；抓不到沿用舊檔。"
+
+msgid "Merged set name (countries + custom whitelist)"
+msgstr "多國家+自訂白名單IP的總集合名稱"
+
+msgid "Rule: start with a letter; letters/digits/_/- only. File shares the set name; old file kept after rename."
+msgstr "規則：英文開頭，僅英文數字底線連字號。檔名與 set 同名；改名舊檔保留。"
+
+msgid "Whitelist set name"
+msgstr "白名單集合名稱"
+
+msgid "Whitelist lives in its own set, visible under Firewall IP Sets. Same rules as above."
+msgstr "白名單獨立成一個集合，防火牆 IP 集合頁可見，規則同上。"
+
+msgid "Daily"
+msgstr "每天"
+
+msgid "Weekly (Sun)"
+msgstr "每週日"
+
+msgid "Monthly (1st)"
+msgstr "每月 1 日"
+
+msgid "Auto-update schedule"
+msgstr "自動更新清單頻率"
+
+msgid "Hour"
+msgstr "時"
+
+msgid "Minute"
+msgstr "分"
+
+msgid "Enable auto-update"
+msgstr "啟用自動更新"
+
+msgid "This page only builds IP set files and never changes firewall rules."
+msgstr "本頁只負責產生 IP 集合檔，不動防火牆任何規則。"
+
+msgid "Apply: Network → Firewall → Port Forwards → Add → Advanced → pick the set in IPSet, then Save & Apply."
+msgstr "生效方式：網路→防火牆→連接埠轉發→新增→進階設定→IPSet 下拉選集合，存檔套用。"
+
+msgid "Fallback (SSH): uci set firewall.@redirect[N].ipset=set name, commit, then fw4 reload."
+msgstr "備用（SSH）：uci set firewall.@redirect[N].ipset＝集合名稱，commit 後 fw4 reload。"
+
+msgid "Bad set name (must start with a letter: letters/digits/_/- only). Settings saved, update skipped."
+msgstr "集合名稱不合規格（英文字母開頭，僅英文數字底線連字號），設定已存檔但不會執行更新"
+
+msgid "Update failed: %s"
+msgstr "更新失敗：%s"
+
+msgid "unknown error"
+msgstr "未知錯誤"
+
+msgid "Failed: %s"
+msgstr "執行失敗：%s"
+
+msgid "Update IP Sets Now"
+msgstr "立即更新 IP 集合"
+
+msgid "Update and Merge Now"
+msgstr "立即更新並合併"
+
+msgid "Save Settings"
+msgstr "儲存設定"
+
+msgid "Clear Update History"
+msgstr "清除更新歷史"
+
+msgid "Update history cleared"
+msgstr "更新歷史已清除"
+
+msgid "Disabling stops the guard service; active bans stay until expiry."
+msgstr "關閉即停掉防護服務，已封鎖的不自動解封。"
+
+msgid "Fails to ban"
+msgstr "失敗幾次封鎖"
+
+msgid "Ban time (hours)"
+msgstr "封鎖多久（小時）"
+
+msgid "Guard LuCI web login"
+msgstr "防護 LuCI 網頁登入"
+
+msgid "Guard SSH login"
+msgstr "防護 SSH 登入"
+
+msgid "Enter an IP or CIDR (e.g. 192.168.0.0/16)"
+msgstr "請輸入 IP 或 CIDR（如 192.168.0.0/16）"
+
+msgid "IPs/subnets here are never banned. Defaults already cover reserved and private ranges. Two more auto-exempt sources need no entry here: IP whitelist (IP Sets tab) and DDNS whitelist (below), whose IPs follow automatically."
+msgstr "此清單內的 IP／網段永久免於封鎖。系統預設已含保留位址與內網段。另有兩類自動免封，無需在此重複填寫：IP 白名單（IPs 設定籤）與 DDNS 白名單（本籤下方），後者 IP 變動時自動跟隨。"
+
+msgid "DDNS allowlist"
+msgstr "DDNS 白名單清單"
+
+msgid "Enter a valid domain (e.g. home.example.org)"
+msgstr "請輸入合法網域名稱（如 home.example.org）"
+
+msgid "Add multiple entries; each tracked separately. For guard exemption only; never touches IP sets."
+msgstr "可新增多筆；每筆獨立追 IP。本清單只適用防護免封，不動 IP 集合。"
+
+msgid "DDNS check interval (min)"
+msgstr "DDNS 檢查間隔（分鐘）"
+
+msgid "WAN interface (auto-detect)"
+msgstr "外網介面（自動偵測）"
+
+msgid "Bad interface name"
+msgstr "介面名稱格式錯誤"
+
+msgid "Leave empty to auto-detect (firewall wan zone → system → default route). Fill in manually only if detection fails (e.g. pppoe-wan)."
+msgstr "留空自動偵測（firewall wan 區→系統→預設路由）。只有自動偵測失靈才手填（如 pppoe-wan）。"
+
+msgid "Banned = invisible: every packet from the WAN (all ports, TCP/UDP/ICMP) is dropped at ingress, auto-released after %s hours."
+msgstr "被封鎖＝整台對他消失：外網進來的所有封包（所有 port、TCP/UDP/ICMP）在源頭全丟，%s 小時自動解封。"
+
+msgid "Loading status…"
+msgstr "狀態載入中…"
+
+msgid "Guard settings saved and restarted"
+msgstr "防護設定已儲存並重啟"
+
+msgid "Guard restart failed: %s"
+msgstr "重啟防護失敗：%s"
+
+msgid "All unbanned"
+msgstr "已全部解封"
+
+msgid "Save & Restart Guard"
+msgstr "儲存防護設定並重啟"
+
+msgid "GeoGuard"
+msgstr "國門守衛 GeoGuard"
+
+msgid "GeoGuard Ver:"
+msgstr "國門守衛 GeoGuard Ver:"
+
+msgid "Never-block whitelist"
+msgstr "永不封鎖的白名單"
+
+msgid "Within (minutes)"
+msgstr "在幾（分鐘）內"
+
+msgid "Log review and ban interval (sec)"
+msgstr "檢視記錄並封鎖的間隔（秒）"
+
+msgid "IP Geolocation - Primary Feed"
+msgstr "IP地理定位-主要訂閱源"
+
+msgid "IP Geolocation - Backup Feed"
+msgstr "IP地理定位-備用訂閱源"
+
+msgid "Enable this option to block IP addresses with too many failed logins"
+msgstr "啟用此選項來封鎖登入失敗次數過多的 IP 位址"
+
+msgid "Unban all IPs"
+msgstr "解除所有IP的封鎖"
+
+msgid "IP sets updated (fetch only, not merged)"
+msgstr "IP 集合已更新（僅抓檔，未合併重載）"
+
+msgid "Updated and merged successfully (incl. whitelist)"
+msgstr "已成功更新並合併（含白名單）"
+
+msgid "Settings saved (schedule synced)"
+msgstr "設定已儲存（排程已同步）"
+
+msgid "Select countries + whitelist IPs into merged IP set files. This page only builds IP sets; apply them yourself under Firewall - Port Forwards by picking the set in a rule."
+msgstr "勾選國家＋白名單 IP，合併成IPs集合檔。本頁只生產 IPs 集合，請自行到 防火牆 - 連接埠轉發，選取規則-使用 IPs 集合"
+
+msgid "Latest merged IP set file: /etc/luci-uploads/%s.cidr (%s lines / live %s entries / updated %s)"
+msgstr "目前最新合併的IPs集合檔：/etc/luci-uploads/%s.cidr（%s 行 / live %s 段 / 更新於 %s）"
+
+msgid "Latest merged IP set file: no data yet"
+msgstr "目前最新合併的IPs集合檔：尚無資料"
+
+msgid "Status script failed"
+msgstr "狀態腳本執行失敗"
+
+msgid "Status script failed: %s"
+msgstr "狀態腳本執行失敗：%s"
+
+msgid "e.g. 203.0.113.10, 203.0.113.0/24, 203.0.113.10-203.0.113.50"
+msgstr "例如 203.0.113.10、203.0.113.0/24、203.0.113.10-203.0.113.50"
+

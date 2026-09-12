@@ -1,0 +1,16 @@
+#!/bin/sh
+# geoguard-ban-unban [ip|all]: 解封（防護頁按鈕用）
+SET=geoguard_ban
+case "$1" in
+  all|"")
+    for ip in $(nft list set inet fw4 $SET 2>/dev/null | tr ',' '\n' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ timeout' | awk '{print $1}'); do
+      nft delete element inet fw4 $SET "{ $ip }" 2>/dev/null
+    done
+    logger -t geoguard-ban "unbanned all"
+    ;;
+  *)
+    case "$1" in *[!0-9.]*) echo "bad IP format"; exit 1 ;; esac
+    nft delete element inet fw4 $SET "{ $1 }" 2>/dev/null \
+      && logger -t geoguard-ban "unbanned $1"
+    ;;
+esac

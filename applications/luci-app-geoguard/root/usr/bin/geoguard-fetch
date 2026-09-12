@@ -1,0 +1,57 @@
+#!/bin/sh
+# geoguard-fetch：只抓各國 CIDR 檔（不合併、不重載）
+# 用途：首次安裝補檔、單獨重新抓源。合併請跑 geoguard-update
+BASE_DIR="/etc/luci-uploads"
+TEMP_DIR="/tmp/cafetch-$$"
+
+SRC1=$(uci -q get geoguard.main.src_primary 2>/dev/null)
+SRC2=$(uci -q get geoguard.main.src_backup 2>/dev/null)
+[ -z "$SRC1" ] && SRC1="https://www.ipdeny.com/ipblocks/data/aggregated/{cc}-aggregated.zone"
+[ -z "$SRC2" ] && SRC2="https://raw.githubusercontent.com/ipverse/country-ip-blocks/master/country/{cc}/ipv4-aggregated.txt"
+
+SELECTED=""
+for l in asia europe africa northamerica southamerica oceania; do
+  SELECTED="$SELECTED $(uci -q get geoguard.main.sel_$l 2>/dev/null)"
+done
+SELECTED="$SELECTED $(uci -q get geoguard.main.selected 2>/dev/null)"
+
+mkdir -p "$BASE_DIR" "$TEMP_DIR"
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+upper() { echo "$1" | tr 'a-z' 'A-Z'; }
+
+fetch_one() {
+  local cc="$1" tmp="$TEMP_DIR/${cc}.raw" clean="$TEMP_DIR/${cc}.cidr" url srcname
+  for template in "$SRC1" "$SRC2"; do
+    [ -z "$template" ] && continue
+    url=$(echo "$template" | sed -e "s/{cc}/$cc/g" -e "s/{CC}/$(upper $cc)/g")
+    case "$template" in
+      *ipdeny*) srcname="primary" ;;
+      *) srcname="backup" ;;
+    esac
+    wget -T 30 -t 2 -q -O "$tmp" "$url" 2>/dev/null || continue
+    [ -s "$tmp" ] || continue
+    grep -v '^#' "$tmp" > "$clean"
+    [ "$(wc -l < "$clean")" -ge 15 ] || continue
+    grep -qvE '^[0-9]{1,3}(\.[0-9]{1,3}){3}/[0-9]{1,2}$' "$clean" && continue
+    mv -f "$clean" "$BASE_DIR/${cc}.cidr"
+    logger -t geoguard "$cc updated OK (source:$srcname)"
+    echo "$cc:OK:$srcname:$(wc -l < "$BASE_DIR/${cc}.cidr") lines" >> "$BASE_DIR/.fetch-results"
+    return 0
+  done
+  logger -t geoguard "$cc update FAILED (both sources down, keeping old file)"
+  echo "$cc:FAIL:keeping old file" >> "$BASE_DIR/.fetch-results"
+  return 1
+}
+
+OK=0; FAIL=""
+: > "$BASE_DIR/.fetch-results"
+for cc in $SELECTED; do
+  [ -z "$cc" ] && continue
+  if fetch_one "$cc"; then OK=$((OK+1)); else FAIL="$FAIL $cc"; fi
+done
+logger -t geoguard "IP set fetch done: OK $OK countries, FAILED:$FAIL"
+echo "$(date '+%F %T')|fetch-only|OK=$OK FAILED:$FAIL" >> "$BASE_DIR/history.log"
+tail -n 200 "$BASE_DIR/history.log" > "$TEMP_DIR/hist" 2>/dev/null \
+  && mv "$TEMP_DIR/hist" "$BASE_DIR/history.log"
+[ -z "$FAIL" ]

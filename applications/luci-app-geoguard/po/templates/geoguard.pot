@@ -1,0 +1,248 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-geoguard\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Invalid format: enter a single IP (e.g. 203.0.113.10), CIDR (e.g. 203.0.113.0/24) or range (e.g. 203.0.113.10-203.0.113.50)"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Login Guard"
+msgstr ""
+
+msgid "IP Sets"
+msgstr ""
+
+msgid "Log"
+msgstr ""
+
+msgid "Selected:"
+msgstr ""
+
+msgid "(none selected)"
+msgstr ""
+
+msgid "Search, e.g. TW 台灣 TAIWAN"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Clear selected"
+msgstr ""
+
+msgid "Code"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Select countries"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Whitelist beyond countries: IP / CIDR / Range"
+msgstr ""
+
+msgid "Formats: single IP, CIDR, A-B range. No country + IPs = pure whitelist."
+msgstr ""
+
+msgid "{cc} becomes the lowercase code, {CC} uppercase."
+msgstr ""
+
+msgid "Falls back on failure; keeps the old file if both fail."
+msgstr ""
+
+msgid "Merged set name (countries + custom whitelist)"
+msgstr ""
+
+msgid "Rule: start with a letter; letters/digits/_/- only. File shares the set name; old file kept after rename."
+msgstr ""
+
+msgid "Whitelist set name"
+msgstr ""
+
+msgid "Whitelist lives in its own set, visible under Firewall IP Sets. Same rules as above."
+msgstr ""
+
+msgid "Daily"
+msgstr ""
+
+msgid "Weekly (Sun)"
+msgstr ""
+
+msgid "Monthly (1st)"
+msgstr ""
+
+msgid "Auto-update schedule"
+msgstr ""
+
+msgid "Hour"
+msgstr ""
+
+msgid "Minute"
+msgstr ""
+
+msgid "Enable auto-update"
+msgstr ""
+
+msgid "This page only builds IP set files and never changes firewall rules."
+msgstr ""
+
+msgid "Apply: Network → Firewall → Port Forwards → Add → Advanced → pick the set in IPSet, then Save & Apply."
+msgstr ""
+
+msgid "Fallback (SSH): uci set firewall.@redirect[N].ipset=set name, commit, then fw4 reload."
+msgstr ""
+
+msgid "Bad set name (must start with a letter: letters/digits/_/- only). Settings saved, update skipped."
+msgstr ""
+
+msgid "Update failed: %s"
+msgstr ""
+
+msgid "unknown error"
+msgstr ""
+
+msgid "Failed: %s"
+msgstr ""
+
+msgid "Update IP Sets Now"
+msgstr ""
+
+msgid "Update and Merge Now"
+msgstr ""
+
+msgid "Save Settings"
+msgstr ""
+
+msgid "Clear Update History"
+msgstr ""
+
+msgid "Update history cleared"
+msgstr ""
+
+msgid "Disabling stops the guard service; active bans stay until expiry."
+msgstr ""
+
+msgid "Fails to ban"
+msgstr ""
+
+msgid "Ban time (hours)"
+msgstr ""
+
+msgid "Guard LuCI web login"
+msgstr ""
+
+msgid "Guard SSH login"
+msgstr ""
+
+msgid "Enter an IP or CIDR (e.g. 192.168.0.0/16)"
+msgstr ""
+
+msgid "IPs/subnets here are never banned. Defaults already cover reserved and private ranges. Two more auto-exempt sources need no entry here: IP whitelist (IP Sets tab) and DDNS whitelist (below), whose IPs follow automatically."
+msgstr ""
+
+msgid "DDNS allowlist"
+msgstr ""
+
+msgid "Enter a valid domain (e.g. home.example.org)"
+msgstr ""
+
+msgid "Add multiple entries; each tracked separately. For guard exemption only; never touches IP sets."
+msgstr ""
+
+msgid "DDNS check interval (min)"
+msgstr ""
+
+msgid "WAN interface (auto-detect)"
+msgstr ""
+
+msgid "Bad interface name"
+msgstr ""
+
+msgid "Leave empty to auto-detect (firewall wan zone → system → default route). Fill in manually only if detection fails (e.g. pppoe-wan)."
+msgstr ""
+
+msgid "Banned = invisible: every packet from the WAN (all ports, TCP/UDP/ICMP) is dropped at ingress, auto-released after %s hours."
+msgstr ""
+
+msgid "Loading status…"
+msgstr ""
+
+msgid "Guard settings saved and restarted"
+msgstr ""
+
+msgid "Guard restart failed: %s"
+msgstr ""
+
+msgid "All unbanned"
+msgstr ""
+
+msgid "Save & Restart Guard"
+msgstr ""
+
+msgid "GeoGuard"
+msgstr ""
+
+msgid "GeoGuard Ver:"
+msgstr ""
+
+msgid "Never-block whitelist"
+msgstr ""
+
+msgid "Within (minutes)"
+msgstr ""
+
+msgid "Log review and ban interval (sec)"
+msgstr ""
+
+msgid "IP Geolocation - Primary Feed"
+msgstr ""
+
+msgid "IP Geolocation - Backup Feed"
+msgstr ""
+
+msgid "Enable this option to block IP addresses with too many failed logins"
+msgstr ""
+
+msgid "Unban all IPs"
+msgstr ""
+
+msgid "IP sets updated (fetch only, not merged)"
+msgstr ""
+
+msgid "Updated and merged successfully (incl. whitelist)"
+msgstr ""
+
+msgid "Settings saved (schedule synced)"
+msgstr ""
+
+msgid "Select countries + whitelist IPs into merged IP set files. This page only builds IP sets; apply them yourself under Firewall - Port Forwards by picking the set in a rule."
+msgstr ""
+
+msgid "Latest merged IP set file: /etc/luci-uploads/%s.cidr (%s lines / live %s entries / updated %s)"
+msgstr ""
+
+msgid "Latest merged IP set file: no data yet"
+msgstr ""
+
+msgid "Status script failed"
+msgstr ""
+
+msgid "Status script failed: %s"
+msgstr ""
+
+msgid "e.g. 203.0.113.10, 203.0.113.0/24, 203.0.113.10-203.0.113.50"
+msgstr ""
+

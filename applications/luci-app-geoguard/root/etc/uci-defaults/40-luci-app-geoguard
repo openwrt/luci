@@ -1,0 +1,6 @@
+#!/bin/sh
+# 40-luci-app-geoguard: enable daily schedule after first install.
+# Config values come from package default /etc/config/geoguard.
+/usr/bin/geoguard-cron 2>/dev/null
+logger -t geoguard "installed, open LuCI GeoGuard and press update-merge once"
+exit 0

@@ -1,0 +1,54 @@
+#!/bin/sh
+# geoguard 排程管理：每天／每週日／每月1日＋時分（改 UCI 後跑一次即生效）
+CRON_FILE="/etc/crontabs/root"
+JOB="/usr/bin/geoguard-update"
+
+sed -i '\#geoguard-update#d' "$CRON_FILE" 2>/dev/null
+sed -i '\#geoguard-ddns#d' "$CRON_FILE" 2>/dev/null
+
+BASE_DIR="/etc/luci-uploads"
+# cron 行尾註解跟 LuCI 系統語言走。
+# 警告：NOTE_* 四句在 geoguard-ddns 內有完全相同的副本，兩邊必須一字不差，
+# 否則 ddns 自癒整行比對永遠失配→每輪刪寫重載 cron。
+NOTE_DDNS_ZH='# 國門守衛 DDNS 白名單追蹤（自動管理，請勿手改）'
+NOTE_DDNS_EN='# GeoGuard DDNS whitelist tracker (auto-managed, do not edit)'
+NOTE_UPDATE_ZH='# 國門守衛 IP 集合更新（自動管理，請勿手改）'
+NOTE_UPDATE_EN='# GeoGuard country IP sets updater (auto-managed, do not edit)'
+gg_cron_lang() {
+  case "$(uci -q get luci.main.lang 2>/dev/null)" in
+    zh*) echo 'zh' ;;
+    *) echo 'en' ;;
+  esac
+}
+# DDNS 白名單：靜態行常駐（任何存檔路徑都刪不掉它；無清單時腳本秒退）。
+# 間隔讀 UCI（預設 3 分）；清單空但 state 有貨＝剛被清空→跑一次 purge。
+DDNS_I=$(uci -q get geoguard.main.ddns_interval 2>/dev/null)
+case "$DDNS_I" in ''|*[!0-9]*) DDNS_I=30 ;; esac
+[ "$DDNS_I" -lt 1 ] && DDNS_I=1
+[ "$DDNS_I" -gt 60 ] && DDNS_I=60
+if [ "$(gg_cron_lang)" = 'zh' ]; then
+  DNOTE="$NOTE_DDNS_ZH"; UNOTE="$NOTE_UPDATE_ZH"
+else
+  DNOTE="$NOTE_DDNS_EN"; UNOTE="$NOTE_UPDATE_EN"
+fi
+echo "*/$DDNS_I * * * * /usr/bin/geoguard-ddns $DNOTE" >> "$CRON_FILE"
+/usr/bin/geoguard-ddns
+
+if [ "$(uci -q get geoguard.main.auto_update)" = "1" ]; then
+	FREQ=$(uci -q get geoguard.main.update_freq 2>/dev/null)
+	HOUR=$(uci -q get geoguard.main.update_hour)
+	MIN=$(uci -q get geoguard.main.update_min)
+	[ -z "$HOUR" ] && HOUR=3
+	[ -z "$MIN" ] && MIN=10
+	case "$FREQ" in
+		weekly)  SPEC="$MIN $HOUR * * 0" ;;
+		monthly) SPEC="$MIN $HOUR 1 * *" ;;
+		*)       SPEC="$MIN $HOUR * * *" ;;
+	esac
+	echo "$SPEC $JOB $UNOTE" >> "$CRON_FILE"
+	logger -t geoguard "schedule set: $SPEC"
+else
+	logger -t geoguard "auto update disabled"
+fi
+
+/etc/init.d/cron restart >/dev/null 2>&1

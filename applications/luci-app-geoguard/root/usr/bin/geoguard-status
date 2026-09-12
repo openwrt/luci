@@ -1,0 +1,25 @@
+#!/bin/sh
+# geoguard-status: set status + update history + related system log (for LuCI log tab)
+BASE_DIR="/etc/luci-uploads"
+SETNAME=$(uci -q get geoguard.main.setname 2>/dev/null)
+echo "$SETNAME" | grep -qE '^[A-Za-z][A-Za-z0-9_-]*$' || SETNAME="allowed-IPList"
+FILE="$BASE_DIR/${SETNAME}.cidr"
+
+echo "===== Set status ====="
+if [ -f "$FILE" ]; then
+  echo "Set file: $FILE ($(wc -l < "$FILE") lines, $(date -r "$FILE" '+%F %T'))"
+else
+  echo "Set file: $FILE (missing, press Update IP sets now)"
+fi
+if nft list set inet fw4 "$SETNAME" >/dev/null 2>&1; then
+  echo "live set: $(nft list set inet fw4 "$SETNAME" 2>/dev/null | tr ',' '\n' | grep -c '/') entries active"
+else
+  echo "live set: missing (created after firewall reload)"
+fi
+echo "Schedule: $(grep 'geoguard-update' /etc/crontabs/root 2>/dev/null | head -1)"
+echo ""
+echo "===== Update history (last 20) ====="
+tail -n 20 "$BASE_DIR/history.log" 2>/dev/null || echo "(no records yet)"
+echo ""
+echo "===== System log (last 15) ====="
+logread 2>/dev/null | grep 'geoguard' | tail -n 15 || echo "(no records yet)"

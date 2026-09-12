@@ -1,0 +1,93 @@
+#!/bin/sh
+# geoguard-ddns: DDNS 白名單（多家清單，只適用防護免封，不動 IP 集合）
+# 來源：company_ddns 清單（人填的域名）；存貨：company-ddns.list（host ip）
+# 移除一家＝purge（state＋記錄斷乾淨）；換 IP＝換 state；成功只寫 log
+# ban 免封直接讀 state 檔；IP 集合的放行封鎖與本腳本無關（唯一關聯是人工白名單）
+BASE_DIR="/etc/luci-uploads"
+STATE="$BASE_DIR/company-ddns.list"
+HIST="$BASE_DIR/history.log"
+[ -f "$STATE" ] || : > "$STATE"
+
+# cron 行尾註解跟 LuCI 系統語言走。
+# 警告：NOTE_* 四句在 geoguard-cron 內有完全相同的副本，兩邊必須一字不差，
+# 否則本自癒整行比對永遠失配→每輪刪寫重載 cron。
+NOTE_DDNS_ZH='# 國門守衛 DDNS 白名單追蹤（自動管理，請勿手改）'
+NOTE_DDNS_EN='# GeoGuard DDNS whitelist tracker (auto-managed, do not edit)'
+NOTE_UPDATE_ZH='# 國門守衛 IP 集合更新（自動管理，請勿手改）'
+NOTE_UPDATE_EN='# GeoGuard country IP sets updater (auto-managed, do not edit)'
+gg_cron_lang() {
+  case "$(uci -q get luci.main.lang 2>/dev/null)" in
+    zh*) echo 'zh' ;;
+    *) echo 'en' ;;
+  esac
+}
+# cron 自癒：靜態行被任何路徑弄丟／間隔被改都自動修回來
+DI=$(uci -q get geoguard.main.ddns_interval 2>/dev/null)
+case "$DI" in ''|*[!0-9]*) DI=3 ;; esac
+[ "$DI" -lt 1 ] && DI=1
+[ "$DI" -gt 60 ] && DI=60
+if [ "$(gg_cron_lang)" = 'zh' ]; then
+  DNOTE="$NOTE_DDNS_ZH"
+else
+  DNOTE="$NOTE_DDNS_EN"
+fi
+DLINE="*/$DI * * * * /usr/bin/geoguard-ddns $DNOTE"
+grep -qxF "$DLINE" /etc/crontabs/root 2>/dev/null || {
+  sed -i '\#geoguard-ddns#d' /etc/crontabs/root 2>/dev/null
+  echo "$DLINE" >> /etc/crontabs/root
+  /etc/init.d/cron restart >/dev/null 2>&1
+}
+
+resolve() {
+  nslookup "$1" 2>/dev/null \
+    | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' \
+    | grep -vE '^(127\.|10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.)' \
+    | head -n 1
+}
+valid_ip() { echo "$1" | grep -qE '^([0-9]{1,3}\.){3}[0-9]{1,3}$'; }
+
+hist() {
+  echo "$(date '+%F %T')|ddns|$1" >> "$HIST"
+  tail -n 200 "$HIST" > "$HIST.tmp" 2>/dev/null && mv "$HIST.tmp" "$HIST"
+}
+
+CHANGED=0
+NEWSTATE="$STATE.new"
+: > "$NEWSTATE"
+
+# purge：state 有、清單沒了 → 三處斷乾淨
+HOSTS=$(uci -q get geoguard.main.company_ddns 2>/dev/null)
+while read -r h ip; do
+  [ -z "$h" ] && continue
+  keep=0
+  for want in $HOSTS; do [ "$want" = "$h" ] && keep=1; done
+  if [ "$keep" = "0" ]; then
+    logger -t geoguard-ddns "purge $h $ip"
+    hist "purge|$h $ip"
+    CHANGED=1
+  else
+    echo "$h $ip" >> "$NEWSTATE"
+  fi
+done < "$STATE"
+
+# 跟隨：逐家解析比對
+for h in $HOSTS; do
+  case "$h" in ""|*[!A-Za-z0-9.-]*) logger -t geoguard-ddns "bad host skip: $h"; continue ;; esac
+  ip=$(resolve "$h")
+  valid_ip "$ip" || { logger -t geoguard-ddns "resolve fail: $h"; continue; }
+  old=$(awk -v h="$h" '$1 == h { print $2; exit; }' "$NEWSTATE")
+  if [ "$ip" != "$old" ]; then
+    awk -v h="$h" '$1 != h' "$NEWSTATE" > "$NEWSTATE.tmp" 2>/dev/null && mv "$NEWSTATE.tmp" "$NEWSTATE"
+    echo "$h $ip" >> "$NEWSTATE"
+    logger -t geoguard-ddns "company $h: ${old:-none} -> $ip"
+    hist "$h ${old:-none} -> $ip"
+    CHANGED=1
+  fi
+done
+mv -f "$NEWSTATE" "$STATE"
+
+# 換血成功→記一筆，提醒 banIP 自癒（不主動踢：banip reload 實測超過 10 分鐘，
+# 會拖住呼叫者；banIP 自己的 autoallowlist 週期會重解重寫）
+if [ "$CHANGED" = "1" ]; then
+  logger -t geoguard-ddns "changed, banIP will self-heal on its own cycle"
+fi

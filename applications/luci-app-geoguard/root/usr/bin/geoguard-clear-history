@@ -1,0 +1,6 @@
+#!/bin/sh
+# geoguard-clear-history：清空更新歷史（history.log），集合檔案與設定不動
+BASE_DIR="/etc/luci-uploads"
+: > "$BASE_DIR/history.log"
+logger -t geoguard "update history cleared manually"
+echo "cleared"
