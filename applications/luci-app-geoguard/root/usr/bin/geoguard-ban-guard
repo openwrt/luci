@@ -1,0 +1,60 @@
+#!/bin/sh
+# geoguard-ban-guard: generate the full-block guard from UCI
+# (banned = the box disappears for them)
+# WAN interface: use ban_wan_if when set, auto-detect when empty
+# (firewall wan zone -> ubus -> default route)
+# Fixed output /etc/nftables.d/10-geoguard-guard.nft; fw4 reload only on change
+OUT=/etc/nftables.d/10-geoguard-guard.nft
+TMP=/tmp/luci-guard.new
+
+# Disabled: emit the inert placeholder (chain + set fully removed).
+# Enabled: detect WAN and emit the live guard below.
+EN=$(uci -q get geoguard.main.ban_enabled 2>/dev/null)
+[ -z "$EN" ] && EN=0
+if [ "$EN" != "1" ]; then
+  cat > "$TMP" <<EOF
+# GeoGuard login guard (inert until enabled in the UI).
+# geoguard-ban-guard writes the live chain + set on first enable
+# and reloads fw4 only when the content changes.
+EOF
+else
+
+WANIF=$(uci -q get geoguard.main.ban_wan_if 2>/dev/null)
+if [ -z "$WANIF" ]; then
+  # Auto-detect: walk firewall zones one by one (no grep context, it bleeds into neighbor zones)
+  for zi in $(uci show firewall 2>/dev/null | grep -oE '@zone\[[0-9]+\]=zone' | grep -oE '[0-9]+'); do
+    if [ "$(uci -q get firewall.@zone[$zi].name 2>/dev/null)" = "wan" ]; then
+      ZNET=$(uci -q get firewall.@zone[$zi].network 2>/dev/null | awk '{print $1}')
+      break
+    fi
+  done
+  [ -n "$ZNET" ] && WANIF=$(ubus call "network.interface.$ZNET" status 2>/dev/null | jsonfilter -e '@.l3_device' 2>/dev/null)
+  [ -z "$WANIF" ] && WANIF=$(ip route show default 2>/dev/null | sed -n 's/.*dev \([^ ]*\).*/\1/p' | head -n 1)
+  [ -z "$WANIF" ] && WANIF="pppoe-wan"
+fi
+
+# Interface names go verbatim into nft; reject anything outside [A-Za-z0-9._-]
+case "$WANIF" in ''|*[!A-Za-z0-9._-]*) WANIF="pppoe-wan" ;; esac
+cat > "$TMP" <<EOF
+set geoguard_ban {
+	type ipv4_addr
+	flags timeout
+}
+
+chain luci_guard {
+	type filter hook prerouting priority -160; policy accept;
+	iifname "$WANIF" ip saddr @geoguard_ban limit rate over 10/minute burst 5 packets log prefix "geoguard-ban-drop: " drop
+	iifname "$WANIF" ip saddr @geoguard_ban drop
+}
+EOF
+fi
+
+if [ -f "$OUT" ] && cmp -s "$TMP" "$OUT"; then
+  rm -f "$TMP"
+  echo "guard unchanged${WANIF:+ ($WANIF)}"
+else
+  mv -f "$TMP" "$OUT"
+  /etc/init.d/firewall reload >/dev/null 2>&1
+  logger -t geoguard-ban-guard "guard regenerated${WANIF:+ full-block ($WANIF)}"
+  echo "guard regenerated${WANIF:+ ($WANIF)}"
+fi

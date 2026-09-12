@@ -1,0 +1,28 @@
+
+config geoguard 'main'
+	# Shipped quiet: no selection, no schedule, no guard until the user
+	# saves once in the UI (fresh install must not change the system).
+	option setname 'allowed-IPList'
+	option src_primary 'https://www.ipdeny.com/ipblocks/data/aggregated/{cc}-aggregated.zone'
+	option src_backup 'https://raw.githubusercontent.com/ipverse/country-ip-blocks/master/country/{cc}/ipv4-aggregated.txt'
+	option update_freq 'weekly'
+	option auto_reload '1'
+	option auto_update '0'
+	option update_hour '6'
+	option update_min '0'
+	option white_name 'CustomAllow'
+	# list ddns_allowlist: DDNS whitelist (added via UI, empty = disabled; shipped empty)
+	option ban_interval '60'
+	option ddns_interval '30'
+	list ban_exempt '192.168.0.0/16'
+	list ban_exempt '127.0.0.0/8'
+	list ban_exempt '10.0.0.0/8'
+	list ban_exempt '172.16.0.0/12'
+	list ban_exempt '0.0.0.0/32'
+	option ban_enabled '0'
+	option ban_maxretry '8'
+	option ban_findtime '5'
+	option ban_bantime '2'
+	option ban_web '1'
+	option ban_ssh '1'
+

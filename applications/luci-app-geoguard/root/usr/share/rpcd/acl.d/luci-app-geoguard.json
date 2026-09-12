@@ -1,0 +1,33 @@
+{
+	"luci-app-geoguard": {
+		"description": "Grant access to GeoGuard",
+		"read": {
+			"uci": [ "geoguard" ],
+			"file": {
+				"/usr/bin/geoguard-status": [ "exec" ],
+				"/usr/bin/geoguard-counts": [ "exec" ],
+				"/usr/bin/geoguard-ban-status": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec" ]
+			}
+		},
+		"write": {
+			"uci": [ "geoguard" ],
+			"file": {
+				"/usr/bin/geoguard-fetch": [ "exec" ],
+				"/usr/bin/geoguard-update": [ "exec" ],
+				"/usr/bin/geoguard-cron": [ "exec" ],
+				"/usr/bin/geoguard-clear-history": [ "exec" ],
+				"/usr/bin/geoguard-ban-guard": [ "exec" ],
+				"/usr/bin/geoguard-ban-unban all": [ "exec" ],
+				"/etc/init.d/geoguard-ban reload": [ "exec" ],
+				"/etc/init.d/geoguard-ban enable": [ "exec" ],
+				"/etc/init.d/geoguard-ban disable": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec" ]
+			}
+		}
+	}
+}
