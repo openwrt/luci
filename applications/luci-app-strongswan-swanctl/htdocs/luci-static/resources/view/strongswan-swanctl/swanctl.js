@@ -36,15 +36,14 @@ function sectionNameCheck(extra_class) {
 		nameEl = el.querySelector('.cbi-section-create-name');
 	ui.addValidator(nameEl, 'uciname', true, function(v) {
 		let sections = [
-			...uci.sections('ipsec', 'remote'),
-			...uci.sections('ipsec', 'tunnel'),
+			...uci.sections('ipsec', 'child'),
 			...uci.sections('ipsec', 'crypto_proposal'),
 		];
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Remotes, Encryption Proposals and Tunnels may not share the same names.') + ' ' + 
-				_('Use combinations like tunnel1_phase1 that do not exceed 15 characters.');
+			return _('Remotes, Encryption Proposals and Childrens may not share the same names.') + ' ' +
+				_('Use combinations like child1_phase1 that do not exceed 15 characters.');
 		}
 		if (v.length > 15) return _('Name length shall not exceed 15 characters');
 		return true;
@@ -124,18 +123,18 @@ return view.extend({
 		};
 		o.rmempty = false;
 
-		o = s.taboption('general', form.MultiValue, 'tunnel', _('Tunnel'),
-			_('The Tunnel containing the ESP (phase 2) section'));
+		o = s.taboption('general', form.MultiValue, 'child', _('Children'),
+			_('The Children containing the ESP (phase 2) section'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'tunnel');
+			var sections = uci.sections('ipsec', 'child');
 			if (sections.length == 0) {
-				this.value('', _('Please create a Tunnel first'));
+				this.value('', _('Please create a Children first'));
 			} else {
 				sections.forEach(L.bind(function (section) {
-					this.value(section['.name']);
+					this.value(section['.name'], '%s (%s)'.format(section['.name'], section['mode']));
 				}, this));
 			}
 
@@ -231,7 +230,7 @@ return view.extend({
 		o.placeholder = '3';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'dpddelay', _('DPD Delay'),
+		o = s.taboption('advanced', form.Value, 'dpd_delay', _('DPD Delay'),
 			_('Interval to check liveness of a peer'));
 		o.validate = validateTimeFormat;
 		o.placeholder = '30s';
@@ -243,12 +242,12 @@ return view.extend({
 		o.placeholder = '0s';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
+		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
 			_('IKEv2 interval to refresh keying material; also used to compute lifetime'));
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'overtime', _('Overtime'),
+		o = s.taboption('advanced', form.Value, 'over_time', _('Overtime'),
 			_('Limit on time to complete rekeying/reauthentication'));
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
@@ -269,15 +268,21 @@ return view.extend({
 		o.default = 'ikev2';
 		o.modalonly = true;
 
-		// Tunnel Configuration
-		s = m.section(form.GridSection, 'tunnel', _('Tunnel Configuration'),
-			_('Define Connection Children to be used as Tunnels in Remote Configurations.'));
+		// Children Configuration
+		s = m.section(form.GridSection, 'child', _('Children Configuration'),
+			_('Define Connection Children to be used in Remote Configurations.'));
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
 
 		o = s.tab('general', _('General'));
 		o = s.tab('advanced', _('Advanced'));
+
+		o = s.taboption('general', form.ListValue, 'mode', _('Child mode'));
+		o.rmempty = false;
+		o.value('tunnel', _('Tunnel'));
+		o.value('transport', _('Transport'));
+		o.default = 'tunnel';
 
 		o = s.taboption('general', form.DynamicList, 'local_subnet', _('Local Subnet'),
 			_('Local network(s)'));
@@ -311,20 +316,24 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('general', form.ListValue, 'startaction', _('Start Action'),
+		o = s.taboption('general', form.ListValue, 'start_action', _('Start Action'),
 			_('Action on initial configuration load'));
-		o.value('none');
-		o.value('trap');
-		o.value('start');
-		o.default = 'trap';
-		o.modalonly = true;
-
-		o = s.taboption('general', form.ListValue, 'closeaction', _('Close Action'),
-			_('Action when CHILD_SA is closed'));
-		o.value('none');
+		o.value('', '%s (%s)'.format('none', _('default')));
 		o.value('trap');
 		o.value('start');
 		o.optional = true;
+		o.default = '';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
+			_('Action when CHILD_SA is closed'));
+		o.value('', '%s (%s)'.format('none', _('default')));
+		o.value('trap');
+		o.value('start');
+		o.optional = true;
+		o.default = '';
+		o.rmempty = true;
 		o.modalonly = true;
 
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal',
@@ -354,16 +363,17 @@ return view.extend({
 		o.datatype = 'file';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.ListValue, 'dpdaction', _('DPD Action'),
+		o = s.taboption('advanced', form.ListValue, 'dpd_action', _('DPD Action'),
 			_('Action when DPD timeout occurs'));
-		o.value('none');
-		o.value('clear');
+		o.value('', '%s (%s)'.format('clear', _('default')));
 		o.value('trap');
 		o.value('start');
+		o.default = '';
+		o.rmempty = true;
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
+		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
 			_('Interval before a CHILD_SA is rekeyed.') + ' ' +
 			_('Also used to derive lifetime (110% of this value).') + '<br />' +
 			_('If not configured, the default value is "1h".')
@@ -373,7 +383,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifetime', _('Life Time'),
+		o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
 			_('Maximum time before the CHILD_SA gets closed, as a hard limit.')
 		);
 		o.validate = validateTimeFormat;
@@ -404,7 +414,7 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeybytes', _('Rekey Bytes'),
+		o = s.taboption('advanced', form.Value, 'rekey_bytes', _('Rekey Bytes'),
 			_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
 			_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
 			_('Use "0" to disable byte based rekeying.')
@@ -414,7 +424,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifebytes', _('Life Bytes'),
+		o = s.taboption('advanced', form.Value, 'life_bytes', _('Life Bytes'),
 			_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
 			_('Use "0" to disable (default).')
 		);
@@ -423,7 +433,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'rekeypackets', _('Rekey Packets'),
+		o = s.taboption('advanced', form.Value, 'rekey_packets', _('Rekey Packets'),
 			_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
 			_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
 			_('Use "0" to disable packet based rekeying (default).')
@@ -433,7 +443,7 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'lifepackets', _('Life Packets'),
+		o = s.taboption('advanced', form.Value, 'life_packets', _('Life Packets'),
 			_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
 			_('Use "0" to disable (default).')
 		);
@@ -453,13 +463,26 @@ return view.extend({
 		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
 			_('Whether this is an ESP (phase 2) proposal or not'));
 
+		o = s.option(form.Flag, 'use_custom_proposal', _('Use custom proposal'),
+			_('When enabled, you can specify your own proposal string.'));
+		o.default = '0';
+		o.rmempty = true;
+
+		o = s.option(form.Value, 'custom_proposal', _('Custom proposal'),
+			_('Using this option only if you know exactly what you are doing.') + '<br />' +
+			_('Manually defining a proposal can break compatibility with peers or cause connection failures.') + '<br />' +
+			_('Using this setting may prevent future updates or migrations.') + '<br />' +
+			_('You are responsible for maintaining compatibility!'));
+		o.depends('use_custom_proposal', '1');
+		o.rmempty = false;
+
 		o = s.option(form.ListValue, 'encryption_algorithm',
 			_('Encryption Algorithm'),
 			_('Algorithms marked with * are considered insecure'));
 		o.default = 'aes256gcm128';
+		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.encryption);
 		addAlgorithms(o, algorithms.aead);
-
 
 		const encryptionAlgorithmNames = algorithms.encryption?.map(algorithm => algorithm.name);
 		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
@@ -469,11 +492,13 @@ return view.extend({
 		});
 		o.default = 'sha512';
 		o.rmempty = false;
+		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.integrity);
 
 		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
 			_('Algorithms marked with * are considered insecure'));
 		o.default = 'modp3072';
+		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
 
 		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
@@ -489,7 +514,7 @@ return view.extend({
 			return true;
 		};
 		o.optional = true;
-		o.depends('is_esp', '0');
+		o.depends({'is_esp': '0', 'use_custom_proposal': '0'});
 		addAlgorithms(o, algorithms.prf);
 
 		return m.render();
