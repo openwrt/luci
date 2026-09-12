@@ -5,7 +5,7 @@
 'require ui';
 'require uci';
 
-var VERSION = '2.1.7';
+var VERSION = '2.1.8';
 var fmt = function(s) {
 	var args = Array.prototype.slice.call(arguments, 1);
 	var i = 0;
@@ -515,20 +515,26 @@ return view.extend({
 				autoCb.checked = true;
 			schedState.auto = autoCb.checked ? '1' : '0';
 			autoCb.addEventListener('change', function() { schedDirty = true; schedState.auto = autoCb.checked ? '1' : '0'; });
-			return E('div', { 'class': 'cbi-value' }, [
-				E('label', { 'class': 'cbi-value-title' }, [_('Auto-update schedule')]),
-				E('div', { 'class': 'cbi-value-field' }, [
-					freqSel, E('span', {}, [' ']),
-					E('span', {}, [_('Hour')]), E('span', {}, [' ']), hourSel,
-					E('span', {}, [' ']), E('span', {}, [_('Minute')]), E('span', {}, [' ']), minSel,
-					E('span', {}, ['  ']), autoCb, E('span', {}, [' ']), E('span', {}, [_('Enable auto-update')])
+			return E('div', {}, [
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-field' }, [
+						autoCb, E('span', {}, [' ']), E('span', {}, [_('Enable auto-update of feed sets')])
+					])
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title' }, [_('Auto-update schedule')]),
+					E('div', { 'class': 'cbi-value-field' }, [
+						freqSel, E('span', {}, [' ']),
+						E('span', {}, [_('Hour')]), E('span', {}, [' ']), hourSel,
+						E('span', {}, [' ']), E('span', {}, [_('Minute')]), E('span', {}, [' ']), minSel
+					])
 				])
 			]);
 		};
 		o = s.taboption('settings', form.DummyValue, '_note');
 		o.render = function(section_id) {
 			return E('div', { 'class': 'cbi-section' }, [
-				E('style', {}, ['#cbi-geoguard input.cbi-input-text{width:15em;max-width:100%}#cbi-geoguard .cbi-value-title{white-space:nowrap;text-align:left!important}#cbi-geoguard .cbi-value-field .btn{width:auto}#cbi-geoguard table.cbi-section-table td,#cbi-geoguard table.cbi-section-table th{padding:3px 6px;text-align:left!important}#cbi-geoguard p{margin:0.3em 0;text-align:left}#cbi-geoguard .cbi-dynlist{width:100%;max-width:none}#cbi-geoguard .cbi-dynlist .add-item{display:flex}#cbi-geoguard .cbi-dynlist .add-item input{flex:1;margin-right:0.5em}#cbi-geoguard .cbi-value label.cbi-value-title{width:auto!important;flex:none!important;margin-right:.6em;min-width:12em}#cbi-geoguard div.cbi-value{text-align:left}#cbi-geoguard-main-src_primary input.cbi-input-text,#cbi-geoguard-main-src_backup input.cbi-input-text{width:100%;max-width:640px}']),
+				E('style', {}, ['#cbi-geoguard input.cbi-input-text{width:15em;max-width:100%}#cbi-geoguard .cbi-value-title{white-space:nowrap;text-align:left!important}#cbi-geoguard .cbi-value-field .btn{width:auto}#cbi-geoguard table.cbi-section-table td,#cbi-geoguard table.cbi-section-table th{padding:3px 6px;text-align:left!important}#cbi-geoguard p{margin:0.3em 0;text-align:left}#cbi-geoguard .cbi-dynlist{width:100%;max-width:none}#cbi-geoguard .cbi-dynlist .add-item{display:flex}#cbi-geoguard .cbi-dynlist .add-item input{flex:1;margin-right:0.5em}#cbi-geoguard .cbi-value label.cbi-value-title{width:auto!important;flex:none!important;margin-right:.6em;min-width:12em}#cbi-geoguard div.cbi-value{text-align:left}#cbi-geoguard-main-src_primary input.cbi-input-text,#cbi-geoguard-main-src_backup input.cbi-input-text{width:100%;max-width:640px}#cbi-geoguard pre{overflow-x:auto;max-width:100%;overflow-wrap:anywhere;word-break:break-all}#cbi-geoguard .country-counts{word-break:break-all}']),
 				E('p', {}, [_('This page only builds IP set files and never changes firewall rules.')]),
 				E('p', {}, [_('Apply: Network → Firewall → Port Forwards → Add → Advanced → pick the set in IPSet, then Save & Apply.')]),
 				E('p', {}, [_('Fallback (SSH): uci set firewall.@redirect[N].ipset=set name, commit, then fw4 reload.')])
