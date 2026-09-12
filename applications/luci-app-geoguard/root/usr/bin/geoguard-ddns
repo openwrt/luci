@@ -1,0 +1,84 @@
+#!/bin/sh
+# geoguard-ddns: DDNS whitelist (guard exemption only, IP sets untouched)
+# Source: ddns_allowlist (human-entered hostnames); state: ddns-allowlist.list (host ip)
+# Removing a host = purge (state + records cut clean); IP change = state swap; success only logs
+# Ban exemption reads the state file directly; allow/block via IP sets is
+# unrelated to this script (only link is the manual whitelist)
+BASE_DIR="/etc/geoguard"
+STATE="$BASE_DIR/ddns-allowlist.list"
+HIST="$BASE_DIR/history.log"
+[ -f "$STATE" ] || : > "$STATE"
+
+# Cron trailing comments are English-only (no locale data in shell code).
+# WARNING: the NOTE_DDNS line has an identical copy in geoguard-cron;
+# both sides must match byte-for-byte, otherwise this self-heal line
+# comparison never matches and rewrites+reloads cron every round.
+NOTE_DDNS='# GeoGuard DDNS whitelist tracker (auto-managed, do not edit)'
+# Cron self-heal: a static line dropped by any path, or a changed interval, is repaired automatically
+DI=$(uci -q get geoguard.main.ddns_interval 2>/dev/null)
+case "$DI" in ''|*[!0-9]*) DI=30 ;; esac
+[ "$DI" -lt 1 ] && DI=1
+[ "$DI" -gt 60 ] && DI=60
+DLINE="*/$DI * * * * /usr/bin/geoguard-ddns $NOTE_DDNS"
+grep -qxF "$DLINE" /etc/crontabs/root 2>/dev/null || {
+  sed -i '\#geoguard-ddns#d' /etc/crontabs/root 2>/dev/null
+  # crontabs often lack a trailing newline; appending then glues our entry
+  # onto the user's last line, breaking both (same guard as geoguard-cron).
+  [ -s /etc/crontabs/root ] && [ -n "$(tail -c 1 /etc/crontabs/root)" ] && echo "" >> /etc/crontabs/root
+  echo "$DLINE" >> /etc/crontabs/root
+  /etc/init.d/cron restart >/dev/null 2>&1
+}
+
+resolve() {
+  nslookup "$1" 2>/dev/null \
+    | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' \
+    | grep -vE '^(127\.|10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.)' \
+    | head -n 1
+}
+valid_ip() { echo "$1" | grep -qE '^([0-9]{1,3}\.){3}[0-9]{1,3}$'; }
+
+hist() {
+  echo "$(date '+%F %T')|ddns|$1" >> "$HIST"
+  tail -n 200 "$HIST" > "$HIST.tmp" 2>/dev/null && mv "$HIST.tmp" "$HIST"
+}
+
+CHANGED=0
+NEWSTATE="$STATE.new"
+: > "$NEWSTATE"
+
+# purge: in state but gone from the list -> cut clean everywhere
+HOSTS=$(uci -q get geoguard.main.ddns_allowlist 2>/dev/null)
+while read -r h ip; do
+  [ -z "$h" ] && continue
+  keep=0
+  for want in $HOSTS; do [ "$want" = "$h" ] && keep=1; done
+  if [ "$keep" = "0" ]; then
+    logger -t geoguard-ddns "purge $h $ip"
+    hist "purge|$h $ip"
+    CHANGED=1
+  else
+    echo "$h $ip" >> "$NEWSTATE"
+  fi
+done < "$STATE"
+
+# Follow: resolve each host and compare
+for h in $HOSTS; do
+  case "$h" in ""|*[!A-Za-z0-9.-]*) logger -t geoguard-ddns "bad host skip: $h"; continue ;; esac
+  ip=$(resolve "$h")
+  valid_ip "$ip" || { logger -t geoguard-ddns "resolve fail: $h"; continue; }
+  old=$(awk -v h="$h" '$1 == h { print $2; exit; }' "$NEWSTATE")
+  if [ "$ip" != "$old" ]; then
+    awk -v h="$h" '$1 != h' "$NEWSTATE" > "$NEWSTATE.tmp" 2>/dev/null && mv "$NEWSTATE.tmp" "$NEWSTATE"
+    echo "$h $ip" >> "$NEWSTATE"
+    logger -t geoguard-ddns "$h: ${old:-none} -> $ip"
+    hist "$h ${old:-none} -> $ip"
+    CHANGED=1
+  fi
+done
+mv -f "$NEWSTATE" "$STATE"
+
+# State changed -> log only; geoguard-ban picks it up on its next cycle
+# (no active kick: never block the caller on a firewall reload)
+if [ "$CHANGED" = "1" ]; then
+  logger -t geoguard-ddns "changed, geoguard-ban will pick it up on its next cycle"
+fi

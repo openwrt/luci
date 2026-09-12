@@ -1,0 +1,79 @@
+#!/bin/sh
+# geoguard-fetch: download per-country CIDR files only (no merge, no reload)
+# Purpose: backfill on first install, re-fetch sources standalone. Run geoguard-update to merge.
+BASE_DIR="/etc/geoguard"
+TEMP_DIR="/tmp/cafetch-$$"
+
+SRC1=$(uci -q get geoguard.main.src_primary 2>/dev/null)
+SRC2=$(uci -q get geoguard.main.src_backup 2>/dev/null)
+[ -z "$SRC1" ] && SRC1="https://www.ipdeny.com/ipblocks/data/aggregated/{cc}-aggregated.zone"
+[ -z "$SRC2" ] && SRC2="https://raw.githubusercontent.com/ipverse/country-ip-blocks/master/country/{cc}/ipv4-aggregated.txt"
+
+SELECTED=""
+for l in asia europe africa northamerica southamerica oceania; do
+  SELECTED="$SELECTED $(uci -q get geoguard.main.sel_$l 2>/dev/null)"
+done
+SELECTED="$SELECTED $(uci -q get geoguard.main.selected 2>/dev/null)"
+
+mkdir -p "$BASE_DIR" "$TEMP_DIR"
+# Single-flight with geoguard-update: same lockdir path as update's H2 lock.
+# Skipped when invoked by geoguard-update itself (GEOGUARD_LOCKED=1 exported
+# by the caller, which already holds the lock).
+LOCKDIR="$BASE_DIR/.update.lockdir"
+if [ -z "$GEOGUARD_LOCKED" ]; then
+  if ! mkdir "$LOCKDIR" 2>/dev/null; then
+    LPID=$(cat "$LOCKDIR/pid" 2>/dev/null)
+    if [ -n "$LPID" ] && kill -0 "$LPID" 2>/dev/null; then
+      logger -t geoguard "fetch skipped: another run in progress (pid $LPID)"
+      exit 0
+    fi
+    rm -rf "$LOCKDIR"
+    mkdir "$LOCKDIR" 2>/dev/null || { logger -t geoguard "fetch skipped: lock contention"; exit 0; }
+  fi
+  echo "$$" > "$LOCKDIR/pid"
+  trap 'rm -rf "$TEMP_DIR" "$LOCKDIR"' EXIT
+fi
+trap 'rm -rf "$TEMP_DIR"' EXIT
+
+upper() { echo "$1" | tr 'a-z' 'A-Z'; }
+
+fetch_one() {
+  local cc="$1" tmp="$TEMP_DIR/${cc}.raw" clean="$TEMP_DIR/${cc}.cidr" url srcname
+  for template in "$SRC1" "$SRC2"; do
+    [ -z "$template" ] && continue
+    url=$(echo "$template" | sed -e "s/{cc}/$cc/g" -e "s/{CC}/$(upper $cc)/g")
+    case "$template" in
+      *ipdeny*) srcname="primary" ;;
+      *) srcname="backup" ;;
+    esac
+    wget -T 30 -t 2 -q -O "$tmp" "$url" 2>/dev/null || continue
+    [ -s "$tmp" ] || continue
+    grep -v '^#' "$tmp" > "$clean"
+    # Strict per-line filter: only fw4-loadable IPv4 CIDRs are installed, so a
+    # corrupt source can never poison the on-disk file (N8: raw country files
+    # feed firewall ipset loadfile directly; one bad line breaks fw4 reload).
+    grep -E '^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])/([1-9]|[12][0-9]|3[0-2])$' "$clean" > "$clean.strict" 2>/dev/null
+    mv -f "$clean.strict" "$clean"
+    [ "$(wc -l < "$clean")" -ge 15 ] || continue
+    cmp -s "$clean" "$BASE_DIR/${cc}.cidr" || mv -f "$clean" "$BASE_DIR/${cc}.cidr"
+    logger -t geoguard "$cc updated OK (source:$srcname)"
+    echo "$cc:OK:$srcname:$(wc -l < "$BASE_DIR/${cc}.cidr") lines, $(wc -c < "$BASE_DIR/${cc}.cidr") B" >> "$BASE_DIR/.fetch-results"
+    return 0
+  done
+  logger -t geoguard "$cc update FAILED (both sources down, keeping old file)"
+  echo "$cc:FAIL:keeping old file" >> "$BASE_DIR/.fetch-results"
+  return 1
+}
+
+OK=0; FAIL=""
+: > "$BASE_DIR/.fetch-results"
+for cc in $SELECTED; do
+  [ -z "$cc" ] && continue
+  case "$cc" in [a-z][a-z]) ;; *) logger -t geoguard "bad country code, skip: $cc"; continue ;; esac
+  if fetch_one "$cc"; then OK=$((OK+1)); else FAIL="$FAIL $cc"; fi
+done
+logger -t geoguard "IP set fetch done: OK $OK countries, FAILED:$FAIL"
+echo "$(date '+%F %T')|fetch-only|OK=$OK FAILED:$FAIL" >> "$BASE_DIR/history.log"
+tail -n 200 "$BASE_DIR/history.log" > "$TEMP_DIR/hist" 2>/dev/null \
+  && mv "$TEMP_DIR/hist" "$BASE_DIR/history.log"
+[ -z "$FAIL" ]
