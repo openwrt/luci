@@ -43,7 +43,7 @@ return baseclass.extend({
 				{ text: device.macaddr, className: 'dashboard-mono' }
 			]),
 			emptyText: _('No active leases'),
-			foot: [ '', _('Total') + '：', String(this.params.lan.devices.length) ]
+			foot: [ '', _('Total'), String(this.params.lan.devices.length) ]
 		});
 	},
 
