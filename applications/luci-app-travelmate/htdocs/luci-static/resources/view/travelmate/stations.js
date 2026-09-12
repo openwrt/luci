@@ -336,7 +336,7 @@ function handleStatus() {
 					}
 					if (!info || !info.data) return;
 
-					const vpnMatch = (info.data.ext_hooks || '').match(/vpn:\s*(.)/);
+					const vpnMatch = (info.data.run_flags || '').match(/vpn:\s*(.)/);
 					const uplinkId = (info.data.station_id || '').trim().split('/');
 					const oldUplinkView = document.getElementsByName('uplinkStation');
 					const w_sections = uci.sections('wireless', 'wifi-iface');
