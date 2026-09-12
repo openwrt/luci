@@ -1,16 +1,23 @@
 #!/bin/sh
 # geoguard-ban-unban [ip|all]: 解封（防護頁按鈕用）
+# 同步清掉 reboot-restore 用的 persist，否則重開機會把剛解封的 IP 抓回來
 SET=geoguard_ban
+PERSIST="/etc/luci-uploads/ban-persist.list"
 case "$1" in
   all|"")
     for ip in $(nft list set inet fw4 $SET 2>/dev/null | tr ',' '\n' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ timeout' | awk '{print $1}'); do
       nft delete element inet fw4 $SET "{ $ip }" 2>/dev/null
     done
+    : > "$PERSIST" 2>/dev/null
     logger -t geoguard-ban "unbanned all"
     ;;
   *)
     case "$1" in *[!0-9.]*) echo "bad IP format"; exit 1 ;; esac
     nft delete element inet fw4 $SET "{ $1 }" 2>/dev/null \
       && logger -t geoguard-ban "unbanned $1"
+    if [ -f "$PERSIST" ]; then
+      grep -v "^$1 " "$PERSIST" > "$PERSIST.tmp" 2>/dev/null || true
+      mv "$PERSIST.tmp" "$PERSIST" 2>/dev/null || true
+    fi
     ;;
 esac

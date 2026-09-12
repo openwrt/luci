@@ -213,26 +213,28 @@ if [ -n "$APPLIED_W" ] && [ "$APPLIED_W" != "$WHITENAME" ]; then
   done
 fi
 STALE_GONE=""
-for m in $MANAGED; do
-  echo " $DESIRED " | grep -q " $m:" || {
-    if uci show firewall 2>/dev/null | grep -q "\.ipset='$m'$"; then
-      # H1: still referenced by rules -> keep section, refuse silently-dangerous delete
-      logger -t geoguard "ERROR stale set $m still referenced by rules, kept (re-bind rules first)"
-      hist "stale-kept|$m referenced by rules"
-    else
-      nft flush set inet fw4 "$m" 2>/dev/null
-      for idx in $(uci show firewall 2>/dev/null | grep '=ipset$' | cut -d. -f2 | cut -d[ -f2 | cut -d] -f1 | sort -rn | uniq); do
-        case "$idx" in ''|*[!0-9]*) continue ;; esac
-        sec="firewall.@ipset[$idx]"
-        if [ "$(uci -q get "$sec.name" 2>/dev/null)" = "$m" ]; then
-          uci delete "$sec"
-          NEED_RELOAD=1
-          STALE_GONE="$STALE_GONE $m"
-          logger -t geoguard "stale section removed (live flushed): $m"
-        fi
-      done
-    fi
-  }
+# Sweep every ipset section whose loadfile lives in our uploads dir.
+# The old MANAGED-list loop could never see names that were never recorded
+# (legacy/hand-made orphans); managed names are a subset of this sweep.
+for idx in $(uci show firewall 2>/dev/null | grep '=ipset$' | cut -d. -f2 | cut -d[ -f2 | cut -d] -f1 | sort -rn | uniq); do
+  case "$idx" in ''|*[!0-9]*) continue ;; esac
+  sec="firewall.@ipset[$idx]"
+  nm=$(uci -q get "$sec.name" 2>/dev/null)
+  lf=$(uci -q get "$sec.loadfile" 2>/dev/null)
+  [ -z "$nm" ] && continue
+  case "$lf" in "$BASE_DIR/"*) ;; *) continue ;; esac
+  echo " $DESIRED " | grep -q " $nm:" && continue
+  if uci show firewall 2>/dev/null | grep -q "\.ipset='$nm'$"; then
+    # H1: still referenced by rules -> keep section, refuse silently-dangerous delete
+    logger -t geoguard "ERROR stale set $nm still referenced by rules, kept (re-bind rules first)"
+    hist "stale-kept|$nm referenced by rules"
+  else
+    nft flush set inet fw4 "$nm" 2>/dev/null
+    uci delete "$sec"
+    NEED_RELOAD=1
+    STALE_GONE="$STALE_GONE $nm"
+    logger -t geoguard "stale section removed (live flushed): $nm"
+  fi
 done
 uci set geoguard.main.applied_name="$SETNAME"
 uci set geoguard.main.applied_white="$WHITENAME"

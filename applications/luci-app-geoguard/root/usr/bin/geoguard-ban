@@ -4,6 +4,7 @@
 # 由 /etc/init.d/geoguard-ban（procd，間隔讀 ban_interval）呼叫
 SET=geoguard_ban
 CFG=geoguard
+PERSIST="/etc/luci-uploads/ban-persist.list"
 nft list set inet fw4 $SET >/dev/null 2>&1 || exit 0
 
 g() { uci get $CFG.main."$1" 2>/dev/null; }
@@ -74,6 +75,26 @@ while [ $i -lt "$FIND" ]; do
 done
 [ -s "$WIN" ] || exit 0
 
+persist_ban() {
+  # record ban start epoch for reboot restore (dedupe by ip)
+  grep -v "^$1 " "$PERSIST" 2>/dev/null > "$PERSIST.tmp"
+  echo "$1 $(date +%s)" >> "$PERSIST.tmp"
+  mv "$PERSIST.tmp" "$PERSIST" 2>/dev/null
+}
+prune_persist() {
+  # drop expired entries by time only (NOT by live absence: a fw4 reload
+  # wipes the live set, and pruning then would defeat reboot restore;
+  # unban() purges the file explicitly on purpose-unbans)
+  now=$(date +%s)
+  : > "$PERSIST.tmp"
+  while read -r pip pstart; do
+    [ -z "$pip" ] && continue
+    if [ $((now - pstart)) -lt $((BANH * 3600)) ]; then
+      echo "$pip $pstart" >> "$PERSIST.tmp"
+    fi
+  done < "$PERSIST" 2>/dev/null
+  mv "$PERSIST.tmp" "$PERSIST" 2>/dev/null
+}
 ban_ip() {
   ip="$1"; tag="$2"
   case "$ip" in ""|0.0.0.0) return 0 ;; esac
@@ -81,8 +102,10 @@ ban_ip() {
   [ -f "$WLFILE" ] && in_list "$ip" < "$WLFILE" && return 0
   in_ddns "$ip" && return 0
   if ! nft get element inet fw4 $SET "{ $ip }" >/dev/null 2>&1; then
-    nft add element inet fw4 $SET "{ $ip timeout ${BANH}h }" \
-      && logger -t geoguard-ban "banned $ip for ${BANH}h ($tag brute force)"
+    if nft add element inet fw4 $SET "{ $ip timeout ${BANH}h }"; then
+      logger -t geoguard-ban "banned $ip for ${BANH}h ($tag brute force)"
+      persist_ban "$ip"
+    fi
   fi
 }
 
@@ -96,8 +119,9 @@ if [ "$WEB" = "1" ]; then
 fi
 
 if [ "$SSHO" = "1" ]; then
-  echo "$LOG" | grep -E 'bad password attempt|Login attempt for nonexistent' | grep -F -f "$WIN" \
-    | sed -n 's/.* from \([0-9][0-9.]*\)[: ].*$/\1/p' \
+  echo "$LOG" | grep -E 'bad password attempt|Login attempt for nonexistent|Exit before auth' | grep -F -f "$WIN" \
+    | tr -d '<>' | sed -n 's/.* from \([0-9][0-9.]*\)[: ].*$/\1/p' \
     | sort | uniq -c | awk -v max="$MAX" '$1>=max{print $2}' \
     | while read -r ip; do ban_ip "$ip" "SSH"; done
 fi
+prune_persist
