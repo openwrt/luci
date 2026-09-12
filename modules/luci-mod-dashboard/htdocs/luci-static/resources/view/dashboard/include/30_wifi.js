@@ -117,7 +117,7 @@ return baseclass.extend({
 	// Fixed five ticks in the unit the peak falls into; the interval is the
 	// smallest 1-2-5 step whose fourth multiple covers the peak.
 	byteScale(peak) {
-		const units = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
+		const units = [ 'B', 'KiB', 'MiB', 'GiB', 'TiB' ];
 		let exp = 0;
 
 		while (peak >= 1024 && exp < units.length - 1) {
@@ -219,7 +219,7 @@ return baseclass.extend({
 				{ text: device.transferred.value.tx, className: 'dashboard-mono dashboard-num' }
 			]),
 			emptyText: _('No wireless clients connected'),
-			foot: [ '', _('Total') + '：', String(this.params.wifi.devices.length), '', '' ]
+			foot: [ '', _('Total'), String(this.params.wifi.devices.length), '', '' ]
 		});
 	},
 
@@ -325,8 +325,8 @@ return baseclass.extend({
 							title: _('Transferred'),
 							visible: true,
 							value: {
-								rx: '%s'.format('%.2mB'.format(bss.rx.bytes)),
-								tx: '%s'.format('%.2mB'.format(bss.tx.bytes)),
+								rx: '%s'.format('%1024.2mB'.format(bss.rx.bytes)),
+								tx: '%s'.format('%1024.2mB'.format(bss.tx.bytes)),
 								bytes: { rx: bss.rx.bytes || 0, tx: bss.tx.bytes || 0 }
 							}
 						}

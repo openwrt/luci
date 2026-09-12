@@ -48,7 +48,7 @@ function collectSections(includes, results) {
 				content = includes[i].content;
 		}
 		catch (e) {
-			includes[i].failed = true;
+			console.error(e);
 			continue;
 		}
 
