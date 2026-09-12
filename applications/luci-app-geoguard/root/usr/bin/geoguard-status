@@ -1,21 +1,52 @@
 #!/bin/sh
 # geoguard-status: set status + update history + related system log (for LuCI log tab)
+# Output is display-only English (detailed); machine parsing uses geoguard-counts.
 BASE_DIR="/etc/luci-uploads"
 SETNAME=$(uci -q get geoguard.main.setname 2>/dev/null)
 echo "$SETNAME" | grep -qE '^[A-Za-z][A-Za-z0-9_-]*$' || SETNAME="allowed-IPList"
+WHITENAME=$(uci -q get geoguard.main.white_name 2>/dev/null)
+echo "$WHITENAME" | grep -qE '^[A-Za-z][A-Za-z0-9_-]*$' || WHITENAME="CustomAllow"
 FILE="$BASE_DIR/${SETNAME}.cidr"
+WFILE="$BASE_DIR/${WHITENAME}.cidr"
+
+# fileline <path>: "<lines> lines | <bytes> B (<KiB> KiB) | updated <date>" or "(missing)"
+fileline() {
+  if [ -f "$1" ]; then
+    _l=$(wc -l < "$1" 2>/dev/null)
+    _b=$(wc -c < "$1" 2>/dev/null)
+    _k=$(awk -v b="$_b" 'BEGIN { printf "%.1f", b/1024 }')
+    _d=$(date -r "$1" '+%F %T' 2>/dev/null || echo "-")
+    echo "$_l lines | $_b B ($_k KiB) | updated $_d"
+  else
+    echo "(missing)"
+  fi
+}
+
+# livecount: total elements + CIDR/range split (nft merges adjacents for display)
+livecount() {
+  _out=$(nft list set inet fw4 "$1" 2>/dev/null | sed -n '/elements = {/,/}/p' | tr -d '{}' | sed 's/elements = //' | tr ',' '\n' | grep '[^[:space:]]')
+  [ -z "$_out" ] && { echo "0 (set missing)"; return; }
+  _t=$(echo "$_out" | wc -l)
+  _c=$(echo "$_out" | grep -c '/')
+  _r=$((_t - _c))
+  echo "$_t entries ($_c CIDR, $_r merged ranges)"
+}
 
 echo "===== Set status ====="
 if [ -f "$FILE" ]; then
-  echo "Set file: $FILE ($(wc -l < "$FILE") lines, $(date -r "$FILE" '+%F %T'))"
+  echo "Set file: $FILE"
+  echo "  $(fileline "$FILE")"
 else
   echo "Set file: $FILE (missing, press Update IP sets now)"
 fi
-if nft list set inet fw4 "$SETNAME" >/dev/null 2>&1; then
-  echo "live set: $(nft list set inet fw4 "$SETNAME" 2>/dev/null | tr ',' '\n' | grep -c '/') entries active"
-else
-  echo "live set: missing (created after firewall reload)"
-fi
+echo "live set \`$SETNAME\`: $(livecount "$SETNAME")"
+echo "Whitelist file: $WFILE"
+echo "  $(fileline "$WFILE")"
+echo "Per-country files:"
+for cc in $(uci -q get geoguard.main.selected 2>/dev/null); do
+  [ -z "$cc" ] && continue
+  echo "  $cc.cidr: $(fileline "$BASE_DIR/${cc}.cidr")"
+done
 echo "Schedule: $(grep 'geoguard-update' /etc/crontabs/root 2>/dev/null | head -1)"
 echo ""
 echo "===== Update history (last 20) ====="

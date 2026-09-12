@@ -5,7 +5,7 @@
 'require ui';
 'require uci';
 
-var VERSION = '2.1.6';
+var VERSION = '2.1.7';
 var fmt = function(s) {
 	var args = Array.prototype.slice.call(arguments, 1);
 	var i = 0;
@@ -200,7 +200,11 @@ return view.extend({
 			var p = (countsText || '').split(/\s+/);
 			if (p.length < 4 || !p[0])
 				return _('Latest merged IP set file: no data yet');
-			return fmt(_('Latest merged IP set file: /etc/luci-uploads/%s.cidr (%s lines / live %s entries / updated %s)'), p[0], p[1], p[2], p[3].replace('_', ' '));
+			var fdate = (p[3] || '').replace('_', ' ');
+			var cdate = (p[4] || '').replace('_', ' ');
+			if (cdate && cdate !== fdate)
+				return fmt(_('Latest merged IP set file: /etc/luci-uploads/%s.cidr (%s lines / live %s entries / updated %s, checked %s — no changes)'), p[0], p[1], p[2], fdate, cdate);
+			return fmt(_('Latest merged IP set file: /etc/luci-uploads/%s.cidr (%s lines / live %s entries / updated %s)'), p[0], p[1], p[2], fdate);
 		};
 
 		var refreshCounts = function() {
@@ -587,22 +591,37 @@ return view.extend({
 		o = s.taboption('log', form.DummyValue, '_log');
 		o.render = function(section_id) {
 			var pre = E('pre', { 'style': 'white-space:pre-wrap' }, [logText]);
-			var clr = E('button', { 'class': 'btn cbi-button cbi-button-neutral', 'style': 'margin-bottom:0.5em' }, [_('Clear Update History')]);
+			var swapPre = function(text) {
+				while (pre.firstChild)
+					pre.removeChild(pre.firstChild);
+				pre.appendChild(document.createTextNode(text || ''));
+			};
+			var clr = E('button', { 'class': 'btn cbi-button cbi-button-neutral', 'style': 'margin-bottom:0.5em;margin-right:0.5em' }, [_('Clear Update History')]);
 			clr.addEventListener('click', function(ev) {
 				if (ev && ev.preventDefault)
 					ev.preventDefault();
 				return fs.exec('/usr/bin/geoguard-clear-history').then(function() {
 					return fs.exec('/usr/bin/geoguard-status');
 				}).then(function(res) {
-					while (pre.firstChild)
-						pre.removeChild(pre.firstChild);
-					pre.appendChild(document.createTextNode(res.stdout || ''));
+					swapPre(res.stdout);
 					ui.addNotification(null, E('p', _('Update history cleared')), 'info');
 				}).catch(function(e) {
 					ui.addNotification(null, E('p', fmt(_('Failed: %s'), e.message)), 'error');
 				});
 			});
-			return E('div', {}, [clr, pre]);
+			/* read-only refresh: exempt from the action-button busy lock
+			   so progress can be watched while an update runs */
+			var rld = E('button', { 'class': 'btn cbi-button cbi-button-neutral', 'style': 'margin-bottom:0.5em' }, [_('Reload Log')]);
+			rld.addEventListener('click', function(ev) {
+				if (ev && ev.preventDefault)
+					ev.preventDefault();
+				return fs.exec('/usr/bin/geoguard-status').then(function(res) {
+					swapPre(res.stdout);
+				}).catch(function(e) {
+					ui.addNotification(null, E('p', fmt(_('Failed: %s'), e.message)), 'error');
+				});
+			});
+			return E('div', {}, [clr, rld, pre]);
 		};
 
 		/* ---- 登入防護籤（7 列緊湊版：短欄併列、清單獨佔） ---- */

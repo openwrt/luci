@@ -36,7 +36,7 @@ fetch_one() {
     grep -qvE '^[0-9]{1,3}(\.[0-9]{1,3}){3}/[0-9]{1,2}$' "$clean" && continue
     mv -f "$clean" "$BASE_DIR/${cc}.cidr"
     logger -t geoguard "$cc updated OK (source:$srcname)"
-    echo "$cc:OK:$srcname:$(wc -l < "$BASE_DIR/${cc}.cidr") lines" >> "$BASE_DIR/.fetch-results"
+    echo "$cc:OK:$srcname:$(wc -l < "$BASE_DIR/${cc}.cidr") lines, $(wc -c < "$BASE_DIR/${cc}.cidr") B" >> "$BASE_DIR/.fetch-results"
     return 0
   done
   logger -t geoguard "$cc update FAILED (both sources down, keeping old file)"

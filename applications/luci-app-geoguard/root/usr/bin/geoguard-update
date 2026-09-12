@@ -265,7 +265,7 @@ for item in $DESIRED; do
 done
 logger -t geoguard "done $SETNAME +$WHITENAME"
 if [ "$changed_files" = "1" ]; then
-  hist "merged+white" "ok"
+  hist "merged+white" "ok $(wc -l < "$OUTPUT" 2>/dev/null) lines, $(wc -c < "$OUTPUT" 2>/dev/null) B"
 else
   hist "merged+white" "no new updates at the moment"
 fi
