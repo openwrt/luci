@@ -1,0 +1,137 @@
+/* SPDX-License-Identifier: MIT */
+
+.qos-badge {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 3px;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.qos-green {
+	background: var(--success-color-medium, #009a4c);
+	color: var(--on-success-color, #fff);
+}
+
+.qos-red {
+	background: var(--error-color-medium, #e8210d);
+	color: var(--on-error-color, #fff);
+}
+
+.qos-amber {
+	background: var(--warn-color-medium, #f0c629);
+	color: var(--on-warn-color, #000);
+}
+
+.qos-ok {
+	color: var(--success-color-medium, #009a4c);
+}
+
+.qos-err {
+	color: var(--error-color-medium, #e8210d);
+}
+
+.qos-warn {
+	color: var(--warn-color-low, #f2d24f);
+}
+
+.qos-muted {
+	font-size: 11px;
+	color: var(--text-color-medium, inherit);
+	opacity: .75;
+}
+
+.qos-kv td {
+	padding: 7px 12px;
+	border-bottom: 1px solid var(--border-color-medium, rgba(128, 128, 128, .35));
+}
+
+.qos-kv td:first-child {
+	font-weight: bold;
+	opacity: .7;
+	width: 200px;
+}
+
+.qos-kv tr:last-child td {
+	border-bottom: none;
+}
+
+.qos-svc > * {
+	display: inline-block;
+	margin: 0 3px 3px 0;
+}
+
+.qos-ref,
+.qos-qa {
+	margin: 0 0 10px;
+	padding: 8px 10px;
+	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
+	border-radius: 4px;
+}
+
+.qos-ref summary {
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 13px;
+}
+
+.qos-qa label {
+	font-size: 11px;
+	opacity: .7;
+}
+
+.qos-qa-row {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	margin: 6px 0 0;
+	flex-wrap: wrap;
+}
+
+.qos-edit {
+	width: 100%;
+	font-family: var(--font-mono, monospace);
+	font-size: 12px;
+	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
+}
+
+.qos-pre {
+	margin: 0;
+	padding: 10px;
+	overflow: auto;
+	white-space: pre;
+	font-family: var(--font-mono, monospace);
+	font-size: 12px;
+	background: var(--background-color-low, rgba(128, 128, 128, .12));
+	color: inherit;
+	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
+	border-radius: 3px;
+}
+
+/* The tc output is the only thing on the Status tab, so it takes the rest of the
+   window: the viewport less the LuCI header, the tab bar and the summary table
+   above it. calc() going negative on a short screen is caught by min-height, and
+   the box is draggable for anything the estimate gets wrong. */
+#qos-st-pre {
+	height: calc(100vh - 310px);
+	min-height: 320px;
+	resize: vertical;
+}
+
+/* Each editor is the last thing on its tab, with only the action buttons under
+   it, so it takes the rest of the window instead of a fixed 28 rows; the
+   reference and Quick Add panels above it scroll off first. The rows attribute
+   stays as the fallback if this sheet does not load. */
+#qos-config-ta,
+#qos-rules-ta {
+	height: calc(100vh - 300px);
+	min-height: 320px;
+	resize: vertical;
+}
+
+.qos-item {
+	margin: 4px 0;
+	padding: 4px 8px;
+	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
+	border-radius: 3px;
+}
