@@ -1,0 +1,20 @@
+{
+	"luci-app-geoguard": {
+		"description": "Grant access to GeoGuard",
+		"read": {
+			"uci": [ "geoguard" ],
+			"file": {
+				"/etc/luci-uploads/*.cidr": [ "read" ]
+			}
+		},
+		"write": {
+			"uci": [ "geoguard" ],
+			"file": {
+				"/etc/luci-uploads/*.cidr": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "exec" ]
+			}
+		}
+	}
+}

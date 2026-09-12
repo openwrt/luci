@@ -1,0 +1,10 @@
+set geoguard_ban {
+	type ipv4_addr
+	flags timeout
+}
+
+chain luci_guard {
+	type filter hook prerouting priority -160; policy accept;
+	iifname "pppoe-wan" ip saddr @geoguard_ban limit rate over 10/minute burst 5 packets log prefix "geoguard-ban-drop: " drop
+	iifname "pppoe-wan" ip saddr @geoguard_ban drop
+}

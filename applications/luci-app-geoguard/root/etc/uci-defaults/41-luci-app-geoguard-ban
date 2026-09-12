@@ -1,0 +1,19 @@
+#!/bin/sh
+# 41-luci-app-geoguard-ban: 初裝遷移（只跑一次）
+# 舊獨立版（/root/geoguard-ban*.sh + rc.local）換手給 procd 服務
+if [ -f /var/run/geoguard-ban-loop.pid ]; then
+  oldpid=$(cat /var/run/geoguard-ban-loop.pid 2>/dev/null)
+  [ -n "$oldpid" ] && kill "$oldpid" 2>/dev/null
+  rm -f /var/run/geoguard-ban-loop.pid
+fi
+for p in $(ps | grep 'geoguard-ban-loop.sh' | grep -v grep | awk '{print $1}'); do kill "$p" 2>/dev/null; done
+sed -i '/geoguard-ban-loop\.sh/d' /etc/rc.local 2>/dev/null
+for f in /root/geoguard-ban.sh /root/geoguard-ban-loop.sh; do
+  [ -f "$f" ] && mv "$f" "$f.bak"
+done
+chmod +x /usr/bin/geoguard-ban /usr/bin/geoguard-ban-status /usr/bin/geoguard-ban-unban /etc/init.d/geoguard-ban
+/etc/init.d/geoguard-ban enable
+/etc/init.d/geoguard-ban start
+logger -t geoguard "ban migrated to procd"
+/etc/init.d/firewall reload >/dev/null 2>&1
+exit 0

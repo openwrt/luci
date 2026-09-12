@@ -1,0 +1,23 @@
+#!/bin/sh
+# geoguard-counts：目前啟用的集合檔行數＋live 段數＋檔案日期＋最後檢查日期（給設定頁用）
+# 輸出：集合名 檔行數 live段數 FILEDATE CHECKDATE（底線分隔，JS 好切；
+# CHECKDATE 取 history.log 最後一行時間，無則同 FILEDATE）
+BASE_DIR="/etc/luci-uploads"
+SETNAME=$(uci -q get geoguard.main.setname 2>/dev/null)
+echo "$SETNAME" | grep -qE '^[A-Za-z][A-Za-z0-9_-]*$' || SETNAME="allowed-IPList"
+FILE="$BASE_DIR/${SETNAME}.cidr"
+FL=0
+LIVE=0
+FDATE="-"
+if [ -f "$FILE" ]; then
+  FL=$(wc -l < "$FILE")
+  FDATE=$(date -r "$FILE" '+%F_%T' 2>/dev/null || echo "-")
+fi
+if nft list set inet fw4 "$SETNAME" >/dev/null 2>&1; then
+  # count elements, not slashes (A-B ranges have no '/')
+  LIVE=$(nft list set inet fw4 "$SETNAME" 2>/dev/null | sed -n '/elements = {/,/}/p' | tr -d '{}' | sed 's/elements = //' | tr ',' '\n' | grep -c '[^[:space:]]')
+  [ -z "$LIVE" ] && LIVE=0
+fi
+CDATE=$(tail -n 1 "$BASE_DIR/history.log" 2>/dev/null | cut -d'|' -f1 | sed 's/ /_/;s/[^0-9_:\-]//g')
+[ -z "$CDATE" ] && CDATE="$FDATE"
+echo "$SETNAME $FL $LIVE $FDATE $CDATE"

@@ -1,0 +1,273 @@
+#!/bin/sh
+# geoguard-update v7：抓取 → 合併 → 同步多個 uci ipset 區段（含英文註解）→ 刷新 live set
+# 集合：各國（有檔才建）＋合併＋白名單（空白不建不留檔）；白名單預設名 CustomAllow
+BASE_DIR="/etc/luci-uploads"
+TEMP_DIR="/tmp/geoguard-$$"
+CCEN="$BASE_DIR/cc-en.txt"
+
+SETNAME=$(uci -q get geoguard.main.setname 2>/dev/null)
+echo "$SETNAME" | grep -qE '^[A-Za-z][A-Za-z0-9_-]*$' || SETNAME="allowed-IPList"
+OUTPUT="$BASE_DIR/${SETNAME}.cidr"
+WHITENAME=$(uci -q get geoguard.main.white_name 2>/dev/null)
+echo "$WHITENAME" | grep -qE '^[A-Za-z][A-Za-z0-9_-]*$' || WHITENAME="CustomAllow"
+WOUTPUT="$BASE_DIR/${WHITENAME}.cidr"
+
+SELECTED=""
+for l in asia europe africa northamerica southamerica oceania; do
+  SELECTED="$SELECTED $(uci -q get geoguard.main.sel_$l 2>/dev/null)"
+done
+SELECTED="$SELECTED $(uci -q get geoguard.main.selected 2>/dev/null)"
+WHITELIST=$(uci -q get geoguard.main.whitelist 2>/dev/null)
+
+mkdir -p "$BASE_DIR" "$TEMP_DIR"
+# H2: single-flight (cron vs manual clicks). mkdir is atomic; stale lock
+# (kill -9) is reclaimed via pid check.
+LOCKDIR="$BASE_DIR/.update.lockdir"
+if ! mkdir "$LOCKDIR" 2>/dev/null; then
+  LPID=$(cat "$LOCKDIR/pid" 2>/dev/null)
+  if [ -n "$LPID" ] && kill -0 "$LPID" 2>/dev/null; then
+    logger -t geoguard "update skipped: another run in progress (pid $LPID)"
+    exit 0
+  fi
+  rm -rf "$LOCKDIR"
+  mkdir "$LOCKDIR" 2>/dev/null || { logger -t geoguard "update skipped: lock contention"; exit 0; }
+fi
+echo "$$" > "$LOCKDIR/pid"
+trap 'rm -rf "$TEMP_DIR" "$LOCKDIR"' EXIT
+
+hist() {
+  echo "$(date '+%F %T')|update|$SETNAME|countries=$1 $2" >> "$BASE_DIR/history.log"
+  tail -n 200 "$BASE_DIR/history.log" > "$TEMP_DIR/hist" 2>/dev/null \
+    && mv "$TEMP_DIR/hist" "$BASE_DIR/history.log"
+}
+
+cc_en() {
+  local en=""
+  [ -f "$CCEN" ] && en=$(grep -i "^$1 " "$CCEN" 2>/dev/null | head -1 | cut -d' ' -f2-)
+  [ -z "$en" ] && en=$(echo "$1" | tr 'a-z' 'A-Z')
+  echo "$en"
+}
+
+/usr/bin/geoguard-fetch
+
+# 逐國結果寫入歷史
+if [ -f "$BASE_DIR/.fetch-results" ]; then
+  while IFS= read -r line; do
+    [ -z "$line" ] && continue
+    echo "$(date '+%F %T')|fetch|$line" >> "$BASE_DIR/history.log"
+  done < "$BASE_DIR/.fetch-results"
+  rm -f "$BASE_DIR/.fetch-results"
+fi
+
+# 範圍 A-B 展開成最小 CIDR 組（awk，無外部依賴）
+range2cidr() {
+  awk '
+  function ip2int(ip,   a) { split(ip, a, "[.]"); return (a[1]*16777216)+(a[2]*65536)+(a[3]*256)+a[4]; }
+  function int2ip(i) { return int(i/16777216) "." (int(i/65536)%256) "." (int(i/256)%256) "." (i%256); }
+  function valid(ip,   n,a,i) { n = split(ip, a, "[.]"); if (n != 4) return 0;
+    for (i = 1; i <= 4; i++) if (a[i] !~ /^[0-9]+$/ || (a[i]+0) < 0 || (a[i]+0) > 255) return 0; return 1; }
+  {
+    if ($0 ~ /^[0-9][0-9.]*-[0-9][0-9.]*$/) {
+      split($0, r, "-");
+      if (!valid(r[1]) || !valid(r[2])) next;
+      s = ip2int(r[1]); e = ip2int(r[2]);
+      if (s > e) next;
+      while (s <= e) {
+        bits = 0;
+        while ((bits < 32) && ((s % (2^(bits+1))) == 0) && ((s + (2^(bits+1)) - 1) <= e)) bits++;
+        print int2ip(s) "/" (32 - bits);
+        s += 2^bits;
+      }
+    } else print $0;
+  }'
+}
+
+# 白名單正規化（單IP補/32、CIDR、範圍展開），結果進 $1 指定的檔
+build_white() {
+  > "$1"
+  for ip in $WHITELIST; do
+    [ -z "$ip" ] && continue
+    if echo "$ip" | grep -qE '^[0-9]{1,3}(\.[0-9]{1,3}){3}$'; then
+      echo "$ip/32" >> "$1"
+    elif echo "$ip" | grep -qE '^[0-9]{1,3}(\.[0-9]{1,3}){3}/[0-9]{1,2}$'; then
+      echo "$ip" >> "$1"
+    elif echo "$ip" | grep -qE '^[0-9]{1,3}(\.[0-9]{1,3}){3}-[0-9]{1,3}(\.[0-9]{1,3}){3}$'; then
+      echo "$ip" | range2cidr >> "$1"
+    else
+      logger -t geoguard "white format skip: $ip"
+    fi
+  done
+  sort -u "$1" -o "$1"
+  grep -E '^[0-9]{1,3}(\.[0-9]{1,3}){3}/([1-9]|[12][0-9]|3[0-2])$' "$1" > "$1.clean" 2>/dev/null
+  mv "$1.clean" "$1"
+}
+
+TEMP_ALLOW="$TEMP_DIR/merged.tmp"
+> "$TEMP_ALLOW"
+for cc in $SELECTED; do
+  [ -z "$cc" ] && continue
+  [ -f "$BASE_DIR/${cc}.cidr" ] && cat "$BASE_DIR/${cc}.cidr" >> "$TEMP_ALLOW"
+done
+build_white "$TEMP_DIR/white.tmp"
+cat "$TEMP_DIR/white.tmp" >> "$TEMP_ALLOW"
+
+[ -s "$TEMP_ALLOW" ] || { logger -t geoguard "no data, skip"; hist "merged" "fail:nodata"; exit 1; }
+sort -u "$TEMP_ALLOW" > "$TEMP_DIR/merged.sorted"
+  grep -E '^[0-9]{1,3}(\.[0-9]{1,3}){3}/([1-9]|[12][0-9]|3[0-2])$' "$TEMP_DIR/merged.sorted" > "$TEMP_DIR/merged.clean"
+[ -s "$TEMP_DIR/merged.clean" ] || { logger -t geoguard "merged empty, skip"; exit 1; }
+
+# 期望集合：格式 name|file|comment
+DESIRED=""
+for cc in $SELECTED; do
+  [ -z "$cc" ] && continue
+  if [ -s "$BASE_DIR/${cc}.cidr" ]; then
+    DESIRED="$DESIRED ${cc}:$BASE_DIR/${cc}.cidr"
+  else
+    logger -t geoguard "country file missing, skip set: $cc"
+  fi
+done
+DESIRED="$DESIRED ${SETNAME}:$OUTPUT"
+if [ -s "$TEMP_DIR/white.tmp" ]; then
+  DESIRED="$DESIRED ${WHITENAME}:$WOUTPUT"
+else
+  rm -f "$WOUTPUT"
+fi
+
+changed_files=0
+if [ ! -f "$OUTPUT" ] || ! cmp -s "$TEMP_DIR/merged.clean" "$OUTPUT"; then
+  mv -f "$TEMP_DIR/merged.clean" "$OUTPUT"
+  changed_files=1
+fi
+if [ -s "$TEMP_DIR/white.tmp" ]; then
+  if [ ! -f "$WOUTPUT" ] || ! cmp -s "$TEMP_DIR/white.tmp" "$WOUTPUT"; then
+    mv -f "$TEMP_DIR/white.tmp" "$WOUTPUT"
+    changed_files=1
+  fi
+fi
+
+comment_for() {
+  case "$1" in
+    "$SETNAME") echo "Merged allow IPs" ;;
+    "$WHITENAME") echo "Custom allow IPs" ;;
+    *) echo "$(cc_en "$1") IPs" ;;
+  esac
+}
+
+sync_one() {
+  local name="$1" file="$2" comment idx sec nm found
+  comment="$(comment_for "$name")"
+  for idx in $(uci show firewall 2>/dev/null | grep '=ipset$' | cut -d. -f2 | cut -d[ -f2 | cut -d] -f1 | sort -rn | uniq); do
+    case "$idx" in ''|*[!0-9]*) continue ;; esac
+    sec="firewall.@ipset[$idx]"
+    nm=$(uci -q get "$sec.name" 2>/dev/null)
+    if [ "$nm" = "$name" ]; then
+      if [ -z "$found" ]; then
+        found="$sec"
+      else
+        uci delete "$sec"
+        NEED_RELOAD=1
+        logger -t geoguard "dup section removed: $name"
+      fi
+    fi
+  done
+  if [ -z "$found" ]; then
+    found="firewall.$(uci add firewall ipset)"
+    NEED_RELOAD=1
+  fi
+  if [ "$(uci -q get $found.name)" != "$name" ] || \
+     [ "$(uci -q get $found.loadfile)" != "$file" ] || \
+     [ "$(uci -q get $found.family)" != "ipv4" ] || \
+     [ "$(uci -q get $found.match)" != "src_net" ] || \
+     [ "$(uci -q get $found.comment)" != "$comment" ]; then
+    uci set $found.name="$name"
+    uci set $found.family='ipv4'
+    uci set $found.match='src_net'
+    uci set $found.loadfile="$file"
+    uci set $found.comment="$comment"
+    uci commit firewall
+    NEED_RELOAD=1
+  fi
+}
+
+NEED_RELOAD=0
+MANAGED=$(uci -q get geoguard.main.managed 2>/dev/null)
+for item in $DESIRED; do
+  sync_one "${item%%:*}" "${item#*:}"
+done
+# rename repoint runs BEFORE stale cleanup so a renamed set is not
+# mistaken for a still-referenced stale set (H1 guard below).
+APPLIED_S=$(uci -q get geoguard.main.applied_name 2>/dev/null)
+APPLIED_W=$(uci -q get geoguard.main.applied_white 2>/dev/null)
+if [ -n "$APPLIED_S" ] && [ "$APPLIED_S" != "$SETNAME" ]; then
+  for rp in $(uci show firewall 2>/dev/null | grep "\.ipset='$APPLIED_S'$" | cut -d= -f1); do
+    uci set "$rp"="$SETNAME"
+    NEED_RELOAD=1
+    logger -t geoguard "rule repoint: $rp -> $SETNAME"
+  done
+fi
+if [ -n "$APPLIED_W" ] && [ "$APPLIED_W" != "$WHITENAME" ]; then
+  for rp in $(uci show firewall 2>/dev/null | grep "\.ipset='$APPLIED_W'$" | cut -d= -f1); do
+    uci set "$rp"="$WHITENAME"
+    NEED_RELOAD=1
+    logger -t geoguard "rule repoint: $rp -> $WHITENAME"
+  done
+fi
+STALE_GONE=""
+# Sweep every ipset section whose loadfile lives in our uploads dir.
+# The old MANAGED-list loop could never see names that were never recorded
+# (legacy/hand-made orphans); managed names are a subset of this sweep.
+for idx in $(uci show firewall 2>/dev/null | grep '=ipset$' | cut -d. -f2 | cut -d[ -f2 | cut -d] -f1 | sort -rn | uniq); do
+  case "$idx" in ''|*[!0-9]*) continue ;; esac
+  sec="firewall.@ipset[$idx]"
+  nm=$(uci -q get "$sec.name" 2>/dev/null)
+  lf=$(uci -q get "$sec.loadfile" 2>/dev/null)
+  [ -z "$nm" ] && continue
+  case "$lf" in "$BASE_DIR/"*) ;; *) continue ;; esac
+  echo " $DESIRED " | grep -q " $nm:" && continue
+  if uci show firewall 2>/dev/null | grep -q "\.ipset='$nm'$"; then
+    # H1: still referenced by rules -> keep section, refuse silently-dangerous delete
+    logger -t geoguard "ERROR stale set $nm still referenced by rules, kept (re-bind rules first)"
+    hist "stale-kept|$nm referenced by rules"
+  else
+    nft flush set inet fw4 "$nm" 2>/dev/null
+    uci delete "$sec"
+    NEED_RELOAD=1
+    STALE_GONE="$STALE_GONE $nm"
+    logger -t geoguard "stale section removed (live flushed): $nm"
+  fi
+done
+uci set geoguard.main.applied_name="$SETNAME"
+uci set geoguard.main.applied_white="$WHITENAME"
+uci delete geoguard.main.managed 2>/dev/null
+for item in $DESIRED; do
+  uci add_list geoguard.main.managed="${item%%:*}"
+done
+uci commit geoguard
+uci commit firewall
+
+if [ "$NEED_RELOAD" = "1" ]; then
+  logger -t geoguard "sections changed, firewall reload"
+  /etc/init.d/firewall reload >/dev/null 2>&1
+fi
+# L5: drop orphan live-set shells left behind by stale cleanup
+for gone in $STALE_GONE; do
+  [ -z "$gone" ] && continue
+  nft delete set inet fw4 "$gone" 2>/dev/null \
+    && logger -t geoguard "orphan live set removed: $gone"
+done
+for item in $DESIRED; do
+  nm="${item%%:*}"
+  fl="${item#*:}"
+  [ -s "$fl" ] || continue
+  if nft list set inet fw4 "$nm" >/dev/null 2>&1; then
+    nft flush set inet fw4 "$nm"
+    nft add element inet fw4 "$nm" "{ $(tr '\n' ',' < "$fl" | sed 's/,$//') }" 2>/dev/null \
+      || logger -t geoguard "live refresh failed: $nm"
+  fi
+done
+logger -t geoguard "done $SETNAME +$WHITENAME"
+if [ "$changed_files" = "1" ]; then
+  hist "merged+white" "ok $(wc -l < "$OUTPUT" 2>/dev/null) lines, $(wc -c < "$OUTPUT" 2>/dev/null) B"
+else
+  hist "merged+white" "no new updates at the moment"
+fi
