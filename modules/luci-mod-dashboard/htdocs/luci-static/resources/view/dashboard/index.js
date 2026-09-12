@@ -17,8 +17,11 @@ function invokeIncludesLoad(includes) {
 	let has_load = false;
 
 	for (let i = 0; i < includes.length; i++) {
+		includes[i].failed = false;
+
 		if (typeof(includes[i].load) == 'function') {
-			tasks.push(includes[i].load().catch(function() {
+			tasks.push(includes[i].load().catch(function(e) {
+				console.error(e);
 				this.failed = true;
 			}.bind(includes[i])));
 
