@@ -1,297 +1,884 @@
 /**
- * Dashboard Principals Styles
-**/
+ * Dashboard styles — theme independent.
+ * Colours map to the LuCI theme variables where a theme defines them and fall
+ * back to a self-contained light / dark palette otherwise.
+ */
 
 .Dashboard {
-	color: var(--text-color-high, #212529) !important;
+	--dashboard-surface: var(--background-color-high, #ffffff);
+	--dashboard-surface-alt: var(--background-color-medium, #f2f4f7);
+	--dashboard-text: var(--text-color-high, #1f2933);
+	--dashboard-text-muted: var(--text-color-low, #6b7280);
+	--dashboard-border: var(--border-color-medium, rgba(0, 0, 0, 0.12));
+	--dashboard-primary: var(--primary-color-high, #1976d2);
+	--dashboard-success: var(--success-color-high, #00ac59);
+	--dashboard-warn: var(--warn-color-high, #e0a800);
+	--dashboard-error: var(--error-color-high, #e53935);
+	--dashboard-series-1: var(--dashboard-primary);
+	--dashboard-series-2: var(--dashboard-success);
+	--dashboard-series-3: var(--dashboard-warn);
+	--dashboard-series-4: #8e5bd8;
+	--dashboard-series-5: #ef6c2f;
+	--dashboard-series-6: #19b5c8;
+	--dashboard-series-7: #b0367c;
+	--dashboard-series-8: #9c9a1c;
+	--dashboard-mono: var(--font-mono, ui-monospace, Menlo, Consolas, monospace);
+	--dashboard-radius: 12px;
+	--dashboard-gap: 16px;
+
+	display: grid;
+	gap: var(--dashboard-gap);
+	color: var(--dashboard-text);
 }
 
-.Dashboard h3 {
-	color: var(--text-color-high, #000);
+[data-darkmode="true"] .Dashboard {
+	--dashboard-surface: var(--background-color-high, #1c2027);
+	--dashboard-surface-alt: var(--background-color-medium, #262b34);
+	--dashboard-text: var(--text-color-high, #e6e8eb);
+	--dashboard-text-muted: var(--text-color-low, #9aa3ad);
+	--dashboard-border: var(--border-color-medium, rgba(255, 255, 255, 0.12));
+	--dashboard-series-4: #a98cf0;
+	--dashboard-series-5: #e5652c;
+	--dashboard-series-6: #10a4b8;
+	--dashboard-series-7: #c2438a;
+	--dashboard-series-8: #a89f2a;
 }
 
-.Dashboard hr {
-	border: 0;
-	height: 0;
-	overflow: visible;
-	margin: 0;
-	box-sizing: content-box;
-	border-top: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
+@media (prefers-color-scheme: dark) {
+	:root:not([data-darkmode="false"]) .Dashboard {
+		--dashboard-surface: var(--background-color-high, #1c2027);
+		--dashboard-surface-alt: var(--background-color-medium, #262b34);
+		--dashboard-text: var(--text-color-high, #e6e8eb);
+		--dashboard-text-muted: var(--text-color-low, #9aa3ad);
+		--dashboard-border: var(--border-color-medium, rgba(255, 255, 255, 0.12));
+		--dashboard-series-4: #a98cf0;
+		--dashboard-series-5: #e5652c;
+		--dashboard-series-6: #10a4b8;
+		--dashboard-series-7: #c2438a;
+		--dashboard-series-8: #a89f2a;
+	}
 }
 
-.Dashboard .box-s1 {
-	min-height: 466px;
+/* ---- Layout ---- */
+.dashboard-kpi-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+	gap: var(--dashboard-gap);
 }
 
-.Dashboard .internet-status-self .internet-status-info .title {
-	height: 97px;
+.dashboard-charts {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: var(--dashboard-gap);
+	align-items: stretch;
 }
 
-.Dashboard .dashboard-bg {
-	border-radius: 16px;
-	background-color: var(--background-color-medium, #e0e0e0);
-}
-
-.Dashboard .title {
-	text-align: center;
-}
-
-.Dashboard .section-content {
+.dashboard-charts > .dashboard-card,
+.dashboard-charts > .dashboard-card > .dashboard-card-body {
 	display: flex;
-	vertical-align: top;
-	padding: 20px 0 0 0;
-	align-items: flex-start;
+	flex-direction: column;
+}
+
+.dashboard-charts > .dashboard-card > .dashboard-card-body {
+	flex: 1;
+}
+
+.dashboard-card-body > .dashboard-donut,
+.dashboard-card-body > .dashboard-empty {
+	margin-block: auto;
+}
+
+.dashboard-extra {
+	display: grid;
+	gap: var(--dashboard-gap);
+}
+
+/* ---- Card ---- */
+.Dashboard .dashboard-card {
+	background: var(--dashboard-surface);
+	border: 1px solid var(--dashboard-border);
+	border-radius: var(--dashboard-radius);
+	padding: 18px 20px;
+	min-width: 0;
+}
+
+.dashboard-card-head {
+	display: flex;
+	align-items: baseline;
 	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 12px;
 }
 
-.Dashboard .section-content > div {
-	width:100%;
-	padding:1.5em;
-}
-
-.Dashboard .section-content  .settings-info {
-	padding-top:1em;
-}
-
-.Dashboard .section-content .internet-status-info .settings-info {
-	display: flex;
-	justify-content: space-around;
-}
-
-.Dashboard .section-content .internet-status-info .settings-info > div > p > i{
-	padding: 0 0 0 5px;
-}
-
-.Dashboard .section-content > div:nth-child(2) {
-	margin-left:20px;
-}
-
-.Dashboard .devices-list .devices-info {
-	margin-bottom: 0;
-}
-
-.Dashboard .devices-list .devices-info .tr .td{
-	padding:0px 0 0 10px;
-}
-
-.Dashboard .devices-list .devices-info .tr .td:first-child {
-	width: 33%;
-	word-break: break-all;
-}
-
-.Dashboard .devices-list hr:nth-child(4) {
-	margin-top: 0;
-	margin-bottom: 8px;
-}
-
-.Dashboard .router-status-lan .devices-list .table-titles .th:first-child {
-	width: 35%;
-}
-
-.Dashboard .router-status-self .router-status-info .settings-info {
-	padding-left:27px;
-}
-
-.Dashboard .router-status-self .router-status-info .title h3 {
-	margin-top:-2px;
-}
-
-.Dashboard .router-status-info svg {
-	width: 70px;
-}
-
-.Dashboard .internet-status-self .settings-info p:first-child span:first-child{
+.Dashboard .dashboard-card-title {
+	margin: 0;
+	padding: 0;
+	border: 0;
 	font-size: 15px;
-	font-weight: 500;
+	font-weight: 700;
+	color: var(--dashboard-text);
 }
 
-.Dashboard .internet-status-self .settings-info p:nth-child(2) span:first-child,
-.Dashboard .router-status-wifi .wifi-info .settings-info p:first-child span:first-child,
-.Dashboard .router-status-wifi .wifi-info .settings-info p:nth-child(2) span:first-child{
+.dashboard-card-desc {
+	font-size: 12px;
+	color: var(--dashboard-text-muted);
+}
+
+/* ---- Icon (mask keeps the SVG files, colour follows the theme) ---- */
+.dashboard-icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	background: currentColor;
+	-webkit-mask: var(--dashboard-icon) center / contain no-repeat;
+	mask: var(--dashboard-icon) center / contain no-repeat;
+}
+
+/* ---- KPI card ---- */
+.Dashboard .dashboard-kpi {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px;
+}
+
+.dashboard-kpi-icon {
+	flex-shrink: 0;
+	width: 56px;
+	height: 56px;
+	border-radius: 14px;
+	background: var(--dashboard-surface-alt);
+	background: color-mix(in srgb, var(--dashboard-primary) 14%, transparent);
+	color: var(--dashboard-primary);
+	position: relative;
+}
+
+.dashboard-kpi-icon::after {
+	content: "";
+	position: absolute;
+	inset: 13px;
+	background: currentColor;
+	-webkit-mask: var(--dashboard-icon) center / contain no-repeat;
+	mask: var(--dashboard-icon) center / contain no-repeat;
+}
+
+.dashboard-kpi-icon.dashboard-icon {
+	-webkit-mask: none;
+	mask: none;
+}
+
+.dashboard-kpi-text {
+	min-width: 0;
+}
+
+.dashboard-kpi-title {
+	font-size: 12.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-kpi-value {
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.15;
+	margin: 2px 0;
+}
+
+.dashboard-kpi-value small {
+	font-size: 13px;
+	font-weight: 400;
+	color: var(--dashboard-text-muted);
+	margin-left: 3px;
+}
+
+.dashboard-kpi-sub {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: var(--dashboard-text-muted);
+	min-width: 0;
+}
+
+.dashboard-kpi-sub .dashboard-mono {
+	color: var(--dashboard-text);
+}
+
+/* ---- Badges (LuCI .label) ---- */
+.Dashboard .label {
+	margin: 0;
+	padding: 2px 8px;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: none;
+	border-radius: 999px;
+	line-height: 1.5;
+	background: var(--dashboard-surface-alt);
+	color: var(--dashboard-text-muted);
+}
+
+.Dashboard .label.success {
+	background: var(--dashboard-surface-alt);
+	background: color-mix(in srgb, var(--dashboard-success) 18%, transparent);
+	color: var(--dashboard-success);
+}
+
+.Dashboard .label.important {
+	background: var(--dashboard-surface-alt);
+	background: color-mix(in srgb, var(--dashboard-error) 16%, transparent);
+	color: var(--dashboard-error);
+}
+
+.Dashboard .label.warning {
+	background: var(--dashboard-surface-alt);
+	background: color-mix(in srgb, var(--dashboard-warn) 22%, transparent);
+	color: var(--dashboard-warn);
+}
+
+.Dashboard .label.notice {
+	background: var(--dashboard-surface-alt);
+	background: color-mix(in srgb, var(--dashboard-primary) 14%, transparent);
+	color: var(--dashboard-primary);
+}
+
+.dashboard-mono {
+	font-family: var(--dashboard-mono);
+	font-size: 12.5px;
+}
+
+.dashboard-empty {
+	padding: 24px 12px;
+	text-align: center;
+	color: var(--dashboard-text-muted);
+	font-size: 13px;
+}
+
+/* ---- Donut ---- */
+.dashboard-donut {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.dashboard-donut svg {
+	width: 136px;
+	height: 136px;
+	flex-shrink: 0;
+}
+
+.dashboard-donut-track {
+	fill: none;
+	stroke: var(--dashboard-surface-alt);
+	stroke-width: 16;
+}
+
+.dashboard-donut-seg {
+	fill: none;
+	stroke: var(--dashboard-text-muted);
+	stroke-width: 16;
+}
+
+.dashboard-donut-value {
+	font-size: 22px;
+	font-weight: 700;
+	fill: var(--dashboard-text);
+	text-anchor: middle;
+}
+
+.dashboard-donut-label {
+	font-size: 9px;
+	fill: var(--dashboard-text-muted);
+	text-anchor: middle;
+}
+
+.Dashboard .dashboard-series-1 { stroke: var(--dashboard-series-1); background: var(--dashboard-series-1); }
+.Dashboard .dashboard-series-2 { stroke: var(--dashboard-series-2); background: var(--dashboard-series-2); }
+.Dashboard .dashboard-series-3 { stroke: var(--dashboard-series-3); background: var(--dashboard-series-3); }
+.Dashboard .dashboard-series-4 { stroke: var(--dashboard-series-4); background: var(--dashboard-series-4); }
+.Dashboard .dashboard-series-5 { stroke: var(--dashboard-series-5); background: var(--dashboard-series-5); }
+.Dashboard .dashboard-series-6 { stroke: var(--dashboard-series-6); background: var(--dashboard-series-6); }
+.Dashboard .dashboard-series-7 { stroke: var(--dashboard-series-7); background: var(--dashboard-series-7); }
+.Dashboard .dashboard-series-8 { stroke: var(--dashboard-series-8); background: var(--dashboard-series-8); }
+
+.Dashboard .dashboard-legend {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+}
+
+.Dashboard .dashboard-legend li {
+	display: grid;
+	grid-template-columns: 10px minmax(0, 1fr) auto auto;
+	gap: 8px;
+	align-items: start;
+	font-size: 12.5px;
+	line-height: 1.4;
+}
+
+.dashboard-legend i {
+	width: 10px;
+	height: 10px;
+	border-radius: 3px;
+	background: var(--dashboard-text-muted);
+	margin-top: calc((1.4em - 10px) / 2);
+}
+
+.dashboard-legend-name {
+	overflow-wrap: anywhere;
+}
+
+.dashboard-legend-name small {
+	display: block;
+	font-size: 11px;
+}
+
+.dashboard-legend li > small {
+	color: var(--dashboard-text-muted);
+	min-width: 3ch;
+	text-align: right;
+	font-size: 12px;
+}
+
+.dashboard-legend-inline {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+	margin-top: 10px;
+	font-size: 11.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-legend-inline span {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.dashboard-legend-inline i {
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+}
+
+/* ---- Bar chart (fixed axis, scrollable plot) ---- */
+.dashboard-bars {
+	--dashboard-plot-h: 170px;
+	--dashboard-label-h: 40px;
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+}
+
+.dashboard-bars-many {
+	--dashboard-label-h: 58px;
+}
+
+.dashboard-bars-axis {
+	position: relative;
+	height: var(--dashboard-plot-h);
+	font-size: 10.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-bars-axis span {
+	position: absolute;
+	right: 8px;
+	transform: translateY(-50%);
+	white-space: nowrap;
+}
+
+.dashboard-bars-scroll {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-bottom: 2px;
+	scrollbar-width: thin;
+}
+
+.dashboard-bars-plot {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	height: calc(var(--dashboard-plot-h) + var(--dashboard-label-h));
+	min-width: 100%;
+}
+
+.dashboard-bars-grid {
+	position: absolute;
+	left: 0;
+	right: 0;
+	pointer-events: none;
+}
+
+.dashboard-bars-grid {
+	top: 0;
+	height: var(--dashboard-plot-h);
+}
+
+.dashboard-bars-grid i {
+	position: absolute;
+	left: 0;
+	right: 0;
+	border-top: 1px solid var(--dashboard-border);
+}
+
+.dashboard-bars-col {
+	flex: 1 0 var(--dashboard-slot, 44px);
+	display: grid;
+	grid-template-rows: var(--dashboard-plot-h) var(--dashboard-label-h);
+	min-width: 0;
+}
+
+.dashboard-bars-col:hover .dashboard-bars-stack i {
+	filter: brightness(0.9);
+}
+
+.dashboard-bars-stack {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 3px;
+	padding: 0 6px;
+	height: var(--dashboard-plot-h);
+}
+
+.dashboard-bars-stack i {
+	display: block;
+	flex: 1 1 0;
+	max-width: 26px;
+	min-height: 2px;
+	border-radius: 4px 4px 0 0;
+	background: var(--dashboard-series-1);
+}
+
+.dashboard-bars-stack i.dashboard-bar-ok { background: var(--dashboard-success); }
+.dashboard-bars-stack i.dashboard-bar-mid { background: var(--dashboard-warn); }
+.dashboard-bars-stack i.dashboard-bar-up { background: var(--dashboard-series-1); }
+.dashboard-bars-stack i.dashboard-bar-down { background: var(--dashboard-series-2); }
+.dashboard-bars-stack i.dashboard-bar-none { background: var(--dashboard-text-muted); }
+
+.dashboard-bars-label {
+	font-size: 10.5px;
+	color: var(--dashboard-text-muted);
+	text-align: center;
+	padding: 6px 2px 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.dashboard-bars-many .dashboard-bars-label {
+	transform: rotate(-40deg) translate(-8px, 10px);
+	transform-origin: top right;
+	text-align: right;
+	overflow: visible;
+	max-width: var(--dashboard-slot, 44px);
+}
+
+.dashboard-legend-inline i.dashboard-bar-ok { background: var(--dashboard-success); }
+.dashboard-legend-inline i.dashboard-bar-mid { background: var(--dashboard-warn); }
+.dashboard-legend-inline i.dashboard-bar-up { background: var(--dashboard-series-1); }
+.dashboard-legend-inline i.dashboard-bar-down { background: var(--dashboard-series-2); }
+
+/* ---- Tabs: LuCI ui.tabs behaviour, dashboard look (themes style
+   .cbi-tabmenu very differently, so the menu is restyled here) ---- */
+.Dashboard .dashboard-tabs {
+	padding: 0;
+	overflow: hidden;
+}
+
+.Dashboard .dashboard-tabs .cbi-tabmenu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0;
+	height: auto;
+	margin: 0;
+	padding: 0 10px;
+	list-style: none;
+	background: none;
+	border: 0;
+	border-bottom: 1px solid var(--dashboard-border);
+	border-radius: 0;
+	box-shadow: none;
+	overflow: visible;
+}
+
+.Dashboard .dashboard-tabs .cbi-tabmenu > li {
+	flex: 0 0 auto;
+	display: block;
+	height: auto;
+	max-width: none;
+	margin: 0 0 -1px;
+	padding: 0;
+	background: none;
+	border: 0;
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
+	box-shadow: none;
+	color: var(--dashboard-text-muted);
+}
+
+.Dashboard .dashboard-tabs .cbi-tabmenu > li:hover {
+	background: none;
+	color: var(--dashboard-text);
+}
+
+.Dashboard .dashboard-tabs .cbi-tabmenu > li.cbi-tab {
+	color: var(--dashboard-primary);
+	border-bottom-color: var(--dashboard-primary);
+}
+
+.Dashboard .dashboard-tabs .cbi-tabmenu > li > a {
+	display: block;
+	padding: 13px 14px 11px;
+	margin: 0;
+	line-height: 1.4;
+	font-size: 13.5px;
+	font-weight: 400;
+	color: inherit;
+	background: none;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.Dashboard .dashboard-tabs .cbi-tabmenu > li.cbi-tab > a {
 	font-weight: 700;
 }
 
-.Dashboard .settings-info p span:first-child {
-	width: 35%;
+.Dashboard .dashboard-tabs .cbi-tabmenu > li > a:focus-visible {
+	outline: 2px solid var(--dashboard-primary);
+	outline-offset: -2px;
+	text-decoration: none;
+}
+
+.dashboard-tab-group > [data-tab] {
+	display: none;
+}
+
+.dashboard-tab-group > [data-tab-active="true"] {
+	display: block;
+}
+
+/* ---- Key / value tables ---- */
+.dashboard-kv-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.dashboard-kv-grid > .dashboard-kv-col + .dashboard-kv-col {
+	border-left: 1px solid var(--dashboard-border);
+}
+
+.dashboard-kv-head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	padding: 12px 18px;
+	background: var(--dashboard-surface-alt);
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--dashboard-text-muted);
+}
+
+.Dashboard .dashboard-kv {
+	width: 100%;
+	margin: 0;
+	border-collapse: collapse;
+	font-size: 13.5px;
+}
+
+.Dashboard .dashboard-kv .td {
+	padding: 12px 18px;
+	border-top: 1px solid var(--dashboard-border);
+	vertical-align: top;
+}
+
+.Dashboard .dashboard-kv .tr:first-child .td {
+	border-top: 0;
+}
+
+.Dashboard .dashboard-kv .td:first-child {
+	width: 9rem;
+	padding-right: 0;
+	color: var(--dashboard-text-muted);
+	white-space: nowrap;
+}
+
+.Dashboard .dashboard-kv .td:last-child {
+	font-weight: 700;
+	overflow-wrap: anywhere;
+}
+
+.Dashboard .dashboard-kv .td.dashboard-mono {
+	font-weight: 400;
+}
+
+.dashboard-stack span {
+	display: block;
+}
+
+/* ---- Data tables ---- */
+.dashboard-table-wrap {
+	overflow-x: auto;
+}
+
+.Dashboard .dashboard-table-wrap .table {
+	margin: 0;
+	min-width: 520px;
+}
+
+.Dashboard .dashboard-table-wrap .th {
+	padding: 12px 18px;
+	background: var(--dashboard-surface-alt);
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--dashboard-text-muted);
+	border-top: 0;
+	white-space: nowrap;
+}
+
+.Dashboard .dashboard-table-wrap .td {
+	padding: 13px 18px;
+	font-size: 13.5px;
+	border-top: 1px solid var(--dashboard-border);
+	vertical-align: middle;
+}
+
+.Dashboard .dashboard-table-wrap .tfoot .td {
+	color: var(--dashboard-text-muted);
+	font-size: 12.5px;
+}
+
+.Dashboard .dashboard-table-wrap .dashboard-table-empty .td {
+	text-align: center;
+	color: var(--dashboard-text-muted);
+	padding: 28px 18px;
+}
+
+.Dashboard .dashboard-table-wrap .td.dashboard-num,
+.Dashboard .dashboard-table-wrap .th.dashboard-num {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.dashboard-section-title {
+	padding: 12px 18px;
+	background: var(--dashboard-surface-alt);
+	font-size: 12.5px;
+	font-weight: 700;
+	color: var(--dashboard-text-muted);
+	border-top: 1px solid var(--dashboard-border);
+}
+
+/* ---- Signal cell ---- */
+.dashboard-signal {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	white-space: nowrap;
+}
+
+.Dashboard .dashboard-signal .label {
+	font-family: var(--dashboard-mono);
 	font-size: 12px;
+}
+
+/* ---- Wireless network mini cards ---- */
+.dashboard-net-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 12px;
+	padding: 16px 18px;
+}
+
+.dashboard-net {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 10px 14px;
+	align-items: start;
+	padding: 14px 16px;
+	border: 1px solid var(--dashboard-border);
+	border-radius: 10px;
+	background: var(--dashboard-surface);
+}
+
+.dashboard-net-off {
+	background: var(--dashboard-surface-alt);
+	opacity: 0.8;
+}
+
+.dashboard-net-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	font-size: 14px;
+	font-weight: 700;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.dashboard-net-off .dashboard-net-head {
+	font-weight: 400;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-net-count {
 	text-align: right;
 }
 
-.Dashboard .settings-info p span:nth-child(2){
-	display: inline-block;
-	word-break: break-all;
+.dashboard-net-count b {
+	display: block;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: -0.02em;
 }
 
-.Dashboard .settings-info p span:nth-child(2).label {
-	padding: 1px 4px 1px 4px;
-	font-size: 9.75px;
+.dashboard-net-count small {
+	display: block;
+	margin-top: 2px;
+	font-size: 11.5px;
+	color: var(--dashboard-text-muted);
 }
 
-.Dashboard .router-status-info .settings-info p span:nth-child(2){
-	max-width: 283px;
+.dashboard-net-fields {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px 14px;
+	font-size: 12.5px;
 }
 
-.Dashboard .settings-info p span.ssid {
-	max-height: 18px;
-	top: 3px;
+.dashboard-net-fields span {
+	display: block;
+	font-size: 11.5px;
+	color: var(--dashboard-text-muted);
 }
 
-.Dashboard .settings-info p span.encryption {
-	max-width: 82px;
+.dashboard-net-fields b {
+	font-weight: 700;
+	overflow-wrap: anywhere;
 }
 
-.Dashboard .router-status-wifi .wifi-info .settings-info,
-.Dashboard .router-status-lan .lan-info .settings-info
-{
-	display: flex;
-	justify-content: space-around;
+.dashboard-net-fields b.dashboard-mono {
+	font-weight: 400;
 }
 
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td {
-	padding: 0 10px 0 10px;
+.dashboard-net-note {
+	grid-column: 1 / -1;
+	font-size: 12.5px;
+	color: var(--dashboard-text-muted);
 }
 
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:first-child {
-	width: 30%;
-	word-break: break-all;
+
+/* Keep real table layout on phones: themes reflow .tr/.td into flex blocks,
+   the dashboard tables scroll horizontally instead. */
+.Dashboard .dashboard-table-wrap .table,
+.Dashboard .dashboard-kv {
+	display: table;
 }
 
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:nth-child(2) {
-	width: 21%;
-	overflow: hidden;
-	padding-left:0;
-	word-break: break-all;
-}
+.Dashboard .dashboard-table-wrap .table .thead { display: table-header-group; }
+.Dashboard .dashboard-table-wrap .table .tbody { display: table-row-group; }
+.Dashboard .dashboard-table-wrap .table .tfoot { display: table-footer-group; }
 
-.Dashboard .router-status-wifi .wifi-info .settings-info{
-	padding:1em 0 1em 0;
-}
-
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:nth-child(3) {
-	width: 22%;
-	overflow: hidden;
-	position: relative;
-	top: -3px;
-}
-
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:nth-child(5) {
-	width: initial;
-}
-
-.Dashboard .router-status-wifi .wifi-info > hr:last-child {
-	margin-bottom:0;
-}
-
-.Dashboard .router-status-wifi .wifi-info .devices-info .device-info .progress {
+.Dashboard .dashboard-table-wrap .table .tr,
+.Dashboard .dashboard-kv .tr {
+	display: table-row;
+	flex: none;
 	padding: 0;
-	width: 100%;
-	margin: 0;
+	border: 0;
 }
 
-.Dashboard .wifi-info .devices-info .table-titles {
-	border-bottom: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
-}
-
-.Dashboard .table {
+.Dashboard .dashboard-table-wrap .table .th,
+.Dashboard .dashboard-table-wrap .table .td,
+.Dashboard .dashboard-kv .td {
+	display: table-cell;
+	flex: none;
 	width: auto;
-	text-align: left;
+	max-width: none;
+	overflow: visible;
 }
 
-[data-darkmode="true"] {
-	/* invert black SVG line drawings in dark mode */
-	.Dashboard .svgmonotone {
-		filter: invert(.5);
+.Dashboard .dashboard-table-wrap .table .tr::before,
+.Dashboard .dashboard-table-wrap .table .td::before,
+.Dashboard .dashboard-kv .tr::before,
+.Dashboard .dashboard-kv .td::before {
+	content: none;
+	display: none;
+}
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 760px) {
+	.dashboard-kv-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.dashboard-kv-grid > .dashboard-kv-col + .dashboard-kv-col {
+		border-left: 0;
+		border-top: 1px solid var(--dashboard-border);
+	}
+
+	.dashboard-donut {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.dashboard-donut svg {
+		margin: 0 auto;
 	}
 }
 
-/**
- * Responsive
- **/
-@media screen and (min-width: 200px) and (max-width: 640px) {
-
-	.Dashboard .cbi-section-1 > .section-content {
-		padding-top:10px;
+@media screen and (max-width: 640px) {
+	.Dashboard {
+		--dashboard-gap: 12px;
 	}
 
-	.Dashboard .section-content {
-		display:block;
+	.Dashboard .dashboard-card {
+		padding: 14px 16px;
 	}
 
-	.Dashboard .section-content > div{
-		padding: 1em;
+	.Dashboard .dashboard-kpi {
+		padding: 14px 16px;
+		gap: 12px;
 	}
 
-	.Dashboard .section-content > div:first-child {
-		margin-bottom:10px;
+	.dashboard-kpi-icon {
+		width: 46px;
+		height: 46px;
+		border-radius: 12px;
 	}
 
-	.Dashboard .section-content > div:nth-child(2) {
-		margin:0;
+	.dashboard-kpi-icon::after {
+		inset: 11px;
 	}
 
-	.Dashboard .router-status-self .router-status-info .settings-info {
-		padding:0;
+	.dashboard-bars {
+		--dashboard-plot-h: 140px;
 	}
 
-	.Dashboard .section-content .internet-status-info .settings-info {
-		display:block;
+	.Dashboard .dashboard-kv .td,
+	.Dashboard .dashboard-table-wrap .th,
+	.Dashboard .dashboard-table-wrap .td,
+	.dashboard-kv-head,
+	.dashboard-section-title {
+		padding-left: 14px;
+		padding-right: 14px;
 	}
 
-	.Dashboard .section-content .internet-status-info .settings-info > div:first-child {
-		margin-bottom: 10px;
-		border-bottom: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
+	.Dashboard .dashboard-kv .td:first-child {
+		width: 7rem;
 	}
 
-	.Dashboard .section-content .router-status-lan .devices-info .table-titles {
-		display:block;
-	}
-
-	.Dashboard .router-status-wifi .wifi-info .settings-info > div{
-		flex:1;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .table-titles .th:last-child{
-		padding-left: 70px;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .td:first-child{
-		flex: 2 2 31%;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .td:nth-child(2){
-		flex: 1 1 24%;
-		padding: 0;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .td:last-child{
-		word-wrap: normal;
-	}
-
-	.Dashboard .router-status-wifi .wifi-info .settings-info > div p:nth-child(6) > span:last-child{
-		display: inline-block;
-		overflow: hidden;
-		height: 14px;
-		width: 52%;
-		word-break: break-word;
-		line-height: 15px;
-	}
-
-	.Dashboard .wifi-info .devices-info .table-titles {
-		padding: 0;
-		margin: 0;
-		display: flex;
-		border-radius: initial;
-	}
-
-	.Dashboard .wifi-info .devices-info .table-titles .th {
-		flex: 2 2 24%;
-	}
-
-	.Dashboard .wifi-info .devices-info .tr .td {
-		flex: 2 2 10%;
-	}
-
-	.Dashboard .wifi-info hr:nth-child(4) {
-		margin-bottom: 0;
+	.dashboard-net-grid {
+		padding: 12px 14px;
 	}
 }

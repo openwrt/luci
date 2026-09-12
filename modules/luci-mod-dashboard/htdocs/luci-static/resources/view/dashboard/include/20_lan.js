@@ -2,6 +2,7 @@
 'require baseclass';
 'require rpc';
 'require network';
+'require view.dashboard.lib.charts as charts';
 
 var callLuciDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
@@ -20,80 +21,30 @@ return baseclass.extend({
 		]);
 	},
 
-	renderHtml() {
+	renderKpi() {
+		const count = this.params.lan.devices.length;
 
-		const container_wapper = E('div', { 'class': 'router-status-lan dashboard-bg box-s1' });
-		const container_box = E('div', { 'class': 'lan-info devices-list' });
-		container_box.appendChild(E('div', { 'class': 'title'}, [
-			E('img', {
-				'src': L.resource('view/dashboard/icons/devices.svg'),
-				'width': 55,
-				'title': this.title,
-				'class': 'middle svgmonotone'
-			}),
-			E('h3', this.title)
-		]));
+		return charts.kpi({
+			className: 'router-status-lan',
+			icon: 'devices',
+			title: this.title,
+			value: [ String(count) ],
+			sub: [ count ? _('Active leases') : _('No active leases') ]
+		});
+	},
 
-		const container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
-			E('thead', { 'class': 'thead dashboard-bg' }, [
-				E('th', { 'class': 'th nowrap' }, _('Hostname')),
-				E('th', { 'class': 'th' }, _('IP Address')),
-				E('th', { 'class': 'th' }, _('MAC')),
-			])
-		]);
-
-		for(let idx in this.params.lan.devices) {
-			const device = this.params.lan.devices[idx];
-
-			container_devices.appendChild(E('tr', { 'class': idx % 2 ? 'tr cbi-rowstyle-2' : 'tr cbi-rowstyle-1' }, [
-
-				E('td', { 'class': 'td device-info'}, [
-					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ device.hostname ]),
-					]),
-				]),
-
-				E('td', { 'class': 'td device-info'}, [
-					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ device.ipv4 ]),
-					]),
-				]),
-
-				E('td', { 'class': 'td device-info'}, [
-					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ device.macaddr ]),
-					]),
-				]),
-			]));
-		}
-
-		container_devices.appendChild(E('tfoot', { 'class': 'tfoot dashboard-bg' }, [
-			E('tr', { 'class': 'tr cbi-rowstyle-1' }, [
-				E('td', { 'class': 'td device-info'}, [
-					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ ]),
-					]),
-				]),
-
-				E('td', { 'class': 'td device-info'}, [
-					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ _('Total') + '：' ]),
-					]),
-				]),
-
-				E('td', { 'class': 'td device-info'}, [
-					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ this.params.lan.devices.length ]),
-					]),
-				]),
-
-			])
-		]));
-
-		container_box.appendChild(container_devices);
-		container_wapper.appendChild(container_box);
-
-		return container_wapper;
+	renderTable() {
+		return charts.table({
+			className: 'assoclist devices-info',
+			head: [ _('Hostname'), _('IP Address'), _('MAC') ],
+			rows: this.params.lan.devices.map(device => [
+				device.hostname,
+				{ text: device.ipv4, className: 'dashboard-mono' },
+				{ text: device.macaddr, className: 'dashboard-mono' }
+			]),
+			emptyText: _('No active leases'),
+			foot: [ '', _('Total'), String(this.params.lan.devices.length) ]
+		});
 	},
 
 	renderUpdateData(leases) {
@@ -106,16 +57,17 @@ return baseclass.extend({
 		this.params.lan = { devices: dev_arr };
 	},
 
-	renderLeases(leases) {
+	render([leases]) {
+		if (!L.hasSystemFeature('dnsmasq') && !L.hasSystemFeature('odhcpd'))
+			return null;
+
 		this.renderUpdateData([...leases.dhcp_leases]);
 
-		return this.renderHtml();
-	},
-
-	render([leases]) {
-		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
-			return this.renderLeases(leases);
-
-		return E([]);
+		return {
+			kpi: [ this.renderKpi() ],
+			tabs: [
+				{ id: 'dhcp', title: this.title, count: this.params.lan.devices.length, content: this.renderTable() }
+			]
+		};
 	}
 });
