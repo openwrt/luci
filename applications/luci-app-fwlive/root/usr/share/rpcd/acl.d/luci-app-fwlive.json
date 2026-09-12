@@ -1,0 +1,15 @@
+{
+	"luci-app-fwlive": {
+		"description": "Grant access to firewall live log view",
+		"read": {
+			"ubus": {
+				"fwlive": [ "rules", "poll", "resolve", "logging_status" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"fwlive": [ "enable_wan_logging", "disable_wan_logging" ]
+			}
+		}
+	}
+}
