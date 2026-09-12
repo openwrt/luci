@@ -27,6 +27,13 @@ case "$action" in
 			find "${lists_dir:-/usr/lib/opkg/lists}" -type f '!' -name '*.sig' | xargs -r gzip -cd
 		fi
 	;;
+	list-upgradable)
+		if [ $ipkg_bin = "apk" ]; then
+			$ipkg_bin list -u
+		else
+			$ipkg_bin list-upgradable
+		fi
+	;;
 	install|update|upgrade|remove)
 		(
 			cmd="$ipkg_bin"
@@ -108,7 +115,7 @@ case "$action" in
 		rm -f /tmp/ipkg.lock /tmp/ipkg.err /tmp/ipkg.out
 	;;
 	*)
-		echo "Usage: $0 {list-installed|list-available|update}" >&2
+		echo "Usage: $0 {list-installed|list-available|list-upgradable|update}" >&2
 		echo "       $0 {install|upgrade|remove} pkg[ pkg...]" >&2
 		exit 1
 	;;

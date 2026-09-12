@@ -100,7 +100,8 @@ const callMountPoints = rpc.declare({
 
 const packages = {
 	available: { providers: {}, pkgs: {} },
-	installed: { providers: {}, pkgs: {} }
+	installed: { providers: {}, pkgs: {} },
+	upgradable: {}
 };
 
 const languages = ['en'];
@@ -260,6 +261,24 @@ function isPkgInstalled(pkg) {
 	return pkg && Array.isArray(pkg.status) && pkg.status.includes('installed');
 }
 
+function parseApkUpgradable(s)
+{
+	for (const line of s.trim().split(/\n/)) {
+		if (!line.trim())
+			continue;
+
+		const m = line.trim().match(/^([a-zA-Z0-9+_.-]+)-([0-9][a-zA-Z0-9._+~]*(?:-r[0-9]+)?)\s.*\[upgradable from: \1-[^\s]+\]$/);
+		if (!m)
+			throw new Error(_('Unable to parse the list of upgradable packages.'));
+
+		const name = m[1], version = m[2];
+		// apk lists versions in ascending order, so the last entry wins.
+		// Use metadata for the version selected by apk, not another repository's candidate.
+		packages.upgradable[name] = (packages.available.providers[name] || [])
+			.find(pkg => pkg.name === name && pkg.version === version) || { name, version };
+	}
+}
+
 function display(pattern)
 {
 	const src = packages[currentDisplayMode === 'updates' ? 'installed' : currentDisplayMode];
@@ -305,13 +324,13 @@ function display(pattern)
 		let btn, ver;
 
 		if (currentDisplayMode === 'updates') {
-			const avail = packages.available.pkgs[name];
+			const avail = L.hasSystemFeature('apk') ? packages.upgradable[name] : packages.available.pkgs[name];
 			const inst  = packages.installed.pkgs[name];
 
 			if (!isPkgInstalled(inst))
 				continue;
 
-			if (!avail || compareVersion(avail.version, pkg.version) <= 0)
+			if (!avail || (!L.hasSystemFeature('apk') && compareVersion(avail.version, pkg.version) <= 0))
 				continue;
 
 			ver = '%s » %s'.format(
@@ -338,8 +357,9 @@ function display(pattern)
 		}
 		else {
 			const inst = packages.installed.pkgs[name];
+			const upgrade = L.hasSystemFeature('apk') ? packages.upgradable[name] : inst && inst.version !== pkg.version;
 
-			ver = truncateVersion(pkg.version || '-');
+			ver = truncateVersion((upgrade && upgrade.version) || pkg.version || '-');
 
 			if (!isPkgInstalled(inst))
 				btn = E('div', {
@@ -348,7 +368,7 @@ function display(pattern)
 					'data-action': 'install',
 					'click': handleInstall
 				}, _('Install…'));
-			else if (isPkgInstalled(inst) && inst.version !== pkg.version)
+			else if (upgrade)
 				btn = E('div', {
 					'class': 'btn cbi-button-positive',
 					'data-package': name,
@@ -746,7 +766,7 @@ function handleInstall(ev)
 {
 	const name = ev.target.getAttribute('data-package');
 	const installcmd = ev.target.getAttribute('data-action');
-	const pkg = packages.available.pkgs[name];
+	const pkg = (installcmd === 'upgrade' && packages.upgradable[name]) || packages.available.pkgs[name];
 	const depcache = {};
 	let size;
 
@@ -1184,7 +1204,8 @@ function downloadLists()
 	return Promise.all([
 		callMountPoints(),
 		fs.exec_direct('/usr/libexec/package-manager-call', [ 'list-available' ]),
-		fs.exec_direct('/usr/libexec/package-manager-call', [ 'list-installed' ])
+		fs.exec_direct('/usr/libexec/package-manager-call', [ 'list-installed' ]),
+		L.hasSystemFeature('apk') ? fs.exec_direct('/usr/libexec/package-manager-call', [ 'list-upgradable' ]) : null
 	]);
 }
 
@@ -1195,6 +1216,7 @@ function updateLists(data)
 
 	packages.available = { providers: {}, pkgs: {} };
 	packages.installed = { providers: {}, pkgs: {} };
+	packages.upgradable = {};
 
 	return (data ? Promise.resolve(data) : downloadLists()).then(function(data) {
 		const pg = document.querySelector('.cbi-progressbar');
@@ -1206,6 +1228,8 @@ function updateLists(data)
 
 		parsePackageData(data[1], packages.available);
 		parsePackageData(data[2], packages.installed);
+		if (L.hasSystemFeature('apk'))
+			parseApkUpgradable(data[3]);
 
 		for (let pkgname in packages.installed.pkgs)
 			if (pkgname.indexOf('luci-i18n-base-') === 0)
