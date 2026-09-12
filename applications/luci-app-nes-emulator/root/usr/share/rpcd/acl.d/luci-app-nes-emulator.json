@@ -1,0 +1,25 @@
+{
+	"luci-app-nes-emulator": {
+		"description": "Grant access to the NES emulator",
+		"read": {
+			"ubus": {
+				"nes-emulator": [ "status", "roms" ]
+			},
+			"uci": [ "nes-emulator" ]
+		},
+		"write": {
+			"cgi-io": [ "upload" ],
+			"ubus": {
+				"nes-emulator": [
+					"access", "reserve_upload", "discard_upload", "load",
+					"import", "start", "stop", "pause", "reset",
+					"rotate_token"
+				]
+			},
+			"uci": [ "nes-emulator" ],
+			"file": {
+				"/tmp/nes-emulator-upload/*": [ "write" ]
+			}
+		}
+	}
+}
