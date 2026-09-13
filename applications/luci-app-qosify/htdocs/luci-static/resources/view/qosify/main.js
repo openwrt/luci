@@ -18,11 +18,26 @@ var MODES=['diffserv3','diffserv4','diffserv8','besteffort','precedence'];
 var QAC_PANEL={defaults:'defaults','class':'class',alias:'class','interface':'interface',device:'interface'};
 var SECT=[['defaults','config defaults'],['class','config class'],['alias','config alias'],['interface','config interface'],['device','config device']];
 
-var callInit=rpc.declare({
-	object:'luci',
-	method:'setInitAction',
+// luci.setInitAction was dropped from luci-base in 4440b267d; the rc namespace
+// (built into the rpcd core binary, so no extra dependency) replaces it.
+var callRcInit=rpc.declare({
+	object:'rc',
+	method:'init',
 	params:['name','action'],
-	expect:{result:false}
+	reject:true
+});
+// skip_running_check keeps rc.list from forking `qosify running`, which waits
+// on ubus for up to 10s while rpcd kills it after 3s.
+var callRcList=rpc.declare({
+	object:'rc',
+	method:'list',
+	params:['name','skip_running_check'],
+	expect:{'':{}}
+});
+var callQosifyStatus=rpc.declare({
+	object:'qosify',
+	method:'status',
+	expect:{'':{}}
 });
 var callServiceList=rpc.declare({
 	object:'service',
@@ -33,7 +48,8 @@ var callServiceList=rpc.declare({
 var callUciRevert=rpc.declare({
 	object:'uci',
 	method:'revert',
-	params:['config']
+	params:['config'],
+	reject:true
 });
 function isRunning(r){
 	try{var i=r.qosify.instances;for(var k in i)if(i[k].running)return true;}catch(e){}
@@ -46,7 +62,23 @@ function esc(s){return (s==null?'':String(s)).replace(/[&<>"']/g,function(c){ret
 function trim(s){return (s||'').replace(/^\s+|\s+$/g,'');}
 function $(id){return document.getElementById(id);}
 
-function detectActive(out){return /qdisc cake|: active/.test(out||'');}
+// ubus call qosify status -> { devices:{}, interfaces:{ <name>:{ active,... } } }
+function statusActive(st){
+	var groups=['interfaces','devices'],i,k,t;
+	for(i=0;i<groups.length;i++){
+		t=st&&st[groups[i]];
+		for(k in t)if(t[k]&&t[k].active)return true;
+	}
+	return false;
+}
+function statusCount(st){
+	var groups=['interfaces','devices'],i,k,t,n=0;
+	for(i=0;i<groups.length;i++){
+		t=st&&st[groups[i]];
+		for(k in t)if(t[k]&&t[k].active)n++;
+	}
+	return n;
+}
 
 function countRules(text){
 	var n=0,lines=(text||'').split('\n');
@@ -206,31 +238,14 @@ return view.extend({
 	load:function(){
 		return Promise.all([
 			uci.load('qosify').catch(function(){return null;}),
-			L.resolveDefault(fs.read(RULES_PATH),''),
-			L.resolveDefault(fs.read(UCI_PATH),''),
-			L.resolveDefault(fs.stat(UCI_PATH),null),
-			L.resolveDefault(fs.stat(RULES_PATH),null),
-			L.resolveDefault(callServiceList('qosify'),{}),
-			L.resolveDefault(fs.exec('/etc/init.d/qosify',['enabled']),{code:1}),
-			L.resolveDefault(fs.stat('/usr/sbin/qosify'),null),
-			L.resolveDefault(fs.stat('/etc/init.d/qosify'),null),
-			L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),{stdout:''})
+			this.gatherCtx(true)
 		]);
 	},
 
 	render:function(d){
-		var ctx={
-			rulesText:d[1]||'',
-			cfgRaw:d[2]||'',
-			cfgStat:d[3],
-			rulesStat:d[4],
-			running:isRunning(d[5]),
-			enabled:d[6].code===0,
-			hasBin:d[7]!=null,
-			hasInit:d[8]!=null,
-			qstatus:(d[9]&&d[9].stdout)||'',
-		};
-		ctx.active=detectActive(ctx.qstatus);
+		var self=this,ctx=d[1];
+
+
 
 		var root=E('div',{'class':'cbi-map','id':'qos-app'});
 		root.appendChild(E('style',{},this.css()));
@@ -437,12 +452,27 @@ return view.extend({
 		return tick();
 	},
 
+	waitForStopped:function(timeoutMs){
+		var deadline=Date.now()+(timeoutMs||3000);
+		function tick(){
+			return L.resolveDefault(callServiceList('qosify'),{}).then(function(r){
+				if(!isRunning(r))return true;
+				if(Date.now()>=deadline)return false;
+				return new Promise(function(res){setTimeout(res,400);}).then(tick);
+			});
+		}
+		return tick();
+	},
+
 	applyService:function(){
 		var self=this;
-		return callInit('qosify','restart').then(function(){
-			return self.waitForRunning(4000);
-		}).then(function(){
-			return callInit('qosify','reload');
+		return L.resolveDefault(callServiceList('qosify'),{}).then(function(r){
+			if(isRunning(r))return callRcInit('qosify','reload');
+			return callRcInit('qosify','start').then(function(){
+				return self.waitForRunning(4000);
+			}).then(function(up){
+				if(!up)throw new Error(_('qosify did not come up — check the system log'));
+			});
 		});
 	},
 
@@ -454,26 +484,36 @@ return view.extend({
 		else{el.className='qos-badge qos-red';dom.append(el,_('Disabled'));}
 	},
 
-	renderSvcTable:function(ctx){
+	svcNodes:function(ctx){
 		function ok(t){return E('span',{'class':'qos-ok'},'\u2714 '+t);}
 		function err(t){return E('span',{'class':'qos-err'},'\u2718 '+t);}
 		function bdg(cls,t){return E('span',{'class':'qos-badge '+cls},t);}
-		var tbl=E('table',{'class':'qos-kv','width':'100%','id':'qos-svc-tbl'});
-		var b=E('tbody');tbl.appendChild(b);
-		b.appendChild(E('tr',{},[E('td',{},_('Package')),E('td',{},ctx.hasBin?ok(_('Installed')):err(_('Not installed')))]));
-		b.appendChild(E('tr',{},[E('td',{},_('Init Script')),E('td',{},ctx.hasInit?ok(_('Available')):err(_('Missing')))]));
-		b.appendChild(E('tr',{},[E('td',{},_('Autostart')),E('td',{},bdg(ctx.enabled?'qos-green':'qos-red',ctx.enabled?_('Enabled'):_('Disabled')))]));
 		var run;
 		if(ctx.running&&ctx.active)run=bdg('qos-green',_('Running & Shaping'));
 		else if(ctx.running)run=bdg('qos-amber',_('Running — Not Shaping'));
 		else run=bdg('qos-red',_('Not Running'));
-		b.appendChild(E('tr',{},[E('td',{},_('Running')),E('td',{},run)]));
+		return {
+			init:ctx.hasInit?ok(_('Available')):err(_('Missing')),
+			auto:bdg(ctx.enabled?'qos-green':'qos-red',ctx.enabled?_('Enabled'):_('Disabled')),
+			run:run,
+			shaped:ctx.shaped?E('span',{},N_(ctx.shaped,'%d interface','%d interfaces').format(ctx.shaped)):E('span',{'class':'qos-muted'},_('none'))
+		};
+	},
+
+	renderSvcTable:function(ctx){
+		var n=this.svcNodes(ctx);
+		var tbl=E('table',{'class':'qos-kv','width':'100%','id':'qos-svc-tbl'});
+		var b=E('tbody');tbl.appendChild(b);
+		b.appendChild(E('tr',{},[E('td',{},_('Init Script')),E('td',{'id':'qos-svc-init'},n.init)]));
+		b.appendChild(E('tr',{},[E('td',{},_('Autostart')),E('td',{'id':'qos-svc-auto'},n.auto)]));
+		b.appendChild(E('tr',{},[E('td',{},_('Running')),E('td',{'id':'qos-svc-run'},n.run)]));
+		b.appendChild(E('tr',{},[E('td',{},_('Shaping')),E('td',{'id':'qos-svc-shaped'},n.shaped)]));
 		return tbl;
 	},
 
 	renderCfgFiles:function(ctx){
-		var rulesN=countRules(ctx.rulesText);
-		var cfgOk=ctx.cfgRaw.length>10&&/(^|\n)config /.test(ctx.cfgRaw);
+		var rulesN=(ctx.rulesN!=null)?ctx.rulesN:countRules(ctx.rulesText);
+		var cfgOk=(ctx.cfgOk!=null)?ctx.cfgOk:((ctx.cfgRaw||'').length>10&&/(^|\n)config /.test(ctx.cfgRaw||''));
 		var rulesOk=rulesN>0;
 		var tbl=E('table',{'class':'qos-kv','width':'100%'});
 		var b=E('tbody');tbl.appendChild(b);
@@ -589,8 +629,8 @@ return view.extend({
 			'id':'qos-config-ta',
 			'rows':28,
 			'style':'width:100%;font-family:monospace;font-size:12px;line-height:1.4;tab-size:4;border:1px solid #ccc;padding:6px'
-		},ctx.cfgRaw);
-		ta.dataset.orig=ctx.cfgRaw;
+		},ctx.cfgRaw||'');
+		ta.dataset.orig=ctx.cfgRaw||'';
 		fs1.appendChild(ta);
 		fs1.appendChild(E('div',{'class':'cbi-page-actions'},[
 			E('button',{'class':'cbi-button cbi-button-reset','style':'margin-right:6px','click':function(){return self.clearCfg();}},_('Clear')),
@@ -778,8 +818,8 @@ return view.extend({
 		var ta=E('textarea',{
 			'id':'qos-rules-ta','rows':28,
 			'style':'width:100%;font-family:monospace;font-size:12px;line-height:1.4;tab-size:4;border:1px solid #ccc;padding:6px'
-		},ctx.rulesText);
-		ta.dataset.orig=ctx.rulesText;
+		},ctx.rulesText||'');
+		ta.dataset.orig=ctx.rulesText||'';
 		fs1.appendChild(ta);
 		fs1.appendChild(E('div',{'class':'cbi-page-actions'},[
 			E('button',{'class':'cbi-button cbi-button-reset','style':'margin-right:6px','click':function(){return self.clearRules();}},_('Clear')),
@@ -887,11 +927,18 @@ return view.extend({
 		var self=this;
 		self.lock();
 		ui.showModal(_('Working'),[E('p',{},_('Sending %s to qosify...').format(action))]);
-		var p=callInit('qosify',action);
+		var p=callRcInit('qosify',action);
 		if(action==='start'||action==='restart')
-			p=p.then(function(){return self.waitForRunning(4000);}).then(function(){return callInit('qosify','reload');});
+			p=p.then(function(){return self.waitForRunning(4000);}).then(function(up){
+				if(!up)throw new Error(_('qosify did not come up — check the system log'));
+			});
 		if(action==='stop')
-			p=p.then(function(){return L.resolveDefault(fs.exec('/usr/share/qosify-luci/cleanup',[]),null);});
+			p=p.then(function(){return self.waitForStopped(4000);}).then(function(down){
+				if(!down)throw new Error(_('qosify is still running — leaving the qdiscs alone'));
+				return fs.exec('/usr/share/qosify-luci/cleanup',[]).then(function(r){
+					if(r&&r.code)notify(_('Cleanup exited with code %d').format(r.code),'warning');
+				});
+			});
 		return p.then(function(){
 			return new Promise(function(r){setTimeout(r,800);});
 		}).then(function(){
@@ -980,19 +1027,27 @@ return view.extend({
 		var data=ta.value.replace(/\r\n/g,'\n');
 		if(data.length===0){
 			if(!confirm(_('Empty config will stop qosify. Continue?')))return;
+			var stopped=false;
 			self.lock();
 			return L.resolveDefault(callUciRevert('qosify'),null).then(function(){
 				return fs.write(UCI_PATH,'');
 			}).then(function(){
-				return callInit('qosify','stop');
+				return callRcInit('qosify','stop');
 			}).then(function(){
+				return self.waitForStopped(4000);
+			}).then(function(down){
+				// cleanup deletes the root and clsact qdiscs and the ifb devices, so
+				// it only runs once the daemon is confirmed down -- the same guard
+				// svcAction() applies to a plain stop.
+				stopped=down;
+				if(!down){notify(_('qosify is still running — leaving the qdiscs alone'),'warning');return null;}
 				return L.resolveDefault(fs.exec('/usr/share/qosify-luci/cleanup',[]),null);
 			}).then(function(){
 				uci.unload('qosify');
 				return uci.load('qosify');
 			}).then(function(){
 				ta.dataset.orig='';
-				notify(_('Config cleared, qosify stopped.'),'info');
+				notify(stopped?_('Config cleared, qosify stopped.'):_('Config cleared.'),'info');
 				return self.refreshAll();
 			}).catch(function(e){
 				notify(_('Save failed: %s').format(e),'danger');
@@ -1026,9 +1081,8 @@ return view.extend({
 
 	waitForShaping:function(tries){
 		var self=this;
-		return L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),{stdout:''}).then(function(r){
-			var st=r.stdout||'';
-			if(detectActive(st)||tries<=1)return st;
+		return L.resolveDefault(callQosifyStatus(),{}).then(function(st){
+			if(statusActive(st)||tries<=1)return statusActive(st);
 			return new Promise(function(res){setTimeout(res,700);}).then(function(){return self.waitForShaping(tries-1);});
 		});
 	},
@@ -1036,8 +1090,8 @@ return view.extend({
 	checkShapingForSave:function(prefix){
 		var sn=ifSect(),w=(sn&&uci.get('qosify',sn.id))||{};
 		if(w.disabled==='1')return Promise.resolve({text:_('%s, applied (QoS disabled).').format(prefix),kind:'info'});
-		return this.waitForShaping(3).then(function(st){
-			if(detectActive(st))return {text:_('%s, applied.').format(prefix),kind:'info'};
+		return this.waitForShaping(3).then(function(active){
+			if(active)return {text:_('%s, applied.').format(prefix),kind:'info'};
 			return {text:_('Warning: %s but qosify is not shaping traffic — check the Status tab.').format(prefix),kind:'warning'};
 		});
 	},
@@ -1265,26 +1319,37 @@ return view.extend({
 
 	// === Refreshers ===
 
-	gatherCtx:function(){
+	gatherCtx:function(withFiles){
+		var self=this;
 		return Promise.all([
-			L.resolveDefault(fs.read(UCI_PATH),''),
-			L.resolveDefault(fs.read(RULES_PATH),''),
+			L.resolveDefault(callServiceList('qosify'),{}),
+			L.resolveDefault(callRcList('qosify',true),{}),
+			L.resolveDefault(callQosifyStatus(),{}),
 			L.resolveDefault(fs.stat(UCI_PATH),null),
 			L.resolveDefault(fs.stat(RULES_PATH),null),
-			L.resolveDefault(callServiceList('qosify'),{}),
-			L.resolveDefault(fs.exec('/etc/init.d/qosify',['enabled']),{code:1}),
-			L.resolveDefault(fs.stat('/usr/sbin/qosify'),null),
-			L.resolveDefault(fs.stat('/etc/init.d/qosify'),null),
-			L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),{stdout:''})
+			withFiles?fs.read(UCI_PATH).catch(function(){return null;}):null,
+			withFiles?fs.read(RULES_PATH).catch(function(){return null;}):null
 		]).then(function(d){
+			var rc=d[1]&&d[1].qosify;
 			var ctx={
-				cfgRaw:d[0]||'',rulesText:d[1]||'',
-				cfgStat:d[2],rulesStat:d[3],
-				running:isRunning(d[4]),enabled:d[5].code===0,
-				hasBin:d[6]!=null,hasInit:d[7]!=null,
-				qstatus:(d[8]&&d[8].stdout)||''
+				running:isRunning(d[0]),
+				enabled:!!(rc&&rc.enabled),
+				hasInit:!!rc,
+				status:d[2]||{},
+				active:statusActive(d[2]),
+				shaped:statusCount(d[2]),
+				cfgStat:d[3],
+				rulesStat:d[4],
+				cfgRaw:d[5],
+				rulesText:d[6],
+				qstatus:null
 			};
-			ctx.active=detectActive(ctx.qstatus);
+			if(withFiles){
+				self._rulesN=countRules(ctx.rulesText);
+				self._cfgOk=(ctx.cfgRaw||'').length>10&&/(^|\n)config /.test(ctx.cfgRaw||'');
+			}
+			ctx.rulesN=self._rulesN;
+			ctx.cfgOk=self._cfgOk;
 			return ctx;
 		});
 	},
