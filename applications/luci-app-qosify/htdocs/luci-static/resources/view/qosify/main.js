@@ -342,6 +342,10 @@ return view.extend({
 			pane.addEventListener('cbi-tab-active',function(){
 				self.currentTab=t[0];
 				try{history.replaceState(null,'','#'+names[t[0]]);}catch(e){}
+				// The Status tab costs a fork per active interface, so it is fetched
+				// when it is opened rather than on every page load; initTabGroup fires
+				// this from a requestAnimationFrame, so the pane is in the DOM.
+				if(t[0]==='st')self.refreshStatus();
 			});
 			group.appendChild(pane);
 		});
@@ -358,10 +362,16 @@ return view.extend({
 		return root;
 	},
 
+	// Both tabs tick at 10 s. Overview is six ubus calls and no forks; the Status
+	// tab forks qosify-status, which runs tc twice per active interface, so it is
+	// the expensive one and does not get a faster tick. Poll.step() holds
+	// the next tick until the promise this returns settles, and refreshStatus()
+	// drops an overlapping call, so a fork slower than the interval skips ticks
+	// instead of stacking up.
 	installPollers:function(){
 		var self=this;
 		poll.add(function(){if(self.currentTab!=='ov'||self._n)return;return self.refreshOverview();},10);
-		poll.add(function(){return self.refreshStatus();},5);
+		poll.add(function(){if(self.currentTab!=='st'||self._n)return;return self.refreshStatus();},10);
 	},
 
 	tabOverview:function(ctx){
@@ -563,6 +573,17 @@ return view.extend({
 		b.appendChild(E('tr',{},[E('td',{},_('Running')),E('td',{'id':'qos-svc-run'},n.run)]));
 		b.appendChild(E('tr',{},[E('td',{},_('Shaping')),E('td',{'id':'qos-svc-shaped'},n.shaped)]));
 		return tbl;
+	},
+
+	updateSvcTable:function(ctx){
+		var n=this.svcNodes(ctx),map={init:'qos-svc-init',auto:'qos-svc-auto',run:'qos-svc-run',shaped:'qos-svc-shaped'},k,el;
+		for(k in map){el=$(map[k]);if(el)dom.content(el,n[k]);}
+		el=$('qos-btn-auto');
+		if(el){
+			el.className='cbi-button '+(ctx.enabled?'cbi-button-positive':'cbi-button-negative');
+			el.title=ctx.enabled?_('Click to disable autostart'):_('Click to enable autostart');
+			dom.content(el,ctx.enabled?_('Enabled'):_('Disabled'));
+		}
 	},
 
 	renderCfgFiles:function(ctx){
@@ -962,7 +983,11 @@ return view.extend({
 	tabStatus:function(ctx){
 		var section=E('div',{'id':'qos-st'});
 		var fs1=E('fieldset',{'class':'cbi-section'},E('legend',{},_('qosify-status')));
-		var body=E('div',{'id':'qos-st-body'});
+		var body=E('div',{'id':'qos-st-body'},[
+			E('div',{'id':'qos-st-sum'}),
+			E('pre',{'id':'qos-st-pre','class':'qos-pre','style':'display:none'}),
+			E('div',{'id':'qos-st-msg'})
+		]);
 		this.fillStatus(body,ctx);
 		fs1.appendChild(body);
 		section.appendChild(fs1);
@@ -982,15 +1007,51 @@ return view.extend({
 		return out;
 	},
 
+	// Runs on every poll tick and twice per open, so only the summary table is
+	// rebuilt: replacing the <pre> would throw away the scroll position while it
+	// is being read. ctx.qstatus null means the fork has not returned yet, '' means
+	// it returned nothing -- the two used to look the same on screen.
 	fillStatus:function(body,ctx){
-		dom.content(body,'');
+		var sum=body.querySelector('#qos-st-sum'),pre=body.querySelector('#qos-st-pre'),msg=body.querySelector('#qos-st-msg');
+		if(!sum||!pre||!msg)return;
+		var note=function(t){dom.content(msg,E('p',{'class':'qos-muted'},E('em',{},t)));};
 		if(!ctx.running){
-			body.appendChild(E('div',{'class':'alert-message warning'},_('qosify is not running. Start from the Overview tab.')));
-		}else if(!ctx.qstatus){
-			body.appendChild(E('p',{'style':'opacity:.7'},E('em',{},_('qosify-status returned no output.'))));
-		}else{
-			body.appendChild(E('pre',{'style':'background:#1e1e1e;color:#e0e0e0;padding:12px;border:1px solid #333;border-radius:4px;overflow-x:auto;font-size:12px;line-height:1.5;white-space:pre-wrap'},ctx.qstatus));
+			dom.content(sum,'');
+			pre.style.display='none';
+			dom.content(msg,E('div',{'class':'alert-message warning'},_('qosify is not running. Start from the Overview tab.')));
+			return;
 		}
+		dom.content(sum,this.statusSummary(ctx.status));
+		pre.style.display=ctx.qstatus?'':'none';
+		if(ctx.qstatus){
+			if(pre.textContent!==ctx.qstatus)pre.textContent=ctx.qstatus;
+			dom.content(msg,'');
+		}
+		else if(this.readonly)note(_('The detailed tc output needs write access to this page.'));
+		else if(ctx.qstatus==null)note(_('Reading tc output...'));
+		else note(_('qosify-status returned no output.'));
+	},
+
+	// ubus call qosify status, so the per-interface summary costs no forks
+	statusSummary:function(st){
+		var tbl=E('table',{'class':'qos-kv','width':'100%'}),b=E('tbody');
+		tbl.appendChild(b);
+		['interfaces','devices'].forEach(function(g){
+			var t=st&&st[g],k,e;
+			for(k in t){
+				e=t[k]||{};
+				b.appendChild(E('tr',{},[
+					E('td',{},(g==='devices'?_('device %s'):_('interface %s')).format(k)),
+					E('td',{},[
+						E('span',{'class':'qos-badge '+(e.active?'qos-green':'qos-red')},e.active?_('active'):_('inactive')),
+						E('span',{'class':'qos-muted','style':'margin-left:8px'},
+							_('device: %s, ingress: %s, egress: %s').format(e.ifname||'-',e.ingress?_('yes'):_('no'),e.egress?_('yes'):_('no')))
+					])
+				]));
+			}
+		});
+		if(!b.firstChild)b.appendChild(E('tr',{},E('td',{'class':'qos-muted'},E('em',{},_('qosify has no interfaces or devices configured')))));
+		return tbl;
 	},
 
 	// === Actions ===
@@ -1508,18 +1569,18 @@ return view.extend({
 		});
 	},
 
+	// Poll path: six ubus calls (uci.get and gatherCtx(false)'s five), no shell
+	// forks, and the parts of the page that hold user input or focus are patched
+	// in place rather than rebuilt.
 	refreshOverview:function(){
 		var self=this;
 		self.lock();
 		uci.unload('qosify');
 		return uci.load('qosify').then(function(){
-			return self.gatherCtx();
+			return self.gatherCtx(false);
 		}).then(function(ctx){
-			self.fillSect('qos-svc-sect',self.buildSvcSect(ctx));
+			self.updateSvcTable(ctx);
 			self.fillSect('qos-cfg-sect',self.buildCfgSect(ctx));
-			self.fillSect('qos-ctl-sect',self.buildCtlSect(ctx));
-			var stb=$('qos-st-body');
-			if(stb)self.fillStatus(stb,ctx);
 			var bd=$('q-en-badge');
 			if(bd){
 				var sn=ifSect(),w=(sn&&uci.get('qosify',sn.id))||{};
@@ -1532,22 +1593,30 @@ return view.extend({
 	refreshOverviewFull:function(){
 		var self=this;
 		return self.refreshOverview().then(function(ctx){
+			self.fillSect('qos-svc-sect',self.buildSvcSect(ctx));
+			self.fillSect('qos-ctl-sect',self.buildCtlSect(ctx));
 			self.fillSect('qos-qs-sect',self.buildQsSect(ctx));
 			return ctx;
 		});
 	},
 
 	refreshStatus:function(){
-		if(this.currentTab!=='st')return;
 		var self=this;
+		if(self.currentTab!=='st'||self._st)return Promise.resolve();
+		self._st=true;
+		var ex=self.readonly?Promise.resolve(null):L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),null);
 		return Promise.all([
 			L.resolveDefault(callServiceList('qosify'),{}),
-			L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),{stdout:''})
+			L.resolveDefault(callQosifyStatus(),{})
 		]).then(function(d){
-			var ctx={running:isRunning(d[0]),qstatus:(d[1]&&d[1].stdout)||''};
+			var ctx={running:isRunning(d[0]),status:d[1]||{},qstatus:self.readonly?'':null};
 			var stb=$('qos-st-body');
 			if(stb)self.fillStatus(stb,ctx);
-		});
+			return ex.then(function(r){
+				ctx.qstatus=self.readonly?'':((r&&r.stdout)||'');
+				if(stb)self.fillStatus(stb,ctx);
+			});
+		}).finally(function(){self._st=false;});
 	},
 
 	// which = 'cfg' | 'rules' | undefined: the editor for the file just written is
