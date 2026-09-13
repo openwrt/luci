@@ -594,29 +594,29 @@
 	font-size: 13.5px;
 }
 
-.Dashboard .dashboard-kv .td {
+.Dashboard .dashboard-kv td {
 	padding: 12px 18px;
 	border-top: 1px solid var(--dashboard-border);
 	vertical-align: top;
 }
 
-.Dashboard .dashboard-kv .tr:first-child .td {
+.Dashboard .dashboard-kv tr:first-child td {
 	border-top: 0;
 }
 
-.Dashboard .dashboard-kv .td:first-child {
+.Dashboard .dashboard-kv td:first-child {
 	width: 9rem;
 	padding-right: 0;
 	color: var(--dashboard-text-muted);
 	white-space: nowrap;
 }
 
-.Dashboard .dashboard-kv .td:last-child {
+.Dashboard .dashboard-kv td:last-child {
 	font-weight: 700;
 	overflow-wrap: anywhere;
 }
 
-.Dashboard .dashboard-kv .td.dashboard-mono {
+.Dashboard .dashboard-kv td.dashboard-mono {
 	font-weight: 400;
 }
 
@@ -629,41 +629,43 @@
 	overflow-x: auto;
 }
 
-.Dashboard .dashboard-table-wrap .table {
-	margin: 0;
+.Dashboard .dashboard-table {
+	width: 100%;
 	min-width: 520px;
+	margin: 0;
+	border-collapse: collapse;
 }
 
-.Dashboard .dashboard-table-wrap .th {
+.Dashboard .dashboard-table th {
 	padding: 12px 18px;
+	text-align: left;
 	background: var(--dashboard-surface-alt);
 	font-size: 12.5px;
 	font-weight: 700;
 	color: var(--dashboard-text-muted);
-	border-top: 0;
 	white-space: nowrap;
 }
 
-.Dashboard .dashboard-table-wrap .td {
+.Dashboard .dashboard-table td {
 	padding: 13px 18px;
 	font-size: 13.5px;
 	border-top: 1px solid var(--dashboard-border);
 	vertical-align: middle;
 }
 
-.Dashboard .dashboard-table-wrap .tfoot .td {
+.Dashboard .dashboard-table tfoot td {
 	color: var(--dashboard-text-muted);
 	font-size: 12.5px;
 }
 
-.Dashboard .dashboard-table-wrap .dashboard-table-empty .td {
+.Dashboard .dashboard-table .dashboard-table-empty td {
 	text-align: center;
 	color: var(--dashboard-text-muted);
 	padding: 28px 18px;
 }
 
-.Dashboard .dashboard-table-wrap .td.dashboard-num,
-.Dashboard .dashboard-table-wrap .th.dashboard-num {
+.Dashboard .dashboard-table td.dashboard-num,
+.Dashboard .dashboard-table th.dashboard-num {
 	text-align: right;
 	white-space: nowrap;
 }
@@ -779,43 +781,6 @@
 }
 
 
-/* Keep real table layout on phones: themes reflow .tr/.td into flex blocks,
-   the dashboard tables scroll horizontally instead. */
-.Dashboard .dashboard-table-wrap .table,
-.Dashboard .dashboard-kv {
-	display: table;
-}
-
-.Dashboard .dashboard-table-wrap .table .thead { display: table-header-group; }
-.Dashboard .dashboard-table-wrap .table .tbody { display: table-row-group; }
-.Dashboard .dashboard-table-wrap .table .tfoot { display: table-footer-group; }
-
-.Dashboard .dashboard-table-wrap .table .tr,
-.Dashboard .dashboard-kv .tr {
-	display: table-row;
-	flex: none;
-	padding: 0;
-	border: 0;
-}
-
-.Dashboard .dashboard-table-wrap .table .th,
-.Dashboard .dashboard-table-wrap .table .td,
-.Dashboard .dashboard-kv .td {
-	display: table-cell;
-	flex: none;
-	width: auto;
-	max-width: none;
-	overflow: visible;
-}
-
-.Dashboard .dashboard-table-wrap .table .tr::before,
-.Dashboard .dashboard-table-wrap .table .td::before,
-.Dashboard .dashboard-kv .tr::before,
-.Dashboard .dashboard-kv .td::before {
-	content: none;
-	display: none;
-}
-
 /* ---- Responsive ---- */
 @media screen and (max-width: 760px) {
 	.dashboard-kv-grid {
@@ -865,16 +830,16 @@
 		--dashboard-plot-h: 140px;
 	}
 
-	.Dashboard .dashboard-kv .td,
-	.Dashboard .dashboard-table-wrap .th,
-	.Dashboard .dashboard-table-wrap .td,
+	.Dashboard .dashboard-kv td,
+	.Dashboard .dashboard-table th,
+	.Dashboard .dashboard-table td,
 	.dashboard-kv-head,
 	.dashboard-section-title {
 		padding-left: 14px;
 		padding-right: 14px;
 	}
 
-	.Dashboard .dashboard-kv .td:first-child {
+	.Dashboard .dashboard-kv td:first-child {
 		width: 7rem;
 	}
 

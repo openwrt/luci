@@ -67,32 +67,30 @@ return baseclass.extend({
 	cell(tag, cell) {
 		const descr = (cell != null && typeof(cell) == 'object' && !(cell instanceof Node)) ? cell : { text: cell };
 
-		return E(tag, { 'class': tag + ' ' + (descr.className || '') }, [ (descr.text != null) ? descr.text : '' ]);
+		return E(tag, descr.className ? { 'class': descr.className } : {}, [ (descr.text != null) ? descr.text : '' ]);
 	},
 
 	table(opts) {
-		const table = E('table', { 'class': 'table ' + (opts.className || '') }, [
-			E('thead', { 'class': 'thead' }, [
-				E('tr', { 'class': 'tr' }, opts.head.map(cell => this.cell('th', cell)))
+		const table = E('table', { 'class': 'dashboard-table ' + (opts.className || '') }, [
+			E('thead', {}, [
+				E('tr', {}, opts.head.map(cell => this.cell('th', cell)))
 			])
 		]);
 
-		const body = E('tbody', { 'class': 'tbody' });
+		const body = E('tbody');
 
-		opts.rows.forEach((row, i) => {
-			body.appendChild(E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, row.map(cell => this.cell('td', cell))));
-		});
+		opts.rows.forEach(row => body.appendChild(E('tr', {}, row.map(cell => this.cell('td', cell)))));
 
 		if (!opts.rows.length && opts.emptyText)
-			body.appendChild(E('tr', { 'class': 'tr dashboard-table-empty' }, [
-				E('td', { 'class': 'td', 'colspan': opts.head.length }, [ opts.emptyText ])
+			body.appendChild(E('tr', { 'class': 'dashboard-table-empty' }, [
+				E('td', { 'colspan': opts.head.length }, [ opts.emptyText ])
 			]));
 
 		table.appendChild(body);
 
 		if (opts.foot)
-			table.appendChild(E('tfoot', { 'class': 'tfoot' }, [
-				E('tr', { 'class': 'tr' }, opts.foot.map(cell => this.cell('td', cell)))
+			table.appendChild(E('tfoot', {}, [
+				E('tr', {}, opts.foot.map(cell => this.cell('td', cell)))
 			]));
 
 		return E('div', { 'class': 'dashboard-table-wrap' }, [ table ]);

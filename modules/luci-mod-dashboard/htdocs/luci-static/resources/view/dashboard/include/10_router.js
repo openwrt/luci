@@ -48,9 +48,9 @@ return baseclass.extend({
 	},
 
 	renderKeyValueTable(rows) {
-		return E('table', { 'class': 'table dashboard-kv' }, rows.map(row => E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td' }, [ row.title ]),
-			E('td', { 'class': 'td' + (row.mono ? ' dashboard-mono' : '') }, [ this.renderValue(row.value, row.mono) ])
+		return E('table', { 'class': 'dashboard-kv' }, rows.map(row => E('tr', {}, [
+			E('td', {}, [ row.title ]),
+			E('td', row.mono ? { 'class': 'dashboard-mono' } : {}, [ this.renderValue(row.value, row.mono) ])
 		])));
 	},
 
