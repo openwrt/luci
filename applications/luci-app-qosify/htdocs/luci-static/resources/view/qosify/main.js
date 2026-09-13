@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 'use strict';
 'require view';
 'require fs';
@@ -58,7 +59,6 @@ function isRunning(r){
 
 function clsLabel(c){return c.name+(c.alias?' '+_('(alias)'):'');}
 function clsDesc(c){return _('Ingress: %s / Egress: %s').format(c.ingress||'',c.egress||'');}
-function esc(s){return (s==null?'':String(s)).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
 function trim(s){return (s||'').replace(/^\s+|\s+$/g,'');}
 function $(id){return document.getElementById(id);}
 
@@ -273,6 +273,10 @@ function notify(msg,kind){
 // Remember the size/mtime an editor was loaded from, so a save can tell the
 // difference between "the user changed this" and "something else changed the
 // file underneath us".
+function noClassRow(){
+	return E('tr',{},E('td',{'colspan':2,'class':'qos-muted'},E('em',{},_('No classes defined in %s').format(UCI_PATH))));
+}
+
 function stampFile(el,st){
 	el.dataset.mtime=st?String(st.mtime):'';
 	el.dataset.size=st?String(st.size):'';
@@ -300,6 +304,7 @@ function confirmDialog(title,text,label,negative){
 return view.extend({
 	handleSaveApply:null,handleSave:null,handleReset:null,
 	currentTab:'ov',
+	readonly:false,
 
 	load:function(){
 		return Promise.all([
@@ -311,33 +316,43 @@ return view.extend({
 	render:function(d){
 		var self=this,ctx=d[1];
 
+		this.readonly=!L.hasViewPermission();
 
 		if(d[0]===null)notify(_('The qosify UCI configuration could not be loaded — class and interface lists may be incomplete.'),'warning');
 
 		var root=E('div',{'class':'cbi-map','id':'qos-app'});
-		root.appendChild(E('style',{},this.css()));
-		root.appendChild(E('h2',{},'qosify'));
+		root.appendChild(E('link',{'rel':'stylesheet','href':L.resource('view/qosify/qosify.css')}));
+		root.appendChild(E('h2',{},_('qosify')));
 		root.appendChild(E('div',{'class':'cbi-map-descr'},_('Traffic shaping and DSCP classification via qosify')));
 
-		var tabs=E('ul',{'class':'cbi-tabmenu'});
-		var tabDef=[['ov',_('Overview')],['cf',_('Config')],['ru',_('Classification Rules')],['ad',_('Advanced')],['st',_('Status')]];
-		var self=this;
-		tabDef.forEach(function(t){
-			var li=E('li',{'class':'cbi-tab-disabled','id':'th-'+t[0]},
-				E('a',{'href':'#','click':function(ev){ev.preventDefault();self.showTab(t[0]);}},t[1]));
-			tabs.appendChild(li);
+		var names={ov:'overview',cf:'config',ru:'rules',ad:'advanced',st:'status'};
+		var hash=(location.hash||'').slice(1),want='ov',k;
+		for(k in names)if(names[k]===hash)want=k;
+
+		var group=E('div',{});
+		[['ov',_('Overview'),this.tabOverview(ctx)],
+		 ['cf',_('Config'),this.tabConfig(ctx)],
+		 ['ru',_('Classification Rules'),this.tabRules(ctx)],
+		 ['ad',_('Advanced'),this.tabAdvanced(ctx)],
+		 ['st',_('Status'),this.tabStatus(ctx)]].forEach(function(t){
+			var pane=t[2];
+			pane.setAttribute('data-tab',t[0]);
+			pane.setAttribute('data-tab-title',t[1]);
+			if(t[0]===want)pane.setAttribute('data-tab-active','true');
+			pane.addEventListener('cbi-tab-active',function(){
+				self.currentTab=t[0];
+				try{history.replaceState(null,'','#'+names[t[0]]);}catch(e){}
+			});
+			group.appendChild(pane);
 		});
-		root.appendChild(tabs);
+		root.appendChild(group);
+		ui.tabs.initTabGroup(group.childNodes);
+		this.currentTab=want;
 
-		root.appendChild(this.tabOverview(ctx));
-		root.appendChild(this.tabConfig(ctx));
-		root.appendChild(this.tabRules(ctx));
-		root.appendChild(this.tabAdvanced(ctx));
-		root.appendChild(this.tabStatus(ctx));
-
-		var hash=(location.hash||'').slice(1);
-		var map={overview:'ov',config:'cf',rules:'ru',advanced:'ad',status:'st'};
-		setTimeout(function(){self.showTab(map[hash]||'ov');},0);
+		if(this.readonly){
+			this.applyReadonly(root);
+			notify(_('You have read-only access to this page, so editing and service control are disabled.'),'warning');
+		}
 
 		this.installPollers();
 		return root;
@@ -349,50 +364,8 @@ return view.extend({
 		poll.add(function(){return self.refreshStatus();},5);
 	},
 
-	showTab:function(t){
-		var dirty=this.dirty();
-		if(dirty&&(this.currentTab==='cf'||this.currentTab==='ru')&&t!==this.currentTab){
-			if(!confirm(_('You have unsaved changes. Leave this tab?')))return;
-		}
-		this.currentTab=t;
-		['ov','cf','ru','ad','st'].forEach(function(x){
-			var el=$('qos-'+x),th=$('th-'+x);
-			if(!el||!th)return;
-			if(x===t){el.style.display='block';th.className='cbi-tab';}
-			else{el.style.display='none';th.className='cbi-tab-disabled';}
-		});
-		var rev={ov:'overview',cf:'config',ru:'rules',ad:'advanced',st:'status'};
-		try{history.replaceState(null,'','#'+rev[t]);}catch(e){}
-	},
-
-	dirty:function(){
-		var c=$('qos-config-ta'),r=$('qos-rules-ta');
-		if(c&&c.dataset.orig!=null&&c.value!==c.dataset.orig)return true;
-		if(r&&r.dataset.orig!=null&&r.value!==r.dataset.orig)return true;
-		return false;
-	},
-
-	css:function(){return [
-		'.qos-badge{display:inline-block;padding:2px 10px;border-radius:3px;font-size:12px;font-weight:bold;color:#fff}',
-		'.qos-green{background:#4caf50}.qos-red{background:#e53935}.qos-amber{background:#ff9800}',
-		'.qos-ok{color:#4caf50}.qos-err{color:#e53935}.qos-warn{color:#ff9800}',
-		'.qos-tab{display:none}.qos-kv td{padding:7px 12px;border-bottom:1px solid #eee}',
-		'.qos-kv td:first-child{font-weight:bold;opacity:.7;width:200px}',
-		'.qos-kv tr:last-child td{border-bottom:none}',
-		'.qos-svc>*{display:inline-block;margin:0 3px 3px 0}',
-		'.qos-btn-en{background:transparent !important;border:2px solid #4caf50 !important;color:#4caf50 !important;font-weight:bold}',
-		'.qos-btn-en:hover{background:#4caf50 !important;color:#fff !important}',
-		'.qos-btn-dis{background:transparent !important;border:2px solid #e53935 !important;color:#e53935 !important;font-weight:bold}',
-		'.qos-btn-dis:hover{background:#e53935 !important;color:#fff !important}',
-		'.qos-ref{margin:0 0 10px;padding:6px 10px;border:1px solid #888;border-radius:4px}',
-		'.qos-ref summary{cursor:pointer;font-weight:bold;font-size:13px}',
-		'.qos-qa{margin:0 0 8px;padding:8px 10px;border:1px solid #888;border-radius:4px}',
-		'.qos-qa label{font-size:11px;opacity:.7}',
-		'.qos-qa-row{display:flex;gap:6px;align-items:center;margin:6px 0 0;flex-wrap:wrap}'
-	].join('');},
-
 	tabOverview:function(ctx){
-		var section=E('div',{'class':'qos-tab','id':'qos-ov'});
+		var section=E('div',{'id':'qos-ov'});
 		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-svc-sect'},this.buildSvcSect(ctx)));
 		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-qs-sect'},this.buildQsSect(ctx)));
 		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-cfg-sect'},this.buildCfgSect(ctx)));
@@ -421,7 +394,11 @@ return view.extend({
 		var tbl=E('table',{'class':'qos-kv','width':'100%'});
 		var bdy=E('tbody');tbl.appendChild(bdy);
 
-		function row(lbl,el){bdy.appendChild(E('tr',{},[E('td',{},lbl),E('td',{},el)]));}
+		function row(lbl,el){
+			var n=(el&&el.nodeType)?el:(Array.isArray(el)?el[0]:null);
+			var id=(n&&n.id)||null;
+			bdy.appendChild(E('tr',{},[E('td',{},id?E('label',{'for':id},lbl):lbl),E('td',{},el)]));
+		}
 		function chk(name,val){return E('input',{'type':'checkbox','id':'q-'+name,'data-q':name,'checked':val?'checked':null});}
 		function txt(name,val,ph,style){return E('input',{'type':'text','id':'q-'+name,'data-q':name,'value':val||'','placeholder':ph||'','style':style||'width:140px;font-family:monospace'});}
 		function sel(name,val,opts,style,def,hint){
@@ -430,7 +407,7 @@ return view.extend({
 			if(!def)s.appendChild(E('option',{'value':''},hint?'-- ('+hint+')':'--'));
 			var sv=val||def||'',known=false;
 			opts.forEach(function(o){var a={'value':o};if(sv===o){a.selected='selected';known=true;}s.appendChild(E('option',a,o));});
-			if(val&&!known)s.appendChild(E('option',{'value':val,'selected':'selected'},val+' (current)'));
+			if(val&&!known)s.appendChild(E('option',{'value':val,'selected':'selected'},_('%s (current)').format(val)));
 			return s;
 		}
 
@@ -448,12 +425,12 @@ return view.extend({
 		// keep warning until a real netdev is entered.
 		var isDev=!!(sn&&sn.type==='device');
 		if(!w.name)row(isDev?_('Netdev Name'):_('Interface Name'),
-			[txt('name',sn?(isDev?'':sn.name):'wan',isDev?'e.g. eth0':'e.g. wan','width:140px'),
+			[txt('name',sn?(isDev?'':sn.name):'wan',_('e.g. %s').format(isDev?'eth0':'wan'),'width:140px'),
 			E('span',{'style':'opacity:.6;font-size:11px;margin-left:8px'},_('required — qosify skips sections with no name'))]);
-		row(_('Bandwidth Up'),txt('bw_up',w.bandwidth_up,'e.g. 100mbit'));
-		row(_('Bandwidth Down'),txt('bw_down',w.bandwidth_down,'e.g. 100mbit'));
+		row(_('Bandwidth Up'),txt('bw_up',w.bandwidth_up,_('e.g. %s').format('100mbit')));
+		row(_('Bandwidth Down'),txt('bw_down',w.bandwidth_down,_('e.g. %s').format('100mbit')));
 		row(_('Overhead Type'),sel('overhead',w.overhead_type,OVH,'width:180px','none'));
-		row(_('Overhead Bytes'),[txt('overhead_b',w.overhead,'manual only','width:100px'),
+		row(_('Overhead Bytes'),[txt('overhead_b',w.overhead,_('manual only'),'width:100px'),
 			E('span',{'style':'opacity:.6;font-size:11px;margin-left:8px'},_('used only when Overhead Type is manual'))]);
 		row(_('Queue Mode'),sel('mode',w.mode,MODES,'width:170px',null,'diffserv4'));
 		row(_('Ingress'),chk('ingress',numBool(w.ingress,true)));
@@ -472,9 +449,9 @@ return view.extend({
 		row(_('NAT'),[natCb,natNote]);
 		row(_('Host Isolate'),hiCb);
 		row(_('Autorate Ingress'),chk('autorate',numBool(w.autorate_ingress,false)));
-		row(_('Ingress Options'),txt('ing_opts',w.ingress_options,'e.g. triple-isolate memlimit 32mb','width:100%;max-width:400px;font-family:monospace'));
-		row(_('Egress Options'),txt('egr_opts',w.egress_options,'e.g. triple-isolate memlimit 32mb wash','width:100%;max-width:400px;font-family:monospace'));
-		row(_('Options'),txt('opts',w.options,'e.g. overhead 44 mpu 84','width:100%;max-width:400px;font-family:monospace'));
+		row(_('Ingress Options'),txt('ing_opts',w.ingress_options,_('e.g. %s').format('triple-isolate memlimit 32mb'),'width:100%;max-width:400px;font-family:monospace'));
+		row(_('Egress Options'),txt('egr_opts',w.egress_options,_('e.g. %s').format('triple-isolate memlimit 32mb wash'),'width:100%;max-width:400px;font-family:monospace'));
+		row(_('Options'),txt('opts',w.options,_('e.g. %s').format('overhead 44 mpu 84'),'width:100%;max-width:400px;font-family:monospace'));
 		nodes.push(tbl);
 		nodes.push(E('div',{'class':'cbi-page-actions'},
 			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveQuick();}},_('Save & Apply'))));
@@ -486,13 +463,15 @@ return view.extend({
 		var nodes=[E('legend',{},_('Service Controls'))];
 		var svcCt=E('div',{'class':'qos-svc','id':'qos-svc-btns'});
 		svcCt.appendChild(E('button',{
-			'class':'cbi-button '+(ctx.enabled?'qos-btn-en':'qos-btn-dis'),
+			'class':'cbi-button '+(ctx.enabled?'cbi-button-positive':'cbi-button-negative'),
+			'id':'qos-btn-auto',
 			'title':ctx.enabled?_('Click to disable autostart'):_('Click to enable autostart'),
 			'click':function(){return self.svcAction(ctx.enabled?'disable':'enable');}
 		},ctx.enabled?_('Enabled'):_('Disabled')));
+		var btnCls={start:'cbi-button-apply',stop:'cbi-button-negative',restart:'cbi-button-action',reload:'cbi-button-reload'};
 		['start','stop','restart','reload'].forEach(function(a){
 			svcCt.appendChild(E('button',{
-				'class':'cbi-button cbi-button-'+(a==='stop'?'reset':'apply'),
+				'class':'cbi-button '+btnCls[a],
 				'click':function(){return self.svcAction(a);}
 			},({start:_('Start'),stop:_('Stop'),restart:_('Restart'),reload:_('Reload')})[a]));
 		});
@@ -505,6 +484,14 @@ return view.extend({
 		if(!el)return;
 		dom.content(el,'');
 		nodes.forEach(function(n){el.appendChild(n);});
+		this.applyReadonly(el);
+	},
+
+	applyReadonly:function(el){
+		if(!this.readonly||!el)return;
+		el.querySelectorAll('input,select,textarea,button').forEach(function(x){
+			if(!x.getAttribute('data-ro-ok'))x.setAttribute('disabled','');
+		});
 	},
 
 	waitForRunning:function(timeoutMs){
@@ -593,13 +580,13 @@ return view.extend({
 			b.appendChild(E('tr',{},[E('td',{},path),E('td',{},[st,meta])]));
 		}
 		fileRow(UCI_PATH,!!ctx.cfgStat,cfgOk,ctx.cfgStat?ctx.cfgStat.size:0,ctx.cfgStat?fmtMtime(ctx.cfgStat.mtime):'');
-		fileRow(RULES_PATH,!!ctx.rulesStat,rulesOk,ctx.rulesStat?ctx.rulesStat.size:0,ctx.rulesStat?fmtMtime(ctx.rulesStat.mtime):'',rulesN+' '+_('rules')+', ');
+		fileRow(RULES_PATH,!!ctx.rulesStat,rulesOk,ctx.rulesStat?ctx.rulesStat.size:0,ctx.rulesStat?fmtMtime(ctx.rulesStat.mtime):'',N_(rulesN,'%d rule','%d rules').format(rulesN)+', ');
 		return tbl;
 	},
 
 	tabConfig:function(ctx){
 		var self=this;
-		var section=E('div',{'class':'qos-tab','id':'qos-cf','style':'display:none'});
+		var section=E('div',{'id':'qos-cf'});
 		var fs1=E('fieldset',{'class':'cbi-section'},[
 			E('legend',{},_('Config')),
 			E('div',{'class':'cbi-section-descr'},[_('UCI configuration — classes, interfaces, defaults.')+' ',E('code',{},UCI_PATH)])
@@ -609,13 +596,13 @@ return view.extend({
 		var classes=this.getClasses();
 		var dscpChoices=classes.map(function(c){return c.name;}).concat(DSCP);
 		var qa=E('div',{'class':'qos-qa'});
-		qa.appendChild(E('strong',{'style':'font-size:13px;color:#aaa'},_('Quick Add Config')));
+		qa.appendChild(E('strong',{},_('Quick Add Config')));
 		var qacRow=E('div',{'class':'qos-qa-row'});
 		var qacType=E('select',{'id':'qac-type','style':'width:130px','change':function(){self.qacSwitch();}});
 		SECT.forEach(function(o){qacType.appendChild(E('option',{'value':o[0]},o[1]));});
 		qacRow.appendChild(qacType);
 		qacRow.appendChild(E('span',{'id':'qac-nm-w','style':'display:none'},
-			E('input',{'id':'qac-name','type':'text','placeholder':'section name','style':'width:120px;font-family:monospace'})));
+			E('input',{'id':'qac-name','type':'text','placeholder':_('section name'),'style':'width:120px;font-family:monospace'})));
 		qacRow.appendChild(E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qacAdd();}},_('Add')));
 		qa.appendChild(qacRow);
 
@@ -673,20 +660,17 @@ return view.extend({
 		var ref=E('details',{'class':'qos-ref'});
 		ref.appendChild(E('summary',{},_('Config Reference')));
 		ref.appendChild(this.refTable({defaults:qadDef,'class':qadCls,'interface':qadIf}));
-		var defBox=E('div',{'id':'qos-cfg-def','style':'margin:6px 0 4px;padding:4px 8px;border:1px solid #888;border-radius:3px'});
+		var defBox=E('div',{'id':'qos-cfg-def','class':'qos-item'});
 		dom.content(defBox,this.defsNodes());
 		ref.appendChild(defBox);
 		var clsBox=E('div',{'id':'qos-cfg-cls'});
 		classes.forEach(function(c){
-			var box=E('div',{'style':'margin:4px 0;padding:4px 8px;border:1px solid #888;border-radius:3px'});
-			box.appendChild(E('strong',{'style':'font-size:12px'},clsLabel(c)));
-			box.appendChild(E('span',{'style':'font-size:11px;opacity:.75;margin-left:8px'},clsDesc(c)));
-			clsBox.appendChild(box);
+			clsBox.appendChild(self.clsBoxNode(c));
 		});
 		ref.appendChild(clsBox);
-		ref.appendChild(E('div',{'style':'opacity:.7;font-size:11px;margin:4px 0 2px'},
+		ref.appendChild(E('div',{'class':'qos-muted','style':'margin:4px 0 2px'},
 			_('DSCP codepoints: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF. Any dscp_* value may also name a class. Prefix with + to override only when the DSCP field is zero.')));
-		ref.appendChild(E('div',{'style':'opacity:.7;font-size:11px;margin:2px 0'},
+		ref.appendChild(E('div',{'class':'qos-muted','style':'margin:2px 0'},
 			_('Defaults qosify applies when a key is absent — interface: mode diffserv4, ingress 1, egress 1, nat 1, host_isolate 1, autorate_ingress 0. device: identical except nat 0. defaults: timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled).')));
 		fs1.appendChild(ref);
 		fs1.appendChild(qa);
@@ -694,8 +678,9 @@ return view.extend({
 		// Editor
 		var ta=E('textarea',{
 			'id':'qos-config-ta',
+			'class':'qos-edit',
 			'rows':28,
-			'style':'width:100%;font-family:monospace;font-size:12px;line-height:1.4;tab-size:4;border:1px solid #ccc;padding:6px'
+			'style':'line-height:1.4;tab-size:4;padding:6px'
 		},ctx.cfgRaw||'');
 		ta.dataset.orig=ctx.cfgRaw||'';
 		stampFile(ta,ctx.cfgStat);
@@ -707,6 +692,13 @@ return view.extend({
 
 		section.appendChild(fs1);
 		return section;
+	},
+
+	clsBoxNode:function(c){
+		return E('div',{'class':'qos-item'},[
+			E('strong',{},clsLabel(c)),
+			E('span',{'class':'qos-muted','style':'margin-left:8px'},clsDesc(c))
+		]);
 	},
 
 	refTable:function(panels){
@@ -726,31 +718,35 @@ return view.extend({
 				E('td',{'style':'width:135px;font-family:monospace;vertical-align:top'},o[1]),
 				E('td',{},[
 					E('div',{'style':'font-family:monospace;font-size:11px;line-height:1.6'},out.join(', ')),
-					note[o[0]]?E('div',{'style':'opacity:.65;font-size:11px;margin-top:3px'},note[o[0]]):''
+					note[o[0]]?E('div',{'class':'qos-muted','style':'margin-top:3px'},note[o[0]]):''
 				])
 			]));
 		});
 		return tbl;
 	},
 
+	qaId:function(parent,opt){return (parent.id||'qac')+'-'+opt;},
 	qaInput:function(parent,opt,pre,ph,w){
-		parent.appendChild(E('label',{},opt+':'));
+		var id=this.qaId(parent,opt);
+		parent.appendChild(E('label',{'for':id},opt+':'));
 		parent.appendChild(E('input',{
-			'data-opt':opt,'data-pre':pre,'type':'text',
+			'id':id,'data-opt':opt,'data-pre':pre,'type':'text',
 			'value':pre==='list'?ph:'','placeholder':pre==='list'?'':ph,
 			'style':'width:'+w+'px;font-family:monospace'
 		}));
 	},
 	qaSelect:function(parent,opt,opts,w,required){
-		parent.appendChild(E('label',{},opt+':'));
-		var s=E('select',{'data-opt':opt,'style':'width:'+w+'px'});
+		var id=this.qaId(parent,opt);
+		parent.appendChild(E('label',{'for':id},opt+':'));
+		var s=E('select',{'id':id,'data-opt':opt,'style':'width:'+w+'px'});
 		if(!required)s.appendChild(E('option',{'value':''},'--'));
 		opts.forEach(function(o){s.appendChild(E('option',{'value':o},o));});
 		parent.appendChild(s);
 	},
 	qaNum:function(parent,opt,ph,w){
-		parent.appendChild(E('label',{},opt+':'));
-		parent.appendChild(E('input',{'data-opt':opt,'type':'number','min':'0','placeholder':ph,'style':'width:'+w+'px'}));
+		var id=this.qaId(parent,opt);
+		parent.appendChild(E('label',{'for':id},opt+':'));
+		parent.appendChild(E('input',{'id':id,'data-opt':opt,'type':'number','min':'0','placeholder':ph,'style':'width:'+w+'px'}));
 	},
 
 	lock:function(){this._n=(this._n||0)+1;},
@@ -759,12 +755,16 @@ return view.extend({
 	defsNodes:function(){
 		var d=null;
 		uci.sections('qosify','defaults',function(s){if(!d)d=s;});
-		if(!d)return [E('em',{'style':'font-size:11px;opacity:.7'},_('No config defaults section defined'))];
+		if(!d)return [E('em',{'class':'qos-muted'},_('No config defaults section defined'))];
 		var keys=['timeout','dscp_default_tcp','dscp_default_udp','dscp_icmp','dscp_prio','dscp_bulk','prio_max_avg_pkt_len','bulk_trigger_pps','bulk_trigger_timeout'];
-		var line=E('div',{'style':'font-size:11px;margin:2px 0 0;font-family:monospace'}),parts=[];
-		keys.forEach(function(k){if(d[k])parts.push(k+': <strong>'+esc(d[k])+'</strong>');});
-		line.innerHTML=parts.join(' &nbsp; ');
-		return [E('strong',{'style':'font-size:12px'},'config defaults'),line];
+		var line=E('div',{'class':'qos-muted','style':'margin:2px 0 0;font-family:monospace'}),first=true;
+		keys.forEach(function(k){
+			if(!d[k])return;
+			if(!first)dom.append(line,'\u00a0\u00a0');
+			first=false;
+			dom.append(line,[k+': ',E('strong',{},String(d[k]))]);
+		});
+		return [E('strong',{},'config defaults'),line];
 	},
 
 	// qosify.init runs add_class() over both `class` and `alias`, so alias names
@@ -819,24 +819,19 @@ return view.extend({
 					]));
 				});
 			}else{
-				ref.appendChild(E('tr',{},E('td',{'colspan':2,'style':'opacity:.7'},E('em',{},_('No classes defined in /etc/config/qosify')))));
+				ref.appendChild(noClassRow());
 			}
 		}
-		var cbox=$('qos-cfg-cls');
+		var cbox=$('qos-cfg-cls'),self=this;
 		if(cbox){
 			dom.content(cbox,'');
-			classes.forEach(function(c){
-				var box=E('div',{'style':'margin:4px 0;padding:4px 8px;border:1px solid #888;border-radius:3px'});
-				box.appendChild(E('strong',{'style':'font-size:12px'},clsLabel(c)));
-				box.appendChild(E('span',{'style':'font-size:11px;opacity:.75;margin-left:8px'},clsDesc(c)));
-				cbox.appendChild(box);
-			});
+			classes.forEach(function(c){cbox.appendChild(self.clsBoxNode(c));});
 		}
 	},
 
 	tabRules:function(ctx){
 		var self=this;
-		var section=E('div',{'class':'qos-tab','id':'qos-ru','style':'display:none'});
+		var section=E('div',{'id':'qos-ru'});
 		var fs1=E('fieldset',{'class':'cbi-section'},[
 			E('legend',{},_('Classification Rules')),
 			E('div',{'class':'cbi-section-descr'},[_('DSCP mapping rules loaded by qosify on startup.')+' ',E('code',{},RULES_PATH)])
@@ -856,27 +851,27 @@ return view.extend({
 				]));
 			});
 		}else{
-			refB.appendChild(E('tr',{},E('td',{'colspan':2,'style':'opacity:.7'},E('em',{},_('No classes defined in /etc/config/qosify')))));
+			refB.appendChild(noClassRow());
 		}
 		ref.appendChild(refTbl);
-		ref.appendChild(E('div',{'style':'opacity:.7;font-size:11px;margin:6px 0 2px'},
+		ref.appendChild(E('div',{'class':'qos-muted','style':'margin:6px 0 2px'},
 			_('Prefix with + to override only when the DSCP field is zero. Ports: tcp:443, udp:3074, ranges: tcp:5060-5061 (1-65534). DNS: dns:*teams*, regex: dns:/zoom[0-9]+, CNAME-only: dns_c:. IP: 1.1.1.1, ff01::1')));
 		fs1.appendChild(ref);
 
 		// Quick Add Rule
 		var qa=E('div',{'class':'qos-qa'});
-		qa.appendChild(E('strong',{'style':'font-size:13px;color:#aaa'},_('Quick Add Rule')));
+		qa.appendChild(E('strong',{},_('Quick Add Rule')));
 		var qarRow=E('div',{'class':'qos-qa-row'});
 		var qarType=E('select',{'id':'qar-type','style':'width:140px','change':function(){self.qarPlaceholder();}});
 		[['tcp:',_('tcp port')],['udp:',_('udp port')],['both:',_('tcp+udp port')],['dns:',_('dns pattern')],['dnsr:',_('dns regex')],['dns_c:',_('dns_c pattern')],['dns_cr:',_('dns_c regex')],['ipv4:',_('IPv4 address')],['ipv6:',_('IPv6 address')]].forEach(function(o){
 			qarType.appendChild(E('option',{'value':o[0]},o[1]));
 		});
 		qarRow.appendChild(qarType);
-		qarRow.appendChild(E('input',{'id':'qar-val','type':'text','placeholder':'e.g. 4500 or 5060-5061','style':'width:180px;font-family:monospace'}));
+		qarRow.appendChild(E('input',{'id':'qar-val','type':'text','placeholder':_('e.g. %s').format('4500'),'style':'width:180px;font-family:monospace'}));
 		var qarCls=E('select',{'id':'qar-cls','style':'width:140px'});
 		classes.forEach(function(c){qarCls.appendChild(E('option',{'value':c.name},c.name));});
 		qarRow.appendChild(qarCls);
-		qarRow.appendChild(E('label',{'style':'font-size:12px;color:#aaa;white-space:nowrap'},
+		qarRow.appendChild(E('label',{'class':'qos-muted','style':'white-space:nowrap','for':'qar-prio'},
 			[E('input',{'type':'checkbox','id':'qar-prio'}),' '+_('only if unset (+)')]));
 		qarRow.appendChild(E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qarAdd();}},_('Add')));
 		qa.appendChild(qarRow);
@@ -884,8 +879,8 @@ return view.extend({
 
 		// Editor
 		var ta=E('textarea',{
-			'id':'qos-rules-ta','rows':28,
-			'style':'width:100%;font-family:monospace;font-size:12px;line-height:1.4;tab-size:4;border:1px solid #ccc;padding:6px'
+			'id':'qos-rules-ta','class':'qos-edit','rows':28,
+			'style':'line-height:1.4;tab-size:4;padding:6px'
 		},ctx.rulesText||'');
 		ta.dataset.orig=ctx.rulesText||'';
 		stampFile(ta,ctx.rulesStat);
@@ -901,7 +896,7 @@ return view.extend({
 
 	tabAdvanced:function(ctx){
 		var self=this;
-		var section=E('div',{'class':'qos-tab','id':'qos-ad','style':'display:none'});
+		var section=E('div',{'id':'qos-ad'});
 
 		// Backup
 		var fb=E('fieldset',{'class':'cbi-section'},[
@@ -946,18 +941,26 @@ return view.extend({
 		return E('div',{'class':'cbi-value'},[
 			E('label',{'class':'cbi-value-title'},path),
 			E('div',{'class':'cbi-value-field'},
-				E('button',{'class':'cbi-button cbi-button-action','click':function(){
-					L.resolveDefault(fs.read(path),'').then(function(content){
+				E('button',{'class':'cbi-button cbi-button-action','data-ro-ok':'1','click':function(){
+					return fs.read(path).then(function(content){
 						var b=new Blob([content||''],{type:'application/octet-stream'});
-						var a=document.createElement('a');
-						a.href=URL.createObjectURL(b);a.download=fn;a.click();URL.revokeObjectURL(a.href);
+						var url=URL.createObjectURL(b);
+						var a=E('a',{'href':url,'download':fn,'style':'display:none'});
+						document.body.appendChild(a);
+						a.click();
+						setTimeout(function(){
+							URL.revokeObjectURL(url);
+							if(a.parentNode)a.parentNode.removeChild(a);
+						},2000);
+					}).catch(function(e){
+						notify(_('Could not read %s: %s').format(path,e),'danger');
 					});
 				}},_('Download')))
 		]);
 	},
 
 	tabStatus:function(ctx){
-		var section=E('div',{'class':'qos-tab','id':'qos-st','style':'display:none'});
+		var section=E('div',{'id':'qos-st'});
 		var fs1=E('fieldset',{'class':'cbi-section'},E('legend',{},_('qosify-status')));
 		var body=E('div',{'id':'qos-st-body'});
 		this.fillStatus(body,ctx);
@@ -1241,12 +1244,16 @@ return view.extend({
 	},
 
 	clearCfg:function(){
-		if(!confirm(_('Clear config editor? Content will not be saved until you click Save.')))return;
-		var ta=$('qos-config-ta');if(ta)ta.value='';
+		return confirmDialog(_('Clear editor'),_('Empty the config editor? Nothing is written until you click Save & Apply.'),_('Clear')).then(function(go){
+			var ta=$('qos-config-ta');
+			if(go&&ta)ta.value='';
+		});
 	},
 	clearRules:function(){
-		if(!confirm(_('Clear rules editor? Content will not be saved until you click Save.')))return;
-		var ta=$('qos-rules-ta');if(ta)ta.value='';
+		return confirmDialog(_('Clear editor'),_('Empty the rules editor? Nothing is written until you click Save & Apply.'),_('Clear')).then(function(go){
+			var ta=$('qos-rules-ta');
+			if(go&&ta)ta.value='';
+		});
 	},
 
 	uploadFiles:function(){
@@ -1254,7 +1261,16 @@ return view.extend({
 		var u1=$('qos-up-cfg'),u2=$('qos-up-rules');
 		var f1=u1&&u1.files[0],f2=u2&&u2.files[0];
 		if(!f1&&!f2){notify(_('No files selected.'),'warning');return;}
-		if(!confirm(_('Upload and overwrite config files? qosify will reload.')))return;
+		return confirmDialog(_('Overwrite config files'),
+			_('The selected files replace the ones on the router and qosify is reloaded. Download a backup from this tab first if you need one.'),
+			_('Upload and apply'),true).then(function(go){
+			if(!go)return null;
+			return self.doUpload(u1,u2,f1,f2);
+		});
+	},
+
+	doUpload:function(u1,u2,f1,f2){
+		var self=this;
 
 		function readFile(f){
 			return new Promise(function(res,rej){
@@ -1322,7 +1338,16 @@ return view.extend({
 
 	resetDefaults:function(){
 		var self=this;
-		if(!confirm(_('Reset qosify config to defaults?')))return;
+		return confirmDialog(_('Reset to defaults'),
+			_('%s and %s are replaced with the templates shipped by the qosify package, and shaping is left disabled.').format(UCI_PATH,RULES_PATH),
+			_('Reset'),true).then(function(go){
+			if(!go)return null;
+			return self.doReset();
+		});
+	},
+
+	doReset:function(){
+		var self=this;
 		self.lock();
 		ui.showModal(_('Resetting'),[E('p',{},_('Restoring defaults...'))]);
 		return callUciRevert('qosify').then(function(){
@@ -1358,9 +1383,10 @@ return view.extend({
 	qarPlaceholder:function(){
 		var t=$('qar-type').value;
 		var v=$('qar-val');
-		var ph={'tcp:':'e.g. 4500 or 5060-5061','udp:':'e.g. 4500 or 5060-5061','both:':'e.g. 4500 or 5060-5061',
-			'dns:':'e.g. *teams* or *.zoom*','dnsr:':'e.g. zoom[0-9]+\\.us','dns_c:':'e.g. *cdn*','dns_cr:':'e.g. cdn[0-9]+',
-			'ipv4:':'e.g. 1.1.1.1','ipv6:':'e.g. ff01::1'};
+		var eg=function(x){return _('e.g. %s').format(x);};
+		var ph={'tcp:':eg('4500'),'udp:':eg('4500'),'both:':eg('5060-5061'),
+			'dns:':eg('*teams*'),'dnsr:':eg('zoom[0-9]+\\.us'),'dns_c:':eg('*cdn*'),'dns_cr:':eg('cdn[0-9]+'),
+			'ipv4:':eg('1.1.1.1'),'ipv6:':eg('ff01::1')};
 		v.placeholder=ph[t]||'';
 	},
 
@@ -1369,26 +1395,26 @@ return view.extend({
 		var val=trim($('qar-val').value);
 		var cls=$('qar-cls').value;
 		var pr=$('qar-prio').checked;
-		if(!val){alert(_('Enter a value.'));return;}
-		if(!cls){alert(_('No classes defined. Add classes in the Config tab first.'));return;}
+		if(!val){notify(_('Enter a value.'),'danger');return;}
+		if(!cls){notify(_('No classes defined. Add classes in the Config tab first.'),'danger');return;}
 		var pt=(ty==='tcp:'||ty==='udp:'||ty==='both:');
 		if(pt){
 			var pp=val.split('-'),pn=[],j,n;
-			if(pp.length>2){alert(_('Port must be a number or a range (4500, 5060-5061).'));return;}
+			if(pp.length>2){notify(_('Port must be a number or a range (4500, 5060-5061).'),'danger');return;}
 			for(j=0;j<pp.length;j++){
 				n=dscpNum(trim(pp[j]));
-				if(n===null){alert(_('Port must be a number or a range (4500, 5060-5061).'));return;}
-				if(n<1||n>65534){alert(_('Port must be 1-65534 (qosify rejects 65535).'));return;}
+				if(n===null){notify(_('Port must be a number or a range (4500, 5060-5061).'),'danger');return;}
+				if(n<1||n>65534){notify(_('Port must be 1-65534 (qosify rejects 65535).'),'danger');return;}
 				pn.push(n);
 			}
-			if(pn.length===2&&pn[0]>pn[1]){alert(_('Range start must not exceed end.'));return;}
-		}else if(/[\s#]/.test(val)){alert(_('No spaces or # allowed in patterns or addresses.'));return;}
+			if(pn.length===2&&pn[0]>pn[1]){notify(_('Range start must not exceed end.'),'danger');return;}
+		}else if(/[\s#]/.test(val)){notify(_('No spaces or # allowed in patterns or addresses.'),'danger');return;}
 		if(ty==='ipv4:'){
 			var oc=val.split('.');
-			if(oc.length!==4||oc.some(function(x){return !/^\d{1,3}$/.test(x)||+x>255;})){alert(_('Enter a single IPv4 address (qosify does not accept CIDR).'));return;}
+			if(oc.length!==4||oc.some(function(x){return !/^\d{1,3}$/.test(x)||+x>255;})){notify(_('Enter a single IPv4 address (qosify does not accept CIDR).'),'danger');return;}
 		}
 		// inet_pton(AF_INET6) also takes the IPv4-mapped form, so allow dots here
-		if(ty==='ipv6:'&&(!/^[0-9a-fA-F:.]+$/.test(val)||val.indexOf(':')<0||val.length>45)){alert(_('Enter a single IPv6 address (qosify does not accept CIDR or a %zone suffix).'));return;}
+		if(ty==='ipv6:'&&(!/^[0-9a-fA-F:.]+$/.test(val)||val.indexOf(':')<0||val.length>45)){notify(_('Enter a single IPv6 address (qosify does not accept CIDR or a %zone suffix).'),'danger');return;}
 		var pfx=pr?'+':'';
 		var ta=$('qos-rules-ta');if(!ta)return;
 		var lines=[];
@@ -1419,11 +1445,11 @@ return view.extend({
 		var nm='',secs=cfgSections(ta.value);
 		if(ty!=='defaults'){
 			nm=trim($('qac-name').value);
-			if(!nm){alert(_('Enter a section name.'));return;}
-			if(!/^[a-zA-Z0-9_]+$/.test(nm)){alert(_('A section name may only contain letters, digits and underscores.'));return;}
+			if(!nm){notify(_('Enter a section name.'),'danger');return;}
+			if(!/^[a-zA-Z0-9_]+$/.test(nm)){notify(_('A section name may only contain letters, digits and underscores.'),'danger');return;}
 		}
-		if(ty==='defaults'&&secs.some(function(x){return x.type==='defaults';})){alert(_('A config defaults section already exists.'));return;}
-		if(nm&&secs.some(function(x){return x.type===ty&&x.name===nm;})){alert(_('Section %s already exists.').format(nm));return;}
+		if(ty==='defaults'&&secs.some(function(x){return x.type==='defaults';})){notify(_('A config defaults section already exists.'),'danger');return;}
+		if(nm&&secs.some(function(x){return x.type===ty&&x.name===nm;})){notify(_('Section %s already exists.').format(nm),'danger');return;}
 		var s='config '+ty+(nm?" '"+nm+"'":'');
 		var div=$('qac-opts-'+QAC_PANEL[ty]);
 		var els=div.querySelectorAll('[data-opt]');
