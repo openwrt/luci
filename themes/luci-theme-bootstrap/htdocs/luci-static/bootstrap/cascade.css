@@ -1094,6 +1094,7 @@ header {
 	padding: 10px 10px 11px;
 	line-height: 19px;
 	text-decoration: none;
+	transition: background-color 0.15s ease-in, color 0.15s ease-in;
 }
 
 .nav a:hover {
@@ -1177,6 +1178,10 @@ a.menu:after {
 	border-radius: 0 0 6px 6px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	background-clip: padding-box;
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.15s ease-in, visibility 0.15s ease-in;
 }
 
 .dropdown-menu li {
@@ -1193,6 +1198,7 @@ a.menu:after {
 	line-height: 18px;
 	color: #808080;
 	text-shadow: 0 1px 0 #fff;
+	transition: color 0.15s ease-in;
 }
 
 .dropdown-menu a:hover {
@@ -1204,8 +1210,12 @@ a.menu:after {
 	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.025), inset 0 -1px rgba(0, 0, 0, 0.025);
 }
 
-.dropdown:hover ul.dropdown-menu {
+.dropdown:hover ul.dropdown-menu,
+.dropdown:focus-within ul.dropdown-menu {
 	left: 0;
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
 }
 
 .dropdown-menu .dropdown-menu {
