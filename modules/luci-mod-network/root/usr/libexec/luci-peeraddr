@@ -1,0 +1,46 @@
+#!/bin/sh
+
+NL="
+"
+
+function ifaces_by_device() {
+	ubus call network.interface dump 2>/dev/null | \
+		jsonfilter -e "@.interface[@.device='$1' || @.l3_device='$1'].interface"
+}
+
+function device_by_addr() {
+	set -- $(ip route get "$1" ${2:+from "$2"} 2>/dev/null)
+	echo "$5"
+}
+
+for inbound_device in $(device_by_addr "$REMOTE_ADDR" "$SERVER_ADDR"); do
+	inbound_devices="$inbound_device"
+	inbound_interfaces=""
+
+	for iface in $(ifaces_by_device "$inbound_device"); do
+		inbound_interfaces="${inbound_interfaces:+$inbound_interfaces$NL}$iface"
+
+		for peeraddr in $(uci get "network.$iface.peeraddr"); do
+			for ipaddr in $(resolveip -t 1 "$peeraddr" 2>/dev/null); do
+				for peerdev in $(device_by_addr "$ipaddr"); do
+					for iface in $(ifaces_by_device "$peerdev"); do
+						inbound_devices="${inbound_devices:+$inbound_devices$NL}$peerdev"
+						inbound_interfaces="${inbound_interfaces:+$inbound_interfaces$NL}$iface"
+					done
+				done
+			done
+		done
+	done
+done
+
+inbound_devices="$(echo "$inbound_devices" | sort -u | sed ':a;N;$!ba;s/\n/", "/g')"
+inbound_interfaces="$(echo "$inbound_interfaces" | sort -u | sed ':a;N;$!ba;s/\n/", "/g')"
+
+cat <<JSON
+{
+	"remote_addr": "$REMOTE_ADDR",
+	"server_addr": "$SERVER_ADDR",
+	"inbound_devices": [ ${inbound_devices:+\"$inbound_devices\"} ],
+	"inbound_interfaces": [ ${inbound_interfaces:+\"$inbound_interfaces\"} ]
+}
+JSON

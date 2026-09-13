@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -f /var/luci-indexcache.*.json
+[ -x "/etc/init.d/rpcd" ] && /etc/init.d/rpcd reload
+exit 0

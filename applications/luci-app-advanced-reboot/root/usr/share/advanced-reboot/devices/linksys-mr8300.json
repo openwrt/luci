@@ -1,0 +1,42 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "MR8300",
+		"board": [
+			"linksys-mr8300",
+			"linksys,mr8300"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd10",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd11"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd12",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd13"
+			}
+		}
+	]
+}

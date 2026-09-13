@@ -1,0 +1,127 @@
+// Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+// Licensed to the public under the Apache License 2.0.
+
+'use strict';
+
+import { cursor } from 'uci';
+import { popen } from 'fs';
+
+
+function shellquote(s) {
+	return `'${replace(s ?? '', "'", "'\\''")}'`;
+}
+
+function command(cmd) {
+	return trim(popen(cmd)?.read?.('all'));
+}
+
+function checkPeerHost(configHost, configPort, wgHost) {
+	const ips = popen(`resolveip ${shellquote(configHost)} 2>/dev/null`);
+	const hostIp = replace(wgHost, /\[|\]/g, "");
+	if (ips) {
+		for (let line = ips.read('line'); length(line); line = ips.read('line')) {
+			const ip = rtrim(line, '\n');
+			if (configPort && (ip + ":" + configPort == hostIp)) {
+				return true;
+			} else if (ip == substr(hostIp, 0, rindex(hostIp, ":"))) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+const methods = {
+	generatePsk: {
+		call: function() {
+			return { psk: command('wg genpsk 2>/dev/null') };
+		}
+	},
+
+	generateKeyPair: {
+		call: function() {
+			const priv = command('wg genkey 2>/dev/null');
+			const pub = command(`echo ${shellquote(priv)} | wg pubkey 2>/dev/null`);
+
+			return { keys: { priv, pub } };
+		}
+	},
+
+	getPublicAndPrivateKeyFromPrivate: {
+		args: { privkey: "privkey" },
+		call: function(req) {
+			const priv = req.args?.privkey;
+			const pub = command(`echo ${shellquote(priv)} | wg pubkey 2>/dev/null`);
+
+			return { keys: { priv, pub } };
+		}
+	},
+
+	getWgInstances: {
+		call: function() {
+			const data = {};
+			let last_device;
+			let qr_pubkey = {};
+
+			const uci = cursor();
+			const wg_dump = popen("wg show all dump 2>/dev/null");
+
+			if (wg_dump) {
+				uci.load("network");
+
+				for (let line = wg_dump.read('line'); length(line); line = wg_dump.read('line')) {
+					const record = split(rtrim(line, '\n'), '\t');
+
+					if (last_device != record[0]) {
+						last_device = record[0];
+						data[last_device] = {
+							name: last_device,
+							public_key: record[2],
+							listen_port: record[3],
+							fwmark: record[4],
+							peers: []
+						};
+
+						if (!length(record[2]) || record[2] == '(none)')
+							qr_pubkey[last_device] = '';
+						else
+							qr_pubkey[last_device] = `PublicKey = ${record[2]}`;
+					}
+					else {
+						let peer_name;
+						let peer_name_legacy;
+
+						uci.foreach('network', `wireguard_${last_device}`, (s) => {
+							if (!s.disabled && s.public_key == record[1] && (!s.endpoint_host || checkPeerHost(s.endpoint_host, s.endpoint_port, record[3])))
+								peer_name = s.description;
+							if (s.public_key == record[1])
+								peer_name_legacy = s.description;
+						});
+
+						if (!peer_name) peer_name = peer_name_legacy;
+
+						const peer = {
+							name: peer_name,
+							public_key: record[1],
+							endpoint: record[3],
+							allowed_ips: [],
+							latest_handshake: record[5],
+							transfer_rx: record[6],
+							transfer_tx: record[7],
+							persistent_keepalive: record[8]
+						};
+
+						if (record[3] != '(none)' && length(record[4]))
+							push(peer.allowed_ips, ...split(record[4], ','));
+
+						push(data[last_device].peers, peer);
+					}
+				}
+			}
+
+			return data;
+		}
+	}
+};
+
+return { 'luci.wireguard': methods };

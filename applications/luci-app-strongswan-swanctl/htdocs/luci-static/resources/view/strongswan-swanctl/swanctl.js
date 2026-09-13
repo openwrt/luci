@@ -1,0 +1,497 @@
+'use strict';
+'require view';
+'require form';
+'require rpc';
+'require uci';
+'require ui';
+
+const callListAlgorithms = rpc.declare({
+	object: 'luci.swanctl',
+	method: 'list-algs',
+	expect: { }
+});
+
+function validateTimeFormat(section_id, value) {
+	if (value && !value.match(/^\d+[smhd]$/)) {
+		return _('Number must have suffix s, m, h or d');
+	}
+
+	return true;
+}
+
+function addAlgorithms(o, algorithms) {
+	algorithms?.forEach(function (algorithm) {
+		const { name: name, insecure: insecure } = algorithm;
+
+		if (insecure) {
+			o.value(name, '%s*'.format(name));
+		} else {
+			o.value(name);
+		}
+	});
+}
+
+function sectionNameCheck(extra_class) {
+	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
+		nameEl = el.querySelector('.cbi-section-create-name');
+	ui.addValidator(nameEl, 'uciname', true, function(v) {
+		let sections = [
+			...uci.sections('ipsec', 'remote'),
+			...uci.sections('ipsec', 'tunnel'),
+			...uci.sections('ipsec', 'crypto_proposal'),
+		];
+		if (sections.find(function(s) {
+			return s['.name'] == v;
+		})) {
+			return _('Remotes, Encryption Proposals and Tunnels may not share the same names.') + ' ' + 
+				_('Use combinations like tunnel1_phase1 that do not exceed 15 characters.');
+		}
+		if (v.length > 15) return _('Name length shall not exceed 15 characters');
+		return true;
+	}, 'blur', 'keyup');
+	return el;
+};
+
+return view.extend({
+	load: async function () {
+		await uci.load('network');
+		return await callListAlgorithms();
+	},
+
+	render: function (result) {
+		let m, s, o;
+		const algorithms = result.data ?? {};
+		const error = result.error;
+
+		if (error)
+			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
+
+		m = new form.Map('ipsec', _('Connection configurations'),
+			_('On this page, you can configure the IPsec connections.'));
+		m.tabbed = true;
+
+		// Remote Configuration
+		s = m.section(form.GridSection, 'remote', _('Remote Configuration'),
+			_('Define Remote IKE Configurations.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck
+
+		o = s.tab('general', _('General'));
+		o = s.tab('authentication', _('Authentication'));
+		o = s.tab('advanced', _('Advanced'));
+
+		o = s.taboption('general', form.Flag, 'enabled', _('Enabled'),
+			_('Configuration is enabled or not'));
+		o.rmempty = false;
+
+		o = s.taboption('general', form.DynamicList, 'remote_addrs', _('Remote Endpoints'),
+			_('IP address or FQDN name of the tunnel remote endpoints.') + ' ' +
+			_('If no value is specified, "%any" is assumed.'));
+		o.datatype = 'or(hostname,ipaddr)';
+		o.placeholder = '%any';
+
+		o = s.taboption('general', form.DynamicList, 'local_addrs', _('Local Endpoints'),
+			_('IP address or FQDN name of the tunnel local endpoints.') + ' ' +
+			_('If no value is specified, "%any" is assumed.'));
+		o.datatype = 'or(hostname,ipaddr)';
+		o.placeholder = '%any';
+		o.modalonly = true;
+
+		o = s.taboption('general', form.DynamicList, 'vips', _('Virtual IP addresses'),
+			_('Virtual IP addresses used as the source IP for outgoing traffic.'));
+		o.datatype = 'ipaddr';
+		o.modalonly = true;
+
+		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
+			_('List of IKE (phase 1) proposals to use for authentication'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+				return section.is_esp != '1';
+			});
+			if (sections.length == 0) {
+				this.value('', _('Please create a Proposal first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
+		o.rmempty = false;
+
+		o = s.taboption('general', form.MultiValue, 'tunnel', _('Tunnel'),
+			_('The Tunnel containing the ESP (phase 2) section'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'tunnel');
+			if (sections.length == 0) {
+				this.value('', _('Please create a Tunnel first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
+		o.rmempty = false;
+
+		o = s.taboption('authentication', form.ListValue, 'authentication_method',
+			_('Authentication Method'), _('IKE authentication (phase 1)'));
+		o.modalonly = true;
+		o.value('psk', 'Pre-shared Key');
+		o.value('pubkey', 'Public Key');
+
+		o = s.taboption('authentication', form.Value, 'local_identifier', _('Local Identifier'),
+			_('Local identifier for IKE (phase 1)'));
+		o.datatype = 'string';
+		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.Value, 'remote_identifier', _('Remote Identifier'),
+			_('Remote identifier for IKE (phase 1)'));
+		o.datatype = 'string';
+		o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.Value, 'pre_shared_key', _('Pre-Shared Key'),
+			_('The pre-shared key for the tunnel'));
+		o.datatype = 'string';
+		o.password = true;
+		o.modalonly = true;
+		o.rmempty = false;
+		o.depends('authentication_method', 'psk');
+
+		o = s.taboption('authentication', form.Value, 'local_cert', _('Local Certificate'),
+			_('Certificate pathname to use for authentication'));
+		o.datatype = 'file';
+		o.depends('authentication_method', 'pubkey');
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.Value, 'local_key', _('Local Key'),
+			_('Private key pathname to use with above certificate'));
+		o.datatype = 'file';
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.Value, 'ca_cert', _('CA Certificate'),
+			_("CA certificate that need to lie in remote peer's certificate's path of trust"));
+		o.datatype = 'file';
+		o.depends('authentication_method', 'pubkey');
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.DynamicList, 'remote_ca_certs', _('Remote CA Certificates'),
+			_('Restrict the remote peer\'s certificate to be issued by one of these CAs'));
+		o.datatype = 'file';
+		o.depends('authentication_method', 'pubkey');
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.ListValue, 'send_cert', _('Send Certificate'),
+			_('Whether to send our own certificate to the remote peer'));
+		o.value('always');
+		o.value('ifasked');
+		o.value('never');
+		o.default = 'ifasked';
+		o.depends('authentication_method', 'pubkey');
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('authentication', form.Flag, 'send_certreq', _('Send Certificate Request'),
+			_('Send certificate request payloads to offer trusted root CA certificates to the peer'));
+		o.default = '1';
+		o.depends('authentication_method', 'pubkey');
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
+			_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'));
+		o.default = '1';
+		o.modalonly = true;
+		o.depends('keyexchange', 'ikev2');
+		o.depends('keyexchange', 'ike');
+
+		o = s.taboption('advanced', form.ListValue, 'fragmentation', _('IKE Fragmentation'),
+			_('Use IKE fragmentation'));
+		o.value('yes');
+		o.value('no');
+		o.value('force');
+		o.value('accept');
+		o.default = 'yes';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'keyingtries', _('Keying Retries'),
+			_('Number of retransmissions attempts during initial negotiation'));
+		o.datatype = 'or(uinteger, "%forever")';
+		o.placeholder = '3';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'dpddelay', _('DPD Delay'),
+			_('Interval to check liveness of a peer'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '30s';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
+			_('Interval before closing an inactive CHILD_SA'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
+			_('IKEv2 interval to refresh keying material; also used to compute lifetime'));
+		o.validate = validateTimeFormat;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'overtime', _('Overtime'),
+			_('Limit on time to complete rekeying/reauthentication'));
+		o.validate = validateTimeFormat;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Flag, 'encap', _('ESP Encapsulation'),
+			_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
+			_('This makes the peer believe that a NAT situation exist on the transmission path, forcing it to encapsulate ESP packets in UDP.') + '<br />' +
+			_('Usually this is not required but it can help to work around connectivity issues with too restrictive intermediary firewalls that block ESP packets.'));
+		o.modalonly = true;
+		o.default = '0';
+		o.rmempty = true;
+
+		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
+			_('Version of IKE for negotiation'));
+		o.value('ikev1', 'IKEv1 (%s)'.format(_('deprecated')));
+		o.value('ikev2', 'IKEv2');
+		o.value('ike', 'IKE (%s, %s)'.format(_('both'), _('deprecated')));
+		o.default = 'ikev2';
+		o.modalonly = true;
+
+		// Tunnel Configuration
+		s = m.section(form.GridSection, 'tunnel', _('Tunnel Configuration'),
+			_('Define Connection Children to be used as Tunnels in Remote Configurations.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
+
+		o = s.tab('general', _('General'));
+		o = s.tab('advanced', _('Advanced'));
+
+		o = s.taboption('general', form.DynamicList, 'local_subnet', _('Local Subnet'),
+			_('Local network(s)'));
+		o.datatype = 'cidr';
+		o.placeholder = '192.168.1.1/24';
+		o.rmempty = false;
+
+		o = s.taboption('general', form.DynamicList, 'remote_subnet', _('Remote Subnet'),
+			_('Remote network(s)'));
+		o.datatype = 'cidr';
+		o.placeholder = '192.168.2.1/24';
+		o.rmempty = false;
+
+		o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
+			_('XFRM interface ID set on input and output interfaces'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var xfrmSections = uci.sections('network').filter(function (section) {
+				return section.proto == 'xfrm';
+			});
+
+			xfrmSections.forEach(L.bind(function (section) {
+				this.value(section.ifid,
+					'%s (%s)'.format(section.ifid, section['.name']));
+			}, this));
+
+			return this.super('load', [section_id]);
+		}
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('general', form.ListValue, 'startaction', _('Start Action'),
+			_('Action on initial configuration load'));
+		o.value('none');
+		o.value('trap');
+		o.value('start');
+		o.default = 'trap';
+		o.modalonly = true;
+
+		o = s.taboption('general', form.ListValue, 'closeaction', _('Close Action'),
+			_('Action when CHILD_SA is closed'));
+		o.value('none');
+		o.value('trap');
+		o.value('start');
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('general', form.MultiValue, 'crypto_proposal',
+			_('Crypto Proposal (Phase 2)'),
+			_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+				return section.is_esp == '1';
+			});
+			if (sections.length == 0) {
+				this.value('', _('Please create an ESP Proposal first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
+		o.rmempty = false;
+
+		o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
+			_('Path to script to run on CHILD_SA up/down events'));
+		o.datatype = 'file';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.ListValue, 'dpdaction', _('DPD Action'),
+			_('Action when DPD timeout occurs'));
+		o.value('none');
+		o.value('clear');
+		o.value('trap');
+		o.value('start');
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'rekeytime', _('Rekey Time'),
+			_('Interval before a CHILD_SA is rekeyed.') + ' ' +
+			_('Also used to derive lifetime (110% of this value).') + '<br />' +
+			_('If not configured, the default value is "1h".')
+		);
+		o.placeholder = '1h';
+		o.validate = validateTimeFormat;
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'lifetime', _('Life Time'),
+			_('Maximum time before the CHILD_SA gets closed, as a hard limit.')
+		);
+		o.validate = validateTimeFormat;
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Flag, 'ipcomp', _('IPComp'),
+			_('Enable ipcomp compression'));
+		o.default = '0';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
+			_('Enable Hardware offload'));
+		o.value('yes');
+		o.value('no');
+		o.value('auto');
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
+			_('Priority of the CHILD_SA'));
+		o.datatype = 'uinteger';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),
+			'%s; %s'.format(_('Replay Window of the CHILD_SA'),
+				_('Values larger than 32 are supported by the Netlink backend only')));
+		o.datatype = 'uinteger';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'rekeybytes', _('Rekey Bytes'),
+			_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
+			_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
+			_('Use "0" to disable byte based rekeying.')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'lifebytes', _('Life Bytes'),
+			_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
+			_('Use "0" to disable (default).')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'rekeypackets', _('Rekey Packets'),
+			_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
+			_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
+			_('Use "0" to disable packet based rekeying (default).')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'lifepackets', _('Life Packets'),
+			_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
+			_('Use "0" to disable (default).')
+		);
+		o.datatype = 'uinteger';
+		o.placeholder = '0';
+		o.rmempty = true;
+		o.modalonly = true;
+
+		// Crypto Proposals
+		s = m.section(form.GridSection, 'crypto_proposal',
+			_('Encryption Proposals'),
+			_('Configure Cipher Suites to define IKE (Phase 1) or ESP (Phase 2) Proposals.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
+
+		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
+			_('Whether this is an ESP (phase 2) proposal or not'));
+
+		o = s.option(form.ListValue, 'encryption_algorithm',
+			_('Encryption Algorithm'),
+			_('Algorithms marked with * are considered insecure'));
+		o.default = 'aes256gcm128';
+		addAlgorithms(o, algorithms.encryption);
+		addAlgorithms(o, algorithms.aead);
+
+
+		const encryptionAlgorithmNames = algorithms.encryption?.map(algorithm => algorithm.name);
+		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
+			_('Algorithms marked with * are considered insecure'));
+		encryptionAlgorithmNames?.forEach(function (algorithmName) {
+			o.depends('encryption_algorithm', algorithmName);
+		});
+		o.default = 'sha512';
+		o.rmempty = false;
+		addAlgorithms(o, algorithms.integrity);
+
+		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
+			_('Algorithms marked with * are considered insecure'));
+		o.default = 'modp3072';
+		addAlgorithms(o, algorithms.ke);
+
+		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
+			_('Algorithms marked with * are considered insecure'));
+		o.validate = function (section_id, value) {
+			const encryptionAlgorithm = this.section.formvalue(section_id, 'encryption_algorithm');
+			const aeadAlgorithmNames = algorithms.aead?.map(algorithm => algorithm.name);
+
+			if (aeadAlgorithmNames?.includes(encryptionAlgorithm) && !value) {
+				return _('PRF Algorithm must be configured when using an Authenticated Encryption Algorithm');
+			}
+
+			return true;
+		};
+		o.optional = true;
+		o.depends('is_esp', '0');
+		addAlgorithms(o, algorithms.prf);
+
+		return m.render();
+	}
+});

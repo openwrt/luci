@@ -1,0 +1,37 @@
+{
+	"device": {
+		"vendor": "Netgear",
+		"model": "GS308T v1",
+		"board": [
+			"netgear,gs308t-v1"
+		]
+	},
+	"commands": {
+		"params": [
+			"bootpartition"
+		],
+		"get": "fw_printsys",
+		"set": "fw_setsys",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				0
+			],
+			"firmware": {
+				"rootfs": "mtd7"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"rootfs": "mtd10"
+			}
+		}
+	]
+}

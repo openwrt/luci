@@ -1,0 +1,222 @@
+'use strict';
+'require form';
+'require network';
+'require validation';
+
+/**
+ * Determine whether a provided value is a CIDR format IP string.
+ * @param {string} value the IP string to test.
+ * @returns {boolean}
+ */
+function isCIDR(value) {
+	return Array.isArray(value) || /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/(\d{1,2}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.test(value);
+}
+
+/**
+ * Calculate the broadcast IP for a given IP.
+ * @param {Node} s the ui element to test.
+ * @param {boolean} use_cfgvalue whether to use the config or form value.
+ * @returns {string}
+ */
+function calculateBroadcast(s, use_cfgvalue) {
+	const readfn = use_cfgvalue ? 'cfgvalue' : 'formvalue';
+	const addropt = s.children.find(o => o.option == 'ipaddr');
+	const addrvals = addropt ? L.toArray(addropt[readfn](s.section)) : [];
+	const maskopt = s.children.find(o => o.option == 'netmask');
+	const maskval = maskopt ? maskopt[readfn](s.section) : null;
+	let firstsubnet = null;
+
+	/* only form a subnet if both parts exist */
+	if (addrvals.length && addrvals[0] && maskval)
+		firstsubnet = addrvals[0] + '/' + maskval;
+	else if (addrvals.length)
+		firstsubnet = addrvals.find(a => a.indexOf('/') > 0);
+
+	if (!firstsubnet)
+		return null;
+
+	const [addr_str, mask_str] = firstsubnet.split('/');
+	const addr = validation.parseIPv4(addr_str);
+	if (!addr)
+		return null;
+
+	let mask = mask_str;
+
+	if (!isNaN(mask))
+		mask = validation.parseIPv4(network.prefixToMask(+mask));
+	else
+		mask = validation.parseIPv4(mask);
+
+	if (!mask)
+		return null;
+
+	const bc = [
+		addr[0] | (~mask[0] >>> 0 & 255),
+		addr[1] | (~mask[1] >>> 0 & 255),
+		addr[2] | (~mask[2] >>> 0 & 255),
+		addr[3] | (~mask[3] >>> 0 & 255)
+	];
+
+	return bc.join('.');
+}
+
+/**
+ * Validate a broadcast IP for a section value.
+ * @param {string} section_id
+ * @param {string} value
+ * @returns {boolean}
+ */
+function validateBroadcast(section_id, value) {
+	const opt = this.map.lookupOption('broadcast', section_id);
+	const node = opt ? this.map.findElement('id', opt[0].cbid(section_id)) : null;
+	const addr = node ? calculateBroadcast(this.section, false) : null;
+
+	if (node != null) {
+		if (addr != null)
+			node.querySelector('input').setAttribute('placeholder', addr);
+		else
+			node.querySelector('input').removeAttribute('placeholder');
+	}
+
+	return true;
+}
+
+return network.registerProtocol('static', {
+	CBIIPValue: form.Value.extend({
+		handleSwitch(section_id, option_index, ev) {
+			const maskopt = this.map.lookupOption('netmask', section_id);
+
+			if (maskopt == null || !this.isValid(section_id))
+				return;
+
+			const maskval = maskopt[0].formvalue(section_id);
+			const addrval = this.formvalue(section_id);
+			const prefix = maskval ? network.maskToPrefix(maskval) : 32;
+
+			if (prefix == null)
+				return;
+
+			this.datatype = 'or(cidr4,ipmask4)';
+
+			let parent = L.dom.parent(ev.target, '.cbi-value-field');
+			L.dom.content(parent, form.DynamicList.prototype.renderWidget.apply(this, [
+				section_id,
+				option_index,
+				addrval ? '%s/%d'.format(addrval, prefix) : ''
+			]));
+
+			const masknode = this.map.findElement('id', maskopt[0].cbid(section_id));
+			if (masknode) {
+				parent = L.dom.parent(masknode, '.cbi-value');
+				parent.parentNode.removeChild(parent);
+			}
+		},
+
+		renderWidget(section_id, option_index, cfgvalue) {
+			const widget = isCIDR(cfgvalue) ? 'DynamicList' : 'Value';
+
+			if (widget == 'DynamicList') {
+				this.datatype = 'or(cidr4,ipmask4)';
+				this.placeholder = _('Add IPv4 address…');
+			}
+			else {
+				this.datatype = 'ip4addr("nomask")';
+			}
+
+			const node = form[widget].prototype.renderWidget.apply(this, [ section_id, option_index, cfgvalue ]);
+
+			if (widget == 'Value')
+				L.dom.append(node, E('button', {
+					'class': 'cbi-button cbi-button-neutral',
+					'title': _('Switch to CIDR list notation'),
+					'aria-label': _('Switch to CIDR list notation'),
+					'click': L.bind(this.handleSwitch, this, section_id, option_index)
+				}, '…'));
+
+			return node;
+		},
+
+		validate: validateBroadcast
+	}),
+
+	CBINetmaskValue: form.Value.extend({
+		render(option_index, section_id, in_table) {
+			var addropt = this.section.children.filter(function(o) { return o.option == 'ipaddr' })[0],
+			    addrval = addropt ? addropt.cfgvalue(section_id) : null;
+
+			if (addrval != null && isCIDR(addrval))
+				return E([]);
+
+			this.value('255.255.255.0');
+			this.value('255.255.0.0');
+			this.value('255.0.0.0');
+
+			return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
+		},
+
+		datatype: 'ip4addr("true")',
+		validate: validateBroadcast
+	}),
+
+	CBIGatewayValue: form.Value.extend({
+		datatype: 'ip4addr("nomask")',
+
+		render(option_index, section_id, in_table) {
+			return network.getWANNetworks().then(L.bind(function(wans) {
+				if (wans.length == 1) {
+					var gwaddr = wans[0].getGatewayAddr();
+					this.placeholder = gwaddr ? '%s (%s)'.format(gwaddr, wans[0].getName()) : '';
+				}
+
+				return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
+			}, this));
+		},
+
+		validate(section_id, value) {
+			const addropt = this.section.children.filter(function(o) { return o.option == 'ipaddr' })[0];
+			const addrval = addropt ? L.toArray(addropt.cfgvalue(section_id)) : null;
+
+			if (addrval != null) {
+				for (let a of addrval) {
+					const addr = a.split('/')[0];
+					if (value == addr)
+						return _('The gateway address must not be a local IP address');
+				}
+			}
+
+			return true;
+		}
+	}),
+
+	CBIBroadcastValue: form.Value.extend({
+		datatype: 'ip4addr("nomask")',
+
+		render(option_index, section_id, in_table) {
+			this.placeholder = calculateBroadcast(this.section, true);
+			return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
+		}
+	}),
+
+	getI18n() {
+		return _('Static address');
+	},
+
+	renderFormOptions(s) {
+		let o;
+
+		s.taboption('general', this.CBIIPValue, 'ipaddr', _('IPv4 address'));
+		s.taboption('general', this.CBINetmaskValue, 'netmask', _('IPv4 netmask'));
+		s.taboption('general', this.CBIGatewayValue, 'gateway', _('IPv4 gateway'));
+		s.taboption('general', this.CBIBroadcastValue, 'broadcast', _('IPv4 broadcast'));
+
+		o = s.taboption('general', form.DynamicList, 'ip6addr', _('IPv6 address'));
+		o.datatype = 'ip6addr';
+		o.placeholder = _('Add IPv6 address…');
+
+		o = s.taboption('general', form.Value, 'ip6gw', _('IPv6 gateway'));
+		o.datatype = 'ip6addr("nomask")';
+
+		o = s.taboption('general', form.Value, 'ip6prefix', _('IPv6 routed prefix'), _('Public prefix routed to this device for distribution to clients.'));
+		o.datatype = 'ip6addr';
+	}
+});

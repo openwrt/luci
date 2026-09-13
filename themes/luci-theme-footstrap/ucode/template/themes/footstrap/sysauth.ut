@@ -1,0 +1,234 @@
+{#
+ The LOGIN page.
+
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2012 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+
+ It exists because the generic template includes the header WITHOUT `blank_page: true`: with no
+ theme-local sysauth the dispatcher falls back to that one and the whole chrome (sidebar, menu,
+ footer) rendered around the login form, every control on it dead. Everything else here is a
+ DEPARTURE the notes below each justify — the `fs-login` hook the page CSS needs, the id/for/
+ autocomplete attributes, the alert gating, and an HTTPS-redirect script that also fixes the
+ generic's `split(https_port, …)` typo — and the rule is that none of them may drop a field the
+ backend posts.
+
+ It is NOT a copy of bootstrap's sysauth.ut, which hides the form in a `<section hidden>` and
+ needs a view module to reveal it: tried here once and it gave a BLANK PAGE WITH NO WAY TO LOG
+ IN — the view bootstraps before a session exists, its RPCs answer "Access denied", the promise
+ rejects and render() never runs. Do not re-introduce it. The SERVER renders the form: works
+ with JS off, cannot be broken by a rejected promise, needs no luci-theme-bootstrap installed.
+
+ styles/pages/10-login.css makes it the centred card, keyed off `.fs-login` below. The strings
+ carry no msgctxt on purpose — luci-base translates them in the ~40 languages this theme has no
+ catalogue for.
+-#}
+
+{%
+	/* WHICH ROUTER THIS IS — requested as openwrt/luci#8961, by an admin coming from
+	   luci-theme-material, which prints the hostname in the top bar and therefore also on its login
+	   page. This one had no chrome at all (blank_page below), so the only place the name appeared
+	   was the browser TAB.
+
+	   A SECOND `ubus.call('system', 'board')`: header.ut makes its own inside its own scope and an
+	   include cannot hand a local back, so the choice is one extra ubus round trip on the login
+	   render or threading `boardinfo` out through a global. One call, on the one page that renders
+	   once per session, is the cheaper of the two.
+
+	   It discloses nothing new. The same `boardinfo.hostname` already reaches an unauthenticated
+	   browser through <title> (partials/head.ut) — as it does in every stock theme — so this moves
+	   a string that was always on the wire into the place a reader looks. */
+	const boardinfo = ubus.call('system', 'board') ?? {};
+-%}
+
+{% include('header', { blank_page: true }) %}
+
+{# The class is what 10-login.css hooks: the form used to be found by
+   `form:has(> .cbi-map input[name="luci_username"])` — 49 characters written 17 times, ~0.8 KB —
+   because the markup was assumed to be stock LuCI's. It is OURS: name the form instead. #}
+<form method="post" class="fs-login">
+	{#
+	 The router's name, above everything else in the card — an admin with three of these open has no
+	 other way to tell the tabs apart once the form is focused. `?? 'OpenWrt'` is the fallback
+	 partials/head.ut and partials/brand.ut already use, so the line never renders empty; the
+	 striptags/entityencode pair is theirs too, and load-bearing: the hostname is admin-controlled
+	 text printed to an UNAUTHENTICATED page, and one containing `&` broke entity parsing here
+	 before it broke anything else (see the <title> note in partials/head.ut).
+
+	 A <p> and NOT a heading: the card's h1 is `Authorization Required` and stays the page's one
+	 heading. An outline is about the page's SUBJECT, and a heading above that one would announce
+	 the login form as two sections — a screen reader walking the headings would hear the router's
+	 name as a section title with the form nested under it. It is printed above the h1 and centred
+	 (10-login.css) because that is where a reader looks for "which box is this", not because it
+	 outranks anything.
+	-#}
+	<p class="fs-login-host">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</p>
+	{#
+	 TWO INDEPENDENT ALERTS, because neither variable on its own says which of the two dispatcher
+	 branches rendered this page — and each of the two spellings in the tree picks one and gets the
+	 other wrong.
+
+	 `fuser` is not "the password was wrong": it is the USERNAME the form posted, set in BOTH
+	 branches. On the second step of a pluggable login (the OTP prompt, dispatcher.uc:1018) the
+	 credentials were CORRECT and `fuser` is still set, so the generic template's
+	 `auth_message && !fuser` reports "Invalid username and/or password!" about a password that was
+	 right and swallows "Too many failed attempts" / "System time is not calibrated" entirely.
+
+	 `auth_message` is not "the password was right" either. The FIRST branch copies it out of
+	 get_challenges() BEFORE the password is checked (dispatcher.uc:956), and that call answers with
+	 a message on every pending result — 'Additional verification required' when the plugin has none
+	 of its own (authplugins.uc:312). So on a router running luci-plugin-2fa both are set at once
+	 whenever a password is rejected, and luci-theme-bootstrap's `elif (fuser)` then never tells
+	 that user their password was wrong.
+
+	 `auth_plugin` is what separates the branches: it is set ONLY in the second one
+	 (dispatcher.uc:1018), i.e. exactly when session_setup() ACCEPTED the credentials. Gate the
+	 credentials alert on `!auth_plugin`, render the message BESIDE it rather than instead of it,
+	 and all four states are covered: a wrong password, a wrong password with a challenge pending
+	 (both alerts), the OTP prompt, a failed OTP. The classes keep them apart once they can appear
+	 together — `error` is the danger variant, the plugin's own notice stays amber.
+	-#}
+	{% if (fuser && !auth_plugin): %}
+		<div class="alert-message error">
+			<p>{{ _('Invalid username and/or password! Please try again.') }}</p>
+		</div>
+	{% endif %}
+	{% if (auth_message): %}
+		<div class="alert-message{% if (auth_plugin): %} warning{% endif %}">
+			<p>{{ auth_message }}</p>
+		</div>
+	{% endif %}
+
+	<div class="cbi-map">
+		{#
+		 An h1, where every other LuCI theme leaves this an h2. The login page has no chrome
+		 (blank_page above), so header.ut's `.fs-title-main` h1 never renders here and the document
+		 went out with its top-level heading MISSING — the one sentence saying where you are, and
+		 the heading a screen reader's `1` shortcut jumps to. Stock's h2 is a copy of a page that
+		 does have a title bar above it; this one does not, so the card's heading IS the page title.
+
+		 `name="content"` is upstream's legacy anchor and travels with the element, not with its
+		 level. The card's own type scale is in 10-login.css: an h1 is 26px in the ramp
+		 (theme/45-misc.css) and this one is set back to the h2's 20px, because the SIZE was never
+		 what was wrong — only the level.
+		-#}
+		<h1 name="content">{{ _('Authorization Required') }}</h1>
+		<div class="cbi-map-descr">
+			{{ _('Please enter your username and password.') }}
+		</div>
+		<div class="cbi-section"><div class="cbi-section-node">
+			<div class="cbi-value">
+				<label class="cbi-value-title" for="luci_username">{{ _('Username') }}</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-text" type="text" name="luci_username" id="luci_username" autocomplete="username" value="{{ entityencode(duser, true) }}" />
+				</div>
+			</div>
+			<div class="cbi-value cbi-value-last">
+				<label class="cbi-value-title" for="luci_password">{{ _('Password') }}</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-text" type="password" name="luci_password" id="luci_password" autocomplete="current-password" />
+				</div>
+			</div>
+			{#
+			 THE LOGIN BACKEND'S OWN FIELDS. The dispatcher hands `auth_fields`, `auth_message`,
+			 `auth_html` and `auth_assets` to whichever sysauth template renders, and a pluggable
+			 backend (luci-plugin-2fa is the in-tree one) puts its OTP input in there. A theme-local
+			 sysauth that drops them is not a login form with a missing extra: the field is never
+			 posted, so on a router with 2FA enabled NOBODY CAN LOG IN while this theme is active,
+			 and the backend's "Too many failed attempts" / "System time is not calibrated" messages
+			 never reach the screen either. Whatever else this template changes, it must stay a
+			 SUPERSET of the generic one's fields.
+
+			 The leading space inside each conditional attribute is load-bearing. ucode's template
+			 lexer eats the whitespace immediately BEFORE a `{%` tag and the newline immediately
+			 AFTER a `%}` — plain tags, no `{%-`/`-%}` needed — so the indentation these lines are
+			 written with never reaches the output. Rendered by a router's own ucode, the generic
+			 template's spelling gives `inputmode="numeric"pattern="[0-9]*"maxlength="6"required`:
+			 an HTML parse error browsers recover from and a validator does not. Measured, not
+			 assumed — `A\n\t{% if (1): %}B{% endif %}\n\t{% if (1): %}C{% endif %}\nD` renders as
+			 `A\nBCD`.
+			-#}
+			{% if (auth_fields): %}
+				{% for (let field in auth_fields): %}
+					<div class="cbi-value">
+						<label class="cbi-value-title" for="{{ entityencode(field.name, true) }}">{{ _(field.label ?? field.name) }}</label>
+						<div class="cbi-value-field">
+							<input class="cbi-input-text"
+								type="{{ field.type ?? 'text' }}"
+								name="{{ field.name }}"
+								id="{{ entityencode(field.name, true) }}"
+								{% if (field.placeholder): %} placeholder="{{ field.placeholder }}"{% endif %}
+								{% if (field.inputmode): %} inputmode="{{ field.inputmode }}"{% endif %}
+								{% if (field.pattern): %} pattern="{{ field.pattern }}"{% endif %}
+								{% if (field.maxlength): %} maxlength="{{ field.maxlength }}"{% endif %}
+								{% if (field.autocomplete): %} autocomplete="{{ field.autocomplete }}"{% endif %}
+								{% if (field.required): %} required{% endif %}
+							/>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+			{% if (auth_html): %}
+				<div class="cbi-value">
+					{{ auth_html }}
+				</div>
+			{% endif %}
+			{% if (auth_assets): %}
+				{% for (let asset in auth_assets): %}
+					{% if (asset.type == 'script'): %}
+						<script src="{{ asset.src }}"></script>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div></div>
+	</div>
+
+	<div class="cbi-page-actions">
+		<input type="submit" value="{{ _('Log in') }}" class="btn cbi-button cbi-button-apply" />
+	</div>
+</form>
+
+{%
+	let https_ports = uci.get('uhttpd', 'main', 'listen_https') ?? [];
+
+	https_ports = uniq(filter(
+		map(
+			(type(https_ports) == 'string') ? split(https_ports, /\s+/) : https_ports,
+			e => +match(e, /\d+$/)?.[0]
+		),
+		p => (p >= 0 && p <= 65535)
+	));
+%}
+
+{# The two server values the script below needs, handed over as DATA. It is the one shape the
+   linter cannot read — a `{{ … }}` block is not JS until the server renders it — so it carries no
+   logic at all, and eslint's .ut processor enforces exactly that (tools/lib/ut-scripts.mjs). The
+   script itself is then plain JS and gets linted like every other file in the theme. #}
+<script>window.__fsHttps={ports:{{ https_ports }},resource:"{{ resource }}"};</script>
+<script>
+	(() => {
+		const input = document.getElementsByName('luci_password')[0];
+
+		if (input)
+			input.focus();
+
+		/* If the router also serves HTTPS, hop over to it — the password is about to go over this
+		 * connection. The <img> probe is upstream's trick: it proves the TLS port actually answers
+		 * before we send the user there. */
+		if (document.location.protocol === 'https:') return;
+
+		const { hostname, pathname } = window.location;
+
+		(window.__fsHttps.ports || []).forEach((port) => {
+			const url = `https://${hostname}:${port}${pathname}`;
+			const img = new Image();
+
+			img.onload = () => { window.location = url; };
+			img.src = `https://${hostname}:${port}${window.__fsHttps.resource}/icons/loading.svg?${Math.random()}`;
+
+			setTimeout(() => { img.src = ''; }, 5000);
+		});
+	})();
+</script>
+
+{% include('footer', { blank_page: true }) %}

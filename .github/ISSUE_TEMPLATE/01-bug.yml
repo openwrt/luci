@@ -1,0 +1,116 @@
+name: 🐛 Bug Report 🧰
+description: File a bug 🐛 report.
+title: "<package-name>: <summary>"
+# labels: ["bug", "triage"]
+# projects: ["octo-org/1", "octo-org/44"]
+# assignees:
+#   - octocat
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+      - label: I have searched among all existing issues (including closed issues)
+        required: true
+  - type: textarea
+    id: screenshots-or-captures
+    attributes:
+      label: screenshots or captures
+      description: Screenshots or captures which illustrate the problem
+      placeholder: |
+        An mp4 screen capture is also possible
+      value:
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Actual behaviour
+      description: Describe what happened
+      placeholder: |
+        Describe what happened
+        
+        1. option ra_mtu '1500' is set correctly in /etc/config/dhcp
+        2. In LuCI though, RA MTU and RA Hop Limit are still displaying the default values in light gray font color.
+      value:
+    validations:
+      required: true
+  - type: textarea
+    id: expect-to-happen
+    attributes:
+      label: Expected behaviour
+      description: Describe what should happen
+      placeholder: |
+        Tell us what you you think should happen
+        
+        1. option ra_mtu '1500' is set correctly in /etc/config/dhcp
+        2. In LuCI though, RA MTU and RA Hop Limit display correctly.
+      value:
+    validations:
+      required: true
+  - type: textarea
+    id: what-you-did
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. go to: Network → Interfaces → LAN (an interface with a static address) → DHCP server tab → IPv6 RA settings tab
+        2. set RA MTU and RA Hop Limit to arbitrary non-default value
+        3. Save & Apply
+        4. go to: IPv6 RA settings tab again
+      value: 
+    validations:
+      required: true
+  - type: textarea
+    id: version
+    attributes:
+      label: Additional Information
+      description: |
+        What version of openwrt/luci are you running? <br/>
+        ```
+        ubus call system board
+        ```
+        <br/>
+        or copy/paste the luci and/or module version from the main status page
+      render: shell
+      value: 
+      placeholder: |
+        e.g.
+
+        {
+          "kernel": "5.15.167",
+          "hostname": "openwrt",
+          "system": "ARMv8 Processor rev 4",
+          "model": "GL.iNet GL-MT6000",
+          "board_name": "glinet,gl-mt6000",
+          "rootfs_type": "squashfs",
+          "release": {
+            "distribution": "OpenWrt",
+            "version": "23.05.5",
+            "revision": "r24106-10cc5fcd00",
+            "target": "mediatek/filogic",
+            "description": "OpenWrt 23.05.5 r24106-10cc5fcd00"
+          }
+        }
+    validations:
+      required: true
+  - type: dropdown
+    id: browsers
+    attributes:
+      label: What browsers do you see the problem on?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output from your browser (web developer tools) console. This will be automatically formatted into code, so no need for backticks.
+      render: shell

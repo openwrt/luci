@@ -1,0 +1,44 @@
+{
+	"admin/vpn/strongswan-swanctl": {
+		"title": "strongSwan IPsec",
+		"order": 90,
+		"action": {
+			"type": "alias",
+			"path": "admin/vpn/strongswan-swanctl/swanctl"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-strongswan-swanctl"
+			]
+		}
+	},
+	"admin/vpn/strongswan-swanctl/swanctl": {
+		"title": "Connections",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/swanctl"
+		}
+	},
+	"admin/vpn/strongswan-swanctl/strongswan": {
+		"title": "Service",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/strongswan"
+		}
+	},
+	"admin/status/strongswan": {
+		"title": "strongSwan IPsec",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/status"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-strongswan-swanctl"
+			]
+		}
+	}
+}

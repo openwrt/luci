@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# Reference: https://openwrt.org/docs/techref/rpcd
+
+. /usr/share/libubox/jshn.sh
+
+get_compile_time_options() {
+	# Extract all options that begins with '--' as a comma-separated string
+	source="$(squid -v)"
+	options="$(echo $source | grep -o "'--[^']*'" | sed "s/'//g")"
+
+	json_init
+	json_add_array 'options'
+	# For each option, add it to the array
+	set -- $options
+	for option; do
+		json_add_string '' "$option"
+	done
+	json_close_array
+	json_dump
+	json_cleanup
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object 'getCompileTimeOptions'
+		json_close_object
+		json_dump
+		json_cleanup
+	;;
+	call)
+		case "$2" in
+			getCompileTimeOptions)
+				get_compile_time_options
+			;;
+		esac
+	;;
+esac

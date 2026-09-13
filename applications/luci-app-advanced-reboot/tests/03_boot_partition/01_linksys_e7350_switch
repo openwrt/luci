@@ -1,0 +1,24 @@
+Test boot_partition for Linksys E7350: switch to partition 2 (success).
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+linksys,e7350
+-- End --
+
+-- File fs/popen~fw_printenv_-n_bootimage_2_dev_null.txt --
+1
+-- End --
+
+-- File fs/popen~fw_setenv_bootimage_2_2_dev_null_echo_.txt --
+0
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.boot_partition.call({ args: { number: "2" } });
+printf("%J\n", result);
+-- End --
+
+-- Expect stdout --
+{ }
+-- End --

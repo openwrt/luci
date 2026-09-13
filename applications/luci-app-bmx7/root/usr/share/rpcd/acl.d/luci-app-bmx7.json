@@ -1,0 +1,18 @@
+{
+	"luci-app-bmx7": {
+		"description": "Grant UCI access for luci-app-bmx7",
+		"read": {
+			"file": {
+				"/www/cgi-bin/bmx7-info *": "exec"
+			},
+			"uci": [
+				"bmx7"
+			]
+		},
+		"write": {
+			"uci": [
+				"bmx7"
+			]
+		}
+	}
+}

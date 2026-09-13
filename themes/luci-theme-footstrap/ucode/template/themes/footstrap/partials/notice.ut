@@ -1,0 +1,21 @@
+{#
+ ONE top-of-content warning notice: heading, sentence, and an optional "go fix it" button. The
+ three notices in notices.ut were three copies of this markup — and the button half was written
+ out twice down to the `dispatcher.lookup` guard around it, which is the part that must not drift:
+ the guard is what keeps the button from pointing at a page this user's ACLs do not grant.
+
+ include(…, { title, text }) for a plain notice; add { path, label } for the button. `path` is a
+ dispatcher path ("admin/system/admin"); it is looked up before it is linked, so a build with that
+ page absent — or a user without rights to it — gets the warning without a dead link.
+
+ title/text are emitted with `{{ }}`, i.e. unescaped, exactly as the three copies did: they are
+ `_()` results over strings this theme ships, not request data.
+ Licensed to the public under the Apache License 2.0.
+-#}
+<div class="alert-message warning">
+	<h2>{{ title }}</h2>
+	<p>{{ text }}</p>
+	{% if (path && dispatcher.lookup(path)): %}
+	  <div class="right"><a class="btn" href="{{ dispatcher.build_url(path) }}">{{ label }}</a></div>
+	{% endif %}
+</div>

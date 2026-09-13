@@ -1,0 +1,25 @@
+{
+    "luci-app-irqbalance": {
+        "description": "Grant UCI access for luci-app-irqbalance",
+        "read": {
+            "file": {
+                "/proc/interrupts": [
+                    "read"
+                ]
+            },
+            "ubus": {
+                "service": [
+                    "list"
+                ]
+            },
+            "uci": [
+                "irqbalance"
+            ]
+        },
+        "write": {
+            "uci": [
+                "irqbalance"
+            ]
+        }
+    }
+}

@@ -1,0 +1,33 @@
+{
+	"luci-app-nlbwmon": {
+		"description": "Grant UCI access for luci-app-nlbwmon",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/proc/sys/kernel/hostname": [ "read" ],
+				"/usr/libexec/nlbwmon-action backup": [ "exec" ],
+				"/usr/libexec/nlbwmon-action download *": [ "exec" ],
+				"/usr/libexec/nlbwmon-action periods": [ "exec" ],
+				"/usr/share/nlbwmon/protocols": [ "read" ]
+			},
+			"ubus": {
+				"file": [ "read" ],
+				"luci-rpc": [ "getHostHints" ],
+				"network.rrdns": [ "lookup" ]
+			},
+			"uci": [ "nlbwmon" ]
+		},
+		"write": {
+			"file": {
+				"/tmp/nlbw-restore.tar.gz": [ "write" ],
+				"/usr/libexec/nlbwmon-action commit": [ "exec" ],
+				"/usr/libexec/nlbwmon-action restore": [ "exec" ],
+				"/usr/share/nlbwmon/protocols": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ]
+			},
+			"uci": [ "nlbwmon" ]
+		}
+	}
+}

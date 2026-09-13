@@ -1,0 +1,102 @@
+[
+	{
+		"device": {
+			"vendor": "Linksys",
+			"model": "E7350",
+			"board": ["linksys,e7350"]
+		},
+		"commands": {
+			"params": ["bootimage"],
+			"get": "fw_printenv",
+			"set": "fw_setenv",
+			"save": null
+		},
+		"partitions": [
+			{
+				"number": 1,
+				"param_values": [1],
+				"firmware": {
+					"kernel": "mtd3",
+					"kernel_label_offset": 192,
+					"rootfs": "mtd4"
+				}
+			},
+			{
+				"number": 2,
+				"param_values": [2],
+				"firmware": {
+					"kernel": "mtd6",
+					"kernel_label_offset": 192,
+					"rootfs": "mtd7"
+				}
+			}
+		]
+	},
+	{
+		"device": {
+			"vendor": "ZyXEL",
+			"model": "NBG6817",
+			"board": ["zyxel,nbg6817"]
+		},
+		"commands": {
+			"params": [],
+			"get": null,
+			"set": null,
+			"save": null
+		},
+		"partitions": [
+			{
+				"number": 1,
+				"param_values": ["ff"],
+				"firmware": {
+					"kernel": "mmcblk0p4",
+					"kernel_label_offset": 32
+				}
+			},
+			{
+				"number": 2,
+				"param_values": ["01"],
+				"firmware": {
+					"kernel": "mmcblk0p7",
+					"kernel_label_offset": 32
+				}
+			}
+		]
+	},
+	{
+		"device": {
+			"vendor": "ZyXEL",
+			"model": "WSM20",
+			"board": ["zyxel,wsm20"]
+		},
+		"commands": {
+			"params": [],
+			"get": null,
+			"set": null,
+			"save": null,
+			"dual_flag": {
+				"mtd": "persist",
+				"offset": 4
+			}
+		},
+		"partitions": [
+			{
+				"number": 1,
+				"param_values": ["01"],
+				"firmware": {
+					"kernel": "mtd4",
+					"kernel_label_offset": 32,
+					"rootfs": "mtd5"
+				}
+			},
+			{
+				"number": 2,
+				"param_values": ["02"],
+				"firmware": {
+					"kernel": "mtd6",
+					"kernel_label_offset": 32
+				}
+			}
+		]
+	}
+]

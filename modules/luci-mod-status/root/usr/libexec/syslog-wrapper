@@ -1,0 +1,21 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+main() {
+	local log_file
+
+	log_file="$(uci_get system @system[0] log_file "")"
+	if [ -f "$log_file" ]; then
+		cat "$log_file"
+		return
+	fi
+
+	if [ -f /sbin/logread ]; then
+		/sbin/logread -e ^
+	else
+		/usr/sbin/logread -e ^
+	fi
+}
+
+main

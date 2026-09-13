@@ -1,0 +1,39 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA9500",
+		"board": []
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd3",
+				"kernel_label_offset": 28,
+				"rootfs": "mtd4"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd6",
+				"kernel_label_offset": 28,
+				"rootfs": "mtd7"
+			}
+		}
+	]
+}

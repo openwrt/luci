@@ -1,0 +1,12 @@
+Test obtain_device_info when board_name file is missing.
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.obtain_device_info.call();
+printf("%J\n", result);
+-- End --
+
+-- Expect stdout --
+{ "error": "NO_BOARD_NAME" }
+-- End --

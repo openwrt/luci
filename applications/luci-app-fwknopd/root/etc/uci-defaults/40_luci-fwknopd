@@ -1,0 +1,14 @@
+#!/bin/sh
+#-- Copyright 2015 Jonathan Bennett <jbennett@incomsystems.biz>
+#-- Licensed to the public under the GNU General Public License v2.
+. /lib/functions/network.sh
+
+# Clean-up - keytype/hkeytype is unnecessary now
+if uci -q show fwknopd | grep \\.h\\?keytype > /dev/null; then
+	for keytype in $(uci -q show fwknopd | grep \\.h\\?keytype= | cut -d= -f1); do
+		uci delete $keytype
+	done
+	uci commit fwknopd
+fi
+
+exit 0

@@ -1,0 +1,31 @@
+#!/bin/sh
+
+action=$1
+shift
+
+case "$action" in
+	nic-list)
+		/usr/bin/vpncmd localhost /client /csv /cmd:niclist | tail -n +4 2> /dev/null
+	;;
+	nic-create)
+		/usr/bin/vpncmd localhost /client /cmd:niccreate $1 > /dev/null && echo "OK" || echo "NOK"
+	;;
+	nic-delete)
+		/usr/bin/vpncmd localhost /client /csv /cmd:nicdelete $1 > /dev/null && echo "OK" || echo "NOK"
+	;;
+	account-list)
+		/usr/bin/vpncmd localhost /client /csv /cmd:accountlist | tail -n +4 2> /dev/null
+	;;
+	account-status-get)
+		/usr/bin/vpncmd localhost /client /csv /cmd:accountstatusget $1 | tail -n +4 2> /dev/null
+	;;
+	*)
+		echo "Usage:" >&2
+		echo "       $0 {nic-list}"                        >&2
+		echo "       $0 {nic-create} {name}"               >&2
+		echo "       $0 {nic-delete} {name}"               >&2
+		echo "       $0 {account-list}"                    >&2
+		echo "       $0 {account-status-get {accountname}" >&2
+		exit 1
+	;;
+esac

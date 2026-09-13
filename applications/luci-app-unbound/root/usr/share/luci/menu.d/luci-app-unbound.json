@@ -1,0 +1,60 @@
+{
+	"admin/services/unbound": {
+		"title": "Unbound DNS",
+		"order": "60",
+		"action": {
+			"type": "alias",
+			"path": "admin/services/unbound/configure"
+		},
+		"depends": {
+			"acl": [ "luci-app-unbound" ],
+			"fs": {
+				"/etc/init.d/unbound": "executable"
+			},
+			"uci": { "unbound": true }
+		}
+	},
+
+	"admin/services/unbound/configure": {
+		"title": "Unbound",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "unbound/configure"
+		}
+	},
+
+	"admin/services/unbound/zone-details": {
+		"action": {
+			"type": "view",
+			"path": "unbound/zone-details"
+		}
+	},
+
+	"admin/services/unbound/zones": {
+		"title": "Zones",
+		"order": 15,
+		"action": {
+			"type": "view",
+			"path": "unbound/zones"
+		}
+	},
+
+	"admin/services/unbound/status": {
+		"title": "Status",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "unbound/status"
+		}
+	},
+
+	"admin/services/unbound/files": {
+		"title": "Files",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "unbound/files"
+		}
+	}
+}

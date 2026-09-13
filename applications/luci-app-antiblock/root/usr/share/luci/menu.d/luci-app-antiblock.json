@@ -1,0 +1,54 @@
+{
+	"admin/services/antiblock": {
+		"title": "AntiBlock",
+		"order": 90,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-antiblock"
+			]
+		}
+	},
+	"admin/services/antiblock/args": {
+		"title": "Args",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "antiblock/args"
+		}
+	},
+	"admin/services/antiblock/routes": {
+		"title": "Routes",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "antiblock/routes"
+		}
+	},
+	"admin/services/antiblock/domains": {
+		"title": "Domains",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "antiblock/domains"
+		}
+	},
+	"admin/services/antiblock/statistics": {
+		"title": "Statistics",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "antiblock/statistics"
+		}
+	},
+	"admin/services/antiblock/log": {
+		"title": "Log",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "antiblock/log"
+		}
+	}
+}

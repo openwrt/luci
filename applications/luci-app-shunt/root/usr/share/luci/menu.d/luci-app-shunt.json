@@ -1,0 +1,54 @@
+{
+	"admin/services/shunt": {
+		"title": "shunt",
+		"order": "65",
+		"action": {
+			"type": "alias",
+			"path": "admin/services/shunt/overview"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-shunt"
+			],
+			"fs": {
+				"/usr/sbin/shunt": "executable",
+				"/etc/init.d/shunt": "executable"
+			},
+			"uci": {
+				"shunt": true
+			}
+		}
+	},
+	"admin/services/shunt/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "shunt/overview"
+		}
+	},
+	"admin/services/shunt/policies": {
+		"title": "Policies",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "shunt/policies"
+		}
+	},
+	"admin/services/shunt/setreport": {
+		"title": "Set Reporting",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "shunt/setreport"
+		}
+	},
+	"admin/services/shunt/logread": {
+		"title": "Processing Log",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "shunt/logread"
+		}
+	}
+}

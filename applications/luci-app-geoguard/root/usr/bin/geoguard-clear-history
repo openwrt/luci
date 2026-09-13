@@ -1,0 +1,6 @@
+#!/bin/sh
+# geoguard-clear-history: clear update history.log only (sets and config untouched)
+BASE_DIR="/etc/geoguard"
+: > "$BASE_DIR/history.log"
+logger -t geoguard "update history cleared manually"
+echo "cleared"

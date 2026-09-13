@@ -1,0 +1,24 @@
+{
+	"title": "OSZX DNS (UK)",
+	"template": "https://doh.{option}/dns-query",
+	"bootstrap_dns": "51.38.82.198,2001:41d0:801:2000::1b28",
+	"help_link": "https://dns.oszx.co/#mdoh",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(oszx.co|pumplex.com)",
+			"options": [
+				{
+					"value": "oszx.co",
+					"description": "AdBlocking Filter"
+				},
+				{
+					"value": "pumplex.com",
+					"description": "Standard"
+				}
+			],
+			"default": "oszx.co"
+		}
+	}
+}

@@ -1,0 +1,44 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+isInstalled() {
+	[ -f /usr/sbin/yggdrasil-jumper ]
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "isInstalled"
+		json_close_object
+		json_add_object "validateConfig"
+		json_add_string "config"
+		json_close_object
+		json_dump
+	;;
+	call)
+		case "$2" in
+			isInstalled)
+				json_init
+				json_add_boolean "isInstalled" "$(isInstalled && echo 1 || echo 0)"
+				json_dump
+			;;
+			validateConfig)
+				read -r input
+				json_load "$input"
+				json_get_vars config
+
+				output="Can't locate `yggdrasil-jumper`"
+				isInstalled && \
+					output="$(echo "$config" \
+						| yggdrasil-jumper --validate --config - 2&>1 \
+						| sed -E 's/(.{100}[^ ]*) /\1\n/g')"
+
+				json_init
+				json_add_string output "$output"
+				json_dump
+			;;
+		esac
+	;;
+esac
+

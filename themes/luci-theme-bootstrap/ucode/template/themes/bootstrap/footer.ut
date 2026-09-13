@@ -1,0 +1,20 @@
+		{% if (!blank_page): %}
+		</div>
+		<footer>
+			<span>
+				Powered by
+				<a href="https://github.com/openwrt/luci" target="_blank" rel="noreferrer">
+					{{ version.luciname }} ({{ version.luciversion }})</a>
+				/
+				<a href="{{ entityencode(version.disturl ?? '#', true) }}" target="_blank" rel="noreferrer">
+					{{ version.distname }} {{ version.distversion }} ({{ version.distrevision }})</a>
+				{% if (lua_active): %}
+					/ {{ _('Lua compatibility mode active') }}
+				{% endif %}
+			</span>
+			<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
+		</footer>
+		<script>L.require('menu-bootstrap')</script>
+		{% endif %}
+	</body>
+</html>

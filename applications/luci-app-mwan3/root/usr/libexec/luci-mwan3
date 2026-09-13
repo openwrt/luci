@@ -1,0 +1,199 @@
+#!/bin/sh
+#
+# Copyright (C) 2021 TDT AG <development@tdt.de>
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See https://www.gnu.org/licenses/gpl-2.0.txt for more information.
+#
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+. /usr/share/libubox/jshn.sh
+
+IIF=1000
+FWMARK=2000
+ID=0
+
+usage() {
+	local status="$1"
+	local msg="$2"
+	if [ -n "$msg" ]; then
+		echo "$msg"
+		echo ""
+	fi
+	echo "Usage: $(basename "$0") <command>"
+	echo "command:"
+	echo "  diag:   diagnostic commands"
+	echo "  ipset:  ipset commands"
+	echo ""
+	echo "diag <command> <iface>"
+	echo "command:"
+	echo "  gateway <iface>:   ping interface gateway"
+	echo "  tracking <iface>:  ping interface tracking targets"
+	echo "  rules <iface>:     check interface routing rules"
+	echo "  routes <iface>:    check interface routing tables"
+	echo ""
+	echo "ipset <command>"
+	echo "command:"
+	echo "  dump:     show all configured ipset names"
+
+	exit "$status"
+}
+
+diag_gateway() {
+	local iface="$1"
+
+	local gw
+
+	network_get_gateway gw "${iface}"
+	[ -z "$gw" ] && network_get_gateway gw "${iface}_4"
+
+	[ -z "$gw" ] && {
+		echo "No gateway for interface ${iface} found."
+		exit 2
+	}
+
+	mwan3 use "$iface" "ping" "-c" "5" "-W" "1" "$gw"
+}
+
+diag_tracking() {
+	local iface="$1"
+
+	checkips() {
+		local ip="$1"
+		local iface="$2"
+
+		mwan3 use "$iface" "ping" "-c" "5" "-W" "1" "$ip"
+	}
+
+	config_load mwan3
+	config_list_foreach "$iface" "track_ip" checkips "$iface"
+}
+
+iface_number() {
+	local cfg="$1"
+	local iface="$2"
+
+	let number++
+
+	[ "$cfg" = "$iface" ] && {
+		ID="$number"
+	}
+}
+
+diag_rules() {
+	local iface="$1"
+
+	local number=0
+	local iif=0
+	local fwmark=0
+
+	local iif_rule iif_result
+	local fwmark_rule fwmark_result
+
+	config_load mwan3
+	config_foreach iface_number 'interface' "$iface"
+
+	[ "$ID" = "0" ] && {
+		echo "Unable to get mwan3 interface number for \"$iface\"."
+		exit 2
+	}
+
+	let "iif=$IIF+$ID"
+	let "fwmark=$FWMARK+$ID"
+
+	iif_rule="$(ip rule | grep ${iif})"
+	iif_result="$?"
+
+	fwmark_rule="$(ip rule | grep ${fwmark})"
+	fwmark_result="$?"
+
+	if [ "$fwmark_result" = 0 ] && [ "$iif_result" = 0 ]; then
+		echo "All required IP rules for interface \"$iface\" found"
+		echo "$fwmark_rule"
+		echo "$iif_rule"
+	elif [ "$fwmark_result" = 1 ] && [ "$iif_result" = 0 ]; then
+		echo "Only iif IP rule for interface \"$iface\" found"
+		echo "$iif_rule"
+	elif [ "$fwmark_result" = 0 ] && [ "$iif_result" = 1 ]; then
+		echo "Only fwmark IP rule for interface \"$iface\" found"
+		echo "$fwmark_rule"
+	else
+		echo "Missing fwmark and iif IP rule for interface \"$iface\""
+	fi
+}
+
+diag_routes() {
+	local iface="$1"
+
+	local table table_result
+
+	config_load mwan3
+	config_foreach iface_number 'interface' "$iface"
+
+	[ "$ID" = "0" ] && {
+		echo "Unable to get mwan3 interface number for \"$iface\"."
+		exit 2
+	}
+
+	table="$(ip route list table $ID)"
+	table_result="$?"
+
+	if [ "$table_result" = 0 ]; then
+		echo "Routing table \"$ID\" for interface \"$iface\" found"
+		echo "$table"
+	else
+		echo "Routing table \"$ID\" for interface \"$iface\" not found"
+	fi
+}
+
+diag_cmd() {
+	case "$1" in
+		gateway)
+			diag_gateway "$2"
+			;;
+		tracking)
+			diag_tracking "$2"
+			;;
+		rules)
+			diag_rules "$2"
+			;;
+		routes)
+			diag_routes "$2"
+			;;
+		*)
+			usage "1" "Command not supported"
+			;;
+	esac
+}
+
+ipset_dump() {
+	ipset -n -L 2>/dev/null | grep -v mwan3_ | sort -u
+}
+
+ipset_cmd() {
+	case "$1" in
+		dump)
+			ipset_dump
+			;;
+		*)
+			usage "1" "Command not supported"
+			;;
+	esac
+}
+
+main () {
+	case "$1" in
+		diag)
+			diag_cmd "$2" "$3"
+			;;
+		ipset)
+			ipset_cmd "$2"
+			;;
+		*)
+			usage "1" "Command not supported"
+			;;
+	esac
+}
+
+main "$@"

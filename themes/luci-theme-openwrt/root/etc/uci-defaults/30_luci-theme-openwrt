@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ "$PKG_UPGRADE" != 1 ]; then
+	uci get luci.themes.OpenWrt >/dev/null 2>&1 || \
+	uci batch <<-EOF
+		set luci.themes.OpenWrt=/luci-static/openwrt.org
+		set luci.main.mediaurlbase=/luci-static/openwrt.org
+		commit luci
+	EOF
+fi
+
+exit 0

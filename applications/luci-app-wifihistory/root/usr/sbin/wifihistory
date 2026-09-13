@@ -1,0 +1,124 @@
+#!/usr/bin/env ucode
+
+'use strict';
+
+import { readfile, writefile, open, mkdir, rename } from 'fs';
+import { connect } from 'ubus';
+
+const HISTORY_DIR = '/var/lib/wifihistory';
+const HISTORY_FILE = HISTORY_DIR + '/history.json';
+const LOCK_FILE = '/var/lock/wifihistory.lock';
+
+function load_history() {
+	let content = readfile(HISTORY_FILE);
+	if (content == null)
+		return {};
+
+	try {
+		return json(content) || {};
+	}
+	catch (e) {
+		return {};
+	}
+}
+
+function save_history(data) {
+	let tmp = HISTORY_FILE + '.tmp';
+
+	writefile(tmp, sprintf('%J', data));
+	rename(tmp, HISTORY_FILE);
+}
+
+function poll_stations() {
+	let ubus = connect();
+	if (!ubus) {
+		warn('Failed to connect to ubus\n');
+		return;
+	}
+
+	let now = time();
+	let history = load_history();
+	let seen_macs = {};
+
+	let wifi_status = ubus.call('network.wireless', 'status');
+	if (!wifi_status)
+		return;
+
+	let hints = ubus.call('luci-rpc', 'getHostHints') || {};
+
+	for (let radio in wifi_status) {
+		let ifaces = wifi_status[radio]?.interfaces;
+		if (!ifaces)
+			continue;
+
+		for (let iface in ifaces) {
+			let ifname = iface?.ifname;
+			if (!ifname)
+				continue;
+
+			let info = ubus.call('iwinfo', 'info', { device: ifname });
+			let ssid = info?.ssid || '';
+
+			let assoc = ubus.call('iwinfo', 'assoclist', { device: ifname });
+			if (!assoc?.results)
+				continue;
+
+			for (let bss in assoc.results) {
+				let mac = bss?.mac;
+				if (!mac)
+					continue;
+
+				mac = uc(mac);
+				seen_macs[mac] = true;
+
+				let hostname = hints?.[mac]?.name || '';
+				let ipv4 = hints?.[mac]?.ipaddrs?.[0] || '';
+				let ipv6 = hints?.[mac]?.ip6addrs?.[0] || '';
+
+				let existing = history[mac];
+				let first_seen = existing?.first_seen || now;
+
+				history[mac] = {
+					mac: mac,
+					hostname: hostname,
+					ipv4: ipv4,
+					ipv6: ipv6,
+					network: ssid,
+					ifname: ifname,
+					connected: true,
+					signal: bss?.signal || 0,
+					noise: bss?.noise || 0,
+					first_seen: first_seen,
+					last_seen: now
+				};
+			}
+		}
+	}
+
+	for (let mac in history)
+		if (!seen_macs[mac])
+			history[mac].connected = false;
+
+	ubus.disconnect();
+
+	save_history(history);
+}
+
+mkdir(HISTORY_DIR);
+
+let lock_fd = open(LOCK_FILE, 'w');
+if (!lock_fd) {
+	warn('Failed to open lock file\n');
+	exit(1);
+}
+
+if (!lock_fd.lock('xn')) {
+	warn('Another instance is already running\n');
+	lock_fd.close();
+	exit(1);
+}
+
+poll_stations();
+
+lock_fd.lock('u');
+lock_fd.close();

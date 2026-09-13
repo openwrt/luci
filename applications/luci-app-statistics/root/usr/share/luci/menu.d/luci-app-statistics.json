@@ -1,0 +1,31 @@
+{
+	"admin/statistics": {
+		"title": "Statistics",
+		"order": 80,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-statistics" ],
+			"uci": { "luci_statistics": true }
+		}
+	},
+
+	"admin/statistics/graphs": {
+		"title": "Graphs",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "statistics/graphs"
+		}
+	},
+
+	"admin/statistics/collectd": {
+		"title": "Setup",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "statistics/collectd"
+		}
+	}
+}

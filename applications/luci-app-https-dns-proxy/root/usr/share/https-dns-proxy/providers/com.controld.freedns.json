@@ -1,0 +1,36 @@
+{
+	"title": "ControlD",
+	"template": "https://freedns.controld.com/{option}",
+	"bootstrap_dns": "76.76.2.0,2606:1a40::0",
+	"help_link": "https://kb.controld.com/tutorials",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(family|p0|p1|p2|p3)",
+			"options": [
+				{
+					"value": "family",
+					"description": "Family Filter"
+				},
+				{
+					"value": "p0",
+					"description": "Standard"
+				},
+				{
+					"value": "p1",
+					"description": "Malware Filter"
+				},
+				{
+					"value": "p2",
+					"description": "Ads + Malware Filter"
+				},
+				{
+					"value": "p3",
+					"description": "Ads + Malware + Social Filter"
+				}
+			],
+			"default": "p0"
+		}
+	}
+}

@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# luci-app-2fa: Setup script for two-factor authentication plugin
+# This script sets up the 2FA plugin configuration in luci_plugins
+
+PLUGIN_UUID="bb4ea47fcffb44ec9bb3d3673c9b4ed2"
+
+# Ensure luci_plugins config file exists
+touch /etc/config/luci_plugins
+
+# Create global section if not exists
+uci -q get luci_plugins.global >/dev/null || {
+	uci set luci_plugins.global=global
+	uci set luci_plugins.global.enabled='0'
+}
+
+# Enable auth_login plugins class if not set
+uci -q get luci_plugins.global.auth_login_enabled >/dev/null || {
+	uci set luci_plugins.global.auth_login_enabled='0'
+}
+
+# Create 2FA plugin section if not exists
+uci -q get "luci_plugins.${PLUGIN_UUID}" >/dev/null || {
+	uci set "luci_plugins.${PLUGIN_UUID}=auth_login"
+	uci set "luci_plugins.${PLUGIN_UUID}.enabled=0"
+	uci set "luci_plugins.${PLUGIN_UUID}.name=Two-Factor Authentication"
+	
+	# Rate limiting defaults
+	uci set "luci_plugins.${PLUGIN_UUID}.rate_limit_enabled=1"
+	uci set "luci_plugins.${PLUGIN_UUID}.rate_limit_max_attempts=5"
+	uci set "luci_plugins.${PLUGIN_UUID}.rate_limit_window=60"
+	uci set "luci_plugins.${PLUGIN_UUID}.rate_limit_lockout=300"
+	
+	# Security defaults
+	uci set "luci_plugins.${PLUGIN_UUID}.strict_mode=0"
+	uci set "luci_plugins.${PLUGIN_UUID}.ip_whitelist_enabled=0"
+	
+	# Time calibration threshold (2026-01-01 00:00:00 UTC)
+	uci set "luci_plugins.${PLUGIN_UUID}.min_valid_time=1767225600"
+}
+
+uci commit luci_plugins
+
+exit 0

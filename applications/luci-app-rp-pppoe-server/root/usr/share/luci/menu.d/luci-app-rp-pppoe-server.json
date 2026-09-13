@@ -1,0 +1,22 @@
+{
+	"admin/services/rp-pppoe-server": {
+		"title": "RP PPPoE Server",
+		"action": {
+			"type": "view",
+			"path": "pppoe/rp-pppoe-server"
+		},
+		"depends": {
+			"acl": [ "luci-app-rp-pppoe-server" ]
+		}
+	},
+	"admin/services/rp-pppoe-relay": {
+		"title": "RP PPPoE Relay",
+		"action": {
+			"type": "view",
+			"path": "pppoe/rp-pppoe-relay"
+		},
+		"depends": {
+			"acl": [ "luci-app-rp-pppoe-server" ]
+		}
+	}
+}

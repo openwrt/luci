@@ -1,0 +1,17 @@
+{
+	"luci-app-openlist": {
+		"description": "Grant UCI access for luci-app-openlist",
+		"read": {
+			"file": {
+				"/var/run/openlist/log/openlist.log": [ "read" ]
+			},
+			"ubus": {
+				"service": [ "list" ]
+			},
+			"uci": [ "openlist" ]
+		},
+		"write": {
+			"uci": [ "openlist" ]
+		}
+	}
+}

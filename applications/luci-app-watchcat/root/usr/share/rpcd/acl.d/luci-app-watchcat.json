@@ -1,0 +1,14 @@
+{
+	"luci-app-watchcat": {
+		"description": "Grant access to LuCI app watchcat",
+		"read": {
+			"file": {
+				"/usr/bin/watchcat.sh": [ "exec" ]
+			},
+			"uci": [ "watchcat" ]
+		},
+		"write": {
+			"uci": [ "watchcat" ]
+		}
+	}
+}

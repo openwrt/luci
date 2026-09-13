@@ -1,0 +1,48 @@
+#!/bin/sh
+# geoguard schedule manager: daily / weekly (Sun) / monthly (1st) + hour:min
+# (takes effect after one run on UCI change)
+CRON_FILE="/etc/crontabs/root"
+JOB="/usr/bin/geoguard-update"
+
+sed -i '\#geoguard-update#d' "$CRON_FILE" 2>/dev/null
+sed -i '\#geoguard-ddns#d' "$CRON_FILE" 2>/dev/null
+
+BASE_DIR="/etc/geoguard"
+# Cron trailing comments are English-only (no locale data in shell code).
+# WARNING: the two NOTE_* lines have identical copies in geoguard-ddns;
+# both sides must match byte-for-byte, otherwise the ddns self-heal line
+# comparison never matches and rewrites+reloads cron every round.
+NOTE_DDNS='# GeoGuard DDNS whitelist tracker (auto-managed, do not edit)'
+NOTE_UPDATE='# GeoGuard country IP sets updater (auto-managed, do not edit)'
+# DDNS whitelist: static line always present (no save path removes it;
+# script exits fast when the list is empty).
+# Interval read from UCI (default 30 min); list empty but state non-empty
+# means just cleared -> run one purge.
+DDNS_I=$(uci -q get geoguard.main.ddns_interval 2>/dev/null)
+case "$DDNS_I" in ''|*[!0-9]*) DDNS_I=30 ;; esac
+[ "$DDNS_I" -lt 1 ] && DDNS_I=1
+[ "$DDNS_I" -gt 60 ] && DDNS_I=60
+DNOTE="$NOTE_DDNS"; UNOTE="$NOTE_UPDATE"
+echo "*/$DDNS_I * * * * /usr/bin/geoguard-ddns $DNOTE" >> "$CRON_FILE"
+/usr/bin/geoguard-ddns
+
+if [ "$(uci -q get geoguard.main.auto_update)" = "1" ]; then
+	FREQ=$(uci -q get geoguard.main.update_freq 2>/dev/null)
+	HOUR=$(uci -q get geoguard.main.update_hour)
+	MIN=$(uci -q get geoguard.main.update_min)
+	case "$HOUR" in ''|*[!0-9]*) HOUR=6 ;; esac
+	case "$MIN" in ''|*[!0-9]*) MIN=0 ;; esac
+	[ "$HOUR" -gt 23 ] && HOUR=6
+	[ "$MIN" -gt 59 ] && MIN=0
+	case "$FREQ" in
+		weekly)  SPEC="$MIN $HOUR * * 0" ;;
+		monthly) SPEC="$MIN $HOUR 1 * *" ;;
+		*)       SPEC="$MIN $HOUR * * *" ;;
+	esac
+	echo "$SPEC $JOB $UNOTE" >> "$CRON_FILE"
+	logger -t geoguard "schedule set: $SPEC"
+else
+	logger -t geoguard "auto update disabled"
+fi
+
+/etc/init.d/cron restart >/dev/null 2>&1

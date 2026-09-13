@@ -1,0 +1,19 @@
+{
+	"luci-app-advanced-reboot": {
+		"description": "Grant access for luci-app-advanced-reboot",
+		"read": {
+			"ubus": {
+				"luci.advanced-reboot": [ "obtain_device_info" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.advanced-reboot": [ "boot_partition" ],
+				"system": [ "reboot" ]
+			},
+			"file": {
+				"/sbin/poweroff": [ "list", "exec" ]
+			}
+		}
+	}
+}

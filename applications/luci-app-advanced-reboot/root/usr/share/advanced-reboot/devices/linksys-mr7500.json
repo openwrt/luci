@@ -1,0 +1,41 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "MR7500",
+		"board": [
+			"linksys,mr7500"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd13",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd14"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd15",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd16"
+			}
+		}
+	]
+}

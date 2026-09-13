@@ -1,0 +1,195 @@
+{#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2012 David Menting <david@nut-bolt.nl>
+ Copyright 2008-2022 Jo-Philipp Wich <jo@mein.io>
+ Copyright 2026 footstrap theme
+ Licensed to the public under the Apache License 2.0.
+
+ i18n, AND THE RULE THE OTHER TEMPLATES POINT AT. A msgid is a GLOBAL name: LuCI serves ONE
+ merged catalogue — load_catalog() loads every *.<lang>.lmo in /usr/lib/lua/luci/i18n and a lookup
+ returns the first archive holding the hash — so readdir order decides who owns a string. The
+ Appearance layout toggle rendered "Максимум" on a Russian router (issue #6), because somebody
+ else's catalogue translates the msgid `Top` as "maximum". Anything we leave BARE is a name anyone
+ may take, and contexting cannot be selective.
+
+ So every label in the Appearance page carries the `footstrap` msgctxt (fs-appearance.js), while
+ the CHROME's own strings — Skip to content, Menu, Collapse menu, Search, Log out — are
+ deliberately msgctxt-FREE, because a bare msgid is how a string INHERITS a translation in the ~40
+ languages this theme ships no catalogue for. Two of the five collect on that today: Skip to
+ content and Log out are luci-base msgids verbatim (the latter was `Logout`, which is nobody's
+ msgid, so it rendered in English everywhere our own catalogue does not reach). Menu, Collapse menu
+ and Search are ours alone for now and stay bare so a future luci-base string can adopt them. Same
+ for the login/notice sentences and for System/Memory/Storage in fs-overview.js, which MATCH the
+ stock headings on purpose.
+-#}
+
+{%
+	import { getuid, getspnam } from 'luci.core';
+
+	const boardinfo = ubus.call('system', 'board') ?? {};
+	const empty_password = (getuid() == 0 && getspnam('root')?.pwdp === '');
+	/* The ROUTER's saved Appearance defaults (Appearance -> Save as default, in /etc/config/footstrap):
+	   head.ut stamps them before paint and the client's own localStorage overrides every one — the
+	   browser choice always wins. Layout falls back to the legacy migration seed
+	   luci.main.footstrap_layout=top, which an admin may set to give the router a default
+	   top-nav theme (a shell script cannot write localStorage). Absent = the built-in defaults.
+
+	   `uci` and `config` come from the render scope, which dispatcher.uc builds per request: `uci` is
+	   already a cursor (dispatcher.uc `let uci = cursor()`) and `config.main` is already
+	   `uci.get_all('luci','main')`. Importing cursor from 'uci' and opening a second one allocated a
+	   cursor per page render and re-read a package the dispatcher had loaded before calling us —
+	   and left this template reaching for UCI a different way than sysauth.ut does. */
+	const fsd = uci.get_all('footstrap', 'settings') ?? {};
+	/* EVERY option saveAsDefault() writes, listed ONCE and read back in a loop.
+	 *
+	 * This used to be a hand-written object literal with one line per axis, and the shape of that
+	 * mistake is on record twice: `density` was saved by saveAsDefault() and then never read back
+	 * here, so the router-wide Density default reached no browser — and when the colour axes landed,
+	 * the same thing happened again to all seven of them at once. The symptom is the worst kind:
+	 * Save as default reports success, the file on disk is correct, and "Reset to saved" drops the
+	 * browser to the BUILT-IN default instead of the saved one, because the value the server hands
+	 * the client for that axis was never there. Nothing else notices — tools/axes.mjs held the
+	 * pre-paint against the live applier and both were right; the gap was the SERVER read that feeds
+	 * them, which is now what tools/axes.mjs checks against snapshotAxes().
+	 *
+	 * '' (not the raw undefined) when unset, so head.ut's `!= ''` guards fire — otherwise
+	 * int(undefined) is 0, a VALID value, and an axis whose 0 is a real choice (rounding, the tint
+	 * strength, the photo dim) would default to 0 instead of to its own default. */
+	const FS_AXES = [
+		'layout', 'darkmode', 'palette', 'wallpaper', 'density',
+		'tint', 'accent', 'good', 'warn', 'danger',
+		'card', 'control', 'bar', 'line',
+		'rounding', 'autocollapse', 'tint_strength', 'photo_dim',
+		'pattern_size', 'pattern_strength', 'pattern_ink',
+		/* the two uploaded images' cache-bust tokens (head.ut whitelists both to hex) — the files
+		   themselves are served, only these tokens travel in the page. NOT axes: they have no
+		   browser layer at all, but they reach the client the same way. */
+		'login_bg', 'pattern',
+		/* the fonts, same shape and for the same reason: no browser layer, no Appearance control,
+		   no entry in snapshotAxes(). font_sans/font_mono are font-family stacks (head.ut
+		   whitelists the charset and prints them into a style element); `fonts` is the cache-bust
+		   token of the @font-face sheet the admin installs beside the faces, hex like the two above.
+		   All three are written with `uci set` — by hand, or by the one-line installer that lives in
+		   the theme's own repository and not in this package — never by Save as default. */
+		'font_sans', 'font_mono', 'fonts'
+	];
+	const fs_defaults = {};
+	for (let k in FS_AXES)
+		fs_defaults[k] = fsd[k] || '';
+	/* the one value with a fallback of its own: the legacy migration seed
+	   luci.main.footstrap_layout=top, which an admin may set to give the router a default
+	   top-nav theme (a shell script cannot write localStorage).
+
+	   `config.main?.` and not `config.main.`: ucode raises a hard reference error on a property read
+	   through null and this template is the ONE that renders every page, so a dispatcher that stopped
+	   defaulting that section would answer 500 everywhere. It defaults it today — dispatcher.uc has
+	   `main: uci.get_all('luci', 'main') ?? {}` on both release branches — and the CI gate cannot see
+	   the difference either way: `ucode -T -c` COMPILES the template, it never runs it. */
+	fs_defaults.layout = fsd.layout || config.main?.footstrap_layout || '';
+
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+
+{% include('themes/footstrap/partials/head', { boardinfo, fs_defaults }) %}
+
+	{#
+		data-page carries the DISPATCH path (ctx.path), not request_path: on a firstchild route
+		/admin/status renders the overview while request_path is only ['admin','status'], so
+		data-page came out "admin-status" and every `body[data-page='admin-status-overview']`
+		rule — and the overview layout include, which gates on it — silently did not apply
+		there. The SPA router stamps the resolved leaf path, so both ways of arriving agree.
+	#}
+	<body class="lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', length(ctx.path) ? ctx.path : ctx.request_path), true) }}">
+		{#
+			The wallpaper PATTERN's paint surface, and nothing else: 15-wallpaper.css masks this
+			element so an uploaded SVG takes the theme's ink. A mask applies to an element's whole
+			rendering, children included, so it cannot go on .fs-shell or on <body> — it needs a
+			layer of its own with nothing in it.
+
+			OUTSIDE the blank_page guard on purpose. The login page renders with blank_page: true
+			(no .fs-shell, no chrome at all), and it is the first page anyone sees: a router whose
+			saved default is Pattern has to show it there too, exactly as the File photo does.
+
+			Inert unless the axis is on — .fs-pattern is display:none by default, so on every other
+			setting this is one empty div that paints nothing.
+
+			data-fs-chrome: Zone 1, ours — see the <nav> below.
+		#}
+		<div class="fs-pattern" data-fs-chrome aria-hidden="true"></div>
+		{% if (!blank_page): %}
+		{#
+			Skip link: jump the menu instead of tabbing through every section on every page.
+			Visually hidden until focused (.fs-skip, theme/10-chrome.css).
+
+			data-fs-chrome: this element and its subtree are Zone 1 — see the <nav> below.
+		#}
+		<a class="fs-skip" data-fs-chrome href="#maincontent">{{ _('Skip to content') }}</a>
+		<div class="fs-shell">
+			{#
+				<nav>, not <aside>: this column IS the site navigation, and an <aside> gets
+				role="complementary" — a screen reader could not reach the menu by landmark, and
+				the shell had no navigation landmark at all. CSS keys off .fs-sidebar.
+
+				data-fs-chrome marks a Zone 1 ROOT: everything from here down is ours, and no
+				third-party rule may match it (the fence, fs-sheets.js) or reach it from html/body
+				by inheritance (the pin, theme/10-chrome.css). Both key off the ATTRIBUTE, never off
+				a class list, because the alternative rotted: chrome is not one element — the skip
+				link and the Appearance popover are not inside this <nav> — so a fence naming
+				`.fs-sidebar` protected the menu and left them out, and nothing said so. Marking the
+				element is what a new chrome root cannot forget to do somewhere else.
+
+				It marks ROOTS ONLY: never nest one marker inside another. The pin states inherited
+				properties on the marked element, and a direct declaration beats an inherited one
+				EVEN WHEN the inherited one is ours — measured, that cost .fs-label its nowrap and
+				forced text-align from start to left on 302 elements (RTL). `npm run chrome-fence`
+				fails on a nested marker.
+			#}
+			<nav class="fs-sidebar" data-fs-chrome aria-label="{{ _('Menu') }}">
+				<div class="fs-brandrow">
+					{% include('themes/footstrap/partials/brand', { boardinfo }) %}
+					<button type="button" class="fs-railtoggle" id="fs-rail-toggle" aria-label="{{ _('Collapse menu') }}" title="{{ _('Collapse menu') }}">
+						{% include('themes/footstrap/partials/icon', { body: '<path d="M15 6l-6 6 6 6"/>' }) %}
+					</button>
+				</div>
+
+				{# LuCI's poll status ("Refreshing") and other indicators land here by id. #}
+				<div id="indicators" class="fs-indicators"></div>
+
+				<div class="fs-navlabel">{{ _('Menu') }}</div>
+				<ul class="nav" id="topmenu"></ul>
+				<ul id="modemenu" class="fs-modemenu"></ul>
+
+				<div class="fs-spacer"></div>
+
+				{# right cluster, in visual order: the poll pill above, then Search, Log out.
+				   APPEARANCE USED TO SIT HERE, a button opening a popover on <body>. It is a tab
+				   now — System -> System (admin/system/system), appended to the stock page by
+				   fs-appearance.js's MutationObserver, because a THEME may not own a dispatcher
+				   node. The axes had outgrown a floating panel; fs-appearance.js's header has the
+				   reasoning. So the chrome carries one control fewer. #}
+				{% include('themes/footstrap/partials/search') %}
+				{% include('themes/footstrap/partials/logout') %}
+			</nav>
+
+			<main class="fs-main" id="maincontent" tabindex="-1">
+				{# The document's <h1>: LuCI views start at <h2>, so without it the heading outline
+				   begins mid-way down. It must EXIST for a screen reader without being seen, and
+				   `hidden` cannot do that — it is display:none, which strips the element from the
+				   accessibility tree too, so the h1 was never there and the SPA router's
+				   .fs-title-main sync updated a node no assistive tech could read. .fs-sr clips
+				   instead (like .fs-skip): clipped stays in the tree — and what keeps it clipped is
+				   a class a foreign `*` outranks with one `!important`, so it is marked Zone 1 too.
+				   Inside .fs-main, which is NOT marked: that is where app pages render. #}
+				<div class="fs-title fs-sr" data-fs-chrome>
+					<h1 class="fs-title-main">{{ entityencode(striptags(dispatched?.title ? _(dispatched.title) : (boardinfo.hostname ?? 'OpenWrt')), true) }}</h1>
+				</div>
+
+				{# The SPA router swaps the page with no reload, and a screen reader cannot notice:
+				   no load event, focus dies with the clicked <a> (renderChrome() empties
+				   #topmenu), the new <title> is not announced. The router writes the incoming
+				   title here after every nav; empty on a full load — that announces itself. #}
+				<div id="fs-nav-status" class="fs-sr" data-fs-chrome role="status" aria-live="polite"></div>
+
+				<div class="fs-content">
+					{% include('themes/footstrap/partials/notices', { boardinfo, empty_password }) %}
+		{% endif %}

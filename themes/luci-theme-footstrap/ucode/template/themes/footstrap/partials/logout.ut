@@ -1,0 +1,21 @@
+{#
+ The logout control (guarded on the node being dispatchable). ONE markup for every layout,
+ which CSS renders as a square icon button in the bar and the rail: ONE markup for every layout,
+ because a layout is a presentation choice and must not fork the markup. So the old `with_label`
+ parameter and .fs-top-logout are gone.
+ It is also the ONLY logout the theme renders: menu-footstrap.js drops the menu tree's own
+ admin/logout node, so the bar carries no duplicate "Log out" item beside this one.
+ Licensed to the public under the Apache License 2.0.
+-#}
+{% if (dispatcher.lookup("admin/logout")): %}
+<a class="fs-logout" href="{{ dispatcher.build_url('admin/logout') }}" title="{{ _('Log out') }}" aria-label="{{ _('Log out') }}">
+	{#
+	 MIRRORED ABOUT x=12, i.e. the glyph reads LEAVING rather than entering: the doorway sits on
+	 the left and the arrow points out of it, to the right. Every path is the same path reflected
+	 (each x becomes 24-x, and each arc's sweep flag flips with it), so the stroke widths, the
+	 corner radii and the 24x24 box are untouched — nothing here is a redrawn icon.
+	-#}
+	{% include('themes/footstrap/partials/icon', { body: '<path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M14 12h7m0 0-3-3m3 3-3 3"/>' }) %}
+	<span class="fs-label">{{ _('Log out') }}</span>
+</a>
+{% endif %}

@@ -1,0 +1,519 @@
+{#
+ <head> for the ONE template. include(…, { boardinfo, fs_defaults }); everything else comes from
+ the render scope. fs_defaults = the ROUTER's saved Appearance defaults (luci-theme-footstrap
+ /etc/config/footstrap), which the client's own localStorage overrides before paint.
+ Licensed to the public under the Apache License 2.0.
+-#}
+<!DOCTYPE html>
+{%
+	/* Sanitise the ROUTER's saved Appearance defaults (Appearance -> Save as default, stored in
+	   /etc/config/footstrap) into the window.__fsSD object the pre-paint below reads. Enums are
+	   whitelisted and the two hues + rounding clamped to range, so a hand-edited config can neither
+	   break the inline script nor inject markup (defence in depth — writing that file already needs
+	   root). Absent/invalid becomes '' (or 0, or -1 for rounding whose 0 is a real value), which the
+	   JS reads as "no router default". The client's own localStorage overrides every one of these
+	   before paint — the browser choice always wins (see fs-prefs.js).
+
+	   `fs_defaults` is a required include parameter, not an optional one: header.ut is the only
+	   caller and builds it as an object literal before the include, so there is nothing to default
+	   it to — a `?? {}` here only hid that contract from a second caller that would need to honour
+	   it. */
+	let _sd_lay  = index([ 'sidebar', 'top' ], fs_defaults.layout) >= 0 ? fs_defaults.layout : '';
+	let _sd_dark = index([ 'auto', 'light', 'dark' ], fs_defaults.darkmode) >= 0 ? fs_defaults.darkmode : '';
+	let _sd_pal  = index([ 'footstrap', 'hicontrast', 'bootstrap', '2020' ], fs_defaults.palette) >= 0 ? fs_defaults.palette : '';
+	let _sd_wall = index([ 'off', 'pattern', 'file' ], fs_defaults.wallpaper) >= 0 ? fs_defaults.wallpaper : '';
+	let _sd_pink = index([ 'theme', 'original' ], fs_defaults.pattern_ink) >= 0 ? fs_defaults.pattern_ink : '';
+	let _sd_ac   = index([ 'on', 'off' ], fs_defaults.autocollapse) >= 0 ? fs_defaults.autocollapse : '';
+	let _sd_dens = index([ 'compact', 'normal', 'large' ], fs_defaults.density) >= 0 ? fs_defaults.density : '';
+	/* The five COLOUR axes (tint, accent, good, warn, danger) each hold one of three things: '' or
+	   '0' for off, '1'..'360' for a hue, or '#rrggbb' for a colour typed into the Appearance page.
+	   Both live forms reach the client as a STRING — the pre-paint below re-reads which it is, the
+	   way fs-prefs.js's normColor() does — so this sanitiser passes through exactly the two shapes
+	   and turns everything else into '' (= no router default). The hex charset is whitelisted for
+	   the same reason login_bg's is: the value is interpolated into the inline data block below, and
+	   writing this file already needs root, so this is defence in depth rather than the only line.
+	   (Do not write the tag name for that block in a comment: tools/lib/ut-scripts.mjs finds the
+	   inline scripts by matching the opening tag, and a mention in prose is one it will match.)
+	   A config written before the axes took colours holds a bare number, which parses identically. */
+	function _sd_color(v) {
+		if (type(v) == 'string' && match(lc(v), /^#[0-9a-f]{6}$/))
+			return lc(v);
+		let n = int(v);
+		return (n >= 1 && n <= 360) ? `${n}` : '';
+	}
+	let _sd_tint = _sd_color(fs_defaults.tint);
+	let _sd_acc  = _sd_color(fs_defaults.accent);
+	let _sd_good = _sd_color(fs_defaults.good);
+	let _sd_warn = _sd_color(fs_defaults.warn);
+	let _sd_dang = _sd_color(fs_defaults.danger);
+	/* the four SURFACE axes (cards, inset controls, the chrome bar, hairlines). Hex or nothing —
+	 * they have no hue mode, so _sd_color's number branch would let a bare '0' through as a value;
+	 * these read '' for off. */
+	function _sd_hex(v) {
+		return (type(v) == 'string' && match(lc(v), /^#[0-9a-f]{6}$/)) ? lc(v) : '';
+	}
+	let _sd_card = _sd_hex(fs_defaults.card);
+	let _sd_ctrl = _sd_hex(fs_defaults.control);
+	let _sd_bar  = _sd_hex(fs_defaults.bar);
+	let _sd_line = _sd_hex(fs_defaults.line);
+	let _rr = int(fs_defaults.rounding);
+	/* rounding 0 is SHARP corners, a real choice, so '' (unset) must map to -1, not 0 */
+	let _sd_round = (fs_defaults.rounding != '' && _rr >= 0 && _rr <= 20) ? _rr : -1;
+	/* login_bg is the CACHE-BUST TOKEN for the uploaded background (the cgi-upload checksum, an
+	   md5), not the image and not a path — the served path is FIXED (/luci-static/footstrap/bg).
+	   Whitelist it to hex so a hand-edited config cannot inject markup into the inline script that
+	   builds the url() below; anything else becomes '' = "no background". */
+	let _lb = fs_defaults.login_bg;
+	let _sd_lbg = (type(_lb) == 'string' && match(_lb, /^[a-f0-9]{6,64}$/)) ? _lb : '';
+	/* the router-identity Tint's STRENGTH 0-200 (% of the designed chroma; the Appearance row is
+	   "Tint strength" — "Density" is the other axis entirely). '' (unset) -> -1, like rounding,
+	   because 0 is a real value. */
+	let _ts = int(fs_defaults.tint_strength);
+	let _sd_tstr = (fs_defaults.tint_strength != '' && _ts >= 0 && _ts <= 200) ? _ts : -1;
+	/* the File photo's scrim opacity 0-100 (Wallpaper -> File -> Dim), a SHARED router value; unset
+	   -> -1, because 0 is a real value (a fully transparent scrim). */
+	let _pd = int(fs_defaults.photo_dim);
+	let _sd_pdim = (fs_defaults.photo_dim != '' && _pd >= 0 && _pd <= 100) ? _pd : -1;
+	/* the uploaded PATTERN: its cache-bust token, whitelisted to the same hex charset as login_bg
+	   and for the same reason — it is interpolated into the inline data block below and then into a
+	   url(); the served path is FIXED (/luci-static/footstrap/pattern.svg). */
+	let _pt = fs_defaults.pattern;
+	let _sd_pat = (type(_pt) == 'string' && match(_pt, /^[a-f0-9]{6,64}$/)) ? _pt : '';
+	/* the pattern's tile edge in px and the layer's opacity 0-100. Unset -> -1 like rounding: 0 is a
+	   real strength (invisible), and 0 px is not a tile. */
+	let _ps = int(fs_defaults.pattern_size);
+	let _sd_psize = (fs_defaults.pattern_size != '' && _ps >= 40 && _ps <= 1600) ? _ps : -1;
+	let _pst = int(fs_defaults.pattern_strength);
+	let _sd_pstr = (fs_defaults.pattern_strength != '' && _pst >= 0 && _pst <= 100) ? _pst : -1;
+	/* ---- THE FONTS ----
+	   The theme carries no faces (see the note by the stylesheet link below), so the two stacks in
+	   styles/02-tokens.css are what everyone gets unless the ROUTER names something else here.
+	   Two independent things, either usable alone:
+	     font_sans / font_mono   a font-family stack, printed into a style element further down.
+	     fonts                   the cache-bust token (an md5) of an @font-face sheet at
+	                             /etc/footstrap/fonts/fonts.css, for when the admin installs the
+	                             FILES too. Hex, exactly like login_bg and pattern, and for the same
+	                             reason.
+	   THE PACKAGE IS THE SERVING HALF ONLY. It reads these three options, serves whatever is in
+	   /etc/footstrap/fonts (uci-defaults links it under /www) and keeps that directory across a
+	   sysupgrade — it installs no faces and fetches nothing at run time, which is the rule the
+	   whole theme is built on. Putting the files there is the admin's move: drop the .woff2 files
+	   and a fonts.css beside them, then `uci set footstrap.settings.fonts=<md5 of fonts.css>`.
+	   `fonts/set-font.sh` in the theme's OWN repository does exactly that in one line and is NOT
+	   part of this package — it names third-party font hosts, which is precisely what a theme in
+	   this tree must not carry.
+	   Neither is an axis: there is no browser layer, no Appearance control and no entry in
+	   snapshotAxes() — a font is a router-wide decision here, not a per-visitor one.
+
+	   THE CHARSET IS MOST OF THE DEFENCE. A family stack is free text and it is printed UNESCAPED,
+	   so the whitelist has to exclude everything that could end the declaration or the element:
+	   < > ( ) { } ; and the backslash are all absent, which leaves no way to close a style element,
+	   start a second declaration or write a url(). Anything else becomes '' = "no router font".
+	   A Cyrillic or CJK family name is refused by this too — those faces carry a Latin name as well,
+	   and the tool's README says to use it.
+
+	   THE TWO QUOTES ARE WHAT THE CHARSET CANNOT REFUSE, and neither ends anything — they EXTEND.
+	   Both have to be in the class (the shipped default is `"Manrope",system-ui,…`), and one left
+	   OPEN starts a CSS string that runs to the end of the sheet: `font_sans=My"Font` swallows
+	   `; --fs-font-mono: …; }` with it, so a typo in the sans stack silently costs the MONO one on a
+	   router that set that one correctly. Two options this file calls independent, and one takes
+	   the other down.
+
+	   COUNTING THEM IS NOT THE TEST, because tokenizing is STATEFUL: inside '…' a " is literal and
+	   vice versa. `"O'Reilly Sans", 'Fira Sans` — a family name with an apostrophe next to a stack
+	   whose closing quote was forgotten — holds two of each, so both counts come out even while the
+	   second `'` is still open at the end. So scan in ORDER, the way the value is actually read:
+	   the quote that opens wins until its own kind closes it, and one still open at the end refuses
+	   the value. `for (let c in …)` walks array VALUES in ucode, and split(v, '') on the empty
+	   separator yields one character per element. */
+	function _sd_family(v) {
+		if (!(type(v) == 'string' && length(v) >= 1 && length(v) <= 120 &&
+			match(v, /^[A-Za-z0-9 ,._"'-]+$/)))
+			return '';
+		let q = '';
+		for (let c in split(v, '')) {
+			if (q == '')
+				q = (c == '"' || c == "'") ? c : '';
+			else if (c == q)
+				q = '';
+		}
+		return (q == '') ? v : '';
+	}
+	let _sd_fsans = _sd_family(fs_defaults.font_sans);
+	let _sd_fmono = _sd_family(fs_defaults.font_mono);
+	let _ft = fs_defaults.fonts;
+	let _sd_ftok = (type(_ft) == 'string' && match(_ft, /^[a-f0-9]{6,64}$/)) ? _ft : '';
+	/* ---- WRITING DIRECTION ----
+	   Nothing in LuCI emits `dir`: the dispatcher stamps `lang` and stops there, and no stock theme
+	   adds one — so a router in Arabic, Persian or Hebrew renders right-to-left text inside a
+	   left-to-right document. That is not a font problem the browser fixes on its own: with `dir`
+	   absent the whole document is `ltr`, so paragraphs align to the wrong edge, a line's trailing
+	   punctuation jumps to the wrong end, and every mirrored affordance (the sidebar, the flyouts,
+	   the chevrons, the tab strip) points the wrong way. The theme owns the <html> element, so this
+	   is the one place that can say it.
+	   Matched on the BASE subtag, so a future `ar-EG` or `fa_IR` is covered; the list is the standard
+	   RTL set rather than only the three LuCI ships catalogues for today (ar, fa, he), because the
+	   cost of a language never installed is one array entry. `ltr` is written explicitly for the same
+	   reason data-layout is: every rule then matches positively. */
+	let _lang = dispatcher.lang;
+	let _lbase = lc(split(_lang, /[-_]/)[0]);
+	let _rtl = index([ 'ar', 'arc', 'ckb', 'dv', 'fa', 'ha', 'he', 'khw', 'ks', 'ps', 'sd', 'ur', 'yi' ], _lbase) >= 0;
+%}
+{# The SERVER always stamps data-layout with an EXPLICIT value (sidebar|top): every layout rule
+   then matches POSITIVELY, so a future third layout must opt in rather than inherit the other's
+   rules by not being it — never write a :not([data-layout=…]) guard. And the chrome is right with
+   JS off; the script below only overrides it.
+   fs_defaults.layout: the router-wide default (Appearance -> Save as default, or uci-defaults'
+   `top` seed when migrating an old top-nav install). ABSENT = TOP: the bar is the theme's default
+   layout and the sidebar is the opt-in. Deliberate — the bar is what the theme is built around
+   (every layout rule starts from it, with the vertical column as the one guarded override) and it
+   is what a phone gets at any setting. #}
+<html lang="{{ dispatcher.lang }}" dir="{{ _rtl ? 'rtl' : 'ltr' }}" data-layout="{{ fs_defaults.layout == 'sidebar' ? 'sidebar' : 'top' }}">
+	<head>
+		<meta charset="utf-8">
+		{# entityencode AROUND striptags: striptags drops tags but escapes neither `&` nor quotes,
+		   so a hostname with `&` broke entity parsing. No XSS (the tags are gone), but the markup
+		   must be well-formed. #}
+		<title>{{ entityencode(striptags(`${boardinfo.hostname ?? 'OpenWrt'}${dispatched?.title ? ` | ${_(dispatched.title)}` : ''}`), true) }}</title>
+		{# The router-wide Appearance defaults, read by BOTH the pre-paint below and fs-prefs.js's
+		   current*() (so the Appearance page's controls show the effective default when this browser
+		   has no localStorage of its own). Enums are '', the colours '' (=off), rounding -1 (=unset)
+		   — see the sanitiser above. #}
+		<script>window.__fsSD={layout:"{{ _sd_lay }}",darkmode:"{{ _sd_dark }}",palette:"{{ _sd_pal }}",wallpaper:"{{ _sd_wall }}",tint:"{{ _sd_tint }}",accent:"{{ _sd_acc }}",good:"{{ _sd_good }}",warn:"{{ _sd_warn }}",danger:"{{ _sd_dang }}",card:"{{ _sd_card }}",control:"{{ _sd_ctrl }}",bar:"{{ _sd_bar }}",line:"{{ _sd_line }}",rounding:{{ _sd_round }},autocollapse:"{{ _sd_ac }}",login_bg:"{{ _sd_lbg }}",tint_strength:{{ _sd_tstr }},photo_dim:{{ _sd_pdim }},density:"{{ _sd_dens }}",pattern:"{{ _sd_pat }}",pattern_size:{{ _sd_psize }},pattern_strength:{{ _sd_pstr }},pattern_ink:"{{ _sd_pink }}"};</script>
+		<script>
+			/* Each block below pre-paints one Appearance axis before the first frame, duplicating
+			   a live applier in fs-prefs.js. They cannot share code — this runs before the module
+			   loader exists — so tools/axes.mjs derives the contract (keys, attrs, properties,
+			   ranges, default, ORDER) from the JS and holds this template to it.
+			   PRECEDENCE, every axis: this browser's localStorage wins; absent -> the router default
+			   (window.__fsSD); absent -> the built-in default. So the effective value is
+			   localStorage ?? router-default ?? built-in, and the browser choice always overrides.
+			   Dark mode: a saved preference wins, else the router default, else the OS. */
+			(() => {
+				const root = document.querySelector(':root'),
+				      sd = (window.__fsSD || {}).darkmode;
+				let saved = null;
+				try { saved = localStorage.getItem('fs-darkmode'); } catch (e) {}
+				const mq = window.matchMedia('(prefers-color-scheme: dark)');
+				/* data-darkmode is what THIS theme's CSS reads. data-theme / data-bs-theme are
+				   outbound compat for apps that sniff them (justclash keys 21 rules off
+				   data-theme, ssclash reads data-bs-theme first); never read from styles/. Must
+				   stay identical to stampDark() — axes.mjs proves it. */
+				function set(dark) {
+					root.setAttribute('data-darkmode', dark ? 'true' : 'false');
+					root.setAttribute('data-theme', dark ? 'dark' : 'light');
+					root.setAttribute('data-bs-theme', dark ? 'dark' : 'light');
+				}
+				/* localStorage stores 'true'/'false' (explicit) or 'auto' (explicitly follow OS);
+				   absent falls to the router default, then the OS. */
+				const explicit = (saved === 'true') ? true
+				               : (saved === 'false') ? false
+				               : (saved === 'auto') ? 'auto'
+				               : (sd === 'dark') ? true
+				               : (sd === 'light') ? false
+				               : 'auto';
+				set(explicit === true || (explicit === 'auto' && mq.matches));
+				/* ALWAYS registered (it re-checks storage): the user can switch to Auto after
+				   loading with a saved value, and OS flips must track live from then on. An
+				   explicit browser choice or an explicit router default does NOT follow the OS. */
+				mq.addEventListener('change', (m) => {
+					try {
+						const s = localStorage.getItem('fs-darkmode');
+						if (s === 'true' || s === 'false') return;
+						if (s === null && (sd === 'dark' || sd === 'light')) return;
+					} catch (e) {}
+					set(m.matches);
+				});
+			})();
+		</script>
+		<script>
+			/* palette, wallpaper, density, rounding and the five colour axes. Each: localStorage
+			   (this browser) wins; absent -> the router default in window.__fsSD; absent -> the
+			   built-in. */
+			(() => {
+				/* PER READ, not once around the block. A browser that refuses storage (Firefox with
+				   dom.storage.enabled=false, "block all cookies" in Chrome/Safari, several WebViews)
+				   throws a SecurityError on the FIRST getItem, and with one try around everything that
+				   aborted the whole pre-paint: dark mode still applied — it guards narrowly, three
+				   blocks up — while palette, density, rounding, wallpaper, the pattern axes, the five
+				   colour axes, the four surfaces, tint strength and photo dim were all skipped, so a
+				   router that had saved defaults painted none of them. Storage failing must mean "this
+				   browser has no override", which is exactly what the live applier's lsGet already
+				   means (fs-prefs.js). The outer try stays as the last resort for everything else. */
+				const lsGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+				try {
+					const root = document.querySelector(':root'),
+					      sd = window.__fsSD || {};
+					let p = lsGet('fs-palette');
+					/* legacy 'rvht'/'roman' = default colours + a doodle wallpaper, and legacy
+					   'github' = the footstrap default, now stored explicitly. Migrate to the current
+					   explicit value, do NOT clear (an absent key means "inherit the router default",
+					   which is no longer the same as "the built-in default"). The migration is
+					   already redundant, and worth knowing before it is carried forward forever: a
+					   stray value reads as the built-in default in the live applier too
+					   (fs-prefs.js's currentPalette ends `return 'footstrap'`), so deleting this
+					   block changes nothing UNLESS that line goes with it. The doodles they used to
+					   turn on are gone — the Wallpaper axis now paints an SVG the admin uploads — so
+					   the wallpaper half of that migration has nothing to point at and is dropped;
+					   `fs-wallpaper` keeps whatever it holds and the whitelist below reads a doodle
+					   name as off. */
+					if (p === 'rvht' || p === 'roman' || p === 'github') {
+						localStorage.setItem('fs-palette', 'footstrap'); p = 'footstrap';
+					}
+					/* the default palette is a bare :root; every other colourway is opt-in and
+					   carries its own value. The list is the same one fs-prefs.js validates
+					   against — a name in one and not the other paints here and is taken away by
+					   the first live change. */
+					if (p === null) p = sd.palette || null;
+					if (p === 'hicontrast' || p === 'bootstrap' || p === '2020') root.setAttribute('data-palette', p);
+					else root.removeAttribute('data-palette');
+
+					/* Wallpaper: off | pattern (the uploaded SVG, tiled and recoloured) | file (the
+					   uploaded photo). The url() and the two pattern numbers are set BEFORE the
+					   attribute for the reason every axis here is: the other order paints one frame
+					   with the tile at the previous size. sd.pattern is the cache-bust token, already
+					   whitelisted to hex above, so nothing user-controlled reaches the url(). */
+					const pu = sd.pattern;
+					if (pu) root.style.setProperty('--fs-pattern-url', 'url("/luci-static/footstrap/pattern.svg?v=' + pu + '")');
+					const psRaw = lsGet('fs-pattern-size');
+					const ps = (psRaw !== null) ? parseInt(psRaw, 10) : sd.pattern_size;
+					if (ps >= 40 && ps <= 1600 && ps !== 440) root.style.setProperty('--fs-pattern-size', ps + 'px');
+					const pstRaw = lsGet('fs-pattern-strength');
+					const pst = (pstRaw !== null) ? parseInt(pstRaw, 10) : sd.pattern_strength;
+					if (pst >= 0 && pst <= 100 && pst !== 20) root.style.setProperty('--fs-pattern-strength', String(pst / 100));
+					let pi = lsGet('fs-pattern-ink');
+					if (pi === null) pi = sd.pattern_ink || null;
+					if (pi === 'original') root.setAttribute('data-pattern-ink', 'original');
+					else root.removeAttribute('data-pattern-ink');
+
+					let w = lsGet('fs-wallpaper');
+					if (w === null) w = sd.wallpaper || null;
+					if (w === 'pattern' || w === 'file') root.setAttribute('data-wallpaper', w);
+					else root.removeAttribute('data-wallpaper');
+
+					/* Density: Compact/Normal/Large, a pure token axis (02-tokens multiplies the
+					   type and space ladders). Normal is a bare :root, so the removeAttribute
+					   half matters as much as the set — without it a browser that switched back
+					   to Normal would paint one frame still compressed. */
+					let dn = lsGet('fs-density');
+					if (dn === null) dn = sd.density || null;
+					if (dn === 'compact' || dn === 'large') root.setAttribute('data-density', dn);
+					else root.removeAttribute('data-density');
+
+					/* Rounding 0-20px (02-tokens derives the control/chip radii from it). The
+					   default is a LITERAL: this runs before the stylesheet and cannot read the
+					   CSS token, so axes.mjs is the only thing checking the two agree. sd.rounding
+					   is -1 when the router has no default. */
+					const rRaw = lsGet('fs-radius');
+					let r = parseInt(rRaw, 10);
+					if (rRaw === null) r = (sd.rounding >= 0 ? sd.rounding : 12);
+					if (r >= 0 && r <= 20 && r !== 12)
+						root.style.setProperty('--fs-radius-base', r + 'px');
+					/* The five COLOUR axes: Tint (the page CANVAS, so this router is recognisable
+					   at a glance), Accent (the UI colour) and the three status colours. Each is
+					   off, a HUE 1-360 that rotates the palette's own colour, or a '#rrggbb' that
+					   replaces it outright — mirrors colorAxis()/normColor() in fs-prefs.js.
+					   Set the PROPERTY BEFORE THE ATTRIBUTE that switches the rotation on, or a
+					   reload paints one frame in the previous colour.
+					   The two modes CLEAR each other's property: this script runs once per load, so
+					   nothing here is stale — but the live applier calls the same sequence on a
+					   browser where the other mode was in effect, and axes.mjs holds the two copies
+					   to one shape. */
+					const hex = /^#[0-9a-f]{6}$/i;
+					const colour = (key, sdVal, attr, hueProp, colorProp) => {
+						const raw = lsGet(key);
+						const v = String((raw === null ? sdVal : raw) ?? '').trim();
+						if (hex.test(v)) {
+							root.style.removeProperty(hueProp);
+							root.style.setProperty(colorProp, v.toLowerCase());
+							root.setAttribute(attr, 'hex');
+							return;
+						}
+						const h = parseInt(v, 10);
+						if (h >= 1 && h <= 360) {
+							root.style.removeProperty(colorProp);
+							root.style.setProperty(hueProp, String(h));
+							root.setAttribute(attr, 'hue');
+						}
+					};
+					colour('fs-tint',   sd.tint,   'data-tint',   '--fs-tint-h',   '--fs-bg');
+					colour('fs-accent', sd.accent, 'data-accent', '--fs-accent-h', '--fs-accent');
+					colour('fs-good',   sd.good,   'data-good',   '--fs-good-h',   '--fs-good');
+					colour('fs-warn',   sd.warn,   'data-warn',   '--fs-warn-h',   '--fs-warn');
+					colour('fs-danger', sd.danger, 'data-danger', '--fs-danger-h', '--fs-danger');
+					/* The four SURFACE axes — the cards, the inset controls, the chrome bar and the
+					   hairlines. Simpler than the colour axes above and deliberately so: no hue
+					   mode and therefore no attribute, just the token or nothing. Mirrors
+					   surfaceAxis() in fs-prefs.js. */
+					const surface = (key, sdVal, prop) => {
+						const raw = lsGet(key);
+						const v = String((raw === null ? sdVal : raw) ?? '').trim().toLowerCase();
+						if (hex.test(v)) root.style.setProperty(prop, v);
+					};
+					surface('fs-card',    sd.card,    '--fs-panel-base');
+					surface('fs-control', sd.control, '--fs-panel2-base');
+					surface('fs-bar',     sd.bar,     '--fs-bar-bg');
+					surface('fs-line',    sd.line,    '--fs-border-base');
+					/* The uploaded photo's URL: ROUTER-SIDE (the token comes purely from
+					   window.__fsSD — no localStorage). Set the property whenever a valid token
+					   exists; whether it PAINTS is the wallpaper axis above (data-wallpaper="file"),
+					   so a router whose default wallpaper is 'file' shows it here, pre-login included.
+					   The token is already whitelisted to hex above, the same as sd.pattern before it, so
+					   nothing user-controlled reaches the url(); the test is repeated here anyway
+					   because this one interpolates into a url() inside a STYLE property, where a
+					   second reading costs one regex and the failure would be silent. */
+					const lb = sd.login_bg;
+					if (lb && (/^[a-f0-9]{6,64}$/).test(lb))
+						root.style.setProperty('--fs-login-bg-url', "url('/luci-static/footstrap/bg?v=" + lb + "')");
+					/* the router-identity Tint's density (default 100% = the designed chroma). */
+					const tsRaw = lsGet('fs-tint-strength');
+					let ts = parseInt(tsRaw, 10);
+					if (tsRaw === null) ts = (sd.tint_strength >= 0 ? sd.tint_strength : 100);
+					if (ts >= 0 && ts <= 200 && ts !== 100)
+						root.style.setProperty('--fs-tint-strength', String(ts / 100));
+					/* the File photo's scrim opacity — an ordinary per-browser axis, same shape as
+					   the tint strength above; the 74% default lives in the CSS token. */
+					const pdRaw = lsGet('fs-photo-dim');
+					let pd = parseInt(pdRaw, 10);
+					if (pdRaw === null) pd = (sd.photo_dim >= 0 ? sd.photo_dim : 74);
+					if (pd >= 0 && pd <= 100 && pd !== 74)
+						root.style.setProperty('--fs-photo-dim', pd + '%');
+				} catch (e) {}
+			})();
+		</script>
+		<script>
+			/* the icon-rail preference, so a reload doesn't flash the full sidebar first. Not a
+			   router-wide default (it is a transient chrome collapse, not an appearance choice). */
+			(() => {
+				try {
+					if (localStorage.getItem('fs-rail') === 'true')
+						document.querySelector(':root').setAttribute('data-rail', 'true');
+				} catch (e) {}
+			})();
+		</script>
+		<script>
+			/* the CLIENT's saved layout overrides the server's stamp above, before paint. Only a
+			   KNOWN value is honoured — a corrupt one leaves the stamp standing rather than
+			   blanking the attribute every layout rule matches on. */
+			(() => {
+				try {
+					const saved = localStorage.getItem('fs-layout');
+					if (saved === 'top' || saved === 'sidebar')
+						document.querySelector(':root').setAttribute('data-layout', saved);
+				} catch (e) {}
+			})();
+		</script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="darkreader-lock">
+		{# TWO <link rel=preload> FOR THE CHROME FACES USED TO SIT HERE, and the package still carries
+		   no webfonts: --fs-font-sans and --fs-font-mono name Manrope and JetBrains Mono FIRST and
+		   the system stack after, so a browser that has either installed locally uses it and one
+		   that does not falls through silently — no request, no 404, no flash. What follows the
+		   stylesheet below is the OPT-IN: a router whose admin installed faces of their own under
+		   /etc/footstrap/fonts (see the option block at the top of this file).
+
+		   The preload pair is why both tags down there are written the way they are. A preload is
+		   not in the stylesheet, so deleting the @font-face rules alone left these two behind and
+		   every page went on asking the router for files that were gone: SIX 404s per page, and
+		   nothing in CSS could have told anyone. So the sheet link is emitted only when the TOKEN
+		   says the sheet exists — set the option after the file, never before. #}
+		{# `data-fs-shell` marks the SHELL's own CSS: on every nav the SPA router asks whether a
+		   VIEW put CSS in the document, and this is how it tells its own sheet from an app's. #}
+		<link rel="stylesheet" data-fs-shell href="{{ media }}/cascade.css?v={{ pkgs_update_time }}">
+		{% if (_sd_ftok != ''): %}
+		{# The generated @font-face sheet, and ONLY the faces: the families themselves come from the
+		   element below, so `uci set footstrap.settings.font_sans=…` by hand takes effect without
+		   regenerating anything. The token is the sheet's md5 — uhttpd sends no Cache-Control, so
+		   without it a browser applies heuristic freshness and keeps the previous face for days. #}
+		<link rel="stylesheet" data-fs-shell href="{{ media }}/fonts/fonts.css?v={{ _sd_ftok }}">
+		{% endif %}
+		{% if (_sd_fsans != '' || _sd_fmono != ''): %}
+		{# The router's own font stacks. Unlayered, so it beats the `tokens` layer that declares the
+		   defaults no matter what order the two sheets arrive in — a layered rule always loses to an
+		   unlayered one, which is the same reason a theme rule never needs !important to outrank
+		   base. Values are whitelisted at the top of this file; nothing here escapes them. #}
+		<style data-fs-shell>:root { {% if (_sd_fsans != ''): %}--fs-font-sans: {{ _sd_fsans }};{% endif %}{% if (_sd_fmono != ''): %} --fs-font-mono: {{ _sd_fmono }};{% endif %} }</style>
+		{% endif %}
+		<link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
+		<link rel="icon" href="{{ media }}/logo.svg" sizes="any">
+		{# THE ROUTER ON A HOME SCREEN. A phone is where LuCI is opened when something is wrong with
+		   the network, and a browser tab is a poor place to keep it: the manifest lets the admin
+		   install this page as an app, which gets it an icon, its own window and no address bar.
+
+		   Both files are STATIC and cannot be otherwise — a theme may not register a dispatcher node,
+		   so there is nothing here that could render them per request. That fixes two values:
+
+		     start_url/scope — `/cgi-bin/luci/`, uhttpd's own default and the path this template is
+		       being served from on every stock install. An admin who moved LuCI elsewhere gets an
+		       installed app that opens the standard path; the browser tab is unaffected either way.
+		     background/theme_color — the DEFAULT palette's page colour (#f6f8fa). The manifest is
+		       read once at install time and cannot follow a live Appearance change, so it carries
+		       the default rather than a value that would be wrong for everyone who changed it. It
+		       only ever paints the splash and the window chrome, never the page.
+
+		   Chrome offers its install prompt on a secure context only, so over plain HTTP this is
+		   iOS's Add to Home Screen (which reads the manifest and this apple-touch-icon) plus the
+		   icons themselves. Nothing here is on the page's critical path: a manifest is fetched at
+		   idle priority and never blocks a paint.
+
+		   `.json`, NOT the conventional `.webmanifest`, and that is the server's doing: uhttpd's
+		   built-in MIME map has no entry for that extension. Measured on the stand — the same bytes
+		   served as `app.webmanifest` come back `application/octet-stream`, as `t.manifest`
+		   `text/cache-manifest`, and only as `.json` do they come back with a JSON type, which is
+		   what every browser accepts a manifest as. There is no per-extension setting to fix from
+		   here: the map is compiled into uhttpd. #}
+		<link rel="manifest" href="{{ media }}/manifest.json?v={{ pkgs_update_time }}">
+		{# iOS reads THIS link and never the manifest's icons array — and it is happy with the 512
+		   square the manifest also uses, which it scales. One raster serves both, see
+		   tools/build-icons.mjs. #}
+		<link rel="apple-touch-icon" href="{{ media }}/app-icon-512.png">
+		{% if (dispatched?.css): %}
+		{# The `css` property of the dispatched menu.d node — an app naming a stylesheet the server
+		   should link for its page, instead of the view injecting one at module eval (which is what
+		   fs-sheets.js spends its existence containing).
+
+		   `dispatched`, not `node`: the dispatcher exports the resolved node as `dispatched`
+		   (`runtime.env.dispatched = resolved.node`) and never binds a `node`. Every ucode theme
+		   carried the same typo until it was fixed upstream in openwrt/luci#8920, so the link had
+		   never once been emitted. Requires `css: 'string'` in the dispatcher's node schema, added
+		   by that same commit — on a luci-base without it the property is filtered out of the tree
+		   and this stays false, which is what 24.10 and 25.12 do.
+
+		   uhttpd sends no Cache-Control, so without a version key the browser applies HEURISTIC
+		   freshness and can serve a stale app stylesheet for days after an upgrade.
+
+		   Deliberately NOT `data-fs-shell`: this sheet belongs to one page, so the SPA router must
+		   judge and contain it like any other app sheet rather than let it ride along. #}
+		<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}?v={{ pkgs_update_time }}">
+		{% endif %}
+		{% if (css): %}
+		{# no `title` attribute: on a <style> it names a STYLE SHEET SET, making this a "preferred"
+		   alternate sheet the user can switch off in Firefox's Page Style menu. `data-fs-shell`
+		   as above — every OTHER sheet in <head> came from an app, and the SPA router treats an
+		   invasive one as a page it must not hand on (filemanager, banip, adblock inject one). #}
+		<style data-fs-shell>{{ css }}</style>
+		{% endif %}
+		{# The catalogue is a CGI SPAWN on the critical path — 30 ms measured on the router — and at
+		   lang=en it spends them to deliver 13 bytes (`window.TR={};`): there is no en catalogue,
+		   because the msgids already ARE English. The process is the cost, not the data. So emit
+		   those 13 bytes inline when this language has no catalogue, and keep the tag when it has.
+		   The probe MIRRORS the server: determine_request_language() (dispatcher.uc) loads this
+		   request's catalogue with load_catalog(lang, '/usr/lib/lua/luci/i18n'), which takes every
+		   `*.<lang>.lmo` in that directory — so a router that does ship an en catalogue still gets
+		   the tag. Deciding by language NAME would silently drop it.
+		   Fails OPEN (a throwing probe keeps the tag): a missing catalogue makes every `_()` render
+		   English and report nothing, which is the one failure this must never risk. #}
+		{%- let has_catalog = true;
+		    try { has_catalog = length(require('fs').glob(`/usr/lib/lua/luci/i18n/*.${dispatcher.lang}.lmo`)) > 0; } catch (e) {} %}
+		{% if (has_catalog): %}
+		<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+		{% else %}
+		<script>window.TR={};</script>
+		{% endif %}
+		{# the one asset stock LuCI leaves without a cache key. Must stay SYNCHRONOUS and
+		   un-deferred: luci.js captures `window.cbi_init` in its constructor. `defer` is not an
+		   option for the catalogue above either — footer.ut runs `L.require('menu-footstrap')`
+		   inline while the parser is still running, so a module's `_()` would race a deferred
+		   window.TR and win silently. #}
+		<script src="{{ resource }}/cbi.js?v={{ pkgs_update_time }}"></script>
+	</head>

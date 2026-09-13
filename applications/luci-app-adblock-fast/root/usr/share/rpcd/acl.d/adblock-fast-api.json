@@ -1,0 +1,19 @@
+{
+	"adblock-fast-api": {
+		"description": "Grant API access for adblock-fast remote control",
+		"read": {
+			"ubus": {
+				"luci.adblock-fast": [
+					"getInitStatus"
+				]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.adblock-fast": [
+					"setInitAction"
+				]
+			}
+		}
+	}
+}

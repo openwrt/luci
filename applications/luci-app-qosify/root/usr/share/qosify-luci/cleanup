@@ -1,0 +1,16 @@
+#!/bin/sh
+# Remove leftover qosify qdiscs/ifb devices after stop
+for ifb in /sys/class/net/ifb-*; do
+	[ -e "$ifb" ] || continue
+	ifb="${ifb##*/}"; dev="${ifb#ifb-}"
+	tc qdisc del dev "$dev" clsact 2>/dev/null
+	tc qdisc del dev "$dev" root 2>/dev/null
+	ip link set "$ifb" down 2>/dev/null
+	ip link del "$ifb" 2>/dev/null
+done
+for dev in $(uci -q get qosify.wan.name) $(uci -q get qosify.wandev.name) pppoe-wan; do
+	[ -n "$dev" ] || continue
+	tc qdisc del dev "$dev" clsact 2>/dev/null
+	tc qdisc del dev "$dev" root 2>/dev/null
+done
+exit 0

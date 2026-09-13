@@ -1,0 +1,37 @@
+{
+	"luci-app-package-manager": {
+		"description": "Grant access to package management",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/libexec/package-manager-call list-installed": [ "exec" ],
+				"/usr/libexec/package-manager-call list-available": [ "exec" ],
+				"/etc/opkg.conf": [ "read" ],
+				"/etc/opkg/*.conf": [ "read" ],
+				"/etc/apk/repositories": [ "read" ],
+				"/etc/apk/repositories.d/distfeeds.list": [ "read" ],
+				"/etc/apk/repositories.d/customfeeds.list": [ "read" ]
+			},
+			"ubus": {
+				"luci": [ "getMountPoints" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/usr/libexec/package-manager-call install": [ "exec" ],
+				"/usr/libexec/package-manager-call install *": [ "exec" ],
+				"/usr/libexec/package-manager-call remove *": [ "exec" ],
+				"/usr/libexec/package-manager-call update": [ "exec" ],
+				"/usr/libexec/package-manager-call upgrade": [ "exec" ],
+				"/usr/libexec/package-manager-call upgrade *": [ "exec" ],
+				"/etc/opkg.conf": [ "write" ],
+				"/etc/opkg/*.conf": [ "write" ],
+				"/etc/apk/repositories": [ "write" ],
+				"/etc/apk/repositories.d/distfeeds.list": [ "write" ],
+				"/etc/apk/repositories.d/customfeeds.list": [ "write" ],
+				"/tmp/upload.ipk": [ "write" ],
+				"/tmp/upload.apk": [ "write" ]
+			}
+		}
+	}
+}
