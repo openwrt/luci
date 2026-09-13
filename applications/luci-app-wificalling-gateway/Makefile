@@ -6,6 +6,9 @@ PKG_RELEASE:=1
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 PKG_MAINTAINER:=Smth Dagg <smthdagg@gmail.com>
+# luci.mk assigns the main package's Maintainer from LUCI_MAINTAINER
+# (default: "OpenWrt LuCI community"); set it so the author is credited.
+LUCI_MAINTAINER:=Smth Dagg <smthdagg@gmail.com>
 
 LUCI_TITLE:=LuCI support for per-device Wi-Fi Calling gateway
 LUCI_URL:=https://github.com/smthdagg/luci-app-wificalling-gateway
@@ -29,3 +32,5 @@ endef
 # $(TOPDIR)/feeds/luci path breaks when the feed is checked out under a
 # different name in feeds.conf.
 include ../../luci.mk
+
+# call BuildPackage - OpenWrt buildroot signature
