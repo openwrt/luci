@@ -1094,6 +1094,7 @@ header {
 	padding: 10px 10px 11px;
 	line-height: 19px;
 	text-decoration: none;
+	transition: background-color 0.15s ease-in, color 0.15s ease-in;
 }
 
 .nav a:hover {
@@ -1177,6 +1178,8 @@ a.menu:after {
 	border-radius: 0 0 6px 6px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	background-clip: padding-box;
+	opacity: 0;
+	transition: opacity 0.15s ease-in;
 }
 
 .dropdown-menu li {
@@ -1193,6 +1196,7 @@ a.menu:after {
 	line-height: 18px;
 	color: #808080;
 	text-shadow: 0 1px 0 #fff;
+	transition: color 0.15s ease-in;
 }
 
 .dropdown-menu a:hover {
@@ -1206,6 +1210,7 @@ a.menu:after {
 
 .dropdown:hover ul.dropdown-menu {
 	left: 0;
+	opacity: 1;
 }
 
 .dropdown-menu .dropdown-menu {
