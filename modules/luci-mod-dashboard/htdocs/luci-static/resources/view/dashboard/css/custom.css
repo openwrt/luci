@@ -1,11 +1,11 @@
 /**
- * Dashboard styles — theme independent.
- * Colours map to the LuCI theme variables where a theme defines them and fall
- * back to a self-contained light / dark palette otherwise.
+ * Dashboard styles. Cards, tabs, tables and badges are standard LuCI
+ * elements styled by the theme; this file only lays out the grids and
+ * draws the charts. Colours map to the LuCI theme variables where a theme
+ * defines them and fall back to a self-contained light / dark palette.
  */
 
 .Dashboard {
-	--dashboard-surface: var(--background-color-high, #ffffff);
 	--dashboard-surface-alt: var(--background-color-medium, #f2f4f7);
 	--dashboard-text: var(--text-color-high, #1f2933);
 	--dashboard-text-muted: var(--text-color-low, #6b7280);
@@ -13,7 +13,6 @@
 	--dashboard-primary: var(--primary-color-high, #1976d2);
 	--dashboard-success: var(--success-color-high, #00ac59);
 	--dashboard-warn: var(--warn-color-high, #e0a800);
-	--dashboard-error: var(--error-color-high, #e53935);
 	--dashboard-series-1: var(--dashboard-primary);
 	--dashboard-series-2: var(--dashboard-success);
 	--dashboard-series-3: var(--dashboard-warn);
@@ -22,17 +21,16 @@
 	--dashboard-series-6: #19b5c8;
 	--dashboard-series-7: #b0367c;
 	--dashboard-series-8: #9c9a1c;
-	--dashboard-mono: var(--font-mono, ui-monospace, Menlo, Consolas, monospace);
-	--dashboard-radius: 12px;
 	--dashboard-gap: 16px;
 
 	display: grid;
+	/* minmax(0, …): a wide tab menu must scroll, not widen every row. */
+	grid-template-columns: minmax(0, 1fr);
 	gap: var(--dashboard-gap);
 	color: var(--dashboard-text);
 }
 
 [data-darkmode="true"] .Dashboard {
-	--dashboard-surface: var(--background-color-high, #1c2027);
 	--dashboard-surface-alt: var(--background-color-medium, #262b34);
 	--dashboard-text: var(--text-color-high, #e6e8eb);
 	--dashboard-text-muted: var(--text-color-low, #9aa3ad);
@@ -46,7 +44,6 @@
 
 @media (prefers-color-scheme: dark) {
 	:root:not([data-darkmode="false"]) .Dashboard {
-		--dashboard-surface: var(--background-color-high, #1c2027);
 		--dashboard-surface-alt: var(--background-color-medium, #262b34);
 		--dashboard-text: var(--text-color-high, #e6e8eb);
 		--dashboard-text-muted: var(--text-color-low, #9aa3ad);
@@ -73,55 +70,10 @@
 	align-items: stretch;
 }
 
-.dashboard-charts > .dashboard-card,
-.dashboard-charts > .dashboard-card > .dashboard-card-body {
-	display: flex;
-	flex-direction: column;
-}
-
-.dashboard-charts > .dashboard-card > .dashboard-card-body {
-	flex: 1;
-}
-
-.dashboard-card-body > .dashboard-donut,
-.dashboard-card-body > .dashboard-empty {
-	margin-block: auto;
-}
-
-.dashboard-extra {
-	display: grid;
-	gap: var(--dashboard-gap);
-}
-
-/* ---- Card ---- */
-.Dashboard .dashboard-card {
-	background: var(--dashboard-surface);
-	border: 1px solid var(--dashboard-border);
-	border-radius: var(--dashboard-radius);
-	padding: 18px 20px;
-	min-width: 0;
-}
-
-.dashboard-card-head {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: 10px;
-	margin-bottom: 12px;
-}
-
-.Dashboard .dashboard-card-title {
+/* Grid gaps space the cards, not the theme's section margin. */
+.dashboard-kpi-row > .cbi-section,
+.dashboard-charts > .cbi-section {
 	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 15px;
-	font-weight: 700;
-	color: var(--dashboard-text);
-}
-
-.dashboard-card-desc {
-	font-size: 12px;
-	color: var(--dashboard-text-muted);
 }
 
 /* ---- Icon (mask keeps the SVG files, colour follows the theme) ---- */
@@ -139,7 +91,6 @@
 	display: flex;
 	align-items: center;
 	gap: 14px;
-	padding: 18px;
 }
 
 .dashboard-kpi-icon {
@@ -148,7 +99,6 @@
 	height: 56px;
 	border-radius: 14px;
 	background: var(--dashboard-surface-alt);
-	background: color-mix(in srgb, var(--dashboard-primary) 14%, transparent);
 	color: var(--dashboard-primary);
 	position: relative;
 }
@@ -171,24 +121,11 @@
 	min-width: 0;
 }
 
-.dashboard-kpi-title {
-	font-size: 12.5px;
-	color: var(--dashboard-text-muted);
-}
-
 .dashboard-kpi-value {
+	display: block;
 	font-size: 22px;
-	font-weight: 700;
-	letter-spacing: -0.02em;
 	line-height: 1.15;
 	margin: 2px 0;
-}
-
-.dashboard-kpi-value small {
-	font-size: 13px;
-	font-weight: 400;
-	color: var(--dashboard-text-muted);
-	margin-left: 3px;
 }
 
 .dashboard-kpi-sub {
@@ -196,62 +133,6 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 6px;
-	font-size: 12px;
-	color: var(--dashboard-text-muted);
-	min-width: 0;
-}
-
-.dashboard-kpi-sub .dashboard-mono {
-	color: var(--dashboard-text);
-}
-
-/* ---- Badges (LuCI .label) ---- */
-.Dashboard .label {
-	margin: 0;
-	padding: 2px 8px;
-	font-size: 11px;
-	font-weight: 700;
-	text-transform: none;
-	border-radius: 999px;
-	line-height: 1.5;
-	background: var(--dashboard-surface-alt);
-	color: var(--dashboard-text-muted);
-}
-
-.Dashboard .label.success {
-	background: var(--dashboard-surface-alt);
-	background: color-mix(in srgb, var(--dashboard-success) 18%, transparent);
-	color: var(--dashboard-success);
-}
-
-.Dashboard .label.important {
-	background: var(--dashboard-surface-alt);
-	background: color-mix(in srgb, var(--dashboard-error) 16%, transparent);
-	color: var(--dashboard-error);
-}
-
-.Dashboard .label.warning {
-	background: var(--dashboard-surface-alt);
-	background: color-mix(in srgb, var(--dashboard-warn) 22%, transparent);
-	color: var(--dashboard-warn);
-}
-
-.Dashboard .label.notice {
-	background: var(--dashboard-surface-alt);
-	background: color-mix(in srgb, var(--dashboard-primary) 14%, transparent);
-	color: var(--dashboard-primary);
-}
-
-.dashboard-mono {
-	font-family: var(--dashboard-mono);
-	font-size: 12.5px;
-}
-
-.dashboard-empty {
-	padding: 24px 12px;
-	text-align: center;
-	color: var(--dashboard-text-muted);
-	font-size: 13px;
 }
 
 /* ---- Donut ---- */
@@ -369,6 +250,7 @@
 .dashboard-bars {
 	--dashboard-plot-h: 170px;
 	--dashboard-label-h: 40px;
+	--dashboard-slot: 56px;
 	display: grid;
 	grid-template-columns: 44px minmax(0, 1fr);
 }
@@ -408,14 +290,11 @@
 
 .dashboard-bars-grid {
 	position: absolute;
+	top: 0;
 	left: 0;
 	right: 0;
-	pointer-events: none;
-}
-
-.dashboard-bars-grid {
-	top: 0;
 	height: var(--dashboard-plot-h);
+	pointer-events: none;
 }
 
 .dashboard-bars-grid i {
@@ -426,7 +305,7 @@
 }
 
 .dashboard-bars-col {
-	flex: 1 0 var(--dashboard-slot, 44px);
+	flex: 1 0 var(--dashboard-slot);
 	display: grid;
 	grid-template-rows: var(--dashboard-plot-h) var(--dashboard-label-h);
 	min-width: 0;
@@ -475,7 +354,7 @@
 	transform-origin: top right;
 	text-align: right;
 	overflow: visible;
-	max-width: var(--dashboard-slot, 44px);
+	max-width: var(--dashboard-slot);
 }
 
 .dashboard-legend-inline i.dashboard-bar-ok { background: var(--dashboard-success); }
@@ -483,257 +362,24 @@
 .dashboard-legend-inline i.dashboard-bar-up { background: var(--dashboard-series-1); }
 .dashboard-legend-inline i.dashboard-bar-down { background: var(--dashboard-series-2); }
 
-/* ---- Tabs: LuCI ui.tabs behaviour, dashboard look (themes style
-   .cbi-tabmenu very differently, so the menu is restyled here) ---- */
-.Dashboard .dashboard-tabs {
-	padding: 0;
-	overflow: hidden;
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0;
-	height: auto;
-	margin: 0;
-	padding: 0 10px;
-	list-style: none;
-	background: none;
-	border: 0;
-	border-bottom: 1px solid var(--dashboard-border);
-	border-radius: 0;
-	box-shadow: none;
-	overflow: visible;
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu > li {
-	flex: 0 0 auto;
-	display: block;
-	height: auto;
-	max-width: none;
-	margin: 0 0 -1px;
-	padding: 0;
-	background: none;
-	border: 0;
-	border-bottom: 2px solid transparent;
-	border-radius: 0;
-	box-shadow: none;
-	color: var(--dashboard-text-muted);
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu > li:hover {
-	background: none;
-	color: var(--dashboard-text);
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu > li.cbi-tab {
-	color: var(--dashboard-primary);
-	border-bottom-color: var(--dashboard-primary);
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu > li > a {
-	display: block;
-	padding: 13px 14px 11px;
-	margin: 0;
-	line-height: 1.4;
-	font-size: 13.5px;
-	font-weight: 400;
-	color: inherit;
-	background: none;
-	border: 0;
-	border-radius: 0;
-	box-shadow: none;
-	text-decoration: none;
-	white-space: nowrap;
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu > li.cbi-tab > a {
-	font-weight: 700;
-}
-
-.Dashboard .dashboard-tabs .cbi-tabmenu > li > a:focus-visible {
-	outline: 2px solid var(--dashboard-primary);
-	outline-offset: -2px;
-	text-decoration: none;
-}
-
-.dashboard-tab-group > [data-tab] {
-	display: none;
-}
-
-.dashboard-tab-group > [data-tab-active="true"] {
-	display: block;
-}
-
-/* ---- Key / value tables ---- */
-.dashboard-kv-grid {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-}
-
-.dashboard-kv-grid > .dashboard-kv-col + .dashboard-kv-col {
-	border-left: 1px solid var(--dashboard-border);
-}
-
-.dashboard-kv-head {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	gap: 10px;
-	padding: 12px 18px;
-	background: var(--dashboard-surface-alt);
-	font-size: 12.5px;
-	font-weight: 700;
-	color: var(--dashboard-text-muted);
-}
-
-.Dashboard .dashboard-kv {
-	width: 100%;
-	margin: 0;
-	border-collapse: collapse;
-	font-size: 13.5px;
-}
-
-.Dashboard .dashboard-kv td {
-	padding: 12px 18px;
-	border-top: 1px solid var(--dashboard-border);
-	vertical-align: top;
-}
-
-.Dashboard .dashboard-kv tr:first-child td {
-	border-top: 0;
-}
-
-.Dashboard .dashboard-kv td:first-child {
-	width: 9rem;
-	padding-right: 0;
-	color: var(--dashboard-text-muted);
-	white-space: nowrap;
-}
-
-.Dashboard .dashboard-kv td:last-child {
-	font-weight: 700;
-	overflow-wrap: anywhere;
-}
-
-.Dashboard .dashboard-kv td.dashboard-mono {
-	font-weight: 400;
-}
-
-.dashboard-stack span {
-	display: block;
-}
-
-/* ---- Data tables ---- */
-.dashboard-table-wrap {
-	overflow-x: auto;
-}
-
-.Dashboard .dashboard-table {
-	width: 100%;
-	min-width: 520px;
-	margin: 0;
-	border-collapse: collapse;
-}
-
-.Dashboard .dashboard-table th {
-	padding: 12px 18px;
-	text-align: left;
-	background: var(--dashboard-surface-alt);
-	font-size: 12.5px;
-	font-weight: 700;
-	color: var(--dashboard-text-muted);
-	white-space: nowrap;
-}
-
-.Dashboard .dashboard-table td {
-	padding: 13px 18px;
-	font-size: 13.5px;
-	border-top: 1px solid var(--dashboard-border);
-	vertical-align: middle;
-}
-
-.Dashboard .dashboard-table tfoot td {
-	color: var(--dashboard-text-muted);
-	font-size: 12.5px;
-}
-
-.Dashboard .dashboard-table .dashboard-table-empty td {
-	text-align: center;
-	color: var(--dashboard-text-muted);
-	padding: 28px 18px;
-}
-
-.Dashboard .dashboard-table td.dashboard-num,
-.Dashboard .dashboard-table th.dashboard-num {
-	text-align: right;
-	white-space: nowrap;
-}
-
-.dashboard-section-title {
-	padding: 12px 18px;
-	background: var(--dashboard-surface-alt);
-	font-size: 12.5px;
-	font-weight: 700;
-	color: var(--dashboard-text-muted);
-	border-top: 1px solid var(--dashboard-border);
-}
-
-/* ---- Signal cell ---- */
-.dashboard-signal {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	white-space: nowrap;
-}
-
-.Dashboard .dashboard-signal .label {
-	font-family: var(--dashboard-mono);
-	font-size: 12px;
-}
-
-/* ---- Wireless network mini cards ---- */
+/* ---- Wireless network boxes (LuCI .ifacebox) ---- */
 .dashboard-net-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
 	gap: 12px;
-	padding: 16px 18px;
+	margin-bottom: 18px;
 }
 
-.dashboard-net {
+.Dashboard .ifacebox {
+	margin: 0;
+}
+
+.Dashboard .ifacebox-body {
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
-	gap: 10px 14px;
-	align-items: start;
-	padding: 14px 16px;
-	border: 1px solid var(--dashboard-border);
-	border-radius: 10px;
-	background: var(--dashboard-surface);
-}
-
-.dashboard-net-off {
-	background: var(--dashboard-surface-alt);
-	opacity: 0.8;
-}
-
-.dashboard-net-head {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 8px;
-	font-size: 14px;
-	font-weight: 700;
-	min-width: 0;
-	overflow-wrap: anywhere;
-}
-
-.dashboard-net-off .dashboard-net-head {
-	font-weight: 400;
-	color: var(--dashboard-text-muted);
-}
-
-.dashboard-net-count {
-	text-align: right;
+	gap: 10px;
+	padding: 12px 14px;
+	text-align: left;
+	white-space: normal;
 }
 
 .dashboard-net-count b {
@@ -752,10 +398,10 @@
 }
 
 .dashboard-net-fields {
-	grid-column: 1 / -1;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 8px 14px;
+	overflow-wrap: anywhere;
 	font-size: 12.5px;
 }
 
@@ -765,17 +411,7 @@
 	color: var(--dashboard-text-muted);
 }
 
-.dashboard-net-fields b {
-	font-weight: 700;
-	overflow-wrap: anywhere;
-}
-
-.dashboard-net-fields b.dashboard-mono {
-	font-weight: 400;
-}
-
 .dashboard-net-note {
-	grid-column: 1 / -1;
 	font-size: 12.5px;
 	color: var(--dashboard-text-muted);
 }
@@ -783,15 +419,6 @@
 
 /* ---- Responsive ---- */
 @media screen and (max-width: 760px) {
-	.dashboard-kv-grid {
-		grid-template-columns: 1fr;
-	}
-
-	.dashboard-kv-grid > .dashboard-kv-col + .dashboard-kv-col {
-		border-left: 0;
-		border-top: 1px solid var(--dashboard-border);
-	}
-
 	.dashboard-donut {
 		flex-direction: column;
 		align-items: stretch;
@@ -807,15 +434,6 @@
 		--dashboard-gap: 12px;
 	}
 
-	.Dashboard .dashboard-card {
-		padding: 14px 16px;
-	}
-
-	.Dashboard .dashboard-kpi {
-		padding: 14px 16px;
-		gap: 12px;
-	}
-
 	.dashboard-kpi-icon {
 		width: 46px;
 		height: 46px;
@@ -828,22 +446,5 @@
 
 	.dashboard-bars {
 		--dashboard-plot-h: 140px;
-	}
-
-	.Dashboard .dashboard-kv td,
-	.Dashboard .dashboard-table th,
-	.Dashboard .dashboard-table td,
-	.dashboard-kv-head,
-	.dashboard-section-title {
-		padding-left: 14px;
-		padding-right: 14px;
-	}
-
-	.Dashboard .dashboard-kv td:first-child {
-		width: 7rem;
-	}
-
-	.dashboard-net-grid {
-		padding: 12px 14px;
 	}
 }

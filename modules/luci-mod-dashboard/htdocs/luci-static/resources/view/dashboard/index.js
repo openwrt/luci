@@ -80,15 +80,16 @@ function renderSections(sections) {
 		nodes.push(E('div', { 'class': 'dashboard-charts' }, sections.charts));
 
 	if (sections.tabs.length)
-		nodes.push(E('div', { 'class': 'dashboard-card dashboard-tabs', 'data-section-id': 'dashboard' }, [
-			E('div', { 'class': 'dashboard-tab-group' }, sections.tabs.map(tab => E('div', {
+		nodes.push(E('div', { 'class': 'cbi-map' }, [
+			E('div', { 'class': 'cbi-map-tabbed' }, sections.tabs.map(tab => E('div', {
+				'class': 'cbi-section',
 				'data-tab': tab.id,
 				'data-tab-title': (tab.count != null) ? '%s (%d)'.format(tab.title, tab.count) : tab.title
 			}, tab.content)))
 		]));
 
 	if (sections.extra.length)
-		nodes.push(E('div', { 'class': 'dashboard-extra' }, sections.extra));
+		nodes.push(E('div', {}, sections.extra));
 
 	return nodes;
 }
@@ -120,7 +121,7 @@ function startPolling(includes, root) {
 
 			dom.content(root, renderSections(collectSections(includes, results)));
 
-			const group = root.querySelector('.dashboard-tab-group');
+			const group = root.querySelector('.cbi-map-tabbed');
 			if (group)
 				ui.tabs.initTabGroup(group.childNodes);
 

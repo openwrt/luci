@@ -52,7 +52,6 @@ return baseclass.extend({
 		const active = radios.filter(radio => radio.isactive.value === true).length;
 
 		return charts.kpi({
-			className: 'router-status-wifi',
 			icon: 'wireless',
 			title: _('Wireless clients'),
 			value: [ String(this.params.wifi.devices.length) ],
@@ -63,12 +62,11 @@ return baseclass.extend({
 	renderDistributionChart() {
 		const devices = this.params.wifi.devices;
 		const series = this.params.wifi.radios.map(radio => ({
-			label: [ radio.ssid.value, ' ', E('small', { 'class': 'dashboard-card-desc' }, [ radio.chan.value ]) ],
+			label: [ radio.ssid.value, ' ', E('small', {}, [ radio.chan.value ]) ],
 			value: (radio.isactive.value === true) ? (parseInt(radio.associations.value) || 0) : 0
 		}));
 
 		return charts.card({
-			className: 'router-status-wifi',
 			title: _('Client distribution'),
 			desc: _('by SSID'),
 			body: devices.length
@@ -81,15 +79,15 @@ return baseclass.extend({
 		const devices = this.params.wifi.devices.slice().sort((a, b) => rssiOf(b) - rssiOf(a));
 
 		return charts.card({
-			className: 'router-status-wifi',
 			title: _('Signal Strength'),
 			desc: devices.length ? '%s · %s'.format(_('%d clients').format(devices.length), _('dBm')) : '',
 			body: devices.length ? [ charts.barChart({
 				id: 'signal',
-				slot: 44,
-				min: -100,
-				max: -30,
-				ticks: [ -30, -50, -70, -90 ].map(v => ({ value: v, label: '%d'.format(v) })),
+				// iwinfo's nl80211 backend clamps the signal to -110..-40 dBm
+				// (the cfg80211 wext compat range) before deriving quality.
+				min: -110,
+				max: -40,
+				ticks: [ -110, -100, -90, -80, -70, -60, -50, -40 ].map(v => ({ value: v, label: '%d'.format(v) })),
 				items: devices.map(device => ({
 					label: device.hostname.value,
 					title: [ device.hostname.value, device.ssid.value, this.signalText(device) ].join(' · '),
@@ -144,13 +142,11 @@ return baseclass.extend({
 		const scale = this.byteScale(peak);
 
 		return charts.card({
-			className: 'router-status-wifi',
 			title: _('Client traffic'),
 			desc: devices.length ? _('Transferred') : '',
 			body: devices.length ? [
 				charts.barChart({
 					id: 'traffic',
-					slot: 56,
 					max: scale.step * 4,
 					ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: scale.step * n, label: scale.format(scale.step * n) })),
 					items: devices.map(device => ({
@@ -178,45 +174,46 @@ return baseclass.extend({
 			if (radio[key].visible)
 				fields.push(E('div', {}, [
 					E('span', {}, [ radio[key].title ]),
-					E('b', { 'class': (key == 'bssid') ? 'dashboard-mono' : '' }, [ radio[key].value ])
+					E((key == 'bssid') ? 'code' : 'b', {}, [ radio[key].value ])
 				]));
 
-		return E('div', { 'class': 'dashboard-net' + (active ? '' : ' dashboard-net-off') }, [
-			E('div', { 'class': 'dashboard-net-head' }, [
-				E('span', {}, [ radio.ssid.value ]),
-				charts.badge(active ? _('Active') : _('Inactive'), active ? 'success' : 'important')
+		return E('div', { 'class': 'ifacebox' }, [
+			E('div', { 'class': 'ifacebox-head' + (active ? ' active' : '') }, [
+				E('strong', {}, [ radio.ssid.value ])
 			]),
-			E('div', { 'class': 'dashboard-net-count' }, [
-				E('b', {}, [ String(active ? radio.associations.value : 0) ]),
-				E('small', {}, [ radio.associations.title ])
-			]),
-			active
-				? E('div', { 'class': 'dashboard-net-fields' }, fields)
-				: E('div', { 'class': 'dashboard-net-note' }, [ _('Interface is disabled') ])
+			E('div', { 'class': 'ifacebox-body' }, [
+				E('div', { 'class': 'dashboard-net-count' }, [
+					E('b', {}, [ String(active ? radio.associations.value : 0) ]),
+					E('small', {}, [ radio.associations.title ])
+				]),
+				active
+					? E('div', { 'class': 'dashboard-net-fields' }, fields)
+					: E('div', { 'class': 'dashboard-net-note' }, [ _('Interface is disabled') ])
+			])
 		]);
 	},
 
 	renderClientTable() {
 		return charts.table({
-			className: 'assoclist devices-info',
 			head: [
 				_('Hostname'),
 				_('SSID'),
 				'%s / %s'.format(_('Signal'), _('Noise floor')),
-				{ text: _('Up.'), className: 'dashboard-num' },
-				{ text: _('Down.'), className: 'dashboard-num' }
+				{ text: _('Up.'), className: 'right' },
+				{ text: _('Down.'), className: 'right' }
 			],
 			rows: this.params.wifi.devices.map(device => [
 				device.hostname.value,
 				device.ssid.value,
-				E('span', { 'class': 'dashboard-signal' }, [
+				E('span', {}, [
 					charts.badge((device.signal.value.rssi != null) ? '%d %s'.format(device.signal.value.rssi, _('dBm')) : _('No RX signal'), signalGrade(device.signal.value.rssi).kind),
+					' ',
 					(device.signal.value.noise != null)
-						? E('small', { 'class': 'dashboard-card-desc dashboard-mono' }, [ '/ %d %s'.format(device.signal.value.noise, _('dBm')) ])
+						? E('small', {}, [ '/ %d %s'.format(device.signal.value.noise, _('dBm')) ])
 						: ''
 				]),
-				{ text: device.transferred.value.rx, className: 'dashboard-mono dashboard-num' },
-				{ text: device.transferred.value.tx, className: 'dashboard-mono dashboard-num' }
+				{ text: device.transferred.value.rx, className: 'right' },
+				{ text: device.transferred.value.tx, className: 'right' }
 			]),
 			emptyText: _('No wireless clients connected'),
 			foot: [ '', _('Total'), String(this.params.wifi.devices.length), '', '' ]
@@ -226,7 +223,7 @@ return baseclass.extend({
 	renderTab() {
 		return E('div', {}, [
 			E('div', { 'class': 'dashboard-net-grid' }, this.params.wifi.radios.map(radio => this.renderNetworkCard(radio))),
-			E('div', { 'class': 'dashboard-section-title' }, [ _('Wireless clients') ]),
+			E('h3', {}, [ _('Wireless clients') ]),
 			this.renderClientTable()
 		]);
 	},

@@ -39,18 +39,19 @@ return baseclass.extend({
 
 	renderValue(value, mono) {
 		if (Array.isArray(value))
-			return E('span', { 'class': 'dashboard-stack' + (mono ? ' dashboard-mono' : '') }, value.map(v => E('span', {}, [ v ])));
+			return E('span', {}, value.map(v => E('div', {}, [ mono ? E('code', {}, [ v ]) : v ])));
 
 		if (value == null || value === '')
 			return '-';
 
-		return mono ? E('span', { 'class': 'dashboard-mono' }, [ value ]) : value;
+		return mono ? E('code', {}, [ value ]) : value;
 	},
 
+	// Same markup as the status page's system table.
 	renderKeyValueTable(rows) {
-		return E('table', { 'class': 'dashboard-kv' }, rows.map(row => E('tr', {}, [
-			E('td', {}, [ row.title ]),
-			E('td', row.mono ? { 'class': 'dashboard-mono' } : {}, [ this.renderValue(row.value, row.mono) ])
+		return E('table', { 'class': 'table' }, rows.map(row => E('tr', { 'class': 'tr' }, [
+			E('td', { 'class': 'td left', 'width': '33%' }, [ row.title ]),
+			E('td', { 'class': 'td left' }, [ this.renderValue(row.value, row.mono) ])
 		])));
 	},
 
@@ -74,17 +75,17 @@ return baseclass.extend({
 			});
 		}
 
-		return E('div', { 'class': 'dashboard-kv-col' }, [
-			E('div', { 'class': 'dashboard-kv-head' }, [
-				E('span', {}, [ group.title ]),
-				charts.badge(connected ? _('Connected') : _('Not connected'), connected ? 'success' : 'important')
+		return E('div', {}, [
+			E('h3', {}, [
+				group.title, ' ',
+				charts.badge(connected ? _('Connected') : _('Not connected'), connected ? 'success' : 'warning')
 			]),
 			connected ? this.renderKeyValueTable(rows) : charts.empty(_('Not configured or no address acquired'))
 		]);
 	},
 
 	renderInternetTab() {
-		return E('div', { 'class': 'dashboard-kv-grid' }, [
+		return E('div', {}, [
 			this.renderInternetColumn(this.params.internet.v4),
 			this.renderInternetColumn(this.params.internet.v6)
 		]);
@@ -108,15 +109,14 @@ return baseclass.extend({
 		const v6 = this.params.internet.v6;
 		const connected = (v4.connected.value === true || v6.connected.value === true);
 		const sub = [
-			charts.badge('IPv4', (v4.connected.value === true) ? 'success' : 'important'),
-			charts.badge('IPv6', (v6.connected.value === true) ? 'success' : 'important')
+			charts.badge('IPv4', (v4.connected.value === true) ? 'success' : 'warning'),
+			charts.badge('IPv6', (v6.connected.value === true) ? 'success' : 'warning')
 		];
 
 		if (v4.connected.value === true && Array.isArray(v4.addrsv4.value) && v4.addrsv4.value.length)
-			sub.push(E('span', { 'class': 'dashboard-mono' }, [ v4.addrsv4.value[0].split('/')[0] ]));
+			sub.push(E('code', {}, [ v4.addrsv4.value[0].split('/')[0] ]));
 
 		return charts.kpi({
-			className: 'internet-status-self',
 			icon: connected ? 'internet' : 'not-internet',
 			title: _('Internet'),
 			value: [ connected ? _('Connected') : _('Not connected') ],
@@ -128,7 +128,6 @@ return baseclass.extend({
 		const router = this.params.router;
 
 		return charts.kpi({
-			className: 'router-status-self',
 			icon: 'router',
 			title: router.uptime.title,
 			value: [ router.uptime.value || '-' ],

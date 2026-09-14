@@ -33,67 +33,60 @@ return baseclass.extend({
 		return E('span', { 'class': 'label ' + (kind || '') }, [ text ]);
 	},
 
+	// A card is a plain .cbi-section, so the theme draws it.
 	card(opts) {
-		const header = [];
-
-		if (opts.title)
-			header.push(E('h3', { 'class': 'dashboard-card-title' }, [ opts.title ]));
-
-		if (opts.desc)
-			header.push(E('span', { 'class': 'dashboard-card-desc' }, [ opts.desc ]));
-
-		return E('div', { 'class': 'dashboard-card ' + (opts.className || '') }, [
-			header.length ? E('div', { 'class': 'dashboard-card-head' }, header) : '',
-			E('div', { 'class': 'dashboard-card-body' }, opts.body)
-		]);
+		return E('div', { 'class': 'cbi-section ' + (opts.className || '') }, [
+			opts.title ? E('h3', {}, [ opts.title ]) : '',
+			opts.desc ? E('div', { 'class': 'cbi-section-descr' }, [ opts.desc ]) : ''
+		].concat(opts.body));
 	},
 
 	kpi(opts) {
-		return E('div', { 'class': 'dashboard-card dashboard-kpi ' + (opts.className || '') }, [
+		return E('div', { 'class': 'cbi-section dashboard-kpi ' + (opts.className || '') }, [
 			this.icon(opts.icon, 'dashboard-kpi-icon'),
 			E('div', { 'class': 'dashboard-kpi-text' }, [
-				E('div', { 'class': 'dashboard-kpi-title' }, [ opts.title ]),
-				E('div', { 'class': 'dashboard-kpi-value' }, opts.value),
-				E('div', { 'class': 'dashboard-kpi-sub' }, opts.sub)
+				E('small', {}, [ opts.title ]),
+				E('strong', { 'class': 'dashboard-kpi-value' }, opts.value),
+				E('small', { 'class': 'dashboard-kpi-sub' }, opts.sub)
 			])
 		]);
 	},
 
 	empty(text) {
-		return E('div', { 'class': 'dashboard-empty' }, [ text ]);
+		return E('em', {}, [ text ]);
 	},
 
 	// A cell is a string, a DOM node or a descriptor `{ text, className }`.
-	cell(tag, cell) {
+	cell(tag, cell, title) {
 		const descr = (cell != null && typeof(cell) == 'object' && !(cell instanceof Node)) ? cell : { text: cell };
 
-		return E(tag, descr.className ? { 'class': descr.className } : {}, [ (descr.text != null) ? descr.text : '' ]);
+		return E(tag, {
+			'class': tag + (descr.className ? ' ' + descr.className : ''),
+			'data-title': (typeof(title) == 'string' && title !== '') ? title : null
+		}, [ (descr.text != null) ? descr.text : '' ]);
 	},
 
+	// Same markup as ui.Table: flat .table > .tr, header row .table-titles,
+	// data-title on the cells so themes can label them on phones.
 	table(opts) {
-		const table = E('table', { 'class': 'dashboard-table ' + (opts.className || '') }, [
-			E('thead', {}, [
-				E('tr', {}, opts.head.map(cell => this.cell('th', cell)))
-			])
+		const titles = opts.head.map(cell => (cell != null && typeof(cell) == 'object' && !(cell instanceof Node)) ? cell.text : cell);
+		const table = E('table', { 'class': 'table ' + (opts.className || '') }, [
+			E('tr', { 'class': 'tr table-titles' }, opts.head.map(cell => this.cell('th', cell)))
 		]);
 
-		const body = E('tbody');
-
-		opts.rows.forEach(row => body.appendChild(E('tr', {}, row.map(cell => this.cell('td', cell)))));
+		opts.rows.forEach((row, i) => {
+			table.appendChild(E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, row.map((cell, n) => this.cell('td', cell, titles[n]))));
+		});
 
 		if (!opts.rows.length && opts.emptyText)
-			body.appendChild(E('tr', { 'class': 'dashboard-table-empty' }, [
-				E('td', { 'colspan': opts.head.length }, [ opts.emptyText ])
+			table.appendChild(E('tr', { 'class': 'tr placeholder' }, [
+				E('td', { 'class': 'td', 'colspan': opts.head.length }, [ E('em', {}, [ opts.emptyText ]) ])
 			]));
-
-		table.appendChild(body);
 
 		if (opts.foot)
-			table.appendChild(E('tfoot', {}, [
-				E('tr', {}, opts.foot.map(cell => this.cell('td', cell)))
-			]));
+			table.appendChild(E('tr', { 'class': 'tr' }, opts.foot.map(cell => this.cell('td', cell))));
 
-		return E('div', { 'class': 'dashboard-table-wrap' }, [ table ]);
+		return table;
 	},
 
 	donut(opts) {
@@ -151,7 +144,7 @@ return baseclass.extend({
 			]));
 		});
 
-		return E('div', { 'class': 'dashboard-bars ' + (many ? 'dashboard-bars-many' : ''), 'style': '--dashboard-slot:%dpx'.format(opts.slot || 44) }, [
+		return E('div', { 'class': 'dashboard-bars ' + (many ? 'dashboard-bars-many' : '') }, [
 			yAxis,
 			E('div', { 'class': 'dashboard-bars-scroll', 'data-chart': opts.id || '' }, [ plot ])
 		]);
