@@ -1,0 +1,38 @@
+{
+	"luci-app-veracrypt": {
+		"description": "Grant access to VeraCrypt console operations and volume configuration",
+		"read": {
+			"ubus": {
+				"file": [ "list", "stat" ],
+				"luci.veracrypt": [ "status", "listdir", "listdev", "mkdir", "rm", "job", "job_log", "job_abort", "job_answer", "tools", "pkg_install", "run" ]
+			},
+			"file": {
+				"*": [ "list", "stat" ],
+				"/bin/mkdir": [ "exec" ],
+				"/usr/bin/mkdir": [ "exec" ],
+				"/bin/rm": [ "exec" ],
+				"/usr/bin/rm": [ "exec" ],
+				"/bin/rmdir": [ "exec" ],
+				"/usr/bin/rmdir": [ "exec" ],
+				"/bin/busybox": [ "exec" ]
+			},
+			"uci": [ "veracrypt" ]
+		},
+		"write": {
+			"ubus": {
+				"file": [ "exec" ],
+				"luci.veracrypt": [ "status", "listdir", "listdev", "mkdir", "rm", "job", "job_log", "job_abort", "job_answer", "tools", "pkg_install", "run" ]
+			},
+			"file": {
+				"/bin/mkdir": [ "exec" ],
+				"/usr/bin/mkdir": [ "exec" ],
+				"/bin/rm": [ "exec" ],
+				"/usr/bin/rm": [ "exec" ],
+				"/bin/rmdir": [ "exec" ],
+				"/usr/bin/rmdir": [ "exec" ],
+				"/bin/busybox": [ "exec" ]
+			},
+			"uci": [ "veracrypt" ]
+		}
+	}
+}
