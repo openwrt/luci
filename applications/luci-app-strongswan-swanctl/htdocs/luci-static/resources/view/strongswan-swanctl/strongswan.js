@@ -94,6 +94,14 @@ return view.extend({
 		o = s.option(form.ListValue, 'tnc', 'tnc', _('Trusted Network Connect'));
 		addLogLevel(o);
 
+		// kernel-netlink plugin settings
+		s = m.section(form.NamedSection, 'netlink', 'netlink', _('Netlink Settings'),
+			_('Configure the kernel-netlink plugin options.'));
+
+		o = s.option(form.Flag, 'install_routes_xfrmi', _('Install routes via XFRM interfaces'),
+			_('When this is enabled, the routes for all XFRM interfaces are set automatically.'));
+		o.default = '0';
+
 		return m.render();
 	}
 });
