@@ -1,0 +1,79 @@
+{
+	"simple": {
+		"title": "Simplified Interface",
+		"order": 5,
+                "action": {
+                        "type": "firstchild",
+                        "preferred": "status",
+                        "recurse": true
+                },
+                "auth": {
+                        "methods": [ "cookie:sysauth" ],
+                        "login": true
+                }
+	},
+
+	"simple/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "simple/status"
+		}
+	},
+
+	"simple/internet": {
+		"title": "Internet",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "simple/internet"
+		}
+	},
+
+	"simple/wireless": {
+		"title": "Wi-Fi",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "simple/wireless"
+		}
+	},
+
+	"simple/network": {
+		"title": "Network",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "simple/network"
+		}
+	},
+
+	"simple/firewall": {
+		"title": "Firewall",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "simple/firewall"
+		}
+	},
+
+	"simple/system": {
+		"title": "System",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "simple/system"
+		}
+	},
+
+	"simple/services": {
+		"title": "Services",
+		"order": 70,
+		"action": {
+			"type": "rewrite",
+			"path": "admin/services",
+			"remove": 2
+		}
+	}
+}
