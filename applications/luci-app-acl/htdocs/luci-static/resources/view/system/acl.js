@@ -15,7 +15,6 @@ const callSetPassword = rpc.declare({
 	object: 'luci',
 	method: 'setPassword',
 	params: [ 'username', 'password', 'oldpassword', 'rpcd' ],
-	expect: { result: 1 }
 });
 
 function checkPassword(value) {
@@ -309,9 +308,12 @@ return view.extend({
 			const user = this.map.lookupOption('username', section_id)[0].formvalue(section_id);
 
 			if (variant.formvalue(section_id) == 'crypted' && value.substring(0, 3) != '$1$')
-				return callSetPassword(user, value, '', true).then(function(success) {
-					if (!success)
+				return callSetPassword(user, value, '', true).then(function(result) {
+					if (!result || !result.result)
 						throw new Error('Failed to create password');
+
+					if (result.hash)
+						uci.set('rpcd', section_id, 'password', result.hash);
 				});
 		};
 		o.remove = function() {};
