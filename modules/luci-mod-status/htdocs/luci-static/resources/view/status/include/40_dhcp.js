@@ -15,7 +15,7 @@ const callUfpList = rpc.declare({
 	object: 'fingerprint',
 	method: 'fingerprint',
 });
-
+ 
 return baseclass.extend({
 	title: _('DHCP Leases'),
 
