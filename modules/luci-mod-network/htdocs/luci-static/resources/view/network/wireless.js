@@ -2250,7 +2250,9 @@ return view.extend({
 			cbi_update_table(table, [], E('em', { class: 'spinning' }, _('Starting wireless scan...')));
 
 			const md = ui.showModal(_('Join Network: Wireless Scan'), [
-				table,
+				E('div', {
+					'style': 'max-height:60vh;overflow:auto'
+				}, table),
 				E('div', { 'class': 'right' }, [
 					stop,
 					' ',
