@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 
-<script>
+<script nonce="<%=csp_nonce%>">
 	var freqlist = <%= luci.http.write_json(self.iwinfo.freqlist) %>;
 	var hwmodes  = <%= luci.http.write_json(self.iwinfo.hwmodelist or {}) %>;
 	var htmodes  = <%= luci.http.write_json(self.iwinfo.htmodelist) %>;
@@ -180,11 +180,11 @@
 
 <label style="float:left; margin-right:3px">
 	<%:Mode%><br />
-	<select style="width:auto" id="<%= cbid %>.mode" name="<%= cbid %>.mode" onchange="cbi_toggle_wifi_mode('<%= cbid %>')"></select>
+	<select style="width:auto" id="<%= cbid %>.mode" name="<%= cbid %>.mode"></select>
 </label>
 <label style="float:left; margin-right:3px">
 	<%:Band%><br />
-	<select style="width:auto" id="<%= cbid %>.band" name="<%= cbid %>.band" onchange="cbi_toggle_wifi_band('<%= cbid %>')"></select>
+	<select style="width:auto" id="<%= cbid %>.band" name="<%= cbid %>.band"></select>
 </label>
 <label style="float:left; margin-right:3px">
 	<%:Channel%><br />
@@ -196,6 +196,10 @@
 </label>
 <br style="clear:left" />
 
-<script>cbi_init_wifi('<%= cbid %>');</script>
+<script nonce="<%=csp_nonce%>">
+cbi_init_wifi('<%= cbid %>');
+document.getElementById('<%= cbid %>.mode').addEventListener('change', function() { cbi_toggle_wifi_mode('<%= cbid %>'); });
+document.getElementById('<%= cbid %>.band').addEventListener('change', function() { cbi_toggle_wifi_band('<%= cbid %>'); });
+</script>
 
 <%+cbi/valuefooter%>

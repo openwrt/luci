@@ -13,7 +13,7 @@
 	<% local isempty = true for i, k in ipairs(self:cfgsections()) do -%>
 		<% if self.addremove then -%>
 			<div class="cbi-section-remove right">
-				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" onclick="this.form.cbi_state='del-section'; return true" value="<%:Delete%>" class="btn cbi-button" />
+				<input type="submit" name="cbi.rts.<%=self.config%>.<%=k%>" data-cbi-state="del-section" value="<%:Delete%>" class="btn cbi-button" />
 			</div>
 		<%- end %>
 
@@ -42,9 +42,9 @@
 					<div class="cbi-section-error"><%:Invalid%></div>
 				<%- end %>
 				<div>
-					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>." name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>." data-type="uciname" data-optional="true" onkeyup="cbi_validate_named_section_add(this)"/>
+					<input type="text" class="cbi-section-create-name" id="cbi.cts.<%=self.config%>.<%=self.sectiontype%>." name="cbi.cts.<%=self.config%>.<%=self.sectiontype%>." data-type="uciname" data-optional="true" />
 				</div>
-				<input class="btn cbi-button cbi-button-add" type="submit" onclick="this.form.cbi_state='add-section'; return true" value="<%:Add%>" title="<%:Add%>" disabled=""/>
+				<input class="btn cbi-button cbi-button-add" type="submit" data-cbi-state="add-section" value="<%:Add%>" title="<%:Add%>" disabled=""/>
 			<%- end %>
 		</div>
 		<%- end %>
