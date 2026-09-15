@@ -1,0 +1,23 @@
+{
+	"luci-app-uci-git-backup": {
+		"description": "Grant access to luci-app-uci-git-backup",
+		"read": {
+			"uci": ["uci_git_backup", "system", "dhcp"],
+			"file": {
+				"/etc/uci-git-backup/id_rsa": ["read"],
+				"/sbin/logread": ["exec"],
+				"/usr/bin/uci-git-backup": ["exec"],
+				"/usr/bin/uci-git-test": ["exec"],
+				"/usr/bin/uci-git-list": ["exec"],
+				"/usr/bin/uci-git-restore": ["exec"]
+			}
+		},
+		"write": {
+			"uci": ["uci_git_backup"],
+			"file": {
+				"/bin/chmod": ["exec"],
+				"/etc/uci-git-backup/id_rsa": ["write"]
+			}
+		}
+	}
+}
