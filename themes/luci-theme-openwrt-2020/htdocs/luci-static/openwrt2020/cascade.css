@@ -958,6 +958,15 @@ button, .btn {
 	display: inline-block;
 }
 
+p > label[for] {
+	cursor: pointer;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
 button:hover, .btn:hover {
 	box-shadow: 0 0 6px var(--main-bright-color);
 }
@@ -983,6 +992,18 @@ button[disabled], button.disabled, .btn[disabled], .btn.disabled {
 	background: var(--danger-color);
 }
 
+p.cbi-checkbox {
+	position: relative;
+	width: max-content;
+	padding: 0 .5em;
+	line-height: 1.5em;
+	text-align: start;
+	box-shadow: 0 0 5px var(--main-dark-color);
+	border-radius: .25em;
+	display: inline-block;
+	cursor: pointer;
+}
+
 input[type="checkbox"],
 input[type="radio"] {
 	--bd-color: var(--main-dark-color);
@@ -997,6 +1018,8 @@ input[type="radio"] {
 	cursor: pointer;
 	background: none;
 	border: none;
+	margin: 0;
+	margin-right: .5em;
 }
 
 input[type="checkbox"]::before,

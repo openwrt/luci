@@ -85,7 +85,7 @@ label,input,button{font-family:var(--fs-font-sans);font-size:var(--fs-type);font
 .cbi-value label.cbi-value-title{padding-top:var(--fs-space-1);flex:0 0 180px;text-align:end;min-width:0}
 .cbi-value>.cbi-section,.cbi-value>.cbi-tblsection{width:100%}
 label>input[type="checkbox"],label>input[type="radio"]{vertical-align:text-top;margin:0}
-label[for]{cursor:pointer}
+label[for]{cursor:pointer;word-break:normal}
 .cbi-dynlist{height:auto;display:inline-flex;flex-direction:column}
 .cbi-dynlist>.item{margin-bottom:var(--fs-space-1);padding:var(--fs-space-1) 2em var(--fs-space-1) var(--fs-space-2);position:relative;pointer-events:auto;overflow:hidden;word-break:break-all;cursor:move;user-select:text}
 .cbi-dynlist>.item::after{content:"×";position:absolute;align-items:center;top:-1px;inset-inline-end:-1px;bottom:-1px;font-weight:var(--fs-weight-bold);pointer-events:auto}
@@ -718,7 +718,8 @@ div.cbi-value var,.td.cbi-value-field var{color:var(--fs-accent)}
 .cbi-filebrowser>ul>li>div:last-child{flex:0 1 auto;min-width:0;display:flex;flex-wrap:wrap;gap:var(--fs-space-2);justify-content:flex-end}
 .cbi-filebrowser>ul>li>div:last-child>button{margin:0}
 .cbi-filebrowser .upload>div>input{width:100%}
-.btn>input[type="checkbox"],.btn>input[type="radio"]{margin-inline-end:.5em}
+p.cbi-checkbox{position:relative;background:transparent;justify-content:center;width:auto;height:auto;min-height:var(--fs-ctl-h);padding:var(--fs-space-2) var(--fs-space-3-5);font-weight:var(--fs-weight);line-height:1.1;border:var(--fs-hairline);border-radius:var(--fs-radius);white-space:normal;text-align:start;min-width:0;gap:.5em;cursor:pointer}
+p.cbi-checkbox>input[type="checkbox"]{height:100%;width:100%}
 .cbi-checkbox{display:inline-flex;align-items:center;gap:var(--fs-space-2);overflow-wrap:anywhere}
 .cbi-checkbox>input[type="checkbox"]{position:absolute;opacity:0;width:0;height:0;margin:0}
 .cbi-checkbox>label[for]{--sw-w:calc(40px * var(--fs-density-box));--sw-h:calc(22px * var(--fs-density-box));--sw-knob:calc(16px * var(--fs-density-box));--sw-pad:calc(2px * var(--fs-density-box));display:inline-block;position:relative;margin:0;flex-shrink:0;width:var(--sw-w);height:var(--sw-h);border-radius:var(--fs-radius-pill);background:var(--fs-track);border:var(--fs-hairline);cursor:pointer;transition:background var(--fs-dur),border-color var(--fs-dur);vertical-align:middle}
@@ -869,7 +870,7 @@ input[type="range"]:focus::-moz-range-track{box-shadow:var(--fs-focus-ring-solo)
 .modal>.alert-message{margin-bottom:var(--fs-space-2)}
 .modal>pre,.modal>textarea{white-space:pre-wrap;overflow:auto;width:100%}
 .modal:has(.cbi-map){max-width:min(1100px,94vw)}
-#modal_overlay .modal label.btn{white-space:normal;overflow-wrap:anywhere;min-width:0}
+#modal_overlay .modal{white-space:normal;overflow-wrap:anywhere;min-width:0}
 #modal_overlay .modal li{overflow-wrap:anywhere}
 #modal_overlay .uci-dialog div>ins,#modal_overlay .uci-dialog div>del,#modal_overlay .uci-dialog div>var{border-radius:var(--fs-radius-sm)}
 #modal_overlay .uci-change-legend-label>ins,#modal_overlay .uci-change-legend-label>del,#modal_overlay .uci-change-legend-label>var{border-radius:var(--fs-radius-sm);overflow:hidden}
