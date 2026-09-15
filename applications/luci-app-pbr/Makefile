@@ -6,13 +6,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=luci-app-pbr
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>, Erik Conijn <egc112@msn.com>
-PKG_VERSION:=1.2.2
-PKG_RELEASE:=20
+PKG_VERSION:=1.2.4
+PKG_RELEASE:=0
 
 LUCI_TITLE:=Policy Based Routing Service Web UI
-LUCI_URL:=https://github.com/mossdef-org/luci-app-pbr/
+LUCI_URL:=https://docs.mossdef.org/pbr/1.2.4/
 LUCI_DESCRIPTION:=Provides Web UI for Policy Based Routing Service.
-LUCI_DEPENDS:=+luci-base +jsonfilter +pbr
+LUCI_DEPENDS:=+luci-base +jsonfilter +rpcd-mod-ucode +pbr
 
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>
