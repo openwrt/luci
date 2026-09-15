@@ -1,0 +1,10 @@
+#!/bin/sh
+# 41-luci-app-geoguard-ban: generate the guard from the live WAN interface,
+# then enable/start the procd service (runs once at install).
+# (No chmod: helpers and init script already ship executable in the tree.)
+/usr/bin/geoguard-ban-guard >/dev/null 2>&1
+/etc/init.d/geoguard-ban enable
+/etc/init.d/geoguard-ban start
+logger -t geoguard "ban installed, guard generated"
+/etc/init.d/firewall reload >/dev/null 2>&1
+exit 0
