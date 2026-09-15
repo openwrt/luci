@@ -271,11 +271,11 @@ return view.extend({
 				}, [ _('Continue') ]);
 
 				if (res[2].code != 0) {
-					body.push(E('p', { 'class': 'alert-message danger' }, E('label', {}, [
+					body.push(E('p', { 'class': 'alert-message danger', 'aria-label': 'Image check failed:' }, [
 						_('Image check failed:'),
 						E('br'), E('br'),
 						res[2].stderr
-					])));
+					]));
 				};
 
 				if ((!is_valid || is_too_big || res[2].code != 0) && is_forceable) {
