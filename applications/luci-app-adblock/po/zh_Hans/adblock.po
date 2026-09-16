@@ -24,7 +24,7 @@ msgstr ""
 msgid "-- default --"
 msgstr "-- 默认 --"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:272
 msgid "0.0.0.0 <Domain>"
 msgstr "0.0.0.0 <域名>"
 
@@ -32,7 +32,7 @@ msgstr "0.0.0.0 <域名>"
 msgid "10 minutes"
 msgstr "10 分钟"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:227
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:271
 msgid "127.0.0.1 <Domain>"
 msgstr "127.0.0.1 <域名>"
 
@@ -56,11 +56,11 @@ msgstr "5 分钟"
 msgid "60 minutes"
 msgstr "60 分钟"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:229
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
 msgid "<Adblock Plus Syntax>"
 msgstr "<Adblock Plus 语法>"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:226
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:270
 msgid "<Domain>"
 msgstr "<域名>"
 
@@ -110,6 +110,10 @@ msgstr "添加白名单域名"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
 msgid "Add Blocklist Domain"
 msgstr "添加黑名单域名"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:219
+msgid "Add feed"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:79
 msgid "Add this (sub-)domain to your local allowlist."
@@ -248,7 +252,7 @@ msgstr "此标签页上的更改需要重新加载 adblock 服务才能生效。
 msgid "Changes on this tab needs an adblock service restart to take effect."
 msgstr "此标签页上的更改需要重新加载 adblock 服务才能生效。"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:293
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:306
 msgid "Clear"
 msgstr "清除"
 
@@ -316,9 +320,17 @@ msgstr "Control D （安全）"
 msgid "Control D (unfiltered)"
 msgstr "Control D （直通）"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "Custom Feed"
+msgstr ""
+
 #: applications/luci-app-adblock/root/usr/share/luci/menu.d/luci-app-adblock.json:43
 msgid "Custom Feed Editor"
 msgstr "自定义源编辑器"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+msgid "Custom feed file saved."
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:360
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:791
@@ -428,7 +440,7 @@ msgstr "用于检查 DNS 后端是否重启成功的域名。"
 msgid "Don't check SSL server certificates during download."
 msgstr "下载期间不检查 SSL 服务器证书。"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:286
 msgid "Download"
 msgstr "下载"
 
@@ -447,6 +459,10 @@ msgstr "下载重试"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:493
 msgid "Download Utility"
 msgstr "下载工具"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:443
 msgid "E-Mail Notification"
@@ -476,8 +492,9 @@ msgstr "编辑白名单"
 msgid "Edit Blocklist"
 msgstr "编辑黑名单"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:206
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:245
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
 msgid "Empty field not allowed"
 msgstr "不允许空的字段"
 
@@ -605,11 +622,11 @@ msgstr "外部远程 DNS 策略（基于 MAC 的临时 DNS 绕过）"
 msgid "External Unfiltered DNS Policy (MAC-/Interface‑based DNS bypass)"
 msgstr "外部直通 DNS 策略（基于 MAC/接口的 DNS 绕过）"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:238
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:255
 msgid "Extra Extra Large"
 msgstr "超大"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:237
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:254
 msgid "Extra Large"
 msgstr "很大"
 
@@ -617,7 +634,7 @@ msgstr "很大"
 msgid "Failed to generate adblock report!"
 msgstr "adblock 统计报告生成失败！"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:224
 msgid "Feed Name"
 msgstr "源名称"
 
@@ -625,7 +642,11 @@ msgstr "源名称"
 msgid "Feed Selection"
 msgstr "源选择"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:283
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+msgid "Feed name already used"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:299
 msgid "Fill"
 msgstr "补充/修改"
 
@@ -727,13 +748,17 @@ msgstr "接口"
 msgid "Interface DNS Filter Targets"
 msgstr "DNS 过滤器目标接口"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:209
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:231
 msgid "Invalid characters"
 msgstr "无效字符"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "输入值无效，无法保存更改。"
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:53
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:98
@@ -744,7 +769,7 @@ msgstr "无效输入，请提交单个有效（子）域名。"
 msgid "Jail Mode"
 msgstr "隔离模式"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:236
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:253
 msgid "Large"
 msgstr "大"
 
@@ -822,9 +847,17 @@ msgstr "地图"
 msgid "Map Reset"
 msgstr "地图重置"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:252
 msgid "Medium"
 msgstr "一般"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:49
+msgid "Missing URL: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:46
+msgid "Missing description: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:473
 msgid "Nice Level"
@@ -998,7 +1031,7 @@ msgid ""
 "bypassing local adblock."
 msgstr "将所选 MAC 或接口流量路由到直通的外部 DNS 解析器，绕过本地 adblock。"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:225
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:268
 msgid "Rule"
 msgstr "规则"
 
@@ -1016,7 +1049,7 @@ msgstr "运行接口"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:71
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:116
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:303
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:312
 msgid "Save"
 msgstr "保存"
 
@@ -1067,11 +1100,11 @@ msgstr ""
 "将最终的 DNS 拦截列表移至备份目录，并在内存中仅保留该文件的软链接。如果备份目"
 "录位于外部存储器上，请启用此选项以节省内存。"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:233
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:250
 msgid "Size"
 msgstr "大小"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:234
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:251
 msgid "Small"
 msgstr "小"
 
@@ -1143,6 +1176,10 @@ msgid ""
 "from the final DNS blocklist."
 msgstr "顶级域名压缩会从最终的 DNS 阻止列表中移除数千条不必要的主机条目。"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:38
 msgid ""
 "This is the local adblock allowlist to always-allow certain domains.<br /> "
@@ -1210,7 +1247,7 @@ msgstr "触发延时"
 msgid "Type"
 msgstr "类型"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:214
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:259
 msgid "URL"
 msgstr "URL"
 
@@ -1230,21 +1267,25 @@ msgstr "无法解析自定义源文件！"
 msgid "Unable to parse the default feed file!"
 msgstr "无法解析默认源文件！"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:63
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:63
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "无法保存更改：%s"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:292
 msgid "Upload"
 msgstr "上传"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:85
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "上传自定义源文件失败。"
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr ""
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:239
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:256
 msgid "Varying"
 msgstr "变化中"
 
@@ -1256,7 +1297,7 @@ msgstr "详细的调试记录"
 msgid "Version"
 msgstr "版本"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:187
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1309,6 +1350,10 @@ msgstr "最大结果集大小"
 msgid "max. top statistics"
 msgstr "最大热门统计数量"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "new"
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:177
 msgid "online documentation"
 msgstr "在线文档"
@@ -1324,6 +1369,12 @@ msgstr "smartdns"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:793
 msgid "unbound"
 msgstr "unbound"
+
+#~ msgid "Invalid input values, unable to save modifications."
+#~ msgstr "输入值无效，无法保存更改。"
+
+#~ msgid "Upload of the custom feed file failed."
+#~ msgstr "上传自定义源文件失败。"
 
 #~ msgid "Clients"
 #~ msgstr "客户端"

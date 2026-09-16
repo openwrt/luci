@@ -19,7 +19,7 @@ msgstr ""
 msgid "-- default --"
 msgstr "-- predeterminado --"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:272
 msgid "0.0.0.0 <Domain>"
 msgstr "0.0.0.0 <Dominio>"
 
@@ -27,7 +27,7 @@ msgstr "0.0.0.0 <Dominio>"
 msgid "10 minutes"
 msgstr "10 minutos"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:227
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:271
 msgid "127.0.0.1 <Domain>"
 msgstr "127.0.0.1 <Dominio>"
 
@@ -51,11 +51,11 @@ msgstr "5 minutos"
 msgid "60 minutes"
 msgstr "60 minutos"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:229
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
 msgid "<Adblock Plus Syntax>"
 msgstr "<Sintaxis de Adblock Plus>"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:226
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:270
 msgid "<Domain>"
 msgstr "<Dominio>"
 
@@ -105,6 +105,10 @@ msgstr "Agregar dominio a la lista de permitidos"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
 msgid "Add Blocklist Domain"
 msgstr "Agregar dominio a la lista de bloqueo"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:219
+msgid "Add feed"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:79
 msgid "Add this (sub-)domain to your local allowlist."
@@ -255,7 +259,7 @@ msgstr ""
 "Cambios en esta pestaña necesitan un reinicio del servicio adblock para "
 "surtir efecto."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:293
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:306
 msgid "Clear"
 msgstr "Limpiar"
 
@@ -324,9 +328,17 @@ msgstr "Control D (seguridad)"
 msgid "Control D (unfiltered)"
 msgstr "Control D (sin filtrar)"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "Custom Feed"
+msgstr ""
+
 #: applications/luci-app-adblock/root/usr/share/luci/menu.d/luci-app-adblock.json:43
 msgid "Custom Feed Editor"
 msgstr "Editor de fuente personalizada"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+msgid "Custom feed file saved."
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:360
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:791
@@ -440,7 +452,7 @@ msgstr "Dominio para verificar un reinicio exitoso del backend de DNS."
 msgid "Don't check SSL server certificates during download."
 msgstr "No verifica los certificados SSL del servidor durante la descarga."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:286
 msgid "Download"
 msgstr "Descargar"
 
@@ -459,6 +471,10 @@ msgstr "Reintentos de descarga"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:493
 msgid "Download Utility"
 msgstr "Utilidad de descarga"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:443
 msgid "E-Mail Notification"
@@ -488,8 +504,9 @@ msgstr "Editar lista de permitidos"
 msgid "Edit Blocklist"
 msgstr "Editar lista de bloqueo"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:206
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:245
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
 msgid "Empty field not allowed"
 msgstr "No se permite el campo vacío"
 
@@ -640,11 +657,11 @@ msgid "External Unfiltered DNS Policy (MAC-/Interface‑based DNS bypass)"
 msgstr ""
 "Política de DNS externa sin filtrar (omisión de DNS basada en MAC/interfaz)"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:238
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:255
 msgid "Extra Extra Large"
 msgstr "Extra Extra Grande"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:237
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:254
 msgid "Extra Large"
 msgstr "Extra Grande"
 
@@ -652,7 +669,7 @@ msgstr "Extra Grande"
 msgid "Failed to generate adblock report!"
 msgstr "¡No se pudo generar el informe de AdBlock!"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:224
 msgid "Feed Name"
 msgstr "Nombre de la fuente"
 
@@ -660,7 +677,11 @@ msgstr "Nombre de la fuente"
 msgid "Feed Selection"
 msgstr "Selección de fuente"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:283
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+msgid "Feed name already used"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:299
 msgid "Fill"
 msgstr "Llenar"
 
@@ -764,13 +785,17 @@ msgstr "Interfaz"
 msgid "Interface DNS Filter Targets"
 msgstr "Objetivos del filtro DNS de la interfaz"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:209
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:231
 msgid "Invalid characters"
 msgstr "Caracteres no válidos"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "Valores de entrada no válidos, no se puede guardar las modificaciones."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:53
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:98
@@ -782,7 +807,7 @@ msgstr ""
 msgid "Jail Mode"
 msgstr "Modo cárcel"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:236
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:253
 msgid "Large"
 msgstr "Grande"
 
@@ -865,9 +890,17 @@ msgstr "Mapa"
 msgid "Map Reset"
 msgstr "Restablecer mapa"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:252
 msgid "Medium"
 msgstr "Media"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:49
+msgid "Missing URL: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:46
+msgid "Missing description: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:473
 msgid "Nice Level"
@@ -1056,7 +1089,7 @@ msgstr ""
 "Enruta las MAC o interfaces seleccionadas a un solucionador DNS externo sin "
 "filtrar, omitiendo el bloqueador de publicidad local."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:225
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:268
 msgid "Rule"
 msgstr "Regla"
 
@@ -1074,7 +1107,7 @@ msgstr "Interfaces de ejecución"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:71
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:116
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:303
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:312
 msgid "Save"
 msgstr "Guardar"
 
@@ -1131,11 +1164,11 @@ msgstr ""
 "de respaldo resida en una unidad externa, active esta opción para ahorrar "
 "memoria."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:233
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:250
 msgid "Size"
 msgstr "Tamaño"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:234
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:251
 msgid "Small"
 msgstr "Pequeño"
 
@@ -1214,6 +1247,10 @@ msgstr ""
 "La compresión de dominio de nivel superior elimina miles de entradas de host "
 "innecesarias de la lista de bloqueo de DNS final."
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:38
 msgid ""
 "This is the local adblock allowlist to always-allow certain domains.<br /> "
@@ -1287,7 +1324,7 @@ msgstr "Retraso de activación"
 msgid "Type"
 msgstr "Tipo"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:214
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:259
 msgid "URL"
 msgstr "URL"
 
@@ -1308,21 +1345,25 @@ msgstr "¡No se puede interpretar el archivo de fuente personalizada!"
 msgid "Unable to parse the default feed file!"
 msgstr "¡No se puede interpretar el archivo de fuente predeterminado!"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:63
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:63
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "No se pueden guardar las modificaciones: %s"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:292
 msgid "Upload"
 msgstr "Cargar"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:85
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "Falló la carga del archivo de fuente personalizada."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr ""
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:239
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:256
 msgid "Varying"
 msgstr "Variante"
 
@@ -1334,7 +1375,7 @@ msgstr "Registro de depuración detallado"
 msgid "Version"
 msgstr "Versión"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:187
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1390,6 +1431,10 @@ msgstr "tamaño máx. del conjunto de resultados"
 msgid "max. top statistics"
 msgstr "máx. estadísticas principales"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "new"
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:177
 msgid "online documentation"
 msgstr "documentación en línea"
@@ -1405,6 +1450,13 @@ msgstr "SmartDNS"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:793
 msgid "unbound"
 msgstr "unbound"
+
+#~ msgid "Invalid input values, unable to save modifications."
+#~ msgstr ""
+#~ "Valores de entrada no válidos, no se puede guardar las modificaciones."
+
+#~ msgid "Upload of the custom feed file failed."
+#~ msgstr "Falló la carga del archivo de fuente personalizada."
 
 #~ msgid "Clients"
 #~ msgstr "Clientes"

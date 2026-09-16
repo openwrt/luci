@@ -51,25 +51,25 @@ msgstr "-- Nustatyti pasirinkimą --"
 msgid "-- default --"
 msgstr "-- numatytasis/-oji --"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:239
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:266
 msgid "<IP-Address>"
 msgstr "<IP-adresas>"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:240
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:267
 msgid "<IP-Address><CSV-Separator>"
 msgstr "<IP-adresas><„CSV“-skyriklis>"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:268
 msgid "<IP-Address><Space><Netmask>"
 msgstr ""
 "<IP-adresas><Tarpas><Tinklavimo „net-kaukė“ – 32-bitų adresas, IP "
 "užmaskãvimas>"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "<JSON Lines><IP-Address><JSON Lines>"
 msgstr "<JSON Lines><IP-Address><JSON Lines>"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
 msgid "<Suricata Syntax>"
 msgstr "<„Suricata“ sintaksė>"
 
@@ -100,6 +100,10 @@ msgstr "Aktyvūs padavimai"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:867
 msgid "AdGuardHome login error"
 msgstr "„AdGuardHome“ prisijungimo klaida"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:219
+msgid "Add feed"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:496
 msgid "Additional trigger delay in seconds before banIP processing begins."
@@ -255,7 +259,7 @@ msgstr "„CPU“ branduoliai"
 msgid "Cancel"
 msgstr "Atšaukti"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:247
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:250
 msgid "Chain"
 msgstr "Grandinė"
 
@@ -279,7 +283,7 @@ msgstr ""
 "Pakeitimai, kuriuos šiame skirtuke atlikote, reikalauja tarnybos paleidimo "
 "iš naujo, kad būtų pritaikyti „banIP“ tarnybai."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:312
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:319
 msgid "Clear"
 msgstr "Išvalyti"
 
@@ -308,9 +312,17 @@ msgstr "Šalys"
 msgid "Country Selection"
 msgstr "Šalies pasirinkimas"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:221
+msgid "Custom Feed"
+msgstr ""
+
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:49
 msgid "Custom Feed Editor"
 msgstr "Pasirinktinis padavimo redaktorius"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:201
+msgid "Custom feed file saved."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:592
 msgid ""
@@ -324,7 +336,7 @@ msgstr ""
 msgid "Deduplicate IPs"
 msgstr "Dedubliuoti IP(dgs.)"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:253
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
 msgid "Description"
 msgstr "Aprašas/-ymas"
 
@@ -344,7 +356,7 @@ msgstr "Išjungti/Išgalinti"
 msgid "Don't check SSL server certificates during download."
 msgstr "Netikrinti „SSL“ serverio sertifikatus, kol siunčiasi."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:285
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:299
 msgid "Download"
 msgstr "Atsisiųsti"
 
@@ -368,6 +380,10 @@ msgstr "Atsisiuntimo įrankis"
 msgid "Drop packets silently or actively reject Inbound traffic."
 msgstr ""
 "Tyliai mesti/šalinti paketus arba aktyviai atmesti atvykstančią srautą."
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:901
 msgid "E-Mail Notification"
@@ -410,8 +426,9 @@ msgstr "Elementai"
 msgid "Elements (max. 50)"
 msgstr "Elementai (maks. 50)"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:208
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:257
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:228
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:273
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:883
 msgid "Empty field not allowed"
 msgstr "Tuščias laukas nėra leidžiamas"
@@ -439,11 +456,8 @@ msgstr "Įjungti/Įgalinti nuotolinį žurnalinimą"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:519
 msgid ""
 "Enable a GeoIP Map with suspicious Set elements. This requires external "
-"requests to get the map tiles and geolocation data."
+"requests to load the Leaflet library and to fetch the geolocation data."
 msgstr ""
-"Įjungti/Įgalinti „GeoIP“ žemėlapį su įtartinais rinkinio elementais. Tam "
-"reikalingos išorinės užklausos, norint gauti žemėlapio išklotinės ir "
-"geografinės vietos duomenys."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:438
 msgid "Enable the banIP service."
@@ -503,7 +517,7 @@ msgstr "Padavimas užbaigtas"
 msgid "Feed Flag Reset"
 msgstr "Padavimo vėliavos grąžinimas į pradinę padėtį ar būseną"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:203
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:224
 msgid "Feed Name"
 msgstr "Padavimo pavadinimas"
 
@@ -511,11 +525,15 @@ msgstr "Padavimo pavadinimas"
 msgid "Feed Selection"
 msgstr "Padavimo pasirinkimas"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:235
+msgid "Feed name already used"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:425
 msgid "Feed/Set Settings"
 msgstr "Padavimo/Rinkinio nustatymai"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:303
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:312
 msgid "Fill"
 msgstr "Užpildyti"
 
@@ -523,11 +541,11 @@ msgstr "Užpildyti"
 msgid "Firewall Log"
 msgstr "Užkardos žurnalas"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:262
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:278
 msgid "Flag"
 msgstr "Vėliava"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:268
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:285
 msgid "Flag not supported"
 msgstr "Vėliava nepalaikoma"
 
@@ -588,11 +606,11 @@ msgstr "IPv6 tinklo sąsajos ir sietuvai"
 msgid "IPv6 Support"
 msgstr "IPv6 palaikymas"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:248
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:251
 msgid "Inbound"
 msgstr "Atvykstantis/-ys"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:250
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:253
 msgid "Inbound & Outbound"
 msgstr "Atvykstantis/-ys ir išsiunčiami"
 
@@ -628,7 +646,7 @@ msgstr "Sąsajos ir/arba Sietuvai"
 msgid "Invalid URL format"
 msgstr "Negalimas „URL“ – saito formatas"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:211
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:231
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:886
 msgid "Invalid characters"
 msgstr "Negalimos rašmenys"
@@ -637,9 +655,13 @@ msgstr "Negalimos rašmenys"
 msgid "Invalid expiry format, e.g. 5m, 2h, 1d or 1h30m"
 msgstr "Negalimas galiojimo formatas, pvz., 5m, 2h, 1d arba 1h30m"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "Negalimos įvesties reikšmės, nepavyko išsaugoti pakeitimų/redagavimų."
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:976
 msgid "LACNIC - serving the Latin American and Caribbean region"
@@ -757,6 +779,14 @@ msgstr "Žemėlapis..."
 msgid "Max Open Files"
 msgstr "Maksimalus atidarytų failų kiekis"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:49
+msgid "Missing URL: %s"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:46
+msgid "Missing description or rule: %s"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1082
 msgid "Monitor Local Allowlist"
 msgstr "Stebėti vietinį leidžiamąjį sąrašą"
@@ -819,7 +849,7 @@ msgstr ""
 msgid "Opt out specific feeds from the deduplication process."
 msgstr "Atsisakyti konkrečių padavimų iš dedubliavimo vyksmo."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:249
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:252
 msgid "Outbound"
 msgstr "Išsiunčiama/-s/-i"
 
@@ -971,7 +1001,7 @@ msgstr ""
 msgid "Result"
 msgstr "Rezultatas"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:238
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:264
 msgid "Rule"
 msgstr "Taisyklė"
 
@@ -995,7 +1025,7 @@ msgstr ""
 "„SYN“ slenkstis paketais per sekundę, skirtas užkirsti kelią „WAN-DoS“ "
 "atakoms. Norėdami išjungti/iįgalinti šią apsaugą, nustatykite ją į – „0-į“."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:321
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:325
 msgid "Save"
 msgstr "Išsaugoti"
 
@@ -1211,6 +1241,10 @@ msgid "The syslog output, pre-filtered for messages related to: %s"
 msgstr ""
 "„Syslog“ išvestis, iš anksto filtruota pagal pranešimus, susijusius su: %s"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:38
 msgid ""
 "This is the local banIP allowlist that will permit certain MAC-, IP-"
@@ -1288,11 +1322,11 @@ msgstr ""
 "„UDP“ slenkstis paketais per sekundę, skirtas užkirsti kelią „WAN-DoS“ "
 "atakoms. Norėdami išjungti/išgalinti šią apsaugą, nustatykite ją į – „0-į“."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:216
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:256
 msgid "URLv4"
 msgstr "„URLv4“"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:227
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:260
 msgid "URLv6"
 msgstr "„URLv6“"
 
@@ -1316,19 +1350,23 @@ msgstr "Nepavyko išnagrinėti numatyto padavimo failo!"
 msgid "Unable to parse the ruleset file!"
 msgstr "Nepavyko išnagrinėti taisyklių rinkinio failo!"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:63
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:63
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "Nepavyko išsaugoti pakeitimų/redagavimų: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:294
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:305
 msgid "Upload"
 msgstr "Įkelti"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:85
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "Įkeliant pasirinktinį padavimo failą įvyko klaida."
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:441
 msgid "Verbose Debug Logging"
@@ -1338,7 +1376,7 @@ msgstr "Platus/Išsamus/Daugiažodiškas derinimo/trukdžių šalinimo žurnalin
 msgid "Version"
 msgstr "Versija"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:187
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1453,6 +1491,10 @@ msgstr "vietinis blokavimo sąrašas"
 msgid "memory"
 msgstr "atmintis"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:221
+msgid "new"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:472
 msgid "no hits yet"
 msgstr "kol kas nėra sutapimų"
@@ -1528,6 +1570,21 @@ msgstr "„wan-if“"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:791
 msgid "warn"
 msgstr "įspėti"
+
+#~ msgid ""
+#~ "Enable a GeoIP Map with suspicious Set elements. This requires external "
+#~ "requests to get the map tiles and geolocation data."
+#~ msgstr ""
+#~ "Įjungti/Įgalinti „GeoIP“ žemėlapį su įtartinais rinkinio elementais. Tam "
+#~ "reikalingos išorinės užklausos, norint gauti žemėlapio išklotinės ir "
+#~ "geografinės vietos duomenys."
+
+#~ msgid "Invalid input values, unable to save modifications."
+#~ msgstr ""
+#~ "Negalimos įvesties reikšmės, nepavyko išsaugoti pakeitimų/redagavimų."
+
+#~ msgid "Upload of the custom feed file failed."
+#~ msgstr "Įkeliant pasirinktinį padavimo failą įvyko klaida."
 
 #~ msgid "Active Devices"
 #~ msgstr "Aktyvūs įrenginiai"

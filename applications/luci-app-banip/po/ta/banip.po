@@ -48,23 +48,23 @@ msgstr "-தேர்வை அமைக்கவும்-"
 msgid "-- default --"
 msgstr "-இயல்புநிலை-"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:239
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:266
 msgid "<IP-Address>"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:240
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:267
 msgid "<IP-Address><CSV-Separator>"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:268
 msgid "<IP-Address><Space><Netmask>"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:242
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "<JSON Lines><IP-Address><JSON Lines>"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:243
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
 msgid "<Suricata Syntax>"
 msgstr ""
 
@@ -95,6 +95,10 @@ msgstr "செயலில் உள்ள ஊட்டங்கள்"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:867
 msgid "AdGuardHome login error"
 msgstr "Adguardhome உள்நுழைவு பிழை"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:219
+msgid "Add feed"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:496
 msgid "Additional trigger delay in seconds before banIP processing begins."
@@ -246,7 +250,7 @@ msgstr "சிபியு கோர்கள்"
 msgid "Cancel"
 msgstr "ரத்துசெய்"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:247
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:250
 msgid "Chain"
 msgstr "சங்கிலி"
 
@@ -266,7 +270,7 @@ msgstr "இந்த தாவலில் ஏற்படும் மாற்
 msgid "Changes on this tab needs a banIP service restart to take effect."
 msgstr "இந்த தாவலில் ஏற்படும் மாற்றங்கள் நடைமுறைக்கு வர Banip பணி மறுதொடக்கம் தேவை."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:312
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:319
 msgid "Clear"
 msgstr "துடை"
 
@@ -292,9 +296,17 @@ msgstr "நாடுகள்"
 msgid "Country Selection"
 msgstr "நாட்டின் தேர்வு"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:221
+msgid "Custom Feed"
+msgstr ""
+
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:49
 msgid "Custom Feed Editor"
 msgstr "தனிப்பயன் தீவன ஆசிரியர்"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:201
+msgid "Custom feed file saved."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:592
 msgid ""
@@ -308,7 +320,7 @@ msgstr ""
 msgid "Deduplicate IPs"
 msgstr "ஐ.பி.எச்"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:253
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:241
 msgid "Description"
 msgstr "விவரம்"
 
@@ -328,7 +340,7 @@ msgstr "முடக்கு"
 msgid "Don't check SSL server certificates during download."
 msgstr "பதிவிறக்கத்தின் போது SSL சேவையக சான்றிதழ்களை சரிபார்க்க வேண்டாம்."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:285
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:299
 msgid "Download"
 msgstr "பதிவிறக்கம்"
 
@@ -352,6 +364,10 @@ msgstr "பயன்பாட்டைப் பதிவிறக்கவு�
 msgid "Drop packets silently or actively reject Inbound traffic."
 msgstr ""
 "பாக்கெட்டுகளை அமைதியாக கைவிடுங்கள் அல்லது உள்வரும் போக்குவரத்தை தீவிரமாக நிராகரிக்கவும்."
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:901
 msgid "E-Mail Notification"
@@ -394,8 +410,9 @@ msgstr "கூறுகள்"
 msgid "Elements (max. 50)"
 msgstr "கூறுகள் (மிகுதியாக 50)"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:208
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:257
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:228
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:273
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:883
 msgid "Empty field not allowed"
 msgstr "வெற்று புலம் அனுமதிக்கப்படவில்லை"
@@ -421,10 +438,8 @@ msgstr "தொலைநிலை பதிவை இயக்கவும்"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:519
 msgid ""
 "Enable a GeoIP Map with suspicious Set elements. This requires external "
-"requests to get the map tiles and geolocation data."
+"requests to load the Leaflet library and to fetch the geolocation data."
 msgstr ""
-"சந்தேகத்திற்கிடமான செட் கூறுகளுடன் உலகம் வரைபடத்தை இயக்கவும். வரைபட ஓடுகள் மற்றும் "
-"புவிஇருப்பிட தரவைப் பெற இதற்கு வெளிப்புற கோரிக்கைகள் தேவை."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:438
 msgid "Enable the banIP service."
@@ -478,7 +493,7 @@ msgstr "முழுமையான ஊட்டம்"
 msgid "Feed Flag Reset"
 msgstr "தீவனக் கொடி மீட்டமைப்பு"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:203
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:224
 msgid "Feed Name"
 msgstr "உணவுப் பெயர்"
 
@@ -486,11 +501,15 @@ msgstr "உணவுப் பெயர்"
 msgid "Feed Selection"
 msgstr "உணவுத் தேர்வு"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:235
+msgid "Feed name already used"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:425
 msgid "Feed/Set Settings"
 msgstr "அமைப்புகளை உணவளிக்கவும்/அமைக்கவும்"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:303
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:312
 msgid "Fill"
 msgstr "நிரப்பவும்"
 
@@ -498,11 +517,11 @@ msgstr "நிரப்பவும்"
 msgid "Firewall Log"
 msgstr "ஃபயர்வால் பதிவு"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:262
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:278
 msgid "Flag"
 msgstr "கொடி"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:268
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:285
 msgid "Flag not supported"
 msgstr "கொடி ஆதரிக்கப்படவில்லை"
 
@@ -562,11 +581,11 @@ msgstr "IPv6 பிணைய இடைமுகங்கள்"
 msgid "IPv6 Support"
 msgstr "ஐபிவி 6 உதவி"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:248
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:251
 msgid "Inbound"
 msgstr "உள்நோக்கி"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:250
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:253
 msgid "Inbound & Outbound"
 msgstr "உள்வரும் & வெளிச்செல்லும்"
 
@@ -602,7 +621,7 @@ msgstr ""
 msgid "Invalid URL format"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:211
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:231
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:886
 msgid "Invalid characters"
 msgstr "தவறான எழுத்துக்கள்"
@@ -611,9 +630,13 @@ msgstr "தவறான எழுத்துக்கள்"
 msgid "Invalid expiry format, e.g. 5m, 2h, 1d or 1h30m"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "தவறான உள்ளீட்டு மதிப்புகள், மாற்றங்களைச் சேமிக்க முடியவில்லை."
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:976
 msgid "LACNIC - serving the Latin American and Caribbean region"
@@ -731,6 +754,14 @@ msgstr "வரைபடம் ..."
 msgid "Max Open Files"
 msgstr "அதிகபட்ச திறந்த கோப்புகள்"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:49
+msgid "Missing URL: %s"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:46
+msgid "Missing description or rule: %s"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:1082
 msgid "Monitor Local Allowlist"
 msgstr ""
@@ -791,7 +822,7 @@ msgstr "தடுப்பதற்கு முன் பதிவில் அ
 msgid "Opt out specific feeds from the deduplication process."
 msgstr "கழித்தல் செயல்முறையிலிருந்து குறிப்பிட்ட ஊட்டங்களைத் தேர்வுசெய்க."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:249
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:252
 msgid "Outbound"
 msgstr "வெளிநொக்கி"
 
@@ -925,7 +956,7 @@ msgstr "இணைய அணுகலை/குறைந்த எண்ணிக
 msgid "Result"
 msgstr "முடிவு"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:238
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:264
 msgid "Rule"
 msgstr ""
 
@@ -949,7 +980,7 @@ msgstr ""
 "WAN-DOS தாக்குதல்களைத் தடுக்க நொடிக்கு பாக்கெட்டுகளில் ஒத்திசைவு. இந்த பாதுகாப்பை முடக்க "
 "அதை '0' ஆக அமைத்தது."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:321
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:325
 msgid "Save"
 msgstr "சேமி"
 
@@ -1146,6 +1177,10 @@ msgstr "BANIP பின்னணி செயலாக்கத்திற்�
 msgid "The syslog output, pre-filtered for messages related to: %s"
 msgstr ""
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:38
 msgid ""
 "This is the local banIP allowlist that will permit certain MAC-, IP-"
@@ -1219,11 +1254,11 @@ msgstr ""
 "WAN-DOS தாக்குதல்களைத் தடுக்க நொடிக்கு பாக்கெட்டுகளில் யுடிபி-வாசல். இந்த பாதுகாப்பை "
 "முடக்க அதை '0' ஆக அமைத்தது."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:216
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:256
 msgid "URLv4"
 msgstr "URLV4"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:227
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:260
 msgid "URLv6"
 msgstr "URLV6"
 
@@ -1247,19 +1282,23 @@ msgstr "இயல்புநிலை ஊட்டக் கோப்பை அ
 msgid "Unable to parse the ruleset file!"
 msgstr "விதிகள் கோப்பை அலச முடியவில்லை!"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:63
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:63
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "மாற்றங்களைச் சேமிக்க முடியவில்லை: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:294
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:305
 msgid "Upload"
 msgstr "பதிவேற்றும்"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:85
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "தனிப்பயன் ஊட்டக் கோப்பின் பதிவேற்றம் தோல்வியடைந்தது."
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:441
 msgid "Verbose Debug Logging"
@@ -1269,7 +1308,7 @@ msgstr "வாய்மொழி பிழைத்திருத்த பத�
 msgid "Version"
 msgstr "பதிப்பு"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:187
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1383,6 +1422,10 @@ msgstr "உள்ளக தடுப்பு பட்டியல்"
 msgid "memory"
 msgstr "நினைவகம்"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:221
+msgid "new"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:472
 msgid "no hits yet"
 msgstr ""
@@ -1458,6 +1501,19 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:791
 msgid "warn"
 msgstr "எச்சரிக்கை"
+
+#~ msgid ""
+#~ "Enable a GeoIP Map with suspicious Set elements. This requires external "
+#~ "requests to get the map tiles and geolocation data."
+#~ msgstr ""
+#~ "சந்தேகத்திற்கிடமான செட் கூறுகளுடன் உலகம் வரைபடத்தை இயக்கவும். வரைபட ஓடுகள் மற்றும் "
+#~ "புவிஇருப்பிட தரவைப் பெற இதற்கு வெளிப்புற கோரிக்கைகள் தேவை."
+
+#~ msgid "Invalid input values, unable to save modifications."
+#~ msgstr "தவறான உள்ளீட்டு மதிப்புகள், மாற்றங்களைச் சேமிக்க முடியவில்லை."
+
+#~ msgid "Upload of the custom feed file failed."
+#~ msgstr "தனிப்பயன் ஊட்டக் கோப்பின் பதிவேற்றம் தோல்வியடைந்தது."
 
 #~ msgid "Active Devices"
 #~ msgstr "செயலில் உள்ள சாதனங்கள்"
