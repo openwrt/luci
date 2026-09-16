@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-08-16 22:03+0000\n"
+"PO-Revision-Date: 2026-09-16 15:38+0000\n"
 "Last-Translator: SnIPeRSnIPeR "
 "<snipersniper@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
@@ -10,14 +10,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:79
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:234
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:255
 msgctxt "Name or IP address of access point"
 msgid "AP"
-msgstr "AP"
+msgstr "ТД"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:425
 msgid "All debug messages"
@@ -25,19 +25,19 @@ msgstr "Все отладочные сообщения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:487
 msgid "Allow ignoring probe requests for steering purposes"
-msgstr "Разрешить игнорирование запросов на зондирование для целей управления"
+msgstr "Разрешить игнорировать probe-запросы для управления роумингом"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:484
 msgid "Allow rejecting assoc requests for steering purposes"
-msgstr "Разрешить отклонять запросы ассоциаций для целей управления"
+msgstr "Разрешить отклонять запросы ассоциации для управления роумингом"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:279
 msgid "Also be sure to enable rrm reports, 80211kv, etc."
-msgstr "Также не забудьте включить отчёты rrm, 80211kv и т. д."
+msgstr "Также обязательно включите отчёты RRM, 802.11kv и т.д."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:373
 msgid "An incorrect parameter can cause usteer to fail to start up."
-msgstr "Неправильный параметр может привести к тому, что usteer не запустится."
+msgstr "Некорректный параметр может привести к сбою запуска usteer."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:484
 msgid "Assoc steering"
@@ -48,8 +48,8 @@ msgid ""
 "Attempting to steer clients to a higher frequency-band every n ms. A value "
 "of 0 disables band-steering."
 msgstr ""
-"Попытка переключения клиентов на более высокую частотную полосу каждые n мс. "
-"Значение 0 отключает переключение диапазонов."
+"Попытка направления клиентов в более высокочастотный диапазон каждые n мс. "
+"Значение 0 отключает управление диапазонами (band steering)."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:236
 msgid "BSSID"
@@ -57,15 +57,15 @@ msgstr "BSSID"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:588
 msgid "Band steering interval"
-msgstr "Интервал переключения полосы"
+msgstr "Интервал управления диапазонами"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:593
 msgid "Band steering min SNR"
-msgstr "Минимальный уровень сигнала для переключения полосы"
+msgstr "Мин. SNR для переключения диапазона"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:469
 msgid "Band steering threshold"
-msgstr "Порог управления диапазоном"
+msgstr "Порог управления диапазонами"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:230
 msgid "Client list"
@@ -86,15 +86,16 @@ msgstr "Отключить сетевое взаимодействие"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:563
 msgid "Enable kicking client on excessive channel load"
-msgstr "Включите функцию отбрасывания клиента при чрезмерной загрузке канала"
+msgstr ""
+"Включить принудительное отключение клиентов при чрезмерной загрузке канала"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:610
 msgid "Event log types"
-msgstr "Типы журналов событий"
+msgstr "Типы событий в журнале"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:420
 msgid "Fatal"
-msgstr "Фатальный"
+msgstr "Критические ошибки"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:82
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:238
@@ -110,7 +111,7 @@ msgstr "Предоставить доступ к UCI для LuCI-приложе�
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:60
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:392
 msgid "Hearing map"
-msgstr "Карта прослушивания"
+msgstr "Карта видимости"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:261
 msgctxt "host hint in usteer overview"
@@ -135,7 +136,7 @@ msgstr "Идентификатор"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:527
 msgid "In case this option is disabled, the client is kicked instead"
-msgstr "В случае отключения данной опции, клиент будет выгнан вместо этого"
+msgstr "Если эта опция отключена, клиент будет принудительно отключён"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:421
 msgid "Info"
@@ -150,8 +151,8 @@ msgid ""
 "Initial delay (ms) before responding to probe requests (to allow other APs "
 "to see packets as well)"
 msgstr ""
-"Начальная задержка (мс) перед ответом на запрос зонда (чтобы другие точки "
-"доступа также могли видеть пакеты)"
+"Начальная задержка (мс) перед ответом на probe-запросы (чтобы другие точки "
+"доступа также успели увидеть эти пакеты)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:80
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:235
@@ -170,22 +171,22 @@ msgid ""
 "Interval (ms) the device is sent a link-measurement request to help assess "
 "the bi-directional link quality."
 msgstr ""
-"Интервал (мс), в течение которого устройству отправляется запрос на "
-"измерение канала связи для оценки качества двунаправленного соединения."
+"Интервал (мс), с которым устройству отправляются запросы измерения качества "
+"канала для оценки двусторонней связи."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:598
 msgid "Link measurement interval"
-msgstr "Интервал измерения связи"
+msgstr "Интервал измерения качества связи"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:626
 msgid "List of SSIDs to enable steering on"
-msgstr "Список SSID, для которых необходимо включить управление"
+msgstr "Список SSID, для которых включается управление переходами"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:241
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:259
 msgctxt "Channel load in usteer overview"
 msgid "Load"
-msgstr "Загрузить"
+msgstr "Загрузка"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:464
 msgid "Load balancing threshold"
@@ -193,23 +194,23 @@ msgstr "Порог балансировки нагрузки"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:571
 msgid "Load kick delay"
-msgstr "Задержка отключения при нагрузке"
+msgstr "Задержка отключения при перегрузке"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:563
 msgid "Load kick enabled"
-msgstr "Отключение при нагрузке включено"
+msgstr "Отключать клиентов при перегрузке канала"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:576
 msgid "Load kick min clients"
-msgstr "Минимальное количество клиентов перед отключением"
+msgstr "Мин. клиентов для отключения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:581
 msgid "Load kick reason code"
-msgstr "Код отключения клиента"
+msgstr "Код причины отключения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:566
 msgid "Load kick threshold"
-msgstr "Порог отключения при нагрузке"
+msgstr "Порог отключения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:412
 msgid "Local mode"
@@ -217,11 +218,11 @@ msgstr "Локальный режим"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:439
 msgid "Local sta timeout"
-msgstr "Тайм-аут локальной STA"
+msgstr "Тайм-аут локальной станции"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:449
 msgid "Local sta update"
-msgstr "Интервал обновления локальной STA"
+msgstr "Интервал обновления локальной станции"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:449
 msgid "Local station information update interval (ms)"
@@ -229,24 +230,24 @@ msgstr "Интервал обновления информации о локал
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:408
 msgid "Log messages to syslog"
-msgstr "Отображение сообщений в системном журнале (syslog)"
+msgstr "Записывать сообщения в системный журнал (syslog)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:242
 msgctxt "Max associated clients in usteer overview"
 msgid "Max assoc"
-msgstr "Максимальные ассоциации"
+msgstr "Макс. ассоциаций"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:429
 msgid "Max neighbor reports"
-msgstr "Максимальные отчёты о соседстве"
+msgstr "Макс. число отчётов о соседях"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:454
 msgid "Max retry band"
-msgstr "Максимальное количество повторов диапазона"
+msgstr "Макс. повторов для диапазона"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:439
 msgid "Maximum amount of time (ms) a local unconnected station is tracked"
-msgstr "Максимальное время отслеживания неподключённых локальных станций (мс)"
+msgstr "Максимальное время (мс) отслеживания неподключённой локальной станции"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:444
 msgid "Maximum amount of time (ms) a measurement report is stored"
@@ -257,30 +258,30 @@ msgid ""
 "Maximum amount of time (ms) a station may be blocked due to policy decisions"
 msgstr ""
 "Максимальное время (мс), в течение которого станция может быть заблокирована "
-"из-за решений политики"
+"согласно правилам политик"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:459
 msgid ""
 "Maximum idle time of a station entry (ms) to be considered for policy "
 "decisions"
 msgstr ""
-"Максимальное время простоя записи станции (мс), учитываемое при принятии "
-"решений политик"
+"Максимальное время (мс) с момента последнего обнаружения станции, "
+"учитываемое при применении политик"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:520
 msgid "Maximum number of client roaming scan trigger attempts"
 msgstr ""
-"Максимальное количество попыток запуска сканирования в роуминге клиента"
+"Максимальное количество попыток запуска сканирования для роуминга клиента"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:454
 msgid "Maximum number of consecutive times a station may be blocked by policy"
 msgstr ""
-"Максимальное количество раз подряд станция может быть заблокирована в "
-"соответствии с политикой"
+"Максимальное количество последовательных блокировок станции согласно "
+"правилам политик"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:429
 msgid "Maximum number of neighbor reports set for a node"
-msgstr "Максимальное количество сообщений о соседях, установленное для узла"
+msgstr "Максимальное число отчётов о соседях для одного узла"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:444
 msgid "Measurement report timeout"
@@ -288,114 +289,115 @@ msgstr "Тайм-аут отчёта об измерениях"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:610
 msgid "Message types to include in log."
-msgstr "Типы сообщений для включения в журнал."
+msgstr "Типы сообщений, записываемых в системный журнал."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:495
 msgid "Min SNR"
-msgstr "Минимальный SNR"
+msgstr "Мин. SNR"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:500
 msgid "Min SNR kick delay"
-msgstr "Минимальная задержка SNR для отключения"
+msgstr "Задержка отключения при низком SNR"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:490
 msgid "Min connect SNR"
-msgstr "Минимальный SNR подключения"
+msgstr "Мин. SNR для подключения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:593
 msgid ""
 "Minimal SNR or absolute signal a device has to maintain over "
 "band_steering_interval to be steered to a higher frequency band."
 msgstr ""
-"Минимальный SNR или абсолютный сигнал, который устройство должно "
-"поддерживать в течение интервала band_steering_interval, чтобы быть "
-"переключенным на более высокую частотную полосу."
+"Минимальный SNR или абсолютный уровень сигнала, который устройство должно "
+"поддерживать в течение band_steering_interval, чтобы его перевели в более "
+"высокий частотный диапазон."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:571
 msgid ""
 "Minimum amount of time (ms) that channel load is above threshold before "
 "starting to kick clients"
 msgstr ""
-"Минимальное время (мс), в течение которого нагрузка на канал превышает "
-"пороговое значение, прежде чем начнется отключение клиентов"
+"Минимальное время (мс), в течение которого загрузка канала должна превышать "
+"пороговое значение перед началом отключения клиентов"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:566
 msgid "Minimum channel load (%) before kicking clients"
-msgstr "Минимальная загрузка канала (%) перед отключением клиентов"
+msgstr ""
+"Минимальная загрузка канала (%), при которой начинается отключение клиентов"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:576
 msgid ""
 "Minimum number of connected clients before kicking based on channel load"
 msgstr ""
-"Минимальное количество подключённых клиентов для отключения по загрузке "
-"канала"
+"Минимальное количество подключённых клиентов для начала отключения по "
+"загрузке канала"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:464
 msgid ""
 "Minimum number of stations delta between APs before load balancing policy is "
 "active"
 msgstr ""
-"Минимальное количество станций, дельта между точками доступа, прежде чем "
-"политика балансировки нагрузки станет активной"
+"Минимальная разница в количестве станций между точками доступа для активации "
+"политики балансировки нагрузки"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:469
 msgid ""
 "Minimum number of stations delta between bands before band steering policy "
 "is active"
 msgstr ""
-"Минимальное количество станций, дельта между диапазонами которых будет "
-"активна до начала действия политики управления диапазонами"
+"Минимальная разница в количестве станций между диапазонами для активации "
+"политики управления диапазонами"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:553
 msgid "Minimum signal strength difference until AP steering policy is active"
 msgstr ""
-"Минимальная разница в уровне сигнала, пока политика управления точками "
-"доступа не станет активной"
+"Минимальная разница в уровне сигнала для активации политики переключения "
+"между точками доступа"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:515
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger client scans for roam"
 msgstr ""
-"Минимальное соотношение сигнал/шум или уровень сигнала (дБм) перед попыткой "
-"запуска сканирования клиента на предмет роуминга"
+"Минимальное соотношение сигнал/шум (SNR) или уровень сигнала (дБм) для "
+"запуска сканирования сети клиентом для роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:538
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger forced client roaming"
 msgstr ""
-"Минимальное соотношение сигнал/шум или уровень сигнала (дБм) перед попыткой "
+"Минимальное соотношение сигнал/шум (SNR) или уровень сигнала (дБм) для "
 "запуска принудительного роуминга клиента"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:490
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) to allow connections"
 msgstr ""
-"Минимальное соотношение сигнал/шум или уровень сигнала (дБм) для обеспечения "
-"возможности подключения"
+"Минимальное соотношение сигнал/шум (SNR) или уровень сигнала (дБм) для "
+"разрешения подключения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:495
 msgid "Minimum signal-to-noise ratio or signal level (dBm) to remain connected"
 msgstr ""
-"Минимальное соотношение сигнал/шум или уровень сигнала (дБм) для сохранения "
-"соединения"
+"Минимальное соотношение сигнал/шум (SNR) или уровень сигнала (дБм) для "
+"поддержания подключения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:533
 msgid "Minimum time (ms) between client roaming scan trigger attempts"
 msgstr ""
-"Минимальное время (мс) между попытками запуска сканирования в роуминге "
-"клиента"
+"Минимальное время (мс) между попытками запуска сканирования для роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:543
 msgid "Minimum time (ms) between client roaming trigger attempts"
-msgstr "Минимальное время (мс) между попытками запуска роуминга клиента"
+msgstr ""
+"Минимальное время (мс) между попытками принудительного роуминга клиента"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:239
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:260
 msgctxt "Number of associated clients in usteer overview"
 msgid "N"
-msgstr "N"
+msgstr "Кол-во"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:406
 msgid "Network"
@@ -418,7 +420,7 @@ msgstr "Нет данных"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:606
 msgid "Node up script"
-msgstr "Скрипт для поднятия узла"
+msgstr "Скрипт"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:240
 msgctxt "Channel noise in usteer overview"
@@ -429,19 +431,19 @@ msgstr "Шум"
 msgid "Number of remote update intervals after which a remote-node is deleted"
 msgstr ""
 "Количество интервалов удалённого обновления, после которых удалённый узел "
-"удаляется"
+"исключается"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:487
 msgid "Probe steering"
-msgstr "Управление зондом"
+msgstr "Управление через probe-запросы"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:582
 msgid "Reason code on client kick based on channel load."
-msgstr "Код причины отключения клиента на основе загрузки канала."
+msgstr "Код причины отключения клиента из-за загрузки канала."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:61
 msgid "Refresh page to get new mac addresses to show up"
-msgstr "Обновите страницу, чтобы отобразились новые mac-адреса"
+msgstr "Обновите страницу, чтобы отобразить новые MAC-адреса"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:216
 msgid "Remote hosts"
@@ -453,56 +455,56 @@ msgstr "Тайм-аут удалённого узла"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:474
 msgid "Remote update interval"
-msgstr "Интервал удалённого обновления"
+msgstr "Интервал обновления удалённых узлов"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:526
 msgid ""
 "Retry scanning when roam_scan_tries is exceeded after this timeout (in ms)."
 msgstr ""
-"Повторное сканирование при превышении значения roam_scan_tries по истечении "
-"данного тайм-аута (в мс)."
+"Повторное сканирование по истечении этого тайм-аута (в мс), если исчерпано "
+"число попыток roam_scan_tries."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:548
 msgid "Roam kick delay"
-msgstr "Задержка отключения в роуминге"
+msgstr "Задержка отключения при роуминге"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:510
 msgid "Roam process timeout"
-msgstr "Тайм-аут процесса роуминга"
+msgstr "Тайм-аут определения роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:515
 msgid "Roam scan SNR"
-msgstr "Сканирование в роуминге SNR"
+msgstr "SNR для запуска сканирования роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:533
 msgid "Roam scan interval"
-msgstr "Интервал сканирования роуминга"
+msgstr "Интервал сканирования для роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:525
 msgid "Roam scan timeout"
-msgstr "Тайм-аут сканирования в роуминге"
+msgstr "Тайм-аут сканирования при роуминге"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:520
 msgid "Roam scan tries"
-msgstr "Попытки сканирования в роуминге"
+msgstr "Попытки сканирования при роуминге"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:243
 msgctxt "Roam source in usteer overview"
 msgid "Roam src"
-msgstr "Источник роуминга"
+msgstr "Роуминги от узла"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:244
 msgctxt "Roam target in usteer overview"
 msgid "Roam tgt"
-msgstr "Цель роуминга"
+msgstr "Роуминги к узлу"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:538
 msgid "Roam trigger SNR"
-msgstr "Триггер роуминга SNR"
+msgstr "SNR для запуска роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:543
 msgid "Roam trigger interval"
-msgstr "Интервал срабатывания роуминга"
+msgstr "Интервал попыток запуска роуминга"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:81
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:237
@@ -516,7 +518,7 @@ msgstr "Список SSID"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:606
 msgid "Script to run after bringing up a node"
-msgstr "Сценарий, запускаемый после поднятия узла"
+msgstr "Скрипт, выполняемый после запуска узла"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:280
 msgid "See <a %s>documentation</a>"
@@ -524,11 +526,11 @@ msgstr "Смотрите <a %s>документацию</a>"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:459
 msgid "Seen policy timeout"
-msgstr "Тайм-аут политики просмотра"
+msgstr "Тайм-аут политики обнаружения"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:600
 msgid "Setting the interval to 0 disables link-measurements."
-msgstr "Установка интервала в 0 отключает измерение каналов."
+msgstr "Значение 0 отключает измерения."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:276
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:393
@@ -542,15 +544,15 @@ msgstr "Сигнал"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:553
 msgid "Signal diff threshold"
-msgstr "Пороговое значение разности сигналов"
+msgstr "Порог разницы уровня сигнала"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:423
 msgid "Some debug"
-msgstr "Некоторые отладки"
+msgstr "Частичная отладка"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:434
 msgid "Sta block timeout"
-msgstr "Тайм-аут блокировки STA"
+msgstr "Тайм-аут блокировки станции"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:391
 msgid "Status"
@@ -558,58 +560,56 @@ msgstr "Статус"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:505
 msgid "Steer reject timeout"
-msgstr "Тайм-аут отклонения управления"
+msgstr "Тайм-аут после отклонения перехода"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:278
 msgid "The first four options below are mandatory."
-msgstr "Первые четыре опции ниже являются обязательными."
+msgstr "Первые четыре опции ниже обязательны."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:406
 msgid "The network interface for inter-AP communication"
-msgstr ""
-"Сетевой интерфейс, который будет использоваться для связи между точками "
-"доступа"
+msgstr "Сетевой интерфейс для связи между точками доступа"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:24
 msgid "This AP"
-msgstr "Это AP"
+msgstr "Эта ТД"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:510
 msgid ""
 "Timeout (in ms) after which a association following a disassociation is not "
 "seen as a roam"
 msgstr ""
-"Тайм-аут(в мс), по истечении которого ассоциация после деассоциации не "
-"считается роумингом"
+"Тайм-аут (в мс), после которого ассоциация после деассоциации не считается "
+"роумингом"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:548
 msgid ""
 "Timeout (ms) for client roam requests. usteer will kick the client after "
 "this times out."
 msgstr ""
-"Тайм-аут (мс) для запросов клиента на роуминг. usteer отбросит клиента по "
-"истечении этого времени."
+"Тайм-аут (мс) ожидания роуминга клиента. По его истечении usteer "
+"принудительно отключит клиента."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:505
 msgid ""
 "Timeout (ms) for which a client will not be steered after rejecting a BSS-"
 "transition-request"
 msgstr ""
-"Тайм-аут (мс), в течение которого клиент не будет направляться после "
-"отклонения запроса BSS-перехода"
+"Тайм-аут (мс), в течение которого клиент не будет переключаться после "
+"отклонения запроса перехода BSS"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:500
 msgid "Timeout after which a station with SNR < min_SNR will be kicked"
 msgstr ""
-"Тайм-аут, по истечении которого станция с SNR < min_SNR будет отброшена"
+"Тайм-аут, по истечении которого станция с SNR < min_SNR будет отключена"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:374
 msgid "To start it running try %s"
-msgstr "Чтобы запустить его, попробуйте %s"
+msgstr "Чтобы запустить его, выполните %s"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:415
 msgid "Use IPv6 for remote exchange"
-msgstr "Используйте IPv6 для удалённого обмена"
+msgstr "Использовать IPv6 для обмена с удалёнными узлами"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:371
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:379
@@ -619,11 +619,11 @@ msgstr "Usteer"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:372
 msgid "Usteer is not running. Make sure it is installed and running."
-msgstr "Usteer не запущен. Убедитесь, что он установлен и запущен."
+msgstr "Usteer не запущен. Убедитесь, что пакет установлен и служба запущена."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:422
 msgid "Verbose"
-msgstr "Уровень детализации"
+msgstr "Подробный"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:412
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:415
@@ -631,12 +631,12 @@ msgstr "Уровень детализации"
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:487
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:563
 msgid "default false"
-msgstr "по умолчанию false"
+msgstr "по умолчанию выключено"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:408
 msgid "default true"
-msgstr "по умолчанию true"
+msgstr "по умолчанию включено"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:626
 msgid "empty means all"
-msgstr "пустой означает, что все"
+msgstr "пусто — значит все"
