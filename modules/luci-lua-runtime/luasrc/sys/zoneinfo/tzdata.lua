@@ -128,7 +128,7 @@ TZ = {
 	{ 'America/Indiana/Vevay', 'EST5EDT,M3.2.0,M11.1.0' },
 	{ 'America/Indiana/Vincennes', 'EST5EDT,M3.2.0,M11.1.0' },
 	{ 'America/Indiana/Winamac', 'EST5EDT,M3.2.0,M11.1.0' },
-	{ 'America/Inuvik', 'MST7MDT,M3.2.0,M11.1.0' },
+	{ 'America/Inuvik', 'CST6' },
 	{ 'America/Iqaluit', 'EST5EDT,M3.2.0,M11.1.0' },
 	{ 'America/Jamaica', 'EST5' },
 	{ 'America/Juneau', 'AKST9AKDT,M3.2.0,M11.1.0' },
