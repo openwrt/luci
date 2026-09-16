@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2026-09-02 07:50+0000\n"
-"Last-Translator: Martin Olmer <m_iv@seznam.cz>\n"
+"PO-Revision-Date: 2026-09-08 16:02+0000\n"
+"Last-Translator: HerbJul <19JulianHerbst95@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.9.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:212
 msgid "!known (not known)"
@@ -1243,6 +1243,11 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"Die GCMP-256-Paarverschlüsselung ankündigen. Für Wi-Fi 7 (EHT) obligatorisch "
+"und ansonsten empfohlen; einige Clients und Chipsätze können jedoch keine "
+"Verbindung herstellen, wenn diese Verschlüsselung angeboten wird. "
+"Standardmäßig nur im Kompatibilitätsmodus eines Wi-Fi 7 (EHT)-Funkmoduls "
+"aktiviert, ansonsten deaktiviert."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2187
 msgid ""
@@ -1252,6 +1257,12 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"Den SAE-EXT-KEY AKM (SAE unter Verwendung eines gruppenabhängigen Hashwerts) "
+"ankündigen. Für Wi-Fi 7 (EHT) obligatorisch und ansonsten empfohlen; einige "
+"Clients verhalten sich jedoch fehlerhaft, wenn dieser angeboten wird, "
+"insbesondere in Verbindung mit 802.11r Fast Transition. Standardmäßig nur im "
+"Kompatibilitätsmodus auf einem Wi-Fi 7 (EHT)-Funkmodul aktiviert, ansonsten "
+"deaktiviert."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1832,7 +1843,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1225
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:389
 msgid "Backup"
-msgstr "Sichern"
+msgstr "Backup"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:139
 msgid "Backup / Flash Firmware"
@@ -3981,6 +3992,13 @@ msgid ""
 "sure to enable additional wireless client isolation options ('isolate' and "
 "'bridge_isolate') for all associated wireless interfaces on all APs."
 msgstr ""
+"Aktivieren Sie die AP-Isolation, um WLAN-Clients, die über diesen AP mit "
+"diesem Batman-VLAN verbunden sind, von WLAN-Clients zu trennen, die über "
+"andere APs mit diesem Batman-VLAN verbunden sind. Um alle WLAN-Clients, die "
+"über alle APs mit diesem Batman-VLAN verbunden sind, voneinander zu trennen, "
+"müssen Sie diese Option auf allen APs aktivieren und zusätzlich die Optionen "
+"zur Isolierung von WLAN-Clients („isolate“ und „bridge_isolate“) für alle "
+"zugehörigen WLAN-Schnittstellen auf allen APs aktivieren."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:279
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:495
@@ -5492,7 +5510,7 @@ msgstr "Hybrid"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:114
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:172
 msgid "IAID"
-msgstr ""
+msgstr "IAID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:180
 msgid "IAID of 1 to 8 hexadecimal characters"
@@ -6307,7 +6325,7 @@ msgstr "Kennung der integrierten Schaltkreiskarte"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
-msgstr "Schnittstelle"
+msgstr "Interface"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:655
 msgctxt "footstrap"
@@ -7974,7 +7992,7 @@ msgstr "NAS-ID"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:169
 msgid "NAT"
-msgstr ""
+msgstr "NAT"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:637
 msgid "NAT action chain \"%h\""
@@ -8619,7 +8637,7 @@ msgstr "Aus"
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:452
 msgctxt "footstrap"
 msgid "Off"
-msgstr ""
+msgstr "Aus"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1784
 msgid ""
@@ -9708,6 +9726,11 @@ msgid ""
 "client communication on the same interface when the WiFi device is in AP "
 "mode."
 msgstr ""
+"Verhindert die Kommunikation ausschließlich mit Zielen an isolierten Bridge-"
+"Ports (während die Kommunikation mit Zielen an nicht isolierten Ports "
+"weiterhin möglich ist). Dies verhindert auch die Kommunikation zwischen "
+"Clients auf derselben Schnittstelle, wenn sich das WLAN-Gerät im AP-Modus "
+"befindet."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:61
 msgid ""
@@ -11011,7 +11034,7 @@ msgstr "Terminplan-Daemon"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:144
 msgctxt "scroll to top (the head) of the log file"
 msgid "Scroll to head"
-msgstr "Zum Kopf scrollen"
+msgstr "Zum Anfang scrollen"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:158
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:134
@@ -11349,6 +11372,10 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"Deaktivierung des Signalübergangs (WPA3-Spezifikation v3.5, Abschnitt 13), "
+"damit ein Client, der einmal eine Verbindung hergestellt hat, für diese SSID "
+"nicht mehr auf einen schwächeren Sicherheitsmodus zurückfällt. Die "
+"übertragene Bitmap leitet sich aus dem Verschlüsselungsmodus ab."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -11904,7 +11931,7 @@ msgstr ""
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:657
 msgctxt "footstrap"
 msgid "Surfaces"
-msgstr ""
+msgstr "Oberfläche"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:558
 msgid "Svc Parameters"
@@ -12124,7 +12151,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:218
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:255
 msgid "Target"
-msgstr "Zielplattform"
+msgstr "Ziel"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:69
 msgid "Target Platform"
@@ -12415,6 +12442,10 @@ msgid ""
 "device, used when acting as a DHCP server or client. The client identifier "
 "can be overridden on a per-interface basis."
 msgstr ""
+"Die Standard-<abbr title=\"DHCP Unique Identifier\">DUID</abbr> für dieses "
+"Gerät, die verwendet wird, wenn es als DHCP-Server oder -Client fungiert. "
+"Die Client-Kennung kann für jede Schnittstelle individuell überschrieben "
+"werden."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5335
 msgid ""
@@ -12648,6 +12679,13 @@ msgid ""
 "Often there is by default one Uplink port for a connection to the next "
 "greater network like the internet and other ports for a local network."
 msgstr ""
+"Die Netzwerkanschlüsse dieses Geräts lassen sich zu mehreren <abbr "
+"title='Virtual Local Area Network'>VLAN</abbr>s zusammenfassen, in denen "
+"Computer direkt miteinander kommunizieren können. <abbr title='Virtual Local "
+"Area Network'>VLAN</abbr>s werden häufig verwendet, um verschiedene "
+"Netzwerksegmente voneinander zu trennen. Oft gibt es standardmäßig einen "
+"Uplink-Anschluss für die Verbindung zum übergeordneten Netzwerk, wie "
+"beispielsweise dem Internet, und weitere Anschlüsse für ein lokales Netzwerk."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:230
 msgid "The private key for your Yggdrasil node"
@@ -12714,6 +12752,10 @@ msgid ""
 "of the <code>DUID</code> or <code>DUID%IAID</code> values listed above. Only "
 "one is expected to be in active use on the network at any given time."
 msgstr ""
+"Dieselben IPv6-Adressen werden jedem <em>beliebigen</em> Host unter "
+"Verwendung eines der oben aufgeführten <code>DUID</code>- oder "
+"<code>DUID%IAID</code>-Werte (erneut) zugewiesen. Es wird davon ausgegangen, "
+"dass zu jedem Zeitpunkt nur einer davon im Netzwerk aktiv genutzt wird."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1490
 msgid "The selected %s mode is incompatible with %s encryption"
@@ -12881,6 +12923,10 @@ msgid ""
 "here lasts until you reload. Saving as default still works and applies to "
 "every browser."
 msgstr ""
+"Dieser Browser speichert keine Einstellungen (Website-Daten werden "
+"blockiert), daher bleibt eine hier vorgenommene Änderung nur so lange "
+"bestehen, bis Sie die Seite neu laden. Das Speichern als Standard "
+"funktioniert weiterhin und gilt für jeden Browser."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:48
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56

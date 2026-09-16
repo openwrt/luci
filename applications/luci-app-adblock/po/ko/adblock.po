@@ -16,7 +16,7 @@ msgstr ""
 msgid "-- default --"
 msgstr "-- 기본값 --"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:272
 msgid "0.0.0.0 <Domain>"
 msgstr "0.0.0.0 <도메인>"
 
@@ -24,7 +24,7 @@ msgstr "0.0.0.0 <도메인>"
 msgid "10 minutes"
 msgstr "10분"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:227
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:271
 msgid "127.0.0.1 <Domain>"
 msgstr "127.0.0.1 <도메인>"
 
@@ -48,11 +48,11 @@ msgstr "5분"
 msgid "60 minutes"
 msgstr "60분"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:229
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
 msgid "<Adblock Plus Syntax>"
 msgstr "<Adblock Plus 구문>"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:226
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:270
 msgid "<Domain>"
 msgstr "<도메인>"
 
@@ -102,6 +102,10 @@ msgstr "허용 목록 도메인 추가"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
 msgid "Add Blocklist Domain"
 msgstr "차단 목록 도메인 추가"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:219
+msgid "Add feed"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:79
 msgid "Add this (sub-)domain to your local allowlist."
@@ -247,7 +251,7 @@ msgstr "이 탭의 변경 사항을 적용하려면 Adblock 서비스를 다시 
 msgid "Changes on this tab needs an adblock service restart to take effect."
 msgstr "이 탭의 변경 사항을 적용하려면 Adblock 서비스를 재시작해야 합니다."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:293
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:306
 msgid "Clear"
 msgstr "초기화"
 
@@ -316,9 +320,17 @@ msgstr "Control D (보안)"
 msgid "Control D (unfiltered)"
 msgstr "Control D (필터링 없음)"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "Custom Feed"
+msgstr ""
+
 #: applications/luci-app-adblock/root/usr/share/luci/menu.d/luci-app-adblock.json:43
 msgid "Custom Feed Editor"
 msgstr "사용자 정의 피드 편집기"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+msgid "Custom feed file saved."
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:360
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:791
@@ -431,7 +443,7 @@ msgstr "DNS 백엔드의 재시작 성공 여부를 확인할 도메인입니다
 msgid "Don't check SSL server certificates during download."
 msgstr "다운로드 시 SSL 서버 인증서를 검증하지 않습니다."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:286
 msgid "Download"
 msgstr "다운로드"
 
@@ -450,6 +462,10 @@ msgstr "다운로드 재시도"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:493
 msgid "Download Utility"
 msgstr "다운로드 유틸리티"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:443
 msgid "E-Mail Notification"
@@ -479,8 +495,9 @@ msgstr "허용 목록 편집"
 msgid "Edit Blocklist"
 msgstr "차단 목록 편집"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:206
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:245
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
 msgid "Empty field not allowed"
 msgstr "필수 입력 항목"
 
@@ -623,11 +640,11 @@ msgstr "외부 원격 DNS 정책 (임시 MAC 기반 원격 DNS 우회)"
 msgid "External Unfiltered DNS Policy (MAC-/Interface‑based DNS bypass)"
 msgstr "외부 필터링 없는 DNS 정책 (MAC/인터페이스 기반 DNS 우회)"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:238
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:255
 msgid "Extra Extra Large"
 msgstr "초대형(XXL)"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:237
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:254
 msgid "Extra Large"
 msgstr "특대형(XL)"
 
@@ -635,7 +652,7 @@ msgstr "특대형(XL)"
 msgid "Failed to generate adblock report!"
 msgstr "Adblock 보고서 생성에 실패했습니다!"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:224
 msgid "Feed Name"
 msgstr "피드 이름"
 
@@ -643,7 +660,11 @@ msgstr "피드 이름"
 msgid "Feed Selection"
 msgstr "피드 선택"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:283
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+msgid "Feed name already used"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:299
 msgid "Fill"
 msgstr "채우기"
 
@@ -746,13 +767,17 @@ msgstr "인터페이스"
 msgid "Interface DNS Filter Targets"
 msgstr "인터페이스 DNS 필터 대상"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:209
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:231
 msgid "Invalid characters"
 msgstr "허용되지 않는 문자"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "잘못된 입력 값입니다. 변경 사항을 저장할 수 없습니다."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:53
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:98
@@ -763,7 +788,7 @@ msgstr "잘못된 입력입니다. 유효한 단일 (하위) 도메인을 입력
 msgid "Jail Mode"
 msgstr "격리 모드(Jail Mode)"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:236
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:253
 msgid "Large"
 msgstr "대형(L)"
 
@@ -844,9 +869,17 @@ msgstr "지도"
 msgid "Map Reset"
 msgstr "지도 초기화"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:252
 msgid "Medium"
 msgstr "중형(M)"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:49
+msgid "Missing URL: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:46
+msgid "Missing description: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:473
 msgid "Nice Level"
@@ -1026,7 +1059,7 @@ msgstr ""
 "선택한 MAC 주소 또는 인터페이스를 필터링 없는 외부 DNS 리졸버로 라우팅하여 로"
 "컬 광고 차단을 우회합니다."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:225
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:268
 msgid "Rule"
 msgstr "규칙"
 
@@ -1044,7 +1077,7 @@ msgstr "실행 인터페이스"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:71
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:116
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:303
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:312
 msgid "Save"
 msgstr "저장"
 
@@ -1098,11 +1131,11 @@ msgstr ""
 "볼릭 링크만 생성합니다. 백업 디렉터리가 외장 드라이브에 있는 경우, 이 옵션을 "
 "활성화하여 메모리를 절약할 수 있습니다."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:233
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:250
 msgid "Size"
 msgstr "크기"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:234
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:251
 msgid "Small"
 msgstr "소형(S)"
 
@@ -1176,6 +1209,10 @@ msgstr ""
 "최상위 도메인 압축은 최종 DNS 차단 목록에서 수천 개의 불필요한 호스트 항목을 "
 "제거합니다."
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:38
 msgid ""
 "This is the local adblock allowlist to always-allow certain domains.<br /> "
@@ -1247,7 +1284,7 @@ msgstr "시작 지연 시간"
 msgid "Type"
 msgstr "유형"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:214
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:259
 msgid "URL"
 msgstr "URL"
 
@@ -1267,21 +1304,25 @@ msgstr "사용자 정의 피드 파일을 분석할 수 없습니다!"
 msgid "Unable to parse the default feed file!"
 msgstr "기본 피드 파일을 분석할 수 없습니다!"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:63
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:63
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "변경 사항을 저장할 수 없습니다: %s"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:292
 msgid "Upload"
 msgstr "업로드"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:85
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "사용자 정의 피드 파일 업로드에 실패했습니다."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr ""
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:239
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:256
 msgid "Varying"
 msgstr "가변형"
 
@@ -1293,7 +1334,7 @@ msgstr "상세 디버그 로그 기록"
 msgid "Version"
 msgstr "버전"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:187
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1347,6 +1388,10 @@ msgstr "최대 결과 집합 크기"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:218
 msgid "max. top statistics"
 msgstr "최대 상위 통계"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "new"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:177
 msgid "online documentation"
