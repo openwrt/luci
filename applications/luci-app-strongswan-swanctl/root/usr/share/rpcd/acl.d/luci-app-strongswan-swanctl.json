@@ -9,7 +9,7 @@
 			"ubus": {
 				"luci.swanctl": [ "list-algs", "map-conns" ]
 			},
-			"uci": [ "ipsec" ]
+			"uci": [ "swanctl" ]
 		},
 		"write": {
 			"file": {
@@ -18,7 +18,7 @@
 				"/usr/sbin/swanctl --terminate --ike *": [ "exec" ],
 				"/usr/sbin/swanctl --terminate --child *": [ "exec" ]
 			},
-			"uci": [ "ipsec" ]
+			"uci": [ "swanctl" ]
 		}
 	}
 }
