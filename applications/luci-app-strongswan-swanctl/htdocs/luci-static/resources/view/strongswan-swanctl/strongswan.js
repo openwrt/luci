@@ -18,7 +18,7 @@ return view.extend({
 	render: function (result) {
 		let m, s, o;
 
-		m = new form.Map('ipsec', _('Service configuration'),
+		m = new form.Map('swanctl', _('Service configuration'),
 			_('On this page, you can configure the IPsec service.'));
 		m.tabbed = true;
 

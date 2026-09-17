@@ -36,10 +36,10 @@ function sectionNameCheck(extra_class) {
 		nameEl = el.querySelector('.cbi-section-create-name');
 	ui.addValidator(nameEl, 'uciname', true, function(v) {
 		let sections = [
-			...uci.sections('ipsec', 'remote'),
-			...uci.sections('ipsec', 'child'),
-			...uci.sections('ipsec', 'shunt'),
-			...uci.sections('ipsec', 'crypto_proposal'),
+			...uci.sections('swanctl', 'remote'),
+			...uci.sections('swanctl', 'child'),
+			...uci.sections('swanctl', 'shunt'),
+			...uci.sections('swanctl', 'crypto_proposal'),
 		];
 		if (sections.find(function(s) {
 			return s['.name'] == v;
@@ -66,7 +66,7 @@ return view.extend({
 		if (error)
 			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
 
-		m = new form.Map('ipsec', _('Connection configurations'),
+		m = new form.Map('swanctl', _('Connection configurations'),
 			_('On this page, you can configure the IPsec connections.'));
 		m.tabbed = true;
 
@@ -109,7 +109,7 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+			var sections = uci.sections('swanctl', 'crypto_proposal').filter(function (section) {
 				return section.is_esp != '1';
 			});
 			if (sections.length == 0) {
@@ -130,7 +130,7 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'child');
+			var sections = uci.sections('swanctl', 'child');
 			if (sections.length == 0) {
 				this.value('', _('Please create a Children first'));
 			} else {
@@ -344,7 +344,7 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+			var sections = uci.sections('swanctl', 'crypto_proposal').filter(function (section) {
 				return section.is_esp == '1';
 			});
 			if (sections.length == 0) {
