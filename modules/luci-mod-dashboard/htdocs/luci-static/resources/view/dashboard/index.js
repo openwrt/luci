@@ -3,6 +3,7 @@
 'require dom';
 'require poll';
 'require fs';
+'require ui';
 'require network';
 
 document.querySelector('head').appendChild(E('link', {
@@ -34,40 +35,98 @@ function invokeIncludesLoad(includes) {
 	return has_load ? Promise.all(tasks) : Promise.resolve(null);
 }
 
-function startPolling(includes, containers) {
+function collectSections(includes, results) {
+	const sections = { kpi: [], charts: [], tabs: [], extra: [] };
+
+	for (let i = 0; i < includes.length; i++) {
+		let content = null;
+
+		if (includes[i].failed)
+			continue;
+
+		try {
+			if (typeof(includes[i].render) == 'function')
+				content = includes[i].render(results ? results[i] : null);
+			else if (includes[i].content != null)
+				content = includes[i].content;
+		}
+		catch (e) {
+			console.error(e);
+			continue;
+		}
+
+		if (content == null)
+			continue;
+
+		if (content instanceof Node || Array.isArray(content)) {
+			sections.extra.push(content);
+			continue;
+		}
+
+		for (const key of [ 'kpi', 'charts', 'tabs' ])
+			(content[key] || []).forEach(item => sections[key].push(item));
+	}
+
+	return sections;
+}
+
+function renderSections(sections) {
+	const nodes = [];
+
+	if (sections.kpi.length)
+		nodes.push(E('div', { 'class': 'dashboard-kpi-row' }, sections.kpi));
+
+	if (sections.charts.length)
+		nodes.push(E('div', { 'class': 'dashboard-charts' }, sections.charts));
+
+	if (sections.tabs.length)
+		nodes.push(E('div', { 'class': 'cbi-map' }, [
+			E('div', { 'class': 'cbi-map-tabbed' }, sections.tabs.map(tab => E('div', {
+				'class': 'cbi-section',
+				'data-tab': tab.id,
+				'data-tab-title': (tab.count != null) ? '%s (%d)'.format(tab.title, tab.count) : tab.title
+			}, tab.content)))
+		]));
+
+	if (sections.extra.length)
+		nodes.push(E('div', {}, sections.extra));
+
+	return nodes;
+}
+
+function saveChartScroll(root) {
+	const positions = {};
+
+	root.querySelectorAll('[data-chart]').forEach(node => {
+		if (node.dataset.chart)
+			positions[node.dataset.chart] = node.scrollLeft;
+	});
+
+	return positions;
+}
+
+function restoreChartScroll(root, positions) {
+	root.querySelectorAll('[data-chart]').forEach(node => {
+		if (positions[node.dataset.chart])
+			node.scrollLeft = positions[node.dataset.chart];
+	});
+}
+
+function startPolling(includes, root) {
 	const step = () => {
 		return network.flushCache().then(() => {
 			return invokeIncludesLoad(includes);
 		}).then(results => {
-			for (let i = 0; i < includes.length; i++) {
-				let content = null;
+			const positions = saveChartScroll(root);
 
-				if (includes[i].failed)
-					continue;
+			dom.content(root, renderSections(collectSections(includes, results)));
 
-				if (typeof(includes[i].render) == 'function')
-					content = includes[i].render(results ? results[i] : null);
-				else if (includes[i].content != null)
-					content = includes[i].content;
+			const group = root.querySelector('.cbi-map-tabbed');
+			if (group)
+				ui.tabs.initTabGroup(group.childNodes);
 
-				if (content != null) {
-
-					if (i > 1) {
-						dom.append(containers[1], content);
-					} else {
-						containers[i].parentNode.style.display = '';
-						containers[i].parentNode.classList.add('fade-in');
-						containers[i].parentNode.classList.add('Dashboard');
-						dom.content(containers[i], content);
-					}
-				}
-			}
-
-			const ssi = document.querySelector('div.includes');
-			if (ssi) {
-				ssi.style.display = '';
-				ssi.classList.add('fade-in');
-			}
+			restoreChartScroll(root, positions);
+			root.classList.add('fade-in');
 		});
 	};
 
@@ -90,22 +149,10 @@ return view.extend({
 	},
 
 	render(includes) {
-		const rv = E([]);
-		const containers = [];
+		const root = E('div', { 'class': 'Dashboard' });
 
-		for (let i = 0; i < includes.length - 1; i++) {
-
-			const container = E('div', { 'class': 'section-content' });
-
-			rv.appendChild(E('div', { 'class': 'cbi-section-' + i, 'style': 'display:none' }, [
-				container
-			]));
-
-			containers.push(container);
-		}
-
-		return startPolling(includes, containers).then(() => {
-			return rv;
+		return startPolling(includes, root).then(() => {
+			return root;
 		});
 	},
 

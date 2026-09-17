@@ -1,298 +1,450 @@
 /**
- * Dashboard Principals Styles
-**/
+ * Dashboard styles. Cards, tabs, tables and badges are standard LuCI
+ * elements styled by the theme; this file only lays out the grids and
+ * draws the charts. Colours map to the LuCI theme variables where a theme
+ * defines them and fall back to a self-contained light / dark palette.
+ */
 
 .Dashboard {
-	color: var(--text-color-high, #212529) !important;
+	--dashboard-surface-alt: var(--background-color-medium, #f2f4f7);
+	--dashboard-text: var(--text-color-high, #1f2933);
+	--dashboard-text-muted: var(--text-color-low, #6b7280);
+	--dashboard-border: var(--border-color-medium, rgba(0, 0, 0, 0.12));
+	--dashboard-primary: var(--primary-color-high, #1976d2);
+	--dashboard-success: var(--success-color-high, #00ac59);
+	--dashboard-warn: var(--warn-color-high, #e0a800);
+	--dashboard-series-1: var(--dashboard-primary);
+	--dashboard-series-2: var(--dashboard-success);
+	--dashboard-series-3: var(--dashboard-warn);
+	--dashboard-series-4: #8e5bd8;
+	--dashboard-series-5: #ef6c2f;
+	--dashboard-series-6: #19b5c8;
+	--dashboard-series-7: #b0367c;
+	--dashboard-series-8: #9c9a1c;
+	--dashboard-gap: 16px;
+
+	display: grid;
+	/* minmax(0, …): a wide tab menu must scroll, not widen every row. */
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--dashboard-gap);
+	color: var(--dashboard-text);
 }
 
-.Dashboard h3 {
-	color: var(--text-color-high, #000);
+[data-darkmode="true"] .Dashboard {
+	--dashboard-surface-alt: var(--background-color-medium, #262b34);
+	--dashboard-text: var(--text-color-high, #e6e8eb);
+	--dashboard-text-muted: var(--text-color-low, #9aa3ad);
+	--dashboard-border: var(--border-color-medium, rgba(255, 255, 255, 0.12));
+	--dashboard-series-4: #a98cf0;
+	--dashboard-series-5: #e5652c;
+	--dashboard-series-6: #10a4b8;
+	--dashboard-series-7: #c2438a;
+	--dashboard-series-8: #a89f2a;
 }
 
-.Dashboard hr {
-	border: 0;
-	height: 0;
-	overflow: visible;
+@media (prefers-color-scheme: dark) {
+	:root:not([data-darkmode="false"]) .Dashboard {
+		--dashboard-surface-alt: var(--background-color-medium, #262b34);
+		--dashboard-text: var(--text-color-high, #e6e8eb);
+		--dashboard-text-muted: var(--text-color-low, #9aa3ad);
+		--dashboard-border: var(--border-color-medium, rgba(255, 255, 255, 0.12));
+		--dashboard-series-4: #a98cf0;
+		--dashboard-series-5: #e5652c;
+		--dashboard-series-6: #10a4b8;
+		--dashboard-series-7: #c2438a;
+		--dashboard-series-8: #a89f2a;
+	}
+}
+
+/* ---- Layout ---- */
+.dashboard-kpi-row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+	gap: var(--dashboard-gap);
+}
+
+.dashboard-charts {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: var(--dashboard-gap);
+	align-items: stretch;
+}
+
+/* Grid gaps space the cards, not the theme's section margin. */
+.dashboard-kpi-row > .cbi-section,
+.dashboard-charts > .cbi-section {
 	margin: 0;
-	box-sizing: content-box;
-	border-top: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
 }
 
-.Dashboard .box-s1 {
-	min-height: 466px;
-}
-
-.Dashboard .internet-status-self .internet-status-info .title {
-	height: 97px;
-}
-
-.Dashboard .dashboard-bg {
-	border-radius: 16px;
-	background-color: var(--background-color-medium, #e0e0e0);
-}
-
-.Dashboard .title {
-	text-align: center;
-}
-
-.Dashboard .section-content {
-	display: flex;
-	vertical-align: top;
-	padding: 20px 0 0 0;
-	align-items: flex-start;
-	justify-content: space-between;
-}
-
-.Dashboard .section-content > div {
-	width:100%;
-	padding:1.5em;
-}
-
-.Dashboard .section-content  .settings-info {
-	padding-top:1em;
-}
-
-.Dashboard .section-content .internet-status-info .settings-info {
-	display: flex;
-	justify-content: space-around;
-}
-
-.Dashboard .section-content .internet-status-info .settings-info > div > p > i{
-	padding: 0 0 0 5px;
-}
-
-.Dashboard .section-content > div:nth-child(2) {
-	margin-left:20px;
-}
-
-.Dashboard .devices-list .devices-info {
-	margin-bottom: 0;
-}
-
-.Dashboard .devices-list .devices-info .tr .td{
-	padding:0px 0 0 10px;
-}
-
-.Dashboard .devices-list .devices-info .tr .td:first-child {
-	width: 33%;
-	word-break: break-all;
-}
-
-.Dashboard .devices-list hr:nth-child(4) {
-	margin-top: 0;
-	margin-bottom: 8px;
-}
-
-.Dashboard .router-status-lan .devices-list .table-titles .th:first-child {
-	width: 35%;
-}
-
-.Dashboard .router-status-self .router-status-info .settings-info {
-	padding-left:27px;
-}
-
-.Dashboard .router-status-self .router-status-info .title h3 {
-	margin-top:-2px;
-}
-
-.Dashboard .router-status-info svg {
-	width: 70px;
-}
-
-.Dashboard .internet-status-self .settings-info p:first-child span:first-child{
-	font-size: 15px;
-	font-weight: 500;
-}
-
-.Dashboard .internet-status-self .settings-info p:nth-child(2) span:first-child,
-.Dashboard .router-status-wifi .wifi-info .settings-info p:first-child span:first-child,
-.Dashboard .router-status-wifi .wifi-info .settings-info p:nth-child(2) span:first-child{
-	font-weight: 700;
-}
-
-.Dashboard .settings-info p span:first-child {
-	width: 35%;
-	font-size: 12px;
-	text-align: right;
-}
-
-.Dashboard .settings-info p span:nth-child(2){
+/* ---- Icon (mask keeps the SVG files, colour follows the theme) ---- */
+.dashboard-icon {
 	display: inline-block;
-	overflow-wrap: break-word;
-	word-break: normal;
+	width: 1em;
+	height: 1em;
+	background: currentColor;
+	-webkit-mask: var(--dashboard-icon) center / contain no-repeat;
+	mask: var(--dashboard-icon) center / contain no-repeat;
 }
 
-.Dashboard .settings-info p span:nth-child(2).label {
-	padding: 1px 4px 1px 4px;
-	font-size: 9.75px;
-}
-
-.Dashboard .router-status-info .settings-info p span:nth-child(2){
-	max-width: 283px;
-}
-
-.Dashboard .settings-info p span.ssid {
-	max-height: 18px;
-	top: 3px;
-}
-
-.Dashboard .settings-info p span.encryption {
-	max-width: 82px;
-}
-
-.Dashboard .router-status-wifi .wifi-info .settings-info,
-.Dashboard .router-status-lan .lan-info .settings-info
-{
+/* ---- KPI card ---- */
+.Dashboard .dashboard-kpi {
 	display: flex;
-	justify-content: space-around;
+	align-items: center;
+	gap: 14px;
 }
 
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td {
-	padding: 0 10px 0 10px;
-}
-
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:first-child {
-	width: 30%;
-	word-break: break-all;
-}
-
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:nth-child(2) {
-	width: 21%;
-	overflow: hidden;
-	padding-left:0;
-	word-break: break-all;
-}
-
-.Dashboard .router-status-wifi .wifi-info .settings-info{
-	padding:1em 0 1em 0;
-}
-
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:nth-child(3) {
-	width: 22%;
-	overflow: hidden;
+.dashboard-kpi-icon {
+	flex-shrink: 0;
+	width: 56px;
+	height: 56px;
+	border-radius: 14px;
+	background: var(--dashboard-surface-alt);
+	color: var(--dashboard-primary);
 	position: relative;
-	top: -3px;
 }
 
-.Dashboard .router-status-wifi .wifi-info .devices-info .tr .td:nth-child(5) {
-	width: initial;
+.dashboard-kpi-icon::after {
+	content: "";
+	position: absolute;
+	inset: 13px;
+	background: currentColor;
+	-webkit-mask: var(--dashboard-icon) center / contain no-repeat;
+	mask: var(--dashboard-icon) center / contain no-repeat;
 }
 
-.Dashboard .router-status-wifi .wifi-info > hr:last-child {
-	margin-bottom:0;
+.dashboard-kpi-icon.dashboard-icon {
+	-webkit-mask: none;
+	mask: none;
 }
 
-.Dashboard .router-status-wifi .wifi-info .devices-info .device-info .progress {
+.dashboard-kpi-text {
+	min-width: 0;
+}
+
+.dashboard-kpi-value {
+	display: block;
+	font-size: 22px;
+	line-height: 1.15;
+	margin: 2px 0;
+}
+
+.dashboard-kpi-sub {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+/* ---- Donut ---- */
+.dashboard-donut {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+.dashboard-donut svg {
+	width: 136px;
+	height: 136px;
+	flex-shrink: 0;
+}
+
+.dashboard-donut-track {
+	fill: none;
+	stroke: var(--dashboard-surface-alt);
+	stroke-width: 16;
+}
+
+.dashboard-donut-seg {
+	fill: none;
+	stroke: var(--dashboard-text-muted);
+	stroke-width: 16;
+}
+
+.dashboard-donut-value {
+	font-size: 22px;
+	font-weight: 700;
+	fill: var(--dashboard-text);
+	text-anchor: middle;
+}
+
+.dashboard-donut-label {
+	font-size: 9px;
+	fill: var(--dashboard-text-muted);
+	text-anchor: middle;
+}
+
+.Dashboard .dashboard-series-1 { stroke: var(--dashboard-series-1); background: var(--dashboard-series-1); }
+.Dashboard .dashboard-series-2 { stroke: var(--dashboard-series-2); background: var(--dashboard-series-2); }
+.Dashboard .dashboard-series-3 { stroke: var(--dashboard-series-3); background: var(--dashboard-series-3); }
+.Dashboard .dashboard-series-4 { stroke: var(--dashboard-series-4); background: var(--dashboard-series-4); }
+.Dashboard .dashboard-series-5 { stroke: var(--dashboard-series-5); background: var(--dashboard-series-5); }
+.Dashboard .dashboard-series-6 { stroke: var(--dashboard-series-6); background: var(--dashboard-series-6); }
+.Dashboard .dashboard-series-7 { stroke: var(--dashboard-series-7); background: var(--dashboard-series-7); }
+.Dashboard .dashboard-series-8 { stroke: var(--dashboard-series-8); background: var(--dashboard-series-8); }
+
+.Dashboard .dashboard-legend {
+	list-style: none;
+	margin: 0;
 	padding: 0;
-	width: 100%;
+	display: grid;
+	gap: 8px;
+	flex: 1;
+	min-width: 0;
+}
+
+.Dashboard .dashboard-legend li {
+	display: grid;
+	grid-template-columns: 10px minmax(0, 1fr) auto auto;
+	gap: 8px;
+	align-items: start;
+	font-size: 12.5px;
+	line-height: 1.4;
+}
+
+.dashboard-legend i {
+	width: 10px;
+	height: 10px;
+	border-radius: 3px;
+	background: var(--dashboard-text-muted);
+	margin-top: calc((1.4em - 10px) / 2);
+}
+
+.dashboard-legend-name {
+	overflow-wrap: anywhere;
+}
+
+.dashboard-legend-name small {
+	display: block;
+	font-size: 11px;
+}
+
+.dashboard-legend li > small {
+	color: var(--dashboard-text-muted);
+	min-width: 3ch;
+	text-align: right;
+	font-size: 12px;
+}
+
+.dashboard-legend-inline {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 14px;
+	margin-top: 10px;
+	font-size: 11.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-legend-inline span {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.dashboard-legend-inline i {
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+}
+
+/* ---- Bar chart (fixed axis, scrollable plot) ---- */
+.dashboard-bars {
+	--dashboard-plot-h: 170px;
+	--dashboard-label-h: 40px;
+	--dashboard-slot: 56px;
+	display: grid;
+	grid-template-columns: 44px minmax(0, 1fr);
+}
+
+.dashboard-bars-many {
+	--dashboard-label-h: 58px;
+}
+
+.dashboard-bars-axis {
+	position: relative;
+	height: var(--dashboard-plot-h);
+	font-size: 10.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-bars-axis span {
+	position: absolute;
+	right: 8px;
+	transform: translateY(-50%);
+	white-space: nowrap;
+}
+
+.dashboard-bars-scroll {
+	overflow-x: auto;
+	overflow-y: hidden;
+	padding-bottom: 2px;
+	scrollbar-width: thin;
+}
+
+.dashboard-bars-plot {
+	position: relative;
+	display: flex;
+	align-items: stretch;
+	height: calc(var(--dashboard-plot-h) + var(--dashboard-label-h));
+	min-width: 100%;
+}
+
+.dashboard-bars-grid {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--dashboard-plot-h);
+	pointer-events: none;
+}
+
+.dashboard-bars-grid i {
+	position: absolute;
+	left: 0;
+	right: 0;
+	border-top: 1px solid var(--dashboard-border);
+}
+
+.dashboard-bars-col {
+	flex: 1 0 var(--dashboard-slot);
+	display: grid;
+	grid-template-rows: var(--dashboard-plot-h) var(--dashboard-label-h);
+	min-width: 0;
+}
+
+.dashboard-bars-col:hover .dashboard-bars-stack i {
+	filter: brightness(0.9);
+}
+
+.dashboard-bars-stack {
+	display: flex;
+	align-items: flex-end;
+	justify-content: center;
+	gap: 3px;
+	padding: 0 6px;
+	height: var(--dashboard-plot-h);
+}
+
+.dashboard-bars-stack i {
+	display: block;
+	flex: 1 1 0;
+	max-width: 26px;
+	min-height: 2px;
+	border-radius: 4px 4px 0 0;
+	background: var(--dashboard-series-1);
+}
+
+.dashboard-bars-stack i.dashboard-bar-ok { background: var(--dashboard-success); }
+.dashboard-bars-stack i.dashboard-bar-mid { background: var(--dashboard-warn); }
+.dashboard-bars-stack i.dashboard-bar-up { background: var(--dashboard-series-1); }
+.dashboard-bars-stack i.dashboard-bar-down { background: var(--dashboard-series-2); }
+.dashboard-bars-stack i.dashboard-bar-none { background: var(--dashboard-text-muted); }
+
+.dashboard-bars-label {
+	font-size: 10.5px;
+	color: var(--dashboard-text-muted);
+	text-align: center;
+	padding: 6px 2px 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.dashboard-bars-many .dashboard-bars-label {
+	transform: rotate(-40deg) translate(-8px, 10px);
+	transform-origin: top right;
+	text-align: right;
+	overflow: visible;
+	max-width: var(--dashboard-slot);
+}
+
+.dashboard-legend-inline i.dashboard-bar-ok { background: var(--dashboard-success); }
+.dashboard-legend-inline i.dashboard-bar-mid { background: var(--dashboard-warn); }
+.dashboard-legend-inline i.dashboard-bar-up { background: var(--dashboard-series-1); }
+.dashboard-legend-inline i.dashboard-bar-down { background: var(--dashboard-series-2); }
+
+/* ---- Wireless network boxes (LuCI .ifacebox) ---- */
+.dashboard-net-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 12px;
+	margin-bottom: 18px;
+}
+
+.Dashboard .ifacebox {
 	margin: 0;
 }
 
-.Dashboard .wifi-info .devices-info .table-titles {
-	border-bottom: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
-}
-
-.Dashboard .table {
-	width: auto;
+.Dashboard .ifacebox-body {
+	display: grid;
+	gap: 10px;
+	padding: 12px 14px;
 	text-align: left;
+	white-space: normal;
 }
 
-[data-darkmode="true"] {
-	/* invert black SVG line drawings in dark mode */
-	.Dashboard .svgmonotone {
-		filter: invert(.5);
+.dashboard-net-count b {
+	display: block;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1;
+	letter-spacing: -0.02em;
+}
+
+.dashboard-net-count small {
+	display: block;
+	margin-top: 2px;
+	font-size: 11.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-net-fields {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px 14px;
+	overflow-wrap: anywhere;
+	font-size: 12.5px;
+}
+
+.dashboard-net-fields span {
+	display: block;
+	font-size: 11.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-net-note {
+	font-size: 12.5px;
+	color: var(--dashboard-text-muted);
+}
+
+
+/* ---- Responsive ---- */
+@media screen and (max-width: 760px) {
+	.dashboard-donut {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.dashboard-donut svg {
+		margin: 0 auto;
 	}
 }
 
-/**
- * Responsive
- **/
-@media screen and (min-width: 200px) and (max-width: 640px) {
-
-	.Dashboard .cbi-section-1 > .section-content {
-		padding-top:10px;
+@media screen and (max-width: 640px) {
+	.Dashboard {
+		--dashboard-gap: 12px;
 	}
 
-	.Dashboard .section-content {
-		display:block;
+	.dashboard-kpi-icon {
+		width: 46px;
+		height: 46px;
+		border-radius: 12px;
 	}
 
-	.Dashboard .section-content > div{
-		padding: 1em;
+	.dashboard-kpi-icon::after {
+		inset: 11px;
 	}
 
-	.Dashboard .section-content > div:first-child {
-		margin-bottom:10px;
-	}
-
-	.Dashboard .section-content > div:nth-child(2) {
-		margin:0;
-	}
-
-	.Dashboard .router-status-self .router-status-info .settings-info {
-		padding:0;
-	}
-
-	.Dashboard .section-content .internet-status-info .settings-info {
-		display:block;
-	}
-
-	.Dashboard .section-content .internet-status-info .settings-info > div:first-child {
-		margin-bottom: 10px;
-		border-bottom: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .table-titles {
-		display:block;
-	}
-
-	.Dashboard .router-status-wifi .wifi-info .settings-info > div{
-		flex:1;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .table-titles .th:last-child{
-		padding-left: 70px;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .td:first-child{
-		flex: 2 2 31%;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .td:nth-child(2){
-		flex: 1 1 24%;
-		padding: 0;
-	}
-
-	.Dashboard .section-content .router-status-lan .devices-info .td:last-child{
-		word-wrap: normal;
-	}
-
-	.Dashboard .router-status-wifi .wifi-info .settings-info > div p:nth-child(6) > span:last-child{
-		display: inline-block;
-		overflow: hidden;
-		height: 14px;
-		width: 52%;
-		word-break: break-word;
-		line-height: 15px;
-	}
-
-	.Dashboard .wifi-info .devices-info .table-titles {
-		padding: 0;
-		margin: 0;
-		display: flex;
-		border-radius: initial;
-	}
-
-	.Dashboard .wifi-info .devices-info .table-titles .th {
-		flex: 2 2 24%;
-	}
-
-	.Dashboard .wifi-info .devices-info .tr .td {
-		flex: 2 2 10%;
-	}
-
-	.Dashboard .wifi-info hr:nth-child(4) {
-		margin-bottom: 0;
+	.dashboard-bars {
+		--dashboard-plot-h: 140px;
 	}
 }
