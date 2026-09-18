@@ -4,6 +4,7 @@
 'require rpc';
 'require uci';
 'require ui';
+'require fs';
 
 const callListAlgorithms = rpc.declare({
 	object: 'luci.swanctl',
@@ -52,16 +53,87 @@ function sectionNameCheck(extra_class) {
 	return el;
 };
 
+let migrationOverlay = null;
+
+function renderMigrationContent(errorMessage) {
+	const dialog = migrationOverlay.firstElementChild;
+	const migrateButton = E('button', {
+		'class': 'btn cbi-button cbi-button-apply',
+		'click': handleMigrate
+	}, [_('Migrate')]);
+
+	const content = E([], [
+		E('h4', _('Migrate IPsec configuration')),
+		E('p', _('A legacy IPsec configuration was found.') + ' ' +
+			_('It must be migrated from the uci config \'/etc/config/ipsec\' ' +
+				'to \'/etc/config/swanctl\' before it can be managed here.')),
+		E('p', _('After a successful migration, the file \'/etc/config/ipsec\' is moved to \'/etc/config/ipsec.bak\'.') + ' ' +
+			_('The migration may require manual intervention.') + ' ' +
+			_('Therefore, the VPN is not restarted.')),
+		E('p', _('Warning: The migration will drop all IPsec VPN connections.')),
+		E('p', _('This will execute the command \'/etc/init.d/swanctl migrate\'.'))
+	]);
+
+	if (errorMessage)
+		content.appendChild(E('p', errorMessage));
+
+	content.appendChild(E('div', { 'class': 'right' }, [migrateButton]));
+
+	dialog.replaceChildren(content);
+}
+
+function showMigrationOverlay(viewNode) {
+	if (migrationOverlay)
+		return;
+
+	const dialog = E('div', { 'class': 'modal', 'style': 'margin:0;' });
+	migrationOverlay = E('div', {
+		'class': 'migration-overlay',
+		'style': 'position:absolute;top:0;right:0;bottom:0;left:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:1em;pointer-events:all;'
+	}, [dialog]);
+
+	viewNode.style.position = 'relative';
+	viewNode.appendChild(migrationOverlay);
+
+	const maincontent = document.getElementById('maincontent');
+	if (maincontent)
+		maincontent.style.pointerEvents = 'none';
+
+	renderMigrationContent(null);
+}
+
+function handleMigrate() {
+	const dialog = migrationOverlay.firstElementChild;
+
+	dialog.replaceChildren(E([], [
+		E('h4', _('Migrate IPsec configuration')),
+		E('p', _('Migrating IPsec configuration…'))
+	]));
+
+	fs.exec('/etc/init.d/swanctl', ['migrate']).then(function (result) {
+		if (result.code != 0)
+			renderMigrationContent(_('Migration failed: %s').format(result.stderr || result.stdout || _('unknown error')));
+		else
+			window.location.reload();
+	}).catch(function (e) {
+		renderMigrationContent(_('Migration failed: %s').format(e.message));
+	});
+}
+
 return view.extend({
 	load: async function () {
 		await uci.load('network');
-		return await callListAlgorithms();
+		const algorithms = await callListAlgorithms();
+		const legacyConfig = await L.resolveDefault(fs.stat('/etc/config/ipsec'), null);
+
+		return { algorithms, legacyConfig };
 	},
 
 	render: function (result) {
 		let m, s, o;
-		const algorithms = result.data ?? {};
-		const error = result.error;
+		const legacyConfig = !!result.legacyConfig;
+		const algorithms = result.algorithms.data ?? {};
+		const error = result.algorithms.error;
 
 		if (error)
 			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
@@ -551,6 +623,11 @@ return view.extend({
 		o.depends({'is_esp': '0', 'use_custom_proposal': '0'});
 		addAlgorithms(o, algorithms.prf);
 
-		return m.render();
+		return m.render().then(function (node) {
+			if (legacyConfig)
+				showMigrationOverlay(node);
+
+			return node;
+		});
 	}
 });
