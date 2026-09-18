@@ -3,22 +3,24 @@
 		"description": "Grant access to luci-app-strongswan-swanctl",
 		"read": {
 			"file": {
+				"/etc/config/ipsec": [ "read" ],
 				"/usr/sbin/swanmon version": [ "exec" ],
 				"/usr/sbin/swanmon stats": [ "exec" ]
 			},
 			"ubus": {
 				"luci.swanctl": [ "list-algs", "map-conns" ]
 			},
-			"uci": [ "ipsec" ]
+			"uci": [ "swanctl" ]
 		},
 		"write": {
 			"file": {
+				"/etc/init.d/swanctl migrate": [ "exec" ],
 				"/usr/sbin/swanctl --initiate --ike *": [ "exec" ],
 				"/usr/sbin/swanctl --initiate --child *": [ "exec" ],
 				"/usr/sbin/swanctl --terminate --ike *": [ "exec" ],
 				"/usr/sbin/swanctl --terminate --child *": [ "exec" ]
 			},
-			"uci": [ "ipsec" ]
+			"uci": [ "swanctl" ]
 		}
 	}
 }
