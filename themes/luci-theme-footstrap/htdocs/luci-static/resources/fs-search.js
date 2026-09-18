@@ -5,46 +5,37 @@
 'require fs-router as router';
 'require fs-widgets as widgets';
 
-/* Find a page by typing its name, instead of remembering which section owns it.
+/* Find a page by typing its name instead of knowing which section owns it. A loaded router
+ * carries ~200 menu nodes across 11 sections, and a tab such as Firewall -> Port Forwards appears
+ * in no menu list until you are already there; this indexes every node the dispatcher would
+ * render, tabs included.
  *
- * A loaded router carries ~200 reachable menu nodes across 11 sections, and the only way to reach
- * one was to know its parent — "Attended Sysupgrade" is under System, "Crontab" under System too,
- * "Port Forwards" is a TAB of Network -> Firewall and appears in no menu list at all until you are
- * already there. This indexes every node the dispatcher would render, tabs included.
+ * It costs no request: the tree is the same ACL-filtered /admin/menu blob the chrome loaded
+ * (fs-menutree), so the palette lists exactly the pages this session may open. The index is built
+ * on the first open, not at init — a user who never searches pays nothing, and only a full load
+ * can change the tree.
  *
- * It costs no request: the tree is the SAME ACL-filtered /admin/menu blob the chrome already
- * loaded (fs-menutree), so the palette knows exactly the pages this session is allowed to open —
- * nothing to leak, nothing to 403 on. The index is built on the FIRST open, not at init: a user
- * who never searches pays nothing, and a full load is the only thing that can change the tree.
- *
- * Navigation is deliberately NOT a call into the router: every result is a real <a href>, so a
- * click bubbles to the router's own document-level handler and takes the SPA path (or falls back
- * to a full load when the node is not SPA-able) with no second copy of that decision here. Enter
- * synthesises the same click. */
+ * Navigation is deliberately not a call into the router: every result is a real <a href>, so a
+ * click bubbles to the router's own document-level handler and no copy of that decision lives
+ * here. Enter synthesises the same click. */
 
 /* ---- the index ---------------------------------------------------------- */
 
-/* How deep below the MODE the walk goes. `depth` counts recursion levels and the walk starts at 1
- * on a node that already has two segments, so a node at depth N carries N+1 of them: 4 admits
- * admin/<section>/<page>/<tab>/<subtab>. That is one more than LuCI's own dispatcher renders, and
- * deliberately so — a third-party node nested deeper is worth finding, and the depth term in the
- * score below already ranks it last. */
+/* How deep below the mode the walk goes. `depth` counts recursion levels starting at 1 on a node
+ * that already has two segments, so 4 admits admin/<section>/<page>/<tab>/<subtab> — one level
+ * more than LuCI renders, so a deeper third-party node is still findable and the depth term in
+ * search() ranks it last. */
 const MAX_DEPTH = 4;
 
 let _index = null;
 
-/* The node's own children, ACL- and title-filtered exactly as ui.menu.getChildren() filters them
- * — but NOT through getChildren() itself, and that is the whole reason this function exists.
+/* The node's own children, ACL- and title-filtered as ui.menu.getChildren() filters them, but not
+ * through getChildren(): on an alias node it returns the alias TARGET's children, which is right
+ * for drawing a menu and wrong for indexing — Network -> Firewall aliases onto the `firewall/zones`
+ * leaf, so all five of its tabs vanish from the index (78 nodes instead of 238).
  *
- * On an ALIAS node getChildren() returns a copy whose `children` are the alias TARGET's, which is
- * right for drawing a menu and wrong for indexing: Network -> Firewall is an alias onto the
- * `firewall/zones` VIEW, a leaf, so its five tabs (Port Forwards, Traffic Rules, NAT Rules, IP
- * Sets, Custom Rules) came back as an empty list and "port" found nothing on a router that plainly
- * has a Port Forwards page. Measured on the dev router: 78 indexed nodes through getChildren(),
- * with every tab of every aliased page missing.
- *
- * Order does not matter here (search ranks by score, not by menu weight), so getChildren()'s sort
- * is not reimplemented — only its two filters, which are what "this session may open it" means. */
+ * Order does not matter (search ranks by score), so only the two filters are reimplemented, not
+ * the sort. */
 function childrenOf(node) {
 	const kids = node.children || {};
 	const out = [];
@@ -59,8 +50,8 @@ function childrenOf(node) {
 function walk(node, segs, trail, out, depth) {
 	childrenOf(node).forEach((entry) => {
 		const child = entry.node;
-		/* the chrome carries its own Logout (partials/logout.ut) — searching for it would open a
-		 * confirmation the user did not ask for */
+		/* the chrome carries its own Logout (partials/logout.ut); indexing it would let a search
+		 * open a confirmation the user did not ask for */
 		if (depth === 1 && entry.name === 'logout')
 			return;
 
@@ -73,17 +64,13 @@ function walk(node, segs, trail, out, depth) {
 			title: title,
 			trail: trail,
 			depth: depth,
-			/* Three haystacks, searched in this order of preference (see score()). `name` is the
-			 * ENGLISH node name and is indexed on purpose: a Russian UI translates "Firewall" to
-			 * "Межсетевой экран", and an admin who knows OpenWrt by its English docs types
-			 * "firewall". Both find it. */
+			/* Three haystacks, in this order of preference (see tokenScore()). The English
+			 * node name is indexed on purpose: a translated UI otherwise hides the page from
+			 * an admin who knows OpenWrt by its English docs. */
 			t: title.toLowerCase(),
 			p: trail.join(' ').toLowerCase(),
-			/* …minus the ROOT segment, which is `admin` on every single node. Indexed, it made
-			 * every substring of "admin" — a, ad, adm, dmi, min, in — a hit on all ~200 pages, so
-			 * `min` returned "Terminal", "Administration", "Attended Sysupgrade" and stopped at the
-			 * 20-result cap sorted only by depth (measured). It carries no information precisely
-			 * because it is shared by everything. */
+			/* …minus the root segment, `admin`, which every node shares: indexed, every
+			 * substring of it ("ad", "min", …) hits all ~200 pages and fills the result cap */
 			n: csegs.slice(1).join(' ').toLowerCase()
 		});
 
@@ -103,26 +90,62 @@ function buildIndex() {
 	return out;
 }
 
-/* Built once per DOCUMENT, and deliberately not re-derived per open: it is a projection of the
- * client menu tree, which `ui.menu.load()` itself caches for the life of the document. So the
- * palette is exactly as fresh as the sidebar beside it — a package installed or removed without a
- * reload is missing from, or still listed in, BOTH. Invalidating only this half would make the two
- * disagree, which is worse than either being stale; the reload the package manager already prompts
- * for is what refreshes them together. (Cheap enough to rebuild if that ever changes: 238 nodes on
- * the dev router.) */
+/* Built once per document: it projects the client menu tree, which `ui.menu.load()` caches for
+ * the life of the document, so the palette is exactly as fresh as the sidebar beside it.
+ * Invalidating only this half would let the two disagree, which is worse than both being stale;
+ * the reload a package install prompts for refreshes them together. */
 function index() {
 	if (!_index) _index = buildIndex();
 	return _index;
 }
 
+/* ---- extra sources -------------------------------------------------------
+ *
+ * An optional package can add rows to the same list — one indexes the SECTION titles inside each
+ * page, so "footstrap" finds System -> Appearance. A source hands over entries in the shape
+ * buildIndex() produces and nothing else: the matching, the ranking and the rendering stay here,
+ * or two lists would disagree about what a hit is. Two fields are the source's alone: `onTake`,
+ * called when the row is chosen, and `key`, what the recents list stores it under when its `path`
+ * is not its own (see keyOf).
+ *
+ * Registration is a GLOBAL ARRAY, not an export a package requires. This module is fetched on the
+ * first gesture and most sessions never make it; a package that had to `require` it to register
+ * would pull it onto every page and pay its 4.5 KB for a palette nobody opened. Pushing a function
+ * onto `window.__fsSearchSources` costs the package nothing and names no one in either direction.
+ *
+ * `window.__fsSearchGen` is how a source says its data grew — a harvester fills in over a session
+ * — and the stamp below is what rebuilds the pool when it does. */
+const _sources = [];
+let _pool = null, _stamp = -1;
+
+function globalSources() {
+	return Array.isArray(window.__fsSearchSources) ? window.__fsSearchSources : [];
+}
+
+function addSource(fn) {
+	_sources.push(fn);
+	_pool = null;
+}
+function refresh() {
+	_pool = null;
+}
+function pool() {
+	const all = _sources.concat(globalSources());
+	const stamp = all.length + (window.__fsSearchGen || 0);
+	if (_pool && stamp === _stamp) return _pool;
+	_stamp = stamp;
+	_pool = all.reduce((rows, fn) => {
+		try { return rows.concat(fn() || []); }
+		catch (e) { console.error('footstrap: a search source threw', e); return rows; }
+	}, index().slice());
+	return _pool;
+}
+
 /* ---- matching ----------------------------------------------------------- */
 
-/* Every whitespace-separated token must hit SOMETHING, so "fire port" finds Firewall -> Port
- * Forwards while "fire xyz" finds nothing — an AND is what a user typing a second word means.
- *
- * Deliberately not a fuzzy subsequence match (the "fzf" kind): on a two-letter query it matches
- * almost every entry and the ranking then decides everything, which reads as random. A substring
- * ladder is predictable — what you typed is visibly in what you got. */
+/* Every whitespace-separated token must hit something: a second word means AND. Deliberately not
+ * a fuzzy subsequence match — on a two-letter query that matches nearly every entry and leaves the
+ * ranking to decide everything, which reads as random. */
 const HIT_NONE = 99;
 function tokenScore(e, tok) {
 	if (e.t.startsWith(tok)) return 0;	/* the title begins with it */
@@ -137,7 +160,7 @@ function search(q, limit) {
 	if (!toks.length) return [];
 
 	const hits = [];
-	for (const e of index()) {
+	for (const e of pool()) {
 		let sum = 0;
 		for (const tok of toks) {
 			const s = tokenScore(e, tok);
@@ -145,7 +168,7 @@ function search(q, limit) {
 			sum += s;
 		}
 		if (sum !== HIT_NONE)
-			hits.push({ e: e, score: sum + (e.depth * 0.1) });	/* ties: the shallower page first */
+			hits.push({ e: e, score: sum + (e.depth * 0.1) });	/* ties: shallower page first */
 	}
 	hits.sort((a, b) => a.score - b.score);
 	return hits.slice(0, limit).map((h) => h.e);
@@ -153,87 +176,61 @@ function search(q, limit) {
 
 /* ---- recently visited --------------------------------------------------- */
 
-/* What the palette shows before a single character is typed. A router admin lives in three or four
- * pages, so the empty state is the most-used view of this thing — an empty box would waste it.
+/* What the palette shows before anything is typed: an admin lives in three or four pages, so the
+ * empty state is its most-used view.
  *
- * Only the PATH is stored, never the title: the title is resolved back through the index on every
- * render, so it follows the UI language and a page that disappeared with its package simply drops
- * out instead of lingering as a dead row. */
+ * Only the KEY is stored, never the title — the title is resolved through the pool on every
+ * render, so it follows the UI language and a row whose package went away drops out instead of
+ * lingering as a dead row. A page's key is its menu path; a row from a source carries its own
+ * `key`, because a section has no dispatcher node and therefore no path that is only its own —
+ * the sections source keys one `admin/system/system#Footstrap`, the page it is on plus its own
+ * heading. */
 const RECENT_KEY = 'fs-recent';
 const RECENT_MAX = 8;
 
-/* prefs.lsGetArr owns the parse, the corruption guard and the Array check; only the
- * "these are paths" filter is this module's business. */
-function loadRecent() {
-	return prefs.lsGetArr(RECENT_KEY).filter((x) => typeof x === 'string');
+/* the string a row is remembered under, and the one menu-footstrap-common's remember() writes */
+function keyOf(e) {
+	return e.key || e.path;
 }
 
-let _recent = loadRecent();
-
-function remember(segs) {
-	if (!Array.isArray(segs) || !segs.length) return;
-	const path = segs.join('/');
-	_recent = [ path ].concat(_recent.filter((p) => p !== path)).slice(0, RECENT_MAX);
-	prefs.lsSet(RECENT_KEY, JSON.stringify(_recent));
-}
-
+/* The list is WRITTEN by menu-footstrap-common.js, which is on every page — this module is not any
+ * more, and a palette that only loads when it is opened cannot be what records where the admin has
+ * been. Read here, at open time, so it is always current. `prefs.lsGetArr` owns the parse, the
+ * corruption guard and the Array check; only the "these are keys" filter belongs here. */
 function recentEntries() {
-	const byPath = new Map(index().map((e) => [ e.path, e ]));
-	return _recent.map((p) => byPath.get(p)).filter(Boolean).slice(0, RECENT_MAX);
-}
-
-/* ---- warm the pages this admin actually uses ----
- *
- * The router's per-link prefetch needs a hover, a tap or a focus first, so the FIRST visit of a
- * session to a page still pays for its module chain. The recents list is the best predictor of that
- * page available anywhere in the theme — an admin lives in three or four of them — and it is already
- * on disk. Walking the whole menu instead would pull every view module on the box, which is the cost
- * docs/spa-router.md warns about; five recents is a handful of files.
- *
- * The current page is skipped: wire() has just remembered it, so it heads the list, and it is loaded
- * by definition. saveData is the user saying "not over this link", and speculation is exactly what
- * has to go then — the per-link prefetch stays, because that one follows a deliberate hover or tap. */
-const RECENT_WARM = 5;
-
-function warmRecent() {
-	try { if (navigator.connection && navigator.connection.saveData) return; } catch (e) {}
-	const here = (L.env.dispatchpath || []).join('/');
-	const paths = _recent.filter((p) => p !== here).slice(0, RECENT_WARM);
-	if (!paths.length) return;
-	/* Nothing waits on this, so it belongs after the page has settled — at idle, with a timeout for a
-	 * page that never goes idle (a busy poll). The fallback is deliberately a LONG timeout: nothing
-	 * on screen waits for this, so it competes with the view's own module fetches and RPCs and must
-	 * lose that race on purpose. */
-	const go = () => paths.forEach((p) => router.prefetchSegs(p.split('/')));
-	if (typeof window.requestIdleCallback === 'function')
-		window.requestIdleCallback(go, { timeout: 4000 });
-	else
-		window.setTimeout(go, 2000);
+	const recent = prefs.lsGetArr(RECENT_KEY).filter((x) => typeof x === 'string');
+	/* pool(), not index(): a section is recalled exactly as a page is. Against the index alone a
+	 * section key resolved to nothing and the row silently vanished, so taking "Footstrap" left
+	 * only "System" in the list — the page path is all either row carries. */
+	const byKey = new Map(pool().map((e) => [ keyOf(e), e ]));
+	return recent.map((k) => byKey.get(k)).filter(Boolean).slice(0, RECENT_MAX);
 }
 
 /* ---- the palette -------------------------------------------------------- */
 
 const MAX_RESULTS = 20;
 
-function wire() {
+/* Built on the first open and kept — the overlay, its listeners and the index survive for the life
+ * of the document, so a second Ctrl+K costs nothing. Until then this module is not even fetched:
+ * menu-footstrap-common.js holds the shortcut and requires this on the first gesture. */
+let _built = null;
+
+function build() {
 	const btn = document.getElementById('fs-search-btn');
-	if (!btn) return;
+	if (!btn) return null;
 
-	/* Remember the page this full load landed on. The SPA path is covered by onNavigate below;
-	 * this covers an F5, a non-SPA-able node and the very first page of a session. */
-	remember(L.env.dispatchpath || []);
-	/* The callback is handed the RESOLVED segments of the incoming page: reading L.env here would
-	 * give the OUTGOING one, since the router fires its callbacks before it re-points L.env. */
-	router.onNavigate(remember);
-	/* after remember(), so the page we are standing on is the one head of the list that gets skipped */
-	warmRecent();
-
+	/* the list's id, said three times below as an id, a class and aria-controls (measured: 17 B x3
+	 * -> 26 B, 25 B saved) */
+	const ID_SEARCH_LIST = 'fs-search-list';
+	/* the attribute name toggled below and stated once more as its own starting value (measured:
+	 * 15 B x3 -> 27 B, 18 B saved) */
+	const ATTR_EXPANDED = 'aria-expanded';
 	const input = E('input', {
 		'type': 'text',
 		'class': 'fs-search-input',
 		'role': 'combobox',
-		'aria-controls': 'fs-search-list',
-		'aria-expanded': 'true',
+		'aria-controls': ID_SEARCH_LIST,
+		[ATTR_EXPANDED]: 'true',
 		'aria-autocomplete': 'list',
 		'aria-label': _('Search pages', 'footstrap'),
 		'placeholder': _('Search pages…', 'footstrap'),
@@ -241,21 +238,20 @@ function wire() {
 		'autocapitalize': 'off',
 		'spellcheck': 'false'
 	});
-	const list = E('div', { 'id': 'fs-search-list', 'class': 'fs-search-list', 'role': 'listbox', 'aria-label': _('Pages', 'footstrap') });
+	const list = E('div', { 'id': ID_SEARCH_LIST, 'class': ID_SEARCH_LIST, 'role': 'listbox', 'aria-label': _('Pages', 'footstrap') });
 	const note = E('div', { 'class': 'fs-search-note' });
 	const ico = E('span', { 'class': 'fs-search-ico' });
 	ico.innerHTML = widgets.svgIcon('<circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/>');
 	const box = E('div', { 'class': 'fs-search-box' }, [
 		E('div', { 'class': 'fs-search-row' }, [ ico, input ]),
-		/* the note is a CAPTION for the rows below it ("Recently visited") and the box's EMPTY
-		 * STATE when there are none, so it belongs above the list in both readings — it sat after
-		 * the list at first, which put the caption under the rows it captions */
+		/* the note captions the rows below it ("Recently visited") and doubles as the empty
+		 * state, so it belongs above the list in both readings */
 		note,
 		list
 	]);
-	/* data-fs-chrome marks a Zone 1 ROOT (docs/third-party-apps.md): this is a `position: fixed` overlay parented
-	 * to <body>, i.e. outside the <nav> that carries the mark in header.ut — exactly the shape that
-	 * once left the Appearance popover unfenced while every test said the chrome was defended. */
+	/* data-fs-chrome marks a zone-1 root (docs/third-party-apps.md): this overlay is parented to
+	 * <body>, outside the <nav> that carries the mark in header.ut, so without it the fence does
+	 * not cover the palette — the shape that once left the Appearance popover unfenced */
 	const ov = E('div', {
 		'id': 'fs-search-ov',
 		'class': 'fs-search-ov',
@@ -269,12 +265,11 @@ function wire() {
 
 	let opts = [], ents = [], at = -1;
 
-	/* Warm the highlighted page's module chain, DEBOUNCED. render() re-runs setActive(0) on every
-	 * keystroke, so warming immediately would pull the top result of "w", "wi", "wir"… and only the
-	 * last of those is a page anyone asked for. The delay also matches how the list is used: the
-	 * highlight settles, then Enter. Only the ARROW KEYS and typing need this — the rows are real
-	 * anchors in the document, so a mouse moving over one already reaches the router's own pointerover
-	 * listener. warmClass() dedupes per class, so a row revisited costs nothing. */
+	/* Warm the highlighted page's module chain, debounced: render() re-runs setActive(0) on every
+	 * keystroke, so warming at once would pull the top result of "w", "wi", "wir"… Only arrow keys
+	 * and typing need this — the rows are real anchors, so a mouse over one already reaches the
+	 * router's pointerover listener. fs-router's warmClass() dedupes, so a row revisited costs
+	 * nothing. */
 	let warmT = null;
 	function warmActive() {
 		if (warmT) window.clearTimeout(warmT);
@@ -302,9 +297,9 @@ function wire() {
 		ents = entries;
 		list.innerHTML = '';
 		opts = entries.map((e, i) => {
-			/* role="option" on the <a> rather than a <div> wrapping one: an option may not contain
-			 * an interactive element, and the anchor has to stay a real link — it is what carries
-			 * the click to the router, and what keeps middle-click and "copy link" working. */
+			/* role="option" on the <a> itself: an option may not contain an interactive element,
+			 * and the anchor must stay a real link — it carries the click to the router and keeps
+			 * middle-click and "copy link" working */
 			const a = E('a', {
 				'class': 'fs-search-opt',
 				'role': 'option',
@@ -315,9 +310,17 @@ function wire() {
 				E('span', { 'class': 'fs-search-opt-title' }, [ e.title ]),
 				e.trail.length ? E('span', { 'class': 'fs-search-opt-path' }, [ e.trail.join(' › ') ]) : ''
 			]);
-			/* close BEFORE the click reaches the router (which re-renders the chrome underneath),
-			 * and without taking focus back — the user is going somewhere else */
-			a.addEventListener('click', () => close(false));
+			/* close before the click reaches the router, which re-renders the chrome underneath;
+			 * no focus return, the user is going elsewhere.
+			 *
+			 * `onTake` is how a row from an extra source finishes the job the href cannot: a
+			 * section row's href can only reach the PAGE, so the source that produced it opens the
+			 * tab and scrolls to the section itself. It fires for a click and for Enter alike —
+			 * Enter synthesises this very click. */
+			a.addEventListener('click', () => {
+				close(false);
+				if (typeof e.onTake === 'function') e.onTake();
+			});
 			a.addEventListener('pointermove', () => { if (at !== i) setActive(i); });
 			list.appendChild(a);
 			return a;
@@ -332,7 +335,7 @@ function wire() {
 	function open() {
 		if (!ov.hidden) return;
 		ov.hidden = false;
-		btn.setAttribute('aria-expanded', 'true');
+		btn.setAttribute(ATTR_EXPANDED, 'true');
 		input.value = '';
 		render('');
 		input.focus();
@@ -341,14 +344,14 @@ function wire() {
 	function close(returnFocus = true) {
 		if (ov.hidden) return;
 		ov.hidden = true;
-		btn.setAttribute('aria-expanded', 'false');
+		btn.setAttribute(ATTR_EXPANDED, 'false');
 		if (returnFocus) btn.focus();
 	}
 
 	input.addEventListener('input', () => render(input.value.trim()));
 
-	/* Keys are handled on the OVERLAY, not the input: the scrim is part of the dialog and a click
-	 * on it moves focus to the overlay itself, where an Escape must still close. */
+	/* keys are handled on the overlay, not the input: a click on the scrim moves focus to the
+	 * overlay itself, where Escape must still close */
 	ov.addEventListener('keydown', (ev) => {
 		switch (ev.key) {
 		case 'Escape':
@@ -368,14 +371,14 @@ function wire() {
 		case 'Enter':
 			if (at < 0 || !opts[at]) return;
 			ev.preventDefault();
-			/* a synthetic click carries detail 0, which is exactly what the router reads as a
-			 * KEYBOARD activation — so the focus lands where a keyboard navigation puts it */
+			/* a synthetic click carries detail 0, which the router reads as a keyboard
+			 * activation, so focus lands where a keyboard navigation puts it */
 			opts[at].click();
 			return;
 		case 'Tab':
-			/* aria-modal="true" is a promise that Tab cannot walk out into the page behind, and
-			 * the input is the dialog's only tabbable element, so the trap is: stay. Escape (or a
-			 * click outside) is the way out, and both hand focus back to the trigger. */
+			/* aria-modal="true" promises Tab cannot walk out into the page behind, and the input
+			 * is the dialog's only tabbable element. Escape or an outside click is the way out,
+			 * both handing focus back to the trigger. */
 			ev.preventDefault();
 			input.focus();
 			return;
@@ -387,16 +390,14 @@ function wire() {
 
 	btn.addEventListener('click', () => { ov.hidden ? open() : close(); });
 
-	/* Back and Forward are navigations no listener here can see: every close above is a user act on
-	 * the document (Escape, the scrim, the trigger, picking a result). An open palette therefore rode
-	 * a popstate onto the next page, aria-modal and Tab-trapped, while the router moved focus behind
-	 * it. returnFocus=false because the router places focus itself on a navigation. */
+	/* Back and Forward are navigations no listener above can see — every other close is a user act
+	 * on the document — so without this an open palette rides a popstate onto the next page,
+	 * aria-modal and Tab-trapped. returnFocus=false: the router places focus itself. */
 	router.onNavigate(() => close(false));
 
-	/* Ctrl/Cmd+K is the shortcut every command palette has taught users, and `/` is the one every
-	 * search field on the web has. `/` only when the user is not already typing somewhere: an
-	 * <input>, a contenteditable, or a .cbi-dropdown (fs-select.js gives those their own typeahead,
-	 * where a `/` is a search character, not a shortcut). */
+	/* Ctrl/Cmd+K and `/`, the two shortcuts users already have. `/` only when the user is not
+	 * typing somewhere — an <input>, a contenteditable, or a .cbi-dropdown, where fs-select.js's
+	 * typeahead reads it as a search character. */
 	document.addEventListener('keydown', (ev) => {
 		if (ev.defaultPrevented) return;
 		if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && (ev.key === 'k' || ev.key === 'K')) {
@@ -409,8 +410,18 @@ function wire() {
 		ev.preventDefault();
 		open();
 	});
+
+	return { open, close };
+}
+
+/* the one entry point: build if this is the first gesture, then open */
+function openPalette() {
+	if (!_built) _built = build();
+	if (_built) _built.open();
 }
 
 return baseclass.extend({
-	wire
+	open: openPalette,
+	/* the seam an optional package registers through; see addSource() */
+	addSource, refresh
 });
