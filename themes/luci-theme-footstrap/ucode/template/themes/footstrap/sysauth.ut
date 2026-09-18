@@ -6,18 +6,14 @@
  Licensed to the public under the Apache License 2.0.
 
  It exists because the generic template includes the header WITHOUT `blank_page: true`: with no
- theme-local sysauth the dispatcher falls back to that one and the whole chrome (sidebar, menu,
- footer) rendered around the login form, every control on it dead. Everything else here is a
- DEPARTURE the notes below each justify — the `fs-login` hook the page CSS needs, the id/for/
- autocomplete attributes, the alert gating, and an HTTPS-redirect script that also fixes the
- generic's `split(https_port, …)` typo — and the rule is that none of them may drop a field the
- backend posts.
+ theme-local sysauth the dispatcher falls back to it and the whole chrome renders around the login
+ form with every control on it dead. Everything else here is a departure the notes below justify,
+ and none of them may drop a field the backend posts.
 
- It is NOT a copy of bootstrap's sysauth.ut, which hides the form in a `<section hidden>` and
- needs a view module to reveal it: tried here once and it gave a BLANK PAGE WITH NO WAY TO LOG
- IN — the view bootstraps before a session exists, its RPCs answer "Access denied", the promise
- rejects and render() never runs. Do not re-introduce it. The SERVER renders the form: works
- with JS off, cannot be broken by a rejected promise, needs no luci-theme-bootstrap installed.
+ Do not re-introduce the `<section hidden>` shape that needs a view module to reveal the form: the
+ view bootstraps before a session exists, its RPCs answer "Access denied", the promise rejects and
+ render() never runs — a blank page with no way to log in. The server renders the form, so it works
+ with JS off and cannot be broken by a rejected promise.
 
  styles/pages/10-login.css makes it the centred card, keyed off `.fs-login` below. The strings
  carry no msgctxt on purpose — luci-base translates them in the ~40 languages this theme has no
@@ -25,68 +21,57 @@
 -#}
 
 {%
-	/* WHICH ROUTER THIS IS — requested as openwrt/luci#8961, by an admin coming from
-	   luci-theme-material, which prints the hostname in the top bar and therefore also on its login
-	   page. This one had no chrome at all (blank_page below), so the only place the name appeared
-	   was the browser TAB.
+	/* Which router this is (openwrt/luci#8961): the login page has no chrome, so the only place the
+	   name appeared was the browser tab.
 
-	   A SECOND `ubus.call('system', 'board')`: header.ut makes its own inside its own scope and an
-	   include cannot hand a local back, so the choice is one extra ubus round trip on the login
-	   render or threading `boardinfo` out through a global. One call, on the one page that renders
-	   once per session, is the cheaper of the two.
+	   A second `ubus.call('system', 'board')`, because header.ut makes its own inside its own scope
+	   and an include cannot hand a local back — one extra round trip on a page that renders once
+	   per session, against threading `boardinfo` through a global.
 
-	   It discloses nothing new. The same `boardinfo.hostname` already reaches an unauthenticated
-	   browser through <title> (partials/head.ut) — as it does in every stock theme — so this moves
-	   a string that was always on the wire into the place a reader looks. */
+	   It discloses nothing new: the same hostname already reaches an unauthenticated browser
+	   through <title>, as in every stock theme. */
 	const boardinfo = ubus.call('system', 'board') ?? {};
 -%}
 
 {% include('header', { blank_page: true }) %}
 
-{# The class is what 10-login.css hooks: the form used to be found by
-   `form:has(> .cbi-map input[name="luci_username"])` — 49 characters written 17 times, ~0.8 KB —
-   because the markup was assumed to be stock LuCI's. It is OURS: name the form instead. #}
+{# the class is what 10-login.css hooks: the markup is ours, so the form is named rather than
+   found by a 49-character `:has()` selector repeated 17 times, ~0.8 KB #}
 <form method="post" class="fs-login">
 	{#
-	 The router's name, above everything else in the card — an admin with three of these open has no
+	 The router's name, above everything else in the card: an admin with three of these open has no
 	 other way to tell the tabs apart once the form is focused. `?? 'OpenWrt'` is the fallback
-	 partials/head.ut and partials/brand.ut already use, so the line never renders empty; the
-	 striptags/entityencode pair is theirs too, and load-bearing: the hostname is admin-controlled
-	 text printed to an UNAUTHENTICATED page, and one containing `&` broke entity parsing here
-	 before it broke anything else (see the <title> note in partials/head.ut).
+	 head.ut and brand.ut use, and the striptags/entityencode pair is theirs too and load-bearing —
+	 the hostname is admin-controlled text printed to an unauthenticated page.
 
-	 A <p> and NOT a heading: the card's h1 is `Authorization Required` and stays the page's one
-	 heading. An outline is about the page's SUBJECT, and a heading above that one would announce
-	 the login form as two sections — a screen reader walking the headings would hear the router's
-	 name as a section title with the form nested under it. It is printed above the h1 and centred
-	 (10-login.css) because that is where a reader looks for "which box is this", not because it
-	 outranks anything.
+	 A <p> and not a heading: the card's h1 is `Authorization Required` and stays the page's one
+	 heading, or a screen reader walking the headings hears the router's name as a section title
+	 with the form nested under it.
 	-#}
 	<p class="fs-login-host">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</p>
 	{#
-	 TWO INDEPENDENT ALERTS, because neither variable on its own says which of the two dispatcher
-	 branches rendered this page — and each of the two spellings in the tree picks one and gets the
-	 other wrong.
+	 Two independent alerts, because neither variable alone says which dispatcher branch rendered
+	 this page.
 
-	 `fuser` is not "the password was wrong": it is the USERNAME the form posted, set in BOTH
-	 branches. On the second step of a pluggable login (the OTP prompt, dispatcher.uc:1018) the
-	 credentials were CORRECT and `fuser` is still set, so the generic template's
-	 `auth_message && !fuser` reports "Invalid username and/or password!" about a password that was
-	 right and swallows "Too many failed attempts" / "System time is not calibrated" entirely.
+	 `fuser` is the USERNAME the form posted, set in both branches — on the second step of a
+	 pluggable login (the OTP prompt, dispatcher.uc:1018) the credentials were correct and it is
+	 still set, so `auth_message && !fuser` reports "Invalid username and/or password!" about a
+	 password that was right and swallows the backend's own messages.
 
-	 `auth_message` is not "the password was right" either. The FIRST branch copies it out of
+	 `auth_message` does not mean the password was right either: the first branch copies it out of
 	 get_challenges() BEFORE the password is checked (dispatcher.uc:956), and that call answers with
-	 a message on every pending result — 'Additional verification required' when the plugin has none
-	 of its own (authplugins.uc:312). So on a router running luci-plugin-2fa both are set at once
-	 whenever a password is rejected, and luci-theme-bootstrap's `elif (fuser)` then never tells
-	 that user their password was wrong.
+	 a message on every pending result. So with a 2FA plugin installed both are set whenever a
+	 password is rejected, and gating on `fuser` alone never tells that user their password was
+	 wrong.
 
-	 `auth_plugin` is what separates the branches: it is set ONLY in the second one
-	 (dispatcher.uc:1018), i.e. exactly when session_setup() ACCEPTED the credentials. Gate the
-	 credentials alert on `!auth_plugin`, render the message BESIDE it rather than instead of it,
-	 and all four states are covered: a wrong password, a wrong password with a challenge pending
-	 (both alerts), the OTP prompt, a failed OTP. The classes keep them apart once they can appear
-	 together — `error` is the danger variant, the plugin's own notice stays amber.
+	 `auth_plugin` separates the branches: set only in the second one, i.e. exactly when
+	 session_setup() accepted the credentials. Gating the credentials alert on `!auth_plugin` and
+	 rendering the message beside it covers all four states — wrong password, wrong password with a
+	 challenge pending, the OTP prompt, a failed OTP.
+
+	 entityencode where upstream prints raw: without the `!fuser` gate the message renders on the
+	 request that posted the form too, and this page is unauthenticated. A plugin's markup travels
+	 in `auth_html` (dispatcher.uc:952), so this variable is text.
 	-#}
 	{% if (fuser && !auth_plugin): %}
 		<div class="alert-message error">
@@ -95,22 +80,18 @@
 	{% endif %}
 	{% if (auth_message): %}
 		<div class="alert-message{% if (auth_plugin): %} warning{% endif %}">
-			<p>{{ auth_message }}</p>
+			<p>{{ entityencode(auth_message, true) }}</p>
 		</div>
 	{% endif %}
 
 	<div class="cbi-map">
 		{#
-		 An h1, where every other LuCI theme leaves this an h2. The login page has no chrome
-		 (blank_page above), so header.ut's `.fs-title-main` h1 never renders here and the document
-		 went out with its top-level heading MISSING — the one sentence saying where you are, and
-		 the heading a screen reader's `1` shortcut jumps to. Stock's h2 is a copy of a page that
-		 does have a title bar above it; this one does not, so the card's heading IS the page title.
+		 An h1, where every other LuCI theme leaves this an h2: the login page has no chrome, so
+		 header.ut's `.fs-title-main` h1 never renders here and the document would go out with no
+		 top-level heading for a screen reader's `1` shortcut to reach.
 
-		 `name="content"` is upstream's legacy anchor and travels with the element, not with its
-		 level. The card's own type scale is in 10-login.css: an h1 is 26px in the ramp
-		 (theme/45-misc.css) and this one is set back to the h2's 20px, because the SIZE was never
-		 what was wrong — only the level.
+		 `name="content"` is upstream's legacy anchor and travels with the element, not its level.
+		 10-login.css sets this h1 back to the h2's 20px: the level was wrong, not the size.
 		-#}
 		<h1 name="content">{{ _('Authorization Required') }}</h1>
 		<div class="cbi-map-descr">
@@ -130,23 +111,17 @@
 				</div>
 			</div>
 			{#
-			 THE LOGIN BACKEND'S OWN FIELDS. The dispatcher hands `auth_fields`, `auth_message`,
+			 The login backend's own fields. The dispatcher hands `auth_fields`, `auth_message`,
 			 `auth_html` and `auth_assets` to whichever sysauth template renders, and a pluggable
-			 backend (luci-plugin-2fa is the in-tree one) puts its OTP input in there. A theme-local
-			 sysauth that drops them is not a login form with a missing extra: the field is never
-			 posted, so on a router with 2FA enabled NOBODY CAN LOG IN while this theme is active,
-			 and the backend's "Too many failed attempts" / "System time is not calibrated" messages
-			 never reach the screen either. Whatever else this template changes, it must stay a
-			 SUPERSET of the generic one's fields.
+			 backend puts its OTP input there. A theme-local sysauth that drops them never posts the
+			 field, so on a router with 2FA enabled nobody can log in while this theme is active.
+			 This template must stay a SUPERSET of the generic one's fields.
 
-			 The leading space inside each conditional attribute is load-bearing. ucode's template
-			 lexer eats the whitespace immediately BEFORE a `{%` tag and the newline immediately
-			 AFTER a `%}` — plain tags, no `{%-`/`-%}` needed — so the indentation these lines are
-			 written with never reaches the output. Rendered by a router's own ucode, the generic
-			 template's spelling gives `inputmode="numeric"pattern="[0-9]*"maxlength="6"required`:
-			 an HTML parse error browsers recover from and a validator does not. Measured, not
-			 assumed — `A\n\t{% if (1): %}B{% endif %}\n\t{% if (1): %}C{% endif %}\nD` renders as
-			 `A\nBCD`.
+			 The leading space inside each conditional attribute is load-bearing: ucode's template
+			 lexer eats the whitespace immediately before a `{%` tag and the newline immediately
+			 after a `%}`, so the indentation never reaches the output and the attributes would run
+			 together into one token — measured, the generic template's spelling renders
+			 `inputmode="numeric"pattern="[0-9]*"maxlength="6"required`.
 			-#}
 			{% if (auth_fields): %}
 				{% for (let field in auth_fields): %}
@@ -200,10 +175,9 @@
 	));
 %}
 
-{# The two server values the script below needs, handed over as DATA. It is the one shape the
-   linter cannot read — a `{{ … }}` block is not JS until the server renders it — so it carries no
-   logic at all, and eslint's .ut processor enforces exactly that (tools/lib/ut-scripts.mjs). The
-   script itself is then plain JS and gets linted like every other file in the theme. #}
+{# The two server values the script below needs, handed over as DATA: a `{{ … }}` block is not JS
+   until the server renders it, so this line carries no logic at all and eslint's .ut processor
+   enforces that (tools/lib/ut-scripts.mjs). The script itself is plain JS and is linted. #}
 <script>window.__fsHttps={ports:{{ https_ports }},resource:"{{ resource }}"};</script>
 <script>
 	(() => {
@@ -212,10 +186,32 @@
 		if (input)
 			input.focus();
 
-		/* If the router also serves HTTPS, hop over to it — the password is about to go over this
-		 * connection. The <img> probe is upstream's trick: it proves the TLS port actually answers
-		 * before we send the user there. */
-		if (document.location.protocol === 'https:') return;
+		/* if the router also serves HTTPS, hop over to it before the password goes over this
+		 * connection; the <img> probe is upstream's trick for proving the TLS port answers first
+		 *
+		 * THE HOP CAN ARRIVE WITHOUT THE SESSION. On Chromium the jump from http to https is
+		 * cross-site — schemeful same-site puts the two schemes in different sites — so the
+		 * browser withholds LuCI's `SameSite=strict` cookie (dispatcher.uc) on exactly that
+		 * navigation and a reader already logged in over https lands back on this form: 403 to
+		 * the hop against 200 to curl carrying the cookie, measured on a stand serving both
+		 * schemes. Firefox sends it and answers 200 straight away.
+		 *
+		 * So where this form is what the hop landed on, it is asked again once, over the same
+		 * scheme: that navigation is same-site everywhere and carries the cookie. The retry is
+		 * bounded by the REFERRER rather than by a marker in the URL — after it, the referrer is
+		 * this https page instead of the http one, so a reader who genuinely has no session sees
+		 * this form once and stays on it. A `#…` marker was tried and is not what ships: on
+		 * Firefox the retry never runs, so nothing takes the fragment back off the address. */
+		if (document.location.protocol === 'https:') {
+			/* the host is compared as a PARSED origin, not as a prefix of the string:
+			 * `http://192.168.1.1.example.com` starts with `http://192.168.1.1` */
+			const from = document.referrer ? new URL(document.referrer) : null;
+
+			if (from && from.protocol === 'http:' && from.hostname === window.location.hostname)
+				window.location.replace(window.location.href);
+
+			return;
+		}
 
 		const { hostname, pathname } = window.location;
 
