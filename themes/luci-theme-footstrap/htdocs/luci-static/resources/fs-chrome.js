@@ -5,10 +5,10 @@
 'require fs-prefs as prefs';
 'require fs-menutree as tree';
 
-/* The chrome AROUND the content: the mode menu, the section tabs, the rail toggle, and the
- * measurements that decide how much room any of it gets. The MAIN menu is not here — it is injected
- * by menu-footstrap.js as a callback (renderMainMenu), because LuCI instantiates every required
- * module into a singleton and so a renderer cannot be a subclass of the chrome (docs/conventions.md). */
+/* The chrome around the content: the mode menu, the section tabs, the rail toggle and the
+ * measurements deciding how much room each gets. The main menu is injected by menu-footstrap.js as
+ * a callback (renderMainMenu), since a required LuCI module is a singleton and a renderer cannot
+ * subclass the chrome (docs/conventions.md). */
 
 /* the injected main-menu renderer; handed over once by the theme's init() */
 let _renderMain = null;
@@ -29,8 +29,8 @@ function renderTabMenu(node, url, level) {
 
 	children.forEach((child) => {
 		const isActive = (L.env.dispatchpath[3 + (level || 0)] === child.name);
-		/* aria-current="page", not just the `active` class: the class is paint, which a screen
-		 * reader cannot see. E() drops a null attribute value, so inactive tabs carry nothing. */
+		/* aria-current, not just the `active` class, which is paint a screen reader cannot see.
+		 * E() drops a null attribute value, so inactive tabs carry nothing. */
 		ul.appendChild(E('li', { 'class': 'tabmenu-item-%s %s'.format(child.name, isActive ? 'active' : '') }, [
 			E('a', { 'href': L.url(url, child.name), 'aria-current': isActive ? 'page' : null }, [ _(child.title) ])
 		]));
@@ -52,31 +52,31 @@ function renderTabMenu(node, url, level) {
 
 /* ---- tab-strip auto-fit ----
  * A tab strip (#tabmenu, or a view's own .cbi-tabmenu) can carry ~11 pills (luci-app-justclash)
- * that overflow one row. Rather than wrap, shrink: two density classes (styles/theme/40-tabs.css)
- * trim padding, then gap+font. Floored so a pill never gets tighter than its label — past the
- * floor the strip is allowed to wrap. */
+ * that overflow one row. Rather than wrap, shrink: two density classes (theme/40-tabs.css) trim
+ * padding, then gap+font. Floored so a pill never gets tighter than its label; past the floor the
+ * strip may wrap. */
 function stripFitsOneRow(ul) {
-	/* Only laid-out children count: a display:none child has offsetTop 0, so taking it as `last`
-	 * read as "one row" while the strip had in fact wrapped, and the density fit never fired. */
+	/* only laid-out children count: a display:none child has offsetTop 0, so taking it as `last`
+	 * reads as "one row" on a strip that has wrapped */
 	const items = [...ul.children].filter((el) => el.getClientRects().length > 0);
 	const first = items[0], last = items[items.length - 1];
 	/* one row iff first and last item share a top edge */
 	return !first || !last || first.offsetTop === last.offsetTop;
 }
 function fitTabStrips() {
-	/* `.fs-sidebar > ul.nav` is the main menu in EVERY layout — the same list — so the
-	 * flexDirection check below is what tells a bar (row) from a vertical sidebar (column),
-	 * where a one-row measure is meaningless. */
+	/* `.fs-sidebar > ul.nav` is the main menu in every layout, so the flexDirection check below
+	 * is what tells a bar (row) from a vertical sidebar (column), where a one-row measure is
+	 * meaningless */
 	document.querySelectorAll('.tabs, .cbi-tabmenu, .fs-sidebar > ul.nav').forEach((ul) => {
 		if (ul.children.length < 2) return;
 		if (ul.matches('.fs-sidebar > ul.nav') && getComputedStyle(ul).flexDirection !== 'row') {
-			/* vertical list: the measure would floor it at fs-dense2 forever. Clear and skip. */
+			/* vertical list: the measure would floor it at fs-dense2 forever */
 			if (ul.classList.contains('fs-dense1') || ul.classList.contains('fs-dense2'))
 				ul.classList.remove('fs-dense1', 'fs-dense2');
 			return;
 		}
 		/* steady state (poll tick on an already-fitting strip): one measure, no class writes —
-		 * the write-measure-write dance below forces a reflow per strip, every second. */
+		 * the write-measure-write below forces a reflow per strip, on every tick */
 		if (!ul.classList.contains('fs-dense1') && !ul.classList.contains('fs-dense2') && stripFitsOneRow(ul))
 			return;
 		ul.classList.remove('fs-dense1', 'fs-dense2');
@@ -87,45 +87,30 @@ function fitTabStrips() {
 		ul.classList.add('fs-dense2');	/* floor: leave wrapped if it still overflows */
 	});
 }
-/* ---- does the CONTENT column still have room, once the sidebar has taken its cut? ----
+/* ---- does the content column still have room, once the sidebar has taken its cut? ----
  *
- * The sidebar gives way to the bar when what is LEFT for the content would be too narrow to read.
- * A viewport breakpoint (`@media (max-width: 767px)`) cannot say that: the cut is not a constant —
- * 224px expanded, 68px collapsed to the rail — so one breakpoint gave both states the same answer,
- * and the rail folded away at the same width as the full sidebar, the ~156px it had just freed
- * buying the user nothing. Do NOT measure the RENDERED sidebar either: the answer would depend on
- * the state it is deciding (once it is a bar there is no cut, so the content "fits", so it
- * un-narrows, so it cuts again) — oscillation.
+ * The sidebar gives way to the bar when what is left for the content would be too narrow to read.
+ * A viewport breakpoint cannot say that: the cut is 224px expanded and 68px as a rail, so one
+ * breakpoint gives both states the same answer and the rail folds away at the same width as the
+ * full sidebar. Do not measure the RENDERED sidebar either — the answer would depend on the state
+ * it is deciding (as a bar there is no cut, so the content fits, so it un-narrows) and oscillate.
  *
- * The widths come from the STYLESHEET (02-tokens.css), which is what lays the sidebar out; never
- * restate them here, or narrowing the rail in CSS leaves this subtracting the old width with no gate
- * able to see it. Memoised because fitShell runs on every resize and mutation and getComputedStyle
- * forces a style recalc; the fallbacks stop an empty custom property making the measurement NaN
- * (`NaN < NaN` is false, so the sidebar would simply never yield). */
-/* A CUSTOM PROPERTY IS UNTYPED, so its computed value is a token stream and not a length.
- * `parseFloat(getComputedStyle(root).getPropertyValue('--fs-sidebar-w'))` therefore reads
- * `calc(224px * 1)` — a string starting with `c` — and returns NaN, which the fallbacks below turn
- * straight back into the literals this function exists to stop restating. It read correctly until
- * the Density axis wrapped three of the four tokens in `calc(… * var(--fs-density-box))`; only
- * `--fs-content-min`, still a bare `500px`, kept working, which is why the failure was one-sided
- * and silent. Measured on the router: content-min 500, and sidebar/rail/pad all NaN.
+ * The widths come from the stylesheet (02-tokens.css) and are never restated here, or narrowing
+ * the rail in CSS leaves this subtracting the old width with no gate able to see it.
  *
- * Resolve them the way the platform actually offers without registering the property: assign the
- * token to a REAL length property on a throwaway element and read the used value back. */
+ * A custom property is untyped, so `parseFloat(getComputedStyle(root).getPropertyValue(…))` reads
+ * `calc(224px * 1)` and returns NaN — silently, since `NaN < NaN` is false and the sidebar simply
+ * never yields. Assign the token to a real length property on a throwaway element and read the
+ * used value back instead. */
 let _probe = null;
-/* THE PROBE IS A PLAIN <div> IN THE SHARED DOCUMENT, so a third-party app's CSS can style it, and
- * every one of its declarations is !important for that reason alone. It carries no chrome mark, so
- * `fs-sheets`'s fence deliberately does not spare it (the fence protects the chrome's own elements),
- * and even a fenced sheet still matches an unmarked div. Issue #19: an app whose stylesheet carried
- * `div { min-width: 500px !important }` won every read — all four tokens came back 500 — so the cut
- * the sidebar was said to take became 500 + 2x500 and `fitShell` folded the sidebar into a bar on a
- * 1857px desktop. The threshold that produces is exactly 500 + 500 + 1000 = 2000 CSS px, which is
- * why it was reported as a ZOOM bug: Chrome at 90% gives 2063 CSS px and passed, 100% gives 1857 and
- * failed. Inline !important is what answers it — a style-attribute declaration outranks any author
- * rule at the same importance, so there is nothing left for the app to out-rank.
- * box-sizing is stated for the same reason: getComputedStyle().width is the CONTENT box, so a
- * foreign `border-box` plus padding would shave the reading (the padding/border resets below are
- * important, but only a stated box-sizing makes them provably irrelevant). */
+/* The probe is a plain <div> in the shared document, so a third-party app's CSS can style it —
+ * it carries no chrome mark and the fence deliberately does not spare it. Every declaration is
+ * therefore !important, which a style-attribute wins outright: an app carrying
+ * `div { min-width: 500px !important }` otherwise wins every read and the sidebar folds into a bar
+ * on a 1857px desktop (issue #19) — the cut becomes 500 + 500 + 1000 = 2000 CSS px, which is why it
+ * was reported as a zoom bug: Chrome at 90% gives 2063 CSS px and passes, 100% gives 1857 and
+ * fails. box-sizing is stated for the same reason — getComputedStyle().width is
+ * the content box, so a foreign `border-box` plus padding would shave the reading. */
 function resolveLen(token, dflt) {
 	if (!_probe) {
 		_probe = document.createElement('div');
@@ -142,47 +127,50 @@ function resolveLen(token, dflt) {
 	return Number.isFinite(v) ? v : dflt;
 }
 
-/* Memoised because fitShell runs on every resize and mutation and resolving forces a style recalc —
- * but keyed on the DENSITY, because that is the one thing that changes these widths at runtime
- * (`prefs.applyDensity()` stamps `:root[data-density]` and calls fit.schedule() precisely so they
- * are re-measured). Reading one attribute is free; the memo without the key meant a density change
- * re-measured against the widths of the density before it. */
-/* The last resort, stated ONCE so the fallbacks and the sanity net below cannot restate the
- * stylesheet's widths in two different places. Reaching for these means the measurement failed. */
+/* Memoised because fitShell runs on every resize and mutation and resolving forces a style recalc,
+ * but keyed on the density: that is the one thing changing these widths at runtime
+ * (`prefs.applyDensity()` stamps `:root[data-density]` and calls fit.schedule() for exactly that).
+ *
+ * The defaults are stated once so the fallbacks and the sanity net below cannot restate the
+ * stylesheet's widths in two places. Reaching for them means the measurement failed. */
 const GEOM_DFLT = { contentMin: 500, sidebarW: 224, railW: 68, contentPad: 56, contentMax: 1280 };
+/* the class name toggled below by fitShell's own escalation and by fitCluster's (measured: 16 B x3
+ * -> 25 B, 23 B saved) */
+const CLASS_IND_COMPACT = 'fs-ind-compact';
 
 let _geom = null, _geomDensity = null, _geomWarned = false;
 function shellGeometry() {
 	const density = document.documentElement.getAttribute('data-density') || '';
-	/* the gutter is re-asked even on the memo hit: it moves with the WIDTH, not with the density */
-	if (_geom && _geomDensity === density) return _geom;
-	_geomDensity = density;
+	/* contentMax moves with data-content-width (02-tokens.css), the other three widths do not, but
+	 * they are one memo and the axis's own applier calls fit.schedule() same as Density's — folded
+	 * into the same key rather than a second one, or a content-width change alone would hit the
+	 * density-only key and go on answering the previous contentMax until density also changed */
+	const cwidth = document.documentElement.getAttribute('data-content-width') || '';
+	const key = density + '|' + cwidth;
+	/* the gutter is re-asked even on a memo hit: it moves with the width, not the density */
+	if (_geom && _geomDensity === key) return _geom;
+	_geomDensity = key;
 	const px = (name, dflt) => resolveLen(name, dflt);
 	const g = {
 		contentMin: px('--fs-content-min', GEOM_DFLT.contentMin),
 		sidebarW:   px('--fs-sidebar-w', GEOM_DFLT.sidebarW),
 		railW:      px('--fs-rail-w', GEOM_DFLT.railW),
-		/* the token is ONE side's padding; the column loses it twice. It is also only the FALLBACK:
-		 * measureShell() overwrites this field with the gutter the column actually got, and until it
-		 * has (the login page has no `.fs-content`, and nothing has measured before the first
-		 * fitter) the token is the honest answer. */
+		/* the token is one side's padding; the column loses it twice. It is only the fallback —
+		 * measureShell() overwrites this with the gutter the column actually got, which nothing
+		 * has measured before the first fitter (and the login page has no `.fs-content`). */
 		contentPad: px('--fs-content-pad', GEOM_DFLT.contentPad / 2) * 2,
-		/* the cap the column stops growing at, so the model knows where the surplus becomes margin
-		 * rather than gutter — see columnWidth() */
+		/* where the column stops growing, i.e. where surplus becomes margin — see columnWidth() */
 		contentMax: px('--fs-content-max', GEOM_DFLT.contentMax)
 	};
-	/* Plausibility, and it costs one comparison: the rail IS the sidebar collapsed, so
-	 * 0 < railW < sidebarW holds by construction. Both known ways this measurement fails destroy
-	 * that — a hijacked probe reports ONE foreign width for all four (issue #19), a renamed or
-	 * absent token reports 0 for all four (an abs-positioned empty div with `width:auto` shrinks to
-	 * 0, and 0 is finite, so the per-read fallback above never fires). Neither can be seen in the
-	 * numbers one at a time; the RELATION between them is what gives it away. */
+	/* Plausibility, at the cost of one comparison: the rail is the sidebar collapsed, so
+	 * 0 < railW < sidebarW holds by construction. Both known failures destroy it — a hijacked probe
+	 * reports one foreign width for all four (issue #19), a renamed or absent token reports 0 for
+	 * all four (an abs-positioned empty div shrinks to 0, which is finite, so the per-read fallback
+	 * never fires). Only the relation between the numbers gives either away. */
 	const sane = (g.railW > 0 && g.railW < g.sidebarW && g.contentMin > 0);
-	/* SAY SO when it fires. The fallback keeps the chrome laid out, which is right — but it lays it
-	 * out on the literals CLAUDE.md forbids copying into JS, so from there on the sidebar folds at a
-	 * width nobody chose while the page still LOOKS correct. Silent, that is how a renamed token
-	 * ships green; one console line is the difference between a mystery and a grep. Once per
-	 * document — this runs on every resize and every mutation. */
+	/* The fallback keeps the chrome laid out, but on built-in literals, so the sidebar folds at a
+	 * width nobody chose while the page still looks correct. Say so, or a renamed token ships
+	 * green. Once per document — this runs on every resize and mutation. */
 	if (!sane && !_geomWarned) {
 		_geomWarned = true;
 		console.error('footstrap: the chrome widths did not read back from the stylesheet (got '
@@ -190,60 +178,45 @@ function shellGeometry() {
 			+ 'renamed, or a foreign sheet is reaching the measurement probe.');
 	}
 	_geom = sane ? g : Object.assign({}, GEOM_DFLT);
-	/* the token is only the fallback; the gutter that counts is the one measureShell() read */
 	if (_shellPad != null) _geom.contentPad = _shellPad;
 	return _geom;
 }
 
-/* THE GUTTER IS MEASURED WHERE IT IS APPLIED, not read off the token that usually supplies it, and
- * SO IS THE WINDOW — but both are read HERE, from a fitter, and nowhere else.
+/* The window's width and the column's gutter are read here, from a fitter or from
+ * `contentWidth()`'s own staleness check below — nowhere else.
  *
- * `--fs-content-pad` is what `.fs-content` uses at desktop widths, and `theme/20-shell.css` gives
- * the same element `padding: var(--fs-space-4)` below 767px: the token says 28px a side while the
- * column's gutter is 16px there. That is a 24px error in a model this file exists to keep honest,
- * and `live-audit` found it on every page at 320, 390 and 568 — the same trap the alert-message rule
- * under that media query carries a paragraph about, repeated in the JS. The breakpoint itself may
- * NOT come here: a width literal copied into JS is exactly what these reads exist to avoid, and a
- * media query has no `data-*` to key on either. Asking the element what it actually got is the only
- * form that cannot drift.
+ * The gutter is measured where it is applied rather than read off `--fs-content-pad`: below 767px
+ * `theme/20-shell.css` re-pads `.fs-content` to `var(--fs-space-4)`, so the token says 28px a side
+ * while the real gutter is 16px. The breakpoint may not be restated here — a width literal in JS is
+ * what these reads exist to avoid — so the element is asked what it actually got.
  *
- * WHY IT IS A SEPARATE FUNCTION AND WHY ONLY A FITTER CALLS IT. `clientWidth` is a LAYOUT read and
- * `getComputedStyle` resolves style; `contentWidth()` below is called mid-scroll, by the one pass in
- * this theme that must answer without reading either (fs-select's, for a table the poll brought in
- * under the reader's thumb). So the numbers are taken when a fitter runs — which is on every resize
- * and every content mutation, and never during a flick, because `fitChrome()` defers exactly like
- * every other measuring pass — and everything after that reads what was stored. Nothing they
- * describe can change without a resize, and a resize schedules a fit; a resize that lands DURING a
- * scroll is deferred with the rest, so a mid-scroll answer is the geometry as of the last still
- * moment, which is the trade this whole file is built on.
+ * `clientWidth` is a layout read and `getComputedStyle` resolves style, so a fitter is the one
+ * caller allowed to reach BOTH unconditionally: it defers the whole pass during a flick
+ * (`fit.scrolling()`, fs-fit.js) rather than pay either mid-scroll. `contentWidth()` reaches only
+ * the first (comparison, not the write) on every call, and this function's own body only when
+ * that comparison says the width moved — its answer is otherwise the geometry as of the last still
+ * moment, exactly what a fitter last measured.
  *
- * Unlike the token probe above, a hostile app's declaration is not a threat here: `.fs-content`
- * carries no chrome mark, so an app CAN restyle it, and if it did then that padding IS the column's
- * real gutter. What the probe must not report is a foreign answer for OUR layout; this reports the
- * layout as it stands. Before any fitter has run — the login page has no `.fs-content` at all — the
- * token stands in. */
+ * A hostile declaration is no threat here: `.fs-content` carries no chrome mark, so if an app
+ * re-pads it then that padding IS the column's gutter. Before any fitter has run — the login page
+ * has no `.fs-content` — the token stands in. */
 let _shellOuter = 0, _shellPad = null, _padAt = null;
 function measureShell() {
-	/* the window's own width, every time: fitShell read it before this function existed and the
-	 * value is what everything downstream is measured against */
+	/* the window's own width, every time: everything downstream is measured against it */
 	_shellOuter = document.documentElement.clientWidth;
-	/* The GUTTER, though, is resolved style, and this runs on every mutation batch — once a second
-	 * on any polled page. Three things move it: the width (a media query re-paddings the column
-	 * below 767px), the density (the token is `calc(28px * var(--fs-density-space))`) and the PAGE.
-	 * The third is the one the paragraph above already names and this key used to miss: `.fs-content`
-	 * carries no chrome mark, so a foreign sheet may re-pad it — and `sheets.scopeToCurrentPage()`
-	 * enables and disables those sheets on every client navigation, with no width and no density
-	 * change to notice it by. Navigating off a page whose sheet re-padded the column would otherwise
-	 * leave this pinned at that app's gutter for as long as the width held. `body[data-page]` is the
-	 * one attribute a navigation always restamps, so it is the third term; an unchanged page still
-	 * resolves nothing. Same trade as the token memo above, for the same reason. */
+	/* The gutter is resolved style and this runs on every mutation batch, so it is memoised on the
+	 * three things that move it: the width (a media query re-pads the column below 767px), the
+	 * density (the token is a calc over it) and the page. The page is the third term because a
+	 * foreign sheet may re-pad `.fs-content`, and `sheets.scopeToCurrentPage()` enables and
+	 * disables those sheets per navigation with no width or density change to notice it by;
+	 * `body[data-page]` is the one attribute a navigation always restamps. */
 	const key = (document.documentElement.getAttribute('data-density') || '') + '|' + _shellOuter +
 		'|' + (document.body ? document.body.getAttribute('data-page') || '' : '');
 	if (_padAt === key && _shellPad != null) return;
 	const host = document.querySelector('.fs-content');
 	const cs = host ? getComputedStyle(host) : null;
 	const v = cs ? parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) : NaN;
-	/* a failed read leaves the key unset, so the next pass tries again rather than caching a miss */
+	/* a failed read leaves the key unset, so the next pass retries rather than caching a miss */
 	if (Number.isFinite(v) && v >= 0) {
 		_shellPad = v;
 		_padAt = key;
@@ -254,44 +227,37 @@ function measureShell() {
 function columnWidth(g, state) {
 	/* narrow OR top: in both the chrome is above the content, not beside it */
 	const cut = (state.narrow || state.top) ? 0 : (state.rail ? g.railW : g.sidebarW);
-	/* AND THE COLUMN STOPS GROWING. `.fs-content` is `max-width: var(--fs-content-max); margin: 0
-	 * auto`, so past roughly a 1500px window the surplus becomes margin and not column: without the
-	 * cap this answered ~2280 on a 2560px sidebar layout for a column that is 1224 wide. No caller
-	 * can reach that today — both ask a LOWER bound (`< --fs-content-min` here, `< CRAMPED` in
-	 * fs-select) and the cap only binds where both are clear by a factor of two — but this is the
-	 * exported answer to "how wide is the content column", and an answer that is only true below
-	 * 1500px is the kind of thing the next caller inherits without being told. */
+	/* The column stops growing: `.fs-content` is `max-width: var(--fs-content-max); margin: 0
+	 * auto`, so past ~1500px the surplus becomes margin, and without the cap this answers ~2280 on
+	 * a 2560px window for a column that is 1224 wide. No caller can reach that today (both ask a
+	 * lower bound), but this is the exported answer to "how wide is the content column". */
 	const room = Math.min(state.outerW - cut, g.contentMax);
 	return Math.max(0, room - g.contentPad);
 }
 
 function fitShell() {
 	const root = document.documentElement;
-	/* the one place the window and the gutter are read — see measureShell(). It runs in BOTH
-	 * branches: the bar layout decides nothing here, but `contentWidth()` still answers in it. */
+	/* runs in both branches: the bar layout decides nothing here, but `contentWidth()` still
+	 * answers in it */
 	measureShell();
 	if (prefs.currentLayout() === 'top') {		/* no sidebar, no cut, nothing to decide */
 		root.removeAttribute('data-narrow');
 		return;
 	}
 	const g = shellGeometry();
-	/* asked UNCOLLAPSED — this is the measurement that decides `data-narrow`, so it may not read it */
+	/* asked uncollapsed: this measurement decides `data-narrow`, so it may not read it */
 	const content = columnWidth(g, { outerW: _shellOuter, rail: prefs.currentRail() });
-	/* toggleAttribute, NOT setAttribute: a same-value setAttribute still QUEUES a mutation record
-	 * (measured in Chromium: 5 identical setAttribute('data-narrow','') -> 5 records; toggleAttribute
-	 * on an already-present attribute -> 0). fitShell runs from fitChrome, which fs-fit calls on every
-	 * mutation batch inside #view — i.e. once a second on any polled page. menu-footstrap observes
-	 * data-narrow and treats each record as a mode CHANGE, so on a phone (390 - 224 - 56 = 110 < 500,
-	 * so the attribute is permanently set) every poll tick re-fired closeFlyouts() and the section the
-	 * user had just tapped open snapped shut, forever. The bug was one-sided and therefore invisible
-	 * on a desktop: the else-branch removeAttribute on an absent attribute already fires 0 records. */
+	/* toggleAttribute, not setAttribute: a same-value setAttribute still queues a mutation record,
+	 * while toggleAttribute on an already-present attribute queues none. fitShell runs on every
+	 * mutation batch inside #view, and menu-footstrap treats each data-narrow record as a mode
+	 * change, so on a phone (where the attribute is permanently set) every poll tick would re-fire
+	 * closeFlyouts() and snap shut the section the user just opened. */
 	root.toggleAttribute('data-narrow', content < g.contentMin);
 }
 
 function fitChrome() {
-	/* Nothing this function asks can change while the reader scrolls — the bar's width, the menu's
-	 * width, the room beside the brand — and every one of those questions is a layout read landing
-	 * in the middle of a flick. Put off until the scrolling stops; see fs-fit.js. */
+	/* nothing asked here — bar width, menu width, room beside the brand — can change while the
+	 * reader scrolls, and each is a layout read landing mid-flick: defer (fs-fit.js) */
 	if (fit.scrolling()) {
 		fit.deferMeasurement();
 		return;
@@ -301,32 +267,57 @@ function fitChrome() {
 
 	const bar = document.querySelector('.fs-sidebar');
 	const menu = document.getElementById('topmenu');
-	/* The top bar is MEASURED at every width — no 768 floor. It used to bail below 768 and hand
-	 * the job to a phone-bar media query, which left the sub-768 bar pinning its dropdowns to the
-	 * left edge and never collapsing "Refreshing"; the shrink/compact/stack escalation below now
-	 * runs at any width for the top layout. (The SIDEBAR layout still has its own phone bar,
-	 * decided by fitShell's data-narrow, and is untouched here.) */
+	/* The top bar is measured at every width, with no breakpoint floor: the shrink/compact/stack
+	 * escalation below runs at any width. (The sidebar layout has its own phone bar, decided by
+	 * fitShell's data-narrow, and is untouched here.) */
 	const topBar = !!bar && !!menu && prefs.isTopLayout();
 
-	if (bar) bar.classList.remove('fs-bar-stack', 'fs-ind-compact', 'fs-bar-actrow');
+	/* THE BAR MAY NOT CHANGE HEIGHT WHILE IT IS BEING MEASURED, IN EITHER DIRECTION. The three
+	 * classes below are taken off so the menu can be asked whether it fits on one row (fs-fit
+	 * rule 1), and while they are off the bar's OWN box is free to answer any height its content
+	 * currently needs — not only shorter. A `min-height` floor alone stops the shrink but not the
+	 * grow: with the classes off and `fs-dense1`/`fs-dense2` stripped by `fitTabStrips()`, this pass
+	 * measured the bar walking 230 -> 202 -> 164 -> 144 -> 123 -> 131 -> 123px against a settled
+	 * 123px on owrt2512 at 767px — 107px of growth a floor never sees, on top of the shrink it does
+	 * — each step landing between two of the poll's own separate section refreshes, so the browser
+	 * paints in between and the reader is moved by exactly as much, on Chromium and Firefox as well
+	 * as Safari (`tools/fit-quiet.mjs`, plus a probe that pauses the layout mid-pass). `min-height`
+	 * alone was measured to `accc451`'s WebKit-only diagnosis instead — WebKit's own scroll anchoring
+	 * looked like the whole story only because it is the one engine with no anchoring at all to hide
+	 * this walk behind; Chromium and Firefox absorb it the same way they absorb any other layout
+	 * change, which is not the same as not producing it.
+	 *
+	 * So both `min-height` AND `height` are pinned to the SAME value for the whole decision — a hard
+	 * pin, not a floor — because nothing this pass measures (`stripFitsOneRow()`'s `offsetTop`,
+	 * `clusterFitsBrandRow()`'s widths) reads the BAR's own height; `overflow: visible`
+	 * (`theme/20-shell.css`) means a row the pin is too short for still lays out and measures
+	 * correctly, it only paints past the pinned box's edge, which is invisible for the one
+	 * synchronous pass before the pin comes off. The pin is released only once the final class set
+	 * is decided — after `fitCluster()`, before `publishBarHeight()` — which must measure the bar
+	 * the reader actually gets. */
+	const pinned = bar ? Math.round(bar.getBoundingClientRect().height) : 0;
+	const hadMinH = bar ? bar.style.minHeight : '';
+	const hadH = bar ? bar.style.height : '';
+	if (pinned > 0) { bar.style.minHeight = pinned + 'px'; bar.style.height = pinned + 'px'; }
+
+	if (bar) bar.classList.remove('fs-bar-stack', CLASS_IND_COMPACT, 'fs-bar-actrow');
 	fitTabStrips();
 	/* ---- does the main menu fit on the brand's row? ----
-	 * Whether it fits depends on how many sections THIS router has (stock 5, a loaded box 11), not
-	 * on the viewport — so it is measured, not a breakpoint. `@media (max-width: 1199px)` stacked
-	 * it on every laptop: a stock bar's contents come to ~683px, i.e. one row fits down to ~723px.
-	 * Measured UNSTACKED (the remove above): a stacked menu owns a whole row and would "fit",
-	 * flipping straight back — oscillation.
+	 * It depends on how many sections THIS router has (stock 5, a loaded box 11), not on the
+	 * viewport, so it is measured — a `max-width: 1199px` breakpoint stacked it on every laptop.
+	 * Measured unstacked (the remove above), because a stacked menu owns a whole row, would "fit"
+	 * and flip straight back.
 	 *
-	 * The menu's own pills wrapping IS the "does not fit" signal, but only because the unstacked
-	 * top bar is flex-wrap: nowrap (50-toplayout.css); otherwise the BAR wraps, hands the menu
-	 * a whole row, and it always "fits". Do NOT measure the bar's children by offsetTop instead:
-	 * the bar is align-items:center with children of differing heights, so their offsetTop differs
-	 * even on one row (that read as "wrapped" for a 5-section menu). */
+	 * The menu's own pills wrapping is the "does not fit" signal, and only works because the
+	 * unstacked top bar is flex-wrap: nowrap (50-toplayout.css) — otherwise the bar wraps, hands
+	 * the menu a row and it always fits. Do not measure the bar's children by offsetTop instead:
+	 * the bar is align-items:center over children of differing heights, so offsetTop differs even
+	 * on one row. */
 	if (topBar && !stripFitsOneRow(menu)) {
-		/* First step before stacking: collapse the poll pill ("Refreshing", ~90px) to an icon
-		 * square and re-measure — that width alone is often enough to keep the menu on the
-		 * brand's row and skip the second row entirely (styles/theme/50-toplayout.css). */
-		bar.classList.add('fs-ind-compact');
+		/* first step before stacking: collapse the poll pill (~90px) to an icon square and
+		 * re-measure — often enough to keep the menu on the brand's row
+		 * (theme/50-toplayout.css) */
+		bar.classList.add(CLASS_IND_COMPACT);
 		fitTabStrips();
 		if (!stripFitsOneRow(menu)) {
 			bar.classList.add('fs-bar-stack');
@@ -334,25 +325,24 @@ function fitChrome() {
 		}
 	}
 
-	/* The cluster's own escalation, for EVERY bar — the top layout at any width, and the sidebar
-	 * layout once fitShell has stamped data-narrow. It runs after the menu's, so that when the menu
-	 * did NOT fit, .fs-bar-stack has already given it a row of its own. */
+	/* the cluster's own escalation, for every bar; after the menu's, so a menu that did not fit
+	 * has already been given a row of its own by .fs-bar-stack */
 	if (bar && (topBar || document.documentElement.hasAttribute('data-narrow')))
 		fitCluster(bar, menu);
 
+	if (pinned > 0) { bar.style.minHeight = hadMinH; bar.style.height = hadH; }
 	publishBarHeight(bar);
 }
 
-/* ---- HOW TALL THE BAR ACTUALLY IS, for whoever has to stick underneath it ----
+/* ---- how tall the bar actually is, for whoever sticks underneath it ----
  *
- * A data table's header row sticks while its rows scroll past (theme/30-tables.css). Where the
- * DOCUMENT scrolls — the top layout, and the sidebar layout once it has become a bar — the sticky
- * bar is what the header has to clear, and `--fs-bar-h` is only its DESIGNED height: the bar grows
- * when the brand wraps, when the menu takes a row of its own (.fs-bar-stack) or when the cluster
- * does (.fs-bar-actrow), and every one of those is decided a few lines above by measurement.
- * So the measurement is published, and the CSS falls back to the token when it is missing.
+ * A data table's header row sticks while its rows scroll past (theme/30-tables.css), and where the
+ * document scrolls it has to clear the sticky bar. `--fs-bar-h` is only the bar's DESIGNED height:
+ * it grows when the brand wraps, when the menu takes a row (.fs-bar-stack) or when the cluster does
+ * (.fs-bar-actrow), each decided by measurement above. So the measurement is published and the CSS
+ * falls back to the token.
  *
- * Written only on a CHANGE and rounded to the pixel: this runs on every fit pass, and a custom
+ * Written only on a change and rounded to the pixel: this runs on every fit pass, and a custom
  * property write on :root invalidates style for the whole document. */
 let _barH = 0;
 function publishBarHeight(bar) {
@@ -366,36 +356,29 @@ function publishBarHeight(bar) {
 
 /* ---- does the right-hand cluster still fit beside the brand? ----
  *
- * The same question as the menu's, one row up, and it cannot be asked the same way. The cluster is
- * four SIBLINGS — the indicators, Search, Appearance, Log out — so flexbox wraps them ONE AT A
- * TIME: measured on a 380px phone bar, Log out alone dropped onto a second row and sat at its LEFT
- * edge under the hostname, while the other three stayed up top. Either the whole cluster shares the
- * brand's row or it takes a row of its own, right-aligned; there is no useful state in between.
+ * The cluster is four siblings (indicators, Search, Appearance, Log out), which flexbox wraps one
+ * at a time: on a narrow bar Log out alone drops to a second row, left-aligned under the hostname.
+ * Either the whole cluster shares the brand's row or it takes a row of its own, right-aligned.
  *
- * Two steps, cheapest first: collapse the pills to icon squares (~200px of prose on a bar showing
- * both), and only if that still overflows give the cluster a row. .fs-ind-compact may already be
- * set by the menu's escalation above — adding it twice is free, and it must NOT be cleared here:
- * whoever asked for it still needs it. */
+ * Two steps, cheapest first: collapse the pills to icon squares (~200px of prose), then give the
+ * cluster a row. .fs-ind-compact may already be set by the menu's escalation above and must not be
+ * cleared here — whoever asked for it still needs it. */
 function fitCluster(bar, menu) {
 	bar.classList.remove('fs-bar-actrow');
 	if (clusterFitsBrandRow(bar, menu))
 		return;
 
-	bar.classList.add('fs-ind-compact');
+	bar.classList.add(CLASS_IND_COMPACT);
 	if (clusterFitsBrandRow(bar, menu))
 		return;
 
 	bar.classList.add('fs-bar-actrow');
 }
 
-/* Add the widths up rather than read positions: the bar is align-items:center over children of
- * differing heights, so offsetTop differs even on ONE row — the same trap the menu measurement
- * documents above. The menu is excluded either way. Where it wraps to a row of its own it plainly
- * is not competing (`ul.nav { flex: 1 1 100% }` — the sidebar-layout bar, and the top bar once
- * .fs-bar-stack is set); where it does share the brand's row, un-stacked at `flex: 1 1 auto`
- * (theme/50-toplayout.css), it is the one child that SHRINKS, so counting its current width would
- * report the cluster as not fitting whenever the menu happened to be wide. What the cluster has to
- * fit beside is the brand and the other actions. */
+/* Add the widths up rather than read positions, for the offsetTop reason above. The menu is
+ * excluded either way: on a row of its own (`ul.nav { flex: 1 1 100% }`) it is not competing, and
+ * where it shares the brand's row it is the child that shrinks (`flex: 1 1 auto`), so counting its
+ * current width would report the cluster as not fitting whenever the menu happened to be wide. */
 function clusterFitsBrandRow(bar, menu) {
 	const cs = getComputedStyle(bar);
 	const gap = parseFloat(cs.columnGap) || 0;
@@ -403,9 +386,7 @@ function clusterFitsBrandRow(bar, menu) {
 	let need = -gap;
 
 	for (const el of bar.children) {
-		/* offsetParent is null for a display:none child, which is most of them in a bar:
-		 * .fs-navlabel, .fs-spacer and #modemenu never show there, and #indicators is empty
-		 * (and so hidden) until the first poll pill lands. */
+		/* offsetParent is null for a display:none child, which is most of them in a bar */
 		if (el === menu || el.offsetParent === null)
 			continue;
 		need += el.offsetWidth + gap;
@@ -413,12 +394,10 @@ function clusterFitsBrandRow(bar, menu) {
 
 	return need <= room;
 }
-/* No observer and no resize listener of our own: fs-fit owns both, and this file used to grow the
- * second one docs/conventions.md warns against. A view renders its .cbi-tabmenu into #view, which fs-fit's
- * MutationObserver already watches — and it re-fits SYNCHRONOUSLY (rule 2), where the copy here
- * deferred through fit.schedule(), i.e. the duplicate was strictly the slower path into the same
- * work. #tabmenu is a sibling of #view rather than inside it, but nothing writes it except
- * renderChrome(), which schedules a fit itself. Resize is fs-fit's ResizeObserver on #view. */
+/* No observer and no resize listener of our own — fs-fit owns both (docs/conventions.md). A view
+ * renders its .cbi-tabmenu into #view, which fs-fit's MutationObserver already watches and re-fits
+ * synchronously. #tabmenu is a sibling of #view, but nothing writes it except renderChrome(),
+ * which schedules a fit itself. */
 
 /* modes -> #modemenu; drives the injected renderMainMenu for the active mode */
 function renderModeMenu(node, renderMainMenu) {
@@ -430,8 +409,7 @@ function renderModeMenu(node, renderMainMenu) {
 			? child.name === L.env.requestpath[0]
 			: index === 0;
 
-		/* the main menu must render even if a template has no #modemenu — only the mode
-		 * list itself is skippable chrome */
+		/* the main menu must render even where a template has no #modemenu */
 		if (ul)
 			ul.appendChild(E('li', { 'class': isActive ? 'active' : '' }, [
 				E('a', { 'href': L.url(child.name) }, [ _(child.title) ])
@@ -449,7 +427,7 @@ function renderModeMenu(node, renderMainMenu) {
 		ul.style.display = '';
 }
 
-/* rebuild mode menu + main menu + section tabs from the current L.env; on first load and after
+/* rebuild mode menu + main menu + section tabs from the current L.env, on first load and after
  * every SPA nav. Containers are cleared first so a re-render does not stack duplicates. */
 function renderChrome() {
 	const root = tree.tree();
@@ -465,11 +443,9 @@ function renderChrome() {
 
 	if (L.env.dispatchpath.length >= 3) {
 		let node = root, url = '';
-		/* `node.children &&`, exactly as fs-menutree's nodeForSegs() walks it: a node without
-		 * children is an ordinary leaf, and reading `.children[…]` off one is a TypeError that
-		 * escapes renderChrome() — i.e. it takes out the mode menu, the tabs and, on the init path,
-		 * everything menu-footstrap-common wires after it. The walk already tests `node` on each
-		 * step; testing only half of what it dereferences is what left the hole. */
+		/* `node.children &&`, as fs-menutree's nodeForSegs() walks it: a childless node is an
+		 * ordinary leaf, and reading `.children[…]` off one throws out of renderChrome(), taking
+		 * the mode menu, the tabs and everything init wires after it */
 		for (let i = 0; i < 3 && node; i++) {
 			node = node.children && node.children[L.env.dispatchpath[i]];
 			url = url + (url ? '/' : '') + L.env.dispatchpath[i];
@@ -482,8 +458,8 @@ function renderChrome() {
 }
 
 /* Sidebar rail toggle: collapse the sidebar to an icon-only strip. The state lives on
- * <html data-rail> (head.ut re-applies it before paint) and in localStorage; everything else —
- * flyout submenus, hidden labels — is CSS keyed off that attribute. */
+ * <html data-rail> (head.ut re-applies it before paint) and in localStorage; everything else is
+ * CSS keyed off that attribute. */
 function wireRail() {
 	const btn = document.getElementById('fs-rail-toggle');
 	if (!btn) return;
@@ -499,27 +475,53 @@ function wireRail() {
 	btn.addEventListener('click', () => {
 		prefs.applyRail(!prefs.currentRail());
 		sync();
-		/* the sidebar's cut just changed by ~156px, so the content column may now clear (or fall
-		 * below) --fs-content-min: re-measure rather than wait for a resize that is not coming */
+		/* the sidebar's cut just changed by ~156px, so the column may now clear or fall below
+		 * --fs-content-min: re-measure rather than wait for a resize that is not coming */
 		fit.schedule();
 	});
 
 	sync();
 }
 
-/* An indicator pill carries its whole meaning as prose — LuCI writes "Unsaved Changes: 2" — and the
- * collapsed rail is 68px wide. Measured on the router: the pill wants 86px, wraps onto three lines
- * and hangs 34px past the rail's edge over the content (issue #14). The rail is an icon strip, so
- * CSS squares the pill there and draws this attribute instead of the label; a text node cannot be
- * reached by a selector, which is why the badge has to be lifted into one here.
+/* An indicator pill carries its meaning as prose ("Unsaved Changes: 2") and the collapsed rail is
+ * 68px wide, so the pill wraps onto three lines and hangs past the rail's edge (issue #14). CSS
+ * squares the pill there and draws this attribute instead of the label — a text node cannot be
+ * reached by a selector, so the badge is lifted into an attribute here.
  *
- * The COUNT is what it shows — the only part that changes and the only part worth reading at that
- * size. A pill with no trailing number (a third-party app's "Backup pending") falls back to a
- * neutral dot: clipping the prose was tried and rendered "up pen", because a centred pill gives an
- * ellipsis no start to anchor to. Choosing between the two is a decision, so it lives here rather
- * than as a second CSS rule. The full prose stays in the label either way — a screen reader still
- * reads it, and `title` keeps it reachable by pointer. */
+ * The count is the only part that changes and the only part readable at that size. A pill with no
+ * trailing number falls back to a neutral dot; clipping the prose instead renders as garbage
+ * ("up pen"), because a centred pill gives an ellipsis no start to anchor to. The full prose
+ * stays in the label for screen readers, and in `title` for the pointer. */
 const IND_DOT = '•';
+
+/* Idempotent attribute write, so a poll tick that finds nothing changed touches no DOM — same
+ * shape as `fsSyncAttr` in menu-footstrap-common.js, restated rather than imported (that file does
+ * not export it). */
+function syncIndAttr(el, name, value) {
+	if (value === null) {
+		if (el.hasAttribute(name)) el.removeAttribute(name);
+	} else if (el.getAttribute(name) !== value) {
+		el.setAttribute(name, value);
+	}
+}
+
+/* A CLICKABLE `[data-indicator]` (the poll pill, "Unsaved Changes: N", …) ships as a bare
+ * span: no role, name or tabindex, so Tab skips it and a screen reader
+ * announces a run of text with no name, role or state (WCAG 2.1.1, 4.1.2). ui.showIndicator's own
+ * click handler already lives on this exact element — this only adds the second, W3C-APG way to
+ * reach it; it does not add a competing one. The name is the pill's own prose ("Refreshing"),
+ * never invented. Enter/Space call el.click() because a <span>, unlike an <a>, gets neither key
+ * for free (contrast fs-widgets.js's wireSpaceKey, written for an <a role="button">); calling
+ * click() cannot double-fire the mouse handler, since a keydown is not a click. */
+function wireIndicatorKeyboard(el) {
+	if (el.dataset.fsWired) return;
+	el.dataset.fsWired = '1';
+	el.addEventListener('keydown', (ev) => {
+		if (ev.key !== 'Enter' && ev.key !== ' ' && ev.key !== 'Spacebar') return;
+		ev.preventDefault();
+		el.click();
+	});
+}
 
 function wireIndicatorCounts() {
 	const box = document.getElementById('indicators');
@@ -532,14 +534,47 @@ function wireIndicatorCounts() {
 			el.setAttribute('data-fs-badge', m ? m[1] : IND_DOT);
 			/* the rail hides the prose; the tooltip is where it stays reachable by pointer */
 			el.setAttribute('title', txt);
+			/* Only a CLICKABLE indicator becomes a control. `ui.showIndicator` sets
+			 * `data-clickable` only when it was handed a handler, and a status-only pill is
+			 * given none (luci-base ui.js; `battstatus.js` calls it with a null handler) — a
+			 * `role="button"` tabstop with nothing behind it is worse than the bare span it
+			 * replaces. The ring and the pointer cursor in theme/20-shell.css are scoped to
+			 * `[data-clickable]` for the same reason; the two must not disagree. */
+			if (el.hasAttribute('data-clickable')) {
+				syncIndAttr(el, 'role', 'button');
+				syncIndAttr(el, 'tabindex', '0');
+				syncIndAttr(el, 'aria-label', txt.trim() || null);
+				wireIndicatorKeyboard(el);
+			}
 		});
 	}
 
-	/* ui.showIndicator REPLACES the label's text node on an update ("Unsaved Changes: 1" -> ": 2")
-	 * and appends the span on the first change of the session, so both matter — and characterData
-	 * too, for the in-place rewrite. Our own attribute writes do not re-enter: attributes are not
-	 * observed. */
-	new MutationObserver(stamp).observe(box, { childList: true, subtree: true, characterData: true });
+	/* ui.showIndicator replaces the label's text node on an update and appends the span on the
+	 * first change of the session, so childList, subtree and characterData all matter. Our own
+	 * attribute writes do not re-enter: attributes are not observed.
+	 *
+	 * AND THE BAR IS RE-FITTED HERE, because a pill arriving is a layout change the fit engine
+	 * cannot see: fs-fit watches `#view` and the dialog, and `#indicators` is in the chrome. The
+	 * cluster then wraps — flexbox answers first — and the compact form only follows when something
+	 * else happens to wake the pass. Measured on WebKit at 390px in the narrow sidebar bar, a second
+	 * indicator beside the poll pill pushed the whole page down 91px and held it there for 708 ms,
+	 * until `fs-ind-compact` landed at 771 ms and it snapped back: a lurch down and up, once per
+	 * appearance, which is what "the Overview twitches, as if an invisible loading bar came and
+	 * went" is from the reader's side. Called from the same callback as `stamp()`, so the decision
+	 * is taken in the microtask before paint and the wrapped frame is never drawn. It cannot
+	 * re-enter: `fitChrome()` writes classes on the BAR and attributes here, and neither is what
+	 * this observer watches.
+	 *
+	 * ON A PILL ARRIVING OR LEAVING, not on its text: `ui.showIndicator` rewrites the poll pill's
+	 * label on every tick, and a fit is a handful of forced layouts — running one per tick to answer
+	 * a label that did not change width is the cost this file spends its measurements avoiding. A
+	 * childList record is the cluster gaining or losing a member, which is the layout change that
+	 * wraps it. */
+	new MutationObserver((recs) => {
+		stamp();
+		if (recs.some((r) => r.type === 'childList' && r.target === box)) fitChrome();
+	})
+		.observe(box, { childList: true, subtree: true, characterData: true });
 	stamp();
 }
 
@@ -547,26 +582,36 @@ return baseclass.extend({
 	setRenderMain,
 	renderChrome,
 	wireIndicatorCounts,
-	/* registered with fs-fit by the theme's init(): the bar's "does the menu fit beside the brand"
-	 * measurement rides the same engine as the data tables' */
+	/* registered with fs-fit by the theme's init(): the bar's fit rides the same engine as the
+	 * data tables' */
 	fitChrome,
 
-	/* The width a page's content column has, WITHOUT reading layout. The sidebar (or the rail) eats
-	 * a known amount of the window and the shell adds a known padding, and all three are already
-	 * memoised against the density attribute for `fitShell()`. It is exported because a pass that
-	 * must answer mid-scroll — fs-select's, for a table the poll has just brought in — otherwise has
-	 * only the window's own width, which in the sidebar layout is the wrong number by exactly the
-	 * sidebar: at an 800px window the column is 520px, so the cheap judgement said "plenty of room"
-	 * for a table that then overflowed and was clipped.
+	/* The width a page's content column has: the sidebar or rail eats a known amount of the
+	 * window and the shell adds a known padding, all memoised for fitShell(). Exported because a
+	 * pass answering mid-scroll (fs-select's, for a table the poll just brought in) otherwise has
+	 * only the window width, which in the sidebar layout is wrong by exactly the sidebar — at
+	 * 800px the column is 520px, so a table judged to have room overflows.
 	 *
-	 * The arithmetic itself is columnWidth()'s, shared with fitShell — see there. All this adds is
-	 * the page's current state, which fitShell is in the middle of deciding and this one reads. */
+	 * The arithmetic is columnWidth()'s; this only adds the page's current state. */
 	contentWidth() {
-		/* NO LAYOUT READ, and that is the whole point of this export: the window's width and the
-		 * column's gutter are whatever the last fitter measured (measureShell), and the three
-		 * attributes below are style, not layout. The bootstrap read is for a caller that arrives
-		 * before any fitter has run, which cannot happen mid-scroll. */
-		if (!_shellOuter) measureShell();
+		/* `_shellOuter` is refreshed only by measureShell(), which only fitShell() calls, and
+		 * fitChrome() steps ASIDE FOR THE WHOLE SCROLL_IDLE WINDOW (400ms, fs-fit.js) whenever
+		 * fit.scrolling() answers yes — including for a resize that lands mid-flick, since a
+		 * resize is exactly what starts that window (fs-fit.js's resize observer feeds the same
+		 * motion sampler `scrolling()` reads). A caller landing in that window, most of all
+		 * fs-select's, got the width the PREVIOUS viewport had: at 568px settling to 390px, model
+		 * stayed 568 for up to 220ms of the 400 (measured: −178px, exactly 568−390, against a probe
+		 * resizing the window mid-settle, and live-audit's `geometry|fs-content` finding on owrt2410,
+		 * CI run 34364446910).
+		 *
+		 * So the window's own width is compared fresh on every call, not only when `_shellOuter`
+		 * is still zero. `clientWidth` is the one read the old "no layout read" promise here was
+		 * already conditional on: the bootstrap branch (no fitter has run yet) made this exact
+		 * call through measureShell(). A plain `!==` compares against the cached width for free —
+		 * nothing invalidated layout since the last read, so this costs nothing when nothing
+		 * moved — and measureShell()'s own further reads (the resolved gutter) only run when the
+		 * comparison says the width actually did. */
+		if (document.documentElement.clientWidth !== _shellOuter) measureShell();
 		const root = document.documentElement;
 		return columnWidth(shellGeometry(), {
 			outerW: _shellOuter,
@@ -576,9 +621,8 @@ return baseclass.extend({
 		});
 	},
 
-	/* exported for the unit suite in the theme's own repository (tests/chrome-geometry.test.mjs — no
-	 * tests ship in the package): the cut is pure arithmetic over a handful of measured numbers, and
-	 * driving it directly is the only way to hold every combination of layout, rail and width
+	/* exported for tests/chrome-geometry.test.mjs (no tests ship in the package): driving the
+	 * arithmetic directly is the only way to cover every combination of layout, rail and width
 	 * without a browser */
 	wireRail
 });
