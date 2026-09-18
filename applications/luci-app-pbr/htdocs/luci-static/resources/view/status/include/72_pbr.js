@@ -25,9 +25,7 @@ return baseclass.extend({
 				versionText = reply.version;
 				if (reply.running) {
 					statusText = _("Active");
-					if (reply.running_iptables) {
-						modeText = _("iptables mode");
-					} else if (reply.running_nft_file) {
+					if (reply.running_nft_file) {
 						modeText = _("fw4 nft file mode");
 					} else if (reply.running_nft) {
 						modeText = _("nft mode");
@@ -60,11 +58,8 @@ return baseclass.extend({
 
 			return table;
 		} catch (e) {
-			return E(
-				"div",
-				{ class: "alert-message warning" },
-				_("Unable to retrieve %s status").format("PBR"),
-			);
+			return E("div", { class: "alert-message warning" },
+				_("Unable to retrieve %s status").format("PBR"));
 		}
 	},
 });
