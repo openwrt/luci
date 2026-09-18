@@ -64,19 +64,19 @@ function validateServerSpec(sid, s) {
 	if (m[2] == '' || m[2] == '#')
 		return true;
 
-	// ipaddr%scopeid#srvport@source@interface#srcport
+	// ipaddr%scopeid#srvport[@source[@interface]]#srcport or ipaddr%scopeid#srvport@interface
 
-	m = m[2].match(/^([0-9a-f:.]+)(?:%[^#@]+)?(?:#(\d+))?(?:@([0-9a-f:.]+)(?:@[^#]+)?(?:#(\d+))?)?$/);
+	m = m[2].match(/^([0-9a-f:.]+)(?:%[^#@]+)?(?:#(\d+))?(?:@([0-9a-f:.]+)(?:@[^#]+)?(?:#(\d+))?|@[^#@0-9][^#@]*)?$/);
 
 	if (!m)
 		return _('Expecting: %s').format(_('valid IP address'));
 
 	if (validation.parseIPv4(m[1])) {
-		if (m[3] != null && !validation.parseIPv4(m[3]))
+		if (m[3] != null && !validation.parseIPv4(m[3]) && !validation.parseIPv6(m[3]))
 			return _('Expecting: %s').format(_('valid IPv4 address'));
 	}
 	else if (validation.parseIPv6(m[1])) {
-		if (m[3] != null && !validation.parseIPv6(m[3]))
+		if (m[3] != null && !validation.parseIPv4(m[3]) && !validation.parseIPv6(m[3]))
 			return _('Expecting: %s').format(_('valid IPv6 address'));
 	}
 	else {
