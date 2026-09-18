@@ -36,14 +36,14 @@ function sectionNameCheck(extra_class) {
 		nameEl = el.querySelector('.cbi-section-create-name');
 	ui.addValidator(nameEl, 'uciname', true, function(v) {
 		let sections = [
-			...uci.sections('ipsec', 'remote'),
+			...uci.sections('ipsec', 'connection'),
 			...uci.sections('ipsec', 'child'),
 			...uci.sections('ipsec', 'crypto_proposal'),
 		];
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Remotes, Encryption Proposals and Children may not share the same names.') + ' ' +
+			return _('Connections, Encryption Proposals and Children may not share the same names.') + ' ' +
 				_('Use combinations like child1_phase1.');
 		}
 		return true;
@@ -75,9 +75,9 @@ return view.extend({
 			_('On this page, you can configure the IPsec connections.'));
 		m.tabbed = true;
 
-		// Remote Configuration
-		s = m.section(form.GridSection, 'remote', _('Remote Configuration'),
-			_('Define Remote IKE Configurations.'));
+		// Connection Configuration
+		s = m.section(form.GridSection, 'connection', _('Connection'),
+			_('Define Connection IKE Configurations.'));
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck
