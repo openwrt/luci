@@ -66,6 +66,14 @@ msgstr ""
 msgid "Bytes routed"
 msgstr ""
 
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:427
+msgid ""
+"Ceiling in seconds for a learned address in its Set. An address learned from "
+"a DNS answer expires with the TTL of that answer, clamped to the range 60 to "
+"this value; a polled address uses this value. Keep it well above the poll "
+"interval."
+msgstr ""
+
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:147
 msgid "Client MACs this policy applies to, ORed with the addresses above."
 msgstr ""
@@ -108,7 +116,7 @@ msgstr ""
 msgid "Destination addresses or prefixes to route into this policy."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:175
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:172
 msgid "Domain Files"
 msgstr ""
 
@@ -129,10 +137,6 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:426
-msgid "Entry Lifetime"
-msgstr ""
-
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:132
 msgid "Error reply, e.g. NXDOMAIN"
 msgstr ""
@@ -144,7 +148,7 @@ msgid ""
 "and only to those domains."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:182
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:179
 msgid "Expecting a bare file name or an absolute path, without whitespace"
 msgstr ""
 
@@ -168,7 +172,7 @@ msgstr ""
 msgid "Fallback Behavior"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:176
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:173
 msgid ""
 "Files with one domain pattern per line, for large or community-maintained "
 "lists. A bare name lives under /tmp/shunt, an absolute path is used as "
@@ -192,11 +196,11 @@ msgstr ""
 msgid "IP fragment"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:187
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:184
 msgid "IPv4 Gateway Override"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:193
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:190
 msgid "IPv6 Gateway Override"
 msgstr ""
 
@@ -239,6 +243,10 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:213
 msgid "Mark"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:426
+msgid "Maximum Entry Lifetime"
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:136
@@ -308,7 +316,7 @@ msgstr ""
 msgid "Observed Devices"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:188
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:185
 msgid ""
 "Only needed when the gateway discovered from netifd is wrong. Point to point "
 "interfaces need no gateway at all."
@@ -372,7 +380,7 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:216
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:213
 msgid "Refresh Domain Files"
 msgstr ""
 
@@ -415,14 +423,8 @@ msgid "Rules"
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:470
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:208
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:205
 msgid "Save & Restart"
-msgstr ""
-
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:427
-msgid ""
-"Seconds a learned address stays in its Set. Keep this well above the poll "
-"interval."
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:422

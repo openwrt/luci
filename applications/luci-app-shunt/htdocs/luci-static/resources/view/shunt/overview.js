@@ -423,8 +423,8 @@ return view.extend({
 		o.datatype = 'and(uinteger,min(30))';
 		o.placeholder = '300';
 
-		o = s.taboption('general', form.Value, 'entry_ttl', _('Entry Lifetime'),
-			_('Seconds a learned address stays in its Set. Keep this well above the poll interval.'));
+		o = s.taboption('general', form.Value, 'entry_ttl', _('Maximum Entry Lifetime'),
+			_('Ceiling in seconds for a learned address in its Set. An address learned from a DNS answer expires with the TTL of that answer, clamped to the range 60 to this value; a polled address uses this value. Keep it well above the poll interval.'));
 		o.datatype = 'and(uinteger,min(60))';
 		o.placeholder = '1200';
 		o.validate = function (section_id, value) {
