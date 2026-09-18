@@ -722,10 +722,10 @@ div.cbi-value var,.td.cbi-value-field var{color:var(--fs-accent)}
 .cbi-filebrowser > ul > li > div:last-child{flex:0 1 auto;min-width:0;display:flex;flex-wrap:wrap;gap:var(--fs-space-2);justify-content:flex-end}
 .cbi-filebrowser > ul > li > div:last-child > button{margin:0}
 .cbi-filebrowser .upload > div > input{width:100%}
-.btn > input[type="checkbox"],.btn > input[type="radio"]{margin-inline-end:.5em}
+label.cbi-checkbox{justify-content:center;width:auto;height:auto;min-height:var(--fs-ctl-h);padding:var(--fs-space-2) var(--fs-space-3-5);font-weight:var(--fs-weight);line-height:1.1;border:var(--fs-hairline);border-radius:var(--fs-radius);white-space:normal;overflow-wrap:anywhere;min-width:0;gap:.5em;cursor:pointer}
 .cbi-checkbox{display:inline-flex;align-items:center}
 .cbi-checkbox > input[type="checkbox"]{position:absolute;opacity:0;width:0;height:0;margin:0}
-.cbi-checkbox > label{--sw-w:calc(40px * var(--fs-density-box));--sw-h:calc(22px * var(--fs-density-box));--sw-knob:calc(16px * var(--fs-density-box));--sw-pad:calc(2px * var(--fs-density-box));display:inline-block;position:relative;margin:0;width:var(--sw-w);height:var(--sw-h);border-radius:var(--fs-radius-pill);background:var(--fs-track);border:var(--fs-hairline);cursor:pointer;transition:background var(--fs-dur),border-color var(--fs-dur);vertical-align:middle}
+.cbi-checkbox > label{--sw-w:calc(40px * var(--fs-density-box));--sw-h:calc(22px * var(--fs-density-box));--sw-knob:calc(16px * var(--fs-density-box));--sw-pad:calc(2px * var(--fs-density-box));display:inline-block;position:relative;margin:0;width:var(--sw-w);height:var(--sw-h);border-radius:var(--fs-radius-pill);background:var(--fs-track);border:var(--fs-hairline);cursor:pointer;transition:background var(--fs-dur),border-color var(--fs-dur);vertical-align:middle;flex-shrink:0}
 .cbi-checkbox > label::before{content:"";position:absolute;inset:-4px -2px}
 .cbi-checkbox > label::after{content:"";position:absolute;top:var(--sw-pad);inset-inline-start:var(--sw-pad);width:var(--sw-knob);height:var(--sw-knob);border-radius:50%;background:var(--fs-dim);transform:translateX(0);transition:transform var(--fs-dur-move),background var(--fs-dur)}
 .cbi-checkbox > input[type="checkbox"]:checked + label{background:var(--fs-accent);border-color:transparent}
@@ -881,7 +881,7 @@ input[type="range"]:focus{box-shadow:var(--fs-focus-ring-solo)}
 .modal > .alert-message{margin-bottom:var(--fs-space-2)}
 .modal > pre,.modal > textarea{white-space:pre-wrap;overflow:auto;width:100%}
 .modal:has(.cbi-map){max-width:min(1100px,94vw)}
-#modal_overlay .modal label.btn{white-space:normal;overflow-wrap:anywhere;min-width:0}
+#modal_overlay .modal{white-space:normal;overflow-wrap:anywhere;min-width:0}
 #modal_overlay .modal li{overflow-wrap:anywhere}
 #modal_overlay .uci-dialog div > ins,#modal_overlay .uci-dialog div > del,#modal_overlay .uci-dialog div > var{border-radius:var(--fs-radius-sm)}
 #modal_overlay .uci-change-legend-label > ins,#modal_overlay .uci-change-legend-label > del,#modal_overlay .uci-change-legend-label > var{border-radius:var(--fs-radius-sm);overflow:hidden}
