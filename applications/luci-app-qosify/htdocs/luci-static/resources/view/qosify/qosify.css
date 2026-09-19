@@ -238,3 +238,117 @@
 	overflow-y: scroll;
 	resize: vertical;
 }
+
+/* Quick settings: one inner box per tab, rows split by the same line as the
+   tables, and the control then its hint on one line so every hint starts in
+   the same column. */
+#qos-app .qs-box {
+	min-width: 0;
+	min-height: 17em;
+	padding: .7em 1.5em;
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
+}
+
+#qos-qs-sect .cbi-value {
+	align-items: flex-start;
+	padding: .55em 0;
+}
+
+#qos-qs-sect .cbi-value + .cbi-value {
+	border-top: 1px solid var(--qos-ln);
+}
+
+#qos-qs-sect .cbi-value label.cbi-value-title {
+	flex: 0 0 16em;
+	padding-top: 0;
+	line-height: 30px;
+	font-weight: 600;
+}
+
+#qos-qs-sect .cbi-value-field {
+	display: grid;
+	grid-template-columns: minmax(0, 18em) minmax(0, 1fr);
+	align-items: center;
+	gap: .3em 1.5em;
+	flex: 1 1 auto;
+	margin-left: 1.5em;
+	min-width: 0;
+	line-height: 30px;
+}
+
+#qos-qs-sect .cbi-value-description {
+	margin-top: 0;
+	line-height: 1.4;
+}
+
+#qos-qs-sect .qs-note {
+	grid-column: 1 / -1;
+}
+
+#qos-qs-sect .cbi-value-field input[type=checkbox] {
+	justify-self: start;
+	margin: 0;
+	vertical-align: middle;
+}
+
+#qos-qs-sect .qs-ctl {
+	justify-self: start;
+}
+
+#qos-qs-sect .cbi-value-field input[type=text],
+#qos-qs-sect .cbi-value-field input[type=number],
+#qos-qs-sect .cbi-value-field select {
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* Sized by what goes in: a byte count gets a byte-sized box, CAKE options get the row. */
+#qos-qs-sect [data-q=ovh_bytes],
+#qos-qs-sect [data-q=overhead_mpu] {
+	width: 7em;
+}
+
+#qos-qs-sect [data-q=overhead_vlan],
+#qos-qs-sect [data-q=overhead_encap] {
+	width: 9em;
+}
+
+#qos-qs-sect [data-q=name],
+#qos-qs-sect [data-q=bw_up],
+#qos-qs-sect [data-q=bw_down] {
+	width: 14em;
+}
+
+#qos-qs-sect [data-q=mode],
+#qos-qs-sect [data-q=overhead] {
+	width: 18em;
+}
+
+#qos-qs-sect .qs-wide .cbi-value-field {
+	grid-template-columns: minmax(0, 28em) minmax(0, 1fr);
+}
+
+#qos-qs-sect [data-q$=opts] {
+	width: 100%;
+}
+
+/* Phones: label, then control, then hint, one under the other. */
+@media (max-width: 600px) {
+	#qos-qs-sect .cbi-value {
+		display: block;
+	}
+
+	#qos-qs-sect .cbi-value label.cbi-value-title {
+		line-height: 1.5;
+	}
+
+	#qos-qs-sect .cbi-value-field {
+		grid-template-columns: minmax(0, 1fr);
+		margin-left: 0;
+	}
+
+	#qos-qs-sect .cbi-value-field > * {
+		grid-column: 1;
+	}
+}
