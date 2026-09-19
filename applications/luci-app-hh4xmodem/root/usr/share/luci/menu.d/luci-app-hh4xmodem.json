@@ -1,0 +1,48 @@
+{
+	"admin/hh4xmodem/": {
+		"title": "Modem",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-hh4xmodem" ]
+		}
+	},
+
+	"admin/hh4xmodem/dashboard": {
+		"title": "Dashboard",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "hh4xmodem/dashboard"
+		}
+	},
+
+	"admin/hh4xmodem/sms": {
+		"title": "SMS",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "hh4xmodem/sms"
+		}
+	},
+
+	"admin/hh4xmodem/calllog": {
+		"title": "Call Log",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "hh4xmodem/calllog"
+		}
+	},
+
+	"admin/hh4xmodem/ussd": {
+		"title": "USSD",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "hh4xmodem/ussd"
+		}
+	}
+}
