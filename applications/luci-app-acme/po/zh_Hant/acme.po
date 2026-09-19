@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-05 14:58+0000\n"
-"Last-Translator: 為什麼不加空格 <c++23@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-09-19 14:02+0000\n"
+"Last-Translator: Cerarin <sk_jiale233@qq.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsacme/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 2026.7.1.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:227
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:235
@@ -17,11 +17,11 @@ msgstr "有關此行程的詳細資訊，請參閱 %s。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:218
 msgid "%s for the format of credentials required by each API."
-msgstr ""
+msgstr "%s 代表各 API 所要求的認證資訊格式。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:165
 msgid "%s for the list of available APIs."
-msgstr ""
+msgstr "%s 代表可用 API 的清單。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/logread.js:4
 msgid "ACME Log"
@@ -48,7 +48,7 @@ msgstr "帳號電子郵件"
 msgid ""
 "Add multiple entries here in KEY=VAL shell variable format to supply "
 "multiple credential variables."
-msgstr ""
+msgstr "請在此處以 KEY=VAL Shell 變數格式新增多個項目，以提供多個認證變數。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:84
 msgid "Advanced Settings"
@@ -208,7 +208,7 @@ msgstr "簽發於"
 msgid ""
 "It may be needed to change if your web server is behind reverse proxy and "
 "uses a different port."
-msgstr ""
+msgstr "如果您的 Web 伺服器位於反向代理後方，且使用不同的連接埠，可能需要修改此設定。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:250
 msgid "Key size (and type) for the generated certificate."
@@ -242,13 +242,13 @@ msgstr "主要網域"
 msgid ""
 "Note that the domain names in the certificate must already be configured to "
 "point at the router's public IP address."
-msgstr ""
+msgstr "請注意，憑證中的網域名稱必須已設定指向路由器的公網 IP 位址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:46
 msgid ""
 "Once configured, issuing certificates can take a while. Check the logs for "
 "progress and any errors."
-msgstr ""
+msgstr "設定完成後，簽發憑證可能需要一些時間。請查看日誌以了解進度及任何錯誤。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:106
 msgid "Package is not installed"
@@ -325,13 +325,13 @@ msgstr "所有網域要使用的 challenge 別名。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:217
 msgid "The credentials for the DNS API mode selected above."
-msgstr ""
+msgstr "上方所選 DNS API 模式的認證資訊。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:407
 msgid ""
 "The domain %s in DDNS %s is already configured in %s. Please check it after "
 "the importing."
-msgstr ""
+msgstr "DDNS %s 中的網域 %s 已在 %s 中設定。匯入後請檢查相關設定。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:234
 msgid "The domain alias to use for ALL domains."
@@ -343,16 +343,18 @@ msgid ""
 "Simply fill out this to have the router configured with Letsencrypt-issued "
 "certificates for the web interface."
 msgstr ""
+"此設定可啟用 ACME（Let’s Encrypt）自動安裝憑證。只需填寫此項目，即可讓路由器"
+"為 Web 介面設定由 Let’s Encrypt 簽發的憑證。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:119
 msgid "To temporary open port you can specify your web server port e.g. 80."
-msgstr ""
+msgstr "若要暫時開放連接埠，可以指定您的 Web 伺服器連接埠，例如 80。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:164
 msgid ""
 "To use DNS mode to issue certificates, set this to the name of a DNS API "
 "supported by acme.sh."
-msgstr ""
+msgstr "若要使用 DNS 模式簽發憑證，請將此項設定為 acme.sh 支援的 DNS API 名稱。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:282
 msgid "Use a custom CA instead of Let's Encrypt."
@@ -405,7 +407,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:147
 msgid "wildcards * require Validation method: DNS"
-msgstr ""
+msgstr "萬用字元 * 憑證需要使用「DNS」驗證方式"
 
 #~ msgid ""
 #~ "The challenge alias to use for ALL domains. See https://github.com/acmesh-"
