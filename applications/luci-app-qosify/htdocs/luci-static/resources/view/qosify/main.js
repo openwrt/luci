@@ -514,71 +514,84 @@ return view.extend({
 		var sn=ifSect();
 		var w=(sn&&uci.get('qosify',sn.id))||{};
 		var enChecked=(w['.name']!=null&&!uciBool(w.disabled,false));
-
-		var nodes=[];
-		nodes.push(E('h3',{},_('Quick Settings')));
-		nodes.push(sdesc(
-			_('Common shaping settings — written straight to %s, section %s.').format(UCI_PATH,sn?'config '+sn.type+(sn.name?" '"+sn.name+"'":' '+_('(unnamed section)')):"config interface 'wan' (will be created)")));
-		var tbl=E('div',{'class':'cbi-section-node'});
-
-		function row(lbl,el){tbl.appendChild(valRow(lbl,el));}
-		function chk(name,val){return E('input',{'type':'checkbox','id':'q-'+name,'data-q':name,'checked':val?'checked':null});}
-		function txt(name,val,ph,style){return E('input',{'type':'text','id':'q-'+name,'data-q':name,'value':val||'','placeholder':ph||'','style':style||'width:140px;font-family:monospace'});}
-		function sel(name,val,opts,style,def,hint){
+		function chk(name,val){return E('input',{'type':'checkbox','class':'cbi-input-checkbox','id':'q-'+name,'data-q':name,'checked':val?'checked':null});}
+		function txt(name,val,ph){return E('input',{'type':'text','class':'cbi-input-text','id':'q-'+name,'data-q':name,'value':val||'','placeholder':ph||''});}
+		function sel(name,val,opts,def){
 			val=qv(val);
-			var s=E('select',{'id':'q-'+name,'data-q':name,'style':style||'width:180px'});
-			if(!def)s.appendChild(E('option',{'value':''},hint?'-- ('+hint+')':'--'));
-			var sv=val||def||'',known=false;
+			var s=E('select',{'class':'cbi-input-select','id':'q-'+name,'data-q':name}),sv=val||def,known=false;
+			if(def==null)s.appendChild(E('option',{'value':''},'--'));
 			opts.forEach(function(o){var a={'value':o};if(sv===o){a.selected='selected';known=true;}s.appendChild(E('option',a,o));});
 			if(val&&!known)s.appendChild(E('option',{'value':val,'selected':'selected'},_('%s (current)').format(val)));
 			return s;
 		}
+		function num(name,val,ph){var e=txt(name,val,ph);e.type='number';return e;}
+		function pane(id,title,rows,top,cls){
+			return E('div',{'data-tab':id,'data-tab-title':title,'data-tab-active':id===self._qsTab?'true':null},
+				E('div',{'class':'qs-box cbi-section-node'+(cls?' '+cls:'')},(top||[]).concat(rows.map(function(r){return Array.isArray(r)?valRow(r[0],r[1]):r;}))));
+		}
 
-		var enCb=chk('enabled',enChecked);
-		var enBadge=badge('warning','');
-		enBadge.id='q-en-badge';
+		var enBadge=E('span',{'id':'q-en-badge'});
 		this.updateEnBadge(enBadge,ctx,enChecked);
-		row(_('QoS Enabled'),[enCb,' ',enBadge]);
 		// qosify.init passes `option name` to add_interface(); without it the daemon
-		// gets an empty device and the section is never applied, so offer it here
-		// whenever it is missing -- anonymous sections have no other way to set it.
-		// Only `config interface` is named after the netifd interface; a `config
-		// device` section names a netdev and the two differ by convention -- the
-		// shipped config has `config device wandev` with `option name wan` -- so the
-		// section name is never a safe prefill there. Leave it empty and let ifLint()
-		// keep warning until a real netdev is entered.
+		// gets an empty device and the section is never applied. Only `config
+		// interface` is named after the netifd interface; a `config device` names a
+		// netdev (the shipped config has `config device wandev` with `option name
+		// wan`), so its section name is never a safe prefill.
 		var isDev=!!(sn&&sn.type==='device');
-		if(!w.name)row(isDev?_('Netdev Name'):_('Interface Name'),
-			[txt('name',sn?(isDev?'':sn.name):'wan',_('e.g. %s').format(isDev?'eth0':'wan'),'width:140px'),
-			desc(_('required — qosify skips sections with no name'))]);
-		row(_('Bandwidth Up'),txt('bw_up',w.bandwidth_up,_('e.g. %s').format('100mbit')));
-		row(_('Bandwidth Down'),txt('bw_down',w.bandwidth_down,_('e.g. %s').format('100mbit')));
-		row(_('Overhead Type'),sel('overhead',w.overhead_type,OVH,'width:180px','none'));
-		row(_('Overhead Bytes'),[txt('overhead_b',w.overhead,_('manual only'),'width:100px'),
-			desc(_('used only when Overhead Type is manual'))]);
-		row(_('Queue Mode'),sel('mode',w.mode,MODES,'width:170px',null,'diffserv4'));
-		row(_('Ingress'),chk('ingress',numBool(w.ingress,true)));
-		row(_('Egress'),chk('egress',numBool(w.egress,true)));
 		// CAKE is only given nat/nonat when host_isolate is on; otherwise it gets
 		// flow isolation and nat has no effect at all.
-		var natCb=chk('nat',numBool(w.nat,!isDev));
 		var hiCb=chk('host_isolate',numBool(w.host_isolate,true));
-		var natNote=desc(_('qosify only passes this to CAKE together with Host Isolate — add nat to Options to force it'));
-		function syncNat(){
-			natNote.style.display=hiCb.checked?'none':'';
-		}
-		hiCb.addEventListener('change',syncNat);
-		syncNat();
-		row(_('NAT'),[natCb,natNote]);
-		row(_('Host Isolate'),hiCb);
-		row(_('Autorate Ingress'),chk('autorate',numBool(w.autorate_ingress,false)));
-		row(_('Ingress Options'),txt('ing_opts',w.ingress_options,_('e.g. %s').format('triple-isolate memlimit 32mb'),'width:100%;max-width:400px;font-family:monospace'));
-		row(_('Egress Options'),txt('egr_opts',w.egress_options,_('e.g. %s').format('triple-isolate memlimit 32mb wash'),'width:100%;max-width:400px;font-family:monospace'));
-		row(_('Options'),txt('opts',w.options,_('e.g. %s').format('overhead 44 mpu 84'),'width:100%;max-width:400px;font-family:monospace'));
-		nodes.push(tbl);
-		nodes.push(E('div',{'class':'cbi-page-actions'},
-			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveQuick();}},_('Save & Apply'))));
-		return nodes;
+		var natNote=desc(_('Only sent with host isolation on — add nat to common CAKE options to force it'));
+		natNote.classList.add('qs-note');
+		hiCb.addEventListener('change',function(){natNote.style.display=hiCb.checked?'none':'';});
+		natNote.style.display=hiCb.checked?'none':'';
+		// qosify.init only reads overhead and overhead_encap under overhead_type manual.
+		var ovSel=sel('overhead',w.overhead_type,OVH,'none');
+		var manRows=[valRow(_('Manual overhead'),[num('ovh_bytes',w.overhead,'--'),desc(_('Sent to CAKE as overhead, in bytes.'))]),
+			valRow(_('Encapsulation overhead'),[sel('overhead_encap',w.overhead_encap,ENCAP),desc(_('Sent to CAKE as atm, noatm or ptm.'))])];
+		function syncOvh(){manRows.forEach(function(r){r.style.display=ovSel.value==='manual'?'':'none';});}
+		ovSel.addEventListener('change',syncOvh);
+		syncOvh();
+		var grp=E('div',{},[
+			pane('qs-basic',_('Basic'),[
+				[_('QoS Enabled'),[E('span',{'class':'qs-ctl'},[chk('enabled',enChecked),' ',enBadge]),desc(_('Unticked sets disabled 1 and qosify skips this section.'))]],
+				[isDev?_('Device'):_('Interface'),[txt('name',w.name||(sn?(isDev?'':sn.name):'wan'),_('e.g. %s').format(isDev?'eth0':'wan')),desc(isDev?_('Netdev to enable QoS on. Required.'):_('netifd interface to enable QoS on. Required.'))]],
+				[_('Upload bandwidth'),[txt('bw_up',w.bandwidth_up,_('e.g. %s').format('850mbit')),desc(_('Uplink bandwidth, same format as tc. Set just below line speed.'))]],
+				[_('Download bandwidth'),[txt('bw_down',w.bandwidth_down,_('e.g. %s').format('850mbit')),desc(_('Downlink bandwidth, same format as tc. Set just below line speed.'))]],
+				[_('Queueing mode'),[sel('mode',w.mode,MODES,'diffserv4'),desc(_('CAKE diffserv mode.'))]]
+			]),
+			pane('qs-shaping',_('Shaping'),[
+				[_('Download shaping'),[chk('ingress',numBool(w.ingress,true)),desc(_('Enable ingress shaping.'))]],
+				[_('Upload shaping'),[chk('egress',numBool(w.egress,true)),desc(_('Enable egress shaping.'))]],
+				[_('Automatic download rate'),[chk('autorate',numBool(w.autorate_ingress,false)),desc(_('Enable CAKE automatic rate estimation for ingress.'))]],
+				[_('NAT awareness'),[chk('nat',numBool(w.nat,!isDev)),desc(_('Enable CAKE NAT host detection via conntrack.')),natNote]],
+				[_('Host isolation'),[hiCb,desc(_('Enable CAKE host isolation.'))]]
+			]),
+			pane('qs-overhead',_('Overhead'),[
+				[_('Overhead preset'),[ovSel,desc(_('CAKE overhead keyword. Use none if unsure.'))]],
+				[_('VLAN tags'),[sel('overhead_vlan',w.overhead_vlan,['0','1','2'],'0'),desc(_('Sent to CAKE as ether-vlan, once per tag.'))]],
+				manRows[0],
+				[_('Minimum packet unit (MPU)'),[num('overhead_mpu',w.overhead_mpu,'--'),desc(_('Sent to CAKE as mpu, in bytes.'))]],
+				manRows[1]
+			]),
+			pane('qs-advanced',_('Advanced'),[
+				[_('Ingress CAKE options'),[txt('ing_opts',w.ingress_options,_('e.g. %s').format('triple-isolate memlimit 32mb')),desc(_('CAKE ingress options, space separated.'))]],
+				[_('Egress CAKE options'),[txt('egr_opts',w.egress_options,_('e.g. %s').format('wash')),desc(_('CAKE egress options, space separated.'))]],
+				[_('Common CAKE options'),[txt('opts',w.options,_('e.g. %s').format('overhead 46 memlimit 32mb')),desc(_('CAKE options for ingress + egress.'))]]
+			],[E('div',{'class':'cbi-tab-descr'},_('Invalid CAKE options can stop qosify starting.'))],'qs-wide')
+		]);
+		// Every pane is marked, as the sub tabs share LuCI's stored tab id with the page tabs.
+		if(!grp.querySelector('[data-tab-active="true"]'))grp.firstChild.setAttribute('data-tab-active','true');
+		grp.childNodes.forEach(function(p){p.addEventListener('cbi-tab-active',function(){self._qsTab=p.getAttribute('data-tab');});});
+		// initTabGroup puts the tab menu before grp in its parent, so grp needs one.
+		var wrap=E('div',{},grp);
+		ui.tabs.initTabGroup(grp.childNodes);
+		return [
+			E('h3',{},_('%s quick settings').format(sn?sn.type+(sn.name?' '+sn.name:''):'interface wan')),
+			wrap,
+			E('div',{'class':'cbi-page-actions'},
+				E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveQuick();}},_('Save & Apply')))
+		];
 	},
 
 	// The controls sit once, at the bottom of Overview, rather than under every tab.
@@ -1559,7 +1572,7 @@ return view.extend({
 		var bw=function(s){return trim(s).replace(/\s+/g,'');};
 		var bwUp=bw(get('bw_up')),bwDn=bw(get('bw_down'));
 		var rate=/^(unlimited|\d+(\.\d+)?((k|m|g|t)?(bit|bps)|(ki|mi|gi)(bit|bps))?)$/i;
-		var ovh=get('overhead'),mode=get('mode'),ovhB=trim(get('overhead_b'));
+		var ovh=get('overhead'),mode=get('mode'),mpu=trim(get('overhead_mpu')),vlan=get('overhead_vlan'),ob=trim(get('ovh_bytes'));
 		var iopts=trim(get('ing_opts')),eopts=trim(get('egr_opts')),gopts=trim(get('opts'));
 		var safe=/^[\w\s.:-]*$/;
 		if(!safe.test(iopts)||!safe.test(eopts)||!safe.test(gopts)){
@@ -1568,7 +1581,8 @@ return view.extend({
 		}
 		if(bwUp&&!rate.test(bwUp))notify(_('bandwidth_up does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
 		if(bwDn&&!rate.test(bwDn))notify(_('bandwidth_down does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
-		if(ovh==='manual'&&ovhB&&!/^\d+$/.test(ovhB)){notify(_('Error: overhead must be a whole number of bytes'),'danger');return;}
+		if(mpu&&!/^\d+$/.test(mpu)){notify(_('Error: overhead_mpu must be a whole number of bytes'),'danger');return;}
+		if(ovh==='manual'&&ob&&!/^-?\d+$/.test(ob)){notify(_('Error: overhead must be a whole number of bytes'),'danger');return;}
 		var en=chk('enabled');
 		if(en&&(!bwUp||!bwDn))notify(_('Note: bandwidth not set — CAKE will run unlimited on that direction.'),'warning');
 
@@ -1590,7 +1604,11 @@ return view.extend({
 			options:gopts||null,
 			option:null
 		};
-		kv.overhead=(ovh==='manual'&&ovhB)?ovhB:null;
+		// overhead and overhead_encap are dropped unless manual, as qosify ignores them.
+		kv.overhead=(ovh==='manual'&&ob)?ob:null;
+		kv.overhead_encap=(ovh==='manual'&&get('overhead_encap'))?get('overhead_encap'):null;
+		kv.overhead_mpu=mpu||null;
+		kv.overhead_vlan=vlan&&vlan!=='0'?vlan:null;
 		var nmEl=$('q-name');
 		if(nmEl){
 			var nm=trim(nmEl.value);
