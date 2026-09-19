@@ -40,6 +40,19 @@ var callQosifyStatus=rpc.declare({
 	method:'status',
 	expect:{'':{}}
 });
+// reload re-reads the files in the defaults list (qosify_map_reload()) and
+// nothing else; check_devices re-runs qosify_iface_check(). Both return an
+// empty reply, so without reject:true a failure would read as success.
+var callQosifyReload=rpc.declare({
+	object:'qosify',
+	method:'reload',
+	reject:true
+});
+var callQosifyCheckDevices=rpc.declare({
+	object:'qosify',
+	method:'check_devices',
+	reject:true
+});
 var callServiceList=rpc.declare({
 	object:'service',
 	method:'list',
@@ -485,6 +498,14 @@ return view.extend({
 				'click':function(){return self.svcAction(a);}
 			},({start:_('Start'),stop:_('Stop'),restart:_('Restart'),reload:_('Reload')})[a]));
 		});
+		// Reload is the init script's reload_service(), a full ubus config push.
+		// Reload Rules re-reads the mapping files alone and leaves the qdiscs and
+		// interface config untouched -- what a rules edit actually needs.
+		svcCt.appendChild(E('button',{
+			'class':'cbi-button cbi-button-reload',
+			'title':_('Re-read the mapping files only'),
+			'click':function(){return self.mapReload();}
+		},_('Reload Rules')));
 		nodes.push(svcCt);
 		return nodes;
 	},
@@ -948,6 +969,13 @@ return view.extend({
 		));
 		section.appendChild(fu);
 
+		section.appendChild(E('fieldset',{'class':'cbi-section'},[
+			E('legend',{},_('Check Devices')),
+			E('div',{'class':'cbi-section-descr'},_('Re-runs the daemon\'s own device pass: a section whose device now exists is started and one whose device has gone is stopped. The call reports nothing back; the result shows in the Overview tab.')),
+			E('div',{'class':'cbi-page-actions'},
+				E('button',{'class':'cbi-button cbi-button-action','click':function(){return self.checkDevices();}},_('Check Devices')))
+		]));
+
 		// Reset
 		section.appendChild(E('fieldset',{'class':'cbi-section'},[
 			E('legend',{},_('Reset to qosify Defaults')),
@@ -1055,6 +1083,40 @@ return view.extend({
 	},
 
 	// === Actions ===
+
+	mapReload:function(){
+		var self=this;
+		self.lock();
+		ui.showModal(_('Working'),[E('p',{},_('Re-reading the mapping files...'))]);
+		return callQosifyReload().then(function(){
+			notify(_('Mapping files reloaded.'),'info');
+			return self.refreshOverview();
+		}).catch(function(e){
+			notify(_('Reload failed: %s').format(e),'danger');
+		}).finally(function(){
+			ui.hideModal();
+			self.unlock();
+		});
+	},
+
+	// check_devices arms a 10 ms uloop timer and returns before the pass runs, so
+	// wait for it before reading the state back.
+	checkDevices:function(){
+		var self=this;
+		self.lock();
+		ui.showModal(_('Working'),[E('p',{},_('Re-checking devices...'))]);
+		return callQosifyCheckDevices().then(function(){
+			return new Promise(function(r){setTimeout(r,800);});
+		}).then(function(){
+			notify(_('Device check done.'),'info');
+			return self.refreshOverview();
+		}).catch(function(e){
+			notify(_('Device check failed: %s').format(e),'danger');
+		}).finally(function(){
+			ui.hideModal();
+			self.unlock();
+		});
+	},
 
 	svcAction:function(action){
 		var self=this;
