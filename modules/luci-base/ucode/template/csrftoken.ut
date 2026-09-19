@@ -18,7 +18,13 @@
 <hr />
 
 <p class="right">
-	<strong><a href="#" onclick="window.history.back();">Continue »</a></strong>
+	<strong><a href="#" id="luci-csrf-back">Continue »</a></strong>
 </p>
+<script nonce="{{ ctx?.csp_nonce }}">
+document.getElementById('luci-csrf-back').addEventListener('click', function(ev) {
+	ev.preventDefault();
+	window.history.back();
+});
+</script>
 
 {% include('footer') %}
