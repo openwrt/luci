@@ -27,24 +27,32 @@ var callRcInit=rpc.declare({
 	params:['name','action'],
 	reject:true
 });
+// rc.list, service.list and qosify.status raise. Without reject:true a ubus
+// status code (6 when the ACL no longer covers the object, 4 when it is gone)
+// stays in result[0] and expect{'':{}} rewrites it to the same {} a working
+// call with nothing to report returns, so a call that never ran cannot be told
+// from one that ran and found nothing. Each site catches the rejection to null.
 // skip_running_check keeps rc.list from forking `qosify running`, which waits
 // on ubus for up to 10s while rpcd kills it after 3s.
 var callRcList=rpc.declare({
 	object:'rc',
 	method:'list',
 	params:['name','skip_running_check'],
-	expect:{'':{}}
+	expect:{'':{}},
+	reject:true
 });
 var callQosifyStatus=rpc.declare({
 	object:'qosify',
 	method:'status',
-	expect:{'':{}}
+	expect:{'':{}},
+	reject:true
 });
 var callServiceList=rpc.declare({
 	object:'service',
 	method:'list',
 	params:['name'],
-	expect:{'':{}}
+	expect:{'':{}},
+	reject:true
 });
 var callUciRevert=rpc.declare({
 	object:'uci',
@@ -473,11 +481,10 @@ return view.extend({
 		var nodes=[E('legend',{},_('Service Controls'))];
 		var svcCt=E('div',{'class':'qos-svc','id':'qos-svc-btns'});
 		svcCt.appendChild(E('button',{
-			'class':'cbi-button '+(ctx.enabled?'cbi-button-positive':'cbi-button-negative'),
 			'id':'qos-btn-auto',
-			'title':ctx.enabled?_('Click to disable autostart'):_('Click to enable autostart'),
-			'click':function(){return self.svcAction(ctx.enabled?'disable':'enable');}
-		},ctx.enabled?_('Enabled'):_('Disabled')));
+			'click':function(){return self.svcAction(self._auto?'disable':'enable');}
+		}));
+		this.autoButton(ctx,svcCt.firstChild);
 		var btnCls={start:'cbi-button-apply',stop:'cbi-button-negative',restart:'cbi-button-action',reload:'cbi-button-reload'};
 		['start','stop','restart','reload'].forEach(function(a){
 			svcCt.appendChild(E('button',{
@@ -504,37 +511,35 @@ return view.extend({
 		});
 	},
 
-	waitForRunning:function(timeoutMs){
+	// true reached, false timed out, null the last service.list went unanswered:
+	// an unanswered call says nothing about qosify, so it never counts as stopped.
+	waitForState:function(want,timeoutMs){
 		var deadline=Date.now()+(timeoutMs||3000);
 		function tick(){
-			return L.resolveDefault(callServiceList('qosify'),{}).then(function(r){
-				if(isRunning(r))return true;
-				if(Date.now()>=deadline)return false;
+			return callServiceList('qosify').then(isRunning,function(){return null;}).then(function(up){
+				if(up===want)return true;
+				if(Date.now()>=deadline)return up===null?null:false;
 				return new Promise(function(res){setTimeout(res,400);}).then(tick);
 			});
 		}
 		return tick();
 	},
 
-	waitForStopped:function(timeoutMs){
-		var deadline=Date.now()+(timeoutMs||3000);
-		function tick(){
-			return L.resolveDefault(callServiceList('qosify'),{}).then(function(r){
-				if(!isRunning(r))return true;
-				if(Date.now()>=deadline)return false;
-				return new Promise(function(res){setTimeout(res,400);}).then(tick);
-			});
-		}
-		return tick();
-	},
+	waitForRunning:function(timeoutMs){return this.waitForState(true,timeoutMs);},
+	waitForStopped:function(timeoutMs){return this.waitForState(false,timeoutMs);},
 
+	// The config is already written and uci reloaded by the time this runs, so an
+	// unanswered service.list must not abort the apply and leave qosify on the old
+	// config: rc init is a write ACL entry and answers when the read half does not.
 	applyService:function(){
 		var self=this;
-		return L.resolveDefault(callServiceList('qosify'),{}).then(function(r){
-			if(isRunning(r))return callRcInit('qosify','reload');
+		return callServiceList('qosify').then(isRunning,function(){return null;}).then(function(run){
+			if(run==null)return callRcInit('qosify','restart');
+			if(run)return callRcInit('qosify','reload');
 			return callRcInit('qosify','start').then(function(){
 				return self.waitForRunning(4000);
 			}).then(function(up){
+				if(up==null)throw new Error(_('rpcd is not answering for qosify, so the service state is unknown.'));
 				if(!up)throw new Error(_('qosify did not come up — check the system log'));
 			});
 		});
@@ -542,7 +547,8 @@ return view.extend({
 
 	updateEnBadge:function(el,ctx,enChecked){
 		dom.content(el,'');
-		if(ctx.active){el.className='qos-badge qos-green';dom.append(el,_('Active'));}
+		if(ctx.active==null&&enChecked){el.className='qos-badge qos-amber';dom.append(el,_('Status Unknown'));}
+		else if(ctx.active){el.className='qos-badge qos-green';dom.append(el,_('Active'));}
 		else if(ctx.running&&enChecked){el.className='qos-badge qos-amber';dom.append(el,_('Enabled — Not Shaping (check config)'));}
 		else if(enChecked){el.className='qos-badge qos-amber';dom.append(el,_('Enabled — Not Running'));}
 		else{el.className='qos-badge qos-red';dom.append(el,_('Disabled'));}
@@ -552,15 +558,25 @@ return view.extend({
 		function ok(t){return E('span',{'class':'qos-ok'},'\u2714 '+t);}
 		function err(t){return E('span',{'class':'qos-err'},'\u2718 '+t);}
 		function bdg(cls,t){return E('span',{'class':'qos-badge '+cls},t);}
+		// Unknown is not Missing: a call rpcd did not answer says nothing about qosify.
+		function tri(v,f){return v==null?bdg('qos-amber',_('Unknown')):f(v);}
 		var run;
-		if(ctx.running&&ctx.active)run=bdg('qos-green',_('Running & Shaping'));
+		if(ctx.running==null)run=bdg('qos-amber',_('Unknown'));
+		else if(ctx.running&&ctx.active==null)run=bdg('qos-amber',_('Running — Shaping Unknown'));
+		else if(ctx.running&&ctx.active)run=bdg('qos-green',_('Running & Shaping'));
 		else if(ctx.running)run=bdg('qos-amber',_('Running — Not Shaping'));
 		else run=bdg('qos-red',_('Not Running'));
+		// One line for the condition behind the Unknowns in the table: it goes on the
+		// first row that reads Unknown, rather than on a row that is known or on
+		// every row it reaches.
+		var note=ctx.rpcOk===false?E('span',{'class':'qos-muted','style':'margin-left:8px'},
+			_('rpcd is not answering for qosify — check the ACL in /usr/share/rpcd/acl.d and restart rpcd')):null;
+		function mark(n,unk){if(!note||!unk)return n;var w=E('span',{},[n,note]);note=null;return w;}
 		return {
-			init:ctx.hasInit?ok(_('Available')):err(_('Missing')),
-			auto:bdg(ctx.enabled?'qos-green':'qos-red',ctx.enabled?_('Enabled'):_('Disabled')),
-			run:run,
-			shaped:ctx.shaped?E('span',{},N_(ctx.shaped,'%d interface','%d interfaces').format(ctx.shaped)):E('span',{'class':'qos-muted'},_('none'))
+			init:mark(tri(ctx.hasInit,function(v){return v?ok(_('Available')):err(_('Missing'));}),ctx.hasInit==null),
+			auto:mark(tri(ctx.enabled,function(v){return bdg(v?'qos-green':'qos-red',v?_('Enabled'):_('Disabled'));}),ctx.enabled==null),
+			run:mark(run,ctx.running==null),
+			shaped:mark(tri(ctx.shaped,function(v){return v?E('span',{},N_(v,'%d interface','%d interfaces').format(v)):E('span',{'class':'qos-muted'},_('none'));}),ctx.shaped==null)
 		};
 	},
 
@@ -579,11 +595,23 @@ return view.extend({
 		var n=this.svcNodes(ctx),map={init:'qos-svc-init',auto:'qos-svc-auto',run:'qos-svc-run',shaped:'qos-svc-shaped'},k,el;
 		for(k in map){el=$(map[k]);if(el)dom.content(el,n[k]);}
 		el=$('qos-btn-auto');
-		if(el){
-			el.className='cbi-button '+(ctx.enabled?'cbi-button-positive':'cbi-button-negative');
-			el.title=ctx.enabled?_('Click to disable autostart'):_('Click to enable autostart');
-			dom.content(el,ctx.enabled?_('Enabled'):_('Disabled'));
+		if(el)this.autoButton(ctx,el);
+	},
+
+	// The label is the state, so with the state unknown there is nothing to toggle.
+	// The click reads _auto, so a tick that changes the state changes the action.
+	autoButton:function(ctx,el){
+		this._auto=ctx.enabled;
+		el.disabled=this.readonly||ctx.enabled==null;
+		if(ctx.enabled==null){
+			el.className='cbi-button';
+			el.title=_('Autostart state unknown — rpcd did not answer');
+			dom.content(el,_('Unknown'));
+			return;
 		}
+		el.className='cbi-button '+(ctx.enabled?'cbi-button-positive':'cbi-button-negative');
+		el.title=ctx.enabled?_('Click to disable autostart'):_('Click to enable autostart');
+		dom.content(el,ctx.enabled?_('Enabled'):_('Disabled'));
 	},
 
 	renderCfgFiles:function(ctx){
@@ -1018,10 +1046,13 @@ return view.extend({
 		if(!ctx.running){
 			dom.content(sum,'');
 			pre.style.display='none';
-			dom.content(msg,E('div',{'class':'alert-message warning'},_('qosify is not running. Start from the Overview tab.')));
+			dom.content(msg,E('div',{'class':'alert-message warning'},ctx.running==null?
+				_('rpcd is not answering for qosify, so the service state is unknown.'):
+				_('qosify is not running. Start from the Overview tab.')));
 			return;
 		}
-		dom.content(sum,this.statusSummary(ctx.status));
+		dom.content(sum,ctx.status?this.statusSummary(ctx.status):
+			E('p',{'class':'qos-muted'},E('em',{},_('qosify did not answer on ubus, so the interface summary is unavailable.'))));
 		pre.style.display=ctx.qstatus?'':'none';
 		if(ctx.qstatus){
 			if(pre.textContent!==ctx.qstatus)pre.textContent=ctx.qstatus;
@@ -1063,10 +1094,12 @@ return view.extend({
 		var p=callRcInit('qosify',action);
 		if(action==='start'||action==='restart')
 			p=p.then(function(){return self.waitForRunning(4000);}).then(function(up){
+				if(up==null)throw new Error(_('rpcd is not answering for qosify, so the service state is unknown.'));
 				if(!up)throw new Error(_('qosify did not come up — check the system log'));
 			});
 		if(action==='stop')
 			p=p.then(function(){return self.waitForStopped(4000);}).then(function(down){
+				if(down==null)throw new Error(_('rpcd is not answering for qosify, so the service state is unknown.'));
 				if(!down)throw new Error(_('qosify is still running — leaving the qdiscs alone'));
 				return fs.exec('/usr/share/qosify-luci/cleanup',[]).then(function(r){
 					if(r&&r.code)notify(_('Cleanup exited with code %d').format(r.code),'warning');
@@ -1212,6 +1245,7 @@ return view.extend({
 					// it only runs once the daemon is confirmed down -- the same guard
 					// svcAction() applies to a plain stop.
 					stopped=down;
+					if(down==null){notify(_('rpcd is not answering for qosify, so the service state is unknown.'),'warning');return null;}
 					if(!down){notify(_('qosify is still running — leaving the qdiscs alone'),'warning');return null;}
 					return L.resolveDefault(fs.exec('/usr/share/qosify-luci/cleanup',[]),null);
 				}).then(function(){
@@ -1253,10 +1287,17 @@ return view.extend({
 		}).finally(function(){self.unlock();});
 	},
 
+	// true shaping, false not shaping, null the status call did not answer. The
+	// qosify object goes with the daemon, so an unanswered call is only unknown
+	// while qosify runs; a stopped qosify is plainly not shaping. A retry costs one
+	// ubus call, so an unanswered one is retried like an idle reply.
 	waitForShaping:function(tries){
 		var self=this;
-		return L.resolveDefault(callQosifyStatus(),{}).then(function(st){
-			if(statusActive(st)||tries<=1)return statusActive(st);
+		return callQosifyStatus().catch(function(){
+			return callServiceList('qosify').then(function(r){return isRunning(r)?null:{};},function(){return null;});
+		}).then(function(st){
+			var a=st?statusActive(st):null;
+			if(a||tries<=1)return a;
 			return new Promise(function(res){setTimeout(res,700);}).then(function(){return self.waitForShaping(tries-1);});
 		});
 	},
@@ -1266,6 +1307,9 @@ return view.extend({
 		if(uciBool(w.disabled,false))return Promise.resolve({text:_('%s, applied (QoS disabled).').format(prefix),kind:'info'});
 		return this.waitForShaping(3).then(function(active){
 			if(active)return {text:_('%s, applied.').format(prefix),kind:'info'};
+			// An unanswered status call is not a report of idle qdiscs: saying "not
+			// shaping" there turns a stale ACL into a false negative on a box that is.
+			if(active==null)return {text:_('%s, applied — qosify did not answer on ubus, so shaping could not be checked.').format(prefix),kind:'warning'};
 			return {text:_('Warning: %s but qosify is not shaping traffic — check the Status tab.').format(prefix),kind:'warning'};
 		});
 	},
@@ -1533,25 +1577,37 @@ return view.extend({
 
 	// === Refreshers ===
 
+	// rc and service answer whenever rpcd does and the session's ACL still covers
+	// this app, so either failing means rpcd is not answering for qosify. Each fact
+	// goes null only with the call it comes from (running with service, enabled/
+	// hasInit with rc) instead of false, which would read as a stopped, unshaped,
+	// uninstalled qosify on a box that is shaping fine.
 	gatherCtx:function(withFiles){
 		var self=this;
+		function nul(){return null;}
 		return Promise.all([
-			L.resolveDefault(callServiceList('qosify'),{}),
-			L.resolveDefault(callRcList('qosify',true),{}),
-			L.resolveDefault(callQosifyStatus(),{}),
+			callServiceList('qosify').catch(nul),
+			callRcList('qosify',true).catch(nul),
+			callQosifyStatus().catch(nul),
 			L.resolveDefault(fs.stat(UCI_PATH),null),
 			L.resolveDefault(fs.stat(RULES_PATH),null),
-			withFiles?fs.read(UCI_PATH).catch(function(){return null;}):null,
-			withFiles?fs.read(RULES_PATH).catch(function(){return null;}):null
+			withFiles?fs.read(UCI_PATH).catch(nul):null,
+			withFiles?fs.read(RULES_PATH).catch(nul):null
 		]).then(function(d){
 			var rc=d[1]&&d[1].qosify;
+			var running=d[0]!==null?isRunning(d[0]):null;
+			// The qosify object goes with the daemon, so a stopped qosify explains an
+			// unanswered status call by itself: shaping only reads unknown while it runs.
+			var st=d[2]||(running===false?{}:null);
 			var ctx={
-				running:isRunning(d[0]),
-				enabled:!!(rc&&rc.enabled),
-				hasInit:!!rc,
-				status:d[2]||{},
-				active:statusActive(d[2]),
-				shaped:statusCount(d[2]),
+				// False whenever a displayed fact is unknown, whichever call left it so.
+				rpcOk:d[0]!==null&&d[1]!==null&&st!==null,
+				running:running,
+				enabled:d[1]!==null?!!(rc&&rc.enabled):null,
+				hasInit:d[1]!==null?!!rc:null,
+				status:st,
+				active:st?statusActive(st):null,
+				shaped:st?statusCount(st):null,
 				cfgStat:d[3],
 				rulesStat:d[4],
 				cfgRaw:d[5],
@@ -1606,10 +1662,10 @@ return view.extend({
 		self._st=true;
 		var ex=self.readonly?Promise.resolve(null):L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),null);
 		return Promise.all([
-			L.resolveDefault(callServiceList('qosify'),{}),
-			L.resolveDefault(callQosifyStatus(),{})
+			callServiceList('qosify').catch(function(){return null;}),
+			callQosifyStatus().catch(function(){return null;})
 		]).then(function(d){
-			var ctx={running:isRunning(d[0]),status:d[1]||{},qstatus:self.readonly?'':null};
+			var ctx={running:d[0]?isRunning(d[0]):null,status:d[1],qstatus:self.readonly?'':null};
 			var stb=$('qos-st-body');
 			if(stb)self.fillStatus(stb,ctx);
 			return ex.then(function(r){
