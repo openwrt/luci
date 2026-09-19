@@ -260,6 +260,20 @@ return view.extend({
 		recordtypes.forEach(r => {
 			o.value(r);
 		});
+
+		s.taboption('cache', form.Flag, 'use_stale_cache',
+			_('Use stale cache'),
+			_('Return a cached DNS record even if its TTL has expired. Dnsmasq refreshes the data with an upstream query after returning the stale record.') + '<br />' +
+			_('This can improve speed and reliability, at the expense of sometimes returning out-of-date data and less efficient cache utilisation.'));
+
+		o = s.taboption('cache', form.Value, 'stale_cache_param',
+			_('Max expiration time'),
+			_('The maximum time a record may stay expired and still be served, in seconds. By default nothing expired for longer than one day is served.') + '<br />' +
+			_('Setting to zero will serve stale cache data regardless of how long it has expired.'));
+		o.optional = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 86400;
+		o.depends('use_stale_cache', '1');
 		// End cache
 
 		// Begin devices
@@ -683,6 +697,25 @@ return view.extend({
 			customi18n(_('File listing upstream resolvers, optionally domain-specific, e.g. {servers_file_entry01}, {servers_file_entry02}.') )
 		);
 		o.placeholder = '/etc/dnsmasq.servers';
+
+		s.taboption('forward', form.Flag, 'fast_dns_retry',
+			_('Fast DNS retry'),
+			_('Allow dnsmasq to generate its own retries (instead of relying on DNS clients).'));
+
+		o = s.taboption('forward', form.Value, 'fast_dns_retry_param',
+			_('Retry time settings'),
+			_('Set initial retry delay and retry duration in milliseconds.') + '<br />' +
+			customi18n(_('Syntax: {code_syntax}.'),
+				{code_syntax: '<code>&lt;initial retry delay&gt;[,&lt;retry duration&gt;]</code>'}) + '<br />' +
+			_('Examples:') + ' ' + '<code>500</code> / <code>500,5000</code>'
+		);
+		o.placeholder = '1000,10000';
+		o.depends('fast_dns_retry', '1');
+		o.validate = function (section_id, value) {
+			if (!value) return true;
+			if (!/^\d+(,\d+)?$/.test(value)) return _('Invalid parameter');
+			return true;
+		};
 
 		o = s.taboption('forward', form.Value, 'addmac',
 			_('Add requestor MAC'),
