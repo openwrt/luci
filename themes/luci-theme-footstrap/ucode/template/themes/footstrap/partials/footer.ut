@@ -1,18 +1,16 @@
 {#
- Footer body. ONE layout template and ONE client menu renderer — sidebar and top bar are
- the same markup, morphed by :root[data-layout] — so the old `menu_module` parameter that
- picked between two renderers is gone with the second one.
+ Footer body. One layout template and one client menu renderer: sidebar and top bar are the same
+ markup, morphed by :root[data-layout].
  Licensed to the public under the Apache License 2.0.
 -#}
 		{% if (!blank_page): %}
 				</div>{# /.fs-content #}
 
 				{#
-					role="contentinfo" is explicit because a <footer> only gets it IMPLICITLY
-					when its nearest ancestor is <body>, and this one lives inside <main> —
-					where it must stay: both layouts lay .fs-main out as a flex column and order
-					the footer within it. The explicit role escapes that scoping rule.
-					The version strings are entityencode()d: /etc/openwrt_release is root-owned,
+					role="contentinfo" is explicit because a <footer> gets it implicitly only when
+					its nearest ancestor is <body>, and this one must stay inside <main>: both
+					layouts lay .fs-main out as a flex column and order the footer within it.
+					The version strings are entityencode()d — /etc/openwrt_release is root-owned,
 					but an unescaped `&` in a distname would still break the markup.
 				#}
 				<footer class="fs-footer" role="contentinfo">

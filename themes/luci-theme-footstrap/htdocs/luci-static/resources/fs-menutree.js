@@ -1,13 +1,9 @@
 'use strict';
 'require baseclass';
 
-/* The menu tree as a ROUTING TABLE: path <-> node, with LuCI's alias/firstchild resolution.
- *
- * Pure lookup — it renders nothing and touches no DOM. Both the chrome (which walks the tree to
- * draw the mode menu and the section tabs) and the SPA router (which asks "what view does this URL
- * open?") need it, and a module they both require is the only way to give them one copy without a
- * cycle: LuCI's require() raises DependencyError on a dependency loop, so the shared half has to
- * come OUT rather than be reached across. */
+/* The menu tree as a routing table: path <-> node, with LuCI's alias/firstchild resolution. Pure
+ * lookup — no DOM. The chrome and the SPA router both need it, and require() raises
+ * DependencyError on a loop, so the shared half is its own module rather than reached across. */
 
 /* the ACL-filtered tree from /admin/menu, handed over once by the chrome's init() */
 let _tree = null;
@@ -17,10 +13,10 @@ function setTree(tree) {
 }
 
 /* /cgi-bin/luci/admin/status/overview -> ['admin','status','overview'].
- * The bare base (what build_url() emits for the brand wordmark) yields an EMPTY seg list, NOT null:
- * the dispatcher's root node is itself a `firstchild`, so resolveSegs([]) walks to the overview
- * exactly as the server does — returning null made the wordmark un-routable and full-reload. null
- * stays reserved for a path outside LuCI's scriptname. */
+ * The bare base (what build_url() emits for the brand wordmark) yields an empty seg list, not
+ * null: the dispatcher's root node is itself a `firstchild`, so resolveSegs([]) walks to the
+ * overview as the server does — returning null made the wordmark full-reload instead. null is
+ * reserved for a path outside LuCI's scriptname. */
 function segsFromPath(pathname) {
 	const base = L.env.scriptname || '';
 	if (base && pathname.indexOf(base) !== 0)
@@ -41,18 +37,15 @@ function nodeForSegs(segs) {
 
 /* ---- alias / firstchild resolution ----
  *
- * 7 of the 27 menu links are redirects, not pages: 4 `alias` (Firewall, System Log, Realtime
- * Graphs) and 3 `firstchild` (Administration, Terminal, Attended Sysupgrade) — i.e. the
- * most-clicked entries were the ones still doing a full load.
+ * 7 of the 27 menu links are redirects rather than pages (4 `alias`, 3 `firstchild`). The server
+ * does not redirect them: a full GET answers 200 at the requested URL and stamps the resolved leaf
+ * into requestpath/dispatchpath/nodespec. The client must therefore resolve exactly as
+ * dispatcher.uc does, or a click and an F5 on the same URL open different pages — nodeWeight() and
+ * firstChildOf() are ports, not approximations. Only the ACL check is skipped, the tree from
+ * /admin/menu already being ACL-filtered for this session.
  *
- * The server does not redirect them: a full GET of /admin/status/logs answers 200 at that URL and
- * stamps the RESOLVED leaf into requestpath/dispatchpath/nodespec, keeping `pathinfo` as requested.
- * The client must resolve EXACTLY as dispatcher.uc does, or a click and an F5 on the same URL would
- * open different pages — nodeWeight() and firstChildOf() are ports, not approximations. Only the
- * ACL check is skipped: the tree from /admin/menu is already ACL-filtered for this session.
- *
- * `rewrite` is deliberately NOT followed: the tree has none, and a wrong guess at its splice
- * semantics would silently open the WRONG page — worse than the full load it falls back to. */
+ * `rewrite` is deliberately not followed: the tree has none, and a wrong guess at its splice
+ * semantics would open the wrong page — worse than the full load it falls back to. */
 
 /* node_weight() from dispatcher.uc: lower wins; a login node sorts last. */
 function nodeWeight(node) {
@@ -106,42 +99,23 @@ function resolveSegs(segs) {
 
 /* ---- readonly is a property of the PATH, not of the leaf ----
  *
- * The dispatcher decides it twice over, from two different inputs. apply_tree_acls()
- * (dispatcher.uc:442) walks the menu JSON handed to the client and marks a NODE readonly when its
- * OWN `depends.acl` resolves to read-without-write. The request path instead accumulates every
- * ancestor's acls into ctx.acls and stamps the leaf from the accumulation
- * (`resolved.node.readonly = !perm`, :1003). So a leaf that declares no acl of its own still comes
- * back readonly from a real GET, while its node in the tree carries nothing at all.
+ * apply_tree_acls() (dispatcher.uc:442) marks a NODE readonly from its own `depends.acl`, but a
+ * request accumulates every ancestor's acls into ctx.acls and stamps the leaf from the
+ * accumulation (`resolved.node.readonly = !perm`, :1003). Reading the leaf alone therefore
+ * disagrees with a full load: luci.js derives hasViewPermission() from
+ * `!env.nodespec.readonly`, which views and the Save/Apply footer key their disabled state off, so
+ * every page whose SECTION is read-only would gain controls the server refuses.
  *
- * Reading the leaf alone therefore loses it, and did: measured on the stand, a full load of
- * admin/status/logs/syslog reports nodespec.readonly true — the flag sits on `logs`, two levels up —
- * against false on an SPA arrival, and the same for dmesg and all four realtime graphs. luci.js
- * implements hasViewPermission() as `!env.nodespec.readonly`, which is what views and luci.js's own
- * Save/Apply footer key their disabled state off, so on a session with narrower ACLs than root's
- * this is any page whose SECTION is read-only.
+ * The operator is AND down the path, not OR: check_acl_depends() (:312) is handed the whole
+ * concatenated list (:457-470) and grants write as soon as ANY group in it does, so a page is
+ * read-only only when every acl-bearing node on the path is. A leaf with a writable acl of its own
+ * re-opens the whole path.
  *
- * AND down the path, not OR — the operator is the whole of this function and it was the wrong one.
- * check_acl_depends() (dispatcher.uc:312) is handed ONE list, the concatenation ctx_append() built
- * from every node's `depends.acl` along the path (:457-470), and it answers `writable = true` as
- * soon as ANY group in that list grants write. So a page is read-only exactly when NO group on the
- * path is writable — and since apply_tree_acls() (:436-446) marks a node `readonly` when that
- * node's own list yields no write, "no group on the path is writable" is "EVERY acl-bearing node on
- * the path is readonly". One read-only ancestor is not enough: a leaf that declares a writable acl
- * of its own re-opens the whole path.
+ * A node with no `depends.acl` contributes nothing to ctx.acls and is skipped. That is also why
+ * the test reads `depends.acl` rather than the `readonly` flag alone: an acl-bearing node the
+ * session may write carries no flag and would otherwise look ungated.
  *
- * Measured, because a source reading is not a verdict: on the 25.12 stand, `admin/status/logs`
- * carries the read-only `luci-mod-status-logs` and its child `syslog` was given a writable acl of
- * its own; a full load then reported `nodespec.readonly` FALSE while this function said true — the
- * same class of disagreement between a click and an F5 that the leaf-only reading used to produce,
- * only in the opposite direction, and this time it TAKES AWAY a Save/Apply the server allows.
- *
- * A node with no `depends.acl` is not evidence either way and is skipped: the dispatcher puts
- * nothing into ctx.acls for it. That is also why the answer needs `depends.acl` at all rather than
- * the `readonly` flag alone — an acl-bearing node the session may write carries no flag, and is
- * therefore indistinguishable from an ungated node without looking at its acl list. /admin/menu
- * serves both fields (66 of 243 nodes carry an acl on the stand).
- *
- * Feed it the RESOLVED segments, since that is the path the dispatcher accumulates over. */
+ * Feed it the RESOLVED segments — that is the path the dispatcher accumulates over. */
 function readonlyForSegs(segs) {
 	let node = _tree;
 	let gated = 0, locked = 0;
@@ -163,10 +137,10 @@ function readonlyForSegs(segs) {
 	return gated > 0 && gated === locked;
 }
 
-/* The view class a menu node instantiates, or null if the node isn't SPA-able. The Status→Overview
- * `template` node maps to view.status.index (its server template just instantiates that — the
- * globals that template also defines are the chrome bootstrap's, see ensureOverviewHelpers in
- * menu-footstrap-common.js). Shared by navigate() and the hover prefetch. */
+/* The view class a menu node instantiates, or null when the node is not SPA-able. The
+ * Status -> Overview `template` node maps to view.status.index, its server template doing nothing
+ * else; the globals that template also defines come from ensureOverviewHelpers() in
+ * menu-footstrap-common.js. Shared by navigate() and the hover prefetch. */
 function viewClassFor(node) {
 	if (!node || !node.action || node.satisfied === false)
 		return null;
@@ -177,7 +151,7 @@ function viewClassFor(node) {
 	return null;
 }
 
-/* The node the CURRENT full-load landed on, i.e. what L.env.dispatchpath points at. */
+/* The node the current full load landed on, i.e. what L.env.dispatchpath points at. */
 function currentNode() {
 	return nodeForSegs(L.env.dispatchpath || []);
 }
@@ -185,6 +159,10 @@ function currentNode() {
 return baseclass.extend({
 	setTree,
 	tree: () => _tree,
+	/* raw presence, no alias or firstchild resolution: fs-commands gates each command on the menu
+	 * node whose `depends.acl` names the group that command needs, and a node that resolves
+	 * elsewhere would answer for a permission the session may not hold */
+	nodeForSegs,
 	segsFromPath,
 	currentNode,
 	resolveSegs,

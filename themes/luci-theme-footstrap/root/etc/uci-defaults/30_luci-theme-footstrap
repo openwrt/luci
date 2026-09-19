@@ -1,8 +1,9 @@
 #!/bin/sh
 
-# Registration, and the three symlinks that expose what the admin uploads. Nothing here migrates a
-# router off an older footstrap: OpenWrt expects a sysupgrade rather than a package upgrade, so
-# leftovers go with the image, and the cleanup that is worth doing is config rather than files.
+# Registration, plus the two symlinks that expose what the admin uploads (a third, the pattern, is
+# deliberately NOT one — see below). Nothing here migrates a router off an older footstrap: OpenWrt
+# expects a sysupgrade rather than a package upgrade — the one exception is the stale pattern
+# symlink itself, removed below because leaving it would keep a reported security hole open.
 
 changed=0
 
@@ -15,22 +16,36 @@ set_opt() {
 set_opt themes.Footstrap /luci-static/footstrap
 
 # A fresh install may pick the theme; an upgrade must never move a router off the theme it is on.
-# `changed` is what tells the two apart — on an upgrade the entry is already there — and it carries
-# the decision on its own, because apk exports no PKG_UPGRADE.
+# `changed` is what tells the two apart — on an upgrade the entry is already there — and it has to
+# carry the decision alone, because apk exports no PKG_UPGRADE.
 if [ "${PKG_UPGRADE:-}" != 1 ] && [ "$changed" = 1 ]; then
 	set_opt main.mediaurlbase /luci-static/footstrap
 fi
 
 [ "$changed" = 1 ] && uci commit luci
 
-# uhttpd serves /www only, so the admin's own uploads live in /etc — where a sysupgrade keeps them
-# (lib/upgrade/keep.d) — and are reached through symlinks. The pattern keeps its .svg name: uhttpd
-# types a response by extension, and an SVG sent as octet-stream paints nowhere.
+# uhttpd serves /www only, so the admin's uploads live in /etc — where a sysupgrade keeps them
+# (lib/upgrade/keep.d) — and are reached through symlinks, EXCEPT the pattern (below).
+#
+# The pattern is deliberately NOT symlinked into /www: an SVG is a document, and served as one
+# through a plain same-origin URL it runs as a script with the admin's session (OpenWrt forum
+# thread 251930). It is instead read by cgi-bin/luci-theme-footstrap-pattern, which answers with
+# CSP 'none' + sandbox and nosniff — headers uhttpd cannot attach to a static file. It needs its
+# .svg name to paint at all, so octet-stream is not open to it.
+#
+# The login background stays a plain symlink, and NOT because of what the browser did to the
+# bytes: the ACL authorises the cgi-upload POST whatever wrote it, so fs-assets.js's canvas
+# re-encode is compression and EXIF removal, not a boundary (it says so itself). What keeps a
+# direct open inert is the extension-less name — uhttpd types the response by extension and
+# answers application/octet-stream, which a browser downloads instead of running as a document.
 mkdir -p /etc/footstrap
 if [ -d /www/luci-static/footstrap ]; then
 	ln -sf /etc/footstrap/login-bg /www/luci-static/footstrap/bg
-	ln -sf /etc/footstrap/pattern.svg /www/luci-static/footstrap/pattern.svg
 	ln -sfn /etc/footstrap/fonts /www/luci-static/footstrap/fonts
 fi
+# Clean up a pre-0.15 install's stale pattern symlink — see the header comment above for why this
+# is the one migration this script makes. `-L` only: never remove a real file some other install
+# step could have left at that path.
+[ -L /www/luci-static/footstrap/pattern.svg ] && rm -f /www/luci-static/footstrap/pattern.svg
 
 exit 0
