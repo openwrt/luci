@@ -130,6 +130,10 @@ function isRunning(r){
 	try{var i=r.qosify.instances;for(var k in i)if(i[k].running)return true;}catch(e){}
 	return false;
 }
+function runPid(r){
+	try{var i=r.qosify.instances;for(var k in i)if(i[k].running&&i[k].pid)return i[k].pid;}catch(e){}
+	return 0;
+}
 
 function clsLabel(c){return c.name+(c.alias?' '+_('(alias)'):'');}
 function clsDesc(c){return _('Ingress: %s / Egress: %s').format(c.ingress||'',c.egress||'');}
@@ -361,6 +365,10 @@ function kvRow(k,v,id){return E('tr',{'class':'tr'},[E('td',{'class':'td left','
 function kvTable(rows,id){return E('table',{'class':'table','id':id||null},rows);}
 function emRow(t){return E('tr',{'class':'tr placeholder'},E('td',{'class':'td'},E('em',{},t)));}
 function emP(t){return E('p',{},E('em',{},t));}
+function gridTable(head,rows){
+	return E('table',{'class':'table cbi-section-table'},[E('tr',{'class':'tr cbi-section-table-titles'},head.map(function(h){return E('th',{'class':'th'},h);}))]
+		.concat(rows.map(function(r){return E('tr',{'class':'tr cbi-section-table-row'},r.map(function(c,i){return E('td',{'class':'td','data-title':head[i]},c);}));})));
+}
 function sect(title,kids,attrs){
 	var a=attrs||{};
 	a['class']='cbi-section';
@@ -440,9 +448,9 @@ return view.extend({
 		[['ov',_('Overview'),this.tabOverview(ctx)],
 		 ['cf',_('Config'),this.tabConfig(ctx)],
 		 ['ru',_('Classification Rules'),this.tabRules(ctx)],
-		 ['ad',_('Advanced'),this.tabAdvanced(ctx)],
 		 ['st',_('Status'),this.tabStatus(ctx)],
-		 ['cn',_('Counters'),this.tabCounters(ctx)]].forEach(function(t){
+		 ['cn',_('Counters'),this.tabCounters(ctx)],
+		 ['ad',_('Advanced'),this.tabAdvanced(ctx)]].forEach(function(t){
 			var pane=t[2];
 			pane.setAttribute('data-tab',t[0]);
 			pane.setAttribute('data-tab-title',t[1]);
@@ -485,20 +493,20 @@ return view.extend({
 	},
 
 	tabOverview:function(ctx){
-		var section=E('div',{'id':'qos-ov'});
-		section.appendChild(E('div',{'class':'cbi-section','id':'qos-svc-sect'},this.buildSvcSect(ctx)));
-		section.appendChild(E('div',{'class':'cbi-section','id':'qos-qs-sect'},this.buildQsSect(ctx)));
-		section.appendChild(E('div',{'class':'cbi-section','id':'qos-cfg-sect'},this.buildCfgSect(ctx)));
-		section.appendChild(E('div',{'class':'cbi-section','id':'qos-ctl-sect'},this.buildCtlSect(ctx)));
-		return section;
+		return E('div',{'id':'qos-ov'},[
+			E('div',{'class':'cbi-section','id':'qos-svc-sect'},this.buildSvcSect(ctx)),
+			E('div',{'class':'cbi-section','id':'qos-qs-sect'},this.buildQsSect(ctx)),
+			E('div',{'class':'cbi-section','id':'qos-cfg-sect'},this.buildCfgSect(ctx)),
+			this.buildSvcActs(ctx)
+		]);
 	},
 
 	buildSvcSect:function(ctx){
-		return [E('h3',{},_('Service Status')),this.renderSvcTable(ctx)];
+		return [E('h3',{},_('Service')),this.renderSvcTable(ctx)];
 	},
 
 	buildCfgSect:function(ctx){
-		return [E('h3',{},_('Configuration Files')),this.renderCfgFiles(ctx)];
+		return [E('h3',{},_('Files')),this.renderCfgFiles(ctx)];
 	},
 
 	buildQsSect:function(ctx){
@@ -573,34 +581,36 @@ return view.extend({
 		return nodes;
 	},
 
-	buildCtlSect:function(ctx){
-		var self=this;
-		var nodes=[E('h3',{},_('Service Controls'))];
-		var svcCt=E('div',{'class':'cbi-section-node','id':'qos-svc-btns'});
-		svcCt.appendChild(E('button',{
-			'id':'qos-btn-auto',
-			'click':function(){return self.svcAction(self._auto?'disable':'enable');}
-		}));
-		this.autoButton(ctx,svcCt.firstChild);
-		var btnCls={start:'cbi-button-apply',stop:'cbi-button-negative',restart:'cbi-button-action',reload:'cbi-button-reload'};
-		['start','stop','restart','reload'].forEach(function(a){
-			svcCt.appendChild(document.createTextNode(' '));
-			svcCt.appendChild(E('button',{
-				'class':'cbi-button '+btnCls[a],
-				'click':function(){return self.svcAction(a);}
-			},({start:_('Start'),stop:_('Stop'),restart:_('Restart'),reload:_('Reload')})[a]));
-		});
+	// The controls sit once, at the bottom of Overview, rather than under every tab.
+	buildSvcActs:function(ctx){
+		var self=this,acts=E('div',{'class':'cbi-page-actions','id':'qos-svc-btns'},
+			E('button',{'id':'qos-btn-auto','click':function(){return self.svcAction(self._auto?'disable':'enable');}}));
 		// Reload is the init script's reload_service(), a full ubus config push.
 		// Reload Rules re-reads the mapping files alone and leaves the qdiscs and
 		// interface config untouched -- what a rules edit actually needs.
-		svcCt.appendChild(document.createTextNode(' '));
-		svcCt.appendChild(E('button',{
-			'class':'cbi-button cbi-button-reload',
-			'title':_('Re-read the mapping files only'),
-			'click':function(){return self.mapReload();}
-		},_('Reload Rules')));
-		nodes.push(svcCt);
-		return nodes;
+		[['start','cbi-button-apply',_('Start')],['restart','cbi-button-action',_('Restart')],
+		 ['reload','cbi-button-reload',_('Reload')],['maps','cbi-button-reload',_('Reload Rules'),1],
+		 ['stop','cbi-button-negative',_('Stop')]].forEach(function(b){
+			acts.appendChild(document.createTextNode(' '));
+			acts.appendChild(E('button',{'class':'cbi-button '+b[1],'id':'qos-btn-'+b[0],'title':b[3]?_('Re-read the mapping files only'):null,
+				'click':function(){return b[3]?self.mapReload():self.svcAction(b[0]);}},b[2]));
+		});
+		this.svcButtons(ctx,acts);
+		return acts;
+	},
+
+	// Buttons that do not apply to the current state are disabled. Unknown is not
+	// Missing: with the state unknown the actions stay clickable, so a stale ACL
+	// answers with the call's own error instead of a bar of dead buttons.
+	svcButtons:function(ctx,root){
+		var ro=this.readonly||ctx.hasInit===false,un=ctx.running==null,b,
+			g=function(id){return root?root.querySelector('#'+id):$(id);};
+		if((b=g('qos-btn-auto')))this.autoButton(ctx,b);
+		[['start',!ctx.running],['restart',ctx.running],['reload',ctx.running],['stop',ctx.running]].forEach(function(x){
+			if((b=g('qos-btn-'+x[0])))b.disabled=ro||!(un||x[1]);
+		});
+		// Reload Rules is a ubus call, so it needs the daemon up but not the init script.
+		if((b=g('qos-btn-maps')))b.disabled=this.readonly||ctx.running===false;
 	},
 
 	fillSect:function(id,nodes){
@@ -676,28 +686,43 @@ return view.extend({
 			_('rpcd is not answering for qosify — check the ACL in /usr/share/rpcd/acl.d and restart rpcd')):null;
 		function mark(n,unk){if(!note||!unk)return n;var w=[n,' ',note];note=null;return w;}
 		return {
-			init:mark(tri(ctx.hasInit,function(v){return badge(v?'success':'danger',v?_('Available'):_('Missing'));}),ctx.hasInit==null),
-			auto:mark(tri(ctx.enabled,function(v){return badge(v?'success':'danger',v?_('Enabled'):_('Disabled'));}),ctx.enabled==null),
+			// Keyed in display order, so the note lands on the first Unknown shown.
 			run:mark(run,ctx.running==null),
-			shaped:mark(tri(ctx.shaped,function(v){return v?N_(v,'%d interface','%d interfaces').format(v):E('em',{},_('none'));}),ctx.shaped==null)
+			up:ctx.uptime!=null?'%t'.format(Math.floor(ctx.uptime)):'-',
+			auto:mark(tri(ctx.enabled,function(v){return badge(v?'success':'danger',v?_('Enabled'):_('Disabled'));}),ctx.enabled==null),
+			shaped:mark(tri(ctx.shaped,function(v){return v?N_(v,'%d interface','%d interfaces').format(v):E('em',{},_('none'));}),ctx.shaped==null),
+			init:mark(tri(ctx.hasInit,function(v){return badge(v?'success':'danger',v?_('Available'):_('Missing'));}),ctx.hasInit==null)
 		};
 	},
 
+	// Status, then the per-interface rows from ubus call qosify status, which cost
+	// no forks, then the init script.
 	renderSvcTable:function(ctx){
-		var n=this.svcNodes(ctx);
-		return kvTable([
-			kvRow(_('Init Script'),n.init,'qos-svc-init'),
-			kvRow(_('Autostart'),n.auto,'qos-svc-auto'),
-			kvRow(_('Running'),n.run,'qos-svc-run'),
-			kvRow(_('Shaping'),n.shaped,'qos-svc-shaped')
-		],'qos-svc-tbl');
+		var n=this.svcNodes(ctx),rows=[
+			kvRow(_('Status'),n.run),
+			kvRow(_('Uptime'),n.up),
+			kvRow(_('Autostart'),n.auto),
+			kvRow(_('Shaping'),n.shaped)
+		];
+		['interfaces','devices'].forEach(function(g){
+			var t=ctx.status&&ctx.status[g],k,e;
+			for(k in t){
+				e=t[k]||{};
+				rows.push(kvRow((g==='devices'?_('device %s'):_('interface %s')).format(k),[
+					badge(e.active?'success':'danger',e.active?_('active'):_('inactive')),' ',
+					_('device: %s, ingress: %s, egress: %s').format(e.ifname||'-',e.ingress?_('yes'):_('no'),e.egress?_('yes'):_('no'))]));
+			}
+		});
+		rows.push(kvRow(E('code',{},'/etc/init.d/qosify'),n.init));
+		return kvTable(rows,'qos-svc-tbl');
 	},
 
+	// Rows follow the configured interfaces, so the table is swapped whole; it
+	// holds no input or focus.
 	updateSvcTable:function(ctx){
-		var n=this.svcNodes(ctx),map={init:'qos-svc-init',auto:'qos-svc-auto',run:'qos-svc-run',shaped:'qos-svc-shaped'},k,el;
-		for(k in map){el=$(map[k]);if(el)dom.content(el,n[k]);}
-		el=$('qos-btn-auto');
-		if(el)this.autoButton(ctx,el);
+		var t=$('qos-svc-tbl');
+		if(t)t.parentNode.replaceChild(this.renderSvcTable(ctx),t);
+		this.svcButtons(ctx);
 	},
 
 	// The label is the state, so with the state unknown there is nothing to toggle.
@@ -719,14 +744,14 @@ return view.extend({
 	renderCfgFiles:function(ctx){
 		var rulesN=(ctx.rulesN!=null)?ctx.rulesN:countRules(ctx.rulesText);
 		var cfgOk=(ctx.cfgOk!=null)?ctx.cfgOk:((ctx.cfgRaw||'').length>10&&/(^|\n)config /.test(ctx.cfgRaw||''));
-		var rulesOk=rulesN>0;
-		function fileRow(path,exists,ok,sz,mod,extra){
-			var st=ok?badge('success',_('Valid')):exists?badge('warning',_('Found (empty or invalid)')):badge('danger',_('Missing'));
-			return kvRow(path,exists?[st,' ','('+(extra||'')+fmtSize(sz)+', '+mod+')']:st);
+		var secN=uci.sections('qosify').length;
+		function row(path,st,ok,n){
+			return [E('code',{},path),st?(ok?badge('success',_('Valid')):badge('warning',_('Found (empty or invalid)'))):badge('danger',_('Missing')),
+				st?n:'-',st?fmtSize(st.size):'-',st?fmtMtime(st.mtime):'-'];
 		}
-		return kvTable([
-			fileRow(UCI_PATH,!!ctx.cfgStat,cfgOk,ctx.cfgStat?ctx.cfgStat.size:0,ctx.cfgStat?fmtMtime(ctx.cfgStat.mtime):''),
-			fileRow(RULES_PATH,!!ctx.rulesStat,rulesOk,ctx.rulesStat?ctx.rulesStat.size:0,ctx.rulesStat?fmtMtime(ctx.rulesStat.mtime):'',N_(rulesN,'%d rule','%d rules').format(rulesN)+', ')
+		return gridTable([_('File'),_('Status'),_('Entries'),_('Size'),_('Modified')],[
+			row(UCI_PATH,ctx.cfgStat,cfgOk,N_(secN,'%d section','%d sections').format(secN)),
+			row(RULES_PATH,ctx.rulesStat,rulesN>0,N_(rulesN,'%d rule','%d rules').format(rulesN))
 		]);
 	},
 
@@ -1037,7 +1062,6 @@ return view.extend({
 		var section=E('div',{'id':'qos-st'});
 		var fs1=sect(_('qosify-status'));
 		var body=E('div',{'id':'qos-st-body'},[
-			E('div',{'id':'qos-st-sum'}),
 			E('pre',{'id':'qos-st-pre','style':'display:none'}),
 			E('div',{'id':'qos-st-msg'})
 		]);
@@ -1444,19 +1468,16 @@ return view.extend({
 	// is being read. ctx.qstatus null means the fork has not returned yet, '' means
 	// it returned nothing -- the two used to look the same on screen.
 	fillStatus:function(body,ctx){
-		var sum=body.querySelector('#qos-st-sum'),pre=body.querySelector('#qos-st-pre'),msg=body.querySelector('#qos-st-msg');
-		if(!sum||!pre||!msg)return;
+		var pre=body.querySelector('#qos-st-pre'),msg=body.querySelector('#qos-st-msg');
+		if(!pre||!msg)return;
 		var note=function(t){dom.content(msg,emP(t));};
 		if(!ctx.running){
-			dom.content(sum,'');
 			pre.style.display='none';
 			dom.content(msg,E('div',{'class':'alert-message warning'},ctx.running==null?
 				_('rpcd is not answering for qosify, so the service state is unknown.'):
 				_('qosify is not running. Start from the Overview tab.')));
 			return;
 		}
-		dom.content(sum,ctx.status?this.statusSummary(ctx.status):
-			emP(_('qosify did not answer on ubus, so the interface summary is unavailable.')));
 		pre.style.display=ctx.qstatus?'':'none';
 		if(ctx.qstatus){
 			if(pre.textContent!==ctx.qstatus)pre.textContent=ctx.qstatus;
@@ -1465,21 +1486,6 @@ return view.extend({
 		else if(this.readonly)note(_('The detailed tc output needs write access to this page.'));
 		else if(ctx.qstatus==null)note(_('Reading tc output...'));
 		else note(_('qosify-status returned no output.'));
-	},
-
-	// ubus call qosify status, so the per-interface summary costs no forks
-	statusSummary:function(st){
-		var rows=[];
-		['interfaces','devices'].forEach(function(g){
-			var t=st&&st[g],k,e;
-			for(k in t){
-				e=t[k]||{};
-				rows.push(kvRow((g==='devices'?_('device %s'):_('interface %s')).format(k),[
-					badge(e.active?'success':'danger',e.active?_('active'):_('inactive')),' ',
-					_('device: %s, ingress: %s, egress: %s').format(e.ifname||'-',e.ingress?_('yes'):_('no'),e.egress?_('yes'):_('no'))]));
-			}
-		});
-		return kvTable(rows.length?rows:[emRow(_('qosify has no interfaces or devices configured'))]);
 	},
 
 	// === Actions ===
@@ -2052,8 +2058,26 @@ return view.extend({
 			}
 			ctx.rulesN=self._rulesN;
 			ctx.cfgOk=self._cfgOk;
-			return ctx;
+			return self.uptime(d[0]).then(function(u){ctx.uptime=u;return ctx;});
 		});
+	},
+
+	// Seconds since the running qosify started, or null. procd's service list
+	// carries the pid but no start time, so starttime (field 22 of /proc/<pid>/stat,
+	// USER_HZ ticks since boot) is set against /proc/uptime, both on the boot
+	// clock. A reload keeps the pid, so the result is cached per pid and later
+	// ticks advance it from performance.now(), which is monotonic: an NTP step or
+	// a date change does not skew it, and nothing is read until qosify restarts.
+	uptime:function(r){
+		var self=this,pid=runPid(r);
+		if(!pid){self._up=null;return Promise.resolve(null);}
+		if(self._up&&self._up.pid===pid)return Promise.resolve(self._up.up+(performance.now()-self._up.t)/1000);
+		return Promise.all([fs.read('/proc/'+pid+'/stat'),fs.read('/proc/uptime')]).then(function(d){
+			var st=String(d[0]),f=st.slice(st.lastIndexOf(')')+2).split(' '),up=parseFloat(d[1])-f[19]/100;
+			if(!(up>=0))return null;
+			self._up={pid:pid,up:up,t:performance.now()};
+			return up;
+		}).catch(function(){return null;});
 	},
 
 	// Poll path: six ubus calls (uci.get and gatherCtx(false)'s five), no shell
@@ -2081,7 +2105,6 @@ return view.extend({
 		var self=this;
 		return self.refreshOverview().then(function(ctx){
 			self.fillSect('qos-svc-sect',self.buildSvcSect(ctx));
-			self.fillSect('qos-ctl-sect',self.buildCtlSect(ctx));
 			self.fillSect('qos-qs-sect',self.buildQsSect(ctx));
 			return ctx;
 		});
@@ -2092,11 +2115,8 @@ return view.extend({
 		if(self.currentTab!=='st'||self._st)return Promise.resolve();
 		self._st=true;
 		var ex=self.readonly?Promise.resolve(null):L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),null);
-		return Promise.all([
-			callServiceList('qosify').catch(function(){return null;}),
-			callQosifyStatus().catch(function(){return null;})
-		]).then(function(d){
-			var ctx={running:d[0]?isRunning(d[0]):null,status:d[1],qstatus:self.readonly?'':null};
+		return callServiceList('qosify').catch(function(){return null;}).then(function(d){
+			var ctx={running:d?isRunning(d):null,qstatus:self.readonly?'':null};
 			var stb=$('qos-st-body');
 			if(stb)self.fillStatus(stb,ctx);
 			return ex.then(function(r){
