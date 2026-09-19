@@ -41,6 +41,28 @@
 	border-radius: 0 0 var(--qos-r) var(--qos-r);
 }
 
+/* The service bar sits outside any section, so it gets its own box. Flex
+   items ignore float, so the theme's page-actions floats cannot reorder the
+   buttons and they stay in declared order whatever their colour class. */
+#qos-svc-btns {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: .4em;
+	margin: 0 0 var(--qos-gap);
+	padding: var(--qos-pad);
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
+}
+
+#qos-svc-btns::after {
+	content: none;
+}
+
+#qos-svc-btns > * {
+	margin: 0;
+}
+
 /* Bootstrap and OpenWrt 2020 define .label.warning and .label.success but no
    .label.danger. */
 #qos-app .label.danger {
