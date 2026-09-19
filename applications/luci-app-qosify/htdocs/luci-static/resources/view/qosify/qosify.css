@@ -122,3 +122,97 @@
 	font-family: var(--font-mono, monospace);
 	font-size: 12px;
 }
+
+/* Counters. Tin colours: bulk, best effort, video and voice take the theme's
+   error, primary, warn and success colours; the extra diffserv8 and precedence
+   tins use fallbacks with light and dark values, switched by LuCI's
+   data-darkmode or, on a theme that does not set it, prefers-color-scheme. */
+#qos-app {
+	--qos-f-red: #e41a1c; --qos-f-blue: #377eb8; --qos-f-yellow: #e6b422;
+	--qos-f-green: #4daf4a; --qos-f-purple: #984ea3; --qos-f-orange: #ff7f00;
+	--qos-f-cyan: #17becf; --qos-f-forest: #1b7837; --qos-f-pine: #0f4d24;
+	--qos-f-grey: #5c5c5c; --qos-f-brown: #a65628; --qos-f-pink: #f781bf;
+	--qos-f-none: rgba(128, 128, 128, .45);
+}
+
+:root[data-darkmode="true"] #qos-app {
+	--qos-f-red: #e57373; --qos-f-blue: #64a0d8; --qos-f-yellow: #d4b44a;
+	--qos-f-green: #66bb6a; --qos-f-purple: #b085c0; --qos-f-orange: #ffa24d;
+	--qos-f-cyan: #4dd0e1; --qos-f-forest: #43a047; --qos-f-pine: #2e7d4f;
+	--qos-f-grey: #9e9e9e; --qos-f-brown: #c08050; --qos-f-pink: #f4a6cf;
+	--qos-f-none: rgba(160, 160, 160, .45);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-darkmode]) #qos-app {
+		--qos-f-red: #e57373; --qos-f-blue: #64a0d8; --qos-f-yellow: #d4b44a;
+		--qos-f-green: #66bb6a; --qos-f-purple: #b085c0; --qos-f-orange: #ffa24d;
+		--qos-f-cyan: #4dd0e1; --qos-f-forest: #43a047; --qos-f-pine: #2e7d4f;
+		--qos-f-grey: #9e9e9e; --qos-f-brown: #c08050; --qos-f-pink: #f4a6cf;
+		--qos-f-none: rgba(160, 160, 160, .45);
+	}
+}
+
+#qos-app {
+	--qos-c-red: var(--error-color-high, var(--qos-f-red));
+	--qos-c-blue: var(--primary-color-high, var(--qos-f-blue));
+	--qos-c-yellow: var(--warn-color-high, var(--qos-f-yellow));
+	--qos-c-green: var(--success-color-high, var(--qos-f-green));
+	--qos-c-purple: var(--qos-f-purple); --qos-c-orange: var(--qos-f-orange);
+	--qos-c-cyan: var(--qos-f-cyan); --qos-c-forest: var(--qos-f-forest);
+	--qos-c-pine: var(--qos-f-pine); --qos-c-grey: var(--qos-f-grey);
+	--qos-c-brown: var(--qos-f-brown); --qos-c-pink: var(--qos-f-pink);
+	--qos-c-none: var(--qos-f-none);
+}
+
+/* A header table above a boxed body; bars and figures are updated in place. */
+#qos-cn .qbox {
+	overflow: hidden;
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
+}
+
+#qos-cn .qbox + .qbox {
+	margin-top: var(--qos-gap);
+}
+
+#qos-cn .qhead {
+	background: var(--qos-hd);
+	border-bottom: 1px solid var(--qos-ln);
+}
+
+#qos-cn .qhead .th,
+#qos-cn .qbox .td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#qos-cn .qbox .tr:not(.table-titles):hover .td {
+	background: var(--qos-hd);
+}
+
+#qos-cn .cbi-progressbar {
+	height: .75em;
+	margin: 0;
+	min-width: 0;
+	border-radius: var(--qos-r);
+}
+
+#qos-cn .qn {
+	width: 1%;
+	text-align: right;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+#qos-cn .qt .td {
+	font-weight: 600;
+}
+
+#qos-cn-map-box {
+	height: 24rem;
+	min-height: 6rem;
+	overflow-y: scroll;
+	resize: vertical;
+}
