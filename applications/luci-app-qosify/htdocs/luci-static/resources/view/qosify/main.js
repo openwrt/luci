@@ -383,16 +383,16 @@ return view.extend({
 		return root;
 	},
 
-	// Both tabs tick at 10 s. Overview is six ubus calls and no forks; the Status
-	// tab forks qosify-status, which runs tc twice per active interface, so it is
-	// the expensive one and does not get a faster tick. Poll.step() holds
-	// the next tick until the promise this returns settles, and refreshStatus()
-	// drops an overlapping call, so a fork slower than the interval skips ticks
-	// instead of stacking up.
+	// Both tabs tick at luci.main.pollinterval, each only while its tab is open.
+	// Overview is six ubus calls and no forks; Status forks qosify-status, which
+	// runs tc twice per active interface, so a slow box raises that interval.
+	// Poll.step() holds the next tick until the promise this returns settles, and
+	// refreshStatus() drops a call overlapping the one fired on tab open, so a
+	// fork slower than the interval skips ticks instead of stacking up.
 	installPollers:function(){
 		var self=this;
-		poll.add(function(){if(self.currentTab!=='ov'||self._n)return;return self.refreshOverview();},10);
-		poll.add(function(){if(self.currentTab!=='st'||self._n)return;return self.refreshStatus();},10);
+		poll.add(function(){if(self.currentTab!=='ov'||self._n)return;return self.refreshOverview();});
+		poll.add(function(){if(self.currentTab!=='st'||self._n)return;return self.refreshStatus();});
 	},
 
 	tabOverview:function(ctx){
