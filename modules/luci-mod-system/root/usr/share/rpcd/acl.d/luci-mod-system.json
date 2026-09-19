@@ -179,7 +179,8 @@
 				"/sbin/sysupgrade --list-backup": [ "exec" ]
 			},
 			"ubus": {
-				"file": [ "exec", "read", "stat" ]
+				"file": [ "exec", "read", "stat" ],
+				"luci-rpc": [ "getBoardJSON" ]
 			}
 		},
 		"write": {
