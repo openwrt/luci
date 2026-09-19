@@ -1,137 +1,328 @@
 /* SPDX-License-Identifier: MIT */
 
-.qos-badge {
-	display: inline-block;
-	padding: 2px 10px;
-	border-radius: 3px;
-	font-size: 12px;
-	font-weight: bold;
+/* The page is stock LuCI markup; this sheet only draws each section as a box,
+   with theme variables first and a neutral fallback for themes without them. */
+#qos-app {
+	--qos-bd: var(--border-color-medium, rgba(128, 128, 128, .35));
+	--qos-ln: var(--border-color-low, rgba(128, 128, 128, .2));
+	--qos-hd: var(--background-color-low, rgba(128, 128, 128, .06));
+	--qos-r: 4px;
+	--qos-gap: .75em;
+	--qos-pad: .45em 1em;
 }
 
-.qos-green {
-	background: var(--success-color-medium, #009a4c);
-	color: var(--on-success-color, #fff);
+#qos-app .cbi-section {
+	margin: 0 0 var(--qos-gap);
+	padding: 0 1em var(--qos-gap);
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
 }
 
-.qos-red {
-	background: var(--error-color-medium, #e8210d);
+#qos-app .cbi-section > h3 {
+	margin: 0 -1em var(--qos-gap);
+	padding: var(--qos-pad);
+	font-size: 1em;
+	line-height: 1.5;
+	font-weight: 600;
+	border-bottom: 1px solid var(--qos-ln);
+	border-radius: var(--qos-r) var(--qos-r) 0 0;
+	background: var(--qos-hd);
+}
+
+#qos-app .cbi-section-descr {
+	margin: 0 0 var(--qos-gap);
+	padding: 0;
+}
+
+#qos-app .cbi-section .cbi-page-actions {
+	margin: var(--qos-gap) -1em calc(-1 * var(--qos-gap));
+	padding: var(--qos-pad);
+	border-top: 1px solid var(--qos-ln);
+	border-radius: 0 0 var(--qos-r) var(--qos-r);
+}
+
+/* Bootstrap and OpenWrt 2020 define .label.warning and .label.success but no
+   .label.danger. */
+#qos-app .label.danger {
+	background-color: var(--error-color-high, #e8210d);
 	color: var(--on-error-color, #fff);
 }
 
-.qos-amber {
-	background: var(--warn-color-medium, #f0c629);
-	color: var(--on-warn-color, #000);
-}
-
-.qos-ok {
-	color: var(--success-color-medium, #009a4c);
-}
-
-.qos-err {
-	color: var(--error-color-medium, #e8210d);
-}
-
-.qos-warn {
-	color: var(--warn-color-low, #f2d24f);
-}
-
-.qos-muted {
-	font-size: 11px;
-	color: var(--text-color-medium, inherit);
-	opacity: .75;
-}
-
-.qos-kv td {
-	padding: 7px 12px;
-	border-bottom: 1px solid var(--border-color-medium, rgba(128, 128, 128, .35));
-}
-
-.qos-kv td:first-child {
-	font-weight: bold;
-	opacity: .7;
-	width: 200px;
-}
-
-.qos-kv tr:last-child td {
-	border-bottom: none;
-}
-
-.qos-svc > * {
-	display: inline-block;
-	margin: 0 3px 3px 0;
-}
-
-.qos-ref,
-.qos-qa {
-	margin: 0 0 10px;
-	padding: 8px 10px;
-	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
-	border-radius: 4px;
-}
-
-.qos-ref summary {
-	cursor: pointer;
-	font-weight: bold;
-	font-size: 13px;
-}
-
-.qos-qa label {
-	font-size: 11px;
-	opacity: .7;
-}
-
-.qos-qa-row {
-	display: flex;
-	gap: 6px;
-	align-items: center;
-	margin: 6px 0 0;
-	flex-wrap: wrap;
-}
-
-.qos-edit {
-	width: 100%;
-	font-family: var(--font-mono, monospace);
-	font-size: 12px;
-	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
-}
-
-.qos-pre {
+#qos-app .table {
 	margin: 0;
-	padding: 10px;
+}
+
+#qos-app .table .td {
+	padding: .45em .75em;
+	vertical-align: middle;
+	border-top-color: var(--qos-ln);
+}
+
+/* Reference panels and Quick Add forms inside a section. */
+#qos-app details,
+#qos-app .qos-qa {
+	margin: 0 0 var(--qos-gap);
+	padding: .45em .75em;
+	border: 1px solid var(--qos-ln);
+	border-radius: var(--qos-r);
+}
+
+#qos-app details > summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+#qos-app details > p,
+#qos-app details > .table {
+	margin: .5em 0 0;
+}
+
+#qos-app .qos-qa > h4 {
+	margin: 0;
+	font-size: 1em;
+}
+
+#qos-app .qos-qa-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .4em;
+	align-items: center;
+	margin: .4em 0 0;
+}
+
+/* The tc output and both editors take the rest of the window: the viewport
+   less the LuCI header, the tab bar and what sits above them. calc() going
+   negative on a short screen is caught by min-height. Width is on the id so
+   the theme's textarea width cannot win, and resize: both keeps a wrong width
+   correctable. rows=28 stays on the textareas as the fallback. */
+#qos-st-pre {
+	margin: 0;
+	padding: .75em;
 	overflow: auto;
 	white-space: pre;
-	font-family: var(--font-mono, monospace);
-	font-size: 12px;
-	background: var(--background-color-low, rgba(128, 128, 128, .12));
-	color: inherit;
-	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
-	border-radius: 3px;
-}
-
-/* The tc output is the only thing on the Status tab, so it takes the rest of the
-   window: the viewport less the LuCI header, the tab bar and the summary table
-   above it. calc() going negative on a short screen is caught by min-height, and
-   the box is draggable for anything the estimate gets wrong. */
-#qos-st-pre {
 	height: calc(100vh - 310px);
 	min-height: 320px;
 	resize: vertical;
+	font-family: var(--font-mono, monospace);
+	font-size: 12px;
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
 }
 
-/* Each editor is the last thing on its tab, with only the action buttons under
-   it, so it takes the rest of the window instead of a fixed 28 rows; the
-   reference and Quick Add panels above it scroll off first. The rows attribute
-   stays as the fallback if this sheet does not load. */
 #qos-config-ta,
 #qos-rules-ta {
+	width: 100%;
+	box-sizing: border-box;
 	height: calc(100vh - 300px);
 	min-height: 320px;
+	resize: both;
+	padding: 6px;
+	line-height: 1.4;
+	tab-size: 4;
+	font-family: var(--font-mono, monospace);
+	font-size: 12px;
+}
+
+/* Counters. Tin colours: bulk, best effort, video and voice take the theme's
+   error, primary, warn and success colours; the extra diffserv8 and precedence
+   tins use fallbacks with light and dark values, switched by LuCI's
+   data-darkmode or, on a theme that does not set it, prefers-color-scheme. */
+#qos-app {
+	--qos-f-red: #e41a1c; --qos-f-blue: #377eb8; --qos-f-yellow: #e6b422;
+	--qos-f-green: #4daf4a; --qos-f-purple: #984ea3; --qos-f-orange: #ff7f00;
+	--qos-f-cyan: #17becf; --qos-f-forest: #1b7837; --qos-f-pine: #0f4d24;
+	--qos-f-grey: #5c5c5c; --qos-f-brown: #a65628; --qos-f-pink: #f781bf;
+	--qos-f-none: rgba(128, 128, 128, .45);
+}
+
+:root[data-darkmode="true"] #qos-app {
+	--qos-f-red: #e57373; --qos-f-blue: #64a0d8; --qos-f-yellow: #d4b44a;
+	--qos-f-green: #66bb6a; --qos-f-purple: #b085c0; --qos-f-orange: #ffa24d;
+	--qos-f-cyan: #4dd0e1; --qos-f-forest: #43a047; --qos-f-pine: #2e7d4f;
+	--qos-f-grey: #9e9e9e; --qos-f-brown: #c08050; --qos-f-pink: #f4a6cf;
+	--qos-f-none: rgba(160, 160, 160, .45);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-darkmode]) #qos-app {
+		--qos-f-red: #e57373; --qos-f-blue: #64a0d8; --qos-f-yellow: #d4b44a;
+		--qos-f-green: #66bb6a; --qos-f-purple: #b085c0; --qos-f-orange: #ffa24d;
+		--qos-f-cyan: #4dd0e1; --qos-f-forest: #43a047; --qos-f-pine: #2e7d4f;
+		--qos-f-grey: #9e9e9e; --qos-f-brown: #c08050; --qos-f-pink: #f4a6cf;
+		--qos-f-none: rgba(160, 160, 160, .45);
+	}
+}
+
+#qos-app {
+	--qos-c-red: var(--error-color-high, var(--qos-f-red));
+	--qos-c-blue: var(--primary-color-high, var(--qos-f-blue));
+	--qos-c-yellow: var(--warn-color-high, var(--qos-f-yellow));
+	--qos-c-green: var(--success-color-high, var(--qos-f-green));
+	--qos-c-purple: var(--qos-f-purple); --qos-c-orange: var(--qos-f-orange);
+	--qos-c-cyan: var(--qos-f-cyan); --qos-c-forest: var(--qos-f-forest);
+	--qos-c-pine: var(--qos-f-pine); --qos-c-grey: var(--qos-f-grey);
+	--qos-c-brown: var(--qos-f-brown); --qos-c-pink: var(--qos-f-pink);
+	--qos-c-none: var(--qos-f-none);
+}
+
+/* A header table above a boxed body; bars and figures are updated in place. */
+#qos-cn .qbox {
+	overflow: hidden;
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
+}
+
+#qos-cn .qbox + .qbox {
+	margin-top: var(--qos-gap);
+}
+
+#qos-cn .qhead {
+	background: var(--qos-hd);
+	border-bottom: 1px solid var(--qos-ln);
+}
+
+#qos-cn .qhead .th,
+#qos-cn .qbox .td {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#qos-cn .qbox .tr:not(.table-titles):hover .td {
+	background: var(--qos-hd);
+}
+
+#qos-cn .cbi-progressbar {
+	height: .75em;
+	margin: 0;
+	min-width: 0;
+	border-radius: var(--qos-r);
+}
+
+#qos-cn .qn {
+	width: 1%;
+	text-align: right;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+#qos-cn .qt .td {
+	font-weight: 600;
+}
+
+#qos-cn-map-box {
+	height: 24rem;
+	min-height: 6rem;
+	overflow-y: scroll;
 	resize: vertical;
 }
 
-.qos-item {
-	margin: 4px 0;
-	padding: 4px 8px;
-	border: 1px solid var(--border-color-medium, rgba(128, 128, 128, .5));
-	border-radius: 3px;
+/* Quick settings: one inner box per tab, rows split by the same line as the
+   tables, and the control then its hint on one line so every hint starts in
+   the same column. */
+#qos-app .qs-box {
+	min-width: 0;
+	min-height: 17em;
+	padding: .7em 1.5em;
+	border: 1px solid var(--qos-bd);
+	border-radius: var(--qos-r);
+}
+
+#qos-qs-sect .cbi-value {
+	align-items: flex-start;
+	padding: .55em 0;
+}
+
+#qos-qs-sect .cbi-value + .cbi-value {
+	border-top: 1px solid var(--qos-ln);
+}
+
+#qos-qs-sect .cbi-value label.cbi-value-title {
+	flex: 0 0 16em;
+	padding-top: 0;
+	line-height: 30px;
+	font-weight: 600;
+}
+
+#qos-qs-sect .cbi-value-field {
+	display: grid;
+	grid-template-columns: minmax(0, 18em) minmax(0, 1fr);
+	align-items: center;
+	gap: .3em 1.5em;
+	flex: 1 1 auto;
+	margin-left: 1.5em;
+	min-width: 0;
+	line-height: 30px;
+}
+
+#qos-qs-sect .cbi-value-description {
+	margin-top: 0;
+	line-height: 1.4;
+}
+
+#qos-qs-sect .qs-note {
+	grid-column: 1 / -1;
+}
+
+#qos-qs-sect .cbi-value-field input[type=checkbox] {
+	justify-self: start;
+	margin: 0;
+	vertical-align: middle;
+}
+
+#qos-qs-sect .cbi-value-field input[type=text],
+#qos-qs-sect .cbi-value-field input[type=number],
+#qos-qs-sect .cbi-value-field select {
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+/* Sized by what goes in: a byte count gets a byte-sized box, CAKE options get the row. */
+#qos-qs-sect [data-q=ovh_bytes],
+#qos-qs-sect [data-q=overhead_mpu] {
+	width: 7em;
+}
+
+#qos-qs-sect [data-q=overhead_vlan],
+#qos-qs-sect [data-q=overhead_encap] {
+	width: 9em;
+}
+
+#qos-qs-sect [data-q=name],
+#qos-qs-sect [data-q=bw_up],
+#qos-qs-sect [data-q=bw_down] {
+	width: 14em;
+}
+
+#qos-qs-sect [data-q=mode],
+#qos-qs-sect [data-q=overhead] {
+	width: 18em;
+}
+
+#qos-qs-sect .qs-wide .cbi-value-field {
+	grid-template-columns: minmax(0, 28em) minmax(0, 1fr);
+}
+
+#qos-qs-sect [data-q$=opts] {
+	width: 100%;
+}
+
+/* Phones: label, then control, then hint, one under the other. */
+@media (max-width: 600px) {
+	#qos-qs-sect .cbi-value {
+		display: block;
+	}
+
+	#qos-qs-sect .cbi-value label.cbi-value-title {
+		line-height: 1.5;
+	}
+
+	#qos-qs-sect .cbi-value-field {
+		grid-template-columns: minmax(0, 1fr);
+		margin-left: 0;
+	}
+
+	#qos-qs-sect .cbi-value-field > * {
+		grid-column: 1;
+	}
 }
