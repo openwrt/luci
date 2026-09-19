@@ -58,43 +58,131 @@
 	border-top-color: var(--qos-ln);
 }
 
-/* Reference panels and Quick Add forms inside a section. */
-#qos-app details,
-#qos-app .qos-qa {
-	margin: 0 0 var(--qos-gap);
-	padding: .45em .75em;
-	border: 1px solid var(--qos-ln);
+/* A folding section is a details.cbi-section whose summary is the title bar. */
+#qos-app .cbi-section > summary {
+	margin: 0 -1em var(--qos-gap);
+	padding: var(--qos-pad);
+	font-weight: 600;
+	line-height: 1.5;
+	cursor: pointer;
+	list-style: none;
+	border-bottom: 1px solid var(--qos-ln);
+	border-radius: var(--qos-r) var(--qos-r) 0 0;
+	background: var(--qos-hd);
+}
+
+#qos-app .cbi-section > summary::-webkit-details-marker {
+	display: none;
+}
+
+#qos-app .cbi-section > summary::before {
+	content: "\25B8";
+	display: inline-block;
+	width: 1.1em;
+	transition: transform .15s;
+}
+
+#qos-app details.cbi-section[open] > summary::before {
+	transform: rotate(90deg);
+}
+
+#qos-app details.cbi-section:not([open]) {
+	padding-bottom: 0;
+}
+
+#qos-app details.cbi-section:not([open]) > summary {
+	margin-bottom: 0;
+	border-bottom: 0;
 	border-radius: var(--qos-r);
 }
 
-#qos-app details > summary {
+#qos-app summary > h3 {
+	display: inline;
+	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
+	line-height: inherit;
+}
+
+/* Reference panels inside a section. */
+#qos-app details:not(.cbi-section) {
+	margin: var(--qos-gap) 0 0;
+}
+
+#qos-app details:not(.cbi-section) > summary {
 	cursor: pointer;
 	font-weight: 600;
 }
 
-#qos-app details > p,
-#qos-app details > .table {
+#qos-app details:not(.cbi-section) > p,
+#qos-app details:not(.cbi-section) > .table {
 	margin: .5em 0 0;
 }
 
-#qos-app .qos-qa > h4 {
+/* Quick Add: forms, so the grids stay tight; the folds are ordinary sections. */
+#qos-app .qa .table {
+	table-layout: fixed;
+	margin: 0 0 .3em;
+}
+
+#qos-app .qa .th,
+#qos-app .qa .td {
+	padding: .15em .3em;
+}
+
+#qos-app .qa .th {
+	font-size: .85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#qos-app .qa .td input:not([type=checkbox]),
+#qos-app .qa .td select {
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+}
+
+#qos-app .qa .td input[type=checkbox] {
 	margin: 0;
-	font-size: 1em;
+	vertical-align: middle;
 }
 
-#qos-app .qos-qa-row {
+#qos-app .qa-foot {
 	display: flex;
-	flex-wrap: wrap;
-	gap: .4em;
-	align-items: center;
-	margin: .4em 0 0;
+	align-items: flex-start;
+	gap: .3em 1em;
 }
 
-/* The tc output and both editors take the rest of the window: the viewport
-   less the LuCI header, the tab bar and what sits above them. calc() going
-   negative on a short screen is caught by min-height. Width is on the id so
-   the theme's textarea width cannot win, and resize: both keeps a wrong width
-   correctable. rows=28 stays on the textareas as the fallback. */
+#qos-app .qa-foot > details {
+	flex: 1 1 0;
+	min-width: 0;
+	margin: .15em 0 0;
+}
+
+#qos-app .qa details:not(.cbi-section) > summary {
+	font-size: .9em;
+}
+
+#qos-app .qa details:not(.cbi-section) .td {
+	padding: .2em .5em;
+	border-top: 1px solid var(--qos-ln);
+}
+
+#qos-app .cbi-section-node > .cbi-value:last-child {
+	margin-bottom: 0;
+}
+
+#qos-app .qos-up-name {
+	margin-left: .5em;
+	opacity: .75;
+}
+
+/* The tc output takes the rest of the window: the viewport less the LuCI
+   header and the tab bar, caught by min-height on a short screen. The editors
+   are fitted to the window by fitEditor(); the calc() height only holds until
+   the first fit. Width is on the id so the theme's textarea width cannot win,
+   and resize: both keeps a wrong width correctable. */
 #qos-st-pre {
 	margin: 0;
 	padding: .75em;
@@ -114,7 +202,7 @@
 	width: 100%;
 	box-sizing: border-box;
 	height: calc(100vh - 300px);
-	min-height: 320px;
+	min-height: 160px;
 	resize: both;
 	padding: 6px;
 	line-height: 1.4;

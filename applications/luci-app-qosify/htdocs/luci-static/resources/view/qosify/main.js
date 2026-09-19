@@ -55,8 +55,41 @@ var TIN_COLORS={besteffort:['blue'],
 for(var tk in TIN_COLORS)TIN_COLORS[tk]=TIN_COLORS[tk].map(qc);
 // qosify.init handles 'alias' with add_class and 'device' with add_interface,
 // so those section types share the option set of class / interface.
-var QAC_PANEL={defaults:'defaults','class':'class',alias:'class','interface':'interface',device:'interface'};
-var SECT=[['defaults','config defaults'],['class','config class'],['alias','config alias'],['interface','config interface'],['device','config device']];
+var OPT_DESC={
+	defaults:_('List of files with port/IP/host mappings'),
+	timeout:_('Default timeout for dynamically added entries'),
+	dscp_default_tcp:_('Default DSCP value for TCP packets'),
+	dscp_default_udp:_('Default DSCP value for UDP packets'),
+	dscp_icmp:_('DSCP value for ICMP packets'),
+	dscp_prio:_('DSCP value for priority-marked packets'),
+	dscp_bulk:_('DSCP value for bulk-marked packets'),
+	prio_max_avg_pkt_len:_('Maximum average packet length for marking a flow as priority'),
+	bulk_trigger_pps:_('Number of packets per second to trigger bulk flow detection'),
+	bulk_trigger_timeout:_('Time below bulk_trigger_pps threshold until a bulk flow mark is removed'),
+	value:_('DSCP value for ingress and egress, where they are not set'),
+	ingress:_('DSCP value for ingress'),
+	egress:_('DSCP value for egress'),
+	name:_('netifd interface (config interface) or netdev (config device) to enable QoS on'),
+	disabled:_('Skip this section'),
+	bandwidth_up:_('Uplink bandwidth (same format as tc)'),
+	bandwidth_down:_('Downlink bandwidth (same format as tc)'),
+	'if.ingress':_('Enable ingress shaping'),
+	'if.egress':_('Enable egress shaping'),
+	mode:_('CAKE diffserv mode'),
+	nat:_('Enable CAKE NAT host detection via conntrack'),
+	host_isolate:_('Enable CAKE host isolation'),
+	autorate_ingress:_('Enable CAKE automatic rate estimation for ingress'),
+	overhead_type:_('CAKE overhead keyword added to options; manual uses overhead and overhead_encap'),
+	overhead:_('Adds overhead <bytes> when overhead_type is manual'),
+	overhead_encap:_('Adds atm, noatm or ptm when overhead_type is manual'),
+	overhead_mpu:_('Adds mpu <bytes>'),
+	overhead_vlan:_('Adds ether-vlan once per level (1 or 2)'),
+	ingress_options:_('CAKE ingress options'),
+	egress_options:_('CAKE egress options'),
+	options:_('CAKE options for ingress + egress')
+};
+// Quick Add grids hold at most this many options per table.
+var QA_COLS=7;
 
 // luci.setInitAction was dropped from luci-base in 4440b267d; the rc namespace
 // (built into the rpcd core binary, so no extra dependency) replaces it.
@@ -135,8 +168,7 @@ function runPid(r){
 	return 0;
 }
 
-function clsLabel(c){return c.name+(c.alias?' '+_('(alias)'):'');}
-function clsDesc(c){return _('Ingress: %s / Egress: %s').format(c.ingress||'',c.egress||'');}
+function clsOpt(c){var d=c.ingress&&c.ingress!==c.egress?c.ingress+'/'+c.egress:c.egress;return c.name+(d?' ('+d+')':'');}
 function trim(s){return (s||'').replace(/^\s+|\s+$/g,'');}
 function $(id){return document.getElementById(id);}
 
@@ -353,9 +385,6 @@ function notify(msg,kind){
 	return n;
 }
 
-// Remember the size/mtime an editor was loaded from, so a save can tell the
-// difference between "the user changed this" and "something else changed the
-// file underneath us".
 // Stock LuCI markup: themes style .cbi-section, .table, .label and
 // .cbi-value already, so qosify.css only draws the section boxes.
 function badge(kind,t){return E('span',{'class':kind?'label '+kind:'label'},t);}
@@ -365,9 +394,21 @@ function kvRow(k,v,id){return E('tr',{'class':'tr'},[E('td',{'class':'td left','
 function kvTable(rows,id){return E('table',{'class':'table','id':id||null},rows);}
 function emRow(t){return E('tr',{'class':'tr placeholder'},E('td',{'class':'td'},E('em',{},t)));}
 function emP(t){return E('p',{},E('em',{},t));}
-function gridTable(head,rows){
+function gridTable(head,rows,empty){
 	return E('table',{'class':'table cbi-section-table'},[E('tr',{'class':'tr cbi-section-table-titles'},head.map(function(h){return E('th',{'class':'th'},h);}))]
-		.concat(rows.map(function(r){return E('tr',{'class':'tr cbi-section-table-row'},r.map(function(c,i){return E('td',{'class':'td','data-title':head[i]},c);}));})));
+		.concat(rows.length?rows.map(function(r){return E('tr',{'class':'tr cbi-section-table-row'},r.map(function(c,i){return E('td',{'class':'td','data-title':head[i]},c);}));}):[emRow(empty)]));
+}
+// A section that folds, its open state kept for the browser session.
+function fold(id,title,kids,open){
+	var k='qosify.fold.'+id,st=null,d;
+	try{st=sessionStorage.getItem(k);}catch(e){}
+	d=E('details',{'class':'cbi-section','id':id,'open':(st==null?open:st==='1')?'':null},[E('summary',{},E('h3',{},title))].concat(kids));
+	d.addEventListener('toggle',function(){try{sessionStorage.setItem(k,d.open?'1':'0');}catch(e){}});
+	return d;
+}
+function refBox(title,note,rows){
+	return E('details',{},[E('summary',{},title),note?E('p',{},note):'',
+		rows.length?E('table',{'class':'table'},rows.map(function(r){return kvRow(E('code',{},r[0]),r[1]);})):'']);
 }
 function sect(title,kids,attrs){
 	var a=attrs||{};
@@ -388,10 +429,9 @@ function valRow(lbl,el){
 	return E('div',{'class':'cbi-value'},[E('label',{'class':'cbi-value-title','for':(n&&n.id)||null},lbl),E('div',{'class':'cbi-value-field'},el)]);
 }
 
-function noClassRow(){
-	return emRow(_('No classes defined in %s').format(UCI_PATH));
-}
-
+// Remember the size/mtime an editor was loaded from, so a save can tell the
+// difference between "the user changed this" and "something else changed the
+// file underneath us".
 function stampFile(el,st){
 	el.dataset.mtime=st?String(st.mtime):'';
 	el.dataset.size=st?String(st.size):'';
@@ -447,7 +487,7 @@ return view.extend({
 		var group=E('div',{});
 		[['ov',_('Overview'),this.tabOverview(ctx)],
 		 ['cf',_('Config'),this.tabConfig(ctx)],
-		 ['ru',_('Classification Rules'),this.tabRules(ctx)],
+		 ['ru',_('Rules'),this.tabRules(ctx)],
 		 ['st',_('Status'),this.tabStatus(ctx)],
 		 ['cn',_('Counters'),this.tabCounters(ctx)],
 		 ['ad',_('Advanced'),this.tabAdvanced(ctx)]].forEach(function(t){
@@ -463,12 +503,15 @@ return view.extend({
 				// this from a requestAnimationFrame, so the pane is in the DOM.
 				if(t[0]==='st')self.refreshStatus();
 				if(t[0]==='cn')self.refreshCounters();
+				self.fitEditor();
 			});
 			group.appendChild(pane);
 		});
 		root.appendChild(group);
 		ui.tabs.initTabGroup(group.childNodes);
 		this.currentTab=want;
+		window.addEventListener('resize',function(){self.fitEditor();});
+		root.firstChild.addEventListener('load',function(){self.fitEditor();});
 
 		if(this.readonly){
 			this.applyReadonly(root);
@@ -770,156 +813,119 @@ return view.extend({
 	tabConfig:function(ctx){
 		var self=this;
 		var section=E('div',{'id':'qos-cf'});
-		var fs1=sect(_('Config'),[sdesc([_('UCI configuration — classes, interfaces, defaults.')+' ',E('code',{},UCI_PATH)])]);
-
-		// Quick Add Config — built first so the reference table can be derived from it
 		var classes=this.getClasses();
 		var dscpChoices=classes.map(function(c){return c.name;}).concat(DSCP);
-		var qa=E('div',{'class':'qos-qa'});
-		qa.appendChild(E('h4',{},_('Quick Add Config')));
-		var qacRow=E('div',{'class':'qos-qa-row'});
-		var qacType=E('select',{'id':'qac-type','style':'width:130px','change':function(){self.qacSwitch();}});
-		SECT.forEach(function(o){qacType.appendChild(E('option',{'value':o[0]},o[1]));});
-		qacRow.appendChild(qacType);
-		qacRow.appendChild(E('span',{'id':'qac-nm-w','style':'display:none'},
-			E('input',{'id':'qac-name','type':'text','placeholder':_('section name'),'style':'width:120px;font-family:monospace'})));
-		qacRow.appendChild(E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qacAdd();}},_('Add')));
-		qa.appendChild(qacRow);
+		function head(p,a,b){
+			p.qaCells=[[_('section type'),E('select',{'class':'cbi-input-select','id':'qac-'+p.id.slice(9)+'-type'},
+				[E('option',{'value':a},'config '+a),E('option',{'value':b},'config '+b)])],
+				[_('section name'),E('input',{'type':'text','class':'cbi-input-text','id':'qac-'+p.id.slice(9)+'-name','placeholder':_('section name')})]];
+		}
+		function add(p){return E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qacAdd(p);}},_('Add'));}
+		var qa=E('div',{'class':'qa'});
 
 		// config defaults — add_defaults() in qosify.init
-		var qadDef=E('div',{'class':'qos-qa-row','id':'qac-opts-defaults'});
-		this.qaInput(qadDef,'defaults','list','/etc/qosify/*.conf',180);
-		this.qaNum(qadDef,'timeout','300',60);
-		this.qaSelect(qadDef,'dscp_default_tcp',dscpChoices,140);
-		this.qaSelect(qadDef,'dscp_default_udp',dscpChoices,140);
-		this.qaSelect(qadDef,'dscp_icmp',dscpChoices,140);
-		this.qaSelect(qadDef,'dscp_prio',dscpChoices,140);
-		this.qaSelect(qadDef,'dscp_bulk',dscpChoices,140);
-		this.qaNum(qadDef,'prio_max_avg_pkt_len','500',55);
-		this.qaNum(qadDef,'bulk_trigger_pps','100',55);
-		this.qaNum(qadDef,'bulk_trigger_timeout','5',45);
-		qa.appendChild(qadDef);
+		var qadDef=E('div',{'id':'qac-opts-defaults'});
+		this.qaInput(qadDef,'defaults','list','/etc/qosify/*.conf');
+		this.qaNum(qadDef,'timeout','300');
+		this.qaSelect(qadDef,'dscp_default_tcp',dscpChoices);
+		this.qaSelect(qadDef,'dscp_default_udp',dscpChoices);
+		this.qaSelect(qadDef,'dscp_icmp',dscpChoices);
+		this.qaSelect(qadDef,'dscp_prio',dscpChoices);
+		this.qaSelect(qadDef,'dscp_bulk',dscpChoices);
+		this.qaNum(qadDef,'prio_max_avg_pkt_len','500');
+		this.qaNum(qadDef,'bulk_trigger_pps','100');
+		this.qaNum(qadDef,'bulk_trigger_timeout','5');
 
 		// config class / config alias — add_class()
-		var qadCls=E('div',{'class':'qos-qa-row','id':'qac-opts-class','style':'display:none'});
-		this.qaSelect(qadCls,'value',DSCP,70);
-		this.qaSelect(qadCls,'ingress',DSCP,70);
-		this.qaSelect(qadCls,'egress',DSCP,70);
-		this.qaSelect(qadCls,'dscp_prio',dscpChoices,140);
-		this.qaSelect(qadCls,'dscp_bulk',dscpChoices,140);
-		this.qaNum(qadCls,'prio_max_avg_pkt_len','500',55);
-		this.qaNum(qadCls,'bulk_trigger_pps','100',55);
-		this.qaNum(qadCls,'bulk_trigger_timeout','5',45);
-		qa.appendChild(qadCls);
+		var qadCls=E('div',{'id':'qac-opts-class'});
+		head(qadCls,'class','alias');
+		this.qaSelect(qadCls,'value',DSCP);
+		this.qaSelect(qadCls,'ingress',DSCP);
+		this.qaSelect(qadCls,'egress',DSCP);
+		this.qaSelect(qadCls,'dscp_prio',dscpChoices);
+		this.qaSelect(qadCls,'dscp_bulk',dscpChoices);
+		this.qaNum(qadCls,'prio_max_avg_pkt_len','500');
+		this.qaNum(qadCls,'bulk_trigger_pps','100');
+		this.qaNum(qadCls,'bulk_trigger_timeout','5');
 
 		// config interface / config device — add_interface()
-		var qadIf=E('div',{'class':'qos-qa-row','id':'qac-opts-interface','style':'display:none'});
-		this.qaInput(qadIf,'name','option','wan',80);
-		this.qaSelect(qadIf,'disabled',['0','1'],45);
-		this.qaInput(qadIf,'bandwidth_up','option','100mbit',80);
-		this.qaInput(qadIf,'bandwidth_down','option','100mbit',80);
-		this.qaInput(qadIf,'bandwidth','option','100mbit',80);
-		this.qaSelect(qadIf,'mode',MODES,100);
-		this.qaSelect(qadIf,'ingress',['0','1'],45);
-		this.qaSelect(qadIf,'egress',['0','1'],45);
-		this.qaSelect(qadIf,'nat',['0','1'],45);
-		this.qaSelect(qadIf,'host_isolate',['0','1'],45);
-		this.qaSelect(qadIf,'autorate_ingress',['0','1'],45);
-		this.qaSelect(qadIf,'overhead_type',OVH,130);
-		this.qaNum(qadIf,'overhead','44',55);
-		this.qaSelect(qadIf,'overhead_encap',ENCAP,70);
-		this.qaNum(qadIf,'overhead_mpu','84',55);
-		this.qaSelect(qadIf,'overhead_vlan',['0','1','2'],45);
-		this.qaInput(qadIf,'ingress_options','option','triple-isolate',160);
-		this.qaInput(qadIf,'egress_options','option','triple-isolate wash',160);
-		this.qaInput(qadIf,'options','option','overhead 44 mpu 84',160);
-		qa.appendChild(qadIf);
+		var qadIf=E('div',{'id':'qac-opts-interface'});
+		head(qadIf,'interface','device');
+		this.qaInput(qadIf,'name','option','wan');
+		this.qaSelect(qadIf,'disabled',['0','1']);
+		this.qaInput(qadIf,'bandwidth_up','option','100mbit');
+		this.qaInput(qadIf,'bandwidth_down','option','100mbit');
+		this.qaSelect(qadIf,'mode',MODES);
+		this.qaSelect(qadIf,'ingress',['0','1']);
+		this.qaSelect(qadIf,'egress',['0','1']);
+		this.qaSelect(qadIf,'nat',['0','1']);
+		this.qaSelect(qadIf,'host_isolate',['0','1']);
+		this.qaSelect(qadIf,'autorate_ingress',['0','1']);
+		this.qaSelect(qadIf,'overhead_type',OVH);
+		this.qaNum(qadIf,'overhead','44');
+		this.qaSelect(qadIf,'overhead_encap',ENCAP);
+		this.qaNum(qadIf,'overhead_mpu','84');
+		this.qaSelect(qadIf,'overhead_vlan',['0','1','2']);
+		this.qaInput(qadIf,'ingress_options','option','triple-isolate');
+		this.qaInput(qadIf,'egress_options','option','triple-isolate wash');
+		this.qaInput(qadIf,'options','option','overhead 44 mpu 84');
 
-		// Reference panel — option lists read back out of the panels above, so the
-		// reference and the Quick Add dropdown can never disagree.
-		var ref=E('details',{});
-		ref.appendChild(E('summary',{},_('Config Reference')));
-		ref.appendChild(this.refTable({defaults:qadDef,'class':qadCls,'interface':qadIf}));
-		var defBox=E('p',{'id':'qos-cfg-def'});
-		dom.content(defBox,this.defsNodes());
-		ref.appendChild(defBox);
-		ref.appendChild(kvTable(classes.map(function(c){return self.clsBoxNode(c);}),'qos-cfg-cls'));
-		ref.appendChild(E('p',{},
-			_('DSCP codepoints: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF. Any dscp_* value may also name a class. Prefix with + to override only when the DSCP field is zero.')));
-		ref.appendChild(E('p',{},
-			_('Defaults qosify applies when a key is absent — interface: mode diffserv4, ingress 1, egress 1, nat 1, host_isolate 1, autorate_ingress 0. device: identical except nat 0. defaults: timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled).')));
-		fs1.appendChild(ref);
-		fs1.appendChild(qa);
-
-		// Editor
-		var ta=E('textarea',{'id':'qos-config-ta','rows':28},ctx.cfgRaw||'');
-		ta.dataset.orig=ctx.cfgRaw||'';
-		stampFile(ta,ctx.cfgStat);
-		fs1.appendChild(ta);
-		fs1.appendChild(E('div',{'class':'cbi-page-actions'},[
-			E('button',{'class':'cbi-button cbi-button-reset','click':function(){return self.clearCfg();}},_('Clear')),' ',
-			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveConfig();}},_('Save & Apply'))
-		]));
-
-		section.appendChild(fs1);
+		// Each stanza type folds on its own; the option reference is read back out
+		// of the form, so the two can never disagree.
+		[[qadDef,'defaults','config defaults',null,''],
+		 [qadCls,'class','config class / config alias',_('Section name is the class name that rules and dscp_* values refer to. qosify.init reads config alias the same way as config class.'),''],
+		 [qadIf,'interface','config interface / config device',_('config device takes the same options, with name set to a netdev. nat defaults to 1 for interfaces and 0 for devices.'),'if.']
+		].forEach(function(p){
+			var opts=p[0].qaCells.filter(function(c){return c[1].hasAttribute('data-opt');});
+			self.qaGrid(p[0],p[0].qaCells);
+			qa.appendChild(fold('qos-qa-'+p[1],_('Quick Add: %s').format(p[2]),[p[0],E('div',{'class':'qa-foot'},[
+				refBox(_('Options'),p[3],opts.map(function(c){return [c[0],OPT_DESC[p[4]+c[0]]||OPT_DESC[c[0]]||''];})),add(p[1])])],false));
+		});
+		qa.appendChild(fold('qos-qa-ref',_('Reference'),[
+			this.classRef('qos-cls-cfg'),
+			refBox(_('DSCP values'),_('DSCP codepoints: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF. A raw value from 0 to 63 is accepted too, and any dscp_* value may also name a class. Prefix with + to override only when the DSCP field is zero.'),[]),
+			refBox(_('Defaults'),_('Defaults qosify applies when a key is absent — interface: mode diffserv4, ingress 1, egress 1, nat 1, host_isolate 1, autorate_ingress 0. device: identical except nat 0. defaults: timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled).'),[])
+		],false));
+		section.appendChild(qa);
+		section.addEventListener('toggle',function(){self.fitEditor();},true);
+		section.appendChild(this.editorSect('qos-config-ta',UCI_PATH,ctx.cfgRaw,ctx.cfgStat,function(){return self.clearCfg();},function(){return self.saveConfig();}));
 		return section;
 	},
 
-	clsBoxNode:function(c){return kvRow(E('strong',{},clsLabel(c)),clsDesc(c));},
 
-	refTable:function(panels){
-		var note={
-			'class':_('Section name is the class name that rules and dscp_* values refer to. value sets ingress and egress together.'),
-			alias:_('Same options as class — gives an existing class a second name.'),
-			'interface':_('name is the netifd interface. bandwidth applies only where bandwidth_up/bandwidth_down are unset. overhead and overhead_encap apply only when overhead_type is manual.'),
-			device:_('Same options as interface, but name is a netdev. nat defaults to 0 here and to 1 for interfaces.')
-		};
-		return kvTable(SECT.map(function(o){
-			var div=panels[QAC_PANEL[o[0]]],els=div?div.querySelectorAll('[data-opt]'):[],out=[];
-			for(var i=0;i<els.length;i++)
-				out.push((els[i].getAttribute('data-pre')==='list'?'list ':'option ')+els[i].getAttribute('data-opt'));
-			return kvRow(E('code',{},o[1]),[E('code',{},out.join(', ')),note[o[0]]?desc(note[o[0]]):'']);
-		}));
-	},
 
 	qaId:function(parent,opt){return (parent.id||'qac')+'-'+opt;},
-	qaInput:function(parent,opt,pre,ph,w){
-		var id=this.qaId(parent,opt);
-		parent.appendChild(E('label',{'for':id},opt+':'));
-		parent.appendChild(E('input',{
-			'id':id,'data-opt':opt,'data-pre':pre,'type':'text',
-			'value':pre==='list'?ph:'','placeholder':pre==='list'?'':ph,
-			'style':'width:'+w+'px;font-family:monospace'
+	qaGrid:function(parent,cells){
+		var n=Math.ceil(cells.length/QA_COLS),cols=Math.ceil(cells.length/n),w='width:'+(100/cols).toFixed(2)+'%',i,c;
+		for(i=0;i<cells.length;i+=cols){
+			c=cells.slice(i,i+cols);
+			while(c.length<cols)c.push(['','']);
+			parent.appendChild(E('table',{'class':'table cbi-section-table'},[
+				E('tr',{'class':'tr cbi-section-table-titles'},c.map(function(x){return E('th',{'class':'th','style':w,'title':x[0]},x[0]);})),
+				E('tr',{'class':'tr cbi-section-table-row'},c.map(function(x){return E('td',{'class':'td','style':w,'data-title':x[0]},x[1]);}))
+			]));
+		}
+		return parent;
+	},
+	qaCell:function(parent,opt,el){(parent.qaCells=parent.qaCells||[]).push([opt,el]);},
+	qaInput:function(parent,opt,pre,ph){
+		this.qaCell(parent,opt,E('input',{
+			'id':this.qaId(parent,opt),'class':'cbi-input-text','data-opt':opt,'data-pre':pre,'type':'text',
+			'value':pre==='list'?ph:'','placeholder':pre==='list'?'':ph
 		}));
 	},
-	qaSelect:function(parent,opt,opts,w,required){
-		var id=this.qaId(parent,opt);
-		parent.appendChild(E('label',{'for':id},opt+':'));
-		var s=E('select',{'id':id,'data-opt':opt,'style':'width:'+w+'px'});
-		if(!required)s.appendChild(E('option',{'value':''},'--'));
+	qaSelect:function(parent,opt,opts){
+		var s=E('select',{'id':this.qaId(parent,opt),'class':'cbi-input-select','data-opt':opt},E('option',{'value':''},'--'));
 		opts.forEach(function(o){s.appendChild(E('option',{'value':o},o));});
-		parent.appendChild(s);
+		this.qaCell(parent,opt,s);
 	},
-	qaNum:function(parent,opt,ph,w){
-		var id=this.qaId(parent,opt);
-		parent.appendChild(E('label',{'for':id},opt+':'));
-		parent.appendChild(E('input',{'id':id,'data-opt':opt,'type':'number','min':'0','placeholder':ph,'style':'width:'+w+'px'}));
+	qaNum:function(parent,opt,ph){
+		this.qaCell(parent,opt,E('input',{'id':this.qaId(parent,opt),'class':'cbi-input-text','data-opt':opt,'type':'number','min':'0','placeholder':ph}));
 	},
 
 	lock:function(){this._n=(this._n||0)+1;},
 	unlock:function(){this._n=Math.max(0,(this._n||0)-1);},
 
-	defsNodes:function(){
-		var d=null;
-		uci.sections('qosify','defaults',function(s){if(!d)d=s;});
-		if(!d)return [E('em',{},_('No config defaults section defined'))];
-		var keys=['timeout','dscp_default_tcp','dscp_default_udp','dscp_icmp','dscp_prio','dscp_bulk','prio_max_avg_pkt_len','bulk_trigger_pps','bulk_trigger_timeout'];
-		var line=[E('strong',{},'config defaults')];
-		keys.forEach(function(k){
-			if(d[k])line.push(' ',E('code',{},k+': '+d[k]));
-		});
-		return line;
-	},
 
 	// qosify.init runs add_class() over both `class` and `alias`, so alias names
 	// are equally valid rule targets and dscp_* values. ingress/egress fall back
@@ -940,135 +946,172 @@ return view.extend({
 	},
 
 	refreshClasses:function(){
-		var classes=this.getClasses();
-		var db=$('qos-cfg-def');
-		if(db)dom.content(db,this.defsNodes());
-		var sel=$('qar-cls');
+		var classes=this.getClasses(),sel=$('qar-cls'),cur,self=this;
 		if(sel){
-			var cur=sel.value;
-			dom.content(sel,'');
-			classes.forEach(function(c){sel.appendChild(E('option',{'value':c.name},c.name));});
+			cur=sel.value;
+			dom.content(sel,classes.map(function(c){return E('option',{'value':c.name},clsOpt(c));}));
 			if(cur&&classes.some(function(c){return c.name===cur;}))sel.value=cur;
 		}
+		['qos-cls-cfg','qos-cls-ru'].forEach(function(id){
+			var b=$(id);
+			if(b)dom.content(b,self.classRows(classes));
+		});
 		var names=classes.map(function(c){return c.name;}).concat(DSCP);
 		['qac-opts-defaults','qac-opts-class'].forEach(function(id){
 			var p=$(id);if(!p)return;
 			var ss=p.querySelectorAll('select[data-opt^="dscp_"]');
 			for(var i=0;i<ss.length;i++){
 				var s=ss[i],cur=s.value;
-				dom.content(s,'');
-				s.appendChild(E('option',{'value':''},'--'));
-				names.forEach(function(o){s.appendChild(E('option',{'value':o},o));});
+				dom.content(s,[E('option',{'value':''},'--')].concat(names.map(function(o){return E('option',{'value':o},o);})));
 				s.value=cur;
 			}
 		});
-		var self=this,ref=$('qos-cls-ref');
-		if(ref)dom.content(ref,classes.length?classes.map(function(c){return self.clsBoxNode(c);}):noClassRow());
-		var cbox=$('qos-cfg-cls');
-		if(cbox)dom.content(cbox,classes.map(function(c){return self.clsBoxNode(c);}));
+	},
+
+	classRows:function(classes){
+		if(!classes.length)return emRow(_('No classes defined in %s').format(UCI_PATH));
+		return classes.map(function(c){
+			return kvRow(E('code',{},c.name),'ingress %s, egress %s'.format(c.ingress||'-',c.egress||'-')+(c.alias?' (alias)':''));
+		});
+	},
+
+	classRef:function(id){
+		return E('details',{},[E('summary',{},_('Classes')),E('table',{'class':'table'},E('tbody',{'id':id},this.classRows(this.getClasses())))]);
+	},
+
+	// Sizes the open editor so the page fits the window. At the window's height the
+	// page overflows by exactly what sits above and below the editor, so the space
+	// left is the window less that: 2 * innerHeight - scrollHeight.
+	// Measured on the next frame, never in the handler: ui.tabs.switchTab() walks the
+	// panes in document order and fires cbi-tab-active from inside that loop, so every
+	// pane after the new one is still data-tab-active when it runs. Coming back from
+	// Advanced, the last tab, scrollHeight counted that pane too and the editor lost
+	// its whole height -- in practice collapsing to the 160px floor. One frame later
+	// the switch has finished and only the open pane is laid out. Repeat calls
+	// coalesce, so a resize drag measures once per frame.
+	fitEditor:function(){
+		var self=this;
+		if(self._fitReq)cancelAnimationFrame(self._fitReq);
+		self._fitReq=requestAnimationFrame(function(){
+			self._fitReq=0;
+			var ta=$({cf:'qos-config-ta',ru:'qos-rules-ta'}[self.currentTab]),w=window.innerHeight;
+			if(!ta||!ta.offsetParent)return;
+			ta.style.height=w+'px';
+			ta.style.height=Math.max(160,2*w-document.documentElement.scrollHeight)+'px';
+		});
+	},
+
+	editorSect:function(id,path,text,st,clear,save){
+		var ta=E('textarea',{'id':id,'class':'cbi-input-textarea','style':'width:100%','rows':28,'spellcheck':'false','wrap':'off'},text||'');
+		ta.dataset.orig=text||'';
+		stampFile(ta,st);
+		return sect(path,[
+			ta,
+			E('div',{'class':'cbi-page-actions'},[
+				E('button',{'class':'cbi-button cbi-button-reset','click':clear},_('Clear')),' ',
+				E('button',{'class':'cbi-button cbi-button-apply','click':save},_('Save & Apply'))
+			])
+		]);
 	},
 
 	tabRules:function(ctx){
 		var self=this;
 		var section=E('div',{'id':'qos-ru'});
-		var fs1=sect(_('Classification Rules'),[sdesc([_('DSCP mapping rules loaded by qosify on startup.')+' ',E('code',{},RULES_PATH)])]);
-
-		// Available classes
-		var classes=this.getClasses();
-		var ref=E('details',{});
-		ref.appendChild(E('summary',{},_('Available Classes')));
-		ref.appendChild(kvTable(classes.length?classes.map(function(c){return self.clsBoxNode(c);}):[noClassRow()],'qos-cls-ref'));
-		ref.appendChild(E('p',{},
-			_('Prefix with + to override only when the DSCP field is zero. Ports: tcp:443, udp:3074, ranges: tcp:5060-5061 (1-65534). DNS: dns:*teams*, regex: dns:/zoom[0-9]+, CNAME-only: dns_c:. IP: 1.1.1.1, ff01::1')));
-		fs1.appendChild(ref);
-
-		// Quick Add Rule
-		var qa=E('div',{'class':'qos-qa'});
-		qa.appendChild(E('h4',{},_('Quick Add Rule')));
-		var qarRow=E('div',{'class':'qos-qa-row'});
-		var qarType=E('select',{'id':'qar-type','style':'width:140px','change':function(){self.qarPlaceholder();}});
-		[['tcp:',_('tcp port')],['udp:',_('udp port')],['both:',_('tcp+udp port')],['dns:',_('dns pattern')],['dnsr:',_('dns regex')],['dns_c:',_('dns_c pattern')],['dns_cr:',_('dns_c regex')],['ipv4:',_('IPv4 address')],['ipv6:',_('IPv6 address')]].forEach(function(o){
+		var qarType=E('select',{'class':'cbi-input-select','id':'qar-type','change':function(){self.qarPlaceholder();}});
+		[['tcp:','tcp:<port>[-<endport>]'],['udp:','udp:<port>[-<endport>]'],['both:','tcp: + udp:'],['dns:','dns:<pattern>'],['dnsr:','dns:/<regex>'],['dns_c:','dns_c:<pattern>'],['dns_cr:','dns_c:/<regex>'],['ipv4:','<ipaddr>'],['ipv6:','<ipv6addr>']].forEach(function(o){
 			qarType.appendChild(E('option',{'value':o[0]},o[1]));
 		});
-		qarRow.appendChild(qarType);
-		qarRow.appendChild(E('input',{'id':'qar-val','type':'text','placeholder':_('e.g. %s').format('4500'),'style':'width:180px;font-family:monospace'}));
-		var qarCls=E('select',{'id':'qar-cls','style':'width:140px'});
-		classes.forEach(function(c){qarCls.appendChild(E('option',{'value':c.name},c.name));});
-		qarRow.appendChild(qarCls);
-		qarRow.appendChild(E('label',{'for':'qar-prio'},
-			[E('input',{'type':'checkbox','id':'qar-prio'}),' '+_('only if unset (+)')]));
-		qarRow.appendChild(E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qarAdd();}},_('Add')));
-		qa.appendChild(qarRow);
-		fs1.appendChild(qa);
-
-		// Editor
-		var ta=E('textarea',{'id':'qos-rules-ta','rows':28},ctx.rulesText||'');
-		ta.dataset.orig=ctx.rulesText||'';
-		stampFile(ta,ctx.rulesStat);
-		fs1.appendChild(ta);
-		fs1.appendChild(E('div',{'class':'cbi-page-actions'},[
-			E('button',{'class':'cbi-button cbi-button-reset','click':function(){return self.clearRules();}},_('Clear')),' ',
-			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveRules();}},_('Save & Apply'))
-		]));
-
-		section.appendChild(fs1);
+		var qarCls=E('select',{'class':'cbi-input-select','id':'qar-cls'},this.getClasses().map(function(c){return E('option',{'value':c.name},clsOpt(c));}));
+		var qr=[['match',5,qarType],['',8,E('input',{'type':'text','class':'cbi-input-text','id':'qar-val','placeholder':_('e.g. %s').format('4500')})],
+			['dscp',6,qarCls],['+',1,E('input',{'type':'checkbox','class':'cbi-input-checkbox','id':'qar-prio'})],
+			['',2,E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qarAdd();}},_('Add'))]];
+		section.appendChild(E('div',{'class':'qa'},fold('qos-qa-rule',_('Quick Add'),[
+			colTable(qr,[E('tr',{'class':'tr cbi-section-table-titles'},qr.map(function(c){return E('th',{'class':'th','title':c[0]},c[0]);})),
+				E('tr',{'class':'tr cbi-section-table-row'},qr.map(function(c){return E('td',{'class':'td','data-title':c[0]},c[2]);}))]),
+			E('div',{'class':'qa-foot'},[refBox(_('Mapping file syntax'),_('Each line has two whitespace separated fields, match and dscp. dscp can be a raw value, a codepoint like CS0, or a class name. DNS entries are compared in the order in which they are specified, using the first matching entry.'),[
+				['tcp:<port>[-<endport>]',_('TCP single port, or range from <port> to <endport>')],
+				['udp:<port>[-<endport>]',_('UDP single port, or range from <port> to <endport>')],
+				['<ipaddr>',_('IPv4 address, e.g. 1.1.1.1')],
+				['<ipv6addr>',_('IPv6 address, e.g. ff01::1')],
+				['dns:<pattern>',_('fnmatch() pattern supporting * and ? as wildcard characters')],
+				['dns:/<regex>',_('POSIX.2 extended regular expression for matching hostnames. Only works if dns lookups are passed to qosify via the add_dns_host ubus call.')],
+				['dns_c:...',_('Like dns:... but only matches cname entries')],
+				['+<dscp>',_('Only override the DSCP value if it is zero')]
+			]),
+			this.classRef('qos-cls-ru')])
+		],false)));
+		section.addEventListener('toggle',function(){self.fitEditor();},true);
+		section.appendChild(this.editorSect('qos-rules-ta',RULES_PATH,ctx.rulesText,ctx.rulesStat,function(){return self.clearRules();},function(){return self.saveRules();}));
 		return section;
 	},
 
 	tabAdvanced:function(ctx){
 		var self=this;
-		var section=E('div',{'id':'qos-ad'});
-
-		// Backup
-		var fb=sect(_('Backup Current Files'),[sdesc(_('Download current config files before making changes.'))]);
-		fb.appendChild(this.dlRow('/etc/config/qosify','qosify'));
-		fb.appendChild(this.dlRow('/etc/qosify/00-defaults.conf','00-defaults.conf'));
-		section.appendChild(fb);
-
-		// Upload
-		var fu=sect(_('Upload Config Files'),[sdesc(_('Select files and click Save & Apply to overwrite and restart qosify.'))]);
-		var u1=E('input',{'type':'file','id':'qos-up-cfg'});
-		var u2=E('input',{'type':'file','id':'qos-up-rules'});
-		fu.appendChild(valRow('/etc/config/qosify',u1));
-		fu.appendChild(valRow('/etc/qosify/00-defaults.conf',u2));
-		fu.appendChild(E('div',{'class':'cbi-page-actions'},
-			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.uploadFiles();}},_('Save & Apply'))
-		));
-		section.appendChild(fu);
-
-		section.appendChild(sect(_('Check Devices'),[
-			sdesc(_('Re-runs the daemon\'s own device pass: a section whose device now exists is started and one whose device has gone is stopped. The call reports nothing back; the result shows in the Overview tab.')),
-			E('div',{'class':'cbi-page-actions'},
-				E('button',{'class':'cbi-button cbi-button-action','click':function(){return self.checkDevices();}},_('Check Devices')))
-		]));
-
-		// Reset
-		section.appendChild(sect(_('Reset to qosify Defaults'),[
-			sdesc(_('Replaces both config files with qosify defaults, qosify will be disabled.')),
-			E('div',{'class':'cbi-page-actions'},
-				E('button',{'class':'cbi-button cbi-button-negative','click':function(){return self.resetDefaults();}},_('Reset to Defaults')))
-		]));
-		return section;
+		function bkRow(i,path,fn,st){
+			return [E('code',{},path),E('span',{'id':'qos-bk-sz-'+i},st?fmtSize(st.size):'-'),
+				E('span',{'id':'qos-bk-mt-'+i},st?fmtMtime(st.mtime):'-'),self.dlBtn(path,fn)];
+		}
+		function reRow(path,id){
+			// The native picker ignores the theme, so it stays hidden behind a LuCI button.
+			var nm=E('span',{'class':'qos-up-name'},_('No file selected')),
+				fi=E('input',{'type':'file','id':id,'style':'display:none','change':function(){nm.textContent=fi.files[0]?fi.files[0].name:_('No file selected');}});
+			return [E('code',{},path),E('span',{},[fi,E('button',{'class':'cbi-button','click':function(){fi.click();}},_('Choose file…')),' ',nm])];
+		}
+		return E('div',{'id':'qos-ad'},[
+			sect(_('Backup'),[
+				sdesc(_('Download the current files from the router.')),
+				gridTable([_('File'),_('Size'),_('Modified'),_('Download')],[
+					bkRow(0,UCI_PATH,'qosify',ctx.cfgStat),
+					bkRow(1,RULES_PATH,'00-defaults.conf',ctx.rulesStat)
+				])
+			]),
+			sect(_('Restore'),[
+				sdesc(_('The selected files replace the ones on the router and qosify is reloaded.')),
+				gridTable([_('File'),_('Upload')],[
+					reRow(UCI_PATH,'qos-up-cfg'),
+					reRow(RULES_PATH,'qos-up-rules')
+				]),
+				E('div',{'class':'cbi-page-actions'},
+					E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.uploadFiles();}},_('Upload & Apply')))
+			]),
+			sect(_('Maintenance'),[
+				E('div',{'class':'cbi-section-node'},valRow(_('Re-check devices'),[
+					E('button',{'class':'cbi-button cbi-button-action','id':'qos-btn-chkdev','click':function(){return self.checkDevices();}},_('Check Devices')),
+					desc(_('Re-runs the daemon\'s own device pass: every shaped section is looked up again, one whose device now exists is started and one whose device has gone is stopped. Nothing is reported back by the call — the result shows in the Service table on the Overview tab.'))]))
+			]),
+			sect(_('Defaults'),[
+				E('div',{'class':'cbi-section-node'},valRow(_('Restore qosify defaults'),
+					E('button',{'class':'cbi-button cbi-button-negative','click':function(){return self.resetDefaults();}},_('Reset'))))
+			])
+		]);
 	},
 
-	dlRow:function(path,fn){
-		return valRow(path,
-				E('button',{'class':'cbi-button cbi-button-action','data-ro-ok':'1','click':function(){
-					return fs.read(path).then(function(content){
-						var b=new Blob([content||''],{type:'application/octet-stream'});
-						var url=URL.createObjectURL(b);
-						var a=E('a',{'href':url,'download':fn,'style':'display:none'});
-						document.body.appendChild(a);
-						a.click();
-						setTimeout(function(){
-							URL.revokeObjectURL(url);
-							if(a.parentNode)a.parentNode.removeChild(a);
-						},2000);
-					}).catch(function(e){
-						notify(_('Could not read %s: %s').format(path,e),'danger');
-					});
-				}},_('Download')));
+	updateFiles:function(ctx){
+		[ctx.cfgStat,ctx.rulesStat].forEach(function(st,i){
+			var z=$('qos-bk-sz-'+i),m=$('qos-bk-mt-'+i);
+			if(z)z.textContent=st?fmtSize(st.size):'-';
+			if(m)m.textContent=st?fmtMtime(st.mtime):'-';
+		});
 	},
+
+	dlBtn:function(path,fn){
+		return E('button',{'class':'cbi-button cbi-button-action','data-ro-ok':'1','click':function(){
+			return fs.read(path).then(function(content){
+				var b=new Blob([content||''],{type:'application/octet-stream'});
+				var url=URL.createObjectURL(b);
+				var a=E('a',{'href':url,'download':fn,'style':'display:none'});
+				document.body.appendChild(a);
+				a.click();
+				setTimeout(function(){
+					URL.revokeObjectURL(url);
+					if(a.parentNode)a.parentNode.removeChild(a);
+				},2000);
+			}).catch(function(e){
+				notify(_('Could not read %s: %s').format(path,e),'danger');
+			});
+		}},_('Download'));
+	},
+
 
 	tabStatus:function(ctx){
 		var section=E('div',{'id':'qos-st'});
@@ -1883,8 +1926,7 @@ return view.extend({
 				if(errs.length)msg+=' '+_('Errors:')+' '+errs.join('; ');
 				notify(msg,errs.length?'warning':'info');
 				warns.forEach(function(t){notify(t,'warning');});
-				if(u1)u1.value='';
-				if(u2)u2.value='';
+				[u1,u2].forEach(function(u){if(u){u.value='';u.dispatchEvent(new Event('change'));}});
 				return self.refreshAll();
 			});
 		}).catch(function(e){
@@ -1987,28 +2029,20 @@ return view.extend({
 		ta.scrollTop=ta.scrollHeight;
 	},
 
-	qacSwitch:function(){
-		var ty=$('qac-type').value,p=QAC_PANEL[ty];
-		['defaults','class','interface'].forEach(function(x){
-			var el=$('qac-opts-'+x);
-			if(el)el.style.display=(x===p)?'flex':'none';
-		});
-		$('qac-nm-w').style.display=(ty==='defaults')?'none':'';
-	},
 
-	qacAdd:function(){
-		var ty=$('qac-type').value;
+	qacAdd:function(p){
+		var tsel=$('qac-'+p+'-type'),nmEl=$('qac-'+p+'-name'),ty=tsel?tsel.value:p;
 		var ta=$('qos-config-ta');if(!ta)return;
 		var nm='',secs=cfgSections(ta.value);
 		if(ty!=='defaults'){
-			nm=trim($('qac-name').value);
+			nm=trim(nmEl.value);
 			if(!nm){notify(_('Enter a section name.'),'danger');return;}
 			if(!/^[a-zA-Z0-9_]+$/.test(nm)){notify(_('A section name may only contain letters, digits and underscores.'),'danger');return;}
 		}
 		if(ty==='defaults'&&secs.some(function(x){return x.type==='defaults';})){notify(_('A config defaults section already exists.'),'danger');return;}
 		if(nm&&secs.some(function(x){return x.type===ty&&x.name===nm;})){notify(_('Section %s already exists.').format(nm),'danger');return;}
 		var s='config '+ty+(nm?" '"+nm+"'":'');
-		var div=$('qac-opts-'+QAC_PANEL[ty]);
+		var div=$('qac-opts-'+p);
 		var els=div.querySelectorAll('[data-opt]');
 		for(var i=0;i<els.length;i++){
 			var v=els[i].value;if(!v)continue;
@@ -2019,7 +2053,7 @@ return view.extend({
 		}
 		var cv=ta.value.replace(/\s+$/,'');
 		ta.value=cv+(cv?'\n\n':'')+s+'\n';
-		if(nm)$('qac-name').value='';
+		if(nm)nmEl.value='';
 		for(i=0;i<els.length;i++){
 			if(els[i].tagName==='SELECT')els[i].selectedIndex=0;
 			else els[i].value=els[i].defaultValue||'';
@@ -2110,6 +2144,7 @@ return view.extend({
 				var sn=ifSect(),w=(sn&&uci.get('qosify',sn.id))||{};
 				self.updateEnBadge(bd,ctx,w['.name']!=null&&!uciBool(w.disabled,false));
 			}
+			self.updateFiles(ctx);
 			return ctx;
 		}).finally(function(){self.unlock();});
 	},
