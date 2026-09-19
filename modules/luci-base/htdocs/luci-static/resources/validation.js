@@ -770,6 +770,35 @@ const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFa
 				multicast ? _('valid multicast MAC address') : _('valid MAC address'));
 		},
 
+		macrange(multicast) {
+			const m = this.value.match(/^((?:[a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2})-((?:[a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2})$/);
+			let valid, mac1, mac2;
+
+			let tonumber = (mac) => {
+				const n = mac.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
+				return BigInt('0x' + n);
+			};
+
+			if (m == null)
+				return this.assert(false, multicast ? _('valid multicast MAC address range') : _('valid MAC address range'));
+
+			if (m[1]) {
+				mac1 = tonumber(m[1]);
+				valid = this.apply('macaddr', m[1], [multicast]);
+				if (!valid)
+					return this.assert(false, multicast ? _('valid multicast MAC address') : _('valid MAC address'));
+			}
+
+			if (m[2]) {
+				mac2 = tonumber(m[2]);
+				valid = this.apply('macaddr', m[2], [multicast]);
+				if (!valid)
+					return this.assert(false, multicast ? _('valid multicast MAC address') : _('valid MAC address'));
+			}
+
+			return this.assert(mac1 < mac2, multicast ? _('valid multicast MAC address range') : _('valid MAC address range'));
+		},
+
 		/**
 		 * Assert a valid hostname or IP address.
 		 * @function LuCI.validation.ValidatorFactory.types#host
@@ -1003,7 +1032,7 @@ const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFa
 			if (v == '.' || v == '..')
 				return this.assert(false, _('valid network device name, not "." or ".."'));
 
-			return this.assert(v.match(/^[^:\/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
+			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
 		},
 
 		/**
