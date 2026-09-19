@@ -294,8 +294,27 @@ function notify(msg,kind){
 // Remember the size/mtime an editor was loaded from, so a save can tell the
 // difference between "the user changed this" and "something else changed the
 // file underneath us".
+// Stock LuCI markup: themes style .cbi-section, .table, .label and
+// .cbi-value already, so qosify.css only draws the section boxes.
+function badge(kind,t){return E('span',{'class':kind?'label '+kind:'label'},t);}
+function desc(t){return E('div',{'class':'cbi-value-description'},t);}
+function sdesc(t){return E('div',{'class':'cbi-section-descr'},t);}
+function kvRow(k,v,id){return E('tr',{'class':'tr'},[E('td',{'class':'td left','width':'33%'},k),E('td',{'class':'td left','id':id||null},v)]);}
+function kvTable(rows,id){return E('table',{'class':'table','id':id||null},rows);}
+function emRow(t){return E('tr',{'class':'tr placeholder'},E('td',{'class':'td'},E('em',{},t)));}
+function emP(t){return E('p',{},E('em',{},t));}
+function sect(title,kids,attrs){
+	var a=attrs||{};
+	a['class']='cbi-section';
+	return E('div',a,[E('h3',{},title)].concat(kids||[]));
+}
+function valRow(lbl,el){
+	var n=Array.isArray(el)?el[0]:el;
+	return E('div',{'class':'cbi-value'},[E('label',{'class':'cbi-value-title','for':(n&&n.id)||null},lbl),E('div',{'class':'cbi-value-field'},el)]);
+}
+
 function noClassRow(){
-	return E('tr',{},E('td',{'colspan':2,'class':'qos-muted'},E('em',{},_('No classes defined in %s').format(UCI_PATH))));
+	return emRow(_('No classes defined in %s').format(UCI_PATH));
 }
 
 function stampFile(el,st){
@@ -397,19 +416,19 @@ return view.extend({
 
 	tabOverview:function(ctx){
 		var section=E('div',{'id':'qos-ov'});
-		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-svc-sect'},this.buildSvcSect(ctx)));
-		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-qs-sect'},this.buildQsSect(ctx)));
-		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-cfg-sect'},this.buildCfgSect(ctx)));
-		section.appendChild(E('fieldset',{'class':'cbi-section','id':'qos-ctl-sect'},this.buildCtlSect(ctx)));
+		section.appendChild(E('div',{'class':'cbi-section','id':'qos-svc-sect'},this.buildSvcSect(ctx)));
+		section.appendChild(E('div',{'class':'cbi-section','id':'qos-qs-sect'},this.buildQsSect(ctx)));
+		section.appendChild(E('div',{'class':'cbi-section','id':'qos-cfg-sect'},this.buildCfgSect(ctx)));
+		section.appendChild(E('div',{'class':'cbi-section','id':'qos-ctl-sect'},this.buildCtlSect(ctx)));
 		return section;
 	},
 
 	buildSvcSect:function(ctx){
-		return [E('legend',{},_('Service Status')),this.renderSvcTable(ctx)];
+		return [E('h3',{},_('Service Status')),this.renderSvcTable(ctx)];
 	},
 
 	buildCfgSect:function(ctx){
-		return [E('legend',{},_('Configuration Files')),this.renderCfgFiles(ctx)];
+		return [E('h3',{},_('Configuration Files')),this.renderCfgFiles(ctx)];
 	},
 
 	buildQsSect:function(ctx){
@@ -419,17 +438,12 @@ return view.extend({
 		var enChecked=(w['.name']!=null&&!uciBool(w.disabled,false));
 
 		var nodes=[];
-		nodes.push(E('legend',{},_('Quick Settings')));
-		nodes.push(E('div',{'class':'cbi-section-descr'},
+		nodes.push(E('h3',{},_('Quick Settings')));
+		nodes.push(sdesc(
 			_('Common shaping settings — written straight to %s, section %s.').format(UCI_PATH,sn?'config '+sn.type+(sn.name?" '"+sn.name+"'":' '+_('(unnamed section)')):"config interface 'wan' (will be created)")));
-		var tbl=E('table',{'class':'qos-kv','width':'100%'});
-		var bdy=E('tbody');tbl.appendChild(bdy);
+		var tbl=E('div',{'class':'cbi-section-node'});
 
-		function row(lbl,el){
-			var n=(el&&el.nodeType)?el:(Array.isArray(el)?el[0]:null);
-			var id=(n&&n.id)||null;
-			bdy.appendChild(E('tr',{},[E('td',{},id?E('label',{'for':id},lbl):lbl),E('td',{},el)]));
-		}
+		function row(lbl,el){tbl.appendChild(valRow(lbl,el));}
 		function chk(name,val){return E('input',{'type':'checkbox','id':'q-'+name,'data-q':name,'checked':val?'checked':null});}
 		function txt(name,val,ph,style){return E('input',{'type':'text','id':'q-'+name,'data-q':name,'value':val||'','placeholder':ph||'','style':style||'width:140px;font-family:monospace'});}
 		function sel(name,val,opts,style,def,hint){
@@ -443,9 +457,10 @@ return view.extend({
 		}
 
 		var enCb=chk('enabled',enChecked);
-		var enBadge=E('span',{'class':'qos-badge qos-amber','style':'margin-left:8px','id':'q-en-badge'},'');
+		var enBadge=badge('warning','');
+		enBadge.id='q-en-badge';
 		this.updateEnBadge(enBadge,ctx,enChecked);
-		row(_('QoS Enabled'),[enCb,enBadge]);
+		row(_('QoS Enabled'),[enCb,' ',enBadge]);
 		// qosify.init passes `option name` to add_interface(); without it the daemon
 		// gets an empty device and the section is never applied, so offer it here
 		// whenever it is missing -- anonymous sections have no other way to set it.
@@ -457,12 +472,12 @@ return view.extend({
 		var isDev=!!(sn&&sn.type==='device');
 		if(!w.name)row(isDev?_('Netdev Name'):_('Interface Name'),
 			[txt('name',sn?(isDev?'':sn.name):'wan',_('e.g. %s').format(isDev?'eth0':'wan'),'width:140px'),
-			E('span',{'style':'opacity:.6;font-size:11px;margin-left:8px'},_('required — qosify skips sections with no name'))]);
+			desc(_('required — qosify skips sections with no name'))]);
 		row(_('Bandwidth Up'),txt('bw_up',w.bandwidth_up,_('e.g. %s').format('100mbit')));
 		row(_('Bandwidth Down'),txt('bw_down',w.bandwidth_down,_('e.g. %s').format('100mbit')));
 		row(_('Overhead Type'),sel('overhead',w.overhead_type,OVH,'width:180px','none'));
 		row(_('Overhead Bytes'),[txt('overhead_b',w.overhead,_('manual only'),'width:100px'),
-			E('span',{'style':'opacity:.6;font-size:11px;margin-left:8px'},_('used only when Overhead Type is manual'))]);
+			desc(_('used only when Overhead Type is manual'))]);
 		row(_('Queue Mode'),sel('mode',w.mode,MODES,'width:170px',null,'diffserv4'));
 		row(_('Ingress'),chk('ingress',numBool(w.ingress,true)));
 		row(_('Egress'),chk('egress',numBool(w.egress,true)));
@@ -470,8 +485,7 @@ return view.extend({
 		// flow isolation and nat has no effect at all.
 		var natCb=chk('nat',numBool(w.nat,!isDev));
 		var hiCb=chk('host_isolate',numBool(w.host_isolate,true));
-		var natNote=E('span',{'style':'opacity:.65;font-size:11px;margin-left:8px'},
-			_('qosify only passes this to CAKE together with Host Isolate — add nat to Options to force it'));
+		var natNote=desc(_('qosify only passes this to CAKE together with Host Isolate — add nat to Options to force it'));
 		function syncNat(){
 			natNote.style.display=hiCb.checked?'none':'';
 		}
@@ -491,8 +505,8 @@ return view.extend({
 
 	buildCtlSect:function(ctx){
 		var self=this;
-		var nodes=[E('legend',{},_('Service Controls'))];
-		var svcCt=E('div',{'class':'qos-svc','id':'qos-svc-btns'});
+		var nodes=[E('h3',{},_('Service Controls'))];
+		var svcCt=E('div',{'class':'cbi-section-node','id':'qos-svc-btns'});
 		svcCt.appendChild(E('button',{
 			'id':'qos-btn-auto',
 			'click':function(){return self.svcAction(self._auto?'disable':'enable');}
@@ -500,6 +514,7 @@ return view.extend({
 		this.autoButton(ctx,svcCt.firstChild);
 		var btnCls={start:'cbi-button-apply',stop:'cbi-button-negative',restart:'cbi-button-action',reload:'cbi-button-reload'};
 		['start','stop','restart','reload'].forEach(function(a){
+			svcCt.appendChild(document.createTextNode(' '));
 			svcCt.appendChild(E('button',{
 				'class':'cbi-button '+btnCls[a],
 				'click':function(){return self.svcAction(a);}
@@ -508,6 +523,7 @@ return view.extend({
 		// Reload is the init script's reload_service(), a full ubus config push.
 		// Reload Rules re-reads the mapping files alone and leaves the qdiscs and
 		// interface config untouched -- what a rules edit actually needs.
+		svcCt.appendChild(document.createTextNode(' '));
 		svcCt.appendChild(E('button',{
 			'class':'cbi-button cbi-button-reload',
 			'title':_('Re-read the mapping files only'),
@@ -569,47 +585,42 @@ return view.extend({
 	},
 
 	updateEnBadge:function(el,ctx,enChecked){
-		dom.content(el,'');
-		if(ctx.active==null){el.className='qos-badge qos-amber';dom.append(el,_('Status Unknown'));}
-		else if(ctx.active){el.className='qos-badge qos-green';dom.append(el,_('Active'));}
-		else if(ctx.running&&enChecked){el.className='qos-badge qos-amber';dom.append(el,_('Enabled — Not Shaping (check config)'));}
-		else if(enChecked){el.className='qos-badge qos-amber';dom.append(el,_('Enabled — Not Running'));}
-		else{el.className='qos-badge qos-red';dom.append(el,_('Disabled'));}
+		if(ctx.active==null){el.className='label warning';dom.content(el,_('Status Unknown'));}
+		else if(ctx.active){el.className='label success';dom.content(el,_('Active'));}
+		else if(ctx.running&&enChecked){el.className='label warning';dom.content(el,_('Enabled — Not Shaping (check config)'));}
+		else if(enChecked){el.className='label warning';dom.content(el,_('Enabled — Not Running'));}
+		else{el.className='label danger';dom.content(el,_('Disabled'));}
 	},
 
 	svcNodes:function(ctx){
-		function ok(t){return E('span',{'class':'qos-ok'},'\u2714 '+t);}
-		function err(t){return E('span',{'class':'qos-err'},'\u2718 '+t);}
-		function bdg(cls,t){return E('span',{'class':'qos-badge '+cls},t);}
 		// Unknown is not Missing: a call rpcd did not answer says nothing about qosify.
-		function tri(v,f){return v==null?bdg('qos-amber',_('Unknown')):f(v);}
+		function tri(v,f){return v==null?badge('warning',_('Unknown')):f(v);}
 		var run;
-		if(ctx.running==null)run=bdg('qos-amber',_('Unknown'));
-		else if(ctx.running&&ctx.active==null)run=bdg('qos-amber',_('Running — Shaping Unknown'));
-		else if(ctx.running&&ctx.active)run=bdg('qos-green',_('Running & Shaping'));
-		else if(ctx.running)run=bdg('qos-amber',_('Running — Not Shaping'));
-		else run=bdg('qos-red',_('Not Running'));
+		if(ctx.running==null)run=badge('warning',_('Unknown'));
+		else if(ctx.running&&ctx.active==null)run=badge('warning',_('Running — Shaping Unknown'));
+		else if(ctx.running&&ctx.active)run=badge('success',_('Running & Shaping'));
+		else if(ctx.running)run=badge('warning',_('Running — Not Shaping'));
+		else run=badge('danger',_('Not Running'));
 		// One line for the condition behind every Unknown in the table, rather than
 		// the same note repeated on each row it reaches.
-		if(ctx.rpcOk===false)run=E('span',{},[run,E('span',{'class':'qos-muted','style':'margin-left:8px'},
-			_('rpcd is not answering for qosify — check the ACL in /usr/share/rpcd/acl.d and restart rpcd'))]);
+		if(ctx.rpcOk===false)run=[run,' ',
+			_('rpcd is not answering for qosify — check the ACL in /usr/share/rpcd/acl.d and restart rpcd')];
 		return {
-			init:tri(ctx.hasInit,function(v){return v?ok(_('Available')):err(_('Missing'));}),
-			auto:tri(ctx.enabled,function(v){return bdg(v?'qos-green':'qos-red',v?_('Enabled'):_('Disabled'));}),
+			init:tri(ctx.hasInit,function(v){return badge(v?'success':'danger',v?_('Available'):_('Missing'));}),
+			auto:tri(ctx.enabled,function(v){return badge(v?'success':'danger',v?_('Enabled'):_('Disabled'));}),
 			run:run,
-			shaped:tri(ctx.shaped,function(v){return v?E('span',{},N_(v,'%d interface','%d interfaces').format(v)):E('span',{'class':'qos-muted'},_('none'));})
+			shaped:tri(ctx.shaped,function(v){return v?N_(v,'%d interface','%d interfaces').format(v):E('em',{},_('none'));})
 		};
 	},
 
 	renderSvcTable:function(ctx){
 		var n=this.svcNodes(ctx);
-		var tbl=E('table',{'class':'qos-kv','width':'100%','id':'qos-svc-tbl'});
-		var b=E('tbody');tbl.appendChild(b);
-		b.appendChild(E('tr',{},[E('td',{},_('Init Script')),E('td',{'id':'qos-svc-init'},n.init)]));
-		b.appendChild(E('tr',{},[E('td',{},_('Autostart')),E('td',{'id':'qos-svc-auto'},n.auto)]));
-		b.appendChild(E('tr',{},[E('td',{},_('Running')),E('td',{'id':'qos-svc-run'},n.run)]));
-		b.appendChild(E('tr',{},[E('td',{},_('Shaping')),E('td',{'id':'qos-svc-shaped'},n.shaped)]));
-		return tbl;
+		return kvTable([
+			kvRow(_('Init Script'),n.init,'qos-svc-init'),
+			kvRow(_('Autostart'),n.auto,'qos-svc-auto'),
+			kvRow(_('Running'),n.run,'qos-svc-run'),
+			kvRow(_('Shaping'),n.shaped,'qos-svc-shaped')
+		],'qos-svc-tbl');
 	},
 
 	updateSvcTable:function(ctx){
@@ -639,34 +650,26 @@ return view.extend({
 		var rulesN=(ctx.rulesN!=null)?ctx.rulesN:countRules(ctx.rulesText);
 		var cfgOk=(ctx.cfgOk!=null)?ctx.cfgOk:((ctx.cfgRaw||'').length>10&&/(^|\n)config /.test(ctx.cfgRaw||''));
 		var rulesOk=rulesN>0;
-		var tbl=E('table',{'class':'qos-kv','width':'100%'});
-		var b=E('tbody');tbl.appendChild(b);
 		function fileRow(path,exists,ok,sz,mod,extra){
-			var st;
-			if(ok)st=E('span',{'class':'qos-ok'},'\u2714 '+_('Valid'));
-			else if(exists)st=E('span',{'class':'qos-warn'},'\u26a0 '+_('Found (empty or invalid)'));
-			else st=E('span',{'class':'qos-err'},'\u2718 '+_('Missing'));
-			var meta=exists?E('span',{'style':'opacity:.7;margin-left:8px;font-size:12px'},'('+(extra||'')+fmtSize(sz)+', '+mod+')'):'';
-			b.appendChild(E('tr',{},[E('td',{},path),E('td',{},[st,meta])]));
+			var st=ok?badge('success',_('Valid')):exists?badge('warning',_('Found (empty or invalid)')):badge('danger',_('Missing'));
+			return kvRow(path,exists?[st,' ','('+(extra||'')+fmtSize(sz)+', '+mod+')']:st);
 		}
-		fileRow(UCI_PATH,!!ctx.cfgStat,cfgOk,ctx.cfgStat?ctx.cfgStat.size:0,ctx.cfgStat?fmtMtime(ctx.cfgStat.mtime):'');
-		fileRow(RULES_PATH,!!ctx.rulesStat,rulesOk,ctx.rulesStat?ctx.rulesStat.size:0,ctx.rulesStat?fmtMtime(ctx.rulesStat.mtime):'',N_(rulesN,'%d rule','%d rules').format(rulesN)+', ');
-		return tbl;
+		return kvTable([
+			fileRow(UCI_PATH,!!ctx.cfgStat,cfgOk,ctx.cfgStat?ctx.cfgStat.size:0,ctx.cfgStat?fmtMtime(ctx.cfgStat.mtime):''),
+			fileRow(RULES_PATH,!!ctx.rulesStat,rulesOk,ctx.rulesStat?ctx.rulesStat.size:0,ctx.rulesStat?fmtMtime(ctx.rulesStat.mtime):'',N_(rulesN,'%d rule','%d rules').format(rulesN)+', ')
+		]);
 	},
 
 	tabConfig:function(ctx){
 		var self=this;
 		var section=E('div',{'id':'qos-cf'});
-		var fs1=E('fieldset',{'class':'cbi-section'},[
-			E('legend',{},_('Config')),
-			E('div',{'class':'cbi-section-descr'},[_('UCI configuration — classes, interfaces, defaults.')+' ',E('code',{},UCI_PATH)])
-		]);
+		var fs1=sect(_('Config'),[sdesc([_('UCI configuration — classes, interfaces, defaults.')+' ',E('code',{},UCI_PATH)])]);
 
 		// Quick Add Config — built first so the reference table can be derived from it
 		var classes=this.getClasses();
 		var dscpChoices=classes.map(function(c){return c.name;}).concat(DSCP);
 		var qa=E('div',{'class':'qos-qa'});
-		qa.appendChild(E('strong',{},_('Quick Add Config')));
+		qa.appendChild(E('h4',{},_('Quick Add Config')));
 		var qacRow=E('div',{'class':'qos-qa-row'});
 		var qacType=E('select',{'id':'qac-type','style':'width:130px','change':function(){self.qacSwitch();}});
 		SECT.forEach(function(o){qacType.appendChild(E('option',{'value':o[0]},o[1]));});
@@ -727,36 +730,27 @@ return view.extend({
 
 		// Reference panel — option lists read back out of the panels above, so the
 		// reference and the Quick Add dropdown can never disagree.
-		var ref=E('details',{'class':'qos-ref'});
+		var ref=E('details',{});
 		ref.appendChild(E('summary',{},_('Config Reference')));
 		ref.appendChild(this.refTable({defaults:qadDef,'class':qadCls,'interface':qadIf}));
-		var defBox=E('div',{'id':'qos-cfg-def','class':'qos-item'});
+		var defBox=E('p',{'id':'qos-cfg-def'});
 		dom.content(defBox,this.defsNodes());
 		ref.appendChild(defBox);
-		var clsBox=E('div',{'id':'qos-cfg-cls'});
-		classes.forEach(function(c){
-			clsBox.appendChild(self.clsBoxNode(c));
-		});
-		ref.appendChild(clsBox);
-		ref.appendChild(E('div',{'class':'qos-muted','style':'margin:4px 0 2px'},
+		ref.appendChild(kvTable(classes.map(function(c){return self.clsBoxNode(c);}),'qos-cfg-cls'));
+		ref.appendChild(E('p',{},
 			_('DSCP codepoints: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF. Any dscp_* value may also name a class. Prefix with + to override only when the DSCP field is zero.')));
-		ref.appendChild(E('div',{'class':'qos-muted','style':'margin:2px 0'},
+		ref.appendChild(E('p',{},
 			_('Defaults qosify applies when a key is absent — interface: mode diffserv4, ingress 1, egress 1, nat 1, host_isolate 1, autorate_ingress 0. device: identical except nat 0. defaults: timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled).')));
 		fs1.appendChild(ref);
 		fs1.appendChild(qa);
 
 		// Editor
-		var ta=E('textarea',{
-			'id':'qos-config-ta',
-			'class':'qos-edit',
-			'rows':28,
-			'style':'line-height:1.4;tab-size:4;padding:6px'
-		},ctx.cfgRaw||'');
+		var ta=E('textarea',{'id':'qos-config-ta','rows':28},ctx.cfgRaw||'');
 		ta.dataset.orig=ctx.cfgRaw||'';
 		stampFile(ta,ctx.cfgStat);
 		fs1.appendChild(ta);
 		fs1.appendChild(E('div',{'class':'cbi-page-actions'},[
-			E('button',{'class':'cbi-button cbi-button-reset','style':'margin-right:6px','click':function(){return self.clearCfg();}},_('Clear')),
+			E('button',{'class':'cbi-button cbi-button-reset','click':function(){return self.clearCfg();}},_('Clear')),' ',
 			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveConfig();}},_('Save & Apply'))
 		]));
 
@@ -764,12 +758,7 @@ return view.extend({
 		return section;
 	},
 
-	clsBoxNode:function(c){
-		return E('div',{'class':'qos-item'},[
-			E('strong',{},clsLabel(c)),
-			E('span',{'class':'qos-muted','style':'margin-left:8px'},clsDesc(c))
-		]);
-	},
+	clsBoxNode:function(c){return kvRow(E('strong',{},clsLabel(c)),clsDesc(c));},
 
 	refTable:function(panels){
 		var note={
@@ -778,21 +767,12 @@ return view.extend({
 			'interface':_('name is the netifd interface. bandwidth applies only where bandwidth_up/bandwidth_down are unset. overhead and overhead_encap apply only when overhead_type is manual.'),
 			device:_('Same options as interface, but name is a netdev. nat defaults to 0 here and to 1 for interfaces.')
 		};
-		var tbl=E('table',{'class':'qos-kv','width':'100%','style':'margin:6px 0'});
-		var b=E('tbody');tbl.appendChild(b);
-		SECT.forEach(function(o){
+		return kvTable(SECT.map(function(o){
 			var div=panels[QAC_PANEL[o[0]]],els=div?div.querySelectorAll('[data-opt]'):[],out=[];
 			for(var i=0;i<els.length;i++)
 				out.push((els[i].getAttribute('data-pre')==='list'?'list ':'option ')+els[i].getAttribute('data-opt'));
-			b.appendChild(E('tr',{},[
-				E('td',{'style':'width:135px;font-family:monospace;vertical-align:top'},o[1]),
-				E('td',{},[
-					E('div',{'style':'font-family:monospace;font-size:11px;line-height:1.6'},out.join(', ')),
-					note[o[0]]?E('div',{'class':'qos-muted','style':'margin-top:3px'},note[o[0]]):''
-				])
-			]));
-		});
-		return tbl;
+			return kvRow(E('code',{},o[1]),[E('code',{},out.join(', ')),note[o[0]]?desc(note[o[0]]):'']);
+		}));
 	},
 
 	qaId:function(parent,opt){return (parent.id||'qac')+'-'+opt;},
@@ -825,16 +805,13 @@ return view.extend({
 	defsNodes:function(){
 		var d=null;
 		uci.sections('qosify','defaults',function(s){if(!d)d=s;});
-		if(!d)return [E('em',{'class':'qos-muted'},_('No config defaults section defined'))];
+		if(!d)return [E('em',{},_('No config defaults section defined'))];
 		var keys=['timeout','dscp_default_tcp','dscp_default_udp','dscp_icmp','dscp_prio','dscp_bulk','prio_max_avg_pkt_len','bulk_trigger_pps','bulk_trigger_timeout'];
-		var line=E('div',{'class':'qos-muted','style':'margin:2px 0 0;font-family:monospace'}),first=true;
+		var line=[E('strong',{},'config defaults')];
 		keys.forEach(function(k){
-			if(!d[k])return;
-			if(!first)dom.append(line,'\u00a0\u00a0');
-			first=false;
-			dom.append(line,[k+': ',E('strong',{},String(d[k]))]);
+			if(d[k])line.push(' ',E('code',{},k+': '+d[k]));
 		});
-		return [E('strong',{},'config defaults'),line];
+		return line;
 	},
 
 	// qosify.init runs add_class() over both `class` and `alias`, so alias names
@@ -878,59 +855,29 @@ return view.extend({
 				s.value=cur;
 			}
 		});
-		var ref=$('qos-cls-ref');
-		if(ref){
-			dom.content(ref,'');
-			if(classes.length){
-				classes.forEach(function(c){
-					ref.appendChild(E('tr',{},[
-						E('td',{'style':'width:140px'},clsLabel(c)),
-						E('td',{},clsDesc(c))
-					]));
-				});
-			}else{
-				ref.appendChild(noClassRow());
-			}
-		}
-		var cbox=$('qos-cfg-cls'),self=this;
-		if(cbox){
-			dom.content(cbox,'');
-			classes.forEach(function(c){cbox.appendChild(self.clsBoxNode(c));});
-		}
+		var self=this,ref=$('qos-cls-ref');
+		if(ref)dom.content(ref,classes.length?classes.map(function(c){return self.clsBoxNode(c);}):noClassRow());
+		var cbox=$('qos-cfg-cls');
+		if(cbox)dom.content(cbox,classes.map(function(c){return self.clsBoxNode(c);}));
 	},
 
 	tabRules:function(ctx){
 		var self=this;
 		var section=E('div',{'id':'qos-ru'});
-		var fs1=E('fieldset',{'class':'cbi-section'},[
-			E('legend',{},_('Classification Rules')),
-			E('div',{'class':'cbi-section-descr'},[_('DSCP mapping rules loaded by qosify on startup.')+' ',E('code',{},RULES_PATH)])
-		]);
+		var fs1=sect(_('Classification Rules'),[sdesc([_('DSCP mapping rules loaded by qosify on startup.')+' ',E('code',{},RULES_PATH)])]);
 
 		// Available classes
 		var classes=this.getClasses();
-		var ref=E('details',{'class':'qos-ref'});
+		var ref=E('details',{});
 		ref.appendChild(E('summary',{},_('Available Classes')));
-		var refTbl=E('table',{'class':'qos-kv','style':'margin:6px 0 0','width':'100%'});
-		var refB=E('tbody',{'id':'qos-cls-ref'});refTbl.appendChild(refB);
-		if(classes.length){
-			classes.forEach(function(c){
-				refB.appendChild(E('tr',{},[
-					E('td',{'style':'width:140px'},clsLabel(c)),
-					E('td',{},clsDesc(c))
-				]));
-			});
-		}else{
-			refB.appendChild(noClassRow());
-		}
-		ref.appendChild(refTbl);
-		ref.appendChild(E('div',{'class':'qos-muted','style':'margin:6px 0 2px'},
+		ref.appendChild(kvTable(classes.length?classes.map(function(c){return self.clsBoxNode(c);}):[noClassRow()],'qos-cls-ref'));
+		ref.appendChild(E('p',{},
 			_('Prefix with + to override only when the DSCP field is zero. Ports: tcp:443, udp:3074, ranges: tcp:5060-5061 (1-65534). DNS: dns:*teams*, regex: dns:/zoom[0-9]+, CNAME-only: dns_c:. IP: 1.1.1.1, ff01::1')));
 		fs1.appendChild(ref);
 
 		// Quick Add Rule
 		var qa=E('div',{'class':'qos-qa'});
-		qa.appendChild(E('strong',{},_('Quick Add Rule')));
+		qa.appendChild(E('h4',{},_('Quick Add Rule')));
 		var qarRow=E('div',{'class':'qos-qa-row'});
 		var qarType=E('select',{'id':'qar-type','style':'width:140px','change':function(){self.qarPlaceholder();}});
 		[['tcp:',_('tcp port')],['udp:',_('udp port')],['both:',_('tcp+udp port')],['dns:',_('dns pattern')],['dnsr:',_('dns regex')],['dns_c:',_('dns_c pattern')],['dns_cr:',_('dns_c regex')],['ipv4:',_('IPv4 address')],['ipv6:',_('IPv6 address')]].forEach(function(o){
@@ -941,22 +888,19 @@ return view.extend({
 		var qarCls=E('select',{'id':'qar-cls','style':'width:140px'});
 		classes.forEach(function(c){qarCls.appendChild(E('option',{'value':c.name},c.name));});
 		qarRow.appendChild(qarCls);
-		qarRow.appendChild(E('label',{'class':'qos-muted','style':'white-space:nowrap','for':'qar-prio'},
+		qarRow.appendChild(E('label',{'for':'qar-prio'},
 			[E('input',{'type':'checkbox','id':'qar-prio'}),' '+_('only if unset (+)')]));
 		qarRow.appendChild(E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qarAdd();}},_('Add')));
 		qa.appendChild(qarRow);
 		fs1.appendChild(qa);
 
 		// Editor
-		var ta=E('textarea',{
-			'id':'qos-rules-ta','class':'qos-edit','rows':28,
-			'style':'line-height:1.4;tab-size:4;padding:6px'
-		},ctx.rulesText||'');
+		var ta=E('textarea',{'id':'qos-rules-ta','rows':28},ctx.rulesText||'');
 		ta.dataset.orig=ctx.rulesText||'';
 		stampFile(ta,ctx.rulesStat);
 		fs1.appendChild(ta);
 		fs1.appendChild(E('div',{'class':'cbi-page-actions'},[
-			E('button',{'class':'cbi-button cbi-button-reset','style':'margin-right:6px','click':function(){return self.clearRules();}},_('Clear')),
+			E('button',{'class':'cbi-button cbi-button-reset','click':function(){return self.clearRules();}},_('Clear')),' ',
 			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.saveRules();}},_('Save & Apply'))
 		]));
 
@@ -969,45 +913,31 @@ return view.extend({
 		var section=E('div',{'id':'qos-ad'});
 
 		// Backup
-		var fb=E('fieldset',{'class':'cbi-section'},[
-			E('legend',{},_('Backup Current Files')),
-			E('div',{'class':'cbi-section-descr'},_('Download current config files before making changes.'))
-		]);
+		var fb=sect(_('Backup Current Files'),[sdesc(_('Download current config files before making changes.'))]);
 		fb.appendChild(this.dlRow('/etc/config/qosify','qosify'));
 		fb.appendChild(this.dlRow('/etc/qosify/00-defaults.conf','00-defaults.conf'));
 		section.appendChild(fb);
 
 		// Upload
-		var fu=E('fieldset',{'class':'cbi-section'},[
-			E('legend',{},_('Upload Config Files')),
-			E('div',{'class':'cbi-section-descr'},_('Select files and click Save & Apply to overwrite and restart qosify.'))
-		]);
+		var fu=sect(_('Upload Config Files'),[sdesc(_('Select files and click Save & Apply to overwrite and restart qosify.'))]);
 		var u1=E('input',{'type':'file','id':'qos-up-cfg'});
 		var u2=E('input',{'type':'file','id':'qos-up-rules'});
-		fu.appendChild(E('div',{'class':'cbi-value'},[
-			E('label',{'class':'cbi-value-title'},'/etc/config/qosify'),
-			E('div',{'class':'cbi-value-field'},u1)
-		]));
-		fu.appendChild(E('div',{'class':'cbi-value'},[
-			E('label',{'class':'cbi-value-title'},'/etc/qosify/00-defaults.conf'),
-			E('div',{'class':'cbi-value-field'},u2)
-		]));
+		fu.appendChild(valRow('/etc/config/qosify',u1));
+		fu.appendChild(valRow('/etc/qosify/00-defaults.conf',u2));
 		fu.appendChild(E('div',{'class':'cbi-page-actions'},
 			E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.uploadFiles();}},_('Save & Apply'))
 		));
 		section.appendChild(fu);
 
-		section.appendChild(E('fieldset',{'class':'cbi-section'},[
-			E('legend',{},_('Check Devices')),
-			E('div',{'class':'cbi-section-descr'},_('Re-runs the daemon\'s own device pass: a section whose device now exists is started and one whose device has gone is stopped. The call reports nothing back; the result shows in the Overview tab.')),
+		section.appendChild(sect(_('Check Devices'),[
+			sdesc(_('Re-runs the daemon\'s own device pass: a section whose device now exists is started and one whose device has gone is stopped. The call reports nothing back; the result shows in the Overview tab.')),
 			E('div',{'class':'cbi-page-actions'},
 				E('button',{'class':'cbi-button cbi-button-action','click':function(){return self.checkDevices();}},_('Check Devices')))
 		]));
 
 		// Reset
-		section.appendChild(E('fieldset',{'class':'cbi-section'},[
-			E('legend',{},_('Reset to qosify Defaults')),
-			E('div',{'class':'cbi-section-descr'},_('Replaces both config files with qosify defaults, qosify will be disabled.')),
+		section.appendChild(sect(_('Reset to qosify Defaults'),[
+			sdesc(_('Replaces both config files with qosify defaults, qosify will be disabled.')),
 			E('div',{'class':'cbi-page-actions'},
 				E('button',{'class':'cbi-button cbi-button-negative','click':function(){return self.resetDefaults();}},_('Reset to Defaults')))
 		]));
@@ -1015,9 +945,7 @@ return view.extend({
 	},
 
 	dlRow:function(path,fn){
-		return E('div',{'class':'cbi-value'},[
-			E('label',{'class':'cbi-value-title'},path),
-			E('div',{'class':'cbi-value-field'},
+		return valRow(path,
 				E('button',{'class':'cbi-button cbi-button-action','data-ro-ok':'1','click':function(){
 					return fs.read(path).then(function(content){
 						var b=new Blob([content||''],{type:'application/octet-stream'});
@@ -1032,16 +960,15 @@ return view.extend({
 					}).catch(function(e){
 						notify(_('Could not read %s: %s').format(path,e),'danger');
 					});
-				}},_('Download')))
-		]);
+				}},_('Download')));
 	},
 
 	tabStatus:function(ctx){
 		var section=E('div',{'id':'qos-st'});
-		var fs1=E('fieldset',{'class':'cbi-section'},E('legend',{},_('qosify-status')));
+		var fs1=sect(_('qosify-status'));
 		var body=E('div',{'id':'qos-st-body'},[
 			E('div',{'id':'qos-st-sum'}),
-			E('pre',{'id':'qos-st-pre','class':'qos-pre','style':'display:none'}),
+			E('pre',{'id':'qos-st-pre','style':'display:none'}),
 			E('div',{'id':'qos-st-msg'})
 		]);
 		this.fillStatus(body,ctx);
@@ -1070,7 +997,7 @@ return view.extend({
 	fillStatus:function(body,ctx){
 		var sum=body.querySelector('#qos-st-sum'),pre=body.querySelector('#qos-st-pre'),msg=body.querySelector('#qos-st-msg');
 		if(!sum||!pre||!msg)return;
-		var note=function(t){dom.content(msg,E('p',{'class':'qos-muted'},E('em',{},t)));};
+		var note=function(t){dom.content(msg,emP(t));};
 		if(!ctx.running){
 			dom.content(sum,'');
 			pre.style.display='none';
@@ -1080,7 +1007,7 @@ return view.extend({
 			return;
 		}
 		dom.content(sum,ctx.status?this.statusSummary(ctx.status):
-			E('p',{'class':'qos-muted'},E('em',{},_('qosify did not answer on ubus, so the interface summary is unavailable.'))));
+			emP(_('qosify did not answer on ubus, so the interface summary is unavailable.')));
 		pre.style.display=ctx.qstatus?'':'none';
 		if(ctx.qstatus){
 			if(pre.textContent!==ctx.qstatus)pre.textContent=ctx.qstatus;
@@ -1093,24 +1020,17 @@ return view.extend({
 
 	// ubus call qosify status, so the per-interface summary costs no forks
 	statusSummary:function(st){
-		var tbl=E('table',{'class':'qos-kv','width':'100%'}),b=E('tbody');
-		tbl.appendChild(b);
+		var rows=[];
 		['interfaces','devices'].forEach(function(g){
 			var t=st&&st[g],k,e;
 			for(k in t){
 				e=t[k]||{};
-				b.appendChild(E('tr',{},[
-					E('td',{},(g==='devices'?_('device %s'):_('interface %s')).format(k)),
-					E('td',{},[
-						E('span',{'class':'qos-badge '+(e.active?'qos-green':'qos-red')},e.active?_('active'):_('inactive')),
-						E('span',{'class':'qos-muted','style':'margin-left:8px'},
-							_('device: %s, ingress: %s, egress: %s').format(e.ifname||'-',e.ingress?_('yes'):_('no'),e.egress?_('yes'):_('no')))
-					])
-				]));
+				rows.push(kvRow((g==='devices'?_('device %s'):_('interface %s')).format(k),[
+					badge(e.active?'success':'danger',e.active?_('active'):_('inactive')),' ',
+					_('device: %s, ingress: %s, egress: %s').format(e.ifname||'-',e.ingress?_('yes'):_('no'),e.egress?_('yes'):_('no'))]));
 			}
 		});
-		if(!b.firstChild)b.appendChild(E('tr',{},E('td',{'class':'qos-muted'},E('em',{},_('qosify has no interfaces or devices configured')))));
-		return tbl;
+		return kvTable(rows.length?rows:[emRow(_('qosify has no interfaces or devices configured'))]);
 	},
 
 	// === Actions ===
