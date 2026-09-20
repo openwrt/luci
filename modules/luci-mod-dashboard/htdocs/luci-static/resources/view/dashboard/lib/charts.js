@@ -21,7 +21,44 @@ function scale(value, min, max) {
 	return Math.max(0, Math.min(100, (value - min) / (max - min) * 100));
 }
 
+// Data rates take decimal prefixes, as link speeds and ISP plans do.
+const RATE_UNITS = [ _('bit/s'), _('Kbit/s'), _('Mbit/s'), _('Gbit/s') ];
+
+function rateUnit(value) {
+	let exp = 0;
+
+	while (value >= 1000 && exp < RATE_UNITS.length - 1) {
+		value /= 1000;
+		exp++;
+	}
+
+	return exp;
+}
+
 return baseclass.extend({
+	formatRate(value) {
+		if (value == null)
+			return '-';
+
+		const exp = rateUnit(value);
+
+		return '%.1f %s'.format(value / Math.pow(1000, exp), RATE_UNITS[exp]);
+	},
+
+	rateScale(peak) {
+		const exp = rateUnit(peak);
+		const unit = Math.pow(1000, exp);
+		const raw = Math.max(peak / unit, 1e-9) / 4;
+		const magnitude = Math.pow(10, Math.floor(Math.log10(raw)));
+		const step = [ 1, 2, 2.5, 5, 10 ].map(n => n * magnitude).find(candidate => candidate >= raw);
+
+		return {
+			max: step * 4 * unit,
+			unit: RATE_UNITS[exp],
+			ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: step * n * unit, label: String(+(step * n).toFixed(2)) }))
+		};
+	},
+
 	icon(name, className) {
 		return E('span', {
 			'class': 'dashboard-icon ' + (className || ''),
@@ -42,13 +79,17 @@ return baseclass.extend({
 	},
 
 	kpi(opts) {
+		const parts = (opts.sub || []).filter(part => part != null && part !== '');
+		const sub = opts.stacked
+			? parts.map(part => E('small', { 'class': 'dashboard-kpi-sub dashboard-kpi-line', 'title': part }, [ part ]))
+			: [ E('small', { 'class': 'dashboard-kpi-sub' }, parts.flatMap((part, i) => i ? [ ' · ', part ] : [ part ])) ];
+
 		return E('div', { 'class': 'cbi-section dashboard-kpi ' + (opts.className || '') }, [
 			this.icon(opts.icon, 'dashboard-kpi-icon'),
 			E('div', { 'class': 'dashboard-kpi-text' }, [
 				E('small', {}, [ opts.title ]),
-				E('strong', { 'class': 'dashboard-kpi-value' }, opts.value),
-				E('small', { 'class': 'dashboard-kpi-sub' }, opts.sub)
-			])
+				E('strong', { 'class': 'dashboard-kpi-value' }, opts.value)
+			].concat(sub))
 		]);
 	},
 
@@ -56,26 +97,16 @@ return baseclass.extend({
 		return E('em', {}, [ text ]);
 	},
 
-	// A cell is a string, a DOM node or a descriptor `{ text, className }`.
-	cell(tag, cell, title) {
-		const descr = (cell != null && typeof(cell) == 'object' && !(cell instanceof Node)) ? cell : { text: cell };
-
-		return E(tag, {
-			'class': tag + (descr.className ? ' ' + descr.className : ''),
-			'data-title': (typeof(title) == 'string' && title !== '') ? title : null
-		}, [ (descr.text != null) ? descr.text : '' ]);
-	},
-
 	// Same markup as ui.Table: flat .table > .tr, header row .table-titles,
 	// data-title on the cells so themes can label them on phones.
 	table(opts) {
-		const titles = opts.head.map(cell => (cell != null && typeof(cell) == 'object' && !(cell instanceof Node)) ? cell.text : cell);
+		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
 		const table = E('table', { 'class': 'table ' + (opts.className || '') }, [
-			E('tr', { 'class': 'tr table-titles' }, opts.head.map(cell => this.cell('th', cell)))
+			E('tr', { 'class': 'tr table-titles' }, opts.head.map(title => cell('th', title)))
 		]);
 
 		opts.rows.forEach((row, i) => {
-			table.appendChild(E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, row.map((cell, n) => this.cell('td', cell, titles[n]))));
+			table.appendChild(E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, row.map((content, n) => cell('td', content, opts.head[n]))));
 		});
 
 		if (!opts.rows.length && opts.emptyText)
@@ -83,8 +114,12 @@ return baseclass.extend({
 				E('td', { 'class': 'td', 'colspan': opts.head.length }, [ E('em', {}, [ opts.emptyText ]) ])
 			]));
 
-		if (opts.foot)
-			table.appendChild(E('tr', { 'class': 'tr' }, opts.foot.map(cell => this.cell('td', cell))));
+		if (opts.foot) {
+			const foot = E('tr', { 'class': 'tr' }, opts.foot.map(content => cell('td', content)));
+
+			foot.lastChild.setAttribute('colspan', opts.head.length - opts.foot.length + 1);
+			table.appendChild(foot);
+		}
 
 		return table;
 	},
@@ -150,8 +185,59 @@ return baseclass.extend({
 		]);
 	},
 
+	// A time series of points `{ t, v }`, placed by their time: the x axis
+	// spans `span` seconds up to the last point. A null `v` leaves a gap, and
+	// a point with gaps on both sides is drawn as a dot.
+	lines(opts) {
+		const max = opts.max || 1;
+		const shapes = [];
+		const end = opts.series.reduce((t, series) => Math.max(t, ...series.values.map(p => p.t)), 0);
+
+		opts.series.forEach((series, n) => {
+			let run = [];
+
+			series.values.concat([ { v: null } ]).forEach(p => {
+				if (p.v != null) {
+					run.push([ 100 - (end - p.t) / (opts.span * 10), 100 - scale(p.v, 0, max) ]);
+					return;
+				}
+
+				if (run.length) {
+					if (run.length == 1)
+						run.push(run[0]);
+
+					const points = run.map(p => '%.2f,%.2f'.format(p[0], p[1])).join(' ');
+
+					if (series.area)
+						shapes.push(svg('polygon', {
+							'class': 'dashboard-series-' + (n + 1),
+							'points': '%.2f,100 %s %.2f,100'.format(run[0][0], points, run[run.length - 1][0])
+						}));
+
+					shapes.push(svg('polyline', { 'class': 'dashboard-series-' + (n + 1), 'points': points }));
+				}
+
+				run = [];
+			});
+		});
+
+		return E('div', { 'class': 'dashboard-bars' }, [
+			E('div', { 'class': 'dashboard-bars-axis' }, opts.ticks.map(tick =>
+				E('span', { 'style': 'top:%.2f%%'.format(100 - scale(tick.value, 0, max)) }, [ tick.label ]))),
+			E('div', { 'class': 'dashboard-lines-plot' }, [
+				E('div', { 'class': 'dashboard-bars-grid' }, opts.ticks.map(tick =>
+					E('i', { 'style': 'top:%.2f%%'.format(100 - scale(tick.value, 0, max)) }))),
+				svg('svg', { 'viewBox': '0 0 100 100', 'preserveAspectRatio': 'none', 'role': 'img', 'aria-label': opts.ariaLabel || '' }, shapes)
+			]),
+			E('div', { 'class': 'dashboard-lines-time' }, [
+				E('span', {}, [ (opts.span >= 60) ? _('%d min ago').format(Math.round(opts.span / 60)) : _('%d s ago').format(opts.span) ]),
+				E('span', {}, [ _('now') ])
+			])
+		]);
+	},
+
 	legend(items) {
 		return E('div', { 'class': 'dashboard-legend-inline' }, items.map(item =>
-			E('span', {}, [ E('i', { 'class': item.className }), item.label ])));
+			E('span', {}, [ E('i', { 'class': item.className }), item.label, (item.value != null) ? E('b', {}, [ item.value ]) : '' ])));
 	}
 });

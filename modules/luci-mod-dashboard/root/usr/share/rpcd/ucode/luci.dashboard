@@ -1,0 +1,80 @@
+'use strict';
+
+import { readfile } from 'fs';
+import * as uloop from 'uloop';
+
+const STEP = 5000, SLOTS = 60;
+
+let ring = [], seq = 0, timer;
+
+function now() {
+	const c = clock(true);
+
+	return c[0] * 1000 + int(c[1] / 1000000);
+}
+
+// Tells the instances apart, as the sequence starts over with rpcd.
+const id = trim(readfile('/proc/sys/kernel/random/uuid'));
+
+// Counters as the kernel has them. Whoever draws them takes the differences,
+// over the time between two samples on the clock they were read by.
+function sample() {
+	const t = now(), cpus = {}, net = {};
+
+	for (let line in split(readfile('/proc/stat') ?? '', '\n')) {
+		if (substr(line, 0, 3) != 'cpu')
+			break;
+
+		const fields = split(line, /\s+/);
+
+		cpus[fields[0]] = map(slice(fields, 1, 9), v => +v);
+	}
+
+	const mem = match(readfile('/proc/meminfo', 256) ?? '', /MemAvailable:\s+(\d+)/);
+
+	for (let line in slice(split(readfile('/proc/net/dev') ?? '', '\n'), 2)) {
+		const fields = split(trim(line), /[: ]+/);
+
+		if (length(fields) > 9 && fields[0] != 'lo')
+			net[fields[0]] = [ +fields[1], +fields[9] ];
+	}
+
+	push(ring, [ ++seq, t, cpus, mem ? +mem[1] * 1024 : null, net ]);
+
+	while (length(ring) > SLOTS)
+		shift(ring);
+}
+
+// Sampling never stops, so the charts are full whenever somebody looks.
+function tick() {
+	timer.set(STEP);
+
+	// An exception here would end rpcd's uloop, not just this timer.
+	try {
+		sample();
+	}
+	catch (e) {
+		warn(`luci.dashboard: ${e}\n`);
+	}
+}
+
+timer = uloop.timer(0, tick);
+
+const methods = {
+	history: {
+		args: { since: 0, id: 'id' },
+		call: function(request) {
+			const since = (request.args?.id == id) ? +(request.args?.since ?? 0) : 0;
+
+			return {
+				id,
+				now: now(),
+				step: STEP,
+				slots: SLOTS,
+				samples: filter(ring, entry => entry[0] > since)
+			};
+		}
+	}
+};
+
+return { 'luci.dashboard': methods };

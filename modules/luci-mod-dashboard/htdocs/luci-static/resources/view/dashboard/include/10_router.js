@@ -5,16 +5,7 @@
 'require network';
 'require uci';
 'require view.dashboard.lib.charts as charts';
-
-var callSystemBoard = rpc.declare({
-	object: 'system',
-	method: 'board'
-});
-
-var callSystemInfo = rpc.declare({
-	object: 'system',
-	method: 'info'
-});
+'require view.dashboard.lib.system as system';
 
 var callGetUnixtime = rpc.declare({
 	object: 'luci',
@@ -26,32 +17,36 @@ return baseclass.extend({
 
 	params: [],
 
+	widgets: [
+		{ id: 'internet', slot: 'cards', title: _('Internet'), order: 10 },
+		{ id: 'uptime', slot: 'cards', title: _('Uptime'), order: 15 },
+		{ id: 'internet', slot: 'tabs', title: _('Internet'), order: 10 },
+		{ id: 'system', slot: 'tabs', title: _('System'), order: 20 }
+	],
+
 	load() {
 		return Promise.all([
 			network.getWANNetworks(),
 			network.getWAN6Networks(),
-			L.resolveDefault(callSystemBoard(), {}),
-			L.resolveDefault(callSystemInfo(), {}),
+			system.board(),
+			system.info(),
 			L.resolveDefault(callGetUnixtime(), 0),
 			uci.load('system')
 		]);
 	},
 
-	renderValue(value, mono) {
+	renderValue(value) {
 		if (Array.isArray(value))
-			return E('span', {}, value.map(v => E('div', {}, [ mono ? E('code', {}, [ v ]) : v ])));
+			return E('span', {}, value.map(v => E('div', {}, [ v ])));
 
-		if (value == null || value === '')
-			return '-';
-
-		return mono ? E('code', {}, [ value ]) : value;
+		return (value == null || value === '') ? '-' : value;
 	},
 
 	// Same markup as the status page's system table.
 	renderKeyValueTable(rows) {
 		return E('table', { 'class': 'table' }, rows.map(row => E('tr', { 'class': 'tr' }, [
 			E('td', { 'class': 'td left', 'width': '33%' }, [ row.title ]),
-			E('td', { 'class': 'td left' }, [ this.renderValue(row.value, row.mono) ])
+			E('td', { 'class': 'td left' }, [ this.renderValue(row.value) ])
 		])));
 	},
 
@@ -65,14 +60,10 @@ return baseclass.extend({
 
 			let value = group[key].value;
 
-			if (key == 'addrsv4' && Array.isArray(value))
+			if (/^addrs/.test(key) && Array.isArray(value))
 				value = value.map(a => a.split('/')[0]);
 
-			rows.push({
-				title: group[key].title,
-				value: value,
-				mono: /^(addrs|gateway|dns|ipprefix)/.test(key)
-			});
+			rows.push({ title: group[key].title, value: value });
 		}
 
 		return E('div', {}, [
@@ -95,11 +86,7 @@ return baseclass.extend({
 		const rows = [];
 
 		for (const key in this.params.router)
-			rows.push({
-				title: this.params.router[key].title,
-				value: this.params.router[key].value,
-				mono: (key == 'kernel' || key == 'localtime')
-			});
+			rows.push({ title: this.params.router[key].title, value: this.params.router[key].value });
 
 		return this.renderKeyValueTable(rows);
 	},
@@ -108,19 +95,15 @@ return baseclass.extend({
 		const v4 = this.params.internet.v4;
 		const v6 = this.params.internet.v6;
 		const connected = (v4.connected.value === true || v6.connected.value === true);
-		const sub = [
-			charts.badge('IPv4', (v4.connected.value === true) ? 'success' : 'warning'),
-			charts.badge('IPv6', (v6.connected.value === true) ? 'success' : 'warning')
-		];
-
-		if (v4.connected.value === true && Array.isArray(v4.addrsv4.value) && v4.addrsv4.value.length)
-			sub.push(E('code', {}, [ v4.addrsv4.value[0].split('/')[0] ]));
+		const address = (family, addrs) => (family.connected.value === true)
+			? [ addrs.title, L.toArray(addrs.value)[0]?.split('/')[0] ].filter(part => part != null).join(' · ') : null;
 
 		return charts.kpi({
 			icon: connected ? 'internet' : 'not-internet',
 			title: _('Internet'),
 			value: [ connected ? _('Connected') : _('Not connected') ],
-			sub: sub
+			sub: [ address(v4, v4.addrsv4), address(v6, v6.addrsv6) ],
+			stacked: true
 		});
 	},
 
@@ -243,7 +226,7 @@ return baseclass.extend({
 
 				addrsv6: {
 					title: _('IPv6'),
-					visible: false,
+					visible: true,
 					value: [ '-' ]
 				},
 
@@ -325,10 +308,13 @@ return baseclass.extend({
 		this.renderRouterBox(data);
 
 		return {
-			kpi: [ this.renderInternetKpi(), this.renderSystemKpi() ],
+			cards: [
+				{ id: 'internet', node: () => this.renderInternetKpi() },
+				{ id: 'uptime', node: () => this.renderSystemKpi() }
+			],
 			tabs: [
-				{ id: 'internet', title: _('Internet'), content: this.renderInternetTab() },
-				{ id: 'system', title: _('System'), content: this.renderSystemTab() }
+				{ id: 'internet', title: _('Internet'), content: () => this.renderInternetTab() },
+				{ id: 'system', title: _('System'), content: () => this.renderSystemTab() }
 			]
 		};
 	}
