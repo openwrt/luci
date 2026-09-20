@@ -57,23 +57,29 @@
 }
 
 /* ---- Layout ---- */
-.dashboard-kpi-row {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-	gap: var(--dashboard-gap);
-}
-
+/* Every row fills the width: an item's basis is its row's share, set from
+   --dashboard-per-row, and flex-grow takes up the rest. On narrow screens
+   the min-width wraps the items, which still fill their rows. */
+.dashboard-kpi-row,
 .dashboard-charts {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	display: flex;
+	flex-wrap: wrap;
 	gap: var(--dashboard-gap);
-	align-items: stretch;
 }
 
-/* Grid gaps space the cards, not the theme's section margin. */
+/* The gaps space the cards, not the theme's section margin. */
 .dashboard-kpi-row > .cbi-section,
 .dashboard-charts > .cbi-section {
+	flex: 1 1 calc(100% / var(--dashboard-per-row, 3) - var(--dashboard-gap));
+	box-sizing: border-box;
+	min-width: 190px;
 	margin: 0;
+}
+
+.dashboard-charts > .cbi-section {
+	display: flex;
+	flex-direction: column;
+	min-width: 250px;
 }
 
 /* ---- Icon (mask keeps the SVG files, colour follows the theme) ---- */
@@ -129,17 +135,25 @@
 }
 
 .dashboard-kpi-sub {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 6px;
+	display: block;
+	overflow-wrap: anywhere;
+}
+
+.dashboard-kpi-line {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 /* ---- Donut ---- */
+/* Shorter than the bar charts it shares a row with, so centre it. */
 .dashboard-donut {
 	display: flex;
 	align-items: center;
 	gap: 20px;
+	margin-block: auto;
+	/* Override Footstrap's negative SVG container margins to preserve card padding. */
+	margin-inline: 0;
 }
 
 .dashboard-donut svg {
@@ -361,6 +375,52 @@
 .dashboard-legend-inline i.dashboard-bar-mid { background: var(--dashboard-warn); }
 .dashboard-legend-inline i.dashboard-bar-up { background: var(--dashboard-series-1); }
 .dashboard-legend-inline i.dashboard-bar-down { background: var(--dashboard-series-2); }
+
+/* ---- Time series (shares the axis and grid of the bar chart) ---- */
+.dashboard-lines-plot {
+	position: relative;
+	height: var(--dashboard-plot-h);
+}
+
+.dashboard-lines-plot svg {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.Dashboard .dashboard-lines-plot polyline {
+	fill: none;
+	stroke-width: 1.75;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+	vector-effect: non-scaling-stroke;
+}
+
+.Dashboard .dashboard-lines-plot polygon {
+	stroke: none;
+	opacity: 0.14;
+}
+
+.dashboard-lines-plot polygon.dashboard-series-1 { fill: var(--dashboard-series-1); }
+.dashboard-lines-plot polygon.dashboard-series-2 { fill: var(--dashboard-series-2); }
+
+.dashboard-lines-time {
+	grid-column: 2;
+	display: flex;
+	justify-content: space-between;
+	padding-top: 6px;
+	font-size: 10.5px;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-legend-inline i.dashboard-series-1 { background: var(--dashboard-series-1); }
+.dashboard-legend-inline i.dashboard-series-2 { background: var(--dashboard-series-2); }
+
+.dashboard-legend-inline b {
+	color: var(--dashboard-text);
+}
 
 /* ---- Wireless network boxes (LuCI .ifacebox) ---- */
 .dashboard-net-grid {

@@ -15,6 +15,15 @@ return baseclass.extend({
 
 	params: {},
 
+	widgets: [
+		{ id: 'dhcp', slot: 'cards', title: _('DHCP Devices'), order: 50, hidden: true },
+		{ id: 'dhcp', slot: 'tabs', title: _('DHCP Devices'), order: 40 }
+	],
+
+	available() {
+		return L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd');
+	},
+
 	load() {
 		return Promise.all([
 			callLuciDHCPLeases(),
@@ -37,11 +46,11 @@ return baseclass.extend({
 			head: [ _('Hostname'), _('IP Address'), _('MAC') ],
 			rows: this.params.lan.devices.map(device => [
 				device.hostname,
-				E('code', {}, [ device.ipv4 ]),
-				E('code', {}, [ device.macaddr ])
+				device.ipv4,
+				device.macaddr
 			]),
 			emptyText: _('No active leases'),
-			foot: [ '', _('Total'), String(this.params.lan.devices.length) ]
+			foot: [ _('Total'), String(this.params.lan.devices.length) ]
 		});
 	},
 
@@ -56,15 +65,12 @@ return baseclass.extend({
 	},
 
 	render([leases]) {
-		if (!L.hasSystemFeature('dnsmasq') && !L.hasSystemFeature('odhcpd'))
-			return null;
-
 		this.renderUpdateData([...leases.dhcp_leases]);
 
 		return {
-			kpi: [ this.renderKpi() ],
+			cards: [ { id: 'dhcp', node: () => this.renderKpi() } ],
 			tabs: [
-				{ id: 'dhcp', title: this.title, count: this.params.lan.devices.length, content: this.renderTable() }
+				{ id: 'dhcp', title: this.title, count: this.params.lan.devices.length, content: () => this.renderTable() }
 			]
 		};
 	}
