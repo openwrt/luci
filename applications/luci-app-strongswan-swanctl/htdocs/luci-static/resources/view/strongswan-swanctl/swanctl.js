@@ -38,12 +38,13 @@ function sectionNameCheck(extra_class) {
 		let sections = [
 			...uci.sections('ipsec', 'remote'),
 			...uci.sections('ipsec', 'child'),
+			...uci.sections('ipsec', 'shunt'),
 			...uci.sections('ipsec', 'crypto_proposal'),
 		];
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Remotes, Encryption Proposals and Children may not share the same names.') + ' ' +
+			return _('Remotes, Encryption Proposals, Children and Shunts may not share the same names.') + ' ' +
 				_('Use combinations like child1_phase1 that do not exceed 15 characters.');
 		}
 		if (v.length > 15) return _('Name length shall not exceed 15 characters');
@@ -451,6 +452,40 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.placeholder = '0';
 		o.rmempty = true;
+		o.modalonly = true;
+
+		// Shunt Configuration
+		s = m.section(form.GridSection, 'shunt', _('Shunt Configuration'),
+			_('Define Shunt pass/drop policies independent of remote connections.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
+
+		o = s.option(form.Flag, 'enabled', _('Enabled'),
+			_('Configuration is enabled or not'));
+		o.rmempty = false;
+
+		o = s.option(form.ListValue, 'mode', _('Mode'),
+			_('Shunt policy mode'));
+		o.value('pass', _('Pass'));
+		o.value('drop', _('Drop'));
+		o.rmempty = false;
+
+		o = s.option(form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
+			_('Local traffic selectors for the shunt policy'));
+		o.datatype = 'or(cidr,ipaddr)';
+
+		o = s.option(form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
+			_('Remote traffic selectors for the shunt policy'));
+		o.datatype = 'or(cidr,ipaddr)';
+
+		o = s.option(form.Value, 'priority', _('Priority'),
+			_('Priority of the shunt policy (lower number means higher priority)'));
+		o.datatype = 'uinteger';
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'interface', _('Interface'),
+			_('Network interface to bind the shunt policy to'));
 		o.modalonly = true;
 
 		// Crypto Proposals
