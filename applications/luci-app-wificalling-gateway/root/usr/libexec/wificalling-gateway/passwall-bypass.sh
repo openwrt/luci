@@ -28,6 +28,7 @@ ips=$(awk -F '|' 'NF>=2 { printf "%s%s", (n++?", ":""), $2 }' "$clients")
 [ -n "$ips" ] || { "$0" clear "$clients"; exit 0; }
 
 for chain in PSW_MANGLE PSW_NAT; do
+	nft list chain inet passwall "$chain" >/dev/null 2>&1 || continue
 	if ! nft list chain inet passwall "$chain" 2>/dev/null | grep -q "$comment"; then
 		nft insert rule inet passwall "$chain" ip saddr { $ips } counter return comment "$comment"
 	fi

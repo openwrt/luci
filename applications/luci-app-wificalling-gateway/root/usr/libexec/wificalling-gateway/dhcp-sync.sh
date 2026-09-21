@@ -43,7 +43,9 @@ valid_ip() {
 	case "$1" in
 		''|*[!0-9.]*|*..*|.*|*.) return 1;;
 	esac
-	return 0
+	awk -F. 'NF == 4 { for (i = 1; i <= 4; i++) if ($i !~ /^[0-9]+$/ || $i > 255) exit 1; exit 0 } { exit 1 }' <<EOF
+$1
+EOF
 }
 
 # 1) Map policy IP -> device label (sanitized) from the clients file.

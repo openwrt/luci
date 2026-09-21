@@ -35,7 +35,14 @@ $1=="global" { if ($2=="log_level") level=$3; if ($2=="wireguard_style") wg_styl
 $1=="node" {
   id=$2; proto=$3
   if (id=="" || seen_node[id]++) fail("duplicate or empty node id: " id)
-  if (proto!="anytls" && proto!="hysteria2" && proto!="tuic" && proto!="vless" && proto!="vmess" && proto!="trojan" && proto!="wireguard") fail("unsupported protocol: " proto)
+  if (proto!="anytls" && proto!="hysteria2" && proto!="tuic" && proto!="vless" && proto!="vmess" && proto!="trojan" && proto!="wireguard" && proto!="shadowsocks") fail("unsupported protocol: " proto)
+  # Shadowsocks carries no TLS/transport layer: the cipher (field 10) is the
+  # only extra field, and an unsupported one makes sing-box reject the whole
+  # config at load.
+  if (proto=="shadowsocks") {
+    if ($10=="") fail("shadowsocks node " id " is missing the encryption method")
+    if ($10 !~ /^(aes-128-gcm|aes-192-gcm|aes-256-gcm|chacha20-ietf-poly1305|xchacha20-ietf-poly1305|2022-blake3-aes-128-gcm|2022-blake3-aes-256-gcm|2022-blake3-chacha20-poly1305)$/) fail("shadowsocks node " id " uses an unsupported encryption method: " $10)
+  }
   if ($4=="" || $5 !~ /^[0-9]+$/ || $5<1 || $5>65535) fail("invalid server or port for node: " id)
   node[++nn]=$0; node_id[nn]=id; node_proto[id]=proto
   if (proto=="wireguard") wg_nodes[++nw]=nn
@@ -90,7 +97,19 @@ END {
     print "  ],"
   }
   print "  \"log\":{\"level\":" q(level) ",\"timestamp\":true},"
-  print "  \"inbounds\":[{\"type\":\"tproxy\",\"tag\":\"wfc-tcp\",\"listen\":\"0.0.0.0\",\"listen_port\":11441,\"network\":\"tcp\"},{\"type\":\"tproxy\",\"tag\":\"wfc-udp\",\"listen\":\"0.0.0.0\",\"listen_port\":11442,\"network\":\"udp\"}],"
+  # IPv6 tunnel mode: policy device IPv6 may follow the tunnel only when
+  # every device policy binds the same node (v6 tproxy cannot tell devices
+  # apart on a shared LAN prefix, so per-device v6 routing is impossible).
+  # Otherwise no v6 inbounds are emitted and firewall.sh drops policy IPv6.
+  v6_node=""
+  if (nd>=1) {
+    v6_same=1
+    for(k2=2;k2<=nd;k2++) if (devnode[k2]!=devnode[1]) v6_same=0
+    if (v6_same) v6_node=devnode[1]
+  }
+  inbounds="{\"type\":\"tproxy\",\"tag\":\"wfc-tcp\",\"listen\":\"0.0.0.0\",\"listen_port\":11441,\"network\":\"tcp\"},{\"type\":\"tproxy\",\"tag\":\"wfc-udp\",\"listen\":\"0.0.0.0\",\"listen_port\":11442,\"network\":\"udp\"}"
+  if (v6_node!="") inbounds=inbounds ",{\"type\":\"tproxy\",\"tag\":\"wfc-tcp6\",\"listen\":\"::\",\"listen_port\":11443,\"network\":\"tcp\"},{\"type\":\"tproxy\",\"tag\":\"wfc-udp6\",\"listen\":\"::\",\"listen_port\":11444,\"network\":\"udp\"}"
+  print "  \"inbounds\":[" inbounds "],"
   print "  \"outbounds\":["
   for(k=1;k<=nn;k++) {
     split(node[k],f,"|"); id=f[2]
@@ -135,6 +154,7 @@ END {
       if (f[16]=="tls"||f[7]!="") s=s ",\"tls\":" tls((f[7]!=""?f[7]:f[19]),f[8],f[9],f[20])
     }
     if (p=="trojan") s=s ",\"password\":" q(f[6]) ",\"tls\":" tls(f[7],f[8],f[9],f[20])
+    if (p=="shadowsocks") s=s ",\"password\":" q(f[6]) ",\"method\":" q(f[10])
     if (p=="wireguard") {
       # Legacy wireguard outbound (sing-box < 1.11).  The endpoint form above
       # is preferred; this branch uses the singular field name the old
@@ -155,6 +175,12 @@ END {
     for(i=1;i<=n;i++) list=list (list?",":"") q(ips[i] "/32")
     out=(node_proto[devnode[k]]=="wireguard" && wg_style=="endpoint") ? "wg-" devnode[k] : "node-" devnode[k]
     print "    {\"source_ip_cidr\":[" list "],\"action\":\"route\",\"outbound\":" q(out) "}" (k<nd?",":"")
+  }
+  # v6 tunnel: one rule routing the shared v6 inbound pair to the single
+  # bound node (only emitted when every device policy binds the same node).
+  if (v6_node!="") {
+    out=(node_proto[v6_node]=="wireguard" && wg_style=="endpoint") ? "wg-" v6_node : "node-" v6_node
+    print "    ,{\"inbound\":[\"wfc-tcp6\",\"wfc-udp6\"],\"action\":\"route\",\"outbound\":" q(out) "}"
   }
   print "  ]}}"
 }

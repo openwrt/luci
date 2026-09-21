@@ -3,6 +3,10 @@ set -eu
 
 nodes=${1:?node list required}
 output=${2:-/var/run/wificalling-gateway/node-status.json}
+# Optional third argument: only refresh this node's probe (the monitor loop
+# rotates one node per tick so a big fleet does not hammer every server at
+# once); with no target every node is refreshed.
+target=${3:-}
 tmp="${output}.tmp.$$"
 trap 'rm -f "$tmp"' EXIT HUP INT TERM
 
@@ -164,6 +168,25 @@ wg_handshake_test() {
 		# reported as an ordinary handshake_failed/unreachable node rather
 		# than rejected.  Skip it here so neither happens.
 		case "$id" in ''|*[!A-Za-z0-9_]*) continue;; esac
+		# Rotated probing: with a target only that node is refreshed; the
+		# rest report from their 60 s cache (or "not yet checked" on the
+		# first sweep) instead of being probed all at once.
+		if [ -n "$target" ] && [ "$id" != "$target" ]; then
+			if [ -f "/tmp/wg-health-$id" ] && [ "$(sed -n '2p' "/tmp/wg-health-$id" 2>/dev/null)" = ok ]; then
+				state=handshake_ok; ping_json="\"$(sed -n '3p' "/tmp/wg-health-$id")\""; measurement=wg_handshake
+			elif [ -f "/tmp/wg-health-$id" ]; then
+				state=handshake_failed; ping_json=null; measurement=wg_handshake
+				reason_json="\"$(sed -n '3p' "/tmp/wg-health-$id" 2>/dev/null || echo unreachable)\""
+			else
+				state=not_yet_checked; ping_json=null; measurement=none; reason_json='"not_yet_checked"'
+			fi
+			[ "$protocol" = wireguard ] || { state=$([ -f "/tmp/wg-health-$id" ] && echo reachable || echo not_yet_checked); measurement=$([ -f "/tmp/wg-health-$id" ] && echo icmp || echo none); ping_json=$([ -f "/tmp/wg-health-$id" ] && printf '"%s"' "$(sed -n '3p' "/tmp/wg-health-$id")" || printf 'null'); }
+			[ "$first" -eq 1 ] || printf ','
+			first=0
+			printf '{"id":"%s","state":"%s","measurement":"%s","ping_ms":%s,"reason":%s}' \
+				"$(json_escape "$id")" "$state" "$measurement" "$ping_json" "${reason_json:-null}"
+			continue
+		fi
 		state=no_icmp_reply; ping_json=null; measurement=icmp; reason_json=null
 		# WireGuard nodes are validated by a real handshake, not ICMP.
 		if [ "$protocol" = wireguard ]; then
