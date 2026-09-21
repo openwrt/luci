@@ -45,9 +45,8 @@ function sectionNameCheck(extra_class) {
 			return s['.name'] == v;
 		})) {
 			return _('Remotes, Encryption Proposals, Children and Shunts may not share the same names.') + ' ' +
-				_('Use combinations like child1_phase1 that do not exceed 15 characters.');
+				_('Use combinations like child1_phase1.');
 		}
-		if (v.length > 15) return _('Name length shall not exceed 15 characters');
 		return true;
 	}, 'blur', 'keyup');
 	return el;
