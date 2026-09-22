@@ -1,5 +1,6 @@
 'use strict';
 'require form';
+'require uci';
 'require view';
 'require tools.widgets as widgets';
 
@@ -15,6 +16,28 @@ function addLogLevel(o) {
 }
 
 return view.extend({
+	load: function () {
+		return uci.load('ipsec').then(function () {
+			let save = false;
+			if (uci.get('ipsec', 'globals') == null) {
+				uci.add('ipsec', 'globals', 'globals');
+				save = true;
+			}
+
+			if (uci.get('ipsec', 'syslog') == null) {
+				uci.add('ipsec', 'syslog', 'syslog');
+				save = true;
+			}
+
+			if (uci.get('ipsec', 'netlink') == null) {
+				uci.add('ipsec', 'netlink', 'netlink');
+				save = true;
+			}
+
+			if (save)
+				uci.save();
+		});
+	},
 	render: function (result) {
 		let m, s, o;
 
