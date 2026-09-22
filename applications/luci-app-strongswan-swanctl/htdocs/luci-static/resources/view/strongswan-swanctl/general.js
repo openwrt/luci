@@ -44,6 +44,32 @@ return view.extend({
 			_('Network interface to bind the shunt policy to'));
 		o.modalonly = true;
 
+		// Authority Configuration
+		s = m.section(form.GridSection, 'authority', _('Authority'),
+			_('Define Certificate Authorities that are trusted to sign and revoke peer certificates.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.anonymous = true;
+
+		o = s.option(form.Value, 'description', _('Description'),
+			_('An optional description of what this authority is used for.'));
+
+		o = s.option(form.Value, 'cacert', _('CA Certificate'),
+			_('CA certificate to use as trust anchor, relative to /etc/swanctl/x509ca.'));
+		o.datatype = 'file';
+
+		o = s.option(form.Value, 'cert_uri_base', _('Certificate Base URI'),
+			_('Base URI for the hash and URL feature to fetch certificates from the trusted CAs.'));
+		o.modalonly = true;
+
+		o = s.option(form.DynamicList, 'crl_uri', _('CRL URIs'),
+			_('URIs where a CRL for the CA can be fetched.'));
+		o.modalonly = true;
+
+		o = s.option(form.DynamicList, 'ocsp_uri', _('OCSP URIs'),
+			_('URIs where an OCSP responder for the CA is available.'));
+		o.modalonly = true;
+
 		return m.render();
 	}
 });
