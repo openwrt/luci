@@ -39,11 +39,13 @@ function sectionNameCheck(extra_class) {
 			...uci.sections('ipsec', 'connection'),
 			...uci.sections('ipsec', 'child'),
 			...uci.sections('ipsec', 'crypto_proposal'),
+			...uci.sections('ipsec', 'local'),
+			...uci.sections('ipsec', 'remote'),
 		];
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Connections, Encryption Proposals and Children may not share the same names.') + ' ' +
+			return _('Connections, Encryption Proposals, Children, Locals and Remotes may not share the same names.') + ' ' +
 				_('Use combinations like child1_phase1.');
 		}
 		return true;
@@ -148,55 +150,44 @@ return view.extend({
 		};
 		o.rmempty = false;
 
-		o = s.taboption('authentication', form.ListValue, 'authentication_method',
-			_('Authentication Method'), _('IKE authentication (phase 1)'));
-		o.modalonly = true;
-		o.value('psk', 'Pre-shared Key');
-		o.value('pubkey', 'Public Key');
+		o = s.taboption('authentication', form.MultiValue, 'local', _('Local Authentication'),
+			_('Local authentication sections used for this connection.') + ' ' +
+			_('Each section corresponds to one authentication round.'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
 
-		o = s.taboption('authentication', form.Value, 'local_identifier', _('Local Identifier'),
-			_('Local identifier for IKE (phase 1)'));
-		o.datatype = 'string';
-		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
-		o.modalonly = true;
+			var sections = uci.sections('ipsec', 'local');
+			if (sections.length == 0) {
+				this.value('', _('Please create a Local section first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
 
-		o = s.taboption('authentication', form.Value, 'remote_identifier', _('Remote Identifier'),
-			_('Remote identifier for IKE (phase 1)'));
-		o.datatype = 'string';
-		o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
-		o.modalonly = true;
+			return this.super('load', [section_id]);
+		};
 
-		o = s.taboption('authentication', form.Value, 'pre_shared_key', _('Pre-Shared Key'),
-			_('The pre-shared key for the tunnel'));
-		o.datatype = 'string';
-		o.password = true;
-		o.modalonly = true;
+		o = s.taboption('authentication', form.MultiValue, 'remote', _('Remote Authentication'),
+			_('Remote authentication sections used for this connection.') + ' ' +
+			_('Each section corresponds to one authentication round.'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'remote');
+			if (sections.length == 0) {
+				this.value('', _('Please create a Remote section first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
 		o.rmempty = false;
-		o.depends('authentication_method', 'psk');
-
-		o = s.taboption('authentication', form.Value, 'local_cert', _('Local Certificate'),
-			_('Certificate pathname to use for authentication'));
-		o.datatype = 'file';
-		o.depends('authentication_method', 'pubkey');
-		o.modalonly = true;
-
-		o = s.taboption('authentication', form.Value, 'local_key', _('Local Key'),
-			_('Private key pathname to use with above certificate'));
-		o.datatype = 'file';
-		o.modalonly = true;
-
-		o = s.taboption('authentication', form.Value, 'ca_cert', _('CA Certificate'),
-			_("CA certificate that need to lie in remote peer's certificate's path of trust"));
-		o.datatype = 'file';
-		o.depends('authentication_method', 'pubkey');
-		o.modalonly = true;
-
-		o = s.taboption('authentication', form.DynamicList, 'remote_ca_certs', _('Remote CA Certificates'),
-			_('Restrict the remote peer\'s certificate to be issued by one of these CAs'));
-		o.datatype = 'file';
-		o.depends('authentication_method', 'pubkey');
-		o.optional = true;
-		o.modalonly = true;
 
 		o = s.taboption('authentication', form.ListValue, 'send_cert', _('Send Certificate'),
 			_('Whether to send our own certificate to the remote peer'));
@@ -204,14 +195,12 @@ return view.extend({
 		o.value('ifasked');
 		o.value('never');
 		o.default = 'ifasked';
-		o.depends('authentication_method', 'pubkey');
 		o.optional = true;
 		o.modalonly = true;
 
 		o = s.taboption('authentication', form.Flag, 'send_certreq', _('Send Certificate Request'),
 			_('Send certificate request payloads to offer trusted root CA certificates to the peer'));
 		o.default = '1';
-		o.depends('authentication_method', 'pubkey');
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
@@ -272,6 +261,71 @@ return view.extend({
 		o.value('ikev2', 'IKEv2');
 		o.value('ike', 'IKE (%s, %s)'.format(_('both'), _('deprecated')));
 		o.default = 'ikev2';
+		o.modalonly = true;
+
+		// Local Configuration
+		s = m.section(form.GridSection, 'local', _('Local'),
+			_('Define local IKE authentication rounds referenced from connections.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
+
+		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
+			_('IKE authentication (phase 1)'));
+		o.value('psk', 'Pre-shared Key');
+		o.value('pubkey', 'Public Key');
+		o.default = 'psk';
+		o.rmempty = false;
+
+		o = s.option(form.Value, 'id', _('Local Identifier'),
+			_('Local identifier for IKE (phase 1)'));
+		o.datatype = 'string';
+		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'certs', _('Local Certificate'),
+			_('Certificate to use for authentication, relative to /etc/swanctl/x509.'));
+		o.datatype = 'file';
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'key', _('Local Key'),
+			_('Private key to use with the certificate, relative to /etc/swanctl/private.'));
+		o.datatype = 'file';
+		o.modalonly = true;
+
+		// Remote Configuration
+		s = m.section(form.GridSection, 'remote', _('Remote'),
+			_('Define remote IKE authentication rounds referenced from connections.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
+
+		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
+			_('IKE authentication (phase 1)'));
+		o.value('psk', 'Pre-shared Key');
+		o.value('pubkey', 'Public Key');
+		o.value('eap-mschapv2', 'EAP MSCHAPv2');
+		o.value('eap-tls', 'EAP TLS');
+		o.default = 'psk';
+		o.rmempty = false;
+
+		o = s.option(form.Value, 'id', _('Remote Identifier'),
+			_('Remote identifier for IKE (phase 1)'));
+		o.datatype = 'string';
+		o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
+		o.modalonly = true;
+
+		o = s.option(form.DynamicList, 'cacerts', _('Remote CA Certificates'),
+			_('Restrict the remote peer\'s certificate to be issued by one of these CAs'));
+		o.datatype = 'file';
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'eap_id', _('EAP ID'),
+			_('EAP identity to use with the remote peer'));
+		o.datatype = 'string';
+		o.default = '%any';
+		o.depends('auth', 'eap-mschapv2');
+		o.depends('auth', 'eap-tls');
 		o.modalonly = true;
 
 		// Children Configuration
