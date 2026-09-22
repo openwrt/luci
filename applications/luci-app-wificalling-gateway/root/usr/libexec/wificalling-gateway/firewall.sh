@@ -14,21 +14,42 @@ v6_teardown() {
 }
 # Resolve a client IP to a MAC (static DHCP lease first, then the neighbour
 # table): IPv6 addresses are dynamic (SLAAC privacy extensions), so the
-# device can only be matched by MAC at the firewall.
+# device can only be matched by MAC at the firewall.  The lease file and LAN
+# device follow the rest of the package: dhcp-sync.sh and the status view
+# read dhcp.@dnsmasq[0].leasefile, and the LAN bridge is whatever
+# network.lan.device names (br-lan on stock images).
+leasefile=$(uci -q get dhcp.@dnsmasq[0].leasefile 2>/dev/null || true)
+[ -n "$leasefile" ] || leasefile=/tmp/dhcp.leases
+lan_dev=$(uci -q get network.lan.device 2>/dev/null || uci -q get network.lan.ifname 2>/dev/null || true)
+[ -n "$lan_dev" ] || lan_dev=br-lan
 mac_for_ip() {
-	_fwc_mac=$(awk -v target="$1" '$3 == target { print $2; exit }' /tmp/dhcp.leases 2>/dev/null || true)
+	_fwc_mac=$(awk -v target="$1" '$3 == target { print $2; exit }' "$leasefile" 2>/dev/null || true)
 	case "$_fwc_mac" in
-		??:??:??:??:??:??) printf '%s' "$_fwc_mac"; return 0 ;;
+		??:??:??:??:??:??) printf '%s\n' "$_fwc_mac"; return 0 ;;
 	esac
-	_fwc_mac=$(ip neigh show "$1" dev br-lan 2>/dev/null | awk '$2 == "lladdr" { print $3; exit }')
+	# "lladdr" sits at field 4 on stock OpenWrt ("IP dev DEV lladdr MAC
+	# STATE"), so match by position-independent scan rather than a fixed
+	# field index.
+	_fwc_mac=$(ip neigh show "$1" dev "$lan_dev" 2>/dev/null | awk '{ for (i = 1; i < NF; i++) if ($i == "lladdr") { print $(i + 1); exit } }')
 	case "$_fwc_mac" in
-		??:??:??:??:??:??) printf '%s' "$_fwc_mac" ;;
+		??:??:??:??:??:??) printf '%s\n' "$_fwc_mac" ;;
 	esac
 }
 [ "$action" = stop ] && { "$bypass_helper" clear "$clients" || true; v6_teardown; nft delete table $table 2>/dev/null || true; ip rule del fwmark 0x66 table 166 2>/dev/null || true; ip route flush table 166 2>/dev/null || true; exit 0; }
 
 macs=$(for ip in $(awk -F '|' 'NF>=2 { print $2 }' "$clients" | sort -u); do mac_for_ip "$ip" || true; done | sort -u)
 ips=$(awk -F '|' 'NF>=2 { printf "%s%s", (n++?", ":""), $2 }' "$clients")
+# mac_for_ip prints one MAC per line; nft wants a comma-joined element list.
+# With no resolvable MAC at all (devices offline, foreign bridge, no lease)
+# an empty "elements = {  }" is an nft syntax error that aborts the whole
+# ruleset under set -eu - fall back to an empty set, which keeps the
+# prerouting6 rules valid while matching nothing.
+mac_list=$(printf '%s\n' "$macs" | awk '{ printf "%s%s", (n++?", ":""), $1 }')
+if [ -n "$macs" ]; then
+	mac_set="set macs { type ether_addr; elements = { $mac_list } }"
+else
+	mac_set="set macs { type ether_addr; }"
+fi
 [ -n "$ips" ] || {
 	# Fail-open on an empty client set: a start with no clients must withdraw
 	# the rule/route/table installed for a previously present device, so
@@ -48,7 +69,7 @@ nft -f - <<EOF
 table $table {
  set clients4 { type ipv4_addr; elements = { $ips } }
  set clients6 { type ipv6_addr; flags interval; elements = { fe80::/10, fc00::/7 } }
- set macs { type ether_addr; elements = { $(printf '%s' "$macs" | sed 's/,/, /g') } }
+ $mac_set
  chain prerouting {
   type filter hook prerouting priority mangle; policy accept;
   meta nfproto ipv6 return

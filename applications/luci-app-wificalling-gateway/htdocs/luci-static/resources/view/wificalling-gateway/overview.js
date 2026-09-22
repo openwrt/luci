@@ -339,15 +339,16 @@ return view.extend({
 		uuidField.modalonly = true;
 		// Shadowsocks cipher.  The field is modal-only because the pinned
 		// cipher list is checked by the compiler; an unsupported cipher makes
-		// sing-box reject the whole config at load.
+		// sing-box reject the whole config at load.  The empty value is
+		// rejected with the same message: the compiler hard-fails on a
+		// missing method and would keep the whole gateway from starting.
 		var methodOpt = s.option(form.Value, 'method', _('Shadowsocks method'));
 		methodOpt.placeholder = 'aes-256-gcm';
 		methodOpt.modalonly = true;
 		var ssMethods = ['aes-128-gcm','aes-192-gcm','aes-256-gcm','chacha20-ietf-poly1305','xchacha20-ietf-poly1305','2022-blake3-aes-128-gcm','2022-blake3-aes-256-gcm','2022-blake3-chacha20-poly1305'];
 		methodOpt.validate = function(section_id, value) {
 			if (this.section.formvalue(section_id, 'protocol') != 'shadowsocks') return true;
-			if (!value) return true;
-			return (ssMethods.indexOf(value) >= 0) ? true : _('Unsupported Shadowsocks encryption method');
+			return (value && ssMethods.indexOf(value) >= 0) ? true : _('Unsupported Shadowsocks encryption method');
 		};
 		var sniOpt = s.option(form.Value, 'sni', _('TLS server name'));
 		sniOpt.modalonly = true;

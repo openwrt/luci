@@ -1,8 +1,10 @@
 #!/bin/sh
-clients=$1; output=$2; nodes=$3; node_output=$4; events=$5; state=$6; event_interval=${7:-60}; max_events=${8:-20}; log_enabled=${9:-1}; tick=0
+clients=$1; output=$2; nodes=$3; node_output=$4; events=$5; state=$6; event_interval=${7:-60}; max_events=${8:-20}; log_enabled=${9:-1}
 # Rotate node-health one node per sweep (cursor file remembers the last
-# probed id): a big fleet no longer hammers every server on the same tick,
-# and each node still gets a fresh probe every other sweep (10 s cadence).
+# probed id): a big fleet no longer hammers every server on the same tick.
+# A node is re-probed every N sweeps (N*5 s for N nodes), so past ~12 nodes
+# the interval outgrows the 60 s cache lifetime and the sweeps in between
+# serve the last cached reading.
 cursor="${state}.node-health"
 next_node() {
 	last=$(cat "$cursor" 2>/dev/null || true)
@@ -23,6 +25,5 @@ while :; do
 		/usr/libexec/wificalling-gateway/node-health.sh "$nodes" "$node_output" "$node"
 		printf '%s\n' "$node" > "$cursor"
 	fi
-	tick=$(( (tick + 1) % 2 ))
 	sleep 5
 done
