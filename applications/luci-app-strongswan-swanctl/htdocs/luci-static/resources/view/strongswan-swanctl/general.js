@@ -70,6 +70,87 @@ return view.extend({
 			_('URIs where an OCSP responder for the CA is available.'));
 		o.modalonly = true;
 
+		// Secrets Configuration
+		s = m.section(form.GridSection, 'secret', _('Secrets'),
+			_('Define shared secrets and private key passphrases used for authentication.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.anonymous = true;
+
+		o = s.option(form.Value, 'description', _('Description'),
+			_('An optional description of what this secret is used for.'));
+
+		o = s.option(form.ListValue, 'type', _('Type'),
+			_('Kind of secret to define'));
+		o.rmempty = false;
+		o.default = 'ike';
+		o.value('eap');
+		o.value('xauth');
+		o.value('ntlm');
+		o.value('ike');
+		o.value('ppk');
+		o.value('private');
+		o.value('rsa');
+		o.value('ecdsa');
+		o.value('pkcs8');
+		o.value('pkcs12');
+		o.value('token');
+
+		o = s.option(form.DynamicList, 'id', _('Identity'),
+			_('Identities this secret is valid for'));
+		o.depends('type', 'eap');
+		o.depends('type', 'xauth');
+		o.depends('type', 'ntlm');
+		o.depends('type', 'ike');
+		o.depends('type', 'ppk');
+
+		o = s.option(form.Value, 'secret', _('Secret'),
+			_('Shared secret for authentication, or passphrase to decrypt a private key.'));
+		o.datatype = 'string';
+		o.password = true;
+		o.depends('type', 'eap');
+		o.depends('type', 'xauth');
+		o.depends('type', 'ntlm');
+		o.depends('type', 'ike');
+		o.depends('type', 'ppk');
+		o.depends('type', 'private');
+		o.depends('type', 'rsa');
+		o.depends('type', 'ecdsa');
+		o.depends('type', 'pkcs8');
+		o.depends('type', 'pkcs12');
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'file', _('Key File'),
+			_('Path to the private key file.'));
+		o.datatype = 'file';
+		o.depends('type', 'private');
+		o.depends('type', 'rsa');
+		o.depends('type', 'ecdsa');
+		o.depends('type', 'pkcs8');
+		o.depends('type', 'pkcs12');
+
+		o = s.option(form.Value, 'handle', _('Handle'),
+			_('Handle of the private key on the smartcard.'));
+		o.depends('type', 'token');
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'slot', _('Slot'),
+			_('Slot of the smartcard to use.'));
+		o.depends('type', 'token');
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'module', _('Module'),
+			_('PKCS#11 module to use.'));
+		o.depends('type', 'token');
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'pin', _('PIN'),
+			_('PIN to access the private key on the smartcard.'));
+		o.datatype = 'string';
+		o.password = true;
+		o.depends('type', 'token');
+		o.modalonly = true;
+
 		return m.render();
 	}
 });
