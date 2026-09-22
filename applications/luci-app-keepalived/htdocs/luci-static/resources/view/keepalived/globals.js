@@ -13,7 +13,7 @@ return view.extend({
 		s.addremove = false;
 
 		o = s.option(form.Flag, 'enabled', _('Enabled'));
-		o.default = o.disabled;
+		o.default = true;
 
 		o = s.option(form.Value, 'router_id', _('Router ID'),
 			_('String identifying the machine (need not be hostname)'));
