@@ -53,15 +53,21 @@ function sectionNameCheck(extra_class) {
 };
 
 return view.extend({
-	load: async function () {
-		await uci.load('network');
-		return await callListAlgorithms();
+	load: function () {
+		return Promise.all([
+			callListAlgorithms(),
+			L.resolveDefault(uci.load('network'), null),
+		]).then(function (data) {
+			return {
+				algorithms: data[0],
+			};
+		});
 	},
 
 	render: function (result) {
 		let m, s, o;
-		const algorithms = result.data ?? {};
-		const error = result.error;
+		const algorithms = result.algorithms.data ?? {};
+		const error = result.algorithms.error;
 
 		if (error)
 			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
