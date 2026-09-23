@@ -180,30 +180,34 @@ wg_handshake_test() {
 			else
 				state=not_yet_checked; ping_json=null; measurement=none; reason_json='"not_yet_checked"'
 			fi
-			# ICMP/TCP probes write the same cache (lines 4-5 carry the
-			# verdict state and measurement kind; WireGuard caches stay
-			# three lines), so the rotated skip branch serves the last
-			# reading instead of reporting "not yet checked" on every
-			# sweep the node is not the target of.
+			# ICMP/TCP probes persist a verdict cache on their own path
+			# (/tmp/wg-health-<id>.probe): the WireGuard handshake cache
+			# treats line 2 == ok as a completed handshake and line 3 as
+			# the exit IP, so reusing one file would let a stale latency
+			# render as a verified exit IP after a protocol switch in UCI.
 			[ "$protocol" = wireguard ] || {
-				if [ -f "/tmp/wg-health-$id" ]; then
-					cache_state=$(sed -n '4p' "/tmp/wg-health-$id" 2>/dev/null)
-					kind=$(sed -n '5p' "/tmp/wg-health-$id" 2>/dev/null)
-					case "$kind" in icmp|tcp) ;; *) kind=icmp ;; esac
-					lat=$(sed -n '3p' "/tmp/wg-health-$id" 2>/dev/null)
-					case "$lat" in *[!0-9.]*) lat= ;; esac
-					if [ "$cache_state" = reachable ] || [ "$cache_state" = tcp_reachable ]; then
-						if [ -n "$lat" ]; then
-							state=$cache_state; measurement=$kind; ping_json=$lat; reason_json=null
+				probe_cache="/tmp/wg-health-$id.probe"
+				if [ -f "$probe_cache" ]; then
+					cache_ts=$(sed -n '1p' "$probe_cache" 2>/dev/null || echo 0)
+					age=$(($(date +%s) - ${cache_ts:-0}))
+					if [ "$age" -lt 60 ] 2>/dev/null; then
+						cache_state=$(sed -n '2p' "$probe_cache" 2>/dev/null)
+						kind=$(sed -n '3p' "$probe_cache" 2>/dev/null)
+						case "$kind" in icmp|tcp) ;; *) kind=icmp ;; esac
+						lat=$(sed -n '4p' "$probe_cache" 2>/dev/null)
+						case "$lat" in *[!0-9.]*) lat= ;; esac
+						if [ "$cache_state" = reachable ] || [ "$cache_state" = tcp_reachable ]; then
+							if [ -n "$lat" ]; then
+								state=$cache_state; measurement=$kind; ping_json=$lat; reason_json=null
+							else
+								state=unreachable; measurement=$kind; ping_json=null; reason_json=null
+							fi
+						elif [ -n "$cache_state" ]; then
+							state=$cache_state; measurement=$kind; ping_json=null; reason_json=null
 						else
-							state=unreachable; measurement=$kind; ping_json=null; reason_json=null
+							state=not_yet_checked; measurement=none; ping_json=null; reason_json='"not_yet_checked"'
 						fi
-					elif [ -n "$cache_state" ]; then
-						state=$cache_state; measurement=$kind; ping_json=null; reason_json=null
 					else
-						# A WireGuard-format cache (protocol switched in
-						# UCI) has no ICMP/TCP verdict lines: report the
-						# node as not yet checked until its next probe.
 						state=not_yet_checked; measurement=none; ping_json=null; reason_json='"not_yet_checked"'
 					fi
 				else
@@ -248,14 +252,14 @@ wg_handshake_test() {
 						;;
 				esac
 			fi
-			# Rotated sweeps read this cache for the non-target nodes:
-			# without it every non-WireGuard node would report "not yet
-			# checked" on every sweep it is not the target of.  The first
-			# three lines mirror the WireGuard cache format; line 4 is the
-			# verdict state itself (preserves no_icmp_reply), line 5 the
-			# measurement kind (icmp/tcp).
+			# Rotated sweeps read this probe cache for the non-target
+			# nodes: without it every non-WireGuard node would report
+			# "not yet checked" on every sweep it is not the target of.
+			# The dedicated .probe path (ts / verdict state / measurement
+			# kind / latency) never collides with the WireGuard handshake
+			# cache format.
 			if [ "$state" = reachable ] || [ "$state" = tcp_reachable ]; then cache_verdict=ok; else cache_verdict=failed; fi
-			printf '%s\n%s\n%s\n%s\n%s\n' "$(date +%s)" "$cache_verdict" "${latency:-}" "$state" "$measurement" > "/tmp/wg-health-$id"
+			printf '%s\n%s\n%s\n%s\n' "$(date +%s)" "$state" "$measurement" "${latency:-}" > "/tmp/wg-health-$id.probe"
 		fi
 		[ "$first" -eq 1 ] || printf ','
 		first=0
