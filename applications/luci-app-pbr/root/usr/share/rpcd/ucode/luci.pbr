@@ -1,0 +1,96 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright 2022-2026 MOSSDeF, Stan Grishin (stangri@melmac.ca).
+//
+// rpcd ucode plugin for pbr.
+
+/*
+ubus -v list luci.pbr
+ubus call luci.pbr getInitList '{"name":"pbr"}'
+ubus call luci.pbr getInitStatus '{"name":"pbr"}'
+ubus call luci.pbr getPlatformSupport '{"name":"pbr"}'
+ubus call luci.pbr getInterfaces '{"name":"pbr"}'
+ubus call luci.pbr setInitAction '{"name":"pbr","action":"start"}'
+*/
+
+import create_pbr from '/lib/pbr/pbr.uc';
+import { access } from 'fs';
+import { cursor } from 'uci';
+
+const packageName = 'pbr'; // ucode-lsp disable
+// Must equal LuciCompat in pbr/status.js and pkg.compat in the pbr backend;
+// a mismatch trips isVersionMismatch() and warns the user to update. Bump all
+// five locations together whenever pbr's message catalog changes.
+const rpcdCompat = 37; // ucode-lsp disable
+
+// ── rpcd Method Handlers ────────────────────────────────────────────
+
+const methods = {
+	getInitList: {
+		args: { name: 'name' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let pbr = create_pbr();
+			return pbr.get_init_list(name);
+		}
+	},
+	getInitStatus: {
+		args: { name: 'name' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let pbr = create_pbr();
+			let result = pbr.get_init_status(name);
+			if (result[name])
+				result[name].rpcdCompat = rpcdCompat;
+			return result;
+		}
+	},
+	getInterfaces: {
+		args: { name: 'name' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let pbr = create_pbr();
+			return pbr.get_supported_interfaces(name);
+		}
+	},
+	getPlatformSupport: {
+		args: { name: 'name' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let pbr = create_pbr();
+			return pbr.get_platform_support(name);
+		}
+	},
+	setInitAction: {
+		args: { name: 'name', action: 'action' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let action = req.args?.action;
+			if (name != packageName) return { result: false };
+			if (!access('/etc/init.d/' + packageName, 'x'))
+				return { error: 'Init script not found!' };
+
+			let result = false;
+			switch (action) {
+			case 'enable':
+			case 'disable': {
+				let val = (action === 'enable') ? '1' : '0';
+				if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0) {
+					let uci_ctx = cursor();
+					uci_ctx.load(packageName);
+					uci_ctx.set(packageName, 'config', 'enabled', val);
+					uci_ctx.commit(packageName);
+					result = true;
+				}
+				break;
+			}
+			case 'start': case 'stop': case 'reload': case 'restart':
+				if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0)
+					result = true;
+				break;
+			}
+			return { result: result };
+		}
+	},
+};
+
+return { 'luci.pbr': methods };
