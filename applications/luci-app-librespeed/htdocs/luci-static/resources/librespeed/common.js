@@ -178,6 +178,17 @@ return baseclass.extend({
 	 * come through here, or the date-only guard gets lost in a copy. */
 	chartStampFull: chartStampFull,
 
+	/* History entries in time order. The backend returns them in the order
+	 * they were recorded, which is time order only while the clock is: a
+	 * router without a battery-backed clock can record a run after boot
+	 * before NTP has set the time. The charts place samples by position
+	 * and the pages read the last entry as the newest. The sort is stable,
+	 * so entries with the same epoch keep their order. */
+	byTime(entries) {
+		return (Array.isArray(entries) ? entries.slice() : [])
+			.sort((a, b) => (a.epoch ?? 0) - (b.epoch ?? 0));
+	},
+
 	/* Plain figures of one series: what is normal, how much it wobbles, and
 	 * where it stands now. The story sentences are built from these. On
 	 * daily aggregates the extremes come from the _min/_max columns the
