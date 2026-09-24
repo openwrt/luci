@@ -20,7 +20,7 @@ return baseclass.extend({
 
 			for (let i = 0; i < radios_networks_hints[1].length; i++)
 				tasks.push(L.resolveDefault(radios_networks_hints[1][i].getAssocList(), []).then(L.bind((net, list) => {
-					net.assoclist = list.sort((a, b) => { return a.mac > b.mac });
+					net.assoclist = list.sort((a, b) => a.mac.localeCompare(b.mac));
 				}, this, radios_networks_hints[1][i])));
 
 			return Promise.all(tasks).then(() => {
@@ -138,7 +138,7 @@ return baseclass.extend({
 
 	renderUpdateData(radios, networks, hosthints) {
 
-		for (let i = 0; i < radios.sort((a, b) => { a.getName() > b.getName() }).length; i++) {
+		for (let i = 0; i < radios.sort((a, b) => a.getName().localeCompare(b.getName())).length; i++) {
 			const network_items = networks.filter(net => { return net.getWifiDeviceName() == radios[i].getName() });
 
 			for (let j = 0; j < network_items.length; j++) {

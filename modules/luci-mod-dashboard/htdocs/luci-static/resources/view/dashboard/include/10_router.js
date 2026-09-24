@@ -116,9 +116,7 @@ return baseclass.extend({
 						if ('addrsv4' === ver) {
 							const addrs = data[idx][ver].value;
 							if(Array.isArray(addrs) && addrs.length) {
-								for(let ip in addrs) {
-									data[idx][ver].value = addrs[ip].split('/')[0];
-								}
+								data[idx][ver].value = addrs.map(a => a.split('/')[0]);
 							}
 						}
 
