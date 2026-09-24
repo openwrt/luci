@@ -1,0 +1,18 @@
+{
+	"luci-proto-wwand": {
+		"description": "Grant LuCI read access to the wwand modem daemon",
+		"read": {
+			"ubus": {
+				"wwand": [ "status", "modem_signal", "modem_cells", "modem_sim_slots", "modem_probe" ]
+			},
+			"file": {
+				"/sys/class/gpio/": [ "list" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"wwand": [ "modem_reset", "modem_sim_pin_verify" ]
+			}
+		}
+	}
+}
