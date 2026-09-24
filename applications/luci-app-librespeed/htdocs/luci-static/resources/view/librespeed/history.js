@@ -14,6 +14,20 @@
  * second fetch, since the entries are in memory anyway. */
 const pageSize = 50;
 
+/* An entry without an interface -- a run whose path could not be proved,
+ * or a daily aggregate from before archives were kept per interface -- gets
+ * a key of its own. '?' is outside the UCI name alphabet, so it never merges
+ * with a real interface. */
+const UNKNOWN = '?';
+
+function ifaceKey(e) {
+	return e.interface || UNKNOWN;
+}
+
+function ifaceLabel(key) {
+	return (key == UNKNOWN) ? _('unknown') : key;
+}
+
 const callConfig = rpc.declare({
 	object: 'librespeed',
 	method: 'config',
@@ -77,22 +91,37 @@ return view.extend({
 	},
 
 	/* The server/interface filters narrow the fetched range on the client;
-	 * daily aggregates carry neither field, so there the filters offer only
-	 * "All" and match everything. */
+	 * daily aggregates carry no server, so there the server filter offers
+	 * only "All" and matches everything. */
 	applyFilters(entries) {
 		return (entries || []).filter(e =>
 			(!this.server || (e.server && e.server.name) == this.server) &&
-			(!this.iface || e.interface == this.iface));
+			(!this.iface || ifaceKey(e) == this.iface));
+	},
+
+	/* The interfaces present, in the order the filter lists them and the
+	 * panels stack: the default one first, the rest by name, unknown last. */
+	ifaceKeys(entries) {
+		const def = this.config && this.config.interface,
+		      rank = k => (k == def) ? 0 : ((k == UNKNOWN) ? 2 : 1),
+		      keys = [];
+
+		entries.forEach(e => {
+			if (keys.indexOf(ifaceKey(e)) < 0)
+				keys.push(ifaceKey(e));
+		});
+
+		return keys.sort((a, b) => rank(a) - rank(b) || L.naturalCompare(a, b));
 	},
 
 	visible() {
 		return this.applyFilters(this.entries);
 	},
 
-	filterSelect(title, values, current, onpick) {
+	filterSelect(title, values, current, onpick, label) {
 		const sel = E('select', { 'class': 'cbi-input-select' },
 			[ E('option', { 'value': '' }, [ _('All') ]) ].concat(
-				values.map(v => E('option', { 'value': v }, [ v ]))));
+				values.map(v => E('option', { 'value': v }, [ label ? label(v) : v ]))));
 
 		sel.value = values.indexOf(current) >= 0 ? current : '';
 		sel.addEventListener('change', ui.createHandlerFn(this, function() {
@@ -106,14 +135,11 @@ return view.extend({
 	/* The header above the chart doubles as the legend: per series a checkbox
 	 * with its color, its average, and the change against the previous period
 	 * -- one place to read the numbers and switch the lines, right where the
-	 * eye already is. Below it, one sentence on how the period behaved. */
-	renderSummary() {
-		const entries = this.visible(),
-		      prev = this.applyFilters(this.prevEntries),
-		      act = this.active[this.group],
+	 * eye already is. Below it, one sentence on how the period behaved.
+	 * Called once per interface panel, with that interface's entries. */
+	renderSummary(node, entries, prev) {
+		const act = this.active[this.group],
 		      states = [];
-
-		this.summaryNode.innerHTML = '';
 
 		const row = E('div', { 'class': 'librespeed-cards' });
 
@@ -180,11 +206,11 @@ return view.extend({
 			}
 		}, this));
 
-		this.summaryNode.appendChild(row);
+		node.appendChild(row);
 
 		if (states.length) {
 			const allStable = states.every(s => s[1] == _('stable'));
-			this.summaryNode.appendChild(E('p', { 'class': 'librespeed-muted', 'style': 'margin:0 0 .25em' }, [
+			node.appendChild(E('p', { 'class': 'librespeed-muted', 'style': 'margin:0 0 .25em' }, [
 				allStable
 					? _('Stable over the selected period.')
 					: states.map(s => '%s: %s'.format(s[0], s[1])).join(' · ')
@@ -229,24 +255,44 @@ return view.extend({
 		this.emptyNode.style.display = 'none';
 		this.dataNode.style.display = '';
 
-		this.renderSummary();
+		/* One panel per interface, each on its own scale and compared with
+		 * its own previous period: WAN and LTE can differ tenfold, and one
+		 * line or average over both would describe neither. A single panel
+		 * needs no heading. */
+		const prev = this.applyFilters(this.prevEntries),
+		      keys = this.ifaceKeys(entries);
 
-		/* The legend lives in the summary header above; the chart itself has
-		 * nothing below it that could be mistaken for table furniture. */
-		const drew = lscommon.renderChart(this.chartNode, entries, {
-			series: this.active[this.group],
-			resolution: this.resolution,
-			hover: true
+		this.panelsNode.innerHTML = '';
+
+		keys.forEach(k => {
+			const own = entries.filter(e => ifaceKey(e) == k),
+			      chart = E('div', {}),
+			      summary = E('div', {});
+
+			if (keys.length > 1)
+				this.panelsNode.appendChild(E('h4', {}, [ ifaceLabel(k) ]));
+
+			this.panelsNode.appendChild(chart);
+			this.panelsNode.appendChild(summary);
+			this.renderSummary(summary, own, prev.filter(e => ifaceKey(e) == k));
+
+			/* The legend lives in the summary header above; the chart itself has
+			 * nothing below it that could be mistaken for table furniture. */
+			const drew = lscommon.renderChart(chart, own, {
+				series: this.active[this.group],
+				resolution: this.resolution,
+				hover: true
+			});
+
+			/* Entries exist -- the empty state above handles the case where they
+			 * do not -- so reaching here means this metric has no numbers. */
+			if (!drew)
+				chart.appendChild(E('p', { 'class': 'librespeed-muted' },
+					[ _('No data for the selected metric.') ]));
+			else if (this.resolution == '1d')
+				chart.appendChild(E('p', { 'class': 'librespeed-muted' },
+					[ _('Daily minimum, average and maximum.') ]));
 		});
-
-		/* Entries exist -- the empty state above handles the case where they
-		 * do not -- so reaching here means this metric has no numbers. */
-		if (!drew)
-			this.chartNode.appendChild(E('p', { 'class': 'librespeed-muted' },
-				[ _('No data for the selected metric.') ]));
-		else if (this.resolution == '1d')
-			this.chartNode.appendChild(E('p', { 'class': 'librespeed-muted' },
-				[ _('Daily minimum, average and maximum.') ]));
 
 		/* The sort key carries the same decimal count as the display half:
 		 * ui.Table stringifies the whole cell and compares digit runs one by
@@ -341,8 +387,7 @@ return view.extend({
 	},
 
 	render() {
-		this.summaryNode = E('div', {});
-		this.chartNode = E('div', {});
+		this.panelsNode = E('div', {});
 		this.controls = E('div', {});
 		this.pagerNode = E('div', { 'class': 'librespeed-toolbar', 'style': 'margin:.5em 0' });
 
@@ -383,18 +428,16 @@ return view.extend({
 			ranges.classList.add('librespeed-push');
 
 			/* Filter choices are whatever the fetched range actually contains. */
-			const servers = [], ifaces = [];
+			const servers = [], ifaces = this.ifaceKeys(this.entries);
 
 			this.entries.forEach(e => {
 				const s = e.server && e.server.name;
 				if (s && servers.indexOf(s) < 0)
 					servers.push(s);
-				if (e.interface && ifaces.indexOf(e.interface) < 0)
-					ifaces.push(e.interface);
 			});
 
 			/* The freshly fetched window may no longer contain the chosen
-			 * server or interface -- daily aggregates carry neither field at
+			 * server or interface -- daily aggregates carry no server at
 			 * all. The widget would then quietly repaint as "All" while the
 			 * model kept filtering everything out, with no control on screen
 			 * able to clear it; reconcile the model here, where the choice
@@ -407,8 +450,8 @@ return view.extend({
 			const filters = E('div', { 'class': 'librespeed-toolbar' }, [
 				this.filterSelect(_('Server'), servers.sort(), this.server,
 					function(v) { this.server = v; this.page = 0; this.redraw(); }),
-				this.filterSelect(_('Interface'), ifaces.sort(), this.iface,
-					function(v) { this.iface = v; this.page = 0; this.redraw(); })
+				this.filterSelect(_('Interface'), ifaces, this.iface,
+					function(v) { this.iface = v; this.page = 0; this.redraw(); }, ifaceLabel)
 			]);
 
 			this.controls.innerHTML = '';
@@ -433,8 +476,7 @@ return view.extend({
 		]);
 
 		this.dataNode = E('div', {}, [
-			this.chartNode,
-			this.summaryNode,
+			this.panelsNode,
 			E('h3', { 'style': 'margin-top:.75em' }, [ _('Measurements') ]),
 			this.tableNode,
 			this.pagerNode,

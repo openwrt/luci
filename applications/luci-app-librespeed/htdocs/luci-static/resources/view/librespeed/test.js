@@ -3,6 +3,7 @@
 'require ui';
 'require poll';
 'require rpc';
+'require uci';
 'require librespeed.common as lscommon';
 
 /* The alias comes from the require above; the repo eslint config only
@@ -12,6 +13,10 @@
 const callStart = rpc.declare({
 	object: 'librespeed',
 	method: 'start',
+	params: [ 'interface' ],
+	/* A ubus error must not read as a start: a backend from before
+	 * per-interface runs refuses the argument with one. */
+	reject: true,
 	expect: { '': {} }
 });
 
@@ -208,17 +213,27 @@ return view.extend({
 			callResult().catch(() => ({})),
 			callConfig().catch(() => ({})),
 			callHistory(Math.floor(Date.now() / 1000 - recentSeconds),
-				undefined, 0).catch(() => ({}))
+				undefined, 0).catch(() => ({})),
+			/* The interfaces offered for a measurement; without it the
+			 * selector still offers the default one. */
+			uci.load('network').catch(() => null),
+			/* netifd's view, so a dynamic default reads as its parent. */
+			lscommon.loadLinks()
 		]);
 	},
 
 	renderRecent(data) {
-		const entries = lscommon.byTime(data && data.entries);
+		/* Only the chosen interface: every figure below is an average, and
+		 * one over WAN and LTE together would describe neither line. */
+		const all = lscommon.byTime(data && data.entries);
+		const entries = all.filter(e => e.interface == this.iface);
 
-		/* Kept so switching the metric can redraw without refetching. */
+		/* Kept so switching the metric or the interface can redraw without
+		 * refetching. */
 		this.recentData = data;
 
 		this.recentNode.innerHTML = '';
+		this.recentSubtitle.textContent = '%s · %s'.format(_('last 24 hours'), this.iface);
 		this.recentCount.textContent = entries.length
 			? N_(entries.length, '%d measurement', '%d measurements')
 				.format(entries.length) : '';
@@ -277,6 +292,19 @@ return view.extend({
 		if (!drew) {
 			this.recentNode.appendChild(E('p', { 'class': 'librespeed-muted' },
 				[ _('No data in the last 24 hours.') ]));
+
+			/* The window may still hold runs of other interfaces, or of
+			 * none proven: they are not this one's, but they exist. */
+			const others = all.length - entries.length;
+
+			if (!entries.length && others > 0)
+				this.recentNode.appendChild(E('p', { 'class': 'librespeed-muted' }, [
+					N_(others, '%d measurement of another interface or of an unknown path is in the full history.',
+						'%d measurements of other interfaces or of an unknown path are in the full history.').format(others),
+					' ',
+					E('a', { 'href': L.url('admin', 'network', 'librespeed', 'history') },
+						[ _('View full history »') ])
+				]));
 			return;
 		}
 
@@ -328,19 +356,28 @@ return view.extend({
 	},
 
 	handleStart(ev) {
-		return callStart().then(L.bind(function(res) {
-			if (res && res.error) {
-				ui.addNotification(null, E('p', [
-					_('Could not start the measurement: %s').format(res.error)
-				]));
-				return;
-			}
+		/* A raised RPC error carries LuCI's stack trace after its first
+		 * line, which is the part a user can act on. */
+		const fail = msg => ui.addNotification(null, E('p', [
+			_('Could not start the measurement: %s').format(String(msg).split('\n')[0])
+		]));
+
+		/* The default interface goes out as {}, the request a backend from
+		 * before per-interface runs still accepts. Such a backend refuses
+		 * any other interface outright, which lands in fail() as well. A
+		 * default naming wan6 is offered as wan, and still runs as set. */
+		const iface = (this.iface != lscommon.linkName(this.defaultIface))
+			? this.iface : undefined;
+
+		return callStart(iface).then(L.bind(function(res) {
+			if (res && res.error)
+				return fail(res.error);
 
 			/* Show the running state immediately rather than waiting up to
 			 * pollInterval for the next status. */
 			this.renderStatus({ running: true, started: Date.now() / 1000 });
 			this.setBusy(true);
-		}, this));
+		}, this), err => fail(err.message));
 	},
 
 	handleStop(ev) {
@@ -360,13 +397,16 @@ return view.extend({
 			running ? 'handleStop' : 'handleStart');
 	},
 
-	runContext() {
+	runContext(status) {
 		const parts = [];
 
 		if (this.config.server && this.config.server != 'auto')
 			parts.push(_('server %s').format(this.config.server));
-		if (this.config.interface)
-			parts.push(this.config.interface);
+		/* Only the interface the backend names for this run: a cron run may
+		 * measure another one than the default, and a run that follows the
+		 * default route learns its interface only at the end. */
+		if (status.interface)
+			parts.push(status.interface);
 
 		return parts.join(' · ');
 	},
@@ -462,7 +502,7 @@ return view.extend({
 				rows.push(E('div', { 'class': 'librespeed-muted' },
 					[ _('%s elapsed').format(elapsed) ]));
 
-			const ctx = this.runContext();
+			const ctx = this.runContext(status);
 
 			if (ctx)
 				rows.push(E('div', { 'class': 'librespeed-muted', 'style': 'margin-top:.5em' }, [ ctx ]));
@@ -480,19 +520,31 @@ return view.extend({
 				status.last_finished ? ' · ' + fmtTime(status.last_finished) : ''
 			]));
 		}
-		else if (!status.running && status.last_error) {
-			/* Compact, and above the figures: the failure is news, the last
-			 * good result is still the substance of the page. */
-			this.alertNode.appendChild(E('div', {
+
+		/* Compact, and above the figures: the failure is news, the last
+		 * good result is still the substance of the page. */
+		const alert = (title, error, when) => E('div', {}, [
+			E('div', {
 				'class': 'alert-message warning',
 				'style': 'display:inline-block; text-align:left'
 			}, [
-				E('strong', {}, [ _('Last measurement failed') ]),
+				E('strong', {}, [ title ]),
 				E('br'),
-				status.last_error,
-				status.last_finished ? ' · ' + fmtTime(status.last_finished) : ''
-			]));
-		}
+				error,
+				when ? ' · ' + fmtTime(when) : ''
+			])
+		]);
+
+		/* One per interface whose last run failed, kept until a run of it
+		 * succeeds: a success of another interface does not hide it. A
+		 * backend from before per-interface runs has only the last run. */
+		if (!status.running && Array.isArray(status.failures))
+			status.failures.forEach(f => this.alertNode.appendChild(alert(
+				_('Last measurement of %s failed').format(lscommon.linkName(f.interface)),
+				f.error, f.finished)));
+		else if (!status.running && status.last_error && status.last_error != 'stopped')
+			this.alertNode.appendChild(alert(_('Last measurement failed'),
+				status.last_error, status.last_finished));
 	},
 
 	renderResult(result) {
@@ -589,6 +641,8 @@ return view.extend({
 		      recent = data[3] || {};
 
 		this.config = config;
+		this.defaultIface = config.interface || 'wan';
+		this.iface = lscommon.linkName(this.defaultIface);
 		this.alertNode = E('div', {});
 		this.statusNode = E('div', {});
 		this.resultHeading = E('div', { 'class': 'librespeed-muted', 'style': 'margin-top:.35em' });
@@ -600,8 +654,7 @@ return view.extend({
 			'class': 'librespeed-visually-hidden'
 		});
 		this.recentCount = E('span', { 'class': 'librespeed-muted' });
-		this.recentSubtitle = E('div', { 'class': 'librespeed-muted' },
-			[ _('last 24 hours') ]);
+		this.recentSubtitle = E('div', { 'class': 'librespeed-muted' });
 		/* Built once and refilled: ui.Table gives sortable headers, the same
 		 * as the History page's table. */
 		this.recentTable = new ui.Table([
@@ -617,6 +670,28 @@ return view.extend({
 		this.recentSwitch = E('div', {});
 		this.button = E('button', { 'class': 'cbi-button cbi-button-action' },
 			[ _('Start test') ]);
+
+		/* The logical interfaces of UCI network, as Settings offers them.
+		 * Dynamic ones such as lte_4 are not sections, and wan6 beside wan
+		 * is wan's link: a result names the interface they belong to. The
+		 * choice lasts for this page only; the default stays what Settings
+		 * says. */
+		const ifaces = uci.sections('network', 'interface')
+			.map(s => s['.name'])
+			.filter(n => n != 'loopback' && lscommon.linkName(n) == n);
+
+		if (ifaces.indexOf(this.iface) < 0)
+			ifaces.push(this.iface);
+
+		const ifaceSelect = E('select', {
+			'class': 'cbi-input-select',
+			'change': ev => {
+				this.iface = ev.target.value;
+				this.renderRecent(this.recentData);
+			}
+		}, ifaces.map(n => E('option', { 'value': n }, [ n ])));
+
+		ifaceSelect.value = this.iface;
 
 		this.lastSeen = status.last_finished;
 
@@ -666,22 +741,21 @@ return view.extend({
 				])
 			])));
 
-		/* Computed by the backend in the router's timezone; the browser may
-		 * well sit in another one, so it only formats the epoch. */
-		const sched = config.schedule || {};
-		const next = sched.next_runs || [];
-		/* Strict, matching history.js: the backend derives this from the
-		 * crontab and emits a real boolean, never UCI's '0'/'1'. */
-		const schedRows = [ [ _('Enabled'), sched.enabled === true ? _('Yes') : _('No') ] ];
+		/* One row per automatic test: its interface, how often (with its
+		 * weekdays), and when next.
+		 * The epoch is computed by the backend in the router's timezone;
+		 * the browser may well sit in another one, so it only formats it. */
+		const schedRows = lscommon.activeSchedules(config).map(sc => {
+			const every = lscommon.scheduleLabel(sc.interval, sc.days),
+			      next = (sc.next_runs || [])[0];
 
-		if (sched.enabled === true) {
-			/* The shared table translates the six tokens the UI offers; the
-			 * init script accepts more, so the raw token is the fallback. */
-			schedRows.push([ _('Interval'),
-				lscommon.INTERVALS[sched.interval || '1d'] || sched.interval ]);
-			if (next.length)
-				schedRows.push([ _('Next run'), new Date(next[0] * 1000).toLocaleString() ]);
-		}
+			return [ sc.interface ? lscommon.linkName(sc.interface) : '–', next
+				? '%s · %s'.format(every, new Date(next * 1000).toLocaleString())
+				: every ];
+		});
+
+		if (!schedRows.length)
+			schedRows.push([ _('Enabled'), _('No') ]);
 
 		/* The main card carries the result; the aside carries what the next
 		 * run will do. Plain sections and tables, so every theme renders it. */
@@ -689,7 +763,6 @@ return view.extend({
 			E('div', { 'class': 'cbi-section', 'style': 'margin:0 0 1em 0' }, [
 				E('h3', [ _('Test configuration') ]),
 				kv([
-					[ _('Interface'), config.interface || 'wan' ],
 					[ _('Server'), (config.server == 'auto' || !config.server)
 						? _('automatic (nearest)') : config.server ],
 					[ _('Protocol'),
@@ -715,7 +788,16 @@ return view.extend({
 			this.statusNode,
 			this.resultHeading,
 			this.resultNode,
-			E('div', { 'style': 'margin-top:1em' }, [ this.button ])
+			E('div', {
+				'class': 'librespeed-toolbar',
+				'style': 'justify-content:center; margin-top:1em'
+			}, [
+				E('label', {}, [
+					E('span', { 'class': 'librespeed-muted' }, [ _('Interface') ]),
+					' ', ifaceSelect
+				]),
+				this.button
+			])
 		]);
 
 		const recentSection = E('div', { 'class': 'cbi-section', 'style': 'margin:1.5em 0 0 0' }, [

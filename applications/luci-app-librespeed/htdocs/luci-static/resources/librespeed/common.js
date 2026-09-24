@@ -1,6 +1,8 @@
 'use strict';
 'require baseclass';
+'require rpc';
 'require ui';
+'require uci';
 
 /* Shared between the Test page's recent-history block and the full History
  * page, so the two can never draw the same data differently. */
@@ -141,6 +143,34 @@ function chartStampShort(e, resolution) {
 	return isNaN(d.getTime()) ? e.timestamp : d.toLocaleDateString();
 }
 
+/* An interface section of UCI network that carries IPv6 only. */
+function v6only(s) {
+	return s.proto == 'dhcpv6' || (s.proto == 'static' &&
+		!L.toArray(s.ipaddr).length && L.toArray(s.ip6addr).length > 0);
+}
+
+const callIfaces = rpc.declare({
+	object: 'network.interface',
+	method: 'dump',
+	expect: { 'interface': [] }
+});
+
+/* netifd's interfaces, as loadLinks() last read them. */
+let netifd = [];
+
+/* The UCI interfaces on the device of a dynamic one: netifd adds lte_4
+ * (qmi) or wan_6 (PPPoE) at runtime, and the backend names a run of it
+ * after the non-dynamic interface on its device. None when netifd does
+ * not list it up. */
+function parentsOf(name) {
+	const st = netifd.filter(i => i.interface == name)[0];
+	const dev = (st && st.dynamic) ? st.l3_device : null;
+
+	return dev ? netifd.filter(i => !i.dynamic && i.l3_device == dev &&
+		(uci.get('network', i.interface) || {})['.type'] == 'interface')
+		.map(i => i.interface) : [];
+}
+
 function fmtVal(v, unit) {
 	return (typeof v == 'number')
 		? (v.toFixed(unit == 'Mbps' ? 2 : 1) + ' ' + unit) : '–';
@@ -172,6 +202,95 @@ return baseclass.extend({
 		'6h': _('Every 6 hours'),
 		'12h': _('Every 12 hours'),
 		'1d': _('Daily')
+	},
+
+	/* Cron's weekday numbers with their names, Monday first as Settings
+	 * lists them: an array, since an object would sort Sunday's '0' first. */
+	DAYS: [
+		[ '1', _('Monday') ], [ '2', _('Tuesday') ], [ '3', _('Wednesday') ],
+		[ '4', _('Thursday') ], [ '5', _('Friday') ], [ '6', _('Saturday') ],
+		[ '0', _('Sunday') ]
+	],
+
+	/* How often an automatic test runs, for a status line: the interval,
+	 * with the days it is limited to listed after it. The raw token or day
+	 * is the fallback for hand-set values. */
+	scheduleLabel(interval, days) {
+		interval = interval || '1d';
+
+		const every = this.INTERVALS[interval] || interval;
+		const names = (days && days != '*') ? String(days).split(',').map(d =>
+			(this.DAYS.filter(x => x[0] == d)[0] || [ d, d ])[1]) : [];
+
+		if (!names.length)
+			return every;
+
+		return _('%s on %s', 'schedule interval on weekdays').format(every, names.join(', '));
+	},
+
+	/* The automatic tests the crontab holds, one per interface, as the Test
+	 * and Settings pages both list them. A backend from before per-interface
+	 * schedules reports only its one schedule, which measured the default
+	 * interface. Strict: the backend derives `enabled` from the crontab and
+	 * emits a real boolean, never UCI's '0'/'1'. */
+	activeSchedules(config) {
+		config = config || {};
+
+		if (Array.isArray(config.schedules))
+			return config.schedules;
+
+		return (config.schedule && config.schedule.enabled === true)
+			? [ Object.assign({ interface: config.interface }, config.schedule) ] : [];
+	},
+
+	/* Reads netifd's interfaces for linkName(); a page calls it in load().
+	 * Without them (netifd down, no access) dynamic names stay as they are. */
+	loadLinks() {
+		return callIfaces().then(list => {
+			netifd = Array.isArray(list) ? list : [];
+		}).catch(() => {
+			netifd = [];
+		});
+	},
+
+	/* The name a result of this interface is recorded under. The backend
+	 * tells links apart by device, so an IPv6 interface on the device of an
+	 * IPv4 one (wan6 beside wan) is recorded as the IPv4 one: the pages
+	 * offer that one only, and show a configuration naming the IPv6 one as
+	 * it. Read from UCI network (loaded by the caller) the way netifd puts
+	 * them on one device: an '@wan' alias, or the same device as a DHCP or
+	 * static IPv4 interface -- PPP brings up a device of its own. Of
+	 * several, the one taking the default route; otherwise the name stays.
+	 * A dynamic interface is its parent's, as loadLinks() found it: the
+	 * one link of the UCI interfaces on its device (lte beside lte6). */
+	linkName(name) {
+		const s = uci.get('network', name);
+		const dev = s ? s.device : null;
+
+		if (!s || s['.type'] != 'interface') {
+			const links = parentsOf(name).map(p => this.linkName(p))
+				.filter((n, i, a) => a.indexOf(n) == i);
+
+			return (links.length == 1) ? links[0] : name;
+		}
+
+		if (!dev || !v6only(s))
+			return name;
+
+		if (dev.charAt(0) == '@') {
+			const p = uci.get('network', dev.substring(1));
+
+			return (p && p['.type'] == 'interface' && !v6only(p)) ? p['.name'] : name;
+		}
+
+		let peers = uci.sections('network', 'interface').filter(p =>
+			p.device == dev && !v6only(p) && (p.proto == 'dhcp' || p.proto == 'static'));
+
+		if (peers.length > 1)
+			peers = peers.filter(p => (p.proto == 'dhcp' && p.defaultroute != '0') ||
+				(p.proto == 'static' && p.gateway));
+
+		return (peers.length == 1) ? peers[0]['.name'] : name;
 	},
 
 	/* Exported alongside the chart: every timestamp a page prints should
