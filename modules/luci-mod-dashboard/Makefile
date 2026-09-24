@@ -7,10 +7,14 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Dashboard Pages
-LUCI_DEPENDS:=+luci-base +libiwinfo
+LUCI_DEPENDS:=+luci-base +libiwinfo +ucode-mod-uloop
 
 PKG_BUILD_DEPENDS:=iwinfo
 PKG_LICENSE:=Apache-2.0
+
+define Package/luci-mod-dashboard/conffiles
+/etc/config/dashboard
+endef
 
 include ../../luci.mk
 

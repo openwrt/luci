@@ -3,6 +3,7 @@
 'require dom';
 'require network';
 'require rpc';
+'require uci';
 'require view.dashboard.lib.charts as charts';
 
 /* -67 dBm is the minimum RSSI Cisco specifies for voice-grade coverage;
@@ -27,6 +28,19 @@ return baseclass.extend({
 	title: _('Wireless'),
 
 	params: [],
+
+	widgets: [
+		{ id: 'wifi', slot: 'cards', title: _('Wireless clients'), order: 60, hidden: true },
+		{ id: 'distribution', slot: 'charts', title: _('Wireless client distribution'), order: 30, hidden: true },
+		{ id: 'signal', slot: 'charts', title: _('Signal Strength'), order: 40, hidden: true },
+		{ id: 'traffic', slot: 'charts', title: _('Wireless client data usage'), order: 50, hidden: true },
+		{ id: 'wifi', slot: 'tabs', title: _('Wireless'), order: 50, hidden: true }
+	],
+
+	// The "wifi" system feature only says /sbin/wifi exists.
+	available() {
+		return uci.load('wireless').then(() => uci.sections('wireless', 'wifi-device').length > 0);
+	},
 
 	load() {
 		return Promise.all([
@@ -67,10 +81,10 @@ return baseclass.extend({
 		}));
 
 		return charts.card({
-			title: _('Client distribution'),
+			title: _('Wireless client distribution'),
 			desc: _('by SSID'),
 			body: devices.length
-				? charts.donut({ series: series, centerLabel: _('clients'), ariaLabel: _('Client distribution') })
+				? charts.donut({ series: series, centerLabel: _('clients'), ariaLabel: _('Wireless client distribution') })
 				: charts.empty(_('No wireless clients connected'))
 		});
 	},
@@ -142,7 +156,7 @@ return baseclass.extend({
 		const scale = this.byteScale(peak);
 
 		return charts.card({
-			title: _('Client traffic'),
+			title: _('Wireless client data usage'),
 			desc: devices.length ? _('Transferred') : '',
 			body: devices.length ? [
 				charts.barChart({
@@ -151,7 +165,8 @@ return baseclass.extend({
 					ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: scale.step * n, label: scale.format(scale.step * n) })),
 					items: devices.map(device => ({
 						label: device.hostname.value,
-						title: '%s · %s %s · %s %s'.format(device.hostname.value, _('Up.'), device.transferred.value.rx, _('Down.'), device.transferred.value.tx),
+						title: '%s · %s %s · %s %s'.format(device.hostname.value, _('Up.'), device.transferred.value.rx, _('Down.'), device.transferred.value.tx)
+							+ (device.connected.value ? ' · %s %s'.format(_('Connected'), device.connected.value) : ''),
 						values: [
 							{ value: device.transferred.value.bytes.rx, className: 'dashboard-bar-up' },
 							{ value: device.transferred.value.bytes.tx, className: 'dashboard-bar-down' }
@@ -174,7 +189,7 @@ return baseclass.extend({
 			if (radio[key].visible)
 				fields.push(E('div', {}, [
 					E('span', {}, [ radio[key].title ]),
-					E((key == 'bssid') ? 'code' : 'b', {}, [ radio[key].value ])
+					E('b', {}, [ radio[key].value ])
 				]));
 
 		return E('div', { 'class': 'ifacebox' }, [
@@ -199,8 +214,9 @@ return baseclass.extend({
 				_('Hostname'),
 				_('SSID'),
 				'%s / %s'.format(_('Signal'), _('Noise floor')),
-				{ text: _('Up.'), className: 'right' },
-				{ text: _('Down.'), className: 'right' }
+				_('Up.'),
+				_('Down.'),
+				_('Connected')
 			],
 			rows: this.params.wifi.devices.map(device => [
 				device.hostname.value,
@@ -212,11 +228,12 @@ return baseclass.extend({
 						? E('small', {}, [ '/ %d %s'.format(device.signal.value.noise, _('dBm')) ])
 						: ''
 				]),
-				{ text: device.transferred.value.rx, className: 'right' },
-				{ text: device.transferred.value.tx, className: 'right' }
+				device.transferred.value.rx,
+				device.transferred.value.tx,
+				device.connected.value || '-'
 			]),
 			emptyText: _('No wireless clients connected'),
-			foot: [ '', _('Total'), String(this.params.wifi.devices.length), '', '' ]
+			foot: [ _('Total'), String(this.params.wifi.devices.length) ]
 		});
 	},
 
@@ -326,6 +343,13 @@ return baseclass.extend({
 								tx: '%s'.format('%1024.2mB'.format(bss.tx.bytes)),
 								bytes: { rx: bss.rx.bytes || 0, tx: bss.tx.bytes || 0 }
 							}
+						},
+
+						// Connection duration is not reported by every driver.
+						connected: {
+							title: _('Connected'),
+							visible: true,
+							value: (typeof(bss.connected_time) == 'number') ? '%t'.format(bss.connected_time) : null
 						}
 					}
 				);
@@ -346,10 +370,14 @@ return baseclass.extend({
 			return null;
 
 		return {
-			kpi: [ this.renderKpi() ],
-			charts: [ this.renderDistributionChart(), this.renderSignalChart(), this.renderTrafficChart() ],
+			cards: [ { id: 'wifi', node: () => this.renderKpi() } ],
+			charts: [
+				{ id: 'distribution', node: () => this.renderDistributionChart() },
+				{ id: 'signal', node: () => this.renderSignalChart() },
+				{ id: 'traffic', node: () => this.renderTrafficChart() }
+			],
 			tabs: [
-				{ id: 'wifi', title: this.title, count: this.params.wifi.devices.length, content: this.renderTab() }
+				{ id: 'wifi', title: this.title, count: this.params.wifi.devices.length, content: () => this.renderTab() }
 			]
 		};
 	}
