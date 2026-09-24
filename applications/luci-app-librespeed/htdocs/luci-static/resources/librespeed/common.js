@@ -178,6 +178,13 @@ return baseclass.extend({
 	 * come through here, or the date-only guard gets lost in a copy. */
 	chartStampFull: chartStampFull,
 
+	/* By epoch: the backend lists runs as recorded, which is out of order
+	 * for a run recorded before NTP set the clock. */
+	byTime(entries) {
+		return (Array.isArray(entries) ? entries.slice() : [])
+			.sort((a, b) => (a.epoch ?? 0) - (b.epoch ?? 0));
+	},
+
 	/* Plain figures of one series: what is normal, how much it wobbles, and
 	 * where it stands now. The story sentences are built from these. On
 	 * daily aggregates the extremes come from the _min/_max columns the

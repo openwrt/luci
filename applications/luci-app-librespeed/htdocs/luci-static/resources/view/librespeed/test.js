@@ -213,7 +213,7 @@ return view.extend({
 	},
 
 	renderRecent(data) {
-		const entries = Array.isArray(data && data.entries) ? data.entries : [];
+		const entries = lscommon.byTime(data && data.entries);
 
 		/* Kept so switching the metric can redraw without refetching. */
 		this.recentData = data;

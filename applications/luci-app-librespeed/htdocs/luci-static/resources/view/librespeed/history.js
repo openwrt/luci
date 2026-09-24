@@ -54,9 +54,9 @@ return view.extend({
 				? callHistory(now - 2 * this.range, now - this.range).catch(() => ({}))
 				: Promise.resolve({})
 		]).then(L.bind(function(data) {
-			this.entries = Array.isArray(data[0].entries) ? data[0].entries : [];
+			this.entries = lscommon.byTime(data[0].entries);
 			this.resolution = data[0].resolution || 'raw';
-			this.prevEntries = Array.isArray(data[1].entries) ? data[1].entries : [];
+			this.prevEntries = lscommon.byTime(data[1].entries);
 			this.prevResolution = data[1].resolution || 'raw';
 		}, this));
 	},
