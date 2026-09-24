@@ -1,5 +1,6 @@
 'use strict';
 'require baseclass';
+'require rpc';
 'require ui';
 
 /* Shared between the Test page's recent-history block and the full History
@@ -173,6 +174,32 @@ return baseclass.extend({
 		'12h': _('Every 12 hours'),
 		'1d': _('Daily')
 	},
+
+	/* Cron's weekday numbers, Monday first; an array keeps that order. */
+	DAYS: [
+		[ '1', _('Monday') ], [ '2', _('Tuesday') ], [ '3', _('Wednesday') ],
+		[ '4', _('Thursday') ], [ '5', _('Friday') ], [ '6', _('Saturday') ],
+		[ '0', _('Sunday') ]
+	],
+
+	/* The interval and the weekdays as set; a token it does not know shows as it is. */
+	scheduleLabel(interval, days) {
+		const every = this.INTERVALS[interval || '1d'] || interval;
+		const day = d => (this.DAYS.find(x => x[0] == d) || [ d, d ])[1];
+
+		if (!days || days == '*')
+			return every;
+
+		return _('%s on %s', 'schedule interval on weekdays').format(every,
+			String(days).split(',').map(p => p.split('-').map(day).join('–')).join(', '));
+	},
+
+	/* Each interface's link: the name the backend records its results under. */
+	callLinks: rpc.declare({
+		object: 'librespeed',
+		method: 'links',
+		expect: { '': {} }
+	}),
 
 	/* Exported alongside the chart: every timestamp a page prints should
 	 * come through here, or the date-only guard gets lost in a copy. */
