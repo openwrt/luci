@@ -496,7 +496,7 @@ function fold(id,title,kids,open){
 }
 function refBox(title,note,rows){
 	return E('details',{},[E('summary',{},title),note?E('p',{},note):'',
-		rows.length?E('table',{'class':'table'},rows.map(function(r){return kvRow(E('code',{},r[0]),r[1]);})):'']);
+		rows.length?E('table',{'class':'table'},rows.map(function(r){return kvRow(E('code',{},[document.createTextNode(r[0])]),[document.createTextNode(r[1])]);})):'']);
 }
 function sect(title,kids,attrs){
 	var a=attrs||{};
@@ -1113,8 +1113,8 @@ return view.extend({
 		var self=this;
 		var section=E('div',{'id':'qos-ru'});
 		var qarType=E('select',{'class':'cbi-input-select','id':'qar-type','aria-label':_('match'),'change':function(){self.qarPlaceholder();}});
-		[['tcp:','tcp:<port>[-<endport>]'],['udp:','udp:<port>[-<endport>]'],['both:','tcp: + udp:'],['dns:','dns:<pattern>'],['dnsr:','dns:/<regex>'],['dns_c:','dns_c:<pattern>'],['dns_cr:','dns_c:/<regex>'],['ipv4:','<ipaddr>'],['ipv6:','<ipv6addr>']].forEach(function(o){
-			qarType.appendChild(E('option',{'value':o[0]},o[1]));
+		[['tcp:','tcp:<port>[-<endport>]'],['udp:','udp:<port>[-<endport>]'],['both:','tcp: + udp:'],['dns:','dns:<pattern>'],['dnsr:','dns:/<regex>'],['dns_c:','dns_c:<pattern>'],['dns_cr:','dns_c:/<regex>'],['ipv4:',_('IPv4 address, e.g. 1.1.1.1')],['ipv6:',_('IPv6 address, e.g. ff01::1')]].forEach(function(o){
+			qarType.appendChild(E('option',{'value':o[0]},[document.createTextNode(o[1])]));
 		});
 		var qarCls=E('select',{'class':'cbi-input-select','id':'qar-cls','aria-label':'dscp'},this.getClasses().map(function(c){return E('option',{'value':c.name},clsOpt(c));}));
 		var qr=[['match',5,qarType],['',8,E('input',{'type':'text','class':'cbi-input-text','id':'qar-val','aria-label':_('value'),'placeholder':_('e.g. %s').format('4500')})],
