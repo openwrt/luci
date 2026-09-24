@@ -7,8 +7,8 @@
 # calls qosify_iface_stop() and interface_clear_qdisc() removes the root qdisc,
 # the bpf filters and the ifb device. This script only matters after a crash, a
 # SIGKILL or a respawn loop, so it deliberately only touches the devices of
-# enabled qosify sections and the ifb names qosify derives from them -- never a
-# qdisc or ifb this package did not create.
+# enabled qosify sections, the ifb names qosify derives from them and qosify's
+# own ifb-dns -- never a qdisc or ifb qosify did not create.
 
 . /lib/functions.sh
 . /lib/functions/network.sh
@@ -95,5 +95,10 @@ clear_device() {
 config_load qosify
 config_foreach clear_interface interface
 config_foreach clear_device device
+
+# ifb-dns is qosify's fixed DNS ifb, not derived from any section, and a stop
+# leaves it up under the kernel's default fq_codel. Deleting its root qdisc only
+# re-attaches the default, so drop the device -- only once qosify has exited.
+pidof qosify >/dev/null || ip link del ifb-dns 2>/dev/null
 
 exit 0
