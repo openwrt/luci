@@ -1,0 +1,1601 @@
+#!/bin/sh
+# Authenticated rpcd bridge. LuCI talks only to rpcd; rpcd talks to nesd on
+# the router and never exposes init-script execution through the ACL.
+
+. /lib/functions.sh 2>/dev/null
+. /usr/share/libubox/jshn.sh 2>/dev/null
+
+CONFIG_FILE=/etc/config/nes-emulator
+TOKEN_FILE=/etc/nes-emulator/auth.token
+UPLOAD_DIR=/tmp/nes-emulator-upload
+LOCK_DIR=/var/run/nes-emulator
+TOKEN_LOCK_FILE="$LOCK_DIR/auth.token.lock"
+UPLOAD_LOCK_FILE="$LOCK_DIR/upload.lock"
+START_LOCK_FILE="$LOCK_DIR/start.lock"
+TOKEN_LOCK_MAX_ATTEMPTS=10
+UPLOAD_LOCK_MAX_ATTEMPTS=3
+START_LOCK_MAX_ATTEMPTS=20
+ROTATE_TOKEN_LOCK_MAX_ATTEMPTS=3
+ROTATE_START_LOCK_MAX_ATTEMPTS=4
+NESD_BIN=/usr/bin/nesd
+MAX_ROM_SIZE=16777216
+ROM_QUOTA_SIZE=134217728
+MIN_FREE_KIB=8192
+MAX_ROM_ENTRIES=8192
+MAX_ROM_FIND_DEPTH=7
+AUTH_TOKEN=''
+TOKEN_LOCK_HELD=0
+UPLOAD_LOCK_HELD=0
+START_LOCK_HELD=0
+HTTP_CLIENT=''
+START_ERROR=''
+RPC_HOST=''
+SERVICE_INSTANCE_RUNNING=''
+SERVICE_INSTANCE_EXIT_CODE=''
+SERVICE_NESD_GID=''
+META_MODE=''
+META_NLINK=''
+META_UID=''
+META_GID=''
+
+# fd 9 owns the upload flock, fd 8 the token flock and fd 7 the startup flock.
+# Keep all three in this rpcd shell only: no command-substitution shell, service
+# process or external jshn process may keep a lock alive after this request exits.
+json_load_without_upload_fd() {
+	local statements
+
+	statements="$(
+		exec 7>&- 8>&- 9>&-
+		jshn -r "$1"
+	)" || return 1
+	eval "$statements"
+}
+
+json_dump_without_upload_fd() {
+	jshn ${JSON_PREFIX:+-p "$JSON_PREFIX"} \
+		${JSON_NONEWLINE:+-n} ${JSON_INDENT:+-i} -w 7>&- 8>&- 9>&-
+}
+
+read_metadata() {
+	local path="$1" metadata
+
+	metadata="$(
+		exec 7>&- 8>&- 9>&-
+		LC_ALL=C ls -ldn "$path" 2>/dev/null
+	)" || return 1
+	case "$metadata" in
+		*'
+'*) return 1 ;;
+	esac
+	# Intentional field splitting of the fixed-format numeric ls output.
+	# shellcheck disable=SC2086
+	set -- $metadata
+	[ "$#" -ge 4 ] || return 1
+	case "$2:$3:$4" in *[!0-9:]*) return 1 ;; esac
+	META_MODE="$1"
+	META_NLINK="$2"
+	META_UID="$3"
+	META_GID="$4"
+	return 0
+}
+
+validate_regular_metadata() {
+	local path="$1" expected_mode="$2" expected_uid="$3" expected_gid="$4"
+
+	[ -f "$path" ] && [ ! -L "$path" ] || return 1
+	read_metadata "$path" &&
+		[ "$META_MODE" = "$expected_mode" ] &&
+		[ "$META_NLINK" = 1 ] &&
+		[ "$META_UID" = "$expected_uid" ] &&
+		[ "$META_GID" = "$expected_gid" ]
+}
+
+validate_directory_metadata() {
+	local path="$1" expected_mode="$2" expected_uid="$3" expected_gid="$4"
+
+	[ -d "$path" ] && [ ! -L "$path" ] || return 1
+	read_metadata "$path" &&
+		[ "$META_MODE" = "$expected_mode" ] &&
+		[ "$META_UID" = "$expected_uid" ] &&
+		[ "$META_GID" = "$expected_gid" ]
+}
+
+prepare_lock_directory() {
+	if [ -e "$LOCK_DIR" ] || [ -L "$LOCK_DIR" ]; then
+		validate_directory_metadata "$LOCK_DIR" drwx------ 0 0
+		return
+	fi
+	(
+		exec 7>&- 8>&- 9>&-
+		umask 077
+		mkdir "$LOCK_DIR"
+	) 2>/dev/null ||
+		validate_directory_metadata "$LOCK_DIR" drwx------ 0 0 ||
+		return 1
+	validate_directory_metadata "$LOCK_DIR" drwx------ 0 0
+}
+
+prepare_lock_file() {
+	local path="$1"
+
+	prepare_lock_directory || return 1
+	if [ -e "$path" ] || [ -L "$path" ]; then
+		validate_regular_metadata "$path" -rw------- 0 0
+		return
+	fi
+	(
+		exec 7>&- 8>&- 9>&-
+		set -C
+		umask 077
+		: >"$path"
+	) 2>/dev/null ||
+		validate_regular_metadata "$path" -rw------- 0 0 ||
+		return 1
+	validate_regular_metadata "$path" -rw------- 0 0
+}
+
+load_service_nesd_gid() {
+	[ -n "$SERVICE_NESD_GID" ] && return 0
+	SERVICE_NESD_GID="$(
+		exec 7>&- 8>&- 9>&-
+		id -g nesd 2>/dev/null
+	)" || SERVICE_NESD_GID=
+	case "$SERVICE_NESD_GID" in
+		''|*[!0-9]*) return 1 ;;
+	esac
+	return 0
+}
+
+validate_config_file() {
+	validate_regular_metadata "$CONFIG_FILE" -rw------- 0 0
+}
+
+json_error() {
+	json_init
+	json_add_boolean ok 0
+	json_add_string error "$1"
+	json_dump_without_upload_fd
+}
+
+token_is_valid() {
+	local token="$1"
+
+	[ "${#token}" -ge 32 ] 2>/dev/null &&
+		[ "${#token}" -le 127 ] 2>/dev/null || return 1
+	case "$token" in *[!A-Za-z0-9._~-]*) return 1 ;; esac
+	return 0
+}
+
+new_token() {
+	local token
+
+	token="$(
+		exec 7>&- 8>&- 9>&-
+		hexdump -v -n 32 -e '1/1 "%02x"' /dev/urandom 2>/dev/null
+	)" || return 1
+	[ "${#token}" -eq 64 ] || return 1
+	printf '%s' "$token"
+}
+
+validate_token_parent() {
+	local directory="${TOKEN_FILE%/*}" resolved
+
+	load_service_nesd_gid || return 1
+	[ -d "$directory" ] && [ ! -L "$directory" ] || return 1
+	resolved="$(
+		exec 7>&- 8>&- 9>&-
+		readlink -f "$directory" 2>/dev/null
+	)" || return 1
+	[ "$resolved" = "$directory" ] || return 1
+	validate_directory_metadata "$directory" drwxr-x--- 0 \
+		"$SERVICE_NESD_GID"
+}
+
+read_auth_token() {
+	local token bytes lines
+
+	load_service_nesd_gid || return 1
+	validate_regular_metadata "$TOKEN_FILE" -rw-r----- 0 \
+		"$SERVICE_NESD_GID" || return 1
+	token="$(
+		exec 7>&- 8>&- 9>&-
+		cat "$TOKEN_FILE" 2>/dev/null
+	)" || return 1
+	token_is_valid "$token" || return 1
+	bytes="$(
+		exec 7>&- 8>&- 9>&-
+		wc -c <"$TOKEN_FILE" 2>/dev/null | tr -d ' '
+	)"
+	lines="$(
+		exec 7>&- 8>&- 9>&-
+		wc -l <"$TOKEN_FILE" 2>/dev/null | tr -d ' '
+	)"
+	[ "$lines" = 1 ] &&
+		[ "$bytes" -eq $((${#token} + 1)) ] 2>/dev/null || return 1
+	AUTH_TOKEN="$token"
+	return 0
+}
+
+write_auth_token() {
+	local token="$1" temporary
+
+	token_is_valid "$token" || return 1
+	validate_token_parent || return 1
+	if [ -e "$TOKEN_FILE" ] || [ -L "$TOKEN_FILE" ]; then
+		validate_regular_metadata "$TOKEN_FILE" -rw-r----- 0 \
+			"$SERVICE_NESD_GID" || return 1
+	fi
+	temporary="$(
+		exec 7>&- 8>&- 9>&-
+		mktemp "${TOKEN_FILE}.tmp.XXXXXX" 2>/dev/null
+	)" ||
+		return 1
+	if ! printf '%s\n' "$token" >"$temporary" ||
+	   ! chown root:nesd "$temporary" 2>/dev/null 7>&- 8>&- 9>&- ||
+	   ! chmod 0640 "$temporary" 2>/dev/null 7>&- 8>&- 9>&- ||
+	   ! mv -f "$temporary" "$TOKEN_FILE" 7>&- 8>&- 9>&-; then
+		rm -f "$temporary" 7>&- 8>&- 9>&-
+		return 1
+	fi
+	return 0
+}
+
+release_token_lock() {
+	[ "$TOKEN_LOCK_HELD" -eq 1 ] || return 0
+	exec 8>&-
+	TOKEN_LOCK_HELD=0
+	[ "$UPLOAD_LOCK_HELD" -eq 1 ] ||
+		[ "$START_LOCK_HELD" -eq 1 ] ||
+		trap - 0 1 2 15
+}
+
+acquire_token_lock() {
+	local attempts=0
+
+	[ "$TOKEN_LOCK_HELD" -eq 0 ] || return 0
+	prepare_lock_file "$TOKEN_LOCK_FILE" || return 1
+	command exec 8<>"$TOKEN_LOCK_FILE" || return 1
+	validate_regular_metadata "$TOKEN_LOCK_FILE" -rw------- 0 0 || {
+		exec 8>&-
+		return 1
+	}
+	while ! flock -n 8 2>/dev/null; do
+		attempts=$((attempts + 1))
+		if [ "$attempts" -ge "$TOKEN_LOCK_MAX_ATTEMPTS" ]; then
+			exec 8>&-
+			return 1
+		fi
+		sleep 1 9>&- 8>&- 7>&-
+	done
+	TOKEN_LOCK_HELD=1
+	trap 'release_all_locks' 0
+	trap 'release_all_locks; exit 1' 1 2 15
+	return 0
+}
+
+release_upload_lock() {
+	[ "$UPLOAD_LOCK_HELD" -eq 1 ] || return 0
+	exec 9>&-
+	UPLOAD_LOCK_HELD=0
+	[ "$TOKEN_LOCK_HELD" -eq 1 ] ||
+		[ "$START_LOCK_HELD" -eq 1 ] ||
+		trap - 0 1 2 15
+}
+
+release_start_lock() {
+	[ "$START_LOCK_HELD" -eq 1 ] || return 0
+	exec 7>&-
+	START_LOCK_HELD=0
+	[ "$TOKEN_LOCK_HELD" -eq 1 ] ||
+		[ "$UPLOAD_LOCK_HELD" -eq 1 ] ||
+		trap - 0 1 2 15
+}
+
+release_all_locks() {
+	trap - 0 1 2 15
+	if [ "$TOKEN_LOCK_HELD" -eq 1 ]; then
+		exec 8>&-
+		TOKEN_LOCK_HELD=0
+	fi
+	if [ "$UPLOAD_LOCK_HELD" -eq 1 ]; then
+		exec 9>&-
+		UPLOAD_LOCK_HELD=0
+	fi
+	if [ "$START_LOCK_HELD" -eq 1 ]; then
+		exec 7>&-
+		START_LOCK_HELD=0
+	fi
+}
+
+acquire_upload_lock() {
+	local attempts=0
+
+	[ "$UPLOAD_LOCK_HELD" -eq 0 ] || return 0
+	prepare_lock_file "$UPLOAD_LOCK_FILE" || return 1
+	command exec 9<>"$UPLOAD_LOCK_FILE" || return 1
+	validate_regular_metadata "$UPLOAD_LOCK_FILE" -rw------- 0 0 || {
+		exec 9>&-
+		return 1
+	}
+	while ! flock -n 9 2>/dev/null; do
+		attempts=$((attempts + 1))
+		if [ "$attempts" -ge "$UPLOAD_LOCK_MAX_ATTEMPTS" ]; then
+			exec 9>&-
+			return 1
+		fi
+		sleep 1 9>&-
+	done
+	UPLOAD_LOCK_HELD=1
+	trap 'release_all_locks' 0
+	trap 'release_all_locks; exit 1' 1 2 15
+	return 0
+}
+
+acquire_start_lock() {
+	local attempts=0 max_attempts="${1:-$START_LOCK_MAX_ATTEMPTS}"
+
+	[ "$START_LOCK_HELD" -eq 0 ] || return 0
+	case "$max_attempts" in ''|*[!0-9]*|0) return 1 ;; esac
+	prepare_lock_file "$START_LOCK_FILE" || return 1
+	command exec 7<>"$START_LOCK_FILE" || return 1
+	validate_regular_metadata "$START_LOCK_FILE" -rw------- 0 0 || {
+		exec 7>&-
+		return 1
+	}
+	while ! flock -n 7 2>/dev/null; do
+		attempts=$((attempts + 1))
+		if [ "$attempts" -ge "$max_attempts" ]; then
+			exec 7>&-
+			return 1
+		fi
+		sleep 1 9>&- 7>&-
+	done
+	START_LOCK_HELD=1
+	trap 'release_all_locks' 0
+	trap 'release_all_locks; exit 1' 1 2 15
+	return 0
+}
+
+remove_legacy_token() {
+	uci -q get nes-emulator.main.auth_token \
+		>/dev/null 2>&1 7>&- 8>&- 9>&- ||
+		return 0
+	uci -q delete nes-emulator.main.auth_token 7>&- 8>&- 9>&- &&
+		uci -q commit nes-emulator 7>&- 8>&- 9>&- &&
+		validate_config_file
+}
+
+ensure_auth_token() {
+	local token
+
+	validate_token_parent || return 1
+	acquire_token_lock || return 1
+	if read_auth_token; then
+		token="$AUTH_TOKEN"
+	elif [ ! -e "$TOKEN_FILE" ] && [ ! -L "$TOKEN_FILE" ]; then
+		token="$(
+			exec 7>&- 8>&- 9>&-
+			new_token
+		)"
+		if [ "${#token}" -ne 64 ] ||
+		   ! write_auth_token "$token" ||
+		   ! remove_legacy_token; then
+			release_token_lock
+			return 1
+		fi
+	else
+		release_token_lock
+		return 1
+	fi
+	release_token_lock
+	AUTH_TOKEN="$token"
+	return 0
+}
+
+prepare_upload_dir() {
+	if [ -e "$UPLOAD_DIR" ] || [ -L "$UPLOAD_DIR" ]; then
+		validate_directory_metadata "$UPLOAD_DIR" drwx------ 0 0
+		return
+	fi
+	(
+		exec 9>&-
+		umask 077
+		mkdir "$UPLOAD_DIR"
+	) 2>/dev/null || return 1
+	validate_directory_metadata "$UPLOAD_DIR" drwx------ 0 0
+}
+
+rotate_token() {
+	local token was_running=0 enabled
+
+	validate_token_parent || {
+		json_error "authentication token directory metadata is unsafe"
+		return
+	}
+	# Including the pre-dispatch token check, the RPCD lock phase allows at
+	# most seven one-second sleeps. A native restart has its own bounded token
+	# lock, so LuCI gives the complete non-cancellable operation a longer budget.
+	acquire_start_lock "$ROTATE_START_LOCK_MAX_ATTEMPTS" || {
+		json_error "another NES Emulator startup operation is still in progress; retry shortly"
+		return
+	}
+	/etc/init.d/nes-emulator running >/dev/null 2>&1 9>&- 7>&- &&
+		was_running=1
+	acquire_token_lock || {
+		release_start_lock
+		json_error "authentication token is busy"
+		return
+	}
+	token="$(
+		exec 7>&- 8>&- 9>&-
+		new_token
+	)"
+	if [ "${#token}" -ne 64 ] ||
+	   ! write_auth_token "$token" ||
+	   ! remove_legacy_token; then
+		release_token_lock
+		release_start_lock
+		json_error "cannot rotate authentication token"
+		return
+	fi
+	release_token_lock
+	AUTH_TOKEN="$token"
+	# A direct init/procd start does not use the RPC startup lock. If it passed
+	# token validation while rotation waited for the token lock, detect the
+	# newly running daemon here and restart it with the new token.
+	if [ "$was_running" -eq 0 ] &&
+	   /etc/init.d/nes-emulator running >/dev/null 2>&1 9>&- 7>&-; then
+		was_running=1
+	fi
+	if [ "$was_running" -eq 1 ]; then
+		enabled="$(
+			exec 7>&- 8>&- 9>&-
+			uci -q get nes-emulator.main.enabled 2>/dev/null
+		)"
+		case "$enabled" in
+		1|on|true|yes|enabled)
+			/etc/init.d/nes-emulator restart >/dev/null 2>&1 9>&- 7>&-
+			;;
+		*)
+			NESD_ON_DEMAND=1 NESD_SKIP_AUTOLOAD=1 \
+				/etc/init.d/nes-emulator restart \
+				>/dev/null 2>&1 9>&- 7>&-
+			;;
+		esac || {
+			release_start_lock
+			json_error "token changed, but nesd could not be restarted"
+			return
+		}
+	fi
+	release_start_lock
+	json_init
+	json_add_boolean ok 1
+	json_add_string token "$token"
+	json_dump_without_upload_fd
+}
+
+load_config() {
+	local bind host
+
+	PORT="$(uci -q get nes-emulator.main.port 2>/dev/null)"
+	case "$PORT" in ''|*[!0-9]*) PORT=29876 ;; esac
+	[ "$PORT" -ge 1 ] 2>/dev/null &&
+		[ "$PORT" -le 65535 ] 2>/dev/null || PORT=29876
+
+	ROM_DIR="$(uci -q get nes-emulator.main.rom_dir 2>/dev/null)"
+	ROM_DIR="${ROM_DIR:-/etc/nes-emulator/roms}"
+
+	bind="$(uci -q get nes-emulator.main.bind 2>/dev/null)"
+	case "$bind" in
+		''|0.0.0.0) host=127.0.0.1 ;;
+		::|\[::\]) host=::1 ;;
+		*[!0-9A-Fa-f:.]*) host=127.0.0.1 ;;
+		\[*\]) host="${bind#\[}"; host="${host%\]}" ;;
+		*) host="$bind" ;;
+	esac
+	RPC_HOST="$host"
+	case "$host" in
+		*:*) BASE="http://[${host}]:${PORT}" ;;
+		*) BASE="http://${host}:${PORT}" ;;
+	esac
+}
+
+select_http_client() {
+	[ -x "$NESD_BIN" ] || {
+		HTTP_CLIENT=''
+		return 1
+	}
+	HTTP_CLIENT=nesd
+	return 0
+}
+
+api_get() {
+	[ "$HTTP_CLIENT" = nesd ] || return 127
+	"$NESD_BIN" --rpc-client \
+		--rpc-host "$RPC_HOST" \
+		--rpc-port "$PORT" \
+		--rpc-path "$1" \
+		--rpc-method GET \
+		--rpc-token-file "$TOKEN_FILE" \
+		--rpc-timeout-ms 2000 \
+		2>/dev/null 9>&- 7>&-
+}
+
+api_post() {
+	local path="$1" body="$2"
+
+	[ "$HTTP_CLIENT" = nesd ] || return 127
+	# nesd validates and buffers the complete reply before writing stdout.
+	# Non-2xx replies keep a nonzero status while preserving their JSON body.
+	"$NESD_BIN" --rpc-client \
+		--rpc-host "$RPC_HOST" \
+		--rpc-port "$PORT" \
+		--rpc-path "$path" \
+		--rpc-method POST \
+		--rpc-body "$body" \
+		--rpc-token-file "$TOKEN_FILE" \
+		--rpc-timeout-ms 3000 \
+		2>/dev/null 9>&- 7>&-
+}
+
+daemon_is_ready() {
+	local resp message_type architecture running paused core_loaded game_loaded
+
+	resp="$(
+		exec 7>&- 9>&-
+		api_get /api/status
+	)" || return 1
+	[ -n "$resp" ] || return 1
+	json_load_without_upload_fd "$resp" 2>/dev/null || return 1
+	json_get_var message_type t
+	json_get_var architecture architecture
+	json_get_var running running
+	json_get_var paused paused
+	json_get_var core_loaded core_loaded
+	json_get_var game_loaded game_loaded
+	case "$message_type:$architecture:$running:$paused:$core_loaded:$game_loaded" in
+		status:router-cpu-thin-client:[01]:[01]:[01]:[01]) return 0 ;;
+	esac
+	return 1
+}
+
+service_instance_state() {
+	local response running exit_code
+
+	SERVICE_INSTANCE_RUNNING=''
+	SERVICE_INSTANCE_EXIT_CODE=''
+	response="$(
+		exec 7>&- 9>&-
+		ubus -S call service list \
+			'{"name":"nes-emulator"}' 2>/dev/null
+	)" || return 1
+	[ -n "$response" ] || return 1
+	running="$(
+		exec 7>&- 9>&-
+		jsonfilter -s "$response" \
+			-e '@["nes-emulator"].instances.nesd.running' \
+			2>/dev/null
+	)" || return 1
+	case "$running" in
+		true|1) SERVICE_INSTANCE_RUNNING=1 ;;
+		false|0) SERVICE_INSTANCE_RUNNING=0 ;;
+		*) return 1 ;;
+	esac
+	exit_code="$(
+		exec 7>&- 9>&-
+		jsonfilter -s "$response" \
+			-e '@["nes-emulator"].instances.nesd.exit_code' \
+			2>/dev/null
+	)" || exit_code=
+	case "$exit_code" in
+		'') [ "$SERVICE_INSTANCE_RUNNING" -eq 1 ] || return 1 ;;
+		*[!0-9]*) return 1 ;;
+		*)
+			[ "$exit_code" -le 255 ] 2>/dev/null || return 1
+			SERVICE_INSTANCE_EXIT_CODE="$exit_code"
+			;;
+	esac
+	return 0
+}
+
+set_preflight_start_error() {
+	case "$1" in
+		10)
+			START_ERROR="the nesd service account is missing or invalid; reinstall nes-emulator"
+			;;
+		11)
+			START_ERROR="the nes-emulator configuration file is missing or has unsafe ownership or permissions"
+			;;
+		12)
+			START_ERROR="the configured bind address, port or browser origin is invalid; review NES Emulator settings"
+			;;
+		13)
+			START_ERROR="a configured emulator data directory is unsafe, unavailable or inaccessible to nesd"
+			;;
+		14)
+			START_ERROR="the nesd authentication token is missing or has unsafe ownership or permissions"
+			;;
+		*)
+			START_ERROR="nesd startup checks failed; verify the emulator configuration and package installation"
+			;;
+	esac
+}
+
+set_native_start_error() {
+	case "$1" in
+		64)
+			START_ERROR="nesd rejected the authentication token file; rotate the token or reinstall both emulator packages"
+			;;
+		65)
+			START_ERROR="nesd cannot access one or more configured emulator data directories"
+			;;
+		66)
+			START_ERROR="nesd could not allocate the resources required by the emulator; free router memory and retry"
+			;;
+		67)
+			START_ERROR="the configured NES Emulator port $PORT is already in use; choose another port in Settings"
+			;;
+		68)
+			START_ERROR="nesd is not permitted to bind the configured address and port"
+			;;
+		69)
+			START_ERROR="nesd could not initialize its local HTTP service; review the bind address, port and data directories"
+			;;
+		70)
+			START_ERROR="nesd could not apply its required privilege and security restrictions; reinstall nes-emulator"
+			;;
+		71)
+			START_ERROR="nesd could not initialize process signal handling; restart the router and retry"
+			;;
+		127)
+			START_ERROR="OpenWrt could not execute /usr/bin/nesd; reinstall nes-emulator for this router architecture"
+			;;
+		137)
+			START_ERROR="nesd was killed during startup, usually because the router ran out of memory"
+			;;
+		139)
+			START_ERROR="nesd crashed during startup; reinstall matching nes-emulator packages for this router architecture"
+			;;
+		143)
+			START_ERROR="nesd was terminated during startup; wait for other service operations to finish and retry"
+			;;
+		0)
+			START_ERROR="nesd stopped before its local API became ready"
+			;;
+		*)
+			START_ERROR="nesd stopped unexpectedly during startup"
+			;;
+	esac
+}
+
+daemon_request() {
+	local endpoint="$1" resp
+
+	resp="$(
+		exec 9>&-
+		api_post "$endpoint" '{}'
+	)"
+	if [ -n "$resp" ]; then
+		printf '%s\n' "$resp"
+	else
+		json_error "nesd is not responding"
+	fi
+}
+
+start_daemon() {
+	local i=0 preflight_status start_status
+
+	START_ERROR=''
+	if [ -z "$HTTP_CLIENT" ]; then
+		START_ERROR="the matching /usr/bin/nesd loopback RPC client is missing; reinstall nes-emulator and luci-app-nes-emulator together"
+		return 1
+	fi
+
+	if daemon_is_ready; then
+		return 0
+	fi
+	if ! acquire_start_lock; then
+		START_ERROR="another NES Emulator startup operation is still in progress; retry shortly"
+		return 1
+	fi
+	if daemon_is_ready; then
+		release_start_lock
+		return 0
+	fi
+
+	NESD_ON_DEMAND=1 NESD_SKIP_AUTOLOAD=1 \
+		/etc/init.d/nes-emulator preflight \
+		>/dev/null 2>&1 9>&- 7>&-
+	preflight_status=$?
+	if [ "$preflight_status" -ne 0 ]; then
+		set_preflight_start_error "$preflight_status"
+		release_start_lock
+		return 1
+	fi
+
+	NESD_ON_DEMAND=1 NESD_SKIP_AUTOLOAD=1 \
+		/etc/init.d/nes-emulator start >/dev/null 2>&1 9>&- 7>&-
+	start_status=$?
+	if [ "$start_status" -ne 0 ]; then
+		START_ERROR="the OpenWrt service manager rejected the nesd start request"
+		release_start_lock
+		return 1
+	fi
+	while :; do
+		if daemon_is_ready; then
+			release_start_lock
+			return 0
+		fi
+		[ "$i" -ge 15 ] && break
+		i=$((i + 1))
+		sleep 1 9>&- 7>&-
+	done
+
+	if service_instance_state; then
+		if [ "$SERVICE_INSTANCE_RUNNING" -eq 1 ]; then
+			START_ERROR="nesd is running, but its local API is unreachable at $BASE; check the configured bind address, port and authentication token"
+		else
+			set_native_start_error "$SERVICE_INSTANCE_EXIT_CODE"
+		fi
+	elif /etc/init.d/nes-emulator running >/dev/null 2>&1 9>&- 7>&-; then
+		START_ERROR="nesd is running, but its local API is unreachable at $BASE; check the configured bind address, port and authentication token"
+	else
+		START_ERROR="nesd stopped during startup, but OpenWrt did not provide a valid service exit status"
+	fi
+	release_start_lock
+	return 1
+}
+
+mode_allows_nesd() {
+	local mode="$1" owner="$2" group="$3" required="$4"
+
+	if [ "$owner" = "$NESD_UID" ]; then
+		case "$required:$mode" in
+			read:?r*|search:???[xs]*) return 0 ;;
+		esac
+	elif case " $NESD_GROUPS " in *" $group "*) true ;; *) false ;; esac; then
+		case "$required:$mode" in
+			read:????r*|search:??????[xs]*) return 0 ;;
+		esac
+	else
+		case "$required:$mode" in
+			read:???????r*|search:?????????[xt]*) return 0 ;;
+		esac
+	fi
+	return 1
+}
+
+path_is_readable_by_nesd() {
+	local current="$1" required=read metadata mode nlink owner group rest
+
+	[ -n "$NESD_UID" ] && [ -n "$NESD_GROUPS" ] || return 1
+	while :; do
+		metadata="$(
+			exec 9>&-
+			LC_ALL=C ls -ldn "$current" 2>/dev/null
+		)" || return 1
+		case "$metadata" in
+			*'
+'*) return 1 ;;
+		esac
+		IFS=' ' read -r mode nlink owner group rest <<EOF
+$metadata
+EOF
+		case "$owner:$group" in
+			:*|*:|*[!0-9:]*) return 1 ;;
+		esac
+		mode_allows_nesd "$mode" "$owner" "$group" "$required" ||
+			return 1
+		[ "$current" != "/" ] || return 0
+		current="${current%/*}"
+		[ -n "$current" ] || current=/
+		required=search
+	done
+}
+
+file_size_bytes() {
+	local size
+
+	[ -f "$1" ] && [ ! -L "$1" ] || return 1
+	size="$(
+		exec 7>&- 9>&-
+		wc -c <"$1" 2>/dev/null | tr -d ' \t'
+	)" || return 1
+	case "$size" in ''|*[!0-9]*) return 1 ;; esac
+	printf '%s\n' "$size"
+}
+
+scan_rom_root() {
+	local root="$1" resolved scan_dir fifo find_pid find_status=0
+	local full name ext size readable
+
+	[ "$SCAN_TRUNCATED" -eq 0 ] || return 0
+	valid_data_dir "$root" || return 0
+	resolved="$(
+		exec 9>&-
+		readlink -f "$root" 2>/dev/null
+	)" || return 0
+	valid_data_dir "$resolved" || return 0
+	[ -d "$resolved" ] || return 0
+	scan_dir="$(
+		exec 9>&-
+		mktemp -d /tmp/nes-rom-scan.XXXXXX 2>/dev/null
+	)" || {
+		SCAN_TRUNCATED=1
+		return 0
+	}
+	fifo="$scan_dir/results"
+	if ! mkfifo "$fifo" 2>/dev/null 9>&-; then
+		rmdir "$scan_dir" 9>&-
+		SCAN_TRUNCATED=1
+		return 0
+	fi
+	find "$resolved" -mindepth 1 -maxdepth "$MAX_ROM_FIND_DEPTH" \
+		-type f -print0 >"$fifo" 2>/dev/null 9>&- &
+	find_pid=$!
+	# OpenWrt uses BusyBox ash, whose read supports NUL delimiters.
+	# shellcheck disable=SC3045
+	while IFS= read -r -d '' full; do
+		SCAN_ENTRIES=$((SCAN_ENTRIES + 1))
+		if [ "$SCAN_ENTRIES" -gt "$MAX_ROM_ENTRIES" ]; then
+			SCAN_TRUNCATED=1
+			break
+		fi
+		name="${full##*/}"
+		case "$name" in ''|.*) continue ;; esac
+		ext="$(
+			exec 9>&-
+			printf '%s' "${name##*.}" |
+				tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'
+		)"
+		case "$ext" in nes|fds|unf|unif) ;; *) continue ;; esac
+		size="$(file_size_bytes "$full")" || continue
+		case "$size" in ''|*[!0-9]*) continue ;; esac
+		[ "$size" -le "$MAX_ROM_SIZE" ] 2>/dev/null || continue
+		rom_is_valid "$full" "$ext" "$size" || continue
+		readable=0
+		path_is_readable_by_nesd "$full" && readable=1
+		json_add_object ""
+		json_add_string name "$name"
+		json_add_string path "$full"
+		json_add_string source "$resolved"
+		json_add_int size "$size"
+		json_add_boolean readable "$readable"
+		if [ "$readable" -ne 1 ]; then
+			json_add_string error \
+				"ROM is not readable by nesd; set traversable directory permissions and group nesd with mode 0640"
+		fi
+		json_close_object
+	done <"$fifo"
+	wait "$find_pid" || find_status=$?
+	rm -f "$fifo" 9>&-
+	rmdir "$scan_dir" 2>/dev/null 9>&- || :
+	if [ "$SCAN_TRUNCATED" -eq 0 ] && [ "$find_status" -ne 0 ]; then
+		SCAN_TRUNCATED=1
+	fi
+}
+
+offline_roms() {
+	SCAN_ENTRIES=0
+	SCAN_TRUNCATED=0
+	NESD_UID="$(
+		exec 9>&-
+		id -u nesd 2>/dev/null
+	)" || NESD_UID=
+	NESD_GROUPS="$(
+		exec 9>&-
+		id -G nesd 2>/dev/null
+	)" || NESD_GROUPS=
+	case "$NESD_UID" in ''|*[!0-9]*) NESD_UID= ;; esac
+	case "$NESD_GROUPS" in
+		''|*[!0-9\ ]*) NESD_GROUPS= ;;
+	esac
+	json_init
+	json_add_array roms
+	scan_rom_root "$ROM_DIR"
+	if config_load nes-emulator; then
+		scan_configured_extra_rom_roots
+	fi
+	json_close_array
+	json_add_string dir "$ROM_DIR"
+	json_add_boolean truncated "$SCAN_TRUNCATED"
+	json_add_string notice "nesd is stopped; ROMs were scanned without starting it"
+	json_dump_without_upload_fd
+}
+
+scan_configured_extra_rom_roots() {
+	local extra_rom_dirs_enabled
+
+	config_get_bool extra_rom_dirs_enabled main extra_rom_dirs_enabled 0
+	[ "$extra_rom_dirs_enabled" -eq 1 ] || return 0
+	config_list_foreach main extra_rom_dir scan_rom_root
+}
+
+valid_data_dir() {
+	local d="$1"
+
+	[ -n "$d" ] && [ "${d#/}" != "$d" ] || return 1
+	while [ "$d" != "/" ] && [ "${d%/}" != "$d" ]; do
+		d="${d%/}"
+	done
+	[ "$(
+		exec 9>&-
+		printf '%s' "$d" | wc -l
+	)" -eq 0 ] || return 1
+	case "$d" in
+		/|/bin|/boot|/dev|/etc|/home|/lib|/lib64|/mnt|/opt|/overlay|/proc|/root|/run|/sbin|/sys|/tmp|/usr|/var)
+			return 1
+			;;
+		*/../*|*/..|*/./*|*/.|*//*|*:*|*';'*|*,*)
+			return 1
+			;;
+	esac
+	return 0
+}
+
+rom_is_valid() {
+	local path="$1" ext="$2" size="$3" magic
+
+	magic="$(
+		exec 9>&-
+		hexdump -v -n 4 -e '1/1 "%02x"' "$path" 2>/dev/null
+	)" || return 1
+	case "$ext" in
+		nes) [ "$magic" = 4e45531a ] ;;
+		unf|unif)
+			[ "$size" -ge 32 ] && [ "$magic" = 554e4946 ]
+			;;
+		fds)
+			if [ "$magic" = 4644531a ]; then
+				[ "$size" -ge 65516 ] &&
+					[ $(((size - 16) % 65500)) -eq 0 ]
+			else
+				[ "$size" -ge 65500 ] &&
+					[ $((size % 65500)) -eq 0 ]
+			fi
+			;;
+		*) return 1 ;;
+	esac
+}
+
+tree_entry_count_is_bounded() {
+	local root="$1" scan_dir fifo find_pid find_status=0 entry count=0
+
+	scan_dir="$(
+		exec 9>&-
+		mktemp -d /tmp/nes-rom-count.XXXXXX 2>/dev/null
+	)" ||
+		return 1
+	fifo="$scan_dir/results"
+	if ! mkfifo "$fifo" 2>/dev/null 9>&-; then
+		rmdir "$scan_dir" 9>&-
+		return 1
+	fi
+	find "$root" -mindepth 1 -maxdepth "$MAX_ROM_FIND_DEPTH" \
+		-print0 >"$fifo" 2>/dev/null 9>&- &
+	find_pid=$!
+	# OpenWrt uses BusyBox ash, whose read supports NUL delimiters.
+	# shellcheck disable=SC3045
+	while IFS= read -r -d '' entry; do
+		count=$((count + 1))
+		[ "$count" -le "$MAX_ROM_ENTRIES" ] || break
+	done <"$fifo"
+	wait "$find_pid" || find_status=$?
+	rm -f "$fifo" 9>&-
+	rmdir "$scan_dir" 2>/dev/null 9>&- || :
+	[ "$count" -le "$MAX_ROM_ENTRIES" ] && [ "$find_status" -eq 0 ]
+}
+
+tree_has_boundary_directory() {
+	local root="$1" scan_dir fifo find_pid find_status=0 entry found=0
+
+	scan_dir="$(
+		exec 9>&-
+		mktemp -d /tmp/nes-rom-depth.XXXXXX 2>/dev/null
+	)" ||
+		return 2
+	fifo="$scan_dir/results"
+	if ! mkfifo "$fifo" 2>/dev/null 9>&-; then
+		rmdir "$scan_dir" 9>&-
+		return 2
+	fi
+	find "$root" -mindepth "$MAX_ROM_FIND_DEPTH" \
+		-maxdepth "$MAX_ROM_FIND_DEPTH" -type d -print0 \
+		>"$fifo" 2>/dev/null 9>&- &
+	find_pid=$!
+	# OpenWrt uses BusyBox ash, whose read supports NUL delimiters. The value
+	# itself is irrelevant; successful input proves a boundary directory exists.
+	# shellcheck disable=SC2034,SC3045
+	if IFS= read -r -d '' entry <"$fifo"; then
+		found=1
+	fi
+	wait "$find_pid" || find_status=$?
+	rm -f "$fifo" 9>&-
+	rmdir "$scan_dir" 2>/dev/null 9>&- || :
+	[ "$find_status" -eq 0 ] || [ "$found" -eq 1 ] || return 2
+	[ "$found" -eq 1 ]
+}
+
+storage_is_available() {
+	local destination="$1" incoming="$2"
+	local used old_size=0 effective available_kib required_kib
+	local scan depth_result
+
+	scan="$(
+		exec 9>&-
+		mktemp /tmp/nes-rom-quota.XXXXXX 2>/dev/null
+	)" || return 1
+	if ! tree_entry_count_is_bounded "$ROM_DIR"; then
+		rm -f "$scan" 9>&-
+		return 1
+	fi
+	tree_has_boundary_directory "$ROM_DIR"
+	depth_result=$?
+	if [ "$depth_result" -ne 1 ]; then
+		rm -f "$scan" 9>&-
+		return 1
+	fi
+	if ! find "$ROM_DIR" -maxdepth "$MAX_ROM_FIND_DEPTH" -type f \
+		-exec wc -c '{}' ';' >"$scan" 2>/dev/null 9>&-; then
+		rm -f "$scan" 9>&-
+		return 1
+	fi
+	used="$(
+		exec 9>&-
+		awk '
+			$1 !~ /^[0-9]+$/ { exit 2 }
+			{ total += $1 }
+			END { if (total < 0) exit 2; print total + 0 }
+		' "$scan"
+	)" || {
+		rm -f "$scan" 9>&-
+		return 1
+	}
+	rm -f "$scan" 9>&-
+	case "$used" in ''|*[!0-9]*) return 1 ;; esac
+	if [ -f "$destination" ] && [ ! -L "$destination" ]; then
+		old_size="$(file_size_bytes "$destination")"
+		case "$old_size" in ''|*[!0-9]*) return 1 ;; esac
+	fi
+	effective=$((used - old_size + incoming))
+	[ "$effective" -ge 0 ] &&
+		[ "$effective" -le "$ROM_QUOTA_SIZE" ] || return 1
+
+	available_kib="$(
+		exec 9>&-
+		df -Pk "$ROM_DIR" 2>/dev/null |
+			awk 'NR > 1 { value = $4 } END { print value }'
+	)"
+	case "$available_kib" in ''|*[!0-9]*) return 1 ;; esac
+	required_kib=$(((incoming + 1023) / 1024 + MIN_FREE_KIB))
+	[ "$available_kib" -ge "$required_kib" ]
+}
+
+staged_path_is_valid() {
+	local staged="$1" leaf nonce
+
+	case "$staged" in "$UPLOAD_DIR/"*) ;; *) return 1 ;; esac
+	leaf="${staged##*/}"
+	[ "$staged" = "$UPLOAD_DIR/$leaf" ] || return 1
+	[ "${#leaf}" -eq 36 ] 2>/dev/null || return 1
+	case "$leaf" in *.rom) ;; *) return 1 ;; esac
+	nonce="${leaf%.rom}"
+	[ "${#nonce}" -eq 32 ] 2>/dev/null || return 1
+	case "$nonce" in *[!0-9a-f]*) return 1 ;; esac
+	return 0
+}
+
+cleanup_staged_uploads() {
+	local staged marker now future
+
+	for staged in "$UPLOAD_DIR"/*.rom; do
+		[ -e "$staged" ] || [ -L "$staged" ] || continue
+		if [ ! -f "$staged" ] || [ -L "$staged" ]; then
+			rm -f "$staged" 9>&- || return 1
+		fi
+	done
+	# A five-minute future tolerance keeps an in-flight cgi-io write from
+	# looking stale while still recovering reservations after a clock rollback.
+	marker="$UPLOAD_DIR/.cleanup-future"
+	rm -f "$marker" 9>&- || return 1
+	if ! (
+		exec 9>&-
+		set -C
+		umask 077
+		: >"$marker"
+	) 2>/dev/null; then
+		return 1
+	fi
+	now="$(
+		exec 9>&-
+		date +%s 2>/dev/null
+	)"
+	case "$now" in ''|*[!0-9]*)
+		rm -f "$marker" 9>&-
+		return 1
+		;;
+	esac
+	future=$((now + 300))
+	if ! touch -d "@$future" "$marker" 2>/dev/null 9>&- ||
+	   ! find "$UPLOAD_DIR" -maxdepth 1 -type f -name '*.rom' \
+		\( -mmin +30 -o -newer "$marker" \) \
+		-exec rm -f '{}' ';' >/dev/null 2>&1 9>&-; then
+		rm -f "$marker" 9>&-
+		return 1
+	fi
+	rm -f "$marker" 9>&- || return 1
+	# Remove the fixed staging name used by legacy versions.
+	[ ! -e "$UPLOAD_DIR/rom" ] && [ ! -L "$UPLOAD_DIR/rom" ] ||
+		rm -f "$UPLOAD_DIR/rom" 9>&- || return 1
+	return 0
+}
+
+cleanup_import_temps() {
+	local configured="$ROM_DIR" resolved tmp suffix metadata
+	local mode nlink owner nesd_uid
+
+	nesd_uid="$(
+		exec 9>&-
+		id -u nesd 2>/dev/null
+	)" || return 1
+	case "$nesd_uid" in ''|*[!0-9]*) return 1 ;; esac
+
+	while [ "$configured" != "/" ] &&
+	      [ "${configured%/}" != "$configured" ]; do
+		configured="${configured%/}"
+	done
+	valid_data_dir "$configured" &&
+		[ -d "$configured" ] && [ ! -L "$configured" ] || return 1
+	resolved="$(
+		exec 9>&-
+		readlink -f "$configured" 2>/dev/null
+	)" || return 1
+	[ "$resolved" = "$configured" ] && valid_data_dir "$resolved" || return 1
+
+	for tmp in "$resolved"/.nes-import.*; do
+		[ -e "$tmp" ] || [ -L "$tmp" ] || continue
+		[ -f "$tmp" ] && [ ! -L "$tmp" ] || continue
+		suffix="${tmp##*/.nes-import.}"
+		[ "${#suffix}" -eq 6 ] 2>/dev/null || continue
+		case "$suffix" in *[!A-Za-z0-9]*) continue ;; esac
+		metadata="$(
+			exec 9>&-
+			LC_ALL=C ls -ldn "$tmp" 2>/dev/null
+		)" || continue
+		IFS=' ' read -r mode nlink owner metadata <<EOF
+$metadata
+EOF
+		[ "$nlink" = 1 ] || continue
+		case "$mode" in
+			-rw-------|-rw-r-----) ;;
+			*) continue ;;
+		esac
+		case "$owner" in
+			0|"$nesd_uid") ;;
+			*) continue ;;
+		esac
+		rm -f "$tmp" 9>&- || return 1
+	done
+	return 0
+}
+
+reserve_upload_locked() {
+	local count=0 nonce staged attempt=0
+
+	cleanup_import_temps || {
+		json_error "cannot clean interrupted ROM imports"
+		return
+	}
+	cleanup_staged_uploads || {
+		json_error "cannot clean the upload staging directory"
+		return
+	}
+	for staged in "$UPLOAD_DIR"/*.rom; do
+		[ -f "$staged" ] && [ ! -L "$staged" ] || continue
+		count=$((count + 1))
+	done
+	[ "$count" -lt 1 ] || {
+		json_error "another upload is already pending; try again later"
+		return
+	}
+	while [ "$attempt" -lt 16 ]; do
+		nonce="$(
+			exec 9>&-
+			hexdump -v -n 16 -e '1/1 "%02x"' \
+				/dev/urandom 2>/dev/null
+		)" || nonce=
+		staged="$UPLOAD_DIR/$nonce.rom"
+		if [ "${#nonce}" -eq 32 ] &&
+		   (
+			exec 9>&-
+			set -C
+			umask 077
+			: >"$staged"
+		   ) 2>/dev/null; then
+			if ! chown root:root "$staged" 2>/dev/null 9>&- ||
+			   ! chmod 0600 "$staged" 2>/dev/null 9>&-; then
+				rm -f "$staged" 9>&-
+				json_error "cannot secure upload reservation"
+				return
+			fi
+			json_init
+			json_add_string staged "$staged"
+			json_dump_without_upload_fd
+			return
+		fi
+		attempt=$((attempt + 1))
+	done
+	json_error "cannot reserve a unique upload path"
+}
+
+reserve_upload() {
+	acquire_upload_lock || {
+		json_error "upload storage is busy"
+		return
+	}
+	reserve_upload_locked
+	release_upload_lock
+}
+
+discard_upload_locked() {
+	local input staged
+
+	read -r input
+	json_load_without_upload_fd "$input" 2>/dev/null || {
+		json_error "invalid request"
+		return
+	}
+	json_get_var staged staged
+	staged_path_is_valid "$staged" || {
+		json_error "invalid upload reservation"
+		return
+	}
+	rm -f "$staged" 9>&-
+	json_init
+	json_add_boolean ok 1
+	json_dump_without_upload_fd
+}
+
+discard_upload() {
+	acquire_upload_lock || {
+		json_error "upload storage is busy"
+		return
+	}
+	discard_upload_locked
+	release_upload_lock
+}
+
+import_rom_locked() {
+	local input staged name safe ext base size actual_size tmp dest body resp
+	local configured resolved daemon_error daemon_ok startup_error
+
+	read -r input
+	json_load_without_upload_fd "$input" 2>/dev/null || {
+		json_error "invalid request"
+		return
+	}
+	json_get_var staged staged
+	json_get_var name name
+	staged_path_is_valid "$staged" && [ -f "$staged" ] &&
+		[ ! -L "$staged" ] || {
+			json_error "staged upload is missing"
+			return
+		}
+
+	size="$(file_size_bytes "$staged")"
+	case "$size" in ''|*[!0-9]*) size=0 ;; esac
+	[ "$size" -ge 16 ] && [ "$size" -le "$MAX_ROM_SIZE" ] || {
+		rm -f "$staged" 9>&-
+		json_error "ROM size must be between 16 bytes and 16 MiB"
+		return
+	}
+
+	safe="$(
+		exec 9>&-
+		printf '%s' "${name##*/}" |
+			sed 's/[^A-Za-z0-9._-]/_/g; s/^\.*//'
+	)"
+	[ -n "$safe" ] || safe=upload.nes
+	ext="$(
+		exec 9>&-
+		printf '%s' "${safe##*.}" |
+			tr 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' 'abcdefghijklmnopqrstuvwxyz'
+	)"
+	case "$ext" in nes|fds|unf|unif) ;; *)
+		rm -f "$staged" 9>&-
+		json_error "unsupported ROM extension"
+		return
+		;;
+	esac
+	rom_is_valid "$staged" "$ext" "$size" || {
+		rm -f "$staged" 9>&-
+		json_error "file header does not match a supported NES ROM"
+		return
+	}
+
+	configured="$ROM_DIR"
+	while [ "$configured" != "/" ] &&
+	      [ "${configured%/}" != "$configured" ]; do
+		configured="${configured%/}"
+	done
+	resolved="$(
+		exec 9>&-
+		readlink -f "$configured" 2>/dev/null
+	)" || resolved=
+	if ! valid_data_dir "$configured" ||
+	   [ ! -d "$configured" ] ||
+	   [ -L "$configured" ] ||
+	   [ "$resolved" != "$configured" ] ||
+	   ! valid_data_dir "$resolved"; then
+		rm -f "$staged" 9>&-
+		json_error "configured ROM directory is unsafe or unavailable"
+		return
+	fi
+	ROM_DIR="$resolved"
+	cleanup_import_temps || {
+		rm -f "$staged" 9>&-
+		json_error "cannot clean interrupted ROM imports"
+		return
+	}
+
+	base="${safe%.*}"
+	base="$(
+		exec 9>&-
+		printf '%s' "$base" | cut -c1-100
+	)"
+	[ -n "$base" ] || base=upload
+	safe="${base}.${ext}"
+	dest="$ROM_DIR/$safe"
+	if [ -e "$dest" ] || [ -L "$dest" ]; then
+		[ -f "$dest" ] && [ ! -L "$dest" ] || {
+			rm -f "$staged" 9>&-
+			json_error "ROM destination is not a regular file"
+			return
+		}
+	fi
+	storage_is_available "$dest" "$size" || {
+		rm -f "$staged" 9>&-
+		json_error "ROM quota exceeded or less than 8 MiB would remain free"
+		return
+	}
+	tmp="$(
+		exec 9>&-
+		mktemp "$ROM_DIR/.nes-import.XXXXXX" 2>/dev/null
+	)" || {
+		rm -f "$staged" 9>&-
+		json_error "cannot create a temporary ROM file"
+		return
+	}
+	# Bound the copy itself: a concurrently replaced or growing cgi-io target
+	# must not be able to consume the filesystem before post-copy validation.
+	if ! dd if="$staged" of="$tmp" bs=4096 count=4097 2>/dev/null 9>&- ||
+	   ! chown nesd:nesd "$tmp" 2>/dev/null 9>&- ||
+	   ! chmod 0640 "$tmp" 9>&-; then
+		rm -f "$tmp" "$staged" 9>&-
+		json_error "cannot store ROM in the configured directory"
+		return
+	fi
+	actual_size="$(file_size_bytes "$tmp")"
+	case "$actual_size" in ''|*[!0-9]*) actual_size=0 ;; esac
+	if [ "$actual_size" -ne "$size" ] 2>/dev/null ||
+	   [ "$actual_size" -lt 16 ] 2>/dev/null ||
+	   [ "$actual_size" -gt "$MAX_ROM_SIZE" ] 2>/dev/null ||
+	   ! rom_is_valid "$tmp" "$ext" "$actual_size"; then
+		rm -f "$tmp" "$staged" 9>&-
+		json_error "staged ROM changed during import"
+		return
+	fi
+	# Revalidate at commit time. The completed temp file is now included in
+	# the directory scan, so concurrent direct /api/upload traffic cannot
+	# make this import exceed the quota or free-space reserve.
+	if ! storage_is_available "$dest" 0; then
+		rm -f "$tmp" "$staged" 9>&-
+		json_error "ROM quota exceeded or less than 8 MiB would remain free"
+		return
+	fi
+	if ! mv -f "$tmp" "$dest" 9>&-; then
+		rm -f "$tmp" "$staged" 9>&-
+		json_error "cannot store ROM in the configured directory"
+		return
+	fi
+	if ! rm -f "$staged" 9>&-; then
+		json_init
+		json_add_boolean ok 0
+		json_add_boolean stored 1
+		json_add_string path "$dest"
+		json_add_string error \
+			"ROM was stored, but the upload reservation could not be removed"
+		json_dump_without_upload_fd
+		return
+	fi
+	if ! sync 9>&-; then
+		json_init
+		json_add_boolean ok 0
+		json_add_boolean stored 1
+		json_add_string path "$dest"
+		json_add_string error \
+			"ROM was stored, but filesystem durability could not be confirmed"
+		json_dump_without_upload_fd
+		return
+	fi
+
+	if start_daemon; then
+		json_init
+		json_add_string path "$dest"
+		body="$(
+			exec 9>&-
+			json_dump_without_upload_fd
+		)"
+		resp="$(
+			exec 9>&-
+			api_post /api/load "$body"
+		)"
+	else
+		startup_error="$START_ERROR"
+	fi
+	if [ -z "$resp" ]; then
+		json_init
+		json_add_boolean ok 0
+		json_add_boolean stored 1
+		json_add_string path "$dest"
+		json_add_string error \
+			"ROM was stored, but ${startup_error:-nesd did not return a load result}"
+		json_dump_without_upload_fd
+		return
+	fi
+	if json_load_without_upload_fd "$resp" 2>/dev/null; then
+		json_get_var daemon_error error
+		json_get_var daemon_ok ok
+		if [ -n "$daemon_error" ] || [ "$daemon_ok" = 0 ]; then
+			json_init
+			json_add_boolean ok 0
+			json_add_boolean stored 1
+			json_add_string path "$dest"
+			json_add_string error \
+				"${daemon_error:-nesd rejected the imported ROM}"
+			json_dump_without_upload_fd
+			return
+		fi
+	fi
+	printf '%s\n' "$resp"
+}
+
+import_rom() {
+	acquire_upload_lock || {
+		json_error "upload storage is busy"
+		return
+	}
+	import_rom_locked
+	release_upload_lock
+}
+
+validate_config_file || {
+	case "$1" in call) json_error "configuration file is missing or unsafe" ;; esac
+	exit 1
+}
+load_config
+select_http_client || :
+# Token rotation takes the same lock once here and once while replacing the
+# token. Use its shorter per-request budget without penalizing ordinary calls.
+case "$1:$2" in
+	call:rotate_token) TOKEN_LOCK_MAX_ATTEMPTS="$ROTATE_TOKEN_LOCK_MAX_ATTEMPTS" ;;
+esac
+ensure_auth_token || {
+	case "$1" in call) json_error "cannot initialize authentication token" ;; esac
+	exit 1
+}
+if ! prepare_upload_dir; then
+	case "$1" in call) json_error "cannot prepare the secure upload directory" ;; esac
+	exit 1
+fi
+umask 077
+
+case "$1" in
+list)
+	printf '%s\n' '{"status":{},"access":{},"roms":{},"reserve_upload":{},"discard_upload":{"staged":"str"},"load":{"path":"str"},"import":{"staged":"str","name":"str"},"start":{},"stop":{},"pause":{},"reset":{},"rotate_token":{}}'
+	;;
+call)
+	case "$2" in
+	status)
+		resp="$(api_get /api/status)"
+		if [ -n "$resp" ]; then
+			printf '%s\n' "$resp"
+		else
+			json_init
+			json_add_boolean running 0
+			json_add_boolean paused 0
+			json_add_boolean core_loaded 0
+			json_add_boolean game_loaded 0
+			json_add_int viewers 0
+			json_add_int port "$PORT"
+			if [ -z "$HTTP_CLIENT" ]; then
+				json_add_string error \
+					"the matching nesd loopback RPC client is missing; reinstall both emulator packages"
+			elif /etc/init.d/nes-emulator running \
+				>/dev/null 2>&1 9>&-; then
+				json_add_string error \
+					"nesd is running, but its local API is not responding"
+			else
+				case "$(uci -q get nes-emulator.main.enabled 2>/dev/null)" in
+				1|on|true|yes|enabled)
+					json_add_string error \
+						"nesd exited or could not be started; inspect logread"
+					;;
+				*)
+					json_add_boolean on_demand 1
+					;;
+				esac
+			fi
+			json_dump_without_upload_fd
+		fi
+		;;
+	access)
+		start_daemon || {
+			json_error "${START_ERROR:-nesd could not be started}"
+			exit 0
+		}
+		json_init
+		json_add_string token "$AUTH_TOKEN"
+		json_add_int port "$PORT"
+		json_dump_without_upload_fd
+		;;
+	roms)
+		resp="$(api_get /api/roms)"
+		if [ -n "$resp" ]; then
+			printf '%s\n' "$resp"
+		else
+			offline_roms
+		fi
+		;;
+	reserve_upload) reserve_upload ;;
+	discard_upload) discard_upload ;;
+	load)
+		read -r input
+		json_load_without_upload_fd "$input" 2>/dev/null || {
+			json_error "invalid request"
+			exit 0
+		}
+		json_get_var path path
+		[ -n "$path" ] || {
+			json_error "path is required"
+			exit 0
+		}
+		# nesd is the final path-security boundary for this forwarded request.
+		# Its resolve_rom_path() canonicalizes with realpath(), confines the
+		# result to the configured primary or opt-in extra ROM roots, reopens it
+		# with O_NOFOLLOW, and validates the extension, size, and ROM header.
+		start_daemon || {
+			json_error "${START_ERROR:-nesd could not be started}"
+			exit 0
+		}
+		json_init
+		json_add_string path "$path"
+		body="$(json_dump_without_upload_fd)"
+		resp="$(api_post /api/load "$body")"
+		if [ -n "$resp" ]; then
+			printf '%s\n' "$resp"
+		else
+			json_error "nesd rejected the ROM"
+		fi
+		;;
+	import)
+		import_rom
+		;;
+	start)
+		start_daemon || {
+			json_error "${START_ERROR:-nesd could not be started}"
+			exit 0
+		}
+		daemon_request /api/start
+		;;
+	stop) daemon_request /api/stop ;;
+	pause) daemon_request /api/pause ;;
+	reset) daemon_request /api/reset ;;
+	rotate_token) rotate_token ;;
+	*) json_error "unknown method" ;;
+	esac
+	;;
+*)
+	exit 1
+	;;
+esac
