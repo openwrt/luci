@@ -12,12 +12,6 @@ const callLuciRealtimeStats = rpc.declare({
 	expect: { result: [] }
 });
 
-const callLuciConntrackList = rpc.declare({
-	object: 'luci',
-	method: 'getConntrackList',
-	expect: { result: [] }
-});
-
 const callNetworkRrdnsLookup = rpc.declare({
 	object: 'network.rrdns',
 	method: 'lookup',
@@ -56,10 +50,61 @@ const recheck_lookup_queue = {};
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
+/*
+ * Convert an full IPv6 address string to a shortened format
+ * Examples:
+[
+	compressIpv6('2620:01ec:0029:0001:0000:0000:0000:0049') === '2620:1ec:29:1::49',
+	compressIpv6('fe80:0000:0000:0000:d86d:2fff:fe24:f6ea') === 'fe80::d86d:2fff:fe24:f6ea',
+	compressIpv6('fe80:0000:0000:0000:d86d:2fff:0000:f6ea') === 'fe80::d86d:2fff:0:f6ea',
+	compressIpv6('fe80:0100:0010:0001:d86d:2fff:0000:f6ea') === 'fe80:100:10:1:d86d:2fff::f6ea',
+	compressIpv6('fe80:0000:d86d:2fff:0000:0000:0000:f6ea') === 'fe80:0:d86d:2fff::f6ea',
+	compressIpv6('ff02:0000:0000:0000:0000:0000:0001:0002') === 'ff02::1:2',
+	compressIpv6('0000:0000:0000:0000:0000:0000:0000:0001') === '::1',
+	compressIpv6('0000:0000:0000:0000:0000:0000:0000:0000') === '::',
+	compressIpv6('0001:0000:0000:0000:0000:0000:0000:0000') === '1::',
+	compressIpv6('0000:0001:0001:0001:0001:0001:0001:0001') === '::1:1:1:1:1:1:1',
+	compressIpv6('0001:0000:0001:0001:0001:0001:0001:0001') === '1::1:1:1:1:1:1',
+	compressIpv6('0001:0001:0001:0001:0001:0001:0001:0001') === '1:1:1:1:1:1:1:1',
+]
+ */
+const compressIpv6 = function(addr) {
+	if (addr.indexOf(':') === -1)
+		return addr;
+
+	const parts = addr.split(':');
+	let best_start = 0, best_len = 0, cur_start = 0, cur_len = 0;
+	for (let i = 0; i < parts.length; i++) {
+		if (parts[i].startsWith('0'))
+			parts[i] = parts[i].replace(/^0+/, '').replace(/^$/, '0');
+
+		if (parts[i] === '0') {
+			if (cur_len === 0)
+				cur_start = i;
+			cur_len++;
+		} else {
+			if (cur_len > best_len) {
+				best_start = cur_start;
+				best_len = cur_len;
+			}
+			cur_len = 0;
+		}
+	}
+	if (cur_len > best_len) {
+		best_start = cur_start;
+		best_len = cur_len;
+	}
+	if (best_len > 0) {
+		parts.splice(best_start, best_len, '');
+	}
+	return (best_start===0&&best_len>0?':':'')+parts.join(':')+(best_start+best_len===8?':':'');
+};
+
 return view.extend({
 	load() {
 		return Promise.all([
-			this.loadSVG(L.resource('svg/connections.svg'))
+			this.loadSVG(L.resource('svg/connections.svg')),
+			fs.lines('/etc/protocols')
 		]);
 	},
 
@@ -282,10 +327,79 @@ return view.extend({
 			}
 	},
 
+	/*
+	 * Replace the conntrack ubus call with a fs.exec_direct to prevent
+	 *   procd from being kicked off by ubusd due to large amounts of data. See https://github.com/openwrt/openwrt/issues/9747
+	 *
+	 * Copy from modules/luci-base/ucode/sys.uc:conntrack_list with adjustments for js
+	 */
+	conntrackList: function() {
+		const protos = this.protos;
+		return fs.exec_direct('/usr/libexec/luci-status-call', ['conntrack']).then(function(data){
+			const connt = [];
+
+			data.split('\n').forEach(function(line) {
+				let m = line.match(/^(ipv[46]) +([0-9]+) +\S+ +([0-9]+)( +.+)$/);
+				if (!m)
+					return;
+
+				const fam = m[1];
+				const l4 = m[3];
+				let tuples = m[4];
+				let timeout = null;
+
+				m = tuples.match(/^ +([0-9]+)( .+)$/);
+
+				if (m) {
+					timeout = m[1];
+					tuples = m[2];
+				}
+
+				const e = {
+					bytes: 0,
+					packets: 0,
+					layer3: fam,
+					layer4: protos[l4] || 'unknown',
+					timeout: +timeout
+				};
+
+				tuples.split(' ').forEach(function(tuple) {
+					const kv = tuple.match(/^(\w+)=(\S+)$/);
+
+					if (!kv)
+						return;
+
+					switch (kv[1]) {
+					case 'bytes':
+					case 'packets':
+						e[kv[1]] += +kv[2];
+						break;
+
+					case 'src':
+					case 'dst':
+						if (undefined === e[kv[1]])
+							e[kv[1]] = compressIpv6(kv[2]);
+						break;
+
+					case 'sport':
+					case 'dport':
+						if (undefined === e[kv[1]])
+							e[kv[1]] = +kv[2];
+						break;
+					}
+				});
+
+				connt.push(e);
+			});
+			return connt;
+
+		});
+	},
+
 	async pollData() {
 		poll.add(L.bind(async function() {
 			const tasks = [
-				L.resolveDefault(callLuciConntrackList(), [])
+				L.resolveDefault(this.conntrackList(), [])
 			];
 
 			graphPolls.forEach(() => {
@@ -415,7 +529,15 @@ return view.extend({
 		});
 	},
 
-	render([svg]) {
+	render([svg, protocols]) {
+		const protos = {};
+		protocols.forEach(function(line) {
+			const m = line.match(/^([^# \t\n]+)\s+([0-9]+)\s+/);
+
+			if (m)
+				protos[m[2]] = m[1];
+		});
+		this.protos = protos;
 
 		const v = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('h2', _('Connections')),
