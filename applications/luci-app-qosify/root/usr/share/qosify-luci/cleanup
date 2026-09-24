@@ -39,15 +39,33 @@ ifb_name() {
 	echo "ifb-$1"
 }
 
+qosify_filter() {
+	tc filter show dev "$1" "$2" 2>/dev/null | grep -q ' qosify_'
+}
+
+# qosify's filters sit at QOSIFY_PRIO_BASE (0x110 = 272): its bpf classifier on
+# egress, and on ingress the classifier plus the DNS and ifb redirects up to 277.
+# A clean exit removes them and the root qdisc, so they only survive a crash, and
+# then the root cake is qosify's too. Another shaper's root qdisc, and a clsact
+# carrying anyone else's filters, are left alone.
 clear_dev() {
 	local dev="$1"
-	local ifb
+	local ifb p
 
 	[ -n "$dev" ] || return 0
 
 	if [ -e "/sys/class/net/$dev" ]; then
-		tc qdisc del dev "$dev" clsact 2>/dev/null
-		tc qdisc del dev "$dev" root 2>/dev/null
+		if qosify_filter "$dev" egress; then
+			tc qdisc del dev "$dev" root 2>/dev/null
+			tc filter del dev "$dev" egress pref 272 2>/dev/null
+		fi
+		if qosify_filter "$dev" ingress; then
+			for p in 272 273 274 275 276 277; do
+				tc filter del dev "$dev" ingress pref "$p" 2>/dev/null
+			done
+		fi
+		[ -n "$(tc filter show dev "$dev" ingress 2>/dev/null)$(tc filter show dev "$dev" egress 2>/dev/null)" ] ||
+			tc qdisc del dev "$dev" clsact 2>/dev/null
 	fi
 
 	# An ifb outlives its parent, so this is not gated on $dev still existing.
