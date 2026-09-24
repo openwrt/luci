@@ -1,0 +1,234 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+umask 077
+
+OUT="${1:-$TMP_CFG}"
+is_safe_temp_path "$OUT" || { echo "Refusing unsafe generated config path: $OUT" >&2; exit 1; }
+[ ! -d "$OUT" ] || { echo "Refusing generated config directory: $OUT" >&2; exit 1; }
+WORK_OUT="$OUT.new.$$"
+ENABLED="$(uci_get main enabled 0)"
+HTTP_PORT="$(uci_get main http_port 80)"
+HTTPS_PORT="$(uci_get main https_port 443)"
+WAN_IP="$(wan_ip || true)"
+
+if [ "$ENABLED" != 1 ]; then
+	echo "Managed HAProxy configuration is disabled." >&2
+	exit 2
+fi
+
+is_valid_port "$HTTP_PORT" || { echo "Invalid public HTTP port: $HTTP_PORT" >&2; exit 1; }
+is_valid_port "$HTTPS_PORT" || { echo "Invalid public HTTPS port: $HTTPS_PORT" >&2; exit 1; }
+
+if [ -z "$WAN_IP" ]; then
+	echo "Cannot detect WAN IPv4 address. Set the WAN bind address manually." >&2
+	exit 1
+fi
+is_valid_ip_or_host "$WAN_IP" || { echo "Invalid WAN bind address: $WAN_IP" >&2; exit 1; }
+
+TMP_HTTP_RULES=/tmp/haproxy-manager-http-rules.$$
+TMP_HTTP_BACKENDS=/tmp/haproxy-manager-http-backends.$$
+TMP_TLS_RULES=/tmp/haproxy-manager-tls-rules.$$
+TMP_TLS_BACKENDS=/tmp/haproxy-manager-tls-backends.$$
+TMP_TCP_FRONTENDS=/tmp/haproxy-manager-tcp-frontends.$$
+TMP_PORTS=/tmp/haproxy-manager-listen-ports.$$
+: > "$TMP_HTTP_RULES"
+: > "$TMP_HTTP_BACKENDS"
+: > "$TMP_TLS_RULES"
+: > "$TMP_TLS_BACKENDS"
+: > "$TMP_TCP_FRONTENDS"
+: > "$TMP_PORTS"
+trap 'rm -f "$WORK_OUT" "$TMP_HTTP_RULES" "$TMP_HTTP_BACKENDS" "$TMP_TLS_RULES" "$TMP_TLS_BACKENDS" "$TMP_TCP_FRONTENDS" "$TMP_PORTS"' EXIT
+
+HAS_HTTP=0
+HAS_HTTPS=0
+HAS_TCP=0
+
+claim_port() {
+	local port="$1"
+	local owner="$2"
+	local existing
+
+	if grep -q "^${port}[[:space:]]" "$TMP_PORTS"; then
+		existing="$(sed -n "s/^${port}[[:space:]]*//p" "$TMP_PORTS" | head -1)"
+		echo "Public TCP port $port conflicts with ${existing:-another service}." >&2
+		exit 1
+	fi
+
+	printf '%s\t%s\n' "$port" "$owner" >> "$TMP_PORTS"
+}
+
+add_http_route() {
+	local name="$1" host="$2" backend_host="$3" backend_port="$4"
+	local address
+	address="$(backend_address "$backend_host" "$backend_port")"
+
+	if [ "$HAS_HTTP" != 1 ]; then
+		claim_port "$HTTP_PORT" "the shared Web HTTP listener"
+		HAS_HTTP=1
+	fi
+
+	{
+		printf '  acl host_%s hdr(host),host_only -i %s\n' "$name" "$host"
+		printf '  use_backend be_http_%s if host_%s\n' "$name" "$name"
+	} >> "$TMP_HTTP_RULES"
+	{
+		printf 'backend be_http_%s\n' "$name"
+		printf '  mode http\n'
+		printf '  option httpchk GET /\n'
+		printf '  server srv1 %s check\n\n' "$address"
+	} >> "$TMP_HTTP_BACKENDS"
+}
+
+add_https_route() {
+	local name="$1" host="$2" backend_host="$3" backend_port="$4"
+	local address
+	address="$(backend_address "$backend_host" "$backend_port")"
+
+	if [ "$HAS_HTTPS" != 1 ]; then
+		claim_port "$HTTPS_PORT" "the shared Web HTTPS listener"
+		HAS_HTTPS=1
+	fi
+
+	printf '  use_backend be_tls_%s if { req.ssl_sni -i %s }\n' "$name" "$host" >> "$TMP_TLS_RULES"
+	{
+		printf 'backend be_tls_%s\n' "$name"
+		printf '  mode tcp\n'
+		printf '  server srv1 %s check\n\n' "$address"
+	} >> "$TMP_TLS_BACKENDS"
+}
+
+add_tcp_route() {
+	local name="$1" label="$2" backend_host="$3" public_port="$4" backend_port="$5"
+	local address bind_address
+	address="$(backend_address "$backend_host" "$backend_port")"
+	bind_address="$(backend_address "$WAN_IP" "$public_port")"
+
+	claim_port "$public_port" "service $label"
+	HAS_TCP=1
+	{
+		printf 'frontend fe_tcp_%s\n' "$name"
+		printf '  bind %s\n' "$bind_address"
+		printf '  mode tcp\n'
+		printf '  default_backend be_tcp_%s\n\n' "$name"
+		printf 'backend be_tcp_%s\n' "$name"
+		printf '  mode tcp\n'
+		printf '  server srv1 %s check\n\n' "$address"
+	} >> "$TMP_TCP_FRONTENDS"
+}
+
+for section in $(route_sections); do
+	enabled="$(uci_get "$section" enabled 1)"
+	[ "$enabled" = 1 ] || continue
+
+	kind="$(route_kind "$section")"
+	label="$(uci_get "$section" name)"
+	host="$(uci_get "$section" host)"
+	backend_host="$(uci_get "$section" backend_host)"
+	[ -n "$label" ] || label="$host"
+	[ -n "$label" ] || label="$kind"
+	name="$(route_name "${label}_${section}")"
+
+	is_valid_ip_or_host "$backend_host" || { echo "Invalid backend host for $label: $backend_host" >&2; exit 1; }
+
+	case "$kind" in
+		web)
+			is_valid_host "$host" || { echo "Invalid or missing domain for Web service $label: $host" >&2; exit 1; }
+			http_enabled="$(uci_get "$section" web_http 1)"
+			https_enabled="$(uci_get "$section" web_https 1)"
+			[ "$http_enabled" = 1 ] || [ "$https_enabled" = 1 ] || { echo "Web service $label has no enabled protocol." >&2; exit 1; }
+
+			if [ "$http_enabled" = 1 ]; then
+				backend_port="$(uci_get "$section" backend_http_port 80)"
+				is_valid_port "$backend_port" || { echo "Invalid HTTP backend port for $label: $backend_port" >&2; exit 1; }
+				add_http_route "$name" "$host" "$backend_host" "$backend_port"
+			fi
+
+			if [ "$https_enabled" = 1 ]; then
+				backend_port="$(uci_get "$section" backend_https_port 443)"
+				is_valid_port "$backend_port" || { echo "Invalid HTTPS backend port for $label: $backend_port" >&2; exit 1; }
+				add_https_route "$name" "$host" "$backend_host" "$backend_port"
+			fi
+		;;
+		http|https|both)
+			is_valid_host "$host" || { echo "Invalid or missing domain for legacy service $label: $host" >&2; exit 1; }
+			backend_port="$(uci_get "$section" backend_port)"
+			is_valid_port "$backend_port" || { echo "Invalid backend port for $label: $backend_port" >&2; exit 1; }
+			case "$kind" in http|both) add_http_route "$name" "$host" "$backend_host" "$backend_port" ;; esac
+			case "$kind" in https|both) add_https_route "$name" "$host" "$backend_host" "$backend_port" ;; esac
+		;;
+		ssh|rdp|custom|tcp)
+			map_index=0
+			maps="$(route_port_maps "$section" "$kind")"
+			[ -n "$maps" ] || { echo "No TCP port mappings configured for $label." >&2; exit 1; }
+			for map in $maps; do
+				is_valid_port_map "$map" || { echo "Invalid TCP port mapping for $label: $map" >&2; exit 1; }
+				public_port="${map%%:*}"
+				backend_port="${map#*:}"
+				map_index=$((map_index + 1))
+				add_tcp_route "${name}_${map_index}" "$label" "$backend_host" "$public_port" "$backend_port"
+			done
+		;;
+		*)
+			echo "Invalid service type for $label: $kind" >&2
+			exit 1
+		;;
+	esac
+done
+
+if [ "$HAS_HTTP" != 1 ] && [ "$HAS_HTTPS" != 1 ] && [ "$HAS_TCP" != 1 ]; then
+	echo "No enabled services define a HAProxy listener." >&2
+	exit 2
+fi
+
+{
+	printf '# Generated by luci-app-haproxy-manager. Manual changes may be overwritten.\n'
+	printf 'global\n'
+	printf '  log /dev/log local0\n'
+	printf '  maxconn 2048\n'
+	printf '  daemon\n\n'
+	printf 'defaults\n'
+	printf '  log global\n'
+	printf '  timeout connect 5s\n'
+	printf '  timeout client 60s\n'
+	printf '  timeout server 60s\n'
+	printf '  option dontlognull\n\n'
+
+	if [ "$HAS_HTTP" = 1 ]; then
+		http_bind="$(backend_address "$WAN_IP" "$HTTP_PORT")"
+		printf 'frontend fe_web_http\n'
+		printf '  bind %s\n' "$http_bind"
+		printf '  mode http\n'
+		printf '  option httplog\n'
+		cat "$TMP_HTTP_RULES"
+		printf '  default_backend be_not_found\n\n'
+		cat "$TMP_HTTP_BACKENDS"
+	fi
+
+	if [ "$HAS_HTTPS" = 1 ]; then
+		https_bind="$(backend_address "$WAN_IP" "$HTTPS_PORT")"
+		printf 'frontend fe_web_https\n'
+		printf '  bind %s\n' "$https_bind"
+		printf '  mode tcp\n'
+		printf '  tcp-request inspect-delay 5s\n'
+		printf '  tcp-request content accept if { req.ssl_hello_type 1 }\n'
+		cat "$TMP_TLS_RULES"
+		printf '  default_backend be_tls_not_found\n\n'
+		cat "$TMP_TLS_BACKENDS"
+	fi
+
+	cat "$TMP_TCP_FRONTENDS"
+
+	printf 'backend be_not_found\n'
+	printf '  mode http\n'
+	printf '  http-request return status 404 content-type text/plain string "No HAProxy route matched this host.\\n"\n\n'
+	printf 'backend be_tls_not_found\n'
+	printf '  mode tcp\n'
+	printf '  tcp-request content reject\n'
+} > "$WORK_OUT"
+
+# Replace the path itself so a stale symlink cannot redirect this root write.
+rm -f "$OUT"
+mv "$WORK_OUT" "$OUT"
+
+printf '%s\n' "$OUT"
