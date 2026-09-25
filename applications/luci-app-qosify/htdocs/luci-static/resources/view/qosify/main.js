@@ -224,10 +224,8 @@ function validateRules(d){
 	if(/\x00/.test(d))return _('Binary content rejected');
 	var lines=d.split('\n');
 	for(var i=0;i<lines.length;i++){
-		var l=lines[i],h=l.indexOf('#');
-		if(h>=0)l=l.slice(0,h);
-		l=trim(l);
-		if(l.length>1023)return _('Line %d is longer than 1023 characters — the rule loader reads fixed-size lines and would split it').format(i+1);
+		var l=lines[i];
+		if((l.length<256?l.length:new TextEncoder().encode(l).length)>1023)return _('Line %d is longer than 1023 characters — the rule loader reads fixed-size lines and would split it, comment included').format(i+1);
 	}
 	return null;
 }
@@ -289,9 +287,6 @@ function ifLint(s,dev){
 	});
 	if(s.disabled!=null&&s.disabled!==''&&!/^(0|1|on|off|true|false|yes|no|enabled|disabled)$/i.test(String(s.disabled)))
 		w.push(_('disabled is set to "%s" — config_get_bool does not recognise that, so the section stays enabled').format(s.disabled));
-	['bandwidth_up','bandwidth_down','bandwidth','mode','ingress_options','egress_options','options'].forEach(function(k){
-		if(s[k]&&/['"`$;&|<>(){}\\]/.test(String(s[k])))w.push(_('%s contains shell metacharacters — qosify assembles the tc command as a string and runs it with sh -c, so the command will break or execute them').format(k));
-	});
 	return w;
 }
 // Locate config blocks in raw UCI text: {type,name,start,end} (end = last non-blank
@@ -309,6 +304,41 @@ function cfgSections(txt){
 	}
 	return out;
 }
+// Section objects from raw UCI text for cfgLint()/rulesLoaded(), read statement by
+// statement as libuci does: each line is cut at an unquoted # and split at unquoted
+// ;, adjacent quoted and bare parts join into one word, and a config statement opens
+// a section wherever it stands. A statement with a backslash outside '' (an escape or
+// line continuation) or an open quote (a multi-line value) cannot be followed line by
+// line, so it is listed in '.bad' and refused by cfgLint(), as is a tc-bound key (TCK)
+// that is not one value.
+var TCK=/^(bandwidth(_up|_down)?|mode|(ingress_|egress_)?options)$/;
+function cfgStmts(l){return (l.replace(/^((?:[^'"#]|'[^']*'|"[^"]*")*)#.*$/,'$1').match(/(?:[^'";]|'[^']*'|"[^"]*"|['"])+/g)||[]);}
+function uciWords(st){
+	var w=[],cur=null,m,re=/\s+|'([^']*)'|"([^"\\]*)"|([^\s'"\\]+)|([\s\S])/g;
+	while((m=re.exec(st))){
+		if(m[4]!=null)return null;
+		if(/^\s/.test(m[0])){if(cur!=null)w.push(cur);cur=null;}
+		else cur=(cur||'')+(m[1]!=null?m[1]:m[2]!=null?m[2]:m[3]);
+	}
+	if(cur!=null)w.push(cur);
+	return w;
+}
+function cfgOpts(txt){
+	var top={'.type':'config','.name':UCI_PATH},out=[],o=null;
+	function bad(x,k){(x['.bad']=x['.bad']||[]).push(k);}
+	(txt||'').split('\n').forEach(function(l){
+		cfgStmts(l).forEach(function(st){
+			var w=uciWords(st),k;
+			if(!w)return bad(o||top,trim(st));
+			if(w[0]==='config'){o={'.type':w[1]||'','.name':w[2]||''};out.push(o);if(w.length<2||w.length>3)bad(o,trim(st));return;}
+			if(!o||(w[0]!=='option'&&w[0]!=='list'))return;
+			k=w[1]||'';
+			if(w.length!==3){if(TCK.test(k))bad(o,k);return;}
+			if(w[0]==='list')(o[k]=[].concat(o[k]||[])).push(w[2]);else o[k]=w[2];
+		});
+	});
+	return top['.bad']?[top].concat(out):out;
+}
 // Values are spliced into a single-quoted UCI string: strip quotes and line breaks,
 // or a stray newline injects arbitrary option/config lines into the file.
 function qv(v){return v==null?'':String(v).replace(/['"\r\n]/g,'');}
@@ -316,6 +346,7 @@ function qv(v){return v==null?'':String(v).replace(/['"\r\n]/g,'');}
 // file (comments, ordering, lists, unknown options). kv[key]===null deletes.
 // idx = ordinal among sections of this type, used when name is empty (anonymous).
 function setOpts(txt,type,name,idx,kv){
+	txt=(txt||'').replace(/\r\n/g,'\n');
 	var lines=(txt||'').split('\n'),secs=cfgSections(txt),s=null,n=0,i,k;
 	for(i=0;i<secs.length;i++){
 		if(secs[i].type!==type)continue;
@@ -352,23 +383,103 @@ function dscpNum(v){
 	if(/^(0|[1-9]\d*)$/.test(v))return parseInt(v,10);
 	return null;
 }
+// NQB is in qosify from 298754f, the get_stats "classes" table from 0edbc51 two
+// commits on. OpenWrt went from 1501e09 (24.10, 25.12) to beeb87e (master), so a
+// reply with "classes" means NQB is known, one without it means not; null is unknown.
+var NQB_OK=null;
+function nqbSeen(st){if(st)NQB_OK=!!st.classes;}
+function dscpList(){return NQB_OK===false?DSCP.filter(function(d){return d!=='NQB';}):DSCP;}
+// A value __qosify_map_dscp_value() takes, or a class name where
+// qosify_map_dscp_value() also checks classes (cls given).
+function dscpOk(v,cls){
+	v=String(v).replace(/^\+/,'');
+	if(cls&&cls.indexOf(v)>=0)return true;
+	if(dscpList().indexOf(v)>=0)return true;
+	var n=dscpNum(v);
+	return n!==null&&n<64;
+}
+// Match keys qosify_map_parse_line() loads: ports 1-65534 (strtoul base 0),
+// one address for inet_pton(), or a dns pattern.
+function portOk(p){
+	var a=p.split('-'),x=dscpNum(a[0]),y=a.length>1?dscpNum(a[1]):x;
+	return a.length<3&&x!==null&&y!==null&&x>=1&&y>=x&&y<=65534;
+}
+function ip4Ok(a){return /^((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.|$)){4}$/.test(a)&&!/\.$/.test(a);}
+function ip6Ok(a){
+	if(!/^[0-9a-fA-F:.]+$/.test(a)||a.indexOf(':')<0)return false;
+	try{new URL('http://['+a+']/');return true;}catch(e){return false;}
+}
+function matchOk(k){
+	if(/^(dns|dns_c|dns_q):./.test(k))return true;
+	if(/^(tcp|udp):/.test(k))return portOk(k.slice(4));
+	if(k.indexOf(':')>=0)return ip6Ok(k);
+	if(k.indexOf('.')>=0)return ip4Ok(k);
+	return false;
+}
 function ruleWarn(txt,names){
-	var w=[],bad=[],bare=[],lines=(txt||'').split('\n');
+	var w=[],bad=[],bare=[],xtra=[],mt=[],lines=(txt||'').split('\n');
+	function add(a,v){if(a.length<5&&a.indexOf(v)<0)a.push(v);}
 	for(var i=0;i<lines.length;i++){
 		var l=lines[i],h=l.indexOf('#');
 		if(h>=0)l=l.slice(0,h);
 		l=trim(l);if(!l)continue;
 		var f=l.split(/\s+/);
-		if(f.length<2){if(bare.length<5)bare.push(String(i+1));continue;}
-		var v=f[1].replace(/^\+/,'');
-		if(names.indexOf(v)>=0||DSCP.indexOf(v)>=0)continue;
-		var n=dscpNum(v);
-		if(n!==null&&n<64)continue;
-		if(bad.indexOf(v)<0)bad.push(v);
+		if(f.length<2){add(bare,String(i+1));continue;}
+		if(f.length>2){add(xtra,String(i+1));continue;}
+		if(!matchOk(f[0]))add(mt,String(i+1));
+		if(!dscpOk(f[1],names))add(bad,f[1].replace(/^\+/,''));
 	}
 	if(bare.length)w.push(_('No DSCP target on line %s — qosify skips single-field lines').format(bare.join(', ')));
-	if(bad.length)w.push(_('Unknown class/DSCP target: %s').format(bad.slice(0,5).join(', ')));
+	if(xtra.length)w.push(_('More than two fields on line %s — qosify reads the rest of the line as the DSCP value and skips it').format(xtra.join(', ')));
+	if(mt.length)w.push(_('Match not loaded by qosify on line %s — ports 1-65534, one IPv4/IPv6 address (no CIDR or %%zone), or dns:, dns_c:').format(mt.join(', ')));
+	if(bad.length)w.push(_('Unknown class/DSCP target: %s').format(bad.join(', '))+(NQB_OK===false&&bad.indexOf('NQB')>=0?' '+_('(this qosify build has no NQB)'):''));
 	return w;
+}
+// dscp_* and class values in config sections (uci.get objects or cfgOpts()).
+// Defaults-level dscp_prio/dscp_bulk/dscp_icmp failing makes qosify_ubus_config()
+// return before the interfaces are applied; the rest is dropped quietly.
+// cmd_add_qdisc() pastes bandwidth, mode and the options unquoted into a tc
+// command run with sh -c as root, so a shell metacharacter there is refused too.
+function cfgLint(secs){
+	var w=[],cls=[];
+	secs.forEach(function(s){if((s['.type']==='class'||s['.type']==='alias')&&s['.name'])cls.push(s['.name']);});
+	secs.forEach(function(s){
+		var t=s['.type'],n=s['.name']||t;
+		(s['.bad']||[]).forEach(function(k){w.push({hard:true,t:_('%s: %s cannot be checked — write it as one plain or fully quoted value, with no backslash').format(n,k)});});
+		if(t==='interface'||t==='device'){
+			['bandwidth_up','bandwidth_down','bandwidth','mode','ingress_options','egress_options','options'].forEach(function(k){
+				if(s[k]&&/['"`$;&|<>(){}\\\n]/.test(String(s[k])))w.push({hard:true,t:_('%s: %s contains shell metacharacters — qosify runs the tc command with sh -c as root, so they would break it or be executed').format(n,k)});
+			});
+		}
+		else if(t==='defaults'){
+			['dscp_prio','dscp_bulk','dscp_icmp'].forEach(function(k){
+				if(s[k]!=null&&s[k]!==''&&!dscpOk(s[k],cls))w.push({hard:true,t:_('%s: %s "%s" is not a class, codepoint or 0-63 — qosify rejects the whole config and interface changes are not applied').format(n,k,s[k])});
+			});
+			['dscp_default_tcp','dscp_default_udp'].forEach(function(k){
+				if(s[k]!=null&&s[k]!==''&&!dscpOk(s[k],cls))w.push({t:_('%s: %s "%s" is not a class, codepoint or 0-63 — qosify ignores it').format(n,k,s[k])});
+			});
+		}
+		else if(t==='class'||t==='alias'){
+			['ingress','egress'].forEach(function(k){
+				var v=s[k]||s.value;
+				if(v&&!dscpOk(v))w.push({t:_('%s: %s "%s" is not a codepoint or 0-63 — qosify drops this class and the rules using it').format(n,k,v)});
+			});
+			['dscp_prio','dscp_bulk'].forEach(function(k){
+				if(s[k]!=null&&s[k]!==''&&!dscpOk(s[k],cls))w.push({t:_('%s: %s "%s" is not a class, codepoint or 0-63 — qosify ignores it').format(n,k,s[k])});
+			});
+		}
+	});
+	return w;
+}
+// Shell glob from `list defaults` against a path, as qosify.init's unquoted $files.
+function globHit(g,p){
+	return new RegExp('^'+String(g).replace(/[.+^${}()|\\]/g,'\\$&').replace(/\*/g,'[^/]*').replace(/\?/g,'[^/]')+'$').test(p);
+}
+function rulesLoaded(secs){
+	return secs.some(function(s){
+		if(s['.type']!=='defaults')return false;
+		return [].concat(s.defaults||[]).some(function(g){return String(g).split(/\s+/).some(function(x){return globHit(x,RULES_PATH);});});
+	});
 }
 
 var noteSeen={};
@@ -409,7 +520,7 @@ function fold(id,title,kids,open){
 }
 function refBox(title,note,rows){
 	return E('details',{},[E('summary',{},title),note?E('p',{},note):'',
-		rows.length?E('table',{'class':'table'},rows.map(function(r){return kvRow(E('code',{},r[0]),r[1]);})):'']);
+		rows.length?E('table',{'class':'table'},rows.map(function(r){return kvRow(E('code',{},[document.createTextNode(r[0])]),[document.createTextNode(r[1])]);})):'']);
 }
 function sect(title,kids,attrs){
 	var a=attrs||{};
@@ -466,7 +577,8 @@ return view.extend({
 	load:function(){
 		return Promise.all([
 			uci.load('qosify').catch(function(){return null;}),
-			this.gatherCtx(true)
+			this.gatherCtx(true),
+			callQosifyStats().then(nqbSeen,function(){})
 		]);
 	},
 
@@ -476,6 +588,7 @@ return view.extend({
 		this.readonly=!L.hasViewPermission();
 
 		if(d[0]===null)notify(_('The qosify UCI configuration could not be loaded — class and interface lists may be incomplete.'),'warning');
+		else this.lintAll(true).forEach(function(t){notify(t,'warning');});
 
 		var root=E('div',{'class':'cbi-map','id':'qos-app'});
 		root.appendChild(E('link',{'rel':'stylesheet','href':L.resource('view/qosify/qosify.css')}));
@@ -583,6 +696,8 @@ return view.extend({
 		// netdev (the shipped config has `config device wandev` with `option name
 		// wan`), so its section name is never a safe prefill.
 		var isDev=!!(sn&&sn.type==='device');
+		// qosify.init falls back to option bandwidth for an unset direction.
+		var bwPh=w.bandwidth?_('%s (from bandwidth)').format(w.bandwidth):_('e.g. %s').format('850mbit');
 		// CAKE is only given nat/nonat when host_isolate is on; otherwise it gets
 		// flow isolation and nat has no effect at all.
 		var hiCb=chk('host_isolate',numBool(w.host_isolate,true));
@@ -601,16 +716,16 @@ return view.extend({
 			pane('qs-basic',_('Basic'),[
 				[_('QoS Enabled'),[E('span',{'class':'qs-ctl'},[chk('enabled',enChecked),' ',enBadge]),desc(_('Unticked sets disabled 1 and qosify skips this section.'))]],
 				[isDev?_('Device'):_('Interface'),[txt('name',w.name||(sn?(isDev?'':sn.name):'wan'),_('e.g. %s').format(isDev?'eth0':'wan')),desc(isDev?_('Netdev to enable QoS on. Required.'):_('netifd interface to enable QoS on. Required.'))]],
-				[_('Upload bandwidth'),[txt('bw_up',w.bandwidth_up,_('e.g. %s').format('850mbit')),desc(_('Uplink bandwidth, same format as tc. Set just below line speed.'))]],
-				[_('Download bandwidth'),[txt('bw_down',w.bandwidth_down,_('e.g. %s').format('850mbit')),desc(_('Downlink bandwidth, same format as tc. Set just below line speed.'))]],
-				[_('Queueing mode'),[sel('mode',w.mode,MODES,'diffserv4'),desc(_('CAKE diffserv mode.'))]]
+				[_('Upload bandwidth'),[txt('bw_up',w.bandwidth_up,bwPh),desc(_('Uplink bandwidth, same format as tc. Set just below line speed.'))]],
+				[_('Download bandwidth'),[txt('bw_down',w.bandwidth_down,bwPh),desc(_('Downlink bandwidth, same format as tc. Set just below line speed.'))]],
+				[_('Queueing mode'),[sel('mode',w.mode,MODES,'diffserv4'),desc(OPT_DESC.mode)]]
 			]),
 			pane('qs-shaping',_('Shaping'),[
-				[_('Download shaping'),[chk('ingress',numBool(w.ingress,true)),desc(_('Enable ingress shaping.'))]],
-				[_('Upload shaping'),[chk('egress',numBool(w.egress,true)),desc(_('Enable egress shaping.'))]],
-				[_('Automatic download rate'),[chk('autorate',numBool(w.autorate_ingress,false)),desc(_('Enable CAKE automatic rate estimation for ingress.'))]],
-				[_('NAT awareness'),[chk('nat',numBool(w.nat,!isDev)),desc(_('Enable CAKE NAT host detection via conntrack.')),natNote]],
-				[_('Host isolation'),[hiCb,desc(_('Enable CAKE host isolation.'))]]
+				[_('Download shaping'),[chk('ingress',numBool(w.ingress,true)),desc(OPT_DESC['if.ingress'])]],
+				[_('Upload shaping'),[chk('egress',numBool(w.egress,true)),desc(OPT_DESC['if.egress'])]],
+				[_('Automatic download rate'),[chk('autorate',numBool(w.autorate_ingress,false)),desc(OPT_DESC.autorate_ingress)]],
+				[_('NAT awareness'),[chk('nat',numBool(w.nat,!isDev)),desc(OPT_DESC.nat),natNote]],
+				[_('Host isolation'),[hiCb,desc(OPT_DESC.host_isolate)]]
 			]),
 			pane('qs-overhead',_('Overhead'),[
 				[_('Overhead preset'),[ovSel,desc(_('CAKE overhead keyword. Use none if unsure.'))]],
@@ -622,7 +737,7 @@ return view.extend({
 			pane('qs-advanced',_('Advanced'),[
 				[_('Ingress CAKE options'),[txt('ing_opts',w.ingress_options,_('e.g. %s').format('triple-isolate memlimit 32mb')),desc(_('CAKE ingress options, space separated.'))]],
 				[_('Egress CAKE options'),[txt('egr_opts',w.egress_options,_('e.g. %s').format('wash')),desc(_('CAKE egress options, space separated.'))]],
-				[_('Common CAKE options'),[txt('opts',w.options,_('e.g. %s').format('overhead 46 memlimit 32mb')),desc(_('CAKE options for ingress + egress.'))]]
+				[_('Common CAKE options'),[txt('opts',w.options,_('e.g. %s').format('overhead 46 memlimit 32mb')),desc(OPT_DESC.options)]]
 			],[E('div',{'class':'cbi-tab-descr'},_('Invalid CAKE options can stop qosify starting.'))],'qs-wide')
 		]);
 		// Every pane is marked, as the sub tabs share LuCI's stored tab id with the page tabs.
@@ -709,15 +824,31 @@ return view.extend({
 	applyService:function(){
 		var self=this;
 		return callServiceList('qosify').then(isRunning,function(){return null;}).then(function(run){
-			if(run==null)return callRcInit('qosify','restart');
+			if(run==null)return callRcInit('qosify','restart').then(function(){return self.pushConfig();});
 			if(run)return callRcInit('qosify','reload');
 			return callRcInit('qosify','start').then(function(){
 				return self.waitForRunning(4000);
 			}).then(function(up){
 				if(up==null)throw new Error(_('rpcd is not answering for qosify, so the service state is unknown.'));
 				if(!up)throw new Error(_('qosify did not come up — check the system log'));
+				return self.pushConfig();
 			});
 		});
+	},
+
+	// qosify.init in 25.12 and master pushes its config from service_running(),
+	// which rc.common only calls for `running`, so start and restart leave the
+	// daemon with no config. reload pushes it once the ubus object is up; on 24.10,
+	// where service_started() already did, the same config changes nothing.
+	pushConfig:function(){
+		var n=10;
+		function tick(){
+			return callQosifyStatus().then(function(){return callRcInit('qosify','reload');},function(){
+				if(--n<=0)throw new Error(_('qosify did not appear on ubus, so its config was not applied — press Reload'));
+				return new Promise(function(r){setTimeout(r,400);}).then(tick);
+			});
+		}
+		return tick();
 	},
 
 	updateEnBadge:function(el,ctx,enChecked){
@@ -817,11 +948,11 @@ return view.extend({
 		var self=this;
 		var section=E('div',{'id':'qos-cf'});
 		var classes=this.getClasses();
-		var dscpChoices=classes.map(function(c){return c.name;}).concat(DSCP);
+		var dscpChoices=classes.map(function(c){return c.name;}).concat(dscpList());
 		function head(p,a,b){
-			p.qaCells=[[_('section type'),E('select',{'class':'cbi-input-select','id':'qac-'+p.id.slice(9)+'-type'},
+			p.qaCells=[[_('section type'),E('select',{'class':'cbi-input-select','id':'qac-'+p.id.slice(9)+'-type','aria-label':_('section type')},
 				[E('option',{'value':a},'config '+a),E('option',{'value':b},'config '+b)])],
-				[_('section name'),E('input',{'type':'text','class':'cbi-input-text','id':'qac-'+p.id.slice(9)+'-name','placeholder':_('section name')})]];
+				[_('section name'),E('input',{'type':'text','class':'cbi-input-text','id':'qac-'+p.id.slice(9)+'-name','placeholder':_('section name'),'aria-label':_('section name')})]];
 		}
 		function add(p){return E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qacAdd(p);}},_('Add'));}
 		var qa=E('div',{'class':'qa'});
@@ -829,7 +960,7 @@ return view.extend({
 		// config defaults — add_defaults() in qosify.init
 		var qadDef=E('div',{'id':'qac-opts-defaults'});
 		this.qaInput(qadDef,'defaults','list','/etc/qosify/*.conf');
-		this.qaNum(qadDef,'timeout','300');
+		this.qaNum(qadDef,'timeout','3600');
 		this.qaSelect(qadDef,'dscp_default_tcp',dscpChoices);
 		this.qaSelect(qadDef,'dscp_default_udp',dscpChoices);
 		this.qaSelect(qadDef,'dscp_icmp',dscpChoices);
@@ -842,9 +973,9 @@ return view.extend({
 		// config class / config alias — add_class()
 		var qadCls=E('div',{'id':'qac-opts-class'});
 		head(qadCls,'class','alias');
-		this.qaSelect(qadCls,'value',DSCP);
-		this.qaSelect(qadCls,'ingress',DSCP);
-		this.qaSelect(qadCls,'egress',DSCP);
+		this.qaSelect(qadCls,'value',dscpList());
+		this.qaSelect(qadCls,'ingress',dscpList());
+		this.qaSelect(qadCls,'egress',dscpList());
 		this.qaSelect(qadCls,'dscp_prio',dscpChoices);
 		this.qaSelect(qadCls,'dscp_bulk',dscpChoices);
 		this.qaNum(qadCls,'prio_max_avg_pkt_len','500');
@@ -887,7 +1018,7 @@ return view.extend({
 		});
 		qa.appendChild(fold('qos-qa-ref',_('Reference'),[
 			this.classRef('qos-cls-cfg'),
-			refBox(_('DSCP values'),_('DSCP codepoints: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF. A raw value from 0 to 63 is accepted too, and any dscp_* value may also name a class. Prefix with + to override only when the DSCP field is zero.'),[]),
+			refBox(_('DSCP values'),_('DSCP codepoints: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF (NQB needs qosify from June 2026; 24.10 and 25.12 do not have it). A raw value from 0 to 63 is accepted too, and any dscp_* value may also name a class. Prefix with + to override only when the DSCP field is zero.'),[]),
 			refBox(_('Defaults'),_('Defaults qosify applies when a key is absent — interface: mode diffserv4, ingress 1, egress 1, nat 1, host_isolate 1, autorate_ingress 0. device: identical except nat 0. defaults: timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled).'),[])
 		],false));
 		section.appendChild(qa);
@@ -914,17 +1045,17 @@ return view.extend({
 	qaCell:function(parent,opt,el){(parent.qaCells=parent.qaCells||[]).push([opt,el]);},
 	qaInput:function(parent,opt,pre,ph){
 		this.qaCell(parent,opt,E('input',{
-			'id':this.qaId(parent,opt),'class':'cbi-input-text','data-opt':opt,'data-pre':pre,'type':'text',
+			'id':this.qaId(parent,opt),'class':'cbi-input-text','data-opt':opt,'data-pre':pre,'type':'text','aria-label':opt,
 			'value':pre==='list'?ph:'','placeholder':pre==='list'?'':ph
 		}));
 	},
 	qaSelect:function(parent,opt,opts){
-		var s=E('select',{'id':this.qaId(parent,opt),'class':'cbi-input-select','data-opt':opt},E('option',{'value':''},'--'));
+		var s=E('select',{'id':this.qaId(parent,opt),'class':'cbi-input-select','data-opt':opt,'aria-label':opt},E('option',{'value':''},'--'));
 		opts.forEach(function(o){s.appendChild(E('option',{'value':o},o));});
 		this.qaCell(parent,opt,s);
 	},
 	qaNum:function(parent,opt,ph){
-		this.qaCell(parent,opt,E('input',{'id':this.qaId(parent,opt),'class':'cbi-input-text','data-opt':opt,'type':'number','min':'0','placeholder':ph}));
+		this.qaCell(parent,opt,E('input',{'id':this.qaId(parent,opt),'class':'cbi-input-text','data-opt':opt,'type':'number','min':'0','placeholder':ph,'aria-label':opt}));
 	},
 
 	lock:function(){this._n=(this._n||0)+1;},
@@ -960,7 +1091,7 @@ return view.extend({
 			var b=$(id);
 			if(b)dom.content(b,self.classRows(classes));
 		});
-		var names=classes.map(function(c){return c.name;}).concat(DSCP);
+		var names=classes.map(function(c){return c.name;}).concat(dscpList());
 		['qac-opts-defaults','qac-opts-class'].forEach(function(id){
 			var p=$(id);if(!p)return;
 			var ss=p.querySelectorAll('select[data-opt^="dscp_"]');
@@ -1021,13 +1152,13 @@ return view.extend({
 	tabRules:function(ctx){
 		var self=this;
 		var section=E('div',{'id':'qos-ru'});
-		var qarType=E('select',{'class':'cbi-input-select','id':'qar-type','change':function(){self.qarPlaceholder();}});
-		[['tcp:','tcp:<port>[-<endport>]'],['udp:','udp:<port>[-<endport>]'],['both:','tcp: + udp:'],['dns:','dns:<pattern>'],['dnsr:','dns:/<regex>'],['dns_c:','dns_c:<pattern>'],['dns_cr:','dns_c:/<regex>'],['ipv4:','<ipaddr>'],['ipv6:','<ipv6addr>']].forEach(function(o){
-			qarType.appendChild(E('option',{'value':o[0]},o[1]));
+		var qarType=E('select',{'class':'cbi-input-select','id':'qar-type','aria-label':_('match'),'change':function(){self.qarPlaceholder();}});
+		[['tcp:','tcp:<port>[-<endport>]'],['udp:','udp:<port>[-<endport>]'],['both:','tcp: + udp:'],['dns:','dns:<pattern>'],['dnsr:','dns:/<regex>'],['dns_c:','dns_c:<pattern>'],['dns_cr:','dns_c:/<regex>'],['ipv4:',_('IPv4 address, e.g. 1.1.1.1')],['ipv6:',_('IPv6 address, e.g. ff01::1')]].forEach(function(o){
+			qarType.appendChild(E('option',{'value':o[0]},[document.createTextNode(o[1])]));
 		});
-		var qarCls=E('select',{'class':'cbi-input-select','id':'qar-cls'},this.getClasses().map(function(c){return E('option',{'value':c.name},clsOpt(c));}));
-		var qr=[['match',5,qarType],['',8,E('input',{'type':'text','class':'cbi-input-text','id':'qar-val','placeholder':_('e.g. %s').format('4500')})],
-			['dscp',6,qarCls],['+',1,E('input',{'type':'checkbox','class':'cbi-input-checkbox','id':'qar-prio'})],
+		var qarCls=E('select',{'class':'cbi-input-select','id':'qar-cls','aria-label':'dscp'},this.getClasses().map(function(c){return E('option',{'value':c.name},clsOpt(c));}));
+		var qr=[['match',5,qarType],['',8,E('input',{'type':'text','class':'cbi-input-text','id':'qar-val','aria-label':_('value'),'placeholder':_('e.g. %s').format('4500')})],
+			['dscp',6,qarCls],['+',1,E('input',{'type':'checkbox','class':'cbi-input-checkbox','id':'qar-prio','aria-label':_('Only override the DSCP value if it is zero')})],
 			['',2,E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qarAdd();}},_('Add'))]];
 		section.appendChild(E('div',{'class':'qa'},fold('qos-qa-rule',_('Quick Add'),[
 			colTable(qr,[E('tr',{'class':'tr cbi-section-table-titles'},qr.map(function(c){return E('th',{'class':'th','title':c[0]},c[0]);})),
@@ -1255,6 +1386,7 @@ return view.extend({
 			var ctx={running:d[0]?isRunning(d[0]):null,stats:d[1]};
 			self._cnStats=ctx.running?ctx.stats:null;
 			if(ctx.stats)self._cnDns=ctx.stats.dns!=null;
+			nqbSeen(ctx.stats);
 			self.fillCounters(ctx);
 			return Promise.all([self._cnDns?callQosifyDump().catch(function(){return null;}):null,ctx.running,
 				ctx.running&&!self.readonly?L.resolveDefault(fs.exec('/usr/sbin/qosify-status',[]),null):null]);
@@ -1509,16 +1641,19 @@ return view.extend({
 	},
 
 
-	lintAll:function(){
-		var out=[];
+	// load=true is the page-load subset: only what silently stops qosify using
+	// the config or the rules file.
+	lintAll:function(load){
+		var out=[],all=uci.sections('qosify');
 		function walk(type,dev){
 			uci.sections('qosify',type,function(s){
 				if(uciBool(s.disabled,false))return;
 				ifLint(s,dev).forEach(function(t){out.push(s['.name']+': '+t);});
 			});
 		}
-		walk('interface',false);
-		walk('device',true);
+		if(!load){walk('interface',false);walk('device',true);}
+		cfgLint(all).forEach(function(x){if(!load||x.hard)out.push(x.t);});
+		if(!rulesLoaded(all))out.push(_('%s is not in the defaults list — qosify does not load it, so the Rules tab has no effect').format(RULES_PATH));
 		return out;
 	},
 
@@ -1592,6 +1727,7 @@ return view.extend({
 			p=p.then(function(){return self.waitForRunning(4000);}).then(function(up){
 				if(up==null)throw new Error(_('rpcd is not answering for qosify, so the service state is unknown.'));
 				if(!up)throw new Error(_('qosify did not come up — check the system log'));
+				return self.pushConfig();
 			});
 		if(action==='stop')
 			p=p.then(function(){return self.waitForStopped(4000);}).then(function(down){
@@ -1623,18 +1759,18 @@ return view.extend({
 		var ovh=get('overhead'),mode=get('mode'),mpu=trim(get('overhead_mpu')),vlan=get('overhead_vlan'),ob=trim(get('ovh_bytes'));
 		var iopts=trim(get('ing_opts')),eopts=trim(get('egr_opts')),gopts=trim(get('opts'));
 		var safe=/^[\w\s.:-]*$/;
-		if(!safe.test(iopts)||!safe.test(eopts)||!safe.test(gopts)){
-			notify(_('Error: invalid characters in options fields. Use alphanumeric, spaces, hyphens, dots, colons only.'),'danger');
+		if(!safe.test(iopts)||!safe.test(eopts)||!safe.test(gopts)||!safe.test(bwUp)||!safe.test(bwDn)){
+			notify(_('Error: invalid characters in bandwidth or options fields. Use alphanumeric, spaces, hyphens, dots, colons only.'),'danger');
 			return;
 		}
 		if(bwUp&&!rate.test(bwUp))notify(_('bandwidth_up does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
 		if(bwDn&&!rate.test(bwDn))notify(_('bandwidth_down does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
 		if(mpu&&!/^\d+$/.test(mpu)){notify(_('Error: overhead_mpu must be a whole number of bytes'),'danger');return;}
 		if(ovh==='manual'&&ob&&!/^-?\d+$/.test(ob)){notify(_('Error: overhead must be a whole number of bytes'),'danger');return;}
-		var en=chk('enabled');
-		if(en&&(!bwUp||!bwDn))notify(_('Note: bandwidth not set — CAKE will run unlimited on that direction.'),'warning');
+		var en=chk('enabled'),s0=ifSect(),bwAll=((s0&&uci.get('qosify',s0.id))||{}).bandwidth;
+		if(en&&!bwAll&&(!bwUp||!bwDn))notify(_('Note: bandwidth not set — CAKE will run unlimited on that direction.'),'warning');
 
-		var s0=ifSect(),sty=s0?s0.type:'interface',sec=s0?s0.name:'wan',sidx=s0?s0.idx:0;
+		var sty=s0?s0.type:'interface',sec=s0?s0.name:'wan',sidx=s0?s0.idx:0;
 		// null = remove the option, so clearing a field actually clears it
 		var kv={
 			disabled:en?'0':'1',
@@ -1649,8 +1785,7 @@ return view.extend({
 			autorate_ingress:chk('autorate')?'1':'0',
 			ingress_options:iopts||null,
 			egress_options:eopts||null,
-			options:gopts||null,
-			option:null
+			options:gopts||null
 		};
 		// overhead and overhead_encap are dropped unless manual, as qosify ignores them.
 		kv.overhead=(ovh==='manual'&&ob)?ob:null;
@@ -1709,6 +1844,8 @@ return view.extend({
 		if(!/(^|\n)config /.test(data)){
 			notify(_('Error: No valid config stanzas found.'),'danger');return;
 		}
+		var hard=cfgLint(cfgOpts(data)).filter(function(x){return x.hard;});
+		if(hard.length){hard.forEach(function(x){notify(_('Error: %s').format(x.t),'danger');});return;}
 		return self.confirmFresh(ta,UCI_PATH).then(function(go){
 			if(!go)return null;
 			return self.writeConfig(ta,data);
@@ -1883,7 +2020,7 @@ return view.extend({
 				if(f.size<1)return rej(_('Empty file'));
 				if(f.size>65536)return rej(_('File too large (max 64KB)'));
 				var r=new FileReader();
-				r.onload=function(){res(r.result);};
+				r.onload=function(){res(String(r.result).replace(/\r\n/g,'\n'));};
 				r.onerror=function(){rej(_('Read error'));};
 				r.readAsText(f);
 			});
@@ -1891,7 +2028,8 @@ return view.extend({
 		function validateUci(d){
 			if(/\x00/.test(d))return _('Binary content rejected');
 			if(!/(^|\n)config /.test(d))return _('No valid UCI config stanzas');
-			return null;
+			var hard=cfgLint(cfgOpts(d)).filter(function(x){return x.hard;});
+			return hard.length?hard.map(function(x){return x.t;}).join('; '):null;
 		}
 		self.lock();
 		ui.showModal(_('Uploading'),[E('p',{},_('Reading and validating files...'))]);
@@ -2015,11 +2153,10 @@ return view.extend({
 			if(pn.length===2&&pn[0]>pn[1]){notify(_('Range start must not exceed end.'),'danger');return;}
 		}else if(/[\s#]/.test(val)){notify(_('No spaces or # allowed in patterns or addresses.'),'danger');return;}
 		if(ty==='ipv4:'){
-			var oc=val.split('.');
-			if(oc.length!==4||oc.some(function(x){return !/^\d{1,3}$/.test(x)||+x>255;})){notify(_('Enter a single IPv4 address (qosify does not accept CIDR).'),'danger');return;}
+			if(!ip4Ok(val)){notify(_('Enter a single IPv4 address (qosify does not accept CIDR).'),'danger');return;}
 		}
 		// inet_pton(AF_INET6) also takes the IPv4-mapped form, so allow dots here
-		if(ty==='ipv6:'&&(!/^[0-9a-fA-F:.]+$/.test(val)||val.indexOf(':')<0||val.length>45)){notify(_('Enter a single IPv6 address (qosify does not accept CIDR or a %zone suffix).'),'danger');return;}
+		if(ty==='ipv6:'&&!ip6Ok(val)){notify(_('Enter a single IPv6 address (qosify does not accept CIDR or a %zone suffix).'),'danger');return;}
 		var pfx=pr?'+':'';
 		var ta=$('qos-rules-ta');if(!ta)return;
 		var lines=[];
