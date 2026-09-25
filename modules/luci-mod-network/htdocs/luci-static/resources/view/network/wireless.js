@@ -246,27 +246,26 @@ function radio_restart(id, ev) {
 }
 
 function network_updown(id, map, ev) {
-	const radio = uci.get('wireless', id, 'device');
+	const radios = L.toArray(uci.get('wireless', id, 'device'));
 	const disabled = (uci.get('wireless', id, 'disabled') == '1') ||
-	               (uci.get('wireless', radio, 'disabled') == '1');
+	               radios.some(radio => uci.get('wireless', radio, 'disabled') == '1');
 
 	if (disabled) {
 		uci.unset('wireless', id, 'disabled');
-		uci.unset('wireless', radio, 'disabled');
+		radios.forEach(radio => uci.unset('wireless', radio, 'disabled'));
 	}
 	else {
 		uci.set('wireless', id, 'disabled', '1');
 
-		let all_networks_disabled = true;
 		const wifi_ifaces = uci.sections('wireless', 'wifi-iface');
 
-		wifi_ifaces.forEach(wifi_iface => {
-			if (wifi_iface.device == radio && wifi_iface.disabled != '1')
-				all_networks_disabled = false;
-		});
+		radios.forEach(radio => {
+			const all_networks_disabled = !wifi_ifaces.some(wifi_iface =>
+				L.toArray(wifi_iface.device).includes(radio) && wifi_iface.disabled != '1');
 
-		if (all_networks_disabled)
-			uci.set('wireless', radio, 'disabled', '1');
+			if (all_networks_disabled)
+				uci.set('wireless', radio, 'disabled', '1');
+		});
 	}
 
 	return map.save().then(function() {
@@ -305,7 +304,7 @@ function add_dependency_permutations(o, deps) {
 // encryption mode (sae-compat -> on, sae/sae-mixed -> off); otherwise force off.
 // Both paths go through the base method so the checkbox is updated reactively.
 function eht_compat_default(section_id) {
-	const dev = uci.get('wireless', section_id, 'device');
+	const dev = L.toArray(uci.get('wireless', section_id, 'device'))[0];
 	let htmode = dev ? uci.get('wireless', dev, 'htmode') : null;
 
 	const freq = dev ? this.map.lookupOption('_freq', dev) : null;
@@ -2380,13 +2379,13 @@ return view.extend({
 
 				if (replopt.formvalue('_new_') == '1') {
 					for (let ws of wifi_sections)
-						if (ws.device == radioDev.getName())
+						if (L.toArray(ws.device).includes(radioDev.getName()))
 							uci.remove('wireless', ws['.name']);
 				}
 
 				if (uci.get('wireless', radioDev.getName(), 'disabled') == '1') {
 					for (let ws of wifi_sections)
-						if (ws.device == radioDev.getName())
+						if (L.toArray(ws.device).includes(radioDev.getName()))
 							uci.set('wireless', ws['.name'], 'disabled', '1');
 
 					uci.unset('wireless', radioDev.getName(), 'disabled');
