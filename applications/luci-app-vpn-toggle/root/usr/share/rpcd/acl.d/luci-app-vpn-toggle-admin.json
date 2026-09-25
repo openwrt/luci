@@ -1,0 +1,18 @@
+{
+	"luci-app-vpn-toggle-admin": {
+		"description": "Admin configuration access for VPN Toggle settings page",
+		"read": {
+			"uci": [ "vpn_toggle", "rpcd", "network", "dhcp", "firewall" ],
+			"file": {
+				"/var/dhcp.leases": [ "read" ],
+				"/proc/net/arp": [ "read" ]
+			}
+		},
+		"write": {
+			"uci": [ "vpn_toggle", "rpcd", "firewall", "dhcp" ],
+			"file": {
+				"/usr/share/vpn-toggle/user-manager": [ "exec" ]
+			}
+		}
+	}
+}
