@@ -122,48 +122,98 @@ function fillRows(nodes, slot) {
 	return nodes;
 }
 
-function renderSections(sections, keep) {
-	const nodes = [];
+function updateShell(root, sections, containers) {
+	const desired = [
+		sections.cards.length ? containers.cards : null,
+		sections.charts.length ? containers.charts : null,
+		sections.tabs.length ? containers.tabs : null,
+		sections.extra.length ? containers.extra : null
+	].filter(Boolean);
 
-	if (sections.cards.length)
-		nodes.push(E('div', { 'class': 'dashboard-kpi-row' }, fillRows(sections.cards, 'cards')));
+	desired.forEach((node, i) => {
+		if (root.children[i] !== node)
+			root.insertBefore(node, root.children[i] || null);
+	});
 
-	if (sections.charts.length)
-		nodes.push(E('div', { 'class': 'dashboard-charts' }, fillRows(sections.charts, 'charts')));
+	while (root.children.length > desired.length)
+		root.removeChild(root.lastChild);
+}
 
-	if (keep)
-		nodes.push(keep);
-	else if (sections.tabs.length)
-		nodes.push(E('div', { 'class': 'cbi-map' }, [
-			E('div', { 'class': 'cbi-map-tabbed' }, sections.tabs.map(tab => E('div', {
+function updateCharts(container, chartNodes) {
+	const scrollPositions = {};
+	container.querySelectorAll('[data-chart]').forEach(el => {
+		if (el.dataset.chart)
+			scrollPositions[el.dataset.chart] = el.scrollLeft;
+	});
+
+	L.dom.content(container, fillRows(chartNodes, 'charts'));
+
+	container.querySelectorAll('[data-chart]').forEach(el => {
+		if (el.dataset.chart && scrollPositions[el.dataset.chart] != null)
+			el.scrollLeft = scrollPositions[el.dataset.chart];
+	});
+}
+
+function updateTabs(tabMap, tabGroup, items, form) {
+	const menu = tabMap.querySelector('.cbi-tabmenu');
+	const existingPanes = Array.from(tabGroup.children);
+	const existingIds = existingPanes.map(pane => pane.dataset.tab);
+	const itemIds = items.map(tab => tab.id);
+
+	const changed = !tabGroup.hasAttribute('data-initialized') ||
+		existingIds.length !== itemIds.length ||
+		existingIds.some((id, i) => id !== itemIds[i]);
+
+	if (changed) {
+		if (menu)
+			menu.remove();
+		tabGroup.removeAttribute('data-initialized');
+
+		const activePane = existingPanes.find(p => p.getAttribute('data-tab-active') === 'true');
+		const activeId = activePane ? activePane.dataset.tab : null;
+
+		while (tabGroup.firstChild)
+			tabGroup.removeChild(tabGroup.firstChild);
+
+		items.forEach(tab => {
+			const pane = (tab.id === 'layout' && form) ? form : E('div', {
 				'class': 'cbi-section',
 				'data-tab': tab.id,
 				'data-tab-title': (tab.count != null) ? '%s (%d)'.format(tab.title, tab.count) : tab.title
-			}, tab.content)))
-		]));
+			}, (typeof(tab.content) == 'function') ? tab.content() : tab.content);
 
-	if (sections.extra.length)
-		nodes.push(E('div', {}, sections.extra));
+			if (tab.id === activeId)
+				pane.setAttribute('data-tab-active', 'true');
 
-	return nodes;
-}
+			tabGroup.appendChild(pane);
+		});
 
-function saveChartScroll(root) {
-	const positions = {};
+		ui.tabs.initTabGroup(tabGroup.childNodes);
+	}
+	else {
+		items.forEach(tab => {
+			const pane = tabGroup.querySelector(':scope > [data-tab="' + tab.id + '"]');
+			if (!pane)
+				return;
 
-	root.querySelectorAll('[data-chart]').forEach(node => {
-		if (node.dataset.chart)
-			positions[node.dataset.chart] = node.scrollLeft;
-	});
+			const newTitle = (tab.count != null) ? '%s (%d)'.format(tab.title, tab.count) : tab.title;
+			if (pane.dataset.tabTitle !== newTitle) {
+				pane.dataset.tabTitle = newTitle;
+				const link = menu ? menu.querySelector('li[data-tab="' + tab.id + '"] > a') : null;
+				if (link && link.textContent !== newTitle)
+					link.textContent = newTitle;
+			}
 
-	return positions;
-}
+			if (tab.id === 'layout')
+				return;
 
-function restoreChartScroll(root, positions) {
-	root.querySelectorAll('[data-chart]').forEach(node => {
-		if (positions[node.dataset.chart])
-			node.scrollLeft = positions[node.dataset.chart];
-	});
+			const contentNode = (typeof(tab.content) == 'function') ? tab.content() : tab.content;
+			if (contentNode) {
+				if (pane.childNodes.length !== 1 || pane.firstChild !== contentNode)
+					L.dom.content(pane, contentNode);
+			}
+		});
+	}
 }
 
 function startPolling(includes, layout, root, form) {
@@ -175,41 +225,45 @@ function startPolling(includes, layout, root, form) {
 			.then(node => L.dom.content(form, node));
 	};
 
+	if (form)
+		form.addEventListener('cbi-tab-active', showForm);
+
+	const cardsContainer = E('div', { 'class': 'dashboard-kpi-row' });
+	const chartsContainer = E('div', { 'class': 'dashboard-charts' });
+	const tabGroup = E('div', { 'class': 'cbi-map-tabbed' });
+	const tabMap = E('div', { 'class': 'cbi-map' }, [ tabGroup ]);
+	const extraContainer = E('div', {});
+
+	const containers = {
+		cards: cardsContainer,
+		charts: chartsContainer,
+		tabs: tabMap,
+		extra: extraContainer
+	};
+
 	const step = () => {
 		return network.flushCache().then(() => {
 			return invokeIncludesLoad(includes, layout);
 		}).then(results => {
-			const positions = saveChartScroll(root);
-
 			const sections = collectSections(includes, results, layout);
 
 			if (form)
-				sections.tabs.push({ id: 'layout', title: _('Layout'), content: form });
+				sections.tabs.push({ id: 'layout', title: _('Layout'), content: [] });
 
-			// The tabs are left alone while the layout form is looked at,
-			// for a redraw not to take away what is being edited.
-			const tabs = root.querySelector(':scope > .cbi-map');
-			const keep = (tabs && tabs.querySelector('[data-tab="layout"][data-tab-active="true"]')) ? tabs : null;
-			let before = keep;
+			updateShell(root, sections, containers);
 
-			Array.from(root.childNodes).filter(node => node !== keep).forEach(node => root.removeChild(node));
+			if (sections.cards.length)
+				L.dom.content(cardsContainer, fillRows(sections.cards, 'cards'));
 
-			renderSections(sections, keep).forEach(node => {
-				if (node === keep)
-					before = null;
-				else
-					root.insertBefore(node, before);
-			});
+			if (sections.charts.length)
+				updateCharts(chartsContainer, sections.charts);
 
-			const group = keep ? null : root.querySelector('.cbi-map-tabbed');
-			if (group) {
-				if (form)
-					form.parentNode.addEventListener('cbi-tab-active', showForm);
+			if (sections.tabs.length)
+				updateTabs(tabMap, tabGroup, sections.tabs, form);
 
-				ui.tabs.initTabGroup(group.childNodes);
-			}
+			if (sections.extra.length)
+				L.dom.content(extraContainer, sections.extra);
 
-			restoreChartScroll(root, positions);
 			root.classList.add('fade-in');
 		});
 	};
@@ -241,7 +295,7 @@ return view.extend({
 
 		document.addEventListener('uci-applied', () => window.location.reload());
 
-		const form = L.hasViewPermission() ? E('div', {}, [ E('em', { 'class': 'spinning' }, [ _('Loading view…') ]) ]) : null;
+		const form = L.hasViewPermission() ? E('div', { 'class': 'cbi-section', 'data-tab': 'layout', 'data-tab-title': _('Layout') }, [ E('em', { 'class': 'spinning' }, [ _('Loading view…') ]) ]) : null;
 
 		return startPolling(includes, layout, root, form).then(() => root);
 	},

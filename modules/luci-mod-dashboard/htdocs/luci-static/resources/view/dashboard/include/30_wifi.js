@@ -210,6 +210,7 @@ return baseclass.extend({
 
 	renderClientTable() {
 		return charts.table({
+			id: 'dashboard-wifi-table',
 			head: [
 				_('Hostname'),
 				_('IP Address'),
@@ -242,11 +243,23 @@ return baseclass.extend({
 	},
 
 	renderTab() {
-		return E('div', {}, [
-			E('div', { 'class': 'dashboard-net-grid' }, this.params.wifi.radios.map(radio => this.renderNetworkCard(radio))),
+		const netGrid = E('div', { 'class': 'dashboard-net-grid' }, this.params.wifi.radios.map(radio => this.renderNetworkCard(radio)));
+		const clientTable = this.renderClientTable();
+
+		if (this.tabNode && this.tabNode.parentNode) {
+			const oldGrid = this.tabNode.querySelector('.dashboard-net-grid');
+			if (oldGrid)
+				this.tabNode.replaceChild(netGrid, oldGrid);
+			return this.tabNode;
+		}
+
+		this.tabNode = E('div', {}, [
+			netGrid,
 			E('h3', {}, [ _('Wireless clients') ]),
-			this.renderClientTable()
+			clientTable
 		]);
+
+		return this.tabNode;
 	},
 
 	clientAddresses(ipv4, hint) {

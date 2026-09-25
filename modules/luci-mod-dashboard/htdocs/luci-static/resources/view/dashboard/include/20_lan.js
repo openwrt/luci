@@ -43,6 +43,7 @@ return baseclass.extend({
 
 	renderTable() {
 		return charts.table({
+			id: 'dashboard-lan-table',
 			head: [ _('Hostname'), _('IP Address'), _('MAC') ],
 			rows: this.params.lan.devices.map(device => [
 				device.hostname,
