@@ -1,0 +1,11 @@
+{
+	"luci-app-netmode": {
+		"description": "Grant exec access for netmode AT command script",
+		"read": {
+			"file": {
+				"/usr/share/netmode/at.sh": ["exec"],
+				"/dev": ["list"]
+			}
+		}
+	}
+}
