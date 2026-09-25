@@ -1,0 +1,128 @@
+#!/bin/sh /etc/rc.common
+# init.d/sing-box — procd init script for sing-box.
+#
+# Lifecycle:
+#   start     regenerate config, validate, launch sing-box under procd
+#   stop      terminate the instance
+#   restart   stop + start
+#   reload    regenerate config in-place and SIGHUP the running process
+#   generate  regenerate /etc/sing-box/config.json without touching the daemon
+#
+# UCI options read from /etc/config/singbox → general:
+#   enabled           0/1     master switch (default 1)
+#   wait_for_usb      0/1     wait for usb_binary_path before start (default 0)
+#   usb_binary_path   path    path to wait for, default /mnt/usb/sing-box
+#   usb_wait_timeout  N       seconds to wait, default 15
+#
+# Auto-detect: if /usr/bin/sing-box is a symlink whose target does not exist,
+# the USB wait kicks in even when wait_for_usb=0 — protects against
+# "binary on external storage" setups where the user forgot to enable it.
+#
+# Respawn: 5 tries within 3600 s, 5 s timeout. Open file limit raised to 1 MiB.
+
+USE_PROCD=1
+START=99
+STOP=10
+
+EXTRA_HELP="	reload	Reload configuration (regenerate config and signal sing-box)
+	generate	Generate config from UCI without restart"
+
+CONF="/etc/sing-box/config.json"
+UCI_CFG="singbox"
+
+# Wait for the sing-box binary if it lives on a removable medium (USB).
+# Activates on UCI wait_for_usb=1 OR when /usr/bin/sing-box is a dangling symlink.
+wait_for_binary() {
+	local bin="$1"
+	local need_wait=0
+	local real_target
+
+	config_get_bool need_wait general wait_for_usb 0
+	if [ "$need_wait" != "1" ]; then
+		# Auto-detect dangling symlink — typical of "binary on USB" setups.
+		if [ -L "$bin" ]; then
+			real_target=$(readlink -f "$bin" 2>/dev/null)
+			[ -e "$real_target" ] || need_wait=1
+		fi
+	fi
+	[ "$need_wait" = "1" ] || return 0
+
+	local usb_path timeout
+	config_get usb_path general usb_binary_path "/mnt/usb/sing-box"
+	config_get timeout general usb_wait_timeout 15
+
+	local i
+	for i in $(seq 1 "$timeout"); do
+		[ -e "$usb_path" ] && return 0
+		sleep 1
+	done
+
+	logger -t sing-box "ERROR: $usb_path not available after ${timeout}s, refusing to start"
+	return 1
+}
+
+start_service() {
+	[ -f /etc/config/$UCI_CFG ] || exit 0
+
+	. /lib/functions.sh
+	config_load "$UCI_CFG"
+
+	config_get_bool enabled general enabled 1
+	[ "$enabled" = "1" ] || return 0
+
+	wait_for_binary /usr/bin/sing-box || return 1
+
+	/usr/share/singbox/generate-config.sh >/dev/null 2>&1
+	[ -f "$CONF" ] || {
+		logger -t sing-box "config generation failed, refusing to start"
+		return 1
+	}
+
+	config_get log_output general log_output "/tmp/sing-box.log"
+	# Note: log_output UCI option is accepted for backward compatibility but
+	# no longer used — sing-box now logs to stderr, which procd relays to
+	# syslog (logd ring buffer). Rotation is handled by logd itself.
+
+	procd_open_instance
+	procd_set_param command /usr/bin/sing-box run -c "$CONF"
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_set_param respawn 3600 5 5
+	procd_set_param limits nofile=1048576
+	procd_set_param term_timeout 5
+	procd_close_instance
+}
+
+reload_service() {
+	/usr/share/singbox/generate-config.sh >/dev/null 2>&1 || return 1
+	procd_send_signal "$initscript"
+}
+
+reload() {
+	reload_service
+}
+
+generate() {
+	/usr/share/singbox/generate-config.sh
+}
+
+boot() {
+	[ -f /etc/config/$UCI_CFG ] || exit 0
+	. /lib/functions.sh
+	config_load "$UCI_CFG"
+	config_get_bool enabled general enabled 1
+	[ "$enabled" = "1" ] || exit 0
+	start_service
+}
+
+service_triggers() {
+	procd_add_reload_trigger "$UCI_CFG"
+}
+
+service_started() {
+	procd_set_config_changed "$UCI_CFG"
+}
+
+service_stopped() {
+	procd_set_config_changed "$UCI_CFG"
+}
