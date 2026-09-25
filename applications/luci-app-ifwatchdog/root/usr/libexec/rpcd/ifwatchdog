@@ -1,0 +1,34 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-or-later
+# rpcd backend for luci-app-ifwatchdog: exposes secret-free status JSON.
+
+case "$1" in
+	list)
+		echo '{ "status": { } }'
+		;;
+	call)
+		case "$2" in
+			status)
+				# now_mono lets the GUI compare staleness against the router's own
+				# monotonic clock (immune to an NTP step) instead of wall time.
+				now_mono=$(awk '{ printf "%d\n", $1; exit }' /proc/uptime 2>/dev/null)
+				printf '{ "now_mono": %s, "instances": [' "${now_mono:-0}"
+				first=1
+				for f in /var/run/ifwatchdog/*.json; do
+					[ -f "$f" ] || continue
+					# Skip a file that isn't valid JSON (e.g. torn by a crash mid-write,
+					# though write_status()'s tmp+mv is already atomic) rather than
+					# feeding the GUI's JSON.parse a string that breaks the whole call.
+					jsonfilter -i "$f" -e '@' >/dev/null 2>&1 || continue
+					[ "$first" = 1 ] || printf ','
+					cat "$f"
+					first=0
+				done
+				printf '] }\n'
+				;;
+			*)
+				echo '{ }'
+				;;
+		esac
+		;;
+esac
