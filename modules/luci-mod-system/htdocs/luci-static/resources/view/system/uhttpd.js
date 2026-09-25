@@ -14,6 +14,9 @@ return view.extend({
 		o = s.option(form.Flag, 'redirect_https', _('Redirect to HTTPS'), _('Enable automatic redirection of <abbr title="Hypertext Transfer Protocol">HTTP</abbr> requests to <abbr title="Hypertext Transfer Protocol Secure">HTTPS</abbr> port.'));
 		o.rmempty = false;
 
+		o = s.option(form.Flag, 'force_http_auth', _('Force HTTP Authentication'), _('Enforce <abbr title="Hypertext Transfer Protocol">HTTP</abbr> basic authentication for all pages using the root account.'));
+		o.rmempty = false;
+
 		return m.render();
 	}
 });
