@@ -12,7 +12,7 @@ import { cursor } from 'uci';
 
 
 /* generic plugin handler */
-export function run_plugins(plugin_class_path, plugin_class_enable) {
+export function run_plugins(plugin_class_path, plugin_class_enable, extra_ctx) {
 	let uci = cursor();
 	const require_path = replace(plugin_class_path, '/', '.');
 
@@ -34,7 +34,7 @@ export function run_plugins(plugin_class_path, plugin_class_enable) {
 				const mod = require(require_path + `.${plugin_id}`);
 				if (type(mod) === 'function') {
 					try {
-						results[plugin_id] = mod(plugin_id);
+						results[plugin_id] = mod(plugin_id, extra_ctx);
 					} catch (e) {
 						syslog(LOG_NOTICE|LOG_LOCAL0,
 							sprintf("Could not execute plugin %s: %s",
