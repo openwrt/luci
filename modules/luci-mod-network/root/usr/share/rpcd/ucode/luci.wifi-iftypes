@@ -1,0 +1,46 @@
+#!/usr/bin/env ucode
+//
+// luci.wifi-iftypes -- expose per-PHY supported nl80211 interface modes.
+//
+//   ubus call luci.wifi iftypes
+//     -> { "phy0": { "iftypes": ["managed","ap","monitor","mesh_point"] }, ... }
+//
+// Consumed by LuCI's wireless mode UI to hide modes the driver does not
+// advertise in wiphy->interface_modes (e.g. STA disabled by the driver
+// for AP-only SKUs, or mesh/monitor unavailable on fullmac chips).
+//
+
+'use strict';
+
+import * as nl80211 from 'nl80211';
+
+function collect() {
+	let out = {};
+
+	let dumps = nl80211.request(
+		nl80211.const.NL80211_CMD_GET_WIPHY,
+		nl80211.const.NLM_F_DUMP,
+		{ split_wiphy_dump: true });
+
+	for (let d in filter(dumps ?? [], d => d.wiphy_name != null)) {
+		let phy = replace(d.wiphy_name, /^wiphy/, 'phy');
+		out[phy] ??= { iftypes: [] };
+		if (type(d.supported_iftypes) == 'object')
+			out[phy].iftypes = uniq([
+				...out[phy].iftypes,
+				...filter(keys(d.supported_iftypes), t => d.supported_iftypes[t])
+			]);
+	}
+
+	return out;
+}
+
+return {
+	'luci.wifi': {
+		iftypes: {
+			call: function() {
+				return collect();
+			}
+		}
+	}
+};
