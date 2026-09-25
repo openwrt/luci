@@ -188,25 +188,24 @@ wg_handshake_test() {
 			[ "$protocol" = wireguard ] || {
 				probe_cache="/tmp/wg-health-$id.probe"
 				if [ -f "$probe_cache" ]; then
-					cache_ts=$(sed -n '1p' "$probe_cache" 2>/dev/null || echo 0)
-					age=$(($(date +%s) - ${cache_ts:-0}))
-					if [ "$age" -lt 60 ] 2>/dev/null; then
-						cache_state=$(sed -n '2p' "$probe_cache" 2>/dev/null)
-						kind=$(sed -n '3p' "$probe_cache" 2>/dev/null)
-						case "$kind" in icmp|tcp) ;; *) kind=icmp ;; esac
-						lat=$(sed -n '4p' "$probe_cache" 2>/dev/null)
-						case "$lat" in *[!0-9.]*) lat= ;; esac
-						if [ "$cache_state" = reachable ] || [ "$cache_state" = tcp_reachable ]; then
-							if [ -n "$lat" ]; then
-								state=$cache_state; measurement=$kind; ping_json=$lat; reason_json=null
-							else
-								state=unreachable; measurement=$kind; ping_json=null; reason_json=null
-							fi
-						elif [ -n "$cache_state" ]; then
-							state=$cache_state; measurement=$kind; ping_json=null; reason_json=null
+					# No age gate, matching the WireGuard skip branch:
+					# rotation refreshes this cache every N*5 s, so a
+					# fixed lifetime would flip big fleets to "not yet
+					# checked" for the tail of each cycle instead of
+					# serving the last reading.
+					cache_state=$(sed -n '2p' "$probe_cache" 2>/dev/null)
+					kind=$(sed -n '3p' "$probe_cache" 2>/dev/null)
+					case "$kind" in icmp|tcp) ;; *) kind=icmp ;; esac
+					lat=$(sed -n '4p' "$probe_cache" 2>/dev/null)
+					case "$lat" in *[!0-9.]*) lat= ;; esac
+					if [ "$cache_state" = reachable ] || [ "$cache_state" = tcp_reachable ]; then
+						if [ -n "$lat" ]; then
+							state=$cache_state; measurement=$kind; ping_json=$lat; reason_json=null
 						else
-							state=not_yet_checked; measurement=none; ping_json=null; reason_json='"not_yet_checked"'
+							state=unreachable; measurement=$kind; ping_json=null; reason_json=null
 						fi
+					elif [ -n "$cache_state" ]; then
+						state=$cache_state; measurement=$kind; ping_json=null; reason_json=null
 					else
 						state=not_yet_checked; measurement=none; ping_json=null; reason_json='"not_yet_checked"'
 					fi
@@ -257,8 +256,8 @@ wg_handshake_test() {
 			# "not yet checked" on every sweep it is not the target of.
 			# The dedicated .probe path (ts / verdict state / measurement
 			# kind / latency) never collides with the WireGuard handshake
-			# cache format.
-			if [ "$state" = reachable ] || [ "$state" = tcp_reachable ]; then cache_verdict=ok; else cache_verdict=failed; fi
+			# cache format, and the skip branch applies no age gate —
+			# this record is simply the node's most recent verdict.
 			printf '%s\n%s\n%s\n%s\n' "$(date +%s)" "$state" "$measurement" "${latency:-}" > "/tmp/wg-health-$id.probe"
 		fi
 		[ "$first" -eq 1 ] || printf ','

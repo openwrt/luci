@@ -2,9 +2,9 @@
 clients=$1; output=$2; nodes=$3; node_output=$4; events=$5; state=$6; event_interval=${7:-60}; max_events=${8:-20}; log_enabled=${9:-1}
 # Rotate node-health one node per sweep (cursor file remembers the last
 # probed id): a big fleet no longer hammers every server on the same tick.
-# A node is re-probed every N sweeps (N*5 s for N nodes), so past ~12 nodes
-# the interval outgrows the 60 s cache lifetime and the sweeps in between
-# serve the last cached reading.
+# A node is re-probed every N sweeps (N*5 s for N nodes); the sweeps in
+# between serve its last cached reading, whatever its age - the node-health
+# skip branches apply no age gate.
 cursor="${state}.node-health"
 next_node() {
 	last=$(cat "$cursor" 2>/dev/null || true)
