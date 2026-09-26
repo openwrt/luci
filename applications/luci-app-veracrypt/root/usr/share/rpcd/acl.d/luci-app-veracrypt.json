@@ -1,0 +1,20 @@
+{
+	"luci-app-veracrypt": {
+		"description": "Grant access to VeraCrypt console operations and volume configuration",
+		"read": {
+			"ubus": {
+				"luci.veracrypt": [ "status", "listdir", "listdev", "job", "job_log", "tools" ]
+			},
+			"uci": [ "veracrypt" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.veracrypt": [
+					"status", "listdir", "listdev", "mkdir", "rm", "job", "job_log",
+					"job_abort", "job_dismount", "job_answer", "tools", "pkg_install", "run"
+				]
+			},
+			"uci": [ "veracrypt" ]
+		}
+	}
+}
