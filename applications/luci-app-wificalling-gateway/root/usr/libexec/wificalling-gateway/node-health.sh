@@ -169,8 +169,8 @@ wg_handshake_test() {
 		# than rejected.  Skip it here so neither happens.
 		case "$id" in ''|*[!A-Za-z0-9_]*) continue;; esac
 		# Rotated probing: with a target only that node is refreshed; the
-		# rest report from their 60 s cache (or "not yet checked" on the
-		# first sweep) instead of being probed all at once.
+		# rest report their last cached reading (or "not yet checked" on
+		# the first sweep) instead of being probed all at once.
 		if [ -n "$target" ] && [ "$id" != "$target" ]; then
 			if [ -f "/tmp/wg-health-$id" ] && [ "$(sed -n '2p' "/tmp/wg-health-$id" 2>/dev/null)" = ok ]; then
 				state=handshake_ok; ping_json="\"$(sed -n '3p' "/tmp/wg-health-$id")\""; measurement=wg_handshake
