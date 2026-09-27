@@ -33,7 +33,7 @@ function handleAction(ev) {
 		ui.showModal(_('Add Blocklist Domain'), [
 			E('p', _('Add this (sub-)domain to your local blocklist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
-				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
+				E('label', { 'style': 'padding-top:.5em' }, [
 					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'blocklist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
@@ -78,7 +78,7 @@ function handleAction(ev) {
 		ui.showModal(_('Add Allowlist Domain'), [
 			E('p', _('Add this (sub-)domain to your local allowlist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
-				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
+				E('label', { 'style': 'padding-top:.5em' }, [
 					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'allowlist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
@@ -231,10 +231,12 @@ function handleAction(ev) {
 					_('max. result set size')
 				])
 			]),
-			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'rep_filter' }, []),
-				'\xa0\xa0\xa0',
-				_('Filter criteria like date, domain or client (optional)')
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'style': 'padding-top:.5em' }, [
+					E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'rep_filter' }, []),
+					'\xa0\xa0\xa0',
+					_('Filter criteria like date, domain or client (optional)')
+				])
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
