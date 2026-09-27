@@ -122,12 +122,15 @@ function feedChips(feeds) {
 
 /*
 	system_info is "cores: n, fetch: cmd, model, target, distribution version".
-	Keep the named entries and the board model, drop target and release.
+	Keep the named entries and the board model, drop target and release. The
+	model is the only unnamed entry, it gets the 'system' key for display.
 */
 function sysPairs(text) {
 	let plain = 0;
 	return parsePairs(text).filter(function (pair) {
 		return pair[0] || ++plain === 1;
+	}).map(function (pair) {
+		return pair[0] ? pair : ['system', pair[1]];
 	});
 }
 
