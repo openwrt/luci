@@ -1,0 +1,37 @@
+{
+	"admin/services/weechat": {
+		"title": "WeeChat",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-weechat" ],
+			"uci": { "weechat": true }
+		}
+	},
+	"admin/services/weechat/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "weechat/status"
+		}
+	},
+	"admin/services/weechat/servers": {
+		"title": "Servers",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "weechat/servers"
+		}
+	},
+	"admin/services/weechat/relay": {
+		"title": "Relay",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "weechat/relay"
+		}
+	}
+}
