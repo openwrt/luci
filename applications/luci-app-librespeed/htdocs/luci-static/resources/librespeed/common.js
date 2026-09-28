@@ -165,14 +165,15 @@ return baseclass.extend({
 	/* One token->label table for the schedule intervals: Settings builds
 	 * its choices from it and the Test page looks the status label up, so
 	 * the two cannot drift. The init script accepts more shapes than these
-	 * six, so readers must fall back to the raw token. */
+	 * seven, so readers must fall back to the raw token. */
 	INTERVALS: {
 		'15m': _('Every 15 minutes'),
 		'30m': _('Every 30 minutes'),
 		'1h': _('Hourly'),
 		'6h': _('Every 6 hours'),
 		'12h': _('Every 12 hours'),
-		'1d': _('Daily')
+		'1d': _('Daily'),
+		'7d': _('Weekly')
 	},
 
 	/* Cron's weekday numbers, Monday first; an array keeps that order. */
