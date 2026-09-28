@@ -415,13 +415,13 @@ return view.extend({
 		o.value('transport', _('Transport'));
 		o.default = 'tunnel';
 
-		o = s.taboption('general', form.DynamicList, 'local_subnet', _('Local Subnet'),
+		o = s.taboption('general', form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
 			_('Local network(s)'));
 		o.datatype = 'cidr';
 		o.placeholder = '192.168.1.1/24';
 		o.rmempty = false;
 
-		o = s.taboption('general', form.DynamicList, 'remote_subnet', _('Remote Subnet'),
+		o = s.taboption('general', form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
 			_('Remote network(s)'));
 		o.datatype = 'cidr';
 		o.placeholder = '192.168.2.1/24';
