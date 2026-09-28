@@ -524,7 +524,7 @@ function refBox(title,note,rows){
 }
 function sect(title,kids,attrs){
 	var a=attrs||{};
-	a['class']='cbi-section';
+	a=Object.assign({},a,{'class':'cbi-section'+(a['class']?' '+a['class']:'')});
 	return E('div',a,[E('h3',{'id':a.id?a.id+'-title':null},title)].concat(kids||[]));
 }
 function colTable(cols,kids){
@@ -738,7 +738,7 @@ return view.extend({
 				[_('Ingress CAKE options'),[txt('ing_opts',w.ingress_options,_('e.g. %s').format('triple-isolate memlimit 32mb')),desc(_('CAKE ingress options, space separated.'))]],
 				[_('Egress CAKE options'),[txt('egr_opts',w.egress_options,_('e.g. %s').format('wash')),desc(_('CAKE egress options, space separated.'))]],
 				[_('Common CAKE options'),[txt('opts',w.options,_('e.g. %s').format('overhead 46 memlimit 32mb')),desc(OPT_DESC.options)]]
-			],[E('div',{'class':'cbi-tab-descr'},_('Invalid CAKE options can stop qosify starting.'))],'qs-wide')
+			],null,'qs-wide')
 		]);
 		// Every pane is marked, as the sub tabs share LuCI's stored tab id with the page tabs.
 		if(!grp.querySelector('[data-tab-active="true"]'))grp.firstChild.setAttribute('data-tab-active','true');
@@ -1192,6 +1192,7 @@ return view.extend({
 				fi=E('input',{'type':'file','id':id,'style':'display:none','change':function(){nm.textContent=fi.files[0]?fi.files[0].name:_('No file selected');}});
 			return [E('code',{},path),E('span',{},[fi,E('button',{'class':'cbi-button','click':function(){fi.click();}},_('Choose file…')),' ',nm])];
 		}
+		var box={'class':'qos-box'};
 		return E('div',{'id':'qos-ad'},[
 			sect(_('Backup'),[
 				sdesc(_('Download the current files from the router.')),
@@ -1199,7 +1200,7 @@ return view.extend({
 					bkRow(0,UCI_PATH,'qosify',ctx.cfgStat),
 					bkRow(1,RULES_PATH,'00-defaults.conf',ctx.rulesStat)
 				])
-			]),
+			],{'class':'qos-box','id':'qos-ad-bk'}),
 			sect(_('Restore'),[
 				sdesc(_('The selected files replace the ones on the router and qosify is reloaded.')),
 				gridTable([_('File'),_('Upload')],[
@@ -1208,16 +1209,24 @@ return view.extend({
 				]),
 				E('div',{'class':'cbi-page-actions'},
 					E('button',{'class':'cbi-button cbi-button-apply','click':function(){return self.uploadFiles();}},_('Upload & Apply')))
-			]),
+			],box),
 			sect(_('Maintenance'),[
-				E('div',{'class':'cbi-section-node'},valRow(_('Re-check devices'),[
-					E('button',{'class':'cbi-button cbi-button-action','id':'qos-btn-chkdev','click':function(){return self.checkDevices();}},_('Check Devices')),
-					desc(_('Re-runs the daemon\'s own device pass: every shaped section is looked up again, one whose device now exists is started and one whose device has gone is stopped. Nothing is reported back by the call — the result shows in the Service table on the Overview tab.'))]))
-			]),
+				sdesc(_('Re-runs the daemon\'s own device pass.')),
+				gridTable([_('Action'),_('Description')],[
+					[_('Re-check devices'),_('Every shaped section is looked up again, one whose device now exists is started and one whose device has gone is stopped. Nothing is reported back by the call — the result shows in the Service table on the Overview tab.')]
+				]),
+				E('div',{'class':'cbi-page-actions'},
+					E('button',{'class':'cbi-button cbi-button-action','id':'qos-btn-chkdev','click':function(){return self.checkDevices();}},_('Check Devices')))
+			],box),
 			sect(_('Defaults'),[
-				E('div',{'class':'cbi-section-node'},valRow(_('Restore qosify defaults'),
-					E('button',{'class':'cbi-button cbi-button-negative','click':function(){return self.resetDefaults();}},_('Reset'))))
-			])
+				sdesc(_('Restore qosify defaults. Shaping is left disabled.')),
+				gridTable([_('File'),_('Replaced with')],[
+					[E('code',{},UCI_PATH),_('qosify package template')],
+					[E('code',{},RULES_PATH),_('qosify package template')]
+				]),
+				E('div',{'class':'cbi-page-actions'},
+					E('button',{'class':'cbi-button cbi-button-negative','click':function(){return self.resetDefaults();}},_('Reset')))
+			],box)
 		]);
 	},
 
