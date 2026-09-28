@@ -74,10 +74,10 @@ function showsLink(o, shown) {
 	};
 }
 
-/* The cron lines the init script can write: minutes 1-59, hours 1-23 and
- * a day. Anything else would leave the test out of the crontab with only a
- * syslog note, so the page refuses it instead. */
-const INTERVAL_RE = /^(?:(?:[1-9]|[1-5][0-9])m|(?:[1-9]|1[0-9]|2[0-3])h|1d)$/;
+/* The cron lines the init script can write: minutes 1-59, hours 1-23, a
+ * day and a week. Anything else would leave the test out of the crontab
+ * with only a syslog note, so the page refuses it instead. */
+const INTERVAL_RE = /^(?:(?:[1-9]|[1-5][0-9])m|(?:[1-9]|1[0-9]|2[0-3])h|1d|7d)$/;
 
 return view.extend({
 	load() {
@@ -135,8 +135,8 @@ return view.extend({
 		 * where a phone, which hides the column headings, still shows it. */
 		s = m.section(form.TableSection, 'schedule', _('Scheduled measurements'), [
 			[ _('Enable'), _('Runs a measurement from cron at the chosen interval. Note that a measurement saturates the connection while it runs.') ],
-			[ _('Days'), _('Leave empty to run every day.') ],
-			[ _('Hours'), _('An hour window on the 24-hour clock, such as 2-5 for 02:00–05:59. A daily measurement runs at a random time inside it, drawn when the schedule is applied; shorter intervals only run within it. Leave empty for any time. A window across midnight is not supported.') ]
+			[ _('Days'), _('Leave empty to run every day. A weekly test runs on one of the chosen days, or on any day when none is chosen; the day is drawn once and kept while it stays among the chosen days.') ],
+			[ _('Hours'), _('An hour window on the 24-hour clock, such as 2-5 for 02:00–05:59. A daily or weekly measurement runs at a random time inside it, drawn when the schedule is applied; shorter intervals only run within it. Leave empty for any time. A window across midnight is not supported.') ]
 		].map(h => E('p', {}, [ '%s: %s'.format(h[0], h[1]) ])));
 		s.anonymous = true;
 		s.addremove = true;
@@ -272,7 +272,7 @@ return view.extend({
 		};
 		o.validate = function(section_id, value) {
 			return INTERVAL_RE.test(value) ||
-				_('The interval %s is not supported. Use 1-59m, 1-23h or 1d.').format(value);
+				_('The interval %s is not supported. Use 1-59m, 1-23h, 1d or 7d.').format(value);
 		};
 
 		o = s.option(form.MultiValue, 'days', _('Days'));
@@ -367,14 +367,16 @@ return view.extend({
 					scheds.flatMap(sc => (sc.next_runs || []).map(e => {
 						const d = new Date(e * 1000);
 
+						/* With the weekday: a weekly test's day may be drawn. */
 						return E('tr', { 'class': 'tr' }, [
 							E('td', { 'class': 'td' }, [ sc.interface ? lscommon.linkName(sc.interface) : '–' ]),
-							E('td', { 'class': 'td' }, [ d.toLocaleDateString() ]),
+							E('td', { 'class': 'td' }, [ d.toLocaleDateString(undefined,
+								{ weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' }) ]),
 							E('td', { 'class': 'td' }, [ d.toLocaleTimeString() ])
 						]);
 					}))));
 				box.appendChild(E('p', { 'style': 'color:#888' }, [
-					_('A daily measurement runs at a time drawn when the schedule is applied; saving draws it anew.')
+					_('The time of a daily measurement is drawn anew whenever the schedule is applied. A weekly measurement keeps its drawn day and time while they fit the chosen days and hours.')
 				]));
 			}
 			else {

@@ -22,7 +22,7 @@ msgstr[1] ""
 msgid "%s elapsed"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:228
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:237
 msgctxt "schedule interval on weekdays"
 msgid "%s on %s"
 msgstr ""
@@ -65,12 +65,6 @@ msgstr ""
 msgid "90 days"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:377
-msgid ""
-"A daily measurement runs at a time drawn when the schedule is applied; "
-"saving draws it anew."
-msgstr ""
-
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:33
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/history.js:123
 msgid "All"
@@ -78,10 +72,10 @@ msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:139
 msgid ""
-"An hour window on the 24-hour clock, such as 2-5 for 02:00–05:59. A daily "
-"measurement runs at a random time inside it, drawn when the schedule is "
-"applied; shorter intervals only run within it. Leave empty for any time. A "
-"window across midnight is not supported."
+"An hour window on the 24-hour clock, such as 2-5 for 02:00–05:59. A daily or "
+"weekly measurement runs at a random time inside it, drawn when the schedule "
+"is applied; shorter intervals only run within it. Leave empty for any time. "
+"A window across midnight is not supported."
 msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:209
@@ -187,7 +181,7 @@ msgstr ""
 msgid "Export JSON"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:211
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:212
 msgid "Friday"
 msgstr ""
 
@@ -273,7 +267,10 @@ msgid "Latency"
 msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:138
-msgid "Leave empty to run every day."
+msgid ""
+"Leave empty to run every day. A weekly test runs on one of the chosen days, "
+"or on any day when none is chosen; the day is drawn once and kept while it "
+"stays among the chosen days."
 msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/test.js:820
@@ -311,7 +308,7 @@ msgstr ""
 msgid "Metric"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:210
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:211
 msgid "Monday"
 msgstr ""
 
@@ -351,7 +348,7 @@ msgstr ""
 msgid "No measurements yet"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:382
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:384
 msgid ""
 "No schedule is active. Enable it above and apply to draw the measurement "
 "time."
@@ -429,7 +426,7 @@ msgid ""
 "saturates the connection while it runs."
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:211
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:212
 msgid "Saturday"
 msgstr ""
 
@@ -489,7 +486,7 @@ msgstr ""
 msgid "Stop test"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:212
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:213
 msgid "Sunday"
 msgstr ""
 
@@ -502,18 +499,25 @@ msgid "Test configuration"
 msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:275
-msgid "The interval %s is not supported. Use 1-59m, 1-23h or 1d."
+msgid "The interval %s is not supported. Use 1-59m, 1-23h, 1d or 7d."
 msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/test.js:519
 msgid "The last measurement was stopped."
 msgstr ""
 
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:379
+msgid ""
+"The time of a daily measurement is drawn anew whenever the schedule is "
+"applied. A weekly measurement keeps its drawn day and time while they fit "
+"the chosen days and hours."
+msgstr ""
+
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/settings.js:323
 msgid "The window must not cross midnight"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:211
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:212
 msgid "Thursday"
 msgstr ""
 
@@ -522,7 +526,7 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:210
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:211
 msgid "Tuesday"
 msgstr ""
 
@@ -570,8 +574,16 @@ msgstr ""
 msgid "View result"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:210
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:211
 msgid "Wednesday"
+msgstr ""
+
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:205
+msgid "Weekly"
+msgstr ""
+
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:232
+msgid "Weekly (%s)"
 msgstr ""
 
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/test.js:776
@@ -586,8 +598,8 @@ msgstr ""
 msgid "average"
 msgstr ""
 
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:430
-#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:501
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:439
+#: applications/luci-app-librespeed/htdocs/luci-static/resources/librespeed/common.js:510
 #: applications/luci-app-librespeed/htdocs/luci-static/resources/view/librespeed/history.js:194
 msgid "avg"
 msgstr ""

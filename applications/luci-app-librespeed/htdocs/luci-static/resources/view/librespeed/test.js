@@ -742,7 +742,7 @@ return view.extend({
 			])));
 
 		/* One row per automatic test: its interface, how often (with its
-		 * weekdays), and when next.
+		 * weekdays, so a weekly test does not read as daily), and when next.
 		 * The epoch is computed by the backend in the router's timezone;
 		 * the browser may well sit in another one, so it only formats it. */
 		const schedRows = lscommon.activeSchedules(config).map(sc => {

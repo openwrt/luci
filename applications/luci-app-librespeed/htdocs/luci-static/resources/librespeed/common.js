@@ -194,14 +194,15 @@ return baseclass.extend({
 	/* One token->label table for the schedule intervals: Settings builds
 	 * its choices from it and the Test page looks the status label up, so
 	 * the two cannot drift. The init script accepts more shapes than these
-	 * six, so readers must fall back to the raw token. */
+	 * seven, so readers must fall back to the raw token. */
 	INTERVALS: {
 		'15m': _('Every 15 minutes'),
 		'30m': _('Every 30 minutes'),
 		'1h': _('Hourly'),
 		'6h': _('Every 6 hours'),
 		'12h': _('Every 12 hours'),
-		'1d': _('Daily')
+		'1d': _('Daily'),
+		'7d': _('Weekly')
 	},
 
 	/* Cron's weekday numbers with their names, Monday first as Settings
@@ -212,9 +213,12 @@ return baseclass.extend({
 		[ '0', _('Sunday') ]
 	],
 
-	/* How often an automatic test runs, for a status line: the interval,
-	 * with the days it is limited to listed after it. The raw token or day
-	 * is the fallback for hand-set values. */
+	/* How often an automatic test runs, for a status line. A weekly test
+	 * names its day when it has one; a daily test limited to one weekday
+	 * runs weekly too and reads the same. A weekly test on a drawn day is
+	 * plain Weekly, as its next run says when. Any other day limit is
+	 * listed after the interval. The raw token or day is the fallback for
+	 * hand-set values. */
 	scheduleLabel(interval, days) {
 		interval = interval || '1d';
 
@@ -222,7 +226,12 @@ return baseclass.extend({
 		const names = (days && days != '*') ? String(days).split(',').map(d =>
 			(this.DAYS.filter(x => x[0] == d)[0] || [ d, d ])[1]) : [];
 
-		if (!names.length)
+		/* One lone day only: a range such as 1-5 is several days. */
+		if ((interval == '1d' || interval == '7d') && names.length == 1 &&
+		    /^[0-6]$/.test(String(days)))
+			return _('Weekly (%s)').format(names[0]);
+
+		if (!names.length || interval == '7d')
 			return every;
 
 		return _('%s on %s', 'schedule interval on weekdays').format(every, names.join(', '));
