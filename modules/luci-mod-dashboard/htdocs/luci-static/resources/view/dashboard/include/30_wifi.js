@@ -165,17 +165,17 @@ return baseclass.extend({
 					ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: scale.step * n, label: scale.format(scale.step * n) })),
 					items: devices.map(device => ({
 						label: device.hostname.value,
-						title: '%s · %s %s · %s %s'.format(device.hostname.value, _('Up.'), device.transferred.value.rx, _('Down.'), device.transferred.value.tx)
+						title: '%s · %s %s · %s %s'.format(device.hostname.value, _('Download'), device.transferred.value.tx, _('Upload'), device.transferred.value.rx)
 							+ (device.connected.value ? ' · %s %s'.format(_('Connected'), device.connected.value) : ''),
 						values: [
-							{ value: device.transferred.value.bytes.rx, className: 'dashboard-bar-up' },
-							{ value: device.transferred.value.bytes.tx, className: 'dashboard-bar-down' }
+							{ value: device.transferred.value.bytes.tx, className: 'dashboard-bar-down' },
+							{ value: device.transferred.value.bytes.rx, className: 'dashboard-bar-up' }
 						]
 					}))
 				}),
 				charts.legend([
-					{ className: 'dashboard-bar-up', label: _('Up.') },
-					{ className: 'dashboard-bar-down', label: _('Down.') }
+					{ className: 'dashboard-bar-down', label: _('Download') },
+					{ className: 'dashboard-bar-up', label: _('Upload') }
 				])
 			] : charts.empty(_('No wireless clients connected'))
 		});
