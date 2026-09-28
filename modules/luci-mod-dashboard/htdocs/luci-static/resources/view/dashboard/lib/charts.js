@@ -36,13 +36,24 @@ function rateUnit(value) {
 }
 
 return baseclass.extend({
-	formatRate(value) {
+	formatRate(value, targetExp) {
 		if (value == null)
 			return '-';
 
-		const exp = rateUnit(value);
+		const exp = (targetExp != null) ? targetExp : rateUnit(value);
+		const unit = Math.pow(1000, exp);
+		const num = value / unit;
 
-		return '%.1f %s'.format(value / Math.pow(1000, exp), RATE_UNITS[exp]);
+		if (num === 0)
+			return '0 %s'.format(RATE_UNITS[exp]);
+
+		if (num > 0 && num < 0.01 && exp > 0)
+			return '< 0.01 %s'.format(RATE_UNITS[exp]);
+
+		if (num < 1 && exp > 0)
+			return '%.2f %s'.format(num, RATE_UNITS[exp]);
+
+		return '%.1f %s'.format(num, RATE_UNITS[exp]);
 	},
 
 	rateScale(peak) {
@@ -55,7 +66,8 @@ return baseclass.extend({
 		return {
 			max: step * 4 * unit,
 			unit: RATE_UNITS[exp],
-			ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: step * n * unit, label: String(+(step * n).toFixed(2)) }))
+			ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: step * n * unit, label: String(+(step * n).toFixed(2)) })),
+			format: value => this.formatRate(value, exp)
 		};
 	},
 

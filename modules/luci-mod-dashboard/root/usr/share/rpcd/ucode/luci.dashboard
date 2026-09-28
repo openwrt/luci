@@ -2,10 +2,58 @@
 
 import { readfile } from 'fs';
 import * as uloop from 'uloop';
+import { connect } from 'ubus';
 
 const STEP = 5000, SLOTS = 60;
 
-let ring = [], seq = 0, timer;
+let ring = [], seq = 0, timer, selectedDevice;
+const bus = connect();
+
+// Observe one main-table default-route device. Prefer IPv4, then route metric;
+// keep the existing device on equal priority to avoid polling-order switches.
+function sources(interfaces, previous) {
+	let best = null;
+	for (let iface in interfaces) {
+		if (!iface.up)
+			continue;
+		let name = iface.device;
+		if (!name || name == 'lo' || substr(name, 0, 1) == '@')
+			name = iface.l3_device;
+		if (!name || name == 'lo' || substr(name, 0, 1) == '@')
+			continue;
+
+		for (let route in iface.route ?? []) {
+			if (+route.mask != 0)
+				continue;
+			const family = route.target == '0.0.0.0' ? 4 : route.target == '::' ? 6 : 0;
+			if (!family)
+				continue;
+			// netifd omits route.table when it is inherited from the interface.
+			const table = route.table ?? (family == 4 ? iface.ip4table : iface.ip6table);
+			if (table && table != 254)
+				continue;
+			const metric = +(route.metric ?? iface.metric ?? 0);
+			if (!best || family < best.family ||
+			    (family == best.family && (metric < best.metric ||
+			    (metric == best.metric && (name == previous ||
+			    (best.device != previous && name < best.device))))))
+				best = { device: name, family, metric };
+		}
+	}
+
+	// Use the configured carrier (including a VLAN) without walking to its
+	// physical parent, which may also carry LAN or IPTV traffic.
+	return best ? [ best.device ] : [];
+}
+
+function traffic_boundary() {
+	const dump = bus.call('network.interface', 'dump');
+	if (type(dump?.interface) != 'array')
+		return null;
+	const devices = sources(dump.interface, selectedDevice);
+	selectedDevice = devices[0];
+	return { devices };
+}
 
 function now() {
 	const c = clock(true);
@@ -19,7 +67,10 @@ const id = trim(readfile('/proc/sys/kernel/random/uuid'));
 // Counters as the kernel has them. Whoever draws them takes the differences,
 // over the time between two samples on the clock they were read by.
 function sample() {
-	const t = now(), cpus = {}, net = {};
+	const cpus = {}, net = {};
+	let boundary = null;
+	try { boundary = traffic_boundary(); }
+	catch (e) { warn(`luci.dashboard: traffic discovery: ${e}\n`); }
 
 	for (let line in split(readfile('/proc/stat') ?? '', '\n')) {
 		if (substr(line, 0, 3) != 'cpu')
@@ -32,14 +83,26 @@ function sample() {
 
 	const mem = match(readfile('/proc/meminfo', 256) ?? '', /MemAvailable:\s+(\d+)/);
 
-	for (let line in slice(split(readfile('/proc/net/dev') ?? '', '\n'), 2)) {
-		const fields = split(trim(line), /[: ]+/);
+	// Only the selected WAN consumes network history. Check its identity
+	// on both sides of the counter read to detect device recreation.
+	const name = boundary?.devices?.[0];
+	const before = name ? int(readfile(`/sys/class/net/${name}/ifindex`)) : null;
+	const t = now();
 
-		if (length(fields) > 9 && fields[0] != 'lo')
-			net[fields[0]] = [ +fields[1], +fields[9] ];
+	if (name) {
+		for (let line in slice(split(readfile('/proc/net/dev') ?? '', '\n'), 2)) {
+			const fields = split(trim(line), /[: ]+/);
+			if (length(fields) <= 9 || fields[0] != name)
+				continue;
+
+			const after = int(readfile(`/sys/class/net/${name}/ifindex`));
+			net[name] = [ +fields[1], +fields[9],
+				after > 0 && after == before ? after : null ];
+			break;
+		}
 	}
 
-	push(ring, [ ++seq, t, cpus, mem ? +mem[1] * 1024 : null, net ]);
+	push(ring, [ ++seq, t, cpus, mem ? +mem[1] * 1024 : null, net, boundary ]);
 
 	while (length(ring) > SLOTS)
 		shift(ring);
