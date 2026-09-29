@@ -631,6 +631,15 @@ return view.extend({
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
 
+		o = s.option(form.DynamicList, 'ke', _('Multiple Key Exchanges'),
+			_('With peers that support multiple IKEv2 key exchanges (RFC 9370), ') +
+				('up to seven additional key exchanges may be negotiated.') + '<br/>' +
+			_('If more than 7 are stored, those that exceed this limit will not be ') +
+				('included in the swanctl configuration.'));
+		o.modalonly = true;
+		o.depends('use_custom_proposal', '0');
+		addAlgorithms(o, algorithms.ke);
+
 		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
 			_('Algorithms marked with * are considered insecure'));
 		o.validate = function (section_id, value) {
