@@ -200,7 +200,7 @@ return view.extend({
 
 			return this.super('load', [section_id]);
 		};
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.taboption('general', form.MultiValue, 'child', _('Children'),
 			_('The Children containing the ESP (phase 2) section'));
@@ -487,7 +487,7 @@ return view.extend({
 
 			return this.super('load', [section_id]);
 		};
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
 			_('Path to script to run on CHILD_SA up/down events'));
