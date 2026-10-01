@@ -153,7 +153,7 @@
 	gap: 20px;
 	margin-block: auto;
 	/* Override Footstrap's negative SVG container margins to preserve card padding. */
-	margin-inline: 0;
+	margin-inline: 0 !important;
 }
 
 .dashboard-donut svg {
@@ -349,8 +349,8 @@
 
 .dashboard-bars-stack i.dashboard-bar-ok { background: var(--dashboard-success); }
 .dashboard-bars-stack i.dashboard-bar-mid { background: var(--dashboard-warn); }
-.dashboard-bars-stack i.dashboard-bar-up { background: var(--dashboard-series-1); }
-.dashboard-bars-stack i.dashboard-bar-down { background: var(--dashboard-series-2); }
+.dashboard-bars-stack i.dashboard-bar-up { background: var(--dashboard-series-2); }
+.dashboard-bars-stack i.dashboard-bar-down { background: var(--dashboard-series-1); }
 .dashboard-bars-stack i.dashboard-bar-none { background: var(--dashboard-border); }
 
 .dashboard-bars-label {
@@ -373,8 +373,8 @@
 
 .dashboard-legend-inline i.dashboard-bar-ok { background: var(--dashboard-success); }
 .dashboard-legend-inline i.dashboard-bar-mid { background: var(--dashboard-warn); }
-.dashboard-legend-inline i.dashboard-bar-up { background: var(--dashboard-series-1); }
-.dashboard-legend-inline i.dashboard-bar-down { background: var(--dashboard-series-2); }
+.dashboard-legend-inline i.dashboard-bar-up { background: var(--dashboard-series-2); }
+.dashboard-legend-inline i.dashboard-bar-down { background: var(--dashboard-series-1); }
 
 /* ---- Time series (shares the axis and grid of the bar chart) ---- */
 .dashboard-lines-plot {
@@ -420,6 +420,11 @@
 
 .dashboard-legend-inline b {
 	color: var(--dashboard-text);
+}
+
+/* ---- WAN traffic: one counter source per plot ---- */
+.dashboard-traffic-source {
+	min-width: 0;
 }
 
 /* ---- Wireless network boxes (LuCI .ifacebox) ---- */
