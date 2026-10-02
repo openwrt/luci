@@ -22,6 +22,7 @@ return view.extend({
 			L.resolveDefault(fs.list('/usr/lib/acme/client/dnsapi/'), null),
 			L.resolveDefault(fs.lines('/proc/sys/kernel/hostname'), ''),
 			L.resolveDefault(uci.load('ddns')),
+			L.resolveDefault(fs.stat('/usr/sbin/uacme'), null),
 		]);
 	},
 
@@ -35,6 +36,7 @@ return view.extend({
 		let ddnsDomains = _collectDdnsDomains();
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
 		let wikiInstructionUrl = wikiUrl + 'dnsapi';
+		let hasUacme = data[5] != null;
 		let m, s, o;
 
 		m = new form.Map("acme", _("ACME certificates"),
@@ -54,7 +56,8 @@ return view.extend({
 
 		o = s.option(form.Value, "account_email", _("Account email"),
 			_('Email address to associate with account key.') + '<br/>' +
-			_('If a certificate wasn\'t renewed in time then you\'ll receive a notice at 20 days before expiry.')
+			_('CA may or may not send email to notify a cert may expire. ' +
+			'Let\'s Encrypt doesn\'t send email; ZeroSSL sends a notification email 30 days before expiry.')
 		);
 		o.rmempty = false;
 		o.datatype = "minlength(1)";
@@ -89,18 +92,19 @@ return view.extend({
 		o = s.taboption('general', form.ListValue, 'validation_method', _('Validation method'),
 			_('Standalone mode will use the built-in webserver of acme.sh to issue a certificate. ' +
 				'Webroot mode will use an existing webserver to issue a certificate. ' +
-				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.') + '<br />' +
+				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.' ) + '<br />' +
 			_('Validation via TLS ALPN') + ': ' + _('Validate via TLS port 443.') + '<br />' +
 			'<a href="https://letsencrypt.org/docs/challenge-types/" target="_blank">' + _('See more') + '</a>'
 		);
-		o.value('standalone', 'HTTP-01' + _('Standalone'));
-		o.value('webroot', 'HTTP-01' + _('Webroot Challenge Validation'));
+		o.value('standalone', 'HTTP-01 ' + _('Standalone'));
+		o.value('webroot', 'HTTP-01 ' + _('Webroot Challenge Validation'));
 		o.value('dns', 'DNS-01 ' + _('DNS Challenge Validation'));
 		o.value('alpn', 'TLS-ALPN-01 ' + _('Validation via TLS ALPN'));
 		o.default = 'standalone';
 
 		if (!hasDnsApi) {
-			let dnsApiPkg = 'acme-acmesh-dnsapi';
+			// Switch package based on which ACME client backend
+			let dnsApiPkg = hasUacme ? 'uacme-dnsapi-adapter' : 'acme-acmesh-dnsapi';
 			o = s.taboption('general', form.Button, '_install');
 			o.depends('validation_method', 'dns');
 			o.title = _('Package is not installed');
