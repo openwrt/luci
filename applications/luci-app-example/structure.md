@@ -7,6 +7,7 @@
 │       └── resources
 │           └── view
 │               └── example
+│                   ├── file-jsonmap.js
 │                   ├── form.js
 │                   ├── htmlview.js
 │                   ├── rpc-jsonmap-tablesection.js

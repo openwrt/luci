@@ -10,4 +10,12 @@ uci set example.animals.num_dogs=2
 uci set example.animals.num_parakeets=4
 uci commit example
 
+# Sample data for the file-backed JSONMap example (file-jsonmap.js)
+[ -f /etc/example.json ] || cat > /etc/example.json <<EOF
+{
+	"animals": { "num_cats": 1, "num_dogs": 2 },
+	"pets": [ { "name": "Polly", "species": "parakeet" } ]
+}
+EOF
+
 return 0
