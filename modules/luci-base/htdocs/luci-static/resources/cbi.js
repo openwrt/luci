@@ -430,6 +430,43 @@ function cbi_init() {
 	});
 
 	Promise.all(tasks).then(cbi_d_update);
+
+	document.querySelectorAll('.cbi-section-create-name').forEach(function(input) {
+		input.addEventListener('keyup', function() { cbi_validate_named_section_add(this); });
+	});
+
+	document.querySelectorAll('.cbi-cidr-toggle').forEach(function(btn) {
+		btn.addEventListener('click', switchToCIDRList);
+	});
+
+	document.querySelectorAll('[data-href]').forEach(function(btn) {
+		btn.addEventListener('click', function() { location.href = this.dataset.href; });
+	});
+
+	document.querySelectorAll('[data-cbi-submit]').forEach(function(btn) {
+		btn.addEventListener('click', function() { cbi_submit(this, this.dataset.cbiSubmit); });
+	});
+
+	document.querySelectorAll('[data-cbi-state]').forEach(function(btn) {
+		btn.addEventListener('click', function() { this.form.cbi_state = this.dataset.cbiState; });
+	});
+
+	document.querySelectorAll('[data-cbi-rowswap]').forEach(function(btn) {
+		btn.addEventListener('click', function(ev) {
+			ev.preventDefault();
+			cbi_row_swap(this, this.dataset.cbiRowswap === 'up', this.dataset.cbiSortstore);
+		});
+	});
+
+	const cbiForm = document.querySelector('form[name="cbi"]');
+	if (cbiForm) {
+		const errMsg = cbiForm.dataset.errorMsg;
+		cbiForm.addEventListener('reset', function() { cbi_validate_reset(cbiForm); });
+		cbiForm.addEventListener('submit', function(ev) {
+			if (!cbi_validate_form(cbiForm, errMsg))
+				ev.preventDefault();
+		});
+	}
 }
 
 /**
@@ -631,6 +668,23 @@ function cbi_submit(elem, name, value, action)
 
 	form.submit();
 	return true;
+}
+
+/**
+ * Switch an IP address input from prefix-list notation to CIDR list.
+ * Reads the previous sibling input, sets its _usecidr companion to '1'
+ * and triggers a CBI dependency refresh.
+ * @param {MouseEvent} ev - Click event from the toggle button.
+ */
+function switchToCIDRList(ev)
+{
+	var input = ev.currentTarget.previousElementSibling,
+	    usecidr = document.getElementById(input.id + '_usecidr');
+
+	ev.preventDefault();
+
+	usecidr.value = '1';
+	cbi_d_update();
 }
 
 /**

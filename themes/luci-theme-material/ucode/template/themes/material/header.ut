@@ -32,7 +32,7 @@
 <head>
 <meta charset="utf-8">
 {% if (!darkpref): %}
-<script>
+<script nonce="{{ ctx?.csp_nonce }}">
 	var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
 	    rootElement = document.querySelector(':root'),
 	    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };
