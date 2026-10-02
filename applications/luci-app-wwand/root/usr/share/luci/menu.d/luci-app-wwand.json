@@ -1,0 +1,51 @@
+{
+	"admin/status/wwand": {
+		"title": "Modem",
+		"order": 15,
+		"action": {
+			"type": "view",
+			"path": "wwand/status"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-wwand"
+			],
+			"ubus": {
+				"wwand": [
+					"status"
+				]
+			}
+		}
+	},
+	"admin/network/wwand": {
+		"title": "Modems",
+		"order": 55,
+		"action": {
+			"type": "view",
+			"path": "wwand/modems"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-wwand"
+			]
+		}
+	},
+	"admin/network/wwand-tools": {
+		"title": "Modem Tools",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "wwand/settings"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-wwand"
+			],
+			"ubus": {
+				"wwand": [
+					"modem_get_settings"
+				]
+			}
+		}
+	}
+}

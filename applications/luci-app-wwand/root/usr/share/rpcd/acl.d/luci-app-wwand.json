@@ -1,0 +1,69 @@
+{
+	"luci-app-wwand": {
+		"description": "Grant access to the wwand modem status page",
+		"read": {
+			"uci": [
+				"network"
+			],
+			"ubus": {
+				"wwand": [
+					"context_status",
+					"modem_cells",
+					"modem_datapath",
+					"modem_esim_profiles",
+					"modem_euicc_profiles",
+					"modem_get_settings",
+					"modem_plmn_lists",
+					"modem_probe",
+					"modem_scan",
+					"modem_scan_start",
+					"modem_scan_status",
+					"modem_signal",
+					"modem_sim_slots",
+					"modem_sms_list",
+					"status"
+				]
+			},
+			"file": {
+				"/sys/class/gpio/": [
+					"list"
+				]
+			}
+		},
+		"write": {
+			"uci": [
+				"network"
+			],
+			"ubus": {
+				"wwand": [
+					"migrate",
+					"modem_carrier_config",
+					"modem_esim",
+					"modem_plmn_restore",
+					"modem_plmn_set",
+					"modem_reattach",
+					"modem_repower",
+					"modem_reset",
+					"modem_set_network_selection",
+					"modem_set_protocol",
+					"modem_set_settings",
+					"modem_sim_pin_lock",
+					"modem_sim_pin_verify",
+					"modem_sim_puk",
+					"modem_sim_switch_slot",
+					"modem_sms_delete"
+				]
+			}
+		}
+	},
+	"luci-app-wwand-log": {
+		"description": "Read the system log for the wwand log viewer on the modem status page. SEPARATE ROLE ON PURPOSE: rpcd cannot filter a method's arguments or its result, so granting `log read` grants the WHOLE system log \u2014 kernel, auth, dropbear, firewall \u2014 not just the wwand lines, which are picked out in the browser afterwards. Keeping it out of the luci-app-wwand role lets an operator be given the modem pages without the box's logs; the viewer says it cannot read them and everything else on the page still works.",
+		"read": {
+			"ubus": {
+				"log": [
+					"read"
+				]
+			}
+		}
+	}
+}
