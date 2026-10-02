@@ -1,0 +1,29 @@
+{
+	"admin/services/wifidogx": {
+		"title": "apfree-wifidog",
+		"order": 1,
+		"action": {
+			"type": "firstchild",
+			"recurse": true
+		},
+		"depends": {
+			"acl": [ "luci-app-apfree-wifidog" ]
+		}
+	},
+	"admin/services/wifidogx/config": {
+		"title": "Settings",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "wifidogx"
+		}
+	},
+	"admin/services/wifidogx/status": {
+		"title": "Status",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "wifidogx/status"
+		}
+	}
+}
