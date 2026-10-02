@@ -1,0 +1,59 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+
+REQUESTED_BASE="$(backup_dir)"
+STAMP="$(date +%Y%m%d-%H%M%S)"
+
+umask 077
+mkdir -p "$REQUESTED_BASE"
+BASE="$(resolve_storage_dir "$REQUESTED_BASE")" || {
+	echo "Recovery point directory resolves outside /root or /mnt" >&2
+	exit 1
+}
+chmod 700 "$BASE" 2>/dev/null || true
+DIR="$BASE/$STAMP"
+attempt=1
+while ! mkdir "$DIR" 2>/dev/null; do
+	[ "$attempt" -lt 5 ] || {
+		echo "Cannot create recovery point in $BASE after $attempt attempts" >&2
+		exit 1
+	}
+	sleep 1
+	attempt=$((attempt + 1))
+	STAMP="$(date +%Y%m%d-%H%M%S)"
+	DIR="$BASE/$STAMP"
+done
+chmod 700 "$DIR" 2>/dev/null || true
+[ -f /etc/config/firewall ] && cp /etc/config/firewall "$DIR/firewall"
+[ -f /etc/config/uhttpd ] && cp /etc/config/uhttpd "$DIR/uhttpd"
+[ -f /etc/config/haproxy_manager ] && cp /etc/config/haproxy_manager "$DIR/haproxy_manager"
+[ -f "$HAPROXY_CFG" ] && cp "$HAPROXY_CFG" "$DIR/haproxy.cfg"
+{
+	if /etc/init.d/haproxy enabled >/dev/null 2>&1; then
+		printf 'enabled=1\n'
+	else
+		printf 'enabled=0\n'
+	fi
+	if /etc/init.d/haproxy status >/dev/null 2>&1; then
+		printf 'running=1\n'
+	else
+		printf 'running=0\n'
+	fi
+} > "$DIR/haproxy.state"
+
+printf '%s\n' "$STAMP" > "$BASE/LAST"
+
+count=0
+for old in $(find "$BASE" -maxdepth 1 -type d -name '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]' 2>/dev/null | sort -r); do
+	count=$((count + 1))
+	[ "$count" -le "$BACKUP_LIMIT" ] && continue
+	case "$old" in
+		"$BASE"/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9])
+			rm -f "$old"/*
+			rmdir "$old"
+		;;
+	esac
+done
+
+printf '%s\n' "$DIR"
