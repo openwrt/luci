@@ -1,0 +1,41 @@
+{
+	"luci-mod-simple": {
+		"description": "LuCI simple ui access",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/proc/sys/net/netfilter/nf_conntrack_count": [ "read" ],
+				"/proc/sys/net/netfilter/nf_conntrack_max": [ "read" ],
+				"/sys/class/ieee80211/phy?/macaddress": [ "read" ],
+				"/usr/sbin/iptables -t nat -n -x -v -L zone_wan_prerouting": [ "exec" ],
+				"/usr/sbin/nft -j list chain inet fw4 dstnat_wan": [ "exec" ]
+			},
+			"ubus": {
+				"file": [ "exec", "read", "stat" ],
+				"iwinfo": [ "info", "txpowerlist" ],
+				"luci-rpc": [ "getHostHints", "getNetworkDevices" ],
+				"network.interface": [ "down", "status", "up" ],
+				"system": [ "board", "info" ],
+				"topology": [ "getTopology" ]
+			},
+			"uci": [ "dhcp", "firewall", "network", "uhttpd", "wireless" ]
+		},
+		"write": {
+			"cgi-io": [ "upload" ],
+			"file": {
+				"/sbin/firstboot -r -y": [ "exec" ],
+				"/sbin/reboot": [ "exec" ],
+				"/sbin/sysupgrade": [ "exec" ],
+				"/tmp/firmware.bin": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "exec", "remove" ],
+				"iwinfo": [ "scan" ],
+				"luci": [ "setPassword" ],
+				"system": [ "validate_firmware_image" ],
+				"uci": [ "commit" ]
+			},
+			"uci": [ "dhcp", "firewall", "network", "uhttpd", "wireless" ]
+		}
+	}
+}
