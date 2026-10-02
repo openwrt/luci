@@ -726,6 +726,7 @@ const methods = {
 			if (uname().machine in [ 'x86_64' ] &&
 			    match(ports[0]?.device, /^eth\d+$/)) {
 				let bus = realpath(`/sys/class/net/${ports[0].device}/device/subsystem`);
+				let builtin_buses = [ '/sys/bus/pci', '/sys/bus/virtio' ];
 
 				for (let netdev in lsdir('/sys/class/net')) {
 					if (!match(netdev, /^eth\d+$/))
@@ -734,7 +735,10 @@ const methods = {
 					if (length(filter(ports, port => port.device == netdev)))
 						continue;
 
-					if (realpath(`/sys/class/net/${netdev}/device/subsystem`) != bus)
+					let netdev_bus = realpath(`/sys/class/net/${netdev}/device/subsystem`);
+
+					if (netdev_bus != bus &&
+					    !(bus in builtin_buses && netdev_bus in builtin_buses))
 						continue;
 
 					push(ports, { role: 'unknown', device: netdev });
