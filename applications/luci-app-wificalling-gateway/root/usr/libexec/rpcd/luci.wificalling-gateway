@@ -1,0 +1,41 @@
+#!/bin/sh
+# luci.wificalling-gateway — rpcd exec plugin: manual node connection test.
+#
+# Protocol (rpcd exec plugin): `$0 list` prints the method table, `$0 call
+# <method>` receives the JSON params on stdin and prints one JSON object.
+# The node id passes as argv to node-test.sh — never through a shell.
+
+. /usr/share/libubox/jshn.sh
+
+node_test() {
+	read -r input
+	json_load "$input"
+	json_get_var id id
+	if [ -z "$id" ] || [ "$id" = "null" ]; then
+		echo '{"state":"failed","reason":"no_node_id"}'
+		exit 0
+	fi
+	if [ ! -x /usr/libexec/wificalling-gateway/node-test.sh ]; then
+		echo '{"state":"failed","reason":"no_test_helper"}'
+		exit 0
+	fi
+	/usr/libexec/wificalling-gateway/node-test.sh "$id"
+	exit 0
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object node_test
+			json_add_string 'id' 'id'
+		json_close_object
+		json_dump
+		;;
+	call)
+		[ "$2" = node_test ] && node_test
+		echo '{"state":"failed","reason":"unknown_method"}'
+		;;
+	*)
+		echo '{"state":"failed","reason":"bad_call"}'
+		;;
+esac
