@@ -17,16 +17,39 @@ return view.extend({
 		o = s.option(form.Flag, 'enable', _('Enable Instance'), _('Enable <abbr title="Secure Shell">SSH</abbr> service instance'));
 		o.default  = o.enabled;
 
-		o = s.option(form.Flag, '_direct', _('Bind to Interface'));
-		o.default = o.disabled;
+		// Virtual option: derives UI mode from Interface/DirectInterface,
+		// is not stored in UCI; inactive real options are removed on save
+		o = s.option(form.ListValue, '_bind_to', _('Bind to'), _('Select how the SSH service should be bound to network interfaces or IP addresses'));
+		o.widget = 'radio';
+		o.value('all', _('All interfaces (unspecified)'));
+		o.value('interface', _('IP addresses of interface'));
+		o.value('direct', _('Network interface'));
+		o.default = 'all';
+		o.cfgvalue = function(section) {
+			if (this.section.cfgvalue(section, 'DirectInterface'))
+				return 'direct';
+			if (this.section.cfgvalue(section, 'Interface'))
+				return 'interface';
+			return 'all';
+		};
+		o.forcewrite = true;
+		o.write = function(section) {
+			this.remove(section);
+		};
 
-		o = s.option(widgets.NetworkSelect, 'DirectInterface', _('Interface'), _('Listen only on the given interface or, if unspecified, on all'));
+		o = s.option(widgets.NetworkSelect, 'DirectInterface', _('Interface'), _('Listen only on the given interface'));
 		o.nocreate = true;
-		o.depends('_direct', '1');
+		o.depends('_bind_to', 'direct');
+		o.validate = function(section, value) {
+			return value ? true : _('Please select an interface');
+		};
 
-		o = s.option(widgets.NetworkSelect, 'Interface', _('Interface'), _('Listen on up to 10 IPs on the given interface or, if unspecified, on all interfaces'));
+		o = s.option(widgets.NetworkSelect, 'Interface', _('Interface'), _('Listen on up to 10 IPs on the given interface'));
 		o.nocreate = true;
-		o.depends('_direct', '0');
+		o.depends('_bind_to', 'interface');
+		o.validate = function(section, value) {
+			return value ? true : _('Please select an interface');
+		};
 
 		o = s.option(form.Value, 'Port', _('Port'));
 		o.datatype    = 'port';
