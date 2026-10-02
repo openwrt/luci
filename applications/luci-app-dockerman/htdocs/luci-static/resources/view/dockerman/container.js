@@ -1685,7 +1685,12 @@ return dm2.dv.extend({
 					return false;
 				}
 
-				const logText = response?.body || _('No logs available');
+				let logText = response?.body;
+				if ("application/vnd.docker.multiplexed-stream" === response?.headers?.['content-type']) {
+					logText = (response?.body || []).map(frame => frame.payload).join('');
+				}
+				logText = logText || _('No logs available');
+
 				// Convert ANSI codes to HTML and set innerHTML
 				logsDiv.innerHTML = dm2.ansiToHtml(logText);
 				logsDiv.scrollTop = logsDiv.scrollHeight;
