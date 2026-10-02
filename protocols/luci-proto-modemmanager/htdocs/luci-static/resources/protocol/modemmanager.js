@@ -164,13 +164,28 @@ return network.registerProtocol('modemmanager', {
 		o.default = 'ERR';
 
 		o = s.taboption('general', form.ListValue, 'init_epsbearer', _('Initial EPS Bearer'),
-		_('none: Do not set an initial EPS bearer (default behaviour)') + '<br/>' +
-		_('default: Use the configuration options above (APN, IP Type, ...).') + '<br/>' +
-		_('custom: Use different options when establishing a connection (these options are prefixed with %s).').format('<code>init_</code>'));
-		o.value('', _('none'));
-		o.value('default', 'default');
-		o.value('custom', 'custom');
-		o.default = '';
+			_('Settings used when attaching to the 4G/5G network, before the data connection is established.') + '<br/>' +
+			_('Leave unchanged: Keep the settings stored on the modem.') + '<br/>' +
+			_('Network-assigned: Clear the settings stored on the modem, the network assigns the APN.') + '<br/>' +
+			_('Same as connection: Use the configuration options above (APN, IP Type, ...).') + '<br/>' +
+			_('Custom: Use different options (these options are prefixed with %s).').format('<code>init_</code>'));
+		o.value('modem', _('Leave unchanged (stored on modem)'));
+		o.value('network', _('Network-assigned'));
+		o.value('connection', _('Same as connection'));
+		o.value('custom', _('Custom'));
+		o.default = 'modem';
+		o.load = function(section_id) {
+			const value = form.ListValue.prototype.load.apply(this, [section_id]);
+
+			switch (value) {
+			case 'none':
+				return 'modem';
+			case 'default':
+				return 'connection';
+			default:
+				return value;
+			}
+		};
 
 		o = s.taboption('general', form.Value, 'init_apn', _('Initial EPS Bearer APN'));
 		o.depends('init_epsbearer', 'custom');
