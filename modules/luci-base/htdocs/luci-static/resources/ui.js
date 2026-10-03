@@ -983,6 +983,12 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	 * Specifies whether multiple choice values may be selected. It defaults
 	 * to `true` when an array is passed as input value to the constructor.
 	 *
+	 * @property {boolean} [keep_order=false]
+	 * Specifies whether selected values should be returned in the
+	 * order they were selected by the user.
+	 * When `true`, getValue() returns selected values in the order they
+	 * were selected rather than in the order they appear in the choice list.
+	 *
 	 * @property {boolean|string[]} [sort=false]
 	 * Specifies if and how to sort choice values. If set to `true`, the choice
 	 * values will be sorted alphabetically. If set to an array of strings, the
@@ -1067,10 +1073,12 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		else
 			this.values = value;
 
+		this.orderCounter = this.values.length;
 		this.choices = choices;
 		this.options = Object.assign({
 			sort:               true,
 			multiple:           Array.isArray(value),
+			keep_order:         false,
 			optional:           true,
 			select_placeholder: _('-- Please choose --'),
 			custom_placeholder: _('-- custom --'),
@@ -1088,6 +1096,7 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			'id': this.options.id,
 			'class': 'cbi-dropdown',
 			'multiple': this.options.multiple ? '' : null,
+			'keep_order': this.options.keep_order ? '' : null,
 			'optional': this.options.optional ? '' : null,
 			'disabled': this.options.disabled ? '' : null,
 			'tabindex': -1
@@ -1151,6 +1160,7 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		const o = this.options;
 
 		o.multiple = sb.hasAttribute('multiple');
+		o.keep_order = sb.hasAttribute('keep_order');
 		o.optional = sb.hasAttribute('optional');
 		o.placeholder = sb.getAttribute('placeholder') ?? o.placeholder;
 		o.display_items = parseInt(sb.getAttribute('display-items') ?? o.display_items);
@@ -1172,8 +1182,16 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			for (let i = 0; i < items.length; i++) {
 				this.transformItem(sb, items[i]);
 
-				if (items[i].hasAttribute('selected') && ndisplay-- > 0)
-					items[i].setAttribute('display', n++);
+				if (items[i].hasAttribute('selected')) {
+					if (ndisplay-- > 0)
+						items[i].setAttribute('display', n++);
+
+					if (this.options.keep_order) {
+						const value = items[i].getAttribute('data-value');
+						if (this.values.includes(value))
+							items[i].setAttribute('data-order', this.values.indexOf(value) + 1);
+					}
+				}
 			}
 		}
 		else {
@@ -1455,6 +1473,9 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 						li.removeAttribute('selected');
 						cbox.checked = cbox.disabled = false;
 						sel--;
+
+						if (this.options.keep_order)
+							li.removeAttribute('data-order');
 					}
 					else {
 						cbox.disabled = true;
@@ -1467,6 +1488,9 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 					cbox.checked = true;
 					cbox.disabled = false;
 					sel++;
+
+					if (this.options.keep_order)
+						li.setAttribute('data-order', ++this.orderCounter);
 				}
 			}
 
@@ -1538,11 +1562,18 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	 * @param {Node} ul unordered list
 	 */
 	saveValues(sb, ul) {
-		const sel = ul.querySelectorAll('li[selected]');
+		const sel = Array.from(ul.querySelectorAll('li[selected]'));
 		const div = sb.lastElementChild;
 		const name = this.options.name;
 		let strval = '';
 		const values = [];
+
+		if (this.options.keep_order) {
+			sel.sort((a, b) =>
+				(+a.getAttribute('data-order') || 0) -
+				(+b.getAttribute('data-order') || 0)
+			);
+		}
 
 		while (div.lastElementChild)
 			div.removeChild(div.lastElementChild);
