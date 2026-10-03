@@ -1039,18 +1039,16 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * Note that [taboption()]{@link LuCI.form.AbstractSection#taboption}
 	 * should be used instead if this form section element uses tabs.
 	 *
-	 * @param {LuCI.form.AbstractValue} optionclass
+	 * @param {LuCI.form.AbstractValue} cbiClass
 	 * The option class to use for rendering the configuration option. Note
 	 * that this value must be the class itself, not a class instance obtained
 	 * from calling `new`. It must also be a class derived from
-	 * {@link LuCI.form.AbstractSection AbstractSection}.
+	 * {@link LuCI.form.AbstractValue AbstractValue}.
 	 *
-	 * @param {object} cbiClass (classargs)
+	 * @param {...*} args (classargs)
 	 * Additional arguments which are passed as-is to the constructor of the
 	 * given option class. Refer to the class specific constructor
 	 * documentation for details.
-	 *
-	 * @param {...*} args argument array
 	 *
 	 * @throws {TypeError}
 	 * Throws a `TypeError` exception in case the passed class value is not a
@@ -1074,11 +1072,11 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * @param {string} tabName
 	 * The name of the section tab to add the option element to.
 	 *
-	 * @param {LuCI.form.AbstractValue} optionclass
+	 * @param {LuCI.form.AbstractValue} cbiClass
 	 * The option class to use for rendering the configuration option. Note
 	 * that this value must be the class itself, not a class instance obtained
 	 * from calling `new`. It must also be a class derived from
-	 * {@link LuCI.form.AbstractSection AbstractSection}.
+	 * {@link LuCI.form.AbstractValue AbstractValue}.
 	 *
 	 * @param {...*} args (classargs)
 	 * Additional arguments which are passed as-is to the constructor of the
@@ -1096,11 +1094,11 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * @returns {LuCI.form.AbstractValue}
 	 * Returns the instantiated option class instance.
 	 */
-	taboption(tabName, ...args) {
+	taboption(tabName, cbiClass, ...args) {
 		if (!this.tabs?.[tabName])
 			throw L.error('ReferenceError', 'Associated tab not declared');
 
-		const obj = this.option(...args);
+		const obj = this.option(cbiClass, ...args);
 		obj.tab = tabName;
 		this.tabs[tabName].children.push(obj);
 

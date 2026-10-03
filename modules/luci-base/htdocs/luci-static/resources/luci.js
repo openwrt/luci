@@ -3127,8 +3127,8 @@
 		 * @memberof LuCI
 		 *
 		 * @callback LuCI.requestCallbackFn
-		 * @param {XMLHTTPRequest} xhr
-		 * The XMLHTTPRequest instance used to make the request.
+		 * @param {XMLHttpRequest} xhr
+		 * The XMLHttpRequest instance used to make the request.
 		 *
 		 * @param {*} data
 		 * The response JSON if the response could be parsed as such,
@@ -3444,7 +3444,7 @@
 		 * Cancels a running request.
 		 *
 		 * This function does not actually cancel the underlying
-		 * `XMLHTTPRequest` request but it sets a flag which prevents the
+		 * `XMLHttpRequest` request but it sets a flag which prevents the
 		 * invocation of the callback function when the request eventually
 		 * finishes or timed out.
 		 *
