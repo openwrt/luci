@@ -162,7 +162,13 @@ const CBIJSONConfig = baseclass.extend({
 			next_index = Math.max(next_index, this.data[name]['.index']);
 		}
 
-		const section_id = sectionname ?? (sectiontype + num_sections_type);
+		let section_id = sectionname;
+
+		/* Anonymous sections loaded from an array are numbered across all section
+		   types, so the per-type count may already be taken; find a free name
+		   instead of returning an existing section. */
+		if (section_id == null)
+			for (let n = num_sections_type; this.data.hasOwnProperty(section_id = sectiontype + n); n++);
 
 		if (!this.data.hasOwnProperty(section_id)) {
 			this.data[section_id] = {
