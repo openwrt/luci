@@ -14,7 +14,8 @@
 			},
 			"ubus": {
 				"luci": [ "getMountPoints" ]
-			}
+			},
+			"uci": [ "luci-package-manager" ]
 		},
 		"write": {
 			"file": {
@@ -31,7 +32,11 @@
 				"/etc/apk/repositories.d/customfeeds.list": [ "write" ],
 				"/tmp/upload.ipk": [ "write" ],
 				"/tmp/upload.apk": [ "write" ]
-			}
+			},
+			"ubus": {
+				"uci": [ "commit", "revert" ]
+			},
+			"uci": [ "luci-package-manager" ]
 		}
 	}
 }

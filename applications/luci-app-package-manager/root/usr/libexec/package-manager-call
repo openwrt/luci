@@ -30,6 +30,7 @@ case "$action" in
 	install|update|upgrade|remove)
 		(
 			cmd="$ipkg_bin"
+			requested_action="$action"
 
 			# The apk package manager uses distinct commands for installing and removing packages.
 			if [ $ipkg_bin = "apk" ]; then
@@ -84,6 +85,19 @@ case "$action" in
 						;;
 					esac
 				done
+			fi
+
+			if [ "$ipkg_bin" = "apk" ] &&
+			   [ "$requested_action" = "install" ] &&
+			   [ "$#" -eq 1 ] &&
+			   [ "$1" = "/tmp/upload.apk" ] &&
+			   [ "$(uci -q get luci-package-manager.main.allow_untrusted_uploads)" = "1" ]; then
+				cmd="$cmd --allow-untrusted"
+			fi
+
+			# Prevent package names and paths from being parsed as apk options.
+			if [ "$ipkg_bin" = "apk" ] && [ "$#" -gt 0 ]; then
+				set -- -- "$@"
 			fi
 
 			if flock -x 200; then

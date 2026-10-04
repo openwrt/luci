@@ -15,6 +15,10 @@ PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
 PKG_PROVIDES:=luci-app-opkg
 
+define Package/luci-app-package-manager/conffiles
+/etc/config/luci-package-manager
+endef
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
