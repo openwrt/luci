@@ -195,7 +195,7 @@ export default {
 	'America/Tortola': 'AST4',
 	'America/Vancouver': 'MST7',
 	'America/Whitehorse': 'MST7',
-	'America/Winnipeg': 'CST6CDT,M3.2.0,M11.1.0',
+	'America/Winnipeg': 'EST5',
 	'America/Yakutat': 'AKST9AKDT,M3.2.0,M11.1.0',
 	'Antarctica/Casey': '<+08>-8',
 	'Antarctica/Davis': '<+07>-7',
