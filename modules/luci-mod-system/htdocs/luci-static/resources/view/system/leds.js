@@ -126,9 +126,6 @@ return view.extend({
 			}
 		};
 
-		o = s.option(form.Value, 'interval', _('Interval'), _('milliseconds'));
-		o.placeholder = '50';
-
 		return m.render();
 	}
 });
