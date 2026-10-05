@@ -32,5 +32,11 @@ return baseclass.extend({
 		o.value('full_duplex', _('Full Duplex'));
 		o.value('tx', _('Transmit'));
 		o.value('rx', _('Receive'));
+
+		o = s.option(form.Value, 'interval', _('Interval'), _('milliseconds'));
+		o.rmempty = true;
+		o.modalonly = true;
+		o.placeholder = '50';
+		o.depends('trigger', 'netdev');
 	}
 });
