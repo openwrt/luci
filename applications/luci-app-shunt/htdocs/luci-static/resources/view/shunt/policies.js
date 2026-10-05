@@ -105,10 +105,11 @@ return view.extend({
 		o.editable = true;
 
 		o = s.option(form.ListValue, 'action', _('Action'),
-			_('Route the selected traffic into the interface below, or \
-				bypass it - a bypass policy marks nothing and exempts the traffic from every policy after it.'));
+			_('Route the selected traffic into the interface below, \
+				bypass it - a bypass policy marks nothing and exempts the traffic from every policy after it - or hand it to a transparent proxy on the router.'));
 		o.value('route', _('Route into a policy interface'));
 		o.value('bypass', _('Bypass - leave the traffic alone'));
+		o.value('tproxy', _('Transparent proxy on the router'));
 		o.default = 'route';
 		o.editable = true;
 
@@ -124,11 +125,21 @@ return view.extend({
 			}
 		});
 
-		o = s.option(form.ListValue, 'fallback', _('Fallback Behavior'));
+		o = s.option(form.Value, 'tproxy_port', _('Proxy Port'),
+			_('The port the transparent proxy listens on, for tcp and udp. \
+				It must listen on loopback or on the wildcard address. Needs kmod-nft-tproxy.'));
+		o.datatype = 'port';
+		o.rmempty = false;
+		o.depends('action', 'tproxy');
+
+		o = s.option(form.ListValue, 'fallback', _('Fallback Behavior'),
+			_('What new traffic does when the interface is down or, for a \
+				transparent proxy, when nothing listens on its port.'));
 		o.value('main', _('Fall through to the normal uplink'));
 		o.value('block', _('Block the traffic (killswitch)'));
 		o.default = 'main';
 		o.depends('action', 'route');
+		o.depends('action', 'tproxy');
 
 		o = s.option(form.Flag, 'keep_local', _('Keep Local Traffic'),
 			_('Traffic to networks the routing table already has a route for \

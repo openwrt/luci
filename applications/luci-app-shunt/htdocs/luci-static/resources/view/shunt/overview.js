@@ -226,7 +226,8 @@ function renderPolicies(st) {
 		rows.push(E('tr', { 'class': 'tr' }, [
 			E('td', { 'class': 'td' }, [p.name]),
 			E('td', { 'class': 'td' }, [p.action || 'route']),
-			E('td', { 'class': 'td' }, [p.interface || '-']),
+			E('td', { 'class': 'td' }, [p.interface ||
+				(p.tproxy_port ? ':%d'.format(p.tproxy_port) : '-')]),
 			E('td', { 'class': 'td' }, [fmtMark(p.mark)]),
 			E('td', { 'class': 'td' }, [bypass ? '-' : fmtCount(p.rt_table)]),
 			E('td', { 'class': 'td' }, [bypass ? '-' : fmtCount(p.rules)]),
