@@ -3,8 +3,8 @@
 'require baseclass';
 
 return baseclass.extend({
-	trigger: _('Always off (kernel: none)'),
-	description: _('The LED is always in default state off.'),
+	trigger: _('Static (kernel: none)'),
+	description: _('The LED stays in the configured default state, on or off.'),
 	kernel: true,
 	addFormOptions: function(s) {
 		var o;
