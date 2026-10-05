@@ -97,31 +97,75 @@ return baseclass.extend({
 		return E('em', {}, [ text ]);
 	},
 
-	// Same markup as ui.Table: flat .table > .tr, header row .table-titles,
-	// data-title on the cells so themes can label them on phones.
-	table(opts) {
+	updateTable(table, opts) {
 		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
-		const table = E('table', { 'class': 'table ' + (opts.className || '') }, [
-			E('tr', { 'class': 'tr table-titles' }, opts.head.map(title => cell('th', title)))
-		]);
+		const head = opts.head || [];
+		const rows = opts.rows || [];
+		const tbody = (table.tBodies && table.tBodies[0]) ? table.tBodies[0] : table;
+		const currentRows = tbody.querySelectorAll('tr:not(.table-titles):not(.table-foot):not(.placeholder)');
+		const placeholder = tbody.querySelector('tr.placeholder');
+		const foot = tbody.querySelector('tr.table-foot');
 
-		opts.rows.forEach((row, i) => {
-			table.appendChild(E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, row.map((content, n) => cell('td', content, opts.head[n]))));
-		});
+		for (let i = 0; i < rows.length; i++) {
+			const tr = E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') },
+				rows[i].map((content, n) => cell('td', content, head[n])));
+			if (currentRows[i])
+				tbody.replaceChild(tr, currentRows[i]);
+			else if (foot)
+				tbody.insertBefore(tr, foot);
+			else
+				tbody.appendChild(tr);
+		}
 
-		if (!opts.rows.length && opts.emptyText)
-			table.appendChild(E('tr', { 'class': 'tr placeholder' }, [
-				E('td', { 'class': 'td', 'colspan': opts.head.length }, [ E('em', {}, [ opts.emptyText ]) ])
-			]));
+		for (let i = rows.length; i < currentRows.length; i++)
+			tbody.removeChild(currentRows[i]);
+
+		if (!rows.length && opts.emptyText) {
+			if (!placeholder) {
+				const tr = E('tr', { 'class': 'tr placeholder' }, [
+					E('td', { 'class': 'td', 'colspan': head.length }, [ E('em', {}, [ opts.emptyText ]) ])
+				]);
+				if (foot)
+					tbody.insertBefore(tr, foot);
+				else
+					tbody.appendChild(tr);
+			}
+		}
+		else if (placeholder) {
+			tbody.removeChild(placeholder);
+		}
 
 		if (opts.foot) {
-			const foot = E('tr', { 'class': 'tr' }, opts.foot.map(content => cell('td', content)));
-
-			foot.lastChild.setAttribute('colspan', opts.head.length - opts.foot.length + 1);
-			table.appendChild(foot);
+			if (!foot) {
+				const tr = E('tr', { 'class': 'tr table-foot' }, opts.foot.map(content => cell('td', content)));
+				tr.lastChild.setAttribute('colspan', head.length - opts.foot.length + 1);
+				tbody.appendChild(tr);
+			}
+			else {
+				while (foot.firstChild)
+					foot.removeChild(foot.firstChild);
+				opts.foot.map(content => cell('td', content)).forEach(td => foot.appendChild(td));
+				foot.lastChild.setAttribute('colspan', head.length - opts.foot.length + 1);
+			}
 		}
 
 		return table;
+	},
+
+	// Same markup as ui.Table: flat .table > .tr, header row .table-titles,
+	// data-title on the cells so themes can label them on phones.
+	table(opts) {
+		const existing = opts.node || (opts.id ? document.getElementById(opts.id) : null);
+		if (existing && existing.parentNode)
+			return this.updateTable(existing, opts);
+
+		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
+		const head = opts.head || [];
+		const table = E('table', { 'id': opts.id || null, 'class': 'table ' + (opts.className || '') }, [
+			E('tr', { 'class': 'tr table-titles' }, head.map(title => cell('th', title)))
+		]);
+
+		return this.updateTable(table, opts);
 	},
 
 	donut(opts) {
