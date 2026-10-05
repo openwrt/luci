@@ -68,6 +68,7 @@ return view.extend({
 		});
 
 		o = s.option(form.ListValue, 'trigger', _('Trigger'));
+		o.default = 'none';
 		for (let plugin of plugins) {
 			if ( plugin.form.kernel == false ) {
 				o.value(plugin.name, plugin.form.trigger);
@@ -87,7 +88,7 @@ return view.extend({
 		o.load = function(section_id) {
 			const trigger = uci.get('system', section_id, 'trigger');
 			for (let plugin of plugins) {
-				if ( plugin.name === trigger)
+				if ( plugin.name === (trigger ?? this.default))
 					this.description = plugin.form.description || ' ';
 			}
 			return trigger;
