@@ -2,6 +2,7 @@
 'require uci';
 'require form';
 'require network';
+'require tools.widgets as widgets';
 
 network.registerPatternVirtual(/^6in4-.+$/);
 
@@ -37,14 +38,20 @@ return network.registerProtocol('6in4', {
 	renderFormOptions: function(s) {
 		var o;
 
-		o = s.taboption('general', form.Value, 'ipaddr', _('Local IPv4 address'), _('Leave empty to use the current WAN address'));
+		o = s.taboption('general', form.Value, 'ipaddr', _('Local IPv4 address'), _('Leave empty to use the bound interface address (current WAN interface by default)'));
 		o.datatype = 'ip4addr("nomask")';
 		o.load = function(section_id) {
-			return network.getWANNetworks().then(L.bind(function(nets) {
-				if (nets.length)
-					this.placeholder = nets[0].getIPAddr();
+			const bind = uci.get('network', section_id, 'tunlink');
+			const intfs = bind ? network.getNetworks() : network.getWANNetworks();
+
+			return intfs.then(nets => {
+				const net = nets.find(net => !bind || net.sid == bind);
+
+				if (net)
+					this.placeholder = net.getIPAddr();
+
 				return form.Value.prototype.load.apply(this, [section_id]);
-			}, this));
+			});
 		};
 
 		o = s.taboption('general', form.Value, 'peeraddr', _('Remote IPv4 address'), _('This is usually the address of the nearest PoP operated by the tunnel broker'));
@@ -89,5 +96,9 @@ return network.registerProtocol('6in4', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Use MTU on tunnel interface'));
 		o.placeholder = '1280';
 		o.datatype    = 'max(9200)';
+
+		o = s.taboption('advanced', widgets.NetworkSelect, 'tunlink', _('Underlying interface'), _('Optional. Bind to a specific interface.'));
+		o.exclude = s.section;
+		o.nocreate = true;
 	}
 });
