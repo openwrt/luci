@@ -1,6 +1,84 @@
 'use strict';
 'require form';
+'require fs';
 'require view';
+
+/**
+ * Add a file picker for a file below a swanctl directory.
+ *
+ * The UCI value is stored relative to `root`. The option name may differ
+ * from the UCI option name (`ucioption`) so that several pickers with
+ * different roots can share one UCI option.
+ */
+function addFileOption(s, name, ucioption, title, descr, root, type) {
+	const o = s.option(form.FileUpload, name, title, descr.format(root));
+
+	o.ucioption = ucioption;
+	o.root_directory = root;
+
+	if (type != null)
+		o.depends('type', type);
+
+	o.load = function (section_id) {
+		return Promise.resolve(form.FileUpload.prototype.load.apply(this, [section_id]))
+			.then(function (val) {
+				return val ? root + '/' + val : val;
+			});
+	};
+
+	o.parse = function (section_id) {
+		const active = this.isActive(section_id);
+		const value = active ? this.formvalue(section_id) : null;
+		const node = this.getUIElement(section_id)?.node;
+		const button = node?.querySelector('.open-file-browser');
+
+		const setError = function (msg) {
+			if (!button)
+				return;
+
+			button.classList.toggle('cbi-input-invalid', !!msg);
+
+			if (msg) {
+				button.setAttribute('data-tooltip', msg);
+				button.setAttribute('data-tooltip-style', 'error');
+			} else {
+				button.removeAttribute('data-tooltip');
+				button.removeAttribute('data-tooltip-style');
+			}
+		};
+
+		// The modal dialog saves silently, so mark the field like ui.addValidator() does.
+		const fail = function (msg) {
+			setError(msg);
+			node.addEventListener('widget-update', function () { setError(null); }, { once: true });
+
+			return Promise.reject(new TypeError(msg));
+		};
+
+		setError(null);
+
+		if (!active)
+			return form.FileUpload.prototype.parse.apply(this, [section_id]);
+
+		if (!value)
+			return fail(_('A file must be selected.'));
+
+		// Check on the device that the file exists before saving.
+		return fs.stat(value).then(L.bind(function () {
+			return form.FileUpload.prototype.parse.apply(this, [section_id]);
+		}, this), function () {
+			return fail(_('The file "%s" does not exist.').format(value));
+		});
+	};
+
+	o.write = function (section_id, value) {
+		const prefix = root + '/';
+		return form.FileUpload.prototype.write.apply(this, [section_id,
+			(value && value.indexOf(prefix) === 0) ? value.substring(prefix.length) : value]);
+	};
+
+	return o;
+}
 
 return view.extend({
 	render: function (result) {
@@ -54,9 +132,9 @@ return view.extend({
 		o = s.option(form.Value, 'description', _('Description'),
 			_('An optional description of what this authority is used for.'));
 
-		o = s.option(form.Value, 'cacert', _('CA Certificate'),
-			_('CA certificate to use as trust anchor, relative to /etc/swanctl/x509ca.'));
-		o.datatype = 'file';
+		o = addFileOption(s, 'cacert', 'cacert', _('CA Certificate'),
+			_('CA certificate to use as trust anchor, relative to %s.'),
+			'/etc/swanctl/x509ca');
 
 		o = s.option(form.Value, 'cert_uri_base', _('Certificate Base URI'),
 			_('Base URI for the hash and URL feature to fetch certificates from the trusted CAs.'));
@@ -120,14 +198,15 @@ return view.extend({
 		o.depends('type', 'pkcs12');
 		o.modalonly = true;
 
-		o = s.option(form.Value, 'file', _('Key File'),
-			_('Path to the private key file.'));
-		o.datatype = 'file';
-		o.depends('type', 'private');
-		o.depends('type', 'rsa');
-		o.depends('type', 'ecdsa');
-		o.depends('type', 'pkcs8');
-		o.depends('type', 'pkcs12');
+		// One file picker per key type, each rooted in its swanctl directory.
+		// The stored value is relative to that directory, like cacert.
+		// Unique option name per type, all mapped to the UCI option 'file'.
+		['private', 'rsa', 'ecdsa', 'pkcs8', 'pkcs12'].forEach(function (type) {
+			o = addFileOption(s, 'file_' + type, 'file', _('Key File'),
+				_('Key file to use, relative to %s.'),
+				'/etc/swanctl/' + type, type);
+			o.modalonly = true;
+		});
 
 		o = s.option(form.Value, 'handle', _('Handle'),
 			_('Handle of the private key on the smartcard.'));
