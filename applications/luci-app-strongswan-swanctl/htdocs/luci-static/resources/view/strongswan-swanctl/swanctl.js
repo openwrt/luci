@@ -343,8 +343,8 @@ return view.extend({
 
 		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
 			_('IKE authentication (phase 1)'));
-		o.value('psk', 'Pre-shared Key');
-		o.value('pubkey', 'Public Key');
+		o.value('psk', _('Pre-shared Key'));
+		o.value('pubkey', _('Public Key'));
 		o.default = 'psk';
 		o.rmempty = false;
 
@@ -373,8 +373,8 @@ return view.extend({
 
 		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
 			_('IKE authentication (phase 1)'));
-		o.value('psk', 'Pre-shared Key');
-		o.value('pubkey', 'Public Key');
+		o.value('psk', _('Pre-shared Key'));
+		o.value('pubkey', _('Public Key'));
 		o.value('eap-mschapv2', 'EAP MSCHAPv2');
 		o.value('eap-tls', 'EAP TLS');
 		o.default = 'psk';
