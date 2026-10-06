@@ -4,6 +4,8 @@
 		"read": {
 			"file": {
 				"/etc/config/ipsec": [ "list" ],
+				"/etc/swanctl/x509": [ "list" ],
+				"/etc/swanctl/x509/*": [ "stat" ],
 				"/etc/swanctl/x509ca": [ "list" ],
 				"/etc/swanctl/x509ca/*": [ "stat" ],
 				"/etc/swanctl/private": [ "list" ],
@@ -28,6 +30,7 @@
 			"cgi-io": [ "upload" ],
 			"file": {
 				"/etc/init.d/swanctl migrate *": [ "exec" ],
+				"/etc/swanctl/x509/*": [ "write" ],
 				"/etc/swanctl/x509ca/*": [ "write" ],
 				"/etc/swanctl/private/*": [ "write" ],
 				"/etc/swanctl/rsa/*": [ "write" ],

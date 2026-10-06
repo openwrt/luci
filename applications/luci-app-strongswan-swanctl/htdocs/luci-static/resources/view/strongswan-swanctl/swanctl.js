@@ -32,6 +32,75 @@ function addAlgorithms(o, algorithms) {
 	});
 }
 
+/**
+ * Add a file picker for a file below a swanctl directory.
+ *
+ * The UCI value is stored relative to `root`.
+ */
+function addFileOption(s, name, title, descr, root) {
+	const o = s.option(form.FileUpload, name, title, descr.format(root));
+
+	o.root_directory = root;
+
+	o.load = function (section_id) {
+		return Promise.resolve(form.FileUpload.prototype.load.apply(this, [section_id]))
+			.then(function (val) {
+				return val ? root + '/' + val : val;
+			});
+	};
+
+	o.parse = function (section_id) {
+		const active = this.isActive(section_id);
+		const value = active ? this.formvalue(section_id) : null;
+		const node = this.getUIElement(section_id)?.node;
+		const button = node?.querySelector('.open-file-browser');
+
+		const setError = function (msg) {
+			if (!button)
+				return;
+
+			button.classList.toggle('cbi-input-invalid', !!msg);
+
+			if (msg) {
+				button.setAttribute('data-tooltip', msg);
+				button.setAttribute('data-tooltip-style', 'error');
+			} else {
+				button.removeAttribute('data-tooltip');
+				button.removeAttribute('data-tooltip-style');
+			}
+		};
+
+		// The modal dialog saves silently, so mark the field like ui.addValidator() does.
+		const fail = function (msg) {
+			setError(msg);
+			node.addEventListener('widget-update', function () { setError(null); }, { once: true });
+
+			return Promise.reject(new TypeError(msg));
+		};
+
+		setError(null);
+
+		// The selection is optional, an empty value removes the option.
+		if (!active || !value)
+			return form.FileUpload.prototype.parse.apply(this, [section_id]);
+
+		// Check on the device that the file exists before saving.
+		return fs.stat(value).then(L.bind(function () {
+			return form.FileUpload.prototype.parse.apply(this, [section_id]);
+		}, this), function () {
+			return fail(_('The file "%s" does not exist.').format(value));
+		});
+	};
+
+	o.write = function (section_id, value) {
+		const prefix = root + '/';
+		return form.FileUpload.prototype.write.apply(this, [section_id,
+			(value && value.indexOf(prefix) === 0) ? value.substring(prefix.length) : value]);
+	};
+
+	return o;
+}
+
 function sectionNameCheck(extra_class) {
 	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
 		nameEl = el.querySelector('.cbi-section-create-name');
@@ -354,15 +423,17 @@ return view.extend({
 		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
 		o.modalonly = true;
 
-		o = s.option(form.Value, 'certs', _('Local Certificate'),
-			_('Certificate to use for authentication, relative to /etc/swanctl/x509.'));
-		o.datatype = 'file';
+		o = addFileOption(s, 'certs', _('Local Certificate'),
+			_('Certificate to use for authentication, relative to %s.'),
+			'/etc/swanctl/x509');
 		o.modalonly = true;
+		o.depends('auth', 'pubkey');
 
-		o = s.option(form.Value, 'key', _('Local Key'),
-			_('Private key to use with the certificate, relative to /etc/swanctl/private.'));
-		o.datatype = 'file';
+		o = addFileOption(s, 'key', _('Local Key'),
+			_('Private key to use with the certificate, relative to %s.'),
+			'/etc/swanctl/private');
 		o.modalonly = true;
+		o.depends('auth', 'pubkey');
 
 		// Remote Configuration
 		s = m.section(form.GridSection, 'remote', _('Remote'),
