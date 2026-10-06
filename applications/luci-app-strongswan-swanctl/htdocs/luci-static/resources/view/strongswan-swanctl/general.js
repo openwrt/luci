@@ -137,15 +137,24 @@ return view.extend({
 			'/etc/swanctl/x509ca');
 
 		o = s.option(form.Value, 'cert_uri_base', _('Certificate Base URI'),
-			_('Base URI for the hash and URL feature to fetch certificates from the trusted CAs.'));
+			_('Base URI for the Hash and URL feature of IKEv2.') + '<br />' +
+			_('Instead of sending complete certificates, a URI that resolves to the DER encoded certificate is sent.') + '<br />' +
+			_('The certificate URIs are built by appending the SHA1 hash of the DER encoded certificate to this base URI.'));
+		o.placeholder = 'http://certs.example.com/';
 		o.modalonly = true;
 
 		o = s.option(form.DynamicList, 'crl_uri', _('CRL URIs'),
-			_('URIs where a CRL for the CA can be fetched.'));
+			_('URIs where a CRL (certificate revocation list) issued by this CA can be fetched.') + '<br />' +
+			_('Supported schemes are http, ldap and file.') + '<br />' +
+			_('A local file must be given as a file URI, e.g. %s.').format('file:///etc/swanctl/x509crl/ca.crl') + '<br />' +
+			_('CRLs stored in %s are read by swanctl when loading credentials.').format('/etc/swanctl/x509crl'));
+		o.placeholder = 'http://crl.example.com/ca.crl';
 		o.modalonly = true;
 
 		o = s.option(form.DynamicList, 'ocsp_uri', _('OCSP URIs'),
-			_('URIs where an OCSP responder for the CA is available.'));
+			_('URIs of OCSP responders that can be queried for the revocation status of certificates issued by this CA.') + '<br />' +
+			_('These are usually http URLs.'));
+		o.placeholder = 'http://ocsp.example.com';
 		o.modalonly = true;
 
 		// Secrets Configuration
