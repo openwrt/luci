@@ -33,6 +33,21 @@ function addAlgorithms(o, algorithms) {
 }
 
 /**
+ * Show "none" in the overview table while a custom proposal is used.
+ *
+ * Otherwise the table would list the default algorithms, although they are
+ * ignored in favor of the custom proposal string.
+ */
+function hideForCustomProposal(o) {
+	o.textvalue = function (section_id) {
+		if (uci.get('ipsec', section_id, 'use_custom_proposal') == '1')
+			return null;
+
+		return this.super('textvalue', [section_id]);
+	};
+}
+
+/**
  * Add a file picker for a file below a swanctl directory.
  *
  * The UCI value is stored relative to `root`.
@@ -701,6 +716,7 @@ return view.extend({
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.encryption);
 		addAlgorithms(o, algorithms.aead);
+		hideForCustomProposal(o);
 
 		const encryptionAlgorithmNames = algorithms.encryption?.map(algorithm => algorithm.name);
 		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
@@ -711,12 +727,14 @@ return view.extend({
 		o.default = 'sha512';
 		o.rmempty = false;
 		addAlgorithms(o, algorithms.integrity);
+		hideForCustomProposal(o);
 
 		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
 			_('Algorithms marked with * are considered insecure'));
 		o.default = 'modp3072';
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
+		hideForCustomProposal(o);
 
 		o = s.option(form.DynamicList, 'ke', _('Multiple Key Exchanges'),
 			_('With peers that support multiple IKEv2 key exchanges (RFC 9370), ') +
@@ -742,6 +760,7 @@ return view.extend({
 		o.optional = true;
 		o.depends({'is_esp': '0', 'use_custom_proposal': '0'});
 		addAlgorithms(o, algorithms.prf);
+		hideForCustomProposal(o);
 
 		return m.render().then(function (node) {
 			if (legacyConfig)
