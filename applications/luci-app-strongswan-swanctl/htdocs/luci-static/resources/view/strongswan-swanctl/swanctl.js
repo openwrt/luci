@@ -13,6 +13,15 @@ const callListAlgorithms = rpc.declare({
 	expect: { }
 });
 
+/**
+ * Append the matching swanctl.conf setting (dotted path) to a description.
+ */
+function swanctlDescr(descr, key) {
+	const code = key.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+	return (descr ? descr + '<br />' : '') + '<code>swanctl.conf: ' + code + '</code>';
+}
+
 // Extend the description of the keyexchange field if IKEv1 is selected.
 function showIkev1Hint(node, value) {
 	let hint = node.querySelector('.cbi-value-description > span');
@@ -266,25 +275,27 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('general', form.DynamicList, 'remote_addrs', _('Remote Endpoints'),
-			_('IP address or FQDN name of the tunnel remote endpoints.') + ' ' +
-			_('If no value is specified, "%any" is assumed.'));
+			swanctlDescr(_('IP address or FQDN name of the tunnel remote endpoints.') + ' ' +
+			_('If no value is specified, "%any" is assumed.'),
+				'connections.<conn>.remote_addrs'));
 		o.datatype = 'or(hostname,ipaddr)';
 		o.placeholder = '%any';
 
 		o = s.taboption('general', form.DynamicList, 'local_addrs', _('Local Endpoints'),
-			_('IP address or FQDN name of the tunnel local endpoints.') + ' ' +
-			_('If no value is specified, "%any" is assumed.'));
+			swanctlDescr(_('IP address or FQDN name of the tunnel local endpoints.') + ' ' +
+			_('If no value is specified, "%any" is assumed.'),
+				'connections.<conn>.local_addrs'));
 		o.datatype = 'or(hostname,ipaddr)';
 		o.placeholder = '%any';
 		o.modalonly = true;
 
 		o = s.taboption('general', form.DynamicList, 'vips', _('Virtual IP addresses'),
-			_('Virtual IP addresses used as the source IP for outgoing traffic.'));
+			swanctlDescr(_('Virtual IP addresses used as the source IP for outgoing traffic.'), 'connections.<conn>.vips'));
 		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
-			_('List of IKE (phase 1) proposals to use for authentication'));
+			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication'), 'connections.<conn>.proposals'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -305,7 +316,7 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('general', form.MultiValue, 'child', _('Children'),
-			_('The Children containing the ESP (phase 2) section'));
+			swanctlDescr(_('The Children containing the ESP (phase 2) section'), 'connections.<conn>.children.<child>'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -324,8 +335,9 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('authentication', form.MultiValue, 'local', _('Local Authentication'),
-			_('Local authentication sections used for this connection.') + ' ' +
-			_('Each section corresponds to one authentication round.'));
+			swanctlDescr(_('Local authentication sections used for this connection.') + ' ' +
+			_('Each section corresponds to one authentication round.'),
+				'connections.<conn>.local<suffix>'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -343,8 +355,9 @@ return view.extend({
 		};
 
 		o = s.taboption('authentication', form.MultiValue, 'remote', _('Remote Authentication'),
-			_('Remote authentication sections used for this connection.') + ' ' +
-			_('Each section corresponds to one authentication round.'));
+			swanctlDescr(_('Remote authentication sections used for this connection.') + ' ' +
+			_('Each section corresponds to one authentication round.'),
+				'connections.<conn>.remote<suffix>'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -363,7 +376,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('authentication', form.ListValue, 'send_cert', _('Send Certificate'),
-			_('Whether to send our own certificate to the remote peer'));
+			swanctlDescr(_('Whether to send our own certificate to the remote peer'), 'connections.<conn>.send_cert'));
 		o.value('always');
 		o.value('ifasked');
 		o.value('never');
@@ -372,19 +385,19 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('authentication', form.Flag, 'send_certreq', _('Send Certificate Request'),
-			_('Send certificate request payloads to offer trusted root CA certificates to the peer'));
+			swanctlDescr(_('Send certificate request payloads to offer trusted root CA certificates to the peer'), 'connections.<conn>.send_certreq'));
 		o.default = '1';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
-			_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'));
+			swanctlDescr(_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'), 'connections.<conn>.mobike'));
 		o.default = '1';
 		o.modalonly = true;
 		o.depends('keyexchange', 'ikev2');
 		o.depends('keyexchange', 'ike');
 
 		o = s.taboption('advanced', form.ListValue, 'fragmentation', _('IKE Fragmentation'),
-			_('Use IKE fragmentation'));
+			swanctlDescr(_('Use IKE fragmentation'), 'connections.<conn>.fragmentation'));
 		o.value('yes');
 		o.value('no');
 		o.value('force');
@@ -393,43 +406,44 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'keyingtries', _('Keying Retries'),
-			_('Number of retransmissions attempts during initial negotiation'));
+			swanctlDescr(_('Number of retransmissions attempts during initial negotiation'), 'connections.<conn>.keyingtries'));
 		o.datatype = 'or(uinteger, "%forever")';
 		o.placeholder = '3';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'dpd_delay', _('DPD Delay'),
-			_('Interval to check liveness of a peer'));
+			swanctlDescr(_('Interval to check liveness of a peer'), 'connections.<conn>.dpd_delay'));
 		o.validate = validateTimeFormat;
 		o.placeholder = '30s';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
-			_('Interval before closing an inactive CHILD_SA'));
+			swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
 		o.validate = validateTimeFormat;
 		o.placeholder = '0s';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
-			_('IKEv2 interval to refresh keying material; also used to compute lifetime'));
+			swanctlDescr(_('IKEv2 interval to refresh keying material; also used to compute lifetime'), 'connections.<conn>.rekey_time'));
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'over_time', _('Overtime'),
-			_('Limit on time to complete rekeying/reauthentication'));
+			swanctlDescr(_('Limit on time to complete rekeying/reauthentication'), 'connections.<conn>.over_time'));
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'encap', _('ESP Encapsulation'),
-			_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
+			swanctlDescr(_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
 			_('This makes the peer believe that a NAT situation exist on the transmission path, forcing it to encapsulate ESP packets in UDP.') + '<br />' +
-			_('Usually this is not required but it can help to work around connectivity issues with too restrictive intermediary firewalls that block ESP packets.'));
+			_('Usually this is not required but it can help to work around connectivity issues with too restrictive intermediary firewalls that block ESP packets.'),
+				'connections.<conn>.encap'));
 		o.modalonly = true;
 		o.default = '0';
 		o.rmempty = true;
 
 		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
-			_('Version of IKE for negotiation'));
+			swanctlDescr(_('Version of IKE for negotiation'), 'connections.<conn>.version'));
 		o.value('ikev1', 'IKEv1 (%s)'.format(_('deprecated')));
 		o.value('ikev2', 'IKEv2');
 		o.value('ike', 'IKE (%s, %s)'.format(_('both'), _('deprecated')));
@@ -453,20 +467,20 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
-			_('IKE authentication (phase 1)'));
+			swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.local<suffix>.auth'));
 		o.value('psk', _('Pre-shared Key'));
 		o.value('pubkey', _('Public Key'));
 		o.default = 'psk';
 		o.rmempty = false;
 
 		o = s.option(form.Value, 'id', _('Local Identifier'),
-			_('Local identifier for IKE (phase 1)'));
+			swanctlDescr(_('Local identifier for IKE (phase 1)'), 'connections.<conn>.local<suffix>.id'));
 		o.datatype = 'string';
 		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
 		o.modalonly = true;
 
 		o = addFileOption(s, 'certs', _('Local Certificate'),
-			_('Certificate to use for authentication, relative to %s.'),
+			swanctlDescr(_('Certificate to use for authentication, relative to %s.'), 'connections.<conn>.local<suffix>.certs'),
 			'/etc/swanctl/x509');
 		o.modalonly = true;
 		o.depends('auth', 'pubkey');
@@ -485,7 +499,7 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
-			_('IKE authentication (phase 1)'));
+			swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.remote<suffix>.auth'));
 		o.value('psk', _('Pre-shared Key'));
 		o.value('pubkey', _('Public Key'));
 		o.value('eap-mschapv2', 'EAP MSCHAPv2');
@@ -494,14 +508,15 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(form.Value, 'id', _('Remote Identifier'),
-			_('Remote identifier for IKE (phase 1)'));
+			swanctlDescr(_('Remote identifier for IKE (phase 1)'), 'connections.<conn>.remote<suffix>.id'));
 		o.datatype = 'string';
 		o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
 		o.modalonly = true;
 
 		o = s.option(form.DynamicList, 'cacerts', _('Remote CA Certificates'),
-			_('Restrict the remote peer\'s certificate to be issued by one of these CAs.') + '<br />' +
-			_('Select a file relative to /etc/swanctl/x509ca. CA certificates can be uploaded in the authorities section.'));
+			swanctlDescr(_('Restrict the remote peer\'s certificate to be issued by one of these CAs.') + '<br />' +
+			_('Select a file relative to /etc/swanctl/x509ca. CA certificates can be uploaded in the authorities section.'),
+				'connections.<conn>.remote<suffix>.cacerts'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -521,7 +536,7 @@ return view.extend({
 		o.depends('auth', 'eap-tls');
 
 		o = s.option(form.Value, 'eap_id', _('EAP ID'),
-			_('EAP identity to use with the remote peer'));
+			swanctlDescr(_('EAP identity to use with the remote peer'), 'connections.<conn>.remote<suffix>.eap_id'));
 		o.datatype = 'string';
 		o.default = '%any';
 		o.depends('auth', 'eap-mschapv2');
@@ -538,26 +553,26 @@ return view.extend({
 		o = s.tab('general', _('General'));
 		o = s.tab('advanced', _('Advanced'));
 
-		o = s.taboption('general', form.ListValue, 'mode', _('Child mode'));
+		o = s.taboption('general', form.ListValue, 'mode', _('Child mode'), swanctlDescr(null, 'connections.<conn>.children.<child>.mode'));
 		o.rmempty = false;
 		o.value('tunnel', _('Tunnel'));
 		o.value('transport', _('Transport'));
 		o.default = 'tunnel';
 
 		o = s.taboption('general', form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
-			_('Local network(s)'));
+			swanctlDescr(_('Local network(s)'), 'connections.<conn>.children.<child>.local_ts'));
 		o.datatype = 'cidr';
 		o.placeholder = '192.168.1.1/24';
 		o.rmempty = false;
 
 		o = s.taboption('general', form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
-			_('Remote network(s)'));
+			swanctlDescr(_('Remote network(s)'), 'connections.<conn>.children.<child>.remote_ts'));
 		o.datatype = 'cidr';
 		o.placeholder = '192.168.2.1/24';
 		o.rmempty = false;
 
 		o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
-			_('XFRM interface ID set on input and output interfaces'));
+			swanctlDescr(_('XFRM interface ID set on input and output interfaces'), 'connections.<conn>.children.<child>.if_id_in, connections.<conn>.children.<child>.if_id_out'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -577,7 +592,7 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('general', form.ListValue, 'start_action', _('Start Action'),
-			_('Action on initial configuration load'));
+			swanctlDescr(_('Action on initial configuration load'), 'connections.<conn>.children.<child>.start_action'));
 		o.value('', '%s (%s)'.format('none', _('default')));
 		o.value('trap');
 		o.value('start');
@@ -587,7 +602,7 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
-			_('Action when CHILD_SA is closed'));
+			swanctlDescr(_('Action when CHILD_SA is closed'), 'connections.<conn>.children.<child>.close_action'));
 		o.value('', '%s (%s)'.format('none', _('default')));
 		o.value('trap');
 		o.value('start');
@@ -598,7 +613,7 @@ return view.extend({
 
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal',
 			_('Crypto Proposal (Phase 2)'),
-			_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'));
+			swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'), 'connections.<conn>.children.<child>.esp_proposals'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -619,12 +634,12 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
-			_('Path to script to run on CHILD_SA up/down events'));
+			swanctlDescr(_('Path to script to run on CHILD_SA up/down events'), 'connections.<conn>.children.<child>.updown'));
 		o.datatype = 'file';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'dpd_action', _('DPD Action'),
-			_('Action when DPD timeout occurs'));
+			swanctlDescr(_('Action when DPD timeout occurs'), 'connections.<conn>.children.<child>.dpd_action'));
 		o.value('', '%s (%s)'.format('clear', _('default')));
 		o.value('trap');
 		o.value('start');
@@ -634,9 +649,10 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
-			_('Interval before a CHILD_SA is rekeyed.') + ' ' +
+			swanctlDescr(_('Interval before a CHILD_SA is rekeyed.') + ' ' +
 			_('Also used to derive lifetime (110% of this value).') + '<br />' +
-			_('If not configured, the default value is "1h".')
+			_('If not configured, the default value is "1h".'),
+				'connections.<conn>.children.<child>.rekey_time')
 		);
 		o.placeholder = '1h';
 		o.validate = validateTimeFormat;
@@ -644,19 +660,19 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
-			_('Maximum time before the CHILD_SA gets closed, as a hard limit.')
+			swanctlDescr(_('Maximum time before the CHILD_SA gets closed, as a hard limit.'), 'connections.<conn>.children.<child>.life_time')
 		);
 		o.validate = validateTimeFormat;
 		o.rmempty = true;
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'ipcomp', _('IPComp'),
-			_('Enable ipcomp compression'));
+			swanctlDescr(_('Enable ipcomp compression'), 'connections.<conn>.children.<child>.ipcomp'));
 		o.default = '0';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
-			_('Enable Hardware offload'));
+			swanctlDescr(_('Enable Hardware offload'), 'connections.<conn>.children.<child>.hw_offload'));
 		o.value('yes');
 		o.value('no');
 		o.value('auto');
@@ -664,20 +680,22 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
-			_('Priority of the CHILD_SA'));
+			swanctlDescr(_('Priority of the CHILD_SA'), 'connections.<conn>.children.<child>.priority'));
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),
-			'%s; %s'.format(_('Replay Window of the CHILD_SA'),
-				_('Values larger than 32 are supported by the Netlink backend only')));
+			swanctlDescr('%s; %s'.format(_('Replay Window of the CHILD_SA'),
+				_('Values larger than 32 are supported by the Netlink backend only')),
+				'connections.<conn>.children.<child>.replay_window'));
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekey_bytes', _('Rekey Bytes'),
-			_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
+			swanctlDescr(_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
 			_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
-			_('Use "0" to disable byte based rekeying.')
+			_('Use "0" to disable byte based rekeying.'),
+				'connections.<conn>.children.<child>.rekey_bytes')
 		);
 		o.datatype = 'uinteger';
 		o.placeholder = '0';
@@ -685,8 +703,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'life_bytes', _('Life Bytes'),
-			_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
-			_('Use "0" to disable (default).')
+			swanctlDescr(_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
+			_('Use "0" to disable (default).'),
+				'connections.<conn>.children.<child>.life_bytes')
 		);
 		o.datatype = 'uinteger';
 		o.placeholder = '0';
@@ -694,9 +713,10 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekey_packets', _('Rekey Packets'),
-			_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
+			swanctlDescr(_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
 			_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
-			_('Use "0" to disable packet based rekeying (default).')
+			_('Use "0" to disable packet based rekeying (default).'),
+				'connections.<conn>.children.<child>.rekey_packets')
 		);
 		o.datatype = 'uinteger';
 		o.placeholder = '0';
@@ -704,8 +724,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'life_packets', _('Life Packets'),
-			_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
-			_('Use "0" to disable (default).')
+			swanctlDescr(_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
+			_('Use "0" to disable (default).'),
+				'connections.<conn>.children.<child>.life_packets')
 		);
 		o.datatype = 'uinteger';
 		o.placeholder = '0';
