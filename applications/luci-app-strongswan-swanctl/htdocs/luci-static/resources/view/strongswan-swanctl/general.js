@@ -2,6 +2,7 @@
 'require form';
 'require fs';
 'require view';
+'require strongswan-swanctl.ikev1 as ikev1';
 
 /**
  * Add a file picker for a file below a swanctl directory.
@@ -239,6 +240,8 @@ return view.extend({
 		o.depends('type', 'token');
 		o.modalonly = true;
 
-		return m.render();
+		return m.render().then(function (node) {
+			return ikev1.prepend(node);
+		});
 	}
 });
