@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-10-05 14:17+0000\n"
+"PO-Revision-Date: 2026-10-06 19:51+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstrongswan-swanctl/pl/>\n"
@@ -265,7 +265,7 @@ msgid ""
 "certificates."
 msgstr ""
 "Określ urzędy certyfikacji, które są zaufane przy podpisywaniu i "
-"unieważnianiu certyfikatów partnerów."
+"unieważnianiu certyfikatów peerów."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:404
 msgid "Define Connection Children to be used in Remote Configurations."
@@ -280,24 +280,32 @@ msgstr "Określ konfiguracje połączeń IKE."
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:15
 msgid "Define Shunt pass/drop policies independent of remote connections."
 msgstr ""
+"Określ bocznikowe zasady przepuszczania/odrzucania połączeń niezależnie od "
+"połączeń zdalnych."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:339
 msgid "Define local IKE authentication rounds referenced from connections."
 msgstr ""
+"Określ lokalne rundy uwierzytelniania IKE, do których odwołują się "
+"połączenia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:369
 msgid "Define remote IKE authentication rounds referenced from connections."
 msgstr ""
+"Określ rundy zdalnego uwierzytelniania IKE, do których odwołują się "
+"połączenia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:75
 msgid ""
 "Define shared secrets and private key passphrases used for authentication."
 msgstr ""
+"Określ współdzielone tajne klucze oraz hasła do kluczy prywatnych używane do "
+"uwierzytelniania."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:54
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:80
 msgid "Description"
-msgstr ""
+msgstr "Opis"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:82
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:97
@@ -319,15 +327,15 @@ msgstr "Zamknij"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:27
 msgid "Drop"
-msgstr ""
+msgstr "Porzucaj"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:394
 msgid "EAP ID"
-msgstr ""
+msgstr "Identyfikator EAP"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:395
 msgid "EAP identity to use with the remote peer"
-msgstr ""
+msgstr "Tożsamość EAP do użycia ze zdalnym peerem"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:321
 msgid "ESP Encapsulation"
@@ -340,7 +348,7 @@ msgstr "Propozycja ESP"
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:226
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:245
 msgid "Each section corresponds to one authentication round."
-msgstr ""
+msgstr "Każda sekcja odpowiada jednej rundzie uwierzytelniania."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:530
 msgid "Enable Hardware offload"
@@ -374,7 +382,7 @@ msgstr "Nawiązano"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:96
 msgid "File descriptor watcher"
-msgstr ""
+msgstr "Obserwator deskryptorów plików"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:158
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:409
@@ -388,11 +396,11 @@ msgstr "Ustawienia główne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:9
 msgid "General connections configurations"
-msgstr ""
+msgstr "Ogólne konfiguracje połączeń"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:11
 msgid "Generic control flow with errors (default)"
-msgstr ""
+msgstr "Ogólny przepływ sterowania z obsługą błędów (domyślny)"
 
 #: applications/luci-app-strongswan-swanctl/root/usr/share/rpcd/acl.d/luci-app-strongswan-swanctl.json:3
 msgid "Grant access to luci-app-strongswan-swanctl"
@@ -408,11 +416,11 @@ msgstr "Półotwarte IKE_SA"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:132
 msgid "Handle"
-msgstr ""
+msgstr "Uchwyt"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:133
 msgid "Handle of the private key on the smartcard."
-msgstr ""
+msgstr "Uchwyt klucza prywatnego na karcie inteligentnej."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:619
 msgid "Hash Algorithm"
@@ -441,15 +449,15 @@ msgstr "Uwierzytelnienie IKE (Faza 1)"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:108
 msgid "IKE network communication"
-msgstr ""
+msgstr "Komunikacja sieciowa IKE"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:84
 msgid "IKE_SA / ISAKMP SA"
-msgstr ""
+msgstr "IKE_SA / ISAKMP SA"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:105
 msgid "IKE_SA manager, handling synchronization for IKE_SA access"
-msgstr ""
+msgstr "Menedżer IKE_SA obsługujący synchronizację dostępu IKE_SA"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:312
 msgid ""
@@ -472,15 +480,15 @@ msgstr "IPComp"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:99
 msgid "IPsec/Networking kernel interface"
-msgstr ""
+msgstr "Interfejs jądra dla IPsec/sieci"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:100
 msgid "Identities this secret is valid for"
-msgstr ""
+msgstr "Tożsamości, dla których ważny jest ten tajny klucz"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:99
 msgid "Identity"
-msgstr ""
+msgstr "Tożsamość"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:168
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:174
@@ -502,7 +510,7 @@ msgstr "Bezczynność"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:13
 msgid "Including RAW data dumps in hex"
-msgstr ""
+msgstr "Dołączanie zrzutów danych RAW w formacie szesnastkowym"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:109
 msgid "Install Time"
@@ -510,19 +518,19 @@ msgstr "Czas instalacji"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:124
 msgid "Install routes via XFRM interfaces"
-msgstr ""
+msgstr "Instaluj trasy przez interfejsy XFRM"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:87
 msgid "Integrity Measurement Collector"
-msgstr ""
+msgstr "Moduł zbierający pomiary integralności"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:90
 msgid "Integrity Measurement Verifier"
-msgstr ""
+msgstr "Moduł weryfikujący pomiary integralności"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:43
 msgid "Interface"
-msgstr ""
+msgstr "Interfejs"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:53
 msgid "Interfaces that accept VPN traffic."
@@ -545,14 +553,16 @@ msgid ""
 "It must be migrated to the new swanctl uci schema in '/etc/config/ipsec' "
 "before it can be managed here."
 msgstr ""
+"Należy to przenieść do nowego schematu UCI swanctl w pliku „/etc/config/ipsec"
+"”, zanim będzie można tym zarządzać z tego miejsca."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:93
 msgid "Jobs queuing/processing and thread pool management"
-msgstr ""
+msgstr "Kolejkowanie i przetwarzanie zadań oraz zarządzanie pulą wątków"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:123
 msgid "Key File"
-msgstr ""
+msgstr "Plik klucza"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:329
 msgid "Keyexchange"
@@ -564,13 +574,13 @@ msgstr "Ponowne próby wznawiania klucza"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:84
 msgid "Kind of secret to define"
-msgstr ""
+msgstr "Rodzaj tajnego klucza do określenia"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:81
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:102
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:114
 msgid "Library messages"
-msgstr ""
+msgstr "Komunikaty biblioteki"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:558
 msgid "Life Bytes"
@@ -607,7 +617,7 @@ msgstr "Interfejsy nasłuchujące"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:338
 msgid "Local"
-msgstr ""
+msgstr "Lokalny"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:85
 msgid "Local Addresses"
@@ -619,7 +629,7 @@ msgstr "Uwierzytelnianie lokalne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:224
 msgid "Local Authentication"
-msgstr ""
+msgstr "Uwierzytelnianie lokalne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:357
 msgid "Local Certificate"
@@ -650,7 +660,7 @@ msgstr "Selektory ruchu lokalnego"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:225
 msgid "Local authentication sections used for this connection."
-msgstr ""
+msgstr "Sekcje uwierzytelniania lokalnego używane dla tego połączenia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:352
 msgid "Local identifier for IKE (phase 1)"
@@ -662,11 +672,11 @@ msgstr "Sieci lokalne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:31
 msgid "Local traffic selectors for the shunt policy"
-msgstr ""
+msgstr "Lokalne selektory ruchu dla zasad bocznikowania"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:66
 msgid "Low-level encoding/decoding (ASN.1, X.509 etc.)"
-msgstr ""
+msgstr "Niskopoziomowe kodowanie/dekodowanie (ASN.1, X.509 itp.)"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:277
 msgid "MOBIKE"
@@ -678,13 +688,15 @@ msgstr "MOBIKE (protokół mobilności i wielodostępności IKEv2)"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:75
 msgid "Main daemon setup/cleanup/signal handling"
-msgstr ""
+msgstr "Główne operacje konfiguracyjne, porządkowe i obsługa sygnałów demona"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:604
 msgid ""
 "Manually defining a proposal can break compatibility with peers or cause "
 "connection failures."
 msgstr ""
+"Ręczne określanie propozycji może spowodować utratę zgodności z peerami lub "
+"błędy połączenia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:559
 msgid "Maximum number of bytes processed before the CHILD_SA gets closed."
@@ -700,21 +712,21 @@ msgstr "Maksymalny czas przed zamknięciem CHILD_SA, jako sztywny limit."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:64
 msgid "Migrate"
-msgstr ""
+msgstr "Migruj"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:67
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:109
 msgid "Migrate IPsec configuration"
-msgstr ""
+msgstr "Migruj konfigurację IPsec"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:110
 msgid "Migrating IPsec configuration…"
-msgstr ""
+msgstr "Migrowanie konfiguracji IPsec…"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:115
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:119
 msgid "Migration failed: %s"
-msgstr ""
+msgstr "Migracja nie powiodła się: %s"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:24
 msgid "Minute"
@@ -732,11 +744,11 @@ msgstr "Tryb"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:142
 msgid "Module"
-msgstr ""
+msgstr "Moduł"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:12
 msgid "More detailed debugging control flow"
-msgstr ""
+msgstr "Bardziej szczegółowy przepływ sterowania podczas debugowania"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:83
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:98
@@ -747,11 +759,11 @@ msgstr "Nazwa"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:121
 msgid "Netlink Settings"
-msgstr ""
+msgstr "Ustawienia Netlink"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:44
 msgid "Network interface to bind the shunt policy to"
-msgstr ""
+msgstr "Interfejs sieciowy do powiązania z zasadami bocznikowania"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:17
 msgid "Number must have suffix s, m, h or d"
@@ -775,7 +787,7 @@ msgstr "Liczba prób retransmisji podczas początkowych negocjacji"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:69
 msgid "OCSP URIs"
-msgstr ""
+msgstr "Identyfikatory URI OCSP"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:148
 msgid "On this page, you can configure the IPsec connections."
@@ -788,7 +800,7 @@ msgstr "Na tej stronie możesz skonfigurować usługę IPsec."
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:10
 msgid ""
 "On this page, you can configure the general settings for IPsec connections."
-msgstr ""
+msgstr "Na tej stronie można skonfigurować ogólne ustawienia połączeń IPsec."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:316
 msgid "Overtime"
@@ -800,15 +812,16 @@ msgstr "Przegląd"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:147
 msgid "PIN"
-msgstr ""
+msgstr "Kod PIN"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:148
 msgid "PIN to access the private key on the smartcard."
 msgstr ""
+"Kod PIN umożliwiający dostęp do klucza prywatnego na karcie inteligentnej."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:143
 msgid "PKCS#11 module to use."
-msgstr ""
+msgstr "Moduł PKCS#11 do użycia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:634
 msgid "PRF Algorithm"
@@ -824,11 +837,11 @@ msgstr ""
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:78
 msgid "Packet encoding/decoding encryption/decryption operations"
-msgstr ""
+msgstr "Operacje kodowania/dekodowania oraz szyfrowania/deszyfrowania pakietów"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:26
 msgid "Pass"
-msgstr ""
+msgstr "Przepuść"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:493
 msgid "Path to script to run on CHILD_SA up/down events"
@@ -838,19 +851,19 @@ msgstr ""
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:124
 msgid "Path to the private key file."
-msgstr ""
+msgstr "Ścieżka do pliku klucza prywatnego."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:111
 msgid "Platform Trust Service"
-msgstr ""
+msgstr "Usługa zaufania platformy"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:213
 msgid "Please create a Children first"
-msgstr ""
+msgstr "Najpierw utwórz obiekt podrzędny"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:233
 msgid "Please create a Local section first"
-msgstr ""
+msgstr "Najpierw utwórz sekcję lokalną"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:194
 msgid "Please create a Proposal first"
@@ -858,7 +871,7 @@ msgstr "Najpierw utwórz propozycję"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:252
 msgid "Please create a Remote section first"
-msgstr ""
+msgstr "Najpierw utwórz sekcję zdalną"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:481
 msgid "Please create an ESP Proposal first"
@@ -875,12 +888,12 @@ msgstr "Priorytet CHILD_SA"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:39
 msgid "Priority of the shunt policy (lower number means higher priority)"
-msgstr ""
+msgstr "Priorytet zasad bocznikowania (niższa liczba oznacza wyższy priorytet)"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:363
 msgid ""
 "Private key to use with the certificate, relative to /etc/swanctl/private."
-msgstr ""
+msgstr "Klucz prywatny do użycia z certyfikatem, względem /etc/swanctl/private."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:100
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:127
@@ -931,7 +944,7 @@ msgstr "Uwierzytelnianie zdalne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:243
 msgid "Remote Authentication"
-msgstr ""
+msgstr "Uwierzytelnianie zdalne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:389
 msgid "Remote CA Certificates"
@@ -958,7 +971,7 @@ msgstr "Selektory ruchu zdalnego"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:244
 msgid "Remote authentication sections used for this connection."
-msgstr ""
+msgstr "Sekcje uwierzytelniania zdalnego używane dla tego połączenia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:384
 msgid "Remote identifier for IKE (phase 1)"
@@ -970,7 +983,7 @@ msgstr "Sieci zdalne"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:35
 msgid "Remote traffic selectors for the shunt policy"
-msgstr ""
+msgstr "Zdalne selektory ruchu dla zasad bocznikowania"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:542
 msgid "Replay Window"
@@ -983,7 +996,7 @@ msgstr "Okno powtórzenia CHILD_SA"
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:390
 msgid "Restrict the remote peer's certificate to be issued by one of these CAs"
 msgstr ""
-"Ogranicz wydawanie certyfikatu zdalnego partnera do jednego z tych urzędów "
+"Ogranicz wydawanie certyfikatu zdalnego peera do jednego z tych urzędów "
 "certyfikacji"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:110
@@ -1004,11 +1017,11 @@ msgstr "Sekundy"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:107
 msgid "Secret"
-msgstr ""
+msgstr "Tajny klucz"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:74
 msgid "Secrets"
-msgstr ""
+msgstr "Tajne klucze"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:54
 msgid "Select an interface or leave empty for all interfaces."
@@ -1042,22 +1055,24 @@ msgstr "Konfiguracja usługi"
 msgid ""
 "Shared secret for authentication, or passphrase to decrypt a private key."
 msgstr ""
+"Wspólny tajny klucz do uwierzytelniania lub hasło do odszyfrowania klucza "
+"prywatnego."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:14
 msgid "Shunt"
-msgstr ""
+msgstr "Bocznikowanie"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:25
 msgid "Shunt policy mode"
-msgstr ""
+msgstr "Tryb zasad bocznikowania"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:137
 msgid "Slot"
-msgstr ""
+msgstr "Gniazdo"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:138
 msgid "Slot of the smartcard to use."
-msgstr ""
+msgstr "Gniazdo karty inteligentnej do użycia."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:145
 msgid "Some options are unavailable because swanctl failed to load: %s"
@@ -1089,27 +1104,27 @@ msgstr "Zatrzymaj"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:60
 msgid "Syslog Settings"
-msgstr ""
+msgstr "Ustawienia dziennika systemowego"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:206
 msgid "The Children containing the ESP (phase 2) section"
-msgstr ""
+msgstr "Obiekty podrzędne zawierające sekcję ESP (Faza 2)"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:72
 msgid "The migration may require manual intervention."
-msgstr ""
+msgstr "Migracja może wymagać ręcznej interwencji."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:73
 msgid "Therefore, the VPN is not restarted."
-msgstr ""
+msgstr "W związku z tym VPN nie jest uruchamiany ponownie."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:323
 msgid ""
 "This makes the peer believe that a NAT situation exist on the transmission "
 "path, forcing it to encapsulate ESP packets in UDP."
 msgstr ""
-"Sprawia to, że druga strona uwierzy, że na ścieżce transmisji występuje "
-"sytuacja NAT, co zmusza ją do kapsułkowania pakietów ESP w protokole UDP."
+"Sprawia to, że peer uzna, że na ścieżce transmisji występuje sytuacja NAT, "
+"co zmusi go do kapsułkowania pakietów ESP w protokole UDP."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:322
 msgid ""
@@ -1121,11 +1136,11 @@ msgstr ""
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:415
 msgid "Transport"
-msgstr ""
+msgstr "Transport"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:117
 msgid "Trusted Network Connect"
-msgstr ""
+msgstr "Zaufana sieć"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:414
 msgid "Tunnel"
@@ -1133,15 +1148,19 @@ msgstr "Tunel"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:83
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:66
 msgid "URIs where a CRL for the CA can be fetched."
 msgstr ""
+"Identyfikatory URI, pod którymi można pobrać listę CRL dla urzędu "
+"certyfikacji (CA)."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:70
 msgid "URIs where an OCSP responder for the CA is available."
 msgstr ""
+"Identyfikatory URI, pod którymi dostępny jest responder OCSP dla urzędu "
+"certyfikacji (CA)."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:84
 msgid "Unique ID"
@@ -1175,23 +1194,24 @@ msgstr "Użyj fragmentacji IKE"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:50
 msgid "Use combinations like child1_phase1."
-msgstr ""
+msgstr "Używaj kombinacji takich jak child1_phase1."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:597
 msgid "Use custom proposal"
-msgstr ""
+msgstr "Użyj niestandardowej propozycji"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:8
 msgid "Use daemon default"
-msgstr ""
+msgstr "Użyj ustawień domyślnych demona"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:603
 msgid "Using this option only if you know exactly what you are doing."
-msgstr ""
+msgstr "Użyj tej opcji tylko wtedy, gdy dokładnie wiesz, co robisz."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:605
 msgid "Using this setting may prevent future updates or migrations."
 msgstr ""
+"Użycie tego ustawienia może uniemożliwić przyszłe aktualizacje lub migracje."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:324
 msgid ""
@@ -1217,7 +1237,7 @@ msgstr "Wersja IKE do negocjacji"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:10
 msgid "Very basic auditing logs"
-msgstr ""
+msgstr "Bardzo podstawowe dzienniki audytu"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:179
 msgid "Virtual IP addresses"
@@ -1230,17 +1250,19 @@ msgstr ""
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:74
 msgid "Warning: The migration will drop all IPsec VPN connections."
-msgstr ""
+msgstr "Ostrzeżenie: migracja spowoduje zerwanie wszystkich połączeń VPN IPsec."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:598
 msgid "When enabled, you can specify your own proposal string."
-msgstr ""
+msgstr "Po włączeniu tej opcji możesz określić własny ciąg znaków propozycji."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:125
 msgid ""
 "When this is enabled, the routes for all XFRM interfaces are set "
 "automatically."
 msgstr ""
+"Po włączeniu tej opcji trasy dla wszystkich interfejsów XFRM są ustawiane "
+"automatycznie."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:595
 msgid "Whether this is an ESP (phase 2) proposal or not"
@@ -1258,7 +1280,7 @@ msgstr ""
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:606
 msgid "You are responsible for maintaining compatibility!"
-msgstr ""
+msgstr "Odpowiadasz za utrzymanie kompatybilności!"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:333
 msgid "both"
@@ -1268,7 +1290,7 @@ msgstr "oba"
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:462
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:499
 msgid "default"
-msgstr ""
+msgstr "domyślna"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:331
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:333
@@ -1278,7 +1300,7 @@ msgstr "przestarzałe"
 #: applications/luci-app-strongswan-swanctl/root/usr/share/luci/menu.d/luci-app-strongswan-swanctl.json:3
 #: applications/luci-app-strongswan-swanctl/root/usr/share/luci/menu.d/luci-app-strongswan-swanctl.json:40
 msgid "strongSwan IPsec"
-msgstr "strongSwan IPsec"
+msgstr "IPsec strongSwan"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:344
 msgid "strongSwan Status"
@@ -1286,7 +1308,7 @@ msgstr "Status strongSwan"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:115
 msgid "unknown error"
-msgstr ""
+msgstr "nieznany błąd"
 
 #~ msgid ""
 #~ "CA certificate that need to lie in remote peer's certificate's path of "
