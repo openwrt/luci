@@ -60,6 +60,21 @@ function addAlgorithms(o, algorithms) {
 }
 
 /**
+ * Describe how the proposal string is assembled from the single options.
+ *
+ * Mirrors config_ike_proposal() and config_esp_proposal() of the init
+ * script. Used as o.tooltip, parts in brackets are optional.
+ */
+function proposalTooltip() {
+	return [
+		_('Without "Use custom proposal" the proposal is assembled from the options of this section:'),
+		_('IKE (phase 1)') + ': proposals = encryption_algorithm-[hash_algorithm]-[prf_algorithm]-[dh_group]-[ke1_<ke>…ke7_<ke>]',
+		_('ESP (phase 2)') + ': esp_proposals = encryption_algorithm-[hash_algorithm]-[dh_group]-[ke1_<ke>…ke7_<ke>]',
+		_('The hash is omitted for authenticated encryption (AEAD) algorithms. The PRF is used for IKE proposals only.')
+	];
+}
+
+/**
  * Show "none" in the overview table while a custom proposal is used.
  *
  * Otherwise the table would list the default algorithms, although they are
@@ -750,16 +765,19 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.option(form.Value, 'custom_proposal', _('Custom proposal'),
-			_('Using this option only if you know exactly what you are doing.') + '<br />' +
+			swanctlDescr(_('Using this option only if you know exactly what you are doing.') + '<br />' +
 			_('Manually defining a proposal can break compatibility with peers or cause connection failures.') + '<br />' +
 			_('Using this setting may prevent future updates or migrations.') + '<br />' +
-			_('You are responsible for maintaining compatibility!'));
+			_('You are responsible for maintaining compatibility!') + '<br />' +
+			_('The string is used verbatim as the proposal instead of the assembled one.'),
+				'connections.<conn>.proposals, connections.<conn>.children.<child>.esp_proposals'));
 		o.depends('use_custom_proposal', '1');
 		o.rmempty = false;
 
 		o = s.option(form.ListValue, 'encryption_algorithm',
 			_('Encryption Algorithm'),
 			_('Algorithms marked with * are considered insecure'));
+		o.tooltip = proposalTooltip;
 		o.default = 'aes256gcm128';
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.encryption);
@@ -769,6 +787,7 @@ return view.extend({
 		const encryptionAlgorithmNames = algorithms.encryption?.map(algorithm => algorithm.name);
 		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
 			_('Algorithms marked with * are considered insecure'));
+		o.tooltip = proposalTooltip;
 		encryptionAlgorithmNames?.forEach(function (algorithmName) {
 			o.depends({'encryption_algorithm': algorithmName, 'use_custom_proposal': '0'});
 		});
@@ -779,6 +798,7 @@ return view.extend({
 
 		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
 			_('Algorithms marked with * are considered insecure'));
+		o.tooltip = proposalTooltip;
 		o.default = 'modp3072';
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
@@ -789,12 +809,14 @@ return view.extend({
 				('up to seven additional key exchanges may be negotiated.') + '<br/>' +
 			_('If more than 7 are stored, those that exceed this limit will not be ') +
 				('included in the swanctl configuration.'));
+		o.tooltip = proposalTooltip;
 		o.modalonly = true;
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
 
 		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
 			_('Algorithms marked with * are considered insecure'));
+		o.tooltip = proposalTooltip;
 		o.validate = function (section_id, value) {
 			const encryptionAlgorithm = this.section.formvalue(section_id, 'encryption_algorithm');
 			const aeadAlgorithmNames = algorithms.aead?.map(algorithm => algorithm.name);
