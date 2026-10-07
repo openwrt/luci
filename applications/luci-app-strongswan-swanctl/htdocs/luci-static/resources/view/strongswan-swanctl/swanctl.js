@@ -13,6 +13,23 @@ const callListAlgorithms = rpc.declare({
 	expect: { }
 });
 
+// Extend the description of the keyexchange field if IKEv1 is selected.
+function showIkev1Hint(node, value) {
+	let hint = node.querySelector('.cbi-value-description > span');
+
+	if (!hint) {
+		hint = E('span', { 'style': 'color: var(--error-color-high, red)' }, [
+			E('br'),
+			_('IKEv1 is deprecated and may be removed in future updates.'),
+			E('br'),
+			_('Please upgrade your connections to IKEv2.')
+		]);
+		node.querySelector('.cbi-value-description').appendChild(hint);
+	}
+
+	hint.hidden = !(value == 'ikev1' || value == 'ike');
+}
+
 function validateTimeFormat(section_id, value) {
 	if (value && !value.match(/^\d+[smhd]$/)) {
 		return _('Number must have suffix s, m, h or d');
@@ -418,6 +435,15 @@ return view.extend({
 		o.value('ike', 'IKE (%s, %s)'.format(_('both'), _('deprecated')));
 		o.default = 'ikev2';
 		o.modalonly = true;
+		o.render = function (option_index, section_id) {
+			return form.ListValue.prototype.render.apply(this, arguments).then(L.bind(function (node) {
+				showIkev1Hint(node, this.cfgvalue(section_id) ?? this.default);
+				return node;
+			}, this));
+		};
+		o.onchange = function (ev, section_id, value) {
+			showIkev1Hint(ev.target.closest('.cbi-value'), value);
+		};
 
 		// Local Configuration
 		s = m.section(form.GridSection, 'local', _('Local'),
