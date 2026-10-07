@@ -2,6 +2,7 @@
 'require form';
 'require uci';
 'require view';
+'require strongswan-swanctl.ikev1 as ikev1';
 'require tools.widgets as widgets';
 
 function addLogLevel(o) {
@@ -125,6 +126,8 @@ return view.extend({
 			_('When this is enabled, the routes for all XFRM interfaces are set automatically.'));
 		o.default = '0';
 
-		return m.render();
+		return m.render().then(function (node) {
+			return ikev1.prepend(node);
+		});
 	}
 });

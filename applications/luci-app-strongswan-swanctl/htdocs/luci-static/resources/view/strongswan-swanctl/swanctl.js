@@ -1,5 +1,6 @@
 'use strict';
 'require view';
+'require strongswan-swanctl.ikev1 as ikev1';
 'require form';
 'require rpc';
 'require uci';
@@ -765,7 +766,7 @@ return view.extend({
 		return m.render().then(function (node) {
 			if (legacyConfig)
 				showMigrationOverlay(node);
-			return node;
+			return ikev1.prepend(node);
 		});
 	}
 });
