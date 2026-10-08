@@ -25,7 +25,7 @@
  * The path->node half lives in fs-menutree.js (the chrome needs it too); the "has a view poisoned
  * this document with its CSS?" half in fs-sheets.js.
  *
- * `docs/…`, `tools/…` and `tests/…` in these comments name the theme's own repository
+ * `docs/…` in these comments names the theme's own repository
  * (https://github.com/VizzleTF/luci-theme-footstrap), not the tree this file is read in: the
  * package ships the runtime and nothing else. */
 
@@ -198,8 +198,7 @@ function flushUciCache() {
 	 * is `uci.sections('wireless', 'wifi-device')`). So dropping those packages does not make
 	 * network.js refetch them, it makes every consumer read an EMPTY config until the next full
 	 * load: Channel Analysis with no band tabs, Network -> Switch with no VLAN sections, both
-	 * correct again after F5. tools/spa-parity.mjs reproduces it; tools/upstream-contract.mjs
-	 * notices if the list of three moves.
+	 * correct again after F5.
 	 *
 	 * navigate() waits for the refill, because a cached module resolves within a microtask and the
 	 * view would read the cache we just emptied. Only when network.js is really in the document.
@@ -438,7 +437,7 @@ function restoreScroll(pos, gen) {
 	 * their own RPCs. The engine then clamps the scroller BACK to whatever height exists NOW, firing
 	 * an ordinary `scroll` event that looks exactly like a reader's, and it lands before this tick has
 	 * ever written anything (`wroteWin`/`wroteMain` still -1), so the "our own write coming back"
-	 * check above cannot catch it either. Measured live (owrt2512b @1440, `/admin/status/overview` <-
+	 * check above cannot catch it either. Measured live (1440px wide, `/admin/status/overview` <-
 	 * package-manager, Back): the UA restores `window.scrollY` to the parked 2684 in the same tick
 	 * `popstate` fires, `commitStage()` leaves the document ~900px tall for one frame, and the next
 	 * native `scroll` event reports `y=0` a whole 5 s before this function's own deadline — cancelling
@@ -792,7 +791,7 @@ function commitStage(stage, contentHost) {
  * with the transition and 213 ms without it, and the swap itself landed at 3,728 ms against 206 ms.
  * The reader spends that time looking at the page they navigated away from, under the new URL —
  * which is what a report of "the section is not where I expect it, F5 fixes it" looks like from the
- * outside (issue #42), F5 being a full load and starting no transition.
+ * outside, F5 being a full load and starting no transition.
  *
  * A deadline was tried and does not hold: `skipTransition()` runs the update callback at once
  * (3-5 ms on WebKit, Chromium and Firefox alike), but it has to be called from a timer, and the
@@ -1002,7 +1001,7 @@ function navigate(pathname, push, kbd) {
 	/* A full load starts at the top and the in-place swap must too, or navigating away from a long
 	 * page opens the next one mid-scroll. Both scrollers are reset, since which one scrolls depends
 	 * on the layout — in the sidebar layout the window does not scroll, `.fs-shell` being 100dvh
-	 * with `.fs-main` owning overflow-y (issue #7) — and scrollTo on the other is a no-op.
+	 * with `.fs-main` owning overflow-y — and scrollTo on the other is a no-op.
 	 *
 	 * The WRITE is at commitStage now, not here — see there. `_rest` is forgotten here regardless:
 	 * it is the reference fs-fit tells a reader-caused scroll from an engine's clamp with, and the
@@ -1249,9 +1248,8 @@ function bootDocumentIsOurs() {
  * Every module here is written against parts of somebody else's code that were never an API:
  * `L.Poll` is a deprecated alias, `L.dom.content` and `ui.instantiateView` are what `view.ut`
  * happens to use, `Request.addInterceptor` is how the session probe hears a 403.
- * tools/upstream-contract.mjs asks whether they still BEHAVE as assumed, but only against the two
- * userlands this repo owns. On a router carrying a luci-base that moved, the first anyone learns of
- * it is a click that opens nothing.
+ * Existence is not behaviour: a name can survive and act differently. On a router carrying a
+ * luci-base that moved, the first anyone learns of it is a click that opens nothing.
  *
  * So existence is checked at boot, once, and a missing name turns the router OFF rather than
  * on-and-broken: the page is then the server-dispatched MPA the theme was before the router
@@ -1379,7 +1377,7 @@ function wireRouter() {
 		/* A fragment change is not a navigation. Chrome fires `popstate` for a same-document
 		 * fragment nav, so an `<a href="#">` inside a view — a common idiom for in-page controls —
 		 * arrives here as if Back had been pressed, and re-running navigate() re-instantiates the
-		 * view and wipes the state the click just set (issue #3). The view changed only if the PATH
+		 * view and wipes the state the click just set. The view changed only if the PATH
 		 * changed. */
 		if (window.location.pathname === _curPath)
 			return;
@@ -1461,11 +1459,6 @@ return baseclass.extend({
 	wire: wireRouter,
 	wireVisibility,
 	onNavigate,
-	/* exported for tests/router-contract.test.mjs (no tests ship in the package), where it is driven
-	 * against a hand-broken `L`: the one way to see the off branch */
-	/* likewise out-of-package: interval-pause.test.mjs drives the navigation sweep around a
-	 * visibilitychange and session-expiry.test.mjs reads the verdict the interceptors reached.
-	 * navigate() is the real caller of the first and `_expired` gates the second. */
 	/* fs-search warms its recents and the arrow-key-highlighted result, neither of which the
 	 * pointer/focus triggers above can see. The edge points search -> router, because the router
 	 * must keep no dependency on the palette. */

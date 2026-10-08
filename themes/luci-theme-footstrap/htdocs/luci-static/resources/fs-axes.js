@@ -10,20 +10,19 @@
  * chrome, the menu and the search palette, so it is fetched on every admin page — and of its
  * sixty-one exports the cold path called eight. Everything here is reached only from
  * `fs-appearance` (the form) and `fs-assets` (the two uploads), both page modules, so the router
- * fetches it on the Appearance page and nowhere else. Measured: 6.6 KB off what every page
+ * fetches it on the Appearance tab and nowhere else. Measured: 6.6 KB off what every page
  * downloads.
  *
  * What stayed behind in `fs-prefs`, and why:
  *   - the localStorage wrappers and `sd()`, which everything here calls through `prefs.`
  *   - dark mode, because `guardDarkStamp` defends against a third-party app on every page and
- *     `tools/chrome-fence.mjs` holds `stampDark()` to that file by path
+ *     `stampDark()` is checked against that file by path
  *   - layout, density, rail and auto-collapse, because the chrome and the menu apply them live —
- *     and because `tools/scroll-anchor.mjs` and `tools/scroll-jank.mjs` stamp layout and density
- *     through `L.require('fs-prefs')` to sweep their matrix
+ *     and because external probes stamp layout and density through `L.require('fs-prefs')`
  *
  * The pre-paint in head.ut has already stamped every axis before the first frame, so nothing here
- * is needed to PAINT a page correctly — only to change one from the form. tools/axes.mjs reads the
- * whole resources directory rather than a path, precisely so an axis may live in a second file. */
+ * is needed to PAINT a page correctly — only to change one from the form. The axis list is read
+ * from the whole resources directory rather than one path, so an axis may live in a second file. */
 
 const FS_RADIUS_DEFAULT = 12;
 
@@ -117,11 +116,10 @@ function propAxis(key, sdKey, prop, min, max, dfl, fmt, after) {
  * it and the first touch of any other control takes it away.
  *
  * Legacy names ('rvht'/'roman'/'github') are migrated by head.ut before paint, so they never reach
- * currentPalette() on a loaded page; the stray fallthrough covers them anyway. */
+ * PALETTE.current() on a loaded page; the stray fallthrough covers them anyway. */
 
 const PALETTES = [ 'hicontrast', 'bootstrap', '2020', 'forum' ];	/* the non-default values; 'footstrap' = bare :root */
 const PALETTE = prefs.listAxis('fs-palette', 'data-palette', PALETTES, 'footstrap');
-const currentPalette = PALETTE.current, applyPalette = PALETTE.apply;
 
 /* Wallpaper is a multi-value axis: off (bare canvas), pattern (the admin-uploaded SVG, tiled and
  * recoloured — 15-wallpaper.css) or file (the admin-uploaded photo, 16-login-bg.css).
@@ -134,7 +132,6 @@ const currentPalette = PALETTE.current, applyPalette = PALETTE.apply;
  * in the list falls back to 'off'. */
 const WALLPAPERS = [ 'pattern', 'file' ];		/* the non-off values; 'off' = bare :root */
 const WALLPAPER = prefs.listAxis('fs-wallpaper', 'data-wallpaper', WALLPAPERS, 'off');
-const currentWallpaper = WALLPAPER.current, applyWallpaper = WALLPAPER.apply;
 
 /* Density: how much air the UI uses. A three-value axis like wallpaper, and a pure token axis —
  * 02-tokens.css multiplies the type and space ladders and every size follows, with no layout switch
@@ -145,14 +142,12 @@ const currentWallpaper = WALLPAPER.current, applyWallpaper = WALLPAPER.apply;
  * otherwise the bar stays stacked — or stays unstacked and overflows — until the next resize. */
 
 const TINT = colorAxis('fs-tint', 'data-tint', '--fs-tint-h', '--fs-bg');
-const currentTint = TINT.current, applyTint = TINT.apply;
 
 /* Accent axis: the UI accent (solid buttons, toggle knobs, sliders, focus rings, accented links)
  * while canvas, cards and status colours stay put. On a hue, CSS rotates --fs-accent and keeps the
  * palette's lightness and chroma, so --fs-on-accent stays legible unrecomputed; on a hex the ink is
  * recomputed from the entered colour's lightness (03-palettes.css). 0 = off. */
 const ACCENT = colorAxis('fs-accent', 'data-accent', '--fs-accent-h', '--fs-accent');
-const currentAccent = ACCENT.current, applyAccent = ACCENT.apply;
 
 /* The three status colours are the same axis pointed at --fs-good / --fs-warn / --fs-danger, kept
  * separate because they carry separate meanings and every derived tint is a color-mix() of the
@@ -197,27 +192,18 @@ function surfaceAxis(key, sdKey, prop) {
 	};
 }
 const CARD = surfaceAxis('fs-card', 'card', '--fs-panel-base');
-const currentCard = CARD.current, applyCard = CARD.apply;
 const CONTROL = surfaceAxis('fs-control', 'control', '--fs-panel2-base');
-const currentControl = CONTROL.current, applyControl = CONTROL.apply;
 const BAR = surfaceAxis('fs-bar', 'bar', '--fs-bar-bg');
-const currentBar = BAR.current, applyBar = BAR.apply;
 const LINE = surfaceAxis('fs-line', 'line', '--fs-border-base');
-const currentLine = LINE.current, applyLine = LINE.apply;
-
 
 const GOOD = colorAxis('fs-good', 'data-good', '--fs-good-h', '--fs-good');
-const currentGood = GOOD.current, applyGood = GOOD.apply;
 const WARN = colorAxis('fs-warn', 'data-warn', '--fs-warn-h', '--fs-warn');
-const currentWarn = WARN.current, applyWarn = WARN.apply;
 const DANGER = colorAxis('fs-danger', 'data-danger', '--fs-danger-h', '--fs-danger');
-const currentDanger = DANGER.current, applyDanger = DANGER.apply;
 
 /* Rounding: the propAxis instance (default const and rationale up top), --fs-radius-base in px. */
 const RADIUS = propAxis('fs-radius', 'rounding', '--fs-radius-base', 0, 20, FS_RADIUS_DEFAULT, (v) => (v + 'px'));
-const currentRadius = RADIUS.current, applyRadius = RADIUS.apply, radiusDefault = RADIUS.def;
 
-/* Content width (issue #44): how far the reader lets the column grow past --fs-content-max's own
+/* Content width: how far the reader lets the column grow past --fs-content-max's own
  * 1280px. A propAxis like Rounding, pointed at that one token — the range comment lives in
  * 02-tokens.css, next to the token it bounds, and is not restated here.
  *
@@ -228,7 +214,6 @@ const currentRadius = RADIUS.current, applyRadius = RADIUS.apply, radiusDefault 
 const FS_CWIDTH_DEFAULT = 1280;
 const CWIDTH = propAxis('fs-content-width', 'content_width', '--fs-content-max', 1280, 3840,
 	FS_CWIDTH_DEFAULT, (v) => (v + 'px'), () => fit.schedule());
-const currentContentWidth = CWIDTH.current, applyContentWidth = CWIDTH.apply, contentWidthDefault = CWIDTH.def;
 
 /* Layout axis: horizontal top bar (the default) vs vertical sidebar. One template, one renderer —
  * CSS morphs the chrome off :root[data-layout] and toggling re-renders nothing; menu-footstrap.js
@@ -256,14 +241,12 @@ const AXIS_KEYS = [
  * module throws, taking the chrome and the menu with it. */
 const FS_TSTR_DEFAULT = 100;
 const TSTR = propAxis('fs-tint-strength', 'tint_strength', '--fs-tint-strength', 0, 200, FS_TSTR_DEFAULT, (v) => String(v / 100));
-const currentTintStrength = TSTR.current, applyTintStrength = TSTR.apply, tintStrengthDefault = TSTR.def;
 
 /* Photo dim: the scrim opacity over the FILE photo (0–100%). The photo is shared; how strongly
  * this browser dims it is not, and it reaches the router through Save-as-default. Only bites while
  * the wallpaper is 'file'. Declared up here for the TDZ reason above. */
 const FS_PDIM_DEFAULT = 74;
 const PDIM = propAxis('fs-photo-dim', 'photo_dim', '--fs-photo-dim', 0, 100, FS_PDIM_DEFAULT, (v) => (v + '%'));
-const currentPhotoDim = PDIM.current, applyPhotoDim = PDIM.apply, photoDimDefault = PDIM.def;
 
 /* The pattern's two live knobs, and the third that is an enum. All three bite only while the
  * wallpaper is 'pattern'; the FILE is shared, how this browser draws it is not.
@@ -273,14 +256,11 @@ const currentPhotoDim = PDIM.current, applyPhotoDim = PDIM.apply, photoDimDefaul
  * the file would put out of CSS's reach. Declared up here for the TDZ reason above. */
 const FS_PSIZE_DEFAULT = 440;
 const PSIZE = propAxis('fs-pattern-size', 'pattern_size', '--fs-pattern-size', 40, 1600, FS_PSIZE_DEFAULT, (v) => (v + 'px'));
-const currentPatternSize = PSIZE.current, applyPatternSize = PSIZE.apply, patternSizeDefault = PSIZE.def;
 const FS_PSTR_DEFAULT = 20;
 const PSTR = propAxis('fs-pattern-strength', 'pattern_strength', '--fs-pattern-strength', 0, 100, FS_PSTR_DEFAULT, (v) => String(v / 100));
-const currentPatternStrength = PSTR.current, applyPatternStrength = PSTR.apply, patternStrengthDefault = PSTR.def;
 /* Ink: 'theme' (the file's alpha, the theme's colour) or 'original' (the file's own colours, no
  * mask). Two-valued with the default as a bare :root, i.e. the enumAxis shape. */
 const PINK = prefs.enumAxis('fs-pattern-ink', 'data-pattern-ink', 'original', 'theme');
-const currentPatternInk = PINK.current, applyPatternInk = PINK.apply;
 /* `reject: true` is load-bearing: without it a refused write arrives as SUCCESS. rpc.js raises on
  * the ubus status code only when the declaration asks it to, and otherwise hands the code back as
  * the resolved value — measured on the router, a per-config ACL refusal resolves with 6
@@ -294,30 +274,30 @@ function snapshotAxes() {
 	return {
 		layout: prefs.currentLayout(),
 		darkmode: prefs.currentMode(),
-		palette: currentPalette(),
-		wallpaper: currentWallpaper(),
-		tint: String(currentTint()),
-		accent: String(currentAccent()),
-		good: String(currentGood()),
-		warn: String(currentWarn()),
-		danger: String(currentDanger()),
-		card: String(currentCard()),
-		control: String(currentControl()),
-		bar: String(currentBar()),
-		line: String(currentLine()),
-		rounding: String(currentRadius()),
+		palette: PALETTE.current(),
+		wallpaper: WALLPAPER.current(),
+		tint: String(TINT.current()),
+		accent: String(ACCENT.current()),
+		good: String(GOOD.current()),
+		warn: String(WARN.current()),
+		danger: String(DANGER.current()),
+		card: String(CARD.current()),
+		control: String(CONTROL.current()),
+		bar: String(BAR.current()),
+		line: String(LINE.current()),
+		rounding: String(RADIUS.current()),
 		autocollapse: prefs.currentAutoCollapse() ? 'on' : 'off',
-		tint_strength: String(currentTintStrength()),
+		tint_strength: String(TSTR.current()),
 		density: prefs.currentDensity(),
-		photo_dim: String(currentPhotoDim()),
-		pattern_size: String(currentPatternSize()),
-		pattern_strength: String(currentPatternStrength()),
-		pattern_ink: currentPatternInk(),
-		content_width: String(currentContentWidth())
+		photo_dim: String(PDIM.current()),
+		pattern_size: String(PSIZE.current()),
+		pattern_strength: String(PSTR.current()),
+		pattern_ink: PINK.current(),
+		content_width: String(CWIDTH.current())
 	};
 }
 /* The resolved router default (the uci value if set, else the built-in) in snapshotAxes() string
- * form, so the Appearance page can grey the Save button when this browser already shows exactly it.
+ * form, so the Appearance tab can grey the Save button when this browser already shows exactly it.
  * Seeded from window.__fsSD at load and replaced with the just-saved snapshot, so a save flips the
  * match without a reload.
  *
@@ -341,15 +321,15 @@ function _resolvedDefault() {
 		control: String(CONTROL.def()),
 		bar: String(BAR.def()),
 		line: String(LINE.def()),
-		rounding: String(radiusDefault()),
+		rounding: String(RADIUS.def()),
 		autocollapse: (prefs.autoCollapseDefault() ? 'on' : 'off'),
-		tint_strength: String(tintStrengthDefault()),
+		tint_strength: String(TSTR.def()),
 		density: prefs.densityDefault(),
-		photo_dim: String(photoDimDefault()),
-		pattern_size: String(patternSizeDefault()),
-		pattern_strength: String(patternStrengthDefault()),
+		photo_dim: String(PDIM.def()),
+		pattern_size: String(PSIZE.def()),
+		pattern_strength: String(PSTR.def()),
 		pattern_ink: PINK.def(),
-		content_width: String(contentWidthDefault())
+		content_width: String(CWIDTH.def())
 	};
 }
 let _savedDefault = _resolvedDefault();
@@ -405,64 +385,39 @@ function resetToBuiltin() {
 	 * first click — the one state no static gate can see and the live check does. */
 	prefs.applyLayout('top');
 	prefs.applyMode('auto');
-	applyPalette('footstrap');
-	applyWallpaper('off');
-	applyTint(0);
-	applyAccent(0);
-	applyGood(0);
-	applyWarn(0);
-	applyDanger(0);
-	applyCard(0);
-	applyControl(0);
-	applyBar(0);
-	applyLine(0);
-	applyRadius(FS_RADIUS_DEFAULT);
+	PALETTE.apply('footstrap');
+	WALLPAPER.apply('off');
+	TINT.apply(0);
+	ACCENT.apply(0);
+	GOOD.apply(0);
+	WARN.apply(0);
+	DANGER.apply(0);
+	CARD.apply(0);
+	CONTROL.apply(0);
+	BAR.apply(0);
+	LINE.apply(0);
+	RADIUS.apply(FS_RADIUS_DEFAULT);
 	prefs.applyAutoCollapse('off');
-	applyTintStrength(FS_TSTR_DEFAULT);
+	TSTR.apply(FS_TSTR_DEFAULT);
 	prefs.applyDensity('normal');
-	applyPhotoDim(FS_PDIM_DEFAULT);
-	applyPatternSize(FS_PSIZE_DEFAULT);
-	applyPatternStrength(FS_PSTR_DEFAULT);
-	applyPatternInk('theme');
-	applyContentWidth(FS_CWIDTH_DEFAULT);
+	PDIM.apply(FS_PDIM_DEFAULT);
+	PSIZE.apply(FS_PSIZE_DEFAULT);
+	PSTR.apply(FS_PSTR_DEFAULT);
+	PINK.apply('theme');
+	CWIDTH.apply(FS_CWIDTH_DEFAULT);
 }
 
 /* ---- the two uploaded wallpapers, browser side ----
  *
  * What the router last saved, what URL that is, and how to paint it. Putting the file THERE is
  * fs-assets.js: a DOMParser pass, a canvas re-encode, a chmod and a rollback, reached only from the
- * Appearance page and so not worth downloading on every admin page. The token accessors stay here
+ * Appearance tab and so not worth downloading on every admin page. The token accessors stay here
  * because `prefs.sd()` is private to this module and because head.ut's pre-paint reads the same fields.
  *
  * Neither is an axis: an axis is per-browser with a router default, and these have no browser
  * layer — one admin uploads once and every device sees it, pre-login included. So they are absent
 
  * from AXIS_KEYS, snapshotAxes() and matchesSavedDefault(), and must not move the Save button. */
-/* NOT a /www symlink, unlike BG_SERVE below: an SVG served as a plain static file is a same-origin
- * document that runs script opened directly (OpenWrt forum thread 251930). This CGI handler reads
- * the fixed /etc/footstrap/pattern.svg path itself and answers with CSP 'none' + sandbox and
- * nosniff, headers uhttpd cannot attach to a static file — see the uci-default and the handler for
- * the rest of the reasoning. Painting stays exactly as before: a URL is a URL to a mask-image. */
-const PAT_SERVE = '/cgi-bin/luci-theme-footstrap-pattern';
-function currentPattern() {
-	const t = prefs.sd('pattern');
-	return (typeof t === 'string' && BG_TOKEN_RE.test(t)) ? t : '';
-}
-function patternUrl(tok) { return PAT_SERVE + '?v=' + tok; }
-
-/* set/clear the tile URL live. This only supplies the url(); whether it PAINTS is the Wallpaper
- * axis (data-wallpaper="pattern"). Exported because fs-assets.js applies the token it just wrote. */
-function applyPattern(tok) {
-	const root = document.documentElement;
-	if (tok) root.style.setProperty('--fs-pattern-url', 'url("' + patternUrl(tok) + '")');
-	else root.style.removeProperty('--fs-pattern-url');
-	prefs.setSD('pattern', tok || '');
-}
-
-/* Still the plain uhttpd symlink the uci-default makes, unlike PAT_SERVE above: fs-assets.js
- * re-encodes every login-bg upload to a JPEG on a canvas before it is sent, so the stored bytes
- * are pixels only — there is no script grammar left in a raster for a direct hit to run. */
-const BG_SERVE = '/luci-static/footstrap/bg';
 /* the cache-bust token charset, an md5/sha hex string. One copy here; head.ut's ucode sanitiser
  * and the pre-paint inline script keep their own identical copies unavoidably, running before this
  * module — see the axes contract in head.ut. */
@@ -471,45 +426,67 @@ const BG_TOKEN_RE = /^[a-f0-9]{6,64}$/;
  * A predicate rather than the pattern itself, so the charset stays stated once. */
 function tokenOk(t) { return BG_TOKEN_RE.test(t); }
 
-/* the token the server last saved, validated to the same hex charset head.ut's sanitiser and
- * pre-paint use, so the Appearance page can build a cache-busted preview src. '' = none. */
-function currentLoginBg() {
-	const t = prefs.sd('login_bg');
-	return (typeof t === 'string' && BG_TOKEN_RE.test(t)) ? t : '';
+/* The pattern and the login-bg photo are the same shape twice: a router-saved cache-bust TOKEN,
+ * read back through prefs.sd(), that sets or clears one url() custom property. Neither is an axis
+ * (see the comment above) — this factory is what a bare url() setter shares with a real axis's
+ * apply(), not membership in AXIS_KEYS. `serve` differs for a reason stated at each call below. */
+function tokenAsset(sdKey, serve, prop) {
+	const current = () => {
+		const t = prefs.sd(sdKey);
+		return (typeof t === 'string' && BG_TOKEN_RE.test(t)) ? t : '';
+	};
+	const url = (tok) => serve + '?v=' + tok;
+	/* set/clear the url() live; whether it PAINTS is the Wallpaper axis (data-wallpaper="pattern"
+	 * or "file"). Exported because fs-assets.js applies the token it just wrote. */
+	const apply = (tok) => {
+		const root = document.documentElement;
+		if (tok) root.style.setProperty(prop, 'url("' + url(tok) + '")');
+		else root.style.removeProperty(prop);
+		prefs.setSD(sdKey, tok || '');
+	};
+	return { current, url, apply };
 }
-function loginBgUrl(tok) { return BG_SERVE + '?v=' + tok; }
 
-/* applyPattern's twin for the photo; data-wallpaper="file" decides whether it paints. */
-function applyLoginBg(tok) {
-	const root = document.documentElement;
-	if (tok) root.style.setProperty('--fs-login-bg-url', 'url("' + loginBgUrl(tok) + '")');
-	else root.style.removeProperty('--fs-login-bg-url');
-	prefs.setSD('login_bg', tok || '');
-}
+/* NOT a /www symlink, unlike LOGIN_BG's plain static path below: an SVG served as a plain static
+ * file is a same-origin document that runs script opened directly (OpenWrt forum thread 251930).
+ * This CGI handler reads the fixed /etc/footstrap/pattern.svg path itself and answers with CSP
+ * 'none' + sandbox and nosniff, headers uhttpd cannot attach to a static file — see the uci-default
+ * and the handler for the rest of the reasoning. Painting stays exactly as before: a URL is a URL
+ * to a mask-image. */
+const PATTERN = tokenAsset('pattern', '/cgi-bin/luci-theme-footstrap-pattern', '--fs-pattern-url');
 
+/* Still the plain uhttpd symlink the uci-default makes, unlike PATTERN's CGI handler above:
+ * fs-assets.js re-encodes every login-bg upload to a JPEG on a canvas before it is sent, so the
+ * stored bytes are pixels only — there is no script grammar left in a raster for a direct hit to
+ * run. */
+const LOGIN_BG = tokenAsset('login_bg', '/luci-static/footstrap/bg', '--fs-login-bg-url');
+
+/* Every axis is exported as the object itself — `{ current, apply, def? }` — not a flat
+ * currentX()/applyX() pair. `pattern` and `loginBg` have the same tokenAsset() shape and export the
+ * same way; the router-default helpers (tokenOk, matchesSavedDefault, ...) stay flat. */
 return baseclass.extend({
-	currentPalette, applyPalette,
-	currentWallpaper, applyWallpaper,
-	currentTint, applyTint,
-	currentAccent, applyAccent,
-	currentGood, applyGood,
-	currentWarn, applyWarn,
-	currentDanger, applyDanger,
-	currentCard, applyCard,
-	currentControl, applyControl,
-	currentBar, applyBar,
-	currentLine, applyLine,
-	currentRadius, applyRadius,
-	currentTintStrength, applyTintStrength,
-	currentPhotoDim, applyPhotoDim,
-	currentPatternSize, applyPatternSize,
-	currentPatternStrength, applyPatternStrength,
-	currentPatternInk, applyPatternInk,
-	currentContentWidth, applyContentWidth, contentWidthDefault,
+	palette: PALETTE,
+	wallpaper: WALLPAPER,
+	tint: TINT,
+	accent: ACCENT,
+	good: GOOD,
+	warn: WARN,
+	danger: DANGER,
+	card: CARD,
+	control: CONTROL,
+	bar: BAR,
+	line: LINE,
+	radius: RADIUS,
+	tintStrength: TSTR,
+	photoDim: PDIM,
+	patternSize: PSIZE,
+	patternStrength: PSTR,
+	patternInk: PINK,
+	contentWidth: CWIDTH,
+	pattern: PATTERN,
+	loginBg: LOGIN_BG,
 
-	currentPattern, patternUrl, applyPattern,
-	currentLoginBg, loginBgUrl, applyLoginBg,
 	tokenOk,
 
-	snapshotAxes, matchesSavedDefault, saveAsDefault, resetToSaved, resetToBuiltin
+	matchesSavedDefault, saveAsDefault, resetToSaved, resetToBuiltin
 });

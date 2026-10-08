@@ -43,7 +43,7 @@ if [ -d /www/luci-static/footstrap ]; then
 	ln -sf /etc/footstrap/login-bg /www/luci-static/footstrap/bg
 	ln -sfn /etc/footstrap/fonts /www/luci-static/footstrap/fonts
 fi
-# Clean up a pre-0.14.13 install's stale pattern symlink — see the header comment above for why this
+# Clean up a pre-0.14.11 install's stale pattern symlink — see the header comment above for why this
 # is the one migration this script makes. `-L` only: never remove a real file some other install
 # step could have left at that path.
 [ -L /www/luci-static/footstrap/pattern.svg ] && rm -f /www/luci-static/footstrap/pattern.svg

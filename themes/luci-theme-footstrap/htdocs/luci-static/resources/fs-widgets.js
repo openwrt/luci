@@ -1,9 +1,10 @@
 'use strict';
 'require baseclass';
 
-/* The theme's UI primitives: the inline-SVG wrapper, the disclosure pair the menu is built on, and
- * the colour control behind the Appearance page's colour axes. Nothing here knows what it is used
- * for, so the menu and the Appearance page share it without requiring each other. */
+/* The theme's UI primitives: the inline-SVG wrapper and two small idioms every module that draws a
+ * control on its own repeats — an idempotent attribute write and Enter/Space activation for an
+ * element with no native key handling. Nothing here knows what it is used for, so the menu, the
+ * chrome and the Overview grid share it without requiring each other. */
 
 /* The one inline-SVG wrapper: every theme icon is a 24x24 stroked outline differing only in path
  * data, so stroke width and linecaps are stated once and cannot drift between call sites.
@@ -15,49 +16,27 @@ function svgIcon(body, cls) {
 		+ body + '</svg>';
 }
 
-/* ---- disclosure primitives, shared by the menu ----
- * A section header is a W3C-APG disclosure control: an <a role="button"> owning a panel it shows
- * and hides. The trigger selector stays a parameter. */
-
-/* Every open and close goes through here so `.open` and aria-expanded cannot disagree: `.open`
- * alone tells a sighted user everything and a screen-reader user nothing. `linkSel` is the
- * layout's trigger (the menu's `:scope > a`). */
-function setOpen(li, on, linkSel) {
-	li.classList.toggle('open', on);
-	li.querySelector(linkSel)?.setAttribute('aria-expanded', on ? 'true' : 'false');
+/* Idempotent attribute write, so a poll tick that finds nothing changed touches no DOM and fires
+ * no mutation record. `value === null` removes the attribute instead of writing the string
+ * "null". Three call sites (menu-footstrap-common.js's meter annotator, fs-chrome.js's indicator
+ * pills, fs-overview.js's card disclosure) carried this same body separately; held here once. */
+function syncAttr(el, name, value) {
+	if (value === null) {
+		if (el.hasAttribute(name)) el.removeAttribute(name);
+	} else if (el.getAttribute(name) !== value) {
+		el.setAttribute(name, value);
+	}
 }
 
-/* An <a role="button"> is given Enter by the browser but not Space, and a disclosure control has
- * to answer both. */
-function wireSpaceKey(link) {
-	link.addEventListener('keydown', (ev) => {
-		if (ev.key !== ' ' && ev.key !== 'Spacebar') return;
+/* Enter/Space activation for an element with no native key handling of its own — a `<span>`
+ * `role="button"`, unlike an `<a role="button">`, gets neither key for free. Calling `activate()`
+ * rather than `el.click()` directly lets a caller forward the activation to a different element
+ * (fs-overview.js's card header activates the pill it labels). */
+function wireActivate(el, activate) {
+	el.addEventListener('keydown', (ev) => {
+		if (ev.key !== 'Enter' && ev.key !== ' ') return;
 		ev.preventDefault();
-		link.click();
-	});
-}
-
-/* A click outside closes; WCAG 2.2 SC 1.4.13 also requires a hover/focus panel to be dismissible
- * from the keyboard, with focus handed back to the trigger. `when` restricts both to flyout mode,
- * where `.open` means "popup panel" — an unfolded accordion must not close on an outside click. */
-function wireDismiss(opts) {
-	const active = () => (opts.when ? opts.when() : true);
-
-	document.addEventListener('click', (ev) => {
-		/* `closest?.`: a document-level listener sees any dispatched click, including one whose
-		 * target is not an Element and has no closest(). The throw would kill this listener for
-		 * the rest of the session. */
-		if (active() && !ev.target.closest?.(opts.inside))
-			opts.close();
-	});
-
-	document.addEventListener('keydown', (ev) => {
-		if (ev.key !== 'Escape' || !active()) return;
-		const open = document.querySelector(opts.open);
-		if (!open) return;
-		const trigger = open.querySelector(opts.trigger);
-		opts.close();
-		trigger?.focus();
+		activate();
 	});
 }
 
@@ -68,7 +47,6 @@ function wireDismiss(opts) {
 
 return baseclass.extend({
 	svgIcon,
-	setOpen,
-	wireSpaceKey,
-	wireDismiss
+	syncAttr,
+	wireActivate
 });
