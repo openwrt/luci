@@ -31,6 +31,7 @@ return baseclass.extend({
 				this.samples = [];
 
 			this.id = res.id;
+			this.now = res.now;
 			this.step = res.step;
 			this.slots = res.slots;
 			this.samples = this.samples.concat(res.samples).filter(sample => sample[TIME] > res.now - res.step * res.slots);
@@ -57,7 +58,7 @@ return baseclass.extend({
 	},
 
 	near(prev, cur) {
-		return (prev != null && cur[TIME] - prev[TIME] <= 2.5 * this.step);
+		return (prev != null && cur[TIME] > prev[TIME] && cur[TIME] - prev[TIME] <= 2.5 * this.step);
 	},
 
 	pair() {
