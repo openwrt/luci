@@ -85,6 +85,43 @@
 	#}
 	{% const fs_page = entityencode(join('-', length(ctx.path) ? ctx.path : ctx.request_path), true) %}
 	<body class="lang_{{ dispatcher.lang }}" data-page="{{ fs_page }}">
+		<script>
+			/* Records every node a script parks directly on <body>: a page that does so makes the next
+			 * navigation a full load, because the document is spent. fs-router.js's
+			 * strayBodyNode()/bodyLittered() read window.__fsBodyAdds. First byte of <body>, before
+			 * any chrome element or the dispatched page's own <div id="view">. Own property of this
+			 * <body> instance, never Node.prototype. */
+			(() => {
+				const body = document.body;
+				if (!body || body.__fsBodyHooked) return;
+				body.__fsBodyHooked = true;
+				const adds = window.__fsBodyAdds || (window.__fsBodyAdds = []);
+				const names = [ 'appendChild', 'insertBefore', 'replaceChild', 'append', 'prepend',
+					'insertAdjacentElement', 'insertAdjacentHTML' ];
+				names.forEach((name) => {
+					const orig = body[name];
+					if (typeof orig !== 'function') return;
+					try {
+						Object.defineProperty(body, name, {
+							configurable: true,
+							writable: true,
+							value() {
+								const before = Array.prototype.slice.call(this.children);
+								const ret = orig.apply(this, arguments);
+								const after = this.children;
+								for (let i = 0; i < after.length; i++) {
+									if (before.indexOf(after[i]) === -1) adds.push(after[i]);
+								}
+								return ret;
+							}
+						});
+					}
+					/* a host that refuses to redefine this one name leaves it unwrapped; the rest
+					 * still are */
+					catch (e) {}
+				});
+			})();
+		</script>
 		{#
 			The wallpaper pattern's paint surface: 15-wallpaper.css masks this element so an
 			uploaded SVG takes the theme's ink. A mask applies to an element's whole rendering,

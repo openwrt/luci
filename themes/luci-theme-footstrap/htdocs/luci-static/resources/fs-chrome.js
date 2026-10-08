@@ -110,6 +110,12 @@ let _probe = null;
 function resolveLen(token, dflt) {
 	if (!_probe) {
 		_probe = document.createElement('div');
+		/* the id is fs-router.js's strayBodyNode() reading an fs-* id as "ours", which is
+		 * a different question from the chrome mark above: this stays unmarked (no data-fs-chrome,
+		 * so the fence still does not spare it from a hostile !important) but still needs SOME fs-*
+		 * name, or an element appended once and never removed would read as body litter and force
+		 * every navigation off this page into a full load. */
+		_probe.id = 'fs-chrome-geom-probe';
 		_probe.setAttribute('aria-hidden', 'true');
 		/* out of flow, no box, no ink: it must never affect layout, scroll extent or hit-testing */
 		_probe.style.cssText = 'position:absolute!important;visibility:hidden!important;' +
