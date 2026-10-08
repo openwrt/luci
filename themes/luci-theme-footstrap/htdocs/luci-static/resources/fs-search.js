@@ -99,48 +99,6 @@ function index() {
 	return _index;
 }
 
-/* ---- extra sources -------------------------------------------------------
- *
- * An optional package can add rows to the same list — one indexes the SECTION titles inside each
- * page, so "footstrap" finds System -> Appearance. A source hands over entries in the shape
- * buildIndex() produces and nothing else: the matching, the ranking and the rendering stay here,
- * or two lists would disagree about what a hit is. Two fields are the source's alone: `onTake`,
- * called when the row is chosen, and `key`, what the recents list stores it under when its `path`
- * is not its own (see keyOf).
- *
- * Registration is a GLOBAL ARRAY, not an export a package requires. This module is fetched on the
- * first gesture and most sessions never make it; a package that had to `require` it to register
- * would pull it onto every page and pay its 4.5 KB for a palette nobody opened. Pushing a function
- * onto `window.__fsSearchSources` costs the package nothing and names no one in either direction.
- *
- * `window.__fsSearchGen` is how a source says its data grew — a harvester fills in over a session
- * — and the stamp below is what rebuilds the pool when it does. */
-const _sources = [];
-let _pool = null, _stamp = -1;
-
-function globalSources() {
-	return Array.isArray(window.__fsSearchSources) ? window.__fsSearchSources : [];
-}
-
-function addSource(fn) {
-	_sources.push(fn);
-	_pool = null;
-}
-function refresh() {
-	_pool = null;
-}
-function pool() {
-	const all = _sources.concat(globalSources());
-	const stamp = all.length + (window.__fsSearchGen || 0);
-	if (_pool && stamp === _stamp) return _pool;
-	_stamp = stamp;
-	_pool = all.reduce((rows, fn) => {
-		try { return rows.concat(fn() || []); }
-		catch (e) { console.error('footstrap: a search source threw', e); return rows; }
-	}, index().slice());
-	return _pool;
-}
-
 /* ---- matching ----------------------------------------------------------- */
 
 /* Every whitespace-separated token must hit something: a second word means AND. Deliberately not
@@ -160,7 +118,7 @@ function search(q, limit) {
 	if (!toks.length) return [];
 
 	const hits = [];
-	for (const e of pool()) {
+	for (const e of index()) {
 		let sum = 0;
 		for (const tok of toks) {
 			const s = tokenScore(e, tok);
@@ -179,19 +137,12 @@ function search(q, limit) {
 /* What the palette shows before anything is typed: an admin lives in three or four pages, so the
  * empty state is its most-used view.
  *
- * Only the KEY is stored, never the title — the title is resolved through the pool on every
- * render, so it follows the UI language and a row whose package went away drops out instead of
- * lingering as a dead row. A page's key is its menu path; a row from a source carries its own
- * `key`, because a section has no dispatcher node and therefore no path that is only its own —
- * the sections source keys one `admin/system/system#Footstrap`, the page it is on plus its own
- * heading. */
+ * Only the PATH is stored, never the title — the title is resolved through the index on every
+ * render, so it follows the UI language and a page an ACL change hides drops out instead of
+ * lingering as a dead row. RECENT_KEY is the one name menu-footstrap-common.js's remember() also
+ * writes; the two modules stay decoupled (see there), so the string is the only thing shared. */
 const RECENT_KEY = 'fs-recent';
 const RECENT_MAX = 8;
-
-/* the string a row is remembered under, and the one menu-footstrap-common's remember() writes */
-function keyOf(e) {
-	return e.key || e.path;
-}
 
 /* The list is WRITTEN by menu-footstrap-common.js, which is on every page — this module is not any
  * more, and a palette that only loads when it is opened cannot be what records where the admin has
@@ -199,11 +150,8 @@ function keyOf(e) {
  * corruption guard and the Array check; only the "these are keys" filter belongs here. */
 function recentEntries() {
 	const recent = prefs.lsGetArr(RECENT_KEY).filter((x) => typeof x === 'string');
-	/* pool(), not index(): a section is recalled exactly as a page is. Against the index alone a
-	 * section key resolved to nothing and the row silently vanished, so taking "Footstrap" left
-	 * only "System" in the list — the page path is all either row carries. */
-	const byKey = new Map(pool().map((e) => [ keyOf(e), e ]));
-	return recent.map((k) => byKey.get(k)).filter(Boolean).slice(0, RECENT_MAX);
+	const byPath = new Map(index().map((e) => [ e.path, e ]));
+	return recent.map((k) => byPath.get(k)).filter(Boolean).slice(0, RECENT_MAX);
 }
 
 /* ---- the palette -------------------------------------------------------- */
@@ -311,16 +259,8 @@ function build() {
 				e.trail.length ? E('span', { 'class': 'fs-search-opt-path' }, [ e.trail.join(' › ') ]) : ''
 			]);
 			/* close before the click reaches the router, which re-renders the chrome underneath;
-			 * no focus return, the user is going elsewhere.
-			 *
-			 * `onTake` is how a row from an extra source finishes the job the href cannot: a
-			 * section row's href can only reach the PAGE, so the source that produced it opens the
-			 * tab and scrolls to the section itself. It fires for a click and for Enter alike —
-			 * Enter synthesises this very click. */
-			a.addEventListener('click', () => {
-				close(false);
-				if (typeof e.onTake === 'function') e.onTake();
-			});
+			 * no focus return, the user is going elsewhere */
+			a.addEventListener('click', () => close(false));
 			a.addEventListener('pointermove', () => { if (at !== i) setActive(i); });
 			list.appendChild(a);
 			return a;
@@ -421,7 +361,5 @@ function openPalette() {
 }
 
 return baseclass.extend({
-	open: openPalette,
-	/* the seam an optional package registers through; see addSource() */
-	addSource, refresh
+	open: openPalette
 });

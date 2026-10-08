@@ -150,7 +150,6 @@
 		{# The router-wide Appearance defaults, read by both the pre-paint below and fs-prefs.js's
 		   current*(), so the Appearance controls show the effective default when this browser has no
 		   localStorage. See the sanitiser above for the unset encodings. #}
-		<script>window.__fsPlugins={{ sprintf('%J', fs_plugins) }};</script>
 		<script>window.__fsSD={layout:"{{ _sd_lay }}",darkmode:"{{ _sd_dark }}",palette:"{{ _sd_pal }}",wallpaper:"{{ _sd_wall }}",tint:"{{ _sd_tint }}",accent:"{{ _sd_acc }}",good:"{{ _sd_good }}",warn:"{{ _sd_warn }}",danger:"{{ _sd_dang }}",card:"{{ _sd_card }}",control:"{{ _sd_ctrl }}",bar:"{{ _sd_bar }}",line:"{{ _sd_line }}",rounding:{{ _sd_round }},autocollapse:"{{ _sd_ac }}",login_bg:"{{ _sd_lbg }}",tint_strength:{{ _sd_tstr }},photo_dim:{{ _sd_pdim }},density:"{{ _sd_dens }}",pattern:"{{ _sd_pat }}",pattern_size:{{ _sd_psize }},pattern_strength:{{ _sd_pstr }},pattern_ink:"{{ _sd_pink }}",content_width:{{ _sd_cwidth }}};</script>
 		<script>
 			/* Each IIFE below pre-paints one Appearance axis before the first frame, duplicating a
