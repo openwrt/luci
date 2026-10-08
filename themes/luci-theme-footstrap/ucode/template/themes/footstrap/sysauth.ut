@@ -107,7 +107,7 @@
 			<div class="cbi-value cbi-value-last">
 				<label class="cbi-value-title" for="luci_password">{{ _('Password') }}</label>
 				<div class="cbi-value-field">
-					<input class="cbi-input-text" type="password" name="luci_password" id="luci_password" autocomplete="current-password" />
+					<input class="cbi-input-text" type="password" name="luci_password" id="luci_password" autocomplete="current-password" autofocus />
 				</div>
 			</div>
 			{#
@@ -181,11 +181,6 @@
 <script>window.__fsHttps={ports:{{ https_ports }},resource:"{{ resource }}"};</script>
 <script>
 	(() => {
-		const input = document.getElementsByName('luci_password')[0];
-
-		if (input)
-			input.focus();
-
 		/* if the router also serves HTTPS, hop over to it before the password goes over this
 		 * connection; the <img> probe is upstream's trick for proving the TLS port answers first
 		 *
