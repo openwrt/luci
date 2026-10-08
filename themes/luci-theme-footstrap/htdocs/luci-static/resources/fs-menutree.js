@@ -19,7 +19,7 @@ function setTree(tree) {
  * reserved for a path outside LuCI's scriptname. */
 function segsFromPath(pathname) {
 	const base = L.env.scriptname || '';
-	if (base && pathname.indexOf(base) !== 0)
+	if (base && !pathname.startsWith(base))
 		return null;
 	const rest = pathname.slice(base.length).replace(/^\/+|\/+$/g, '');
 	return rest.length ? rest.split('/') : [];

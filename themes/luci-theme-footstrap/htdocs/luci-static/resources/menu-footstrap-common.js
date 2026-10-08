@@ -7,6 +7,7 @@
 'require fs-router as router';
 'require fs-prefs as prefs';
 'require fs-sheets as sheets';
+'require fs-widgets as widgets';
 
 /* Page modules: `fs-overview` (Status -> Overview) adds to a stock page rather than owning a
  * route, so it is required only there. A `require` pragma would make it a hard dependency —
@@ -91,8 +92,8 @@ function warmRecent() {
 }
 
 function wireSearch() {
+	/* #fs-search-btn is emitted whenever this module loads (search.ut, !blank_page) */
 	const btn = document.getElementById('fs-search-btn');
-	if (!btn) return;
 	const RT = window.L;
 
 	/* the page this full load landed on; onNavigate covers the SPA path afterwards */
@@ -165,17 +166,6 @@ const FS_METER_INVERTED_DANGER = 100 - FS_METER_DANGER;
 const FS_METER_INVERTED = new Set([ _('Total Available'), _('Swap free') ]);
 const FS_METER_NEUTRAL = new Set([ _('Buffered'), _('Cached') ]);
 
-/* Write an attribute only when the value actually changes, so a poll tick that reads the same
- * numbers back touches no DOM and fires no attribute-mutation observer. `value === null` removes
- * the attribute instead of writing the string "null". */
-function fsSyncAttr(el, name, value) {
-	if (value === null) {
-		if (el.hasAttribute(name)) el.removeAttribute(name);
-	} else if (el.getAttribute(name) !== value) {
-		el.setAttribute(name, value);
-	}
-}
-
 /* The meter's name, if the markup already states one — never invented. A `.cbi-value` row's own
  * label (the RSSI/RSRP gallery shape) or a key/value table row's first cell (Memory, Storage, CPU
  * load on Overview) each stand for the whole row; a bare meter with neither (Software's disk-space
@@ -211,8 +201,7 @@ function findProgressbarLabel(pg) {
  * cannot pick a wrong number out of a title carrying several. An empty title or one with no
  * percentage in any of the three shapes yields null, on purpose — nothing to annotate. `%d` is the
  * unclamped percentage, so the result can still read past 100 or under 0 and is clamped by the
- * caller, the same way `window.progressbar` clamps its own `level`, below. Exported for
- * tests/meter.test.mjs, which is the only caller that needs the parse on its own. */
+ * caller, the same way `window.progressbar` clamps its own `level`, below. */
 function parseMeterPercent(title) {
 	if (title == null) return null;
 	const m = (/\((-?\d+)%\)\s*$/).exec(title) || (/(-?\d+)%\s*$/).exec(title) || (/^(-?\d+)%/).exec(title);
@@ -230,14 +219,14 @@ function annotateMeter(pg) {
 	const pc = parseMeterPercent(title);
 	if (pc == null) return;
 	const level = pc < 0 ? 0 : (pc > 100 ? 100 : pc);
-	fsSyncAttr(pg, 'role', 'progressbar');
-	fsSyncAttr(pg, 'aria-valuemin', '0');
-	fsSyncAttr(pg, 'aria-valuemax', '100');
-	fsSyncAttr(pg, 'aria-valuenow', String(level));
-	fsSyncAttr(pg, 'aria-valuetext', title);
+	widgets.syncAttr(pg, 'role', 'progressbar');
+	widgets.syncAttr(pg, 'aria-valuemin', '0');
+	widgets.syncAttr(pg, 'aria-valuemax', '100');
+	widgets.syncAttr(pg, 'aria-valuenow', String(level));
+	widgets.syncAttr(pg, 'aria-valuetext', title);
 	const label = findProgressbarLabel(pg);
 	const name = label ? label.textContent.trim() : '';
-	fsSyncAttr(pg, 'aria-label', label ? name : null);
+	widgets.syncAttr(pg, 'aria-label', label ? name : null);
 	/* Polarity: an unrecognised bar (a third-party app's own meter included — see the Sets above)
 	 * keeps the plain fill-based rule, on purpose. A wrong red is worse than a missing colour, but a
 	 * MISSING colour on the common case — a used-based fill, which is what an app most often draws —
@@ -252,12 +241,12 @@ function annotateMeter(pg) {
 	} else {
 		dataLevel = level >= FS_METER_DANGER ? 'danger' : (level >= FS_METER_WARN ? 'warn' : null);
 	}
-	fsSyncAttr(pg, 'data-fs-level', dataLevel);
+	widgets.syncAttr(pg, 'data-fs-level', dataLevel);
 }
 
 /* Every `.cbi-progressbar[title]` under `root` — the markup itself, not who last drew it. Called
  * from fs-overview.js's own poll-tick observer (see there for why this file does not run a second
- * one); `fsSyncAttr` above makes a re-run over an unchanged bar a no-op read. */
+ * one); `widgets.syncAttr` above makes a re-run over an unchanged bar a no-op read. */
 function annotateMeters(root) {
 	(root || document).querySelectorAll('.cbi-progressbar[title]').forEach(annotateMeter);
 }
@@ -340,7 +329,7 @@ ensureOverviewHelpers();
  *
  *   fs-menutree    path <-> menu node, alias/firstchild resolution (a port of dispatcher.uc)
  *   fs-prefs       the Appearance axes and their localStorage
- *   fs-widgets     the inline-SVG wrapper, the disclosure primitives, the colour control
+ *   fs-widgets     the inline-SVG wrapper, an idempotent attribute write, Enter/Space activation
  *   fs-chrome      mode menu, section tabs, the rail toggle, the "does it still fit" measurements
  *   fs-router      the SPA client router (docs/spa-router.md)
  *   fs-sheets      the guard against a view's injected CSS repainting every later page
@@ -359,9 +348,6 @@ return baseclass.extend({
 	/* the seam fs-overview.js calls, on its own already-coalesced poll-tick observer, to annotate
 	 * the meters a stock Status -> Overview include draws with its own local progressbar() */
 	annotateMeters,
-
-	/* module-private otherwise: tests/meter.test.mjs drives the percent parse and the clamp/threshold
-	 * split directly rather than through a live `.cbi-progressbar[title]` walk */
 
 	init(renderMainMenu) {
 		/* First, and outside the promise: a third-party sheet that outranks the chrome is already

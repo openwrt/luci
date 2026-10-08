@@ -1,11 +1,11 @@
 'use strict';
 'require baseclass';
 
-/* The installed version, shown on the Appearance page with no network call; which version is
+/* The installed version, shown on the Appearance tab with no network call; which version is
  * available is the package manager's question.
  *
- * The Makefile (Build/Prepare), dev-sync.sh and tools/stage.sh sed the literal below BY FILE
- * NAME, so it cannot move to another file without changing all three. An unstamped checkout
+ * The version stamp is written into the literal below BY FILE NAME, so it must
+ * stay in this file. An unstamped checkout
  * stays 'dev'. */
 const FS_VERSION = '0.0.0-dev';
 

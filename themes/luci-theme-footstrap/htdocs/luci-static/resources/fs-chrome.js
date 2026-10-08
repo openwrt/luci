@@ -4,6 +4,7 @@
 'require fs-fit as fit';
 'require fs-prefs as prefs';
 'require fs-menutree as tree';
+'require fs-widgets as widgets';
 
 /* The chrome around the content: the mode menu, the section tabs, the rail toggle and the
  * measurements deciding how much room each gets. The main menu is injected by menu-footstrap.js as
@@ -18,11 +19,8 @@ function setRenderMain(fn) {
 
 /* section tabs -> #tabmenu (horizontal) */
 function renderTabMenu(node, url, level) {
+	/* #tabmenu is emitted whenever this module loads (notices.ut, !blank_page) */
 	const container = document.querySelector('#tabmenu');
-	/* a template without the container must not reject: an unhandled rejection here kills the
-	 * whole ui.menu.load() chain, i.e. every menu */
-	if (!container)
-		return E([]);
 	const ul = E('ul', { 'class': 'tabs' });
 	const children = ui.menu.getChildren(node);
 	let activeNode = null;
@@ -39,15 +37,13 @@ function renderTabMenu(node, url, level) {
 	});
 
 	if (ul.children.length === 0)
-		return E([]);
+		return;
 
 	container.appendChild(ul);
 	container.style.display = '';
 
 	if (activeNode)
 		renderTabMenu(activeNode, url + '/' + activeNode.name, (level || 0) + 1);
-
-	return ul;
 }
 
 /* ---- tab-strip auto-fit ----
@@ -107,7 +103,7 @@ let _probe = null;
  * it carries no chrome mark and the fence deliberately does not spare it. Every declaration is
  * therefore !important, which a style-attribute wins outright: an app carrying
  * `div { min-width: 500px !important }` otherwise wins every read and the sidebar folds into a bar
- * on a 1857px desktop (issue #19) — the cut becomes 500 + 500 + 1000 = 2000 CSS px, which is why it
+ * on a 1857px desktop — the cut becomes 500 + 500 + 1000 = 2000 CSS px, which is why it
  * was reported as a zoom bug: Chrome at 90% gives 2063 CSS px and passes, 100% gives 1857 and
  * fails. box-sizing is stated for the same reason — getComputedStyle().width is
  * the content box, so a foreign `border-box` plus padding would shave the reading. */
@@ -150,21 +146,20 @@ function shellGeometry() {
 	/* the gutter is re-asked even on a memo hit: it moves with the width, not the density */
 	if (_geom && _geomDensity === key) return _geom;
 	_geomDensity = key;
-	const px = (name, dflt) => resolveLen(name, dflt);
 	const g = {
-		contentMin: px('--fs-content-min', GEOM_DFLT.contentMin),
-		sidebarW:   px('--fs-sidebar-w', GEOM_DFLT.sidebarW),
-		railW:      px('--fs-rail-w', GEOM_DFLT.railW),
+		contentMin: resolveLen('--fs-content-min', GEOM_DFLT.contentMin),
+		sidebarW:   resolveLen('--fs-sidebar-w', GEOM_DFLT.sidebarW),
+		railW:      resolveLen('--fs-rail-w', GEOM_DFLT.railW),
 		/* the token is one side's padding; the column loses it twice. It is only the fallback —
 		 * measureShell() overwrites this with the gutter the column actually got, which nothing
 		 * has measured before the first fitter (and the login page has no `.fs-content`). */
-		contentPad: px('--fs-content-pad', GEOM_DFLT.contentPad / 2) * 2,
+		contentPad: resolveLen('--fs-content-pad', GEOM_DFLT.contentPad / 2) * 2,
 		/* where the column stops growing, i.e. where surplus becomes margin — see columnWidth() */
-		contentMax: px('--fs-content-max', GEOM_DFLT.contentMax)
+		contentMax: resolveLen('--fs-content-max', GEOM_DFLT.contentMax)
 	};
 	/* Plausibility, at the cost of one comparison: the rail is the sidebar collapsed, so
 	 * 0 < railW < sidebarW holds by construction. Both known failures destroy it — a hijacked probe
-	 * reports one foreign width for all four (issue #19), a renamed or absent token reports 0 for
+	 * reports one foreign width for all four, a renamed or absent token reports 0 for
 	 * all four (an abs-positioned empty div shrinks to 0, which is finite, so the per-read fallback
 	 * never fires). Only the relation between the numbers gives either away. */
 	const sane = (g.railW > 0 && g.railW < g.sidebarW && g.contentMin > 0);
@@ -230,7 +225,7 @@ function columnWidth(g, state) {
 	/* The column stops growing: `.fs-content` is `max-width: var(--fs-content-max); margin: 0
 	 * auto`, so past ~1500px the surplus becomes margin, and without the cap this answers ~2280 on
 	 * a 2560px window for a column that is 1224 wide. No caller can reach that today (both ask a
-	 * lower bound), but this is the exported answer to "how wide is the content column". */
+	 * lower bound), but this is the answer to "how wide is the content column". */
 	const room = Math.min(state.outerW - cut, g.contentMax);
 	return Math.max(0, room - g.contentPad);
 }
@@ -278,11 +273,11 @@ function fitChrome() {
 	 * currently needs — not only shorter. A `min-height` floor alone stops the shrink but not the
 	 * grow: with the classes off and `fs-dense1`/`fs-dense2` stripped by `fitTabStrips()`, this pass
 	 * measured the bar walking 230 -> 202 -> 164 -> 144 -> 123 -> 131 -> 123px against a settled
-	 * 123px on owrt2512 at 767px — 107px of growth a floor never sees, on top of the shrink it does
+	 * 123px at 767px — 107px of growth a floor never sees, on top of the shrink it does
 	 * — each step landing between two of the poll's own separate section refreshes, so the browser
 	 * paints in between and the reader is moved by exactly as much, on Chromium and Firefox as well
-	 * as Safari (`tools/fit-quiet.mjs`, plus a probe that pauses the layout mid-pass). `min-height`
-	 * alone was measured to `accc451`'s WebKit-only diagnosis instead — WebKit's own scroll anchoring
+	 * as Safari (measured with a probe that pauses the layout mid-pass). `min-height`
+	 * alone was measured against an earlier WebKit-only diagnosis instead — WebKit's own scroll anchoring
 	 * looked like the whole story only because it is the one engine with no anchoring at all to hide
 	 * this walk behind; Chromium and Firefox absorb it the same way they absorb any other layout
 	 * change, which is not the same as not producing it.
@@ -401,6 +396,7 @@ function clusterFitsBrandRow(bar, menu) {
 
 /* modes -> #modemenu; drives the injected renderMainMenu for the active mode */
 function renderModeMenu(node, renderMainMenu) {
+	/* #modemenu is emitted whenever this module loads (header.ut, !blank_page) */
 	const ul = document.querySelector('#modemenu');
 	const children = ui.menu.getChildren(node);
 
@@ -409,18 +405,14 @@ function renderModeMenu(node, renderMainMenu) {
 			? child.name === L.env.requestpath[0]
 			: index === 0;
 
-		/* the main menu must render even where a template has no #modemenu */
-		if (ul)
-			ul.appendChild(E('li', { 'class': isActive ? 'active' : '' }, [
-				E('a', { 'href': L.url(child.name) }, [ _(child.title) ])
-			]));
+		ul.appendChild(E('li', { 'class': isActive ? 'active' : '' }, [
+			E('a', { 'href': L.url(child.name) }, [ _(child.title) ])
+		]));
 
 		if (isActive)
 			renderMainMenu(child, child.name);
 	});
 
-	if (!ul)
-		return;
 	if (children.length <= 1)
 		ul.classList.add('single');
 	if (ul.children.length > 1)
@@ -431,13 +423,15 @@ function renderModeMenu(node, renderMainMenu) {
  * every SPA nav. Containers are cleared first so a re-render does not stack duplicates. */
 function renderChrome() {
 	const root = tree.tree();
+	/* #modemenu/#topmenu/#tabmenu are emitted whenever this module loads (header.ut/notices.ut,
+	 * !blank_page) */
 	const modemenu = document.querySelector('#modemenu');
 	const topmenu  = document.querySelector('#topmenu');
 	const tabmenu  = document.querySelector('#tabmenu');
 
-	if (modemenu) { modemenu.innerHTML = ''; modemenu.style.display = 'none'; modemenu.classList.remove('single'); }
-	if (topmenu)  topmenu.innerHTML = '';
-	if (tabmenu)  { tabmenu.innerHTML = ''; tabmenu.style.display = 'none'; }
+	modemenu.innerHTML = ''; modemenu.style.display = 'none'; modemenu.classList.remove('single');
+	topmenu.innerHTML = '';
+	tabmenu.innerHTML = ''; tabmenu.style.display = 'none';
 
 	renderModeMenu(root, _renderMain);
 
@@ -461,8 +455,8 @@ function renderChrome() {
  * <html data-rail> (head.ut re-applies it before paint) and in localStorage; everything else is
  * CSS keyed off that attribute. */
 function wireRail() {
+	/* #fs-rail-toggle is emitted whenever this module loads (header.ut, !blank_page) */
 	const btn = document.getElementById('fs-rail-toggle');
-	if (!btn) return;
 
 	function sync() {
 		const on = prefs.currentRail();
@@ -484,7 +478,7 @@ function wireRail() {
 }
 
 /* An indicator pill carries its meaning as prose ("Unsaved Changes: 2") and the collapsed rail is
- * 68px wide, so the pill wraps onto three lines and hangs past the rail's edge (issue #14). CSS
+ * 68px wide, so the pill wraps onto three lines and hangs past the rail's edge. CSS
  * squares the pill there and draws this attribute instead of the label — a text node cannot be
  * reached by a selector, so the badge is lifted into an attribute here.
  *
@@ -494,38 +488,23 @@ function wireRail() {
  * stays in the label for screen readers, and in `title` for the pointer. */
 const IND_DOT = '•';
 
-/* Idempotent attribute write, so a poll tick that finds nothing changed touches no DOM — same
- * shape as `fsSyncAttr` in menu-footstrap-common.js, restated rather than imported (that file does
- * not export it). */
-function syncIndAttr(el, name, value) {
-	if (value === null) {
-		if (el.hasAttribute(name)) el.removeAttribute(name);
-	} else if (el.getAttribute(name) !== value) {
-		el.setAttribute(name, value);
-	}
-}
-
 /* A CLICKABLE `[data-indicator]` (the poll pill, "Unsaved Changes: N", …) ships as a bare
  * span: no role, name or tabindex, so Tab skips it and a screen reader
  * announces a run of text with no name, role or state (WCAG 2.1.1, 4.1.2). ui.showIndicator's own
  * click handler already lives on this exact element — this only adds the second, W3C-APG way to
  * reach it; it does not add a competing one. The name is the pill's own prose ("Refreshing"),
- * never invented. Enter/Space call el.click() because a <span>, unlike an <a>, gets neither key
- * for free (contrast fs-widgets.js's wireSpaceKey, written for an <a role="button">); calling
- * click() cannot double-fire the mouse handler, since a keydown is not a click. */
+ * never invented. widgets.wireActivate() calls el.click() because a <span>, unlike an <a>, gets
+ * neither Enter nor Space for free; calling click() cannot double-fire the mouse handler, since a
+ * keydown is not a click. */
 function wireIndicatorKeyboard(el) {
 	if (el.dataset.fsWired) return;
 	el.dataset.fsWired = '1';
-	el.addEventListener('keydown', (ev) => {
-		if (ev.key !== 'Enter' && ev.key !== ' ' && ev.key !== 'Spacebar') return;
-		ev.preventDefault();
-		el.click();
-	});
+	widgets.wireActivate(el, () => el.click());
 }
 
 function wireIndicatorCounts() {
+	/* #indicators is emitted whenever this module loads (header.ut, !blank_page) */
 	const box = document.getElementById('indicators');
-	if (!box) return;
 
 	function stamp() {
 		box.querySelectorAll('[data-indicator]').forEach((el) => {
@@ -541,9 +520,9 @@ function wireIndicatorCounts() {
 			 * replaces. The ring and the pointer cursor in theme/20-shell.css are scoped to
 			 * `[data-clickable]` for the same reason; the two must not disagree. */
 			if (el.hasAttribute('data-clickable')) {
-				syncIndAttr(el, 'role', 'button');
-				syncIndAttr(el, 'tabindex', '0');
-				syncIndAttr(el, 'aria-label', txt.trim() || null);
+				widgets.syncAttr(el, 'role', 'button');
+				widgets.syncAttr(el, 'tabindex', '0');
+				widgets.syncAttr(el, 'aria-label', txt.trim() || null);
 				wireIndicatorKeyboard(el);
 			}
 		});
@@ -601,8 +580,7 @@ return baseclass.extend({
 		 * motion sampler `scrolling()` reads). A caller landing in that window, most of all
 		 * fs-select's, got the width the PREVIOUS viewport had: at 568px settling to 390px, model
 		 * stayed 568 for up to 220ms of the 400 (measured: −178px, exactly 568−390, against a probe
-		 * resizing the window mid-settle, and live-audit's `geometry|fs-content` finding on owrt2410,
-		 * CI run 34364446910).
+		 * resizing the window mid-settle, and a live geometry audit on 24.10).
 		 *
 		 * So the window's own width is compared fresh on every call, not only when `_shellOuter`
 		 * is still zero. `clientWidth` is the one read the old "no layout read" promise here was
@@ -621,8 +599,5 @@ return baseclass.extend({
 		});
 	},
 
-	/* exported for tests/chrome-geometry.test.mjs (no tests ship in the package): driving the
-	 * arithmetic directly is the only way to cover every combination of layout, rail and width
-	 * without a browser */
 	wireRail
 });

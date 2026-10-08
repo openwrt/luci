@@ -2,8 +2,8 @@
 # wallpaper pattern and the webfonts in /etc/footstrap/fonts. All three are written at runtime, so
 # they survive a package upgrade on their own; a firmware sysupgrade keeps only paths listed here
 # (or in a conffile / /etc/sysupgrade.conf).
-# Not conffiles: they live outside root/etc/config, and tools/conffiles.mjs rejects a
-# conffiles-define entry the package does not ship.
+# Not conffiles: they live outside root/etc/config, and a conffiles-define entry
+# the package does not ship is rejected.
 /etc/footstrap/login-bg
 /etc/footstrap/pattern.svg
 # The whole directory: the faces plus the fonts.css generated beside them. Keeping the faces

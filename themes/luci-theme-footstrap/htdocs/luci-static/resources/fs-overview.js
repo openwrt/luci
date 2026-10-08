@@ -3,6 +3,7 @@
 'require dom';
 'require network';
 'require fs-fit as fit';
+'require fs-widgets as widgets';
 'require menu-footstrap-common as common';
 
 /* Overview layout only: renders nothing of its own, it re-arranges the STOCK System / Memory /
@@ -21,8 +22,6 @@
 /* section title -> grid role. _() with no msgctxt on purpose: these must resolve to exactly what
  * luci-mod-status resolves to, or the titles stop matching. Built once, not per poll tick. */
 const ROLES = { [_('System')]: 'sys', [_('Memory')]: 'mem', [_('Storage')]: 'sto' };
-/* the data-page value four call sites compare against; a string literal is not mangled, so a
- * repeat is paid in full on flash every time (measured: 24 B x4 -> 37 B, 59 B saved) */
 
 function headerEl(sec) {
 	/* two title markups, one per release: 25.12 wraps the heading (`.cbi-title > h3`), 24.10 emits
@@ -46,26 +45,14 @@ function sectionTitle(sec) {
 
 /* ---- keyboard disclosure: the card header becomes the toggle, the pill becomes its glyph ----
  *
- * Live on owrt2512 (25.12.4), Status -> Overview carries 14 `[data-clickable]` elements — the
+ * On 25.12, Status -> Overview carries 14 `[data-clickable]` elements — the
  * topbar poll pill plus one Hide/Show toggle per card — and every one is a bare <span>: no
  * tabindex, no role, no aria-expanded. Tab never reaches one and a screen reader announces a run
  * of text with no name, role or state. WCAG 2.1.1 Keyboard (A), 4.1.2 Name, Role, Value (A).
- * docs/findings.md, "A card cannot be collapsed from the keyboard".
  *
  * index.js's own pill keeps doing the actual show/hide — untouched, so mouse behaviour for anyone
  * clicking it does not change. The header becomes a second, W3C-APG way to reach the SAME handler,
  * not a competing one. */
-
-/* Idempotent attribute write, so a poll tick that finds nothing changed touches no DOM and fires
- * no mutation record. Same shape as `fsSyncAttr` in menu-footstrap-common.js — restated rather than
- * imported, since that file does not export it. */
-function syncAttr(el, name, value) {
-	if (value === null) {
-		if (el.hasAttribute(name)) el.removeAttribute(name);
-	} else if (el.getAttribute(name) !== value) {
-		el.setAttribute(name, value);
-	}
-}
 
 /* index.js's own attribute: "inactive" is expanded (the pill reads "Hide"), "active" is collapsed
  * (it reads "Show") — the chevron mirror in pages/20-overview.css reads the same attribute the
@@ -96,14 +83,14 @@ function wireDisclosure(sec) {
 	const panel = panelFor(h);
 	if (panel && !panel.id) panel.id = 'fs-ovl-panel-' + (_panelSeq++);
 
-	syncAttr(h, 'role', 'button');
-	syncAttr(h, 'tabindex', '0');
-	syncAttr(h, 'aria-controls', panel ? panel.id : null);
-	syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
+	widgets.syncAttr(h, 'role', 'button');
+	widgets.syncAttr(h, 'tabindex', '0');
+	widgets.syncAttr(h, 'aria-controls', panel ? panel.id : null);
+	widgets.syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
 	/* the header now carries the pill's name, role and state; a screen reader user tabbing past it
 	 * to a second, unlabelled clickable span would hear an unexplained duplicate control — same
-	 * reasoning as the aria-hidden on svgIcon()'s output, fs-widgets.js:12 */
-	syncAttr(label, 'aria-hidden', 'true');
+	 * reasoning as the aria-hidden on svgIcon()'s output, fs-widgets.js */
+	widgets.syncAttr(label, 'aria-hidden', 'true');
 
 	if (h.dataset.fsWired) return;
 	h.dataset.fsWired = '1';
@@ -112,22 +99,18 @@ function wireDisclosure(sec) {
 		/* a click landing on the pill itself already ran index.js's own handler; forwarding here
 		 * too would toggle the card twice */
 		if (ev.target.closest?.('[data-indicator="poll-status"]') !== label) label.click();
-		syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
+		widgets.syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
 	});
 	/* the pill is an <a>-less <span>, so neither key is native here — contrast
-	 * fs-widgets.js's wireSpaceKey, written for an <a role="button">, which gets Enter for free
-	 * and needs only Space added */
-	h.addEventListener('keydown', (ev) => {
-		if (ev.key !== 'Enter' && ev.key !== ' ' && ev.key !== 'Spacebar') return;
-		ev.preventDefault();
-		label.click();
-	});
+	 * menu-footstrap.js's wireSpaceKey, written for an <a role="button">, which gets Enter for
+	 * free and needs only Space added */
+	widgets.wireActivate(h, () => label.click());
 }
 
 /* A `.cbi-section` LuCI still renders when a stock include has nothing to show this tick: title
  * "-", the poll pill its only content, 72px tall on the live Overview — seventh there (a fixture is
- * not proof of position: docs/playground.html puts it first). Real and cosmetic, so it is
- * suppressed rather than left as a rung in the tab order with nothing behind its own name. */
+ * not proof of position). Real and cosmetic, so it is suppressed rather than left as a rung in the
+ * tab order with nothing behind its own name. */
 function hideEmptyCard(sec) {
 	if (sectionTitle(sec) === '-') sec.classList.add('fs-ovl-empty');
 }
@@ -165,8 +148,8 @@ function arrange() {
 	/* an SPA nav can leave the observer wired while another page renders into #view: detach as soon
 	 * as the route stops being the overview. body[data-page] carries the DISPATCH path from both
 	 * the server template and the router, so /admin/status (firstchild -> overview) matches. */
-	if ((document.body.getAttribute('data-page') || '') !== /* spelled out, not hoisted: tools/page-modules.mjs reads this value out of the module's
-	 * SOURCE to check it against the map in menu-footstrap-common.js */
+	if ((document.body.getAttribute('data-page') || '') !== /* spelled out, not hoisted: this value is read out of the module's
+	 * SOURCE and checked against the map in menu-footstrap-common.js */
 	'admin-status-overview') {
 		stopWatch();
 		return;
@@ -216,15 +199,13 @@ function arrange() {
 	_wrapEl = wrap;
 }
 
-/* Stock sections render async and repaint every poll, so watch #view and re-run arrange(),
- * coalesced and one observer per #view node. The SPA router may replace #view between visits, so
- * re-attach when the observed node is no longer the current one — a singleton bound to the first
- * #view would watch a detached tree and the grid would never apply again. */
-let _observer = null, _observedRoot = null, _routeObserver = null;
+/* Stock sections render async and repaint every poll, so watch #maincontent and re-run arrange(),
+ * coalesced. #maincontent (unlike #view) outlives every SPA swap, so one observer, attached once,
+ * is never stale and never needs to be re-attached. */
+let _observer = null, _routeObserver = null;
 function stopWatch() {
 	if (_observer) _observer.disconnect();
 	_observer = null;
-	_observedRoot = null;
 	_wrapEl = null;	/* the grid belongs to the #view we are leaving */
 }
 function watch() {
@@ -234,16 +215,12 @@ function watch() {
 	 * first — so the observer bound here read `isConnected: false` after one round trip and the
 	 * grid stopped being re-arranged on every poll tick, silently, until the next full load. The
 	 * shell's column outlives every swap. Same fault, same fix as fs-appearance.js. */
-	const root = document.getElementById('maincontent') || view;
-	if (_observer && _observedRoot !== root)
-		stopWatch();
+	const root = document.getElementById('maincontent');
 	arrange();
-	/* a chrome module is alive on every page, so without the route check an observer would attach
-	 * to #view on, say, the firewall page and re-run arrange() for every table mutation */
-	if (_observer || !view ||
-	    (document.body.getAttribute('data-page') || '') !== 'admin-status-overview')
+	/* the caller (onOverview(), via wire()'s data-page observer) already confirmed the overview
+	 * route before reaching here; !view alone covers the mid-navigation race above */
+	if (_observer || !view)
 		return;
-	_observedRoot = root;
 	/* one arrange() per frame, however many mutations a poll tick delivers (fit.frame — the
 	 * theme's shared coalescer, fs-fit.js) */
 	_observer = new MutationObserver(fit.frame(arrange));

@@ -8,7 +8,7 @@
  i18n, and the rule the other templates point at. A msgid is a GLOBAL name: LuCI serves one merged
  catalogue — load_catalog() loads every *.<lang>.lmo and a lookup returns the first archive holding
  the hash — so readdir order decides who owns a string, and the Appearance layout toggle rendered
- "Максимум" on a Russian router because another catalogue translates `Top` as "maximum" (issue #6).
+ "Максимум" on a Russian router because another catalogue translates `Top` as "maximum".
  Anything left bare is a name anyone may take, and contexting cannot be selective.
 
  So every Appearance label carries the `footstrap` msgctxt, while the chrome's own strings — Skip
@@ -35,7 +35,7 @@
 	/* Every option saveAsDefault() writes, listed once and read back in a loop. A hand-written
 	 * literal with one line per axis drops an axis silently: Save to router reports success, the
 	 * file on disk is correct, and "Reset to router" lands on the BUILT-IN look because the value
-	 * the server hands the client was never there. tools/axes.mjs checks this list against
+	 * the server hands the client was never there. This list is checked against
 	 * snapshotAxes().
 	 *
 	 * '' rather than a raw undefined when unset, so head.ut's `!= ''` guards fire: int(undefined)
