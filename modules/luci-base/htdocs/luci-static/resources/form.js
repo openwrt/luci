@@ -527,7 +527,8 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * to present configuration sections in different ways. Refer to the
 	 * documentation of the different section classes for details.
 	 *
-	 * @param {LuCI.form.AbstractSection} cbiClass (sectionclass)
+	 * @template T
+	 * @param {function(new:T, ...*)} cbiClass (sectionclass)
 	 * The section class to use for rendering the configuration section.
 	 * Note that this value must be the class itself, not a class instance
 	 * obtained from calling `new`. It must also be a class derived from
@@ -538,7 +539,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * given section class. Refer to the class specific constructor
 	 * documentation for details.
 	 *
-	 * @returns {LuCI.form.AbstractSection}
+	 * @returns {T}
 	 * Returns the instantiated section class instance.
 	 */
 	section(cbiClass, ...args) {
@@ -1039,7 +1040,8 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * Note that [taboption()]{@link LuCI.form.AbstractSection#taboption}
 	 * should be used instead if this form section element uses tabs.
 	 *
-	 * @param {LuCI.form.AbstractValue} cbiClass
+	 * @template T
+	 * @param {function(new:T, ...*)} cbiClass
 	 * The option class to use for rendering the configuration option. Note
 	 * that this value must be the class itself, not a class instance obtained
 	 * from calling `new`. It must also be a class derived from
@@ -1054,7 +1056,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * Throws a `TypeError` exception in case the passed class value is not a
 	 * descendant of {@link LuCI.form.AbstractValue AbstractValue}.
 	 *
-	 * @returns {LuCI.form.AbstractValue}
+	 * @returns {T}
 	 * Returns the instantiated option class instance.
 	 */
 	option(cbiClass, ...args) {
@@ -1072,7 +1074,8 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * @param {string} tabName
 	 * The name of the section tab to add the option element to.
 	 *
-	 * @param {LuCI.form.AbstractValue} cbiClass
+	 * @template T
+	 * @param {function(new:T, ...*)} cbiClass
 	 * The option class to use for rendering the configuration option. Note
 	 * that this value must be the class itself, not a class instance obtained
 	 * from calling `new`. It must also be a class derived from
@@ -1091,7 +1094,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * Throws a `TypeError` exception in case the passed class value is not a
 	 * descendant of {@link LuCI.form.AbstractValue AbstractValue}.
 	 *
-	 * @returns {LuCI.form.AbstractValue}
+	 * @returns {T}
 	 * Returns the instantiated option class instance.
 	 */
 	taboption(tabName, cbiClass, ...args) {
@@ -6040,7 +6043,7 @@ const CBIDirectoryPicker = CBIValue.extend(/** @lends LuCI.form.DirectoryPicker.
  * is only used internally and does not need to relate to any underlying UCI
  * option name.
  *
- * @param {LuCI.form.AbstractSection} subsection_class
+ * @param {function(new:LuCI.form.AbstractSection, ...*)} subsection_class
  * The class to use for instantiating the nested section element. Note that
  * the class value itself is expected here, not a class instance obtained by
  * calling `new`. The given class argument must be a subclass of the
