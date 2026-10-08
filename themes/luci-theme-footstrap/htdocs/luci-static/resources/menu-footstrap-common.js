@@ -52,25 +52,17 @@ function wirePageModules() {
  * and the warm pass that uses it, so both live here, in the file every page already loads.
  *
  * The palette reads the list back from localStorage when it opens, so the two halves share the key
- * and nothing else. */
+ * and nothing else — fs-search.js owns the "recently visited" feature, so RECENT_KEY and RECENT_MAX
+ * below have to match its constants of the same name exactly. */
 const RECENT_KEY = 'fs-recent';
 const RECENT_MAX = 8;
 const RECENT_WARM = 5;
 
-/* A key is a menu path, or a page path plus the heading of a section inside it
- * (`admin/system/system#Footstrap`) — a section has no dispatcher node to name it, and only the
- * source that produced the row can build that half. Exported for exactly that: the writer stays
- * one function, or the two halves would drift on the cap and the de-duplication. */
+/* A key is a menu path — what the router can navigate to and what warmRecent() prefetches. */
 function remember(key) {
 	if (typeof key !== 'string' || !key) return;
 	const recent = prefs.lsGetArr(RECENT_KEY).filter((x) => typeof x === 'string');
 	prefs.lsSet(RECENT_KEY, JSON.stringify([ key ].concat(recent.filter((p) => p !== key)).slice(0, RECENT_MAX)));
-}
-
-/* the page half of a key: what the router can navigate to and what warmRecent() prefetches */
-function pageOf(key) {
-	const h = key.indexOf('#');
-	return h < 0 ? key : key.slice(0, h);
 }
 
 /* ---- warm the pages this admin actually uses ----
@@ -87,10 +79,9 @@ function pageOf(key) {
 function warmRecent() {
 	try { if (navigator.connection && navigator.connection.saveData) return; } catch (e) {}
 	const here = (L.env.dispatchpath || []).join('/');
-	/* Keys, not paths: a section key names the page it sits on, and two sections of one page must
-	 * warm it once — the module chain is the page's. */
+	/* already de-duplicated: remember() drops the key from its old slot before re-adding it */
 	const keys = prefs.lsGetArr(RECENT_KEY).filter((p) => typeof p === 'string');
-	const paths = [ ...new Set(keys.map(pageOf)) ].filter((p) => p !== here).slice(0, RECENT_WARM);
+	const paths = keys.filter((p) => p !== here).slice(0, RECENT_WARM);
 	if (!paths.length) return;
 	const go = () => paths.forEach((p) => router.prefetchSegs(p.split('/')));
 	if (typeof window.requestIdleCallback === 'function')
@@ -136,23 +127,6 @@ function wireSearch() {
 		if (ev.key !== '/' || ev.ctrlKey || ev.metaKey || ev.altKey) return;
 		if (ev.target.closest?.('input, textarea, select, [contenteditable], .cbi-dropdown')) return;
 		ev.preventDefault(); open();
-	});
-}
-
-/* ---- optional companion packages ----
- *
- * header.ut prints `window.__fsPlugins` from `footstrap.settings.plugin`, a list a package writes
- * from its own uci-defaults; each entry is a LuCI module name, already whitelisted there. The
- * chrome requires each one after everything below is wired — a plugin registers itself through the
- * seams the theme exports (`fs-router.onNavigate`, `fs-search.addSource`) and the theme names
- * nobody. A plugin that throws costs only itself.
- *
- * No plugin, no cost: an empty list is the shipped state and this loop does nothing. */
-function loadPlugins() {
-	const RT = window.L;
-	const names = Array.isArray(window.__fsPlugins) ? window.__fsPlugins : [];
-	names.forEach((name) => {
-		RT.require(name).catch((e) => console.error('footstrap: plugin ' + name + ' did not load', e));
 	});
 }
 
@@ -382,10 +356,6 @@ ensureOverviewHelpers();
  * halves (fs-menutree, fs-prefs) are separate modules. */
 
 return baseclass.extend({
-	/* the seam a companion package writes its own rows into the recents list through; see
-	 * remember() for what a key is */
-	remember,
-
 	/* the seam fs-overview.js calls, on its own already-coalesced poll-tick observer, to annotate
 	 * the meters a stock Status -> Overview include draws with its own local progressbar() */
 	annotateMeters,
@@ -422,9 +392,6 @@ return baseclass.extend({
 			wirePageModules();
 			router.wire();
 			router.wireVisibility();
-			/* last: a plugin registers against the parts above, and a broken one must not be able
-			 * to take the chrome with it */
-			loadPlugins();
 		/* no sane partial recovery — a throw above loses the menu, the router and the Appearance
 		 * tab together — so this fails loudly rather than silently */
 		}).catch((e) => console.error('footstrap: chrome init failed', e));

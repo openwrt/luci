@@ -159,10 +159,6 @@ function currentNode() {
 return baseclass.extend({
 	setTree,
 	tree: () => _tree,
-	/* raw presence, no alias or firstchild resolution: fs-commands gates each command on the menu
-	 * node whose `depends.acl` names the group that command needs, and a node that resolves
-	 * elsewhere would answer for a permission the session may not hold */
-	nodeForSegs,
 	segsFromPath,
 	currentNode,
 	resolveSegs,

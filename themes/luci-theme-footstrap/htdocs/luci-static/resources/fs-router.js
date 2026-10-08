@@ -952,8 +952,8 @@ function navigate(pathname, push, kbd) {
 	/* the outgoing page's links are about to become a detached tree — do not hold one of them */
 	_lastHovered = null;
 	/* Run every registered navigation callback. The seam is inverted on purpose: a registrant calls
-	 * onNavigate() and the router names nobody, so an optional module that is not installed cannot
-	 * be a DependencyError taking out the whole chrome.
+	 * onNavigate() and the router names nobody, so the router keeps no static dependency
+	 * (a DependencyError would take out the whole chrome).
 	 *
 	 * The RESOLVED segments are passed in, because this runs before L.env is re-pointed below and a
 	 * callback reading L.env.dispatchpath would record the page being left.
@@ -1452,8 +1452,7 @@ function wireVisibility() {
 
 /* Callbacks to run on every SPA navigation, each handed the resolved segments of the INCOMING page
  * (they run before L.env is re-pointed). The registry is inverted on purpose: a registrant calls in
- * and the router names nobody, so it cannot grow a static dependency on a module that may not be
- * installed. */
+ * and the router names nobody, so it cannot grow a static dependency on one. */
 const _navCbs = [];
 function onNavigate(fn) { if (typeof fn === 'function') _navCbs.push(fn); }
 
