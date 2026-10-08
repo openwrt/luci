@@ -3013,7 +3013,19 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 					if (!tbl) return;
 
 					const inputs = tbl.querySelectorAll('tr.cbi-section-table-filter input');
-					const col_filts = Array.from(inputs).map(i => i.value.trim());
+					/* a filter written as /pattern/flags is matched as regular
+					 * expression, anything else as plain substring */
+					const col_filts = Array.from(inputs).map(i => {
+						const v = i.value.trim();
+						const m = v.match(/^\/(.+)\/([a-z]*)$/);
+
+						try {
+							return m ? new RegExp(m[1], m[2].replace(/[gy]/g, '')) : v;
+						}
+						catch (e) {
+							return v;
+						}
+					});
 					const rows = tbl.querySelectorAll('tr.tr.cbi-section-table-row');
 
 					rows.forEach(row => {
@@ -3041,7 +3053,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 							else
 								txt = cell.textContent || '';
 
-							if (!txt.includes(col_filts[k])) { hide = true; break; }
+							if (typeof(col_filts[k]) == 'string' ? !txt.includes(col_filts[k]) : !col_filts[k].test(txt)) { hide = true; break; }
 						}
 						row.style.display = hide ? 'none' : '';
 					});
