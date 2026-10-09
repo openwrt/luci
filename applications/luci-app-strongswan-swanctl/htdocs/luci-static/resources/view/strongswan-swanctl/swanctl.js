@@ -657,7 +657,7 @@ return view.extend({
 			swanctlDescr(_('Action when DPD timeout occurs'), 'connections.<conn>.children.<child>.dpd_action'));
 		o.value('', '%s (%s)'.format('clear', _('default')));
 		o.value('trap');
-		o.value('start');
+		o.value('restart');
 		o.default = '';
 		o.rmempty = true;
 		o.optional = true;
