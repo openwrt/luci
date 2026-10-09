@@ -1,0 +1,67 @@
+#!/bin/sh
+# SPDX-License-Identifier: GPL-2.0-only
+# Starts the one background veracrypt job of the luci.veracrypt-lite rpcd plugin.
+#
+# stdin: a description of the operation ("mount <volume>" or "create
+# <volume>"), the password, then one veracrypt argument per line; for mount
+# the last one is the mount directory, created here if missing. The password
+# only goes to veracrypt's stdin (printf is a shell builtin), never into argv,
+# the environment or the log.
+# Exit status: 0 started, 1 another job is running, 2 bad input.
+
+RUN=/var/run/luci-veracrypt-lite
+
+umask 077
+mkdir -p "$RUN" || exit 2
+
+IFS= read -r op || exit 2
+IFS= read -r pw || exit 2
+case $op in
+	"mount /"*|"create /"*) ;;
+	*) exit 2 ;;
+esac
+# The plugin validates every argument; this only refuses lines that cannot
+# come from it, e.g. if a path ever smuggled in a line break.
+set --
+while IFS= read -r arg; do
+	case $arg in
+		""|--token-lib*|--token-pin*|--password*|--new-password*|--protection-password*) exit 2 ;;
+	esac
+	set -- "$@" "$arg"
+done
+[ $# -gt 0 ] || exit 2
+
+# The job keeps fd 9, and with it the lock, until it ends. veracrypt does
+# not get it, so a FUSE process left running by a mount cannot hold it.
+exec 9>"$RUN/lock"
+flock -n 9 || exit 1
+
+made=
+if [ "${op%% *}" = mount ]; then
+	eval "mp=\${$#}"
+	if [ ! -e "$mp" ]; then
+		(umask 022; mkdir "$mp") || exit 2
+		made=$mp
+	fi
+fi
+
+rm -f "$RUN/rc" "$RUN/pid" "$RUN/stime"
+echo "$op" > "$RUN/op"
+date +%s > "$RUN/start"
+
+# setsid gives the job its own process group, so abort can stop all of it.
+# It does not fork here (the job is not a group leader), so $! is the group.
+# A mount directory made here is removed again if the mount fails.
+printf '%s\n' "$pw" | setsid /bin/sh -c '
+	made=$1; shift
+	trap "[ -z \"\$made\" ] || rmdir \"\$made\"; exit 143" TERM
+	/usr/bin/veracrypt --text --non-interactive --stdin "$@" 9>&-
+	rc=$?
+	[ $rc = 0 ] || [ -z "$made" ] || rmdir "$made"
+	echo $rc > /var/run/luci-veracrypt-lite/rc
+' sh "$made" "$@" > "$RUN/log" 2>&1 &
+job=$!
+# abort compares the start time to tell the job from a later process that
+# got the same pid.
+awk '{ sub(/.*\) /, ""); print $20 }' "/proc/$job/stat" > "$RUN/stime"
+echo "$job" > "$RUN/pid"

@@ -1,0 +1,71 @@
+#!/bin/sh
+# Fake veracrypt for the backend tests. State: one line per mounted volume in
+# /tmp/vcstub.state as "slot<TAB>volume<TAB>vdev<TAB>mountpoint<TAB>ro".
+# Every call appends its arguments (one per line, then "--") to
+# /tmp/vcstub.argv; what it reads from stdin goes to /tmp/vcstub.stdin, its
+# environment to /tmp/vcstub.env, its pid to /tmp/vcstub.pid, and a line to
+# /tmp/vcstub.fd if it inherited the job lock.
+# VCSTUB_PW: the right password (default x); VCSTUB_DELAY: seconds to sleep.
+STATE=/tmp/vcstub.state
+touch "$STATE"
+printf '%s\n' "$@" -- >> /tmp/vcstub.argv
+env > /tmp/vcstub.env
+echo $$ > /tmp/vcstub.pid
+ls -l /proc/$$/fd | grep luci-veracrypt-lite/lock >> /tmp/vcstub.fd
+
+mode=mount slot= pos1= pos2= ro=No stdin= verbose= pw=
+for a in "$@"; do
+	case $a in
+		--stdin) stdin=1 ;;
+		--verbose) verbose=1 ;;
+		--list) mode=list ;;
+		--version) mode=version ;;
+		--create) mode=create ;;
+		--unmount) mode=unmount ;;
+		--create-keyfile) mode=keyfile ;;
+		--slot=*) slot=${a#--slot=} ;;
+		--mount-options=*ro*) ro=Yes ;;
+		-*) ;;
+		*) if [ -z "$pos1" ]; then pos1=$a; else pos2=$a; fi ;;
+	esac
+done
+if [ -n "$stdin" ]; then
+	IFS= read -r pw
+	printf '%s\n' "$pw" >> /tmp/vcstub.stdin
+fi
+[ -n "$VCSTUB_DELAY" ] && sleep "$VCSTUB_DELAY"
+
+case $mode in
+	version) echo "VeraCrypt 1.26.24" ;;
+	list)
+		[ -s "$STATE" ] || { echo "Error: No volumes mounted." >&2; exit 1; }
+		[ -n "$verbose" ] || exit 1
+		while IFS='	' read -r s v d m r; do
+			printf 'Slot: %s\nVolume: %s\nVirtual Device: %s\nMount Directory: %s\nSize: 64.0 MiB\nType: Normal\nRead-Only: %s\nHidden Volume Protected: No\nEncryption Algorithm: AES\n\n' \
+				"$s" "$v" "$d" "$m" "$r"
+		done < "$STATE"
+		;;
+	unmount)
+		grep -q "^$slot	" "$STATE" || { echo "Error: No such volume is mounted." >&2; exit 1; }
+		grep -v "^$slot	" "$STATE" > "$STATE.new"
+		mv "$STATE.new" "$STATE"
+		;;
+	create)
+		echo "progress line"
+		[ "$pw" = "${VCSTUB_PW-x}" ] || { echo "Error: wrong password" >&2; exit 1; }
+		: > "$pos1"
+		echo "The VeraCrypt volume has been successfully created."
+		;;
+	keyfile)
+		head -c 64 /dev/urandom > "$pos1"
+		echo "Keyfile created."
+		;;
+	mount)
+		if [ "$pw" != "${VCSTUB_PW-x}" ]; then
+			echo "Error: Incorrect password or not a VeraCrypt volume." >&2
+			exit 1
+		fi
+		[ -n "$slot" ] || slot=$(($(wc -l < "$STATE") + 1))
+		printf '%s\t%s\t/dev/mapper/veracrypt%s\t%s\t%s\n' "$slot" "$pos1" "$slot" "$pos2" "$ro" >> "$STATE"
+		;;
+esac

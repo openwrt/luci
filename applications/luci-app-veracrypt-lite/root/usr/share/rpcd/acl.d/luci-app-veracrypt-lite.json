@@ -1,0 +1,21 @@
+{
+	"luci-app-veracrypt-lite": {
+		"description": "Grant access to VeraCrypt volumes",
+		"read": {
+			"ubus": {
+				"luci.veracrypt-lite": [ "status", "devices", "job" ]
+			},
+			"file": {
+				"/mnt": [ "list" ],
+				"/mnt/*": [ "list" ]
+			},
+			"uci": [ "veracrypt" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.veracrypt-lite": [ "mount", "unmount", "create", "abort", "create_keyfile" ]
+			},
+			"uci": [ "veracrypt" ]
+		}
+	}
+}
