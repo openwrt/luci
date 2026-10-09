@@ -8,6 +8,7 @@
 'require network';
 'require validation';
 'require uqr';
+'require tools.widgets as widgets';
 
 var generateKey = rpc.declare({
 	object: 'luci.wireguard',
@@ -158,6 +159,11 @@ return network.registerProtocol('wireguard', {
 		o.optional = true;
 
 		o = s.taboption('general', form.Flag, 'nohostroute', _('No Host Routes'), _('Optional. Do not create host routes to peers.'));
+		o.optional = true;
+
+		o = s.taboption('general', widgets.NetworkSelect, 'tunlink', _('Underlying interface'), _('Optional. Create the host routes to peers via this interface. If empty, the interface with the most specific route to the peer endpoint is used, usually the WAN. It must have a route for the address family of the peer endpoints.'));
+		o.exclude = s.section;
+		o.nocreate = true;
 		o.optional = true;
 
 		o = s.taboption('general', form.Button, '_import', _('Import configuration'), _('Imports settings from an existing WireGuard configuration file'));
