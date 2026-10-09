@@ -599,6 +599,12 @@ return view.extend({
 					return L.naturalCompare(a.getProtocol(), b.getProtocol());
 				});
 
+				o = s.taboption('general', form.Value, 'description', _('Description'));
+				o.modalonly = true;
+				o.optional = true;
+				o.rmempty = true;
+				o.placeholder = _('optional interface label');
+
 				o = s.taboption('general', form.DummyValue, '_ifacestat_modal', _('Status'));
 				o.modalonly = true;
 				o.cfgvalue = L.bind(function(section_id) {
@@ -1487,12 +1493,22 @@ return view.extend({
 			if (!net)
 				return;
 
+			const desc = uci.get('network', section_id, 'description') ||
+				['amneziawg', 'wireguard'].reduce(function(found, proto) {
+					if (found) return found;
+					const peers = uci.sections('network', proto + '_' + section_id);
+					const labels = peers.map(function(p) { return p.description }).filter(Boolean);
+					return labels.length ? labels.join(', ') : null;
+				}, null);
 			const node = E('div', { 'class': 'ifacebox' }, [
 				E('div', {
 					'class': 'ifacebox-head',
 					'style': firewall.getZoneColorStyle(zone),
 					'title': zone ? _('Part of zone %q').format(zone.getName()) : _('No zone assigned')
-				}, E('strong', net.getName())),
+				}, [
+					E('strong', net.getName()),
+					desc ? E('span', { 'class': 'ifacebox-descr' }, [ desc ]) : null
+				].filter(Boolean)),
 				E('div', {
 					'class': 'ifacebox-body',
 					'id': '%s-ifc-devices'.format(section_id),
@@ -1626,6 +1642,12 @@ return view.extend({
 				return a;
 			}, []).sort(({ speed: p }, { speed: n }) => p > n ? 1 : -1);
 
+			function addDescription() {
+				const o = s.taboption('devgeneral', form.Value, 'description', _('Description'));
+				o.optional = true;
+				o.rmempty = true;
+			}
+
 			/* Query PSE status from netifd to determine if device has PSE capability */
 			if (devName) {
 				return L.resolveDefault(callNetworkDeviceStatus(devName), {}).then(({
@@ -1643,9 +1665,11 @@ return view.extend({
 					if (!phy_links || phy_links.length === 0)
 						phy_links = phyLinkSpeeds;
 					nettools.addDeviceOptions(s, dev, isNew, rtTables, hasPSE, parseLinks(phy_links));
+					addDescription();
 				});
 			} else {
 				nettools.addDeviceOptions(s, dev, isNew, rtTables, false, parseLinks(phyLinkSpeeds));
+				addDescription();
 				return Promise.resolve();
 			}
 		};
@@ -1845,6 +1869,30 @@ return view.extend({
 			return val ? E('strong', {
 				'data-tooltip': _('The value is overridden by configuration.')
 			}, [ val ]) : (mtu || '-').toString();
+		};
+
+		o = s.option(form.DummyValue, 'description', _('Description'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const direct = uci.get('network', section_id, 'description');
+			if (direct) return direct;
+
+			// For dev:xxx entries without a config device section, fall back
+			// to the matching interface description or WireGuard/AmneziaWG
+			// peer descriptions.
+			const m = section_id.match(/^dev:(.+)$/);
+			const name = m ? m[1] : uci.get('network', section_id, 'name');
+			if (!name) return '-';
+
+			const ifDesc = uci.get('network', name, 'description');
+			if (ifDesc) return ifDesc;
+
+			return ['amneziawg', 'wireguard'].reduce(function(found, proto) {
+				if (found) return found;
+				const peers = uci.sections('network', proto + '_' + name);
+				const labels = peers.map(function(p) { return p.description }).filter(Boolean);
+				return labels.length ? labels.join(', ') : null;
+			}, null) || '-';
 		};
 
 		s = m.section(form.TypedSection, 'globals', _('Global network options'));
