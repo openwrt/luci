@@ -1,0 +1,44 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+
+[ "$(uci_get main webhook_enabled 0)" = 1 ] || exit 0
+URL="$(uci_get main webhook_url)"
+case "$URL" in
+	http://*) AUTHORITY="${URL#http://}" ;;
+	https://*) AUTHORITY="${URL#https://}" ;;
+	*) echo "Webhook URL must use HTTP or HTTPS" >&2; exit 1 ;;
+esac
+[ -n "${AUTHORITY%%/*}" ] || { echo "Webhook URL must include a host" >&2; exit 1; }
+case "$URL" in
+	*[![:graph:]]*) echo "Webhook URL contains invalid characters" >&2; exit 1 ;;
+esac
+if command -v uclient-fetch >/dev/null 2>&1; then
+	FETCHER=uclient-fetch
+elif command -v wget >/dev/null 2>&1; then
+	FETCHER=wget
+else
+	echo "A compatible wget implementation is required for webhook delivery" >&2
+	exit 1
+fi
+[ -r /usr/share/libubox/jshn.sh ] || { echo "jshn.sh is not available" >&2; exit 1; }
+
+INCIDENT_ID="$(printf '%s' "${1:-unknown}" | tr -cd '0-9-')"
+RESULT="$(printf '%s' "${2:-unknown}" | tr -cd 'A-Za-z0-9_.:-')"
+ACTION="$(printf '%s' "${3:-unknown}" | tr -cd 'A-Za-z0-9_.:-')"
+INTERFACE="$(printf '%s' "${4:-unknown}" | tr -cd 'A-Za-z0-9_.:-')"
+REASON="$(printf '%s' "${5:-unknown}" | tr -cd 'A-Za-z0-9_.:-')"
+
+. /usr/share/libubox/jshn.sh
+json_init
+json_add_string event haproxy-manager-recovery
+json_add_string incident "$INCIDENT_ID"
+json_add_string result "$RESULT"
+json_add_string action "$ACTION"
+json_add_string interface "$INTERFACE"
+json_add_string reason "$REASON"
+PAYLOAD="$(json_dump)"
+
+"$FETCHER" -q -T 10 -O /dev/null \
+	--header='Content-Type: application/json' \
+	--post-data="$PAYLOAD" "$URL"

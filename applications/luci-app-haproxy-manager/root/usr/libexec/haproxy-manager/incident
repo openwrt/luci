@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+
+ID="${1:-}"
+is_valid_backup_id "$ID" || { echo "Invalid incident identifier" >&2; exit 1; }
+BASE="$(incident_dir)"
+[ ! -d "$BASE" ] || BASE="$(resolve_storage_dir "$BASE")" || exit 1
+FILE="$BASE/$ID/diagnostics.log"
+[ -f "$FILE" ] || { echo "Incident report not found: $ID" >&2; exit 1; }
+
+# Keep the RPC response bounded even if a platform command produced excessive output.
+tail -c 65536 "$FILE"
