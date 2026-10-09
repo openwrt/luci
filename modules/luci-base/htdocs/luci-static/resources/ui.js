@@ -1090,8 +1090,17 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			'multiple': this.options.multiple ? '' : null,
 			'optional': this.options.optional ? '' : null,
 			'disabled': this.options.disabled ? '' : null,
+			'data-widget-id': this.options.id ? `widget.${this.options.id}` : null,
 			'tabindex': -1
 		}, E('ul'));
+
+		if (this.options.id)
+			sb.appendChild(E('select', {
+				'id': `widget.${this.options.id}`,
+				'style': 'display:none',
+				'aria-hidden': 'true',
+				'tabindex': -1
+			}));
 
 		let keys = Object.keys(this.choices);
 
