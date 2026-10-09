@@ -208,10 +208,10 @@ return view.extend({
 			.then(L.bind(function(btn, res) {
 				/* sysupgrade opts table  [0]:checkbox element [1]:check condition [2]:args to pass */
 				const opts = {
-				    keep : [ E('input', { type: 'checkbox' }), false, '-n' ],
-				    force : [ E('input', { type: 'checkbox' }), true, '--force' ],
-				    skip_orig : [ E('input', { type: 'checkbox' }), true, '-u' ],
-				    backup_pkgs : [ E('input', { type: 'checkbox' }), true, '-k' ],
+				    keep : [ E('input', { 'id': 'flash-keep', 'type': 'checkbox' }), false, '-n' ],
+				    force : [ E('input', { 'id': 'flash-force', 'type': 'checkbox' }), true, '--force' ],
+				    skip_orig : [ E('input', { 'id': 'flash-skip_orig', 'type': 'checkbox' }), true, '-u' ],
+				    backup_pkgs : [ E('input', { 'id': 'flash-backup_pkgs', 'type': 'checkbox' }), true, '-k' ],
 				    },
 				    is_valid = res[1].valid,
 				    is_forceable = res[1].forceable,
@@ -226,9 +226,11 @@ return view.extend({
 					res[0].sha256sum ? E('li', {}, '%s: %s'.format(_('SHA256'), res[0].sha256sum)) : ''
 				]));
 
-				body.push(E('p', {}, E('label', { 'class': 'btn' }, [
-					opts.keep[0], ' ', _('Keep settings and retain the current configuration')
-				])));
+				body.push(E('p', { 'class': 'cbi-checkbox' }, [
+					opts.keep[0], ' ',
+					E('label', { 'for': 'flash-keep' }),
+					E('label', {}, _('Keep settings and retain the current configuration'))
+				]));
 
 				if (!is_valid || is_too_big)
 					body.push(E('hr'));
@@ -255,14 +257,18 @@ return view.extend({
 					opts.keep[0].checked = true;
 
 					if (has_rootfs_data) {
-						body.push(E('p', {}, E('label', { 'class': 'btn' }, [
-							opts.skip_orig[0], ' ', _('Skip from backup files that are equal to those in /rom')
-						])));
+						body.push(E('p', { 'class': 'cbi-checkbox' }, [
+							opts.skip_orig[0], ' ',
+							E('label', { 'for': 'flash-skip_orig' }),
+							E('label', {}, _('Skip from backup files that are equal to those in /rom'))
+						]));
 					}
 
-					body.push(E('p', {}, E('label', { 'class': 'btn' }, [
-						opts.backup_pkgs[0], ' ', _('Include in backup a list of current installed packages at /etc/backup/installed_packages.txt')
-					])));
+					body.push(E('p', { 'class': 'cbi-checkbox' }, [
+						opts.backup_pkgs[0], ' ',
+						E('label', { 'for': 'flash-backup_pkgs' }),
+						E('label', {}, _('Include in backup a list of current installed packages at /etc/backup/installed_packages.txt'))
+					]));
 				};
 
 				const cntbtn = E('button', {
@@ -279,11 +285,15 @@ return view.extend({
 				};
 
 				if ((!is_valid || is_too_big || res[2].code != 0) && is_forceable) {
-					body.push(E('p', {}, E('label', { 'class': 'btn alert-message danger' }, [
-						opts.force[0], ' ', _('Force upgrade'),
-						E('br'), E('br'),
-						_('Select \'Force upgrade\' to flash the image even if the image format check fails. Use only if you are sure that the firmware is correct and meant for your device!')
-					])));
+					body.push(E('p', { 'class': 'cbi-checkbox alert-message danger' }, [
+						opts.force[0], ' ',
+						E('label', { 'for': 'flash-force' }),
+						E('label', {}, [
+							_('Force upgrade'),
+							E('br'), E('br'),
+							_('Select \'Force upgrade\' to flash the image even if the image format check fails. Use only if you are sure that the firmware is correct and meant for your device!')
+						])
+					]));
 					cntbtn.disabled = true;
 				};
 

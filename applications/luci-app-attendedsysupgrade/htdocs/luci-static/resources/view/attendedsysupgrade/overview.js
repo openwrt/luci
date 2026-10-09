@@ -184,7 +184,7 @@ return view.extend({
 			this.sha256_unsigned = image.sha256_unsigned;
 			let sysupgrade_url = `${data.url}/store/${response.bin_dir}/${image.name}`;
 
-			let keep = E('input', { type: 'checkbox' });
+			let keep = E('input', { 'id': 'asu-keep', 'type': 'checkbox' });
 			keep.checked = true;
 
 			let fields = [
@@ -232,12 +232,12 @@ return view.extend({
 				table,
 				E(
 					'p',
-					{ class: 'mt-2' },
-					E('label', { class: 'btn' }, [
+					{ 'class': 'mt-2 cbi-checkbox' }, [
 						keep,
 						' ',
-						_('Keep settings and retain the current configuration'),
-					])
+						E('label', { 'for': 'asu-keep' }),
+						E('label', {}, _('Keep settings and retain the current configuration'))
+					]
 				),
 				E('div', { class: 'right' }, [
 					E('div', { class: 'btn', click: ui.hideModal }, _('Cancel')),
