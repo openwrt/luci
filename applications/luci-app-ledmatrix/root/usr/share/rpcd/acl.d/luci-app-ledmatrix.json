@@ -1,0 +1,17 @@
+{
+	"luci-app-ledmatrix": {
+		"description": "Grant access to the LED matrix configuration",
+		"read": {
+			"file": {
+				"/usr/share/ledmatrixd/layout.bin": [ "read" ]
+			},
+			"uci": [ "ledmatrix" ]
+		},
+		"write": {
+			"file": {
+				"/usr/sbin/ledmatrixctl *": [ "exec" ]
+			},
+			"uci": [ "ledmatrix" ]
+		}
+	}
+}
