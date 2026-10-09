@@ -28,7 +28,7 @@
 	` });
 -%}
 
-<script>
+<script nonce="{{ ctx?.csp_nonce }}">
 	function command_run(ev, id)
 	{
 		var field = document.getElementById(id);
@@ -113,6 +113,18 @@
 		ev.preventDefault();
 	}
 
+	document.addEventListener('DOMContentLoaded', function() {
+		document.querySelectorAll('button[data-cmd]').forEach(function(btn) {
+			btn.addEventListener('click', function(ev) {
+				var id = ev.currentTarget.dataset.cmd;
+				switch (ev.currentTarget.dataset.action) {
+				case 'run':      command_run(ev, id);      break;
+				case 'download': command_download(ev, id); break;
+				case 'link':     command_link(ev, id);     break;
+				}
+			});
+		});
+	});
 </script>
 
 {%
@@ -148,10 +160,10 @@
 						<p>{{ _('Arguments:') }} <input type="text" id="{{ command['.name'] }}" /></p>
 					{% endif %}
 					<div>
-						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '{{ command['.name'] }}')">{{ _('Run') }}</button>
-						<button class="cbi-button cbi-button-download" onclick="command_download(event, '{{ command['.name'] }}')">{{ _('Download') }}</button>
+						<button class="cbi-button cbi-button-apply" data-action="run" data-cmd="{{ command['.name'] }}">{{ _('Run') }}</button>
+						<button class="cbi-button cbi-button-download" data-action="download" data-cmd="{{ command['.name'] }}">{{ _('Download') }}</button>
 						{% if (command.public == "1"): %}
-							<button class="cbi-button cbi-button-link" onclick="command_link(event, '{{ command['.name'] }}')">{{ _('Link') }}</button>
+							<button class="cbi-button cbi-button-link" data-action="link" data-cmd="{{ command['.name'] }}">{{ _('Link') }}</button>
 						{% endif %}
 					</div>
 				</div>
