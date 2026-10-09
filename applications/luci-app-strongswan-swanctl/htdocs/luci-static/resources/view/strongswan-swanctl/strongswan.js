@@ -2,16 +2,17 @@
 'require form';
 'require uci';
 'require view';
+'require strongswan-swanctl.ikev1 as ikev1';
 'require tools.widgets as widgets';
 
 function addLogLevel(o) {
 	o.value('', _('Use daemon default'));
-	o.value('-1', _('Absolutely silent'));
-	o.value('0', _('Very basic auditing logs'));
-	o.value('1', _('Generic control flow with errors (default)'));
-	o.value('2', _('More detailed debugging control flow'));
-	o.value('3', _('Including RAW data dumps in hex'));
-	o.value('4', _('Also include sensitive material in dumps, e.g. keys'));
+	o.value('-1', '%s: %s'.format('-1', _('Absolutely silent')));
+	o.value('0', '%s: %s'.format('0', _('Very basic auditing logs')));
+	o.value('1', '%s: %s'.format('1', _('Generic control flow with errors (default)')));
+	o.value('2', '%s: %s'.format('2', _('More detailed debugging control flow')));
+	o.value('3', '%s: %s'.format('3', _('Including RAW data dumps in hex')));
+	o.value('4', '%s: %s'.format('4', _('Also include sensitive material in dumps, e.g. keys')));
 	o.default = '';
 }
 
@@ -125,6 +126,8 @@ return view.extend({
 			_('When this is enabled, the routes for all XFRM interfaces are set automatically.'));
 		o.default = '0';
 
-		return m.render();
+		return m.render().then(function (node) {
+			return ikev1.prepend(node);
+		});
 	}
 });

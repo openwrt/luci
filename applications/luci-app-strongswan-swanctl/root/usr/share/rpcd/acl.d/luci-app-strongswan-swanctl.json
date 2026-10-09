@@ -4,6 +4,20 @@
 		"read": {
 			"file": {
 				"/etc/config/ipsec": [ "list" ],
+				"/etc/swanctl/x509": [ "list" ],
+				"/etc/swanctl/x509/*": [ "stat" ],
+				"/etc/swanctl/x509ca": [ "list" ],
+				"/etc/swanctl/x509ca/*": [ "stat" ],
+				"/etc/swanctl/private": [ "list" ],
+				"/etc/swanctl/private/*": [ "stat" ],
+				"/etc/swanctl/rsa": [ "list" ],
+				"/etc/swanctl/rsa/*": [ "stat" ],
+				"/etc/swanctl/ecdsa": [ "list" ],
+				"/etc/swanctl/ecdsa/*": [ "stat" ],
+				"/etc/swanctl/pkcs8": [ "list" ],
+				"/etc/swanctl/pkcs8/*": [ "stat" ],
+				"/etc/swanctl/pkcs12": [ "list" ],
+				"/etc/swanctl/pkcs12/*": [ "stat" ],
 				"/usr/sbin/swanmon version": [ "exec" ],
 				"/usr/sbin/swanmon stats": [ "exec" ]
 			},
@@ -13,8 +27,16 @@
 			"uci": [ "ipsec" ]
 		},
 		"write": {
+			"cgi-io": [ "upload" ],
 			"file": {
 				"/etc/init.d/swanctl migrate *": [ "exec" ],
+				"/etc/swanctl/x509/*": [ "write" ],
+				"/etc/swanctl/x509ca/*": [ "write" ],
+				"/etc/swanctl/private/*": [ "write" ],
+				"/etc/swanctl/rsa/*": [ "write" ],
+				"/etc/swanctl/ecdsa/*": [ "write" ],
+				"/etc/swanctl/pkcs8/*": [ "write" ],
+				"/etc/swanctl/pkcs12/*": [ "write" ],
 				"/usr/sbin/swanctl --initiate --ike *": [ "exec" ],
 				"/usr/sbin/swanctl --initiate --child *": [ "exec" ],
 				"/usr/sbin/swanctl --terminate --ike *": [ "exec" ],
