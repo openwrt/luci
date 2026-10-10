@@ -301,8 +301,7 @@ function documentCarries(path) {
  * original is deliberately not one. */
 function documentPoisoned() {
 	const names = themeNames();
-	return Array.prototype.some.call(
-		document.querySelectorAll(VIEW_SHEETS),
+	return Array.from(document.querySelectorAll(VIEW_SHEETS)).some(
 		(el) => outlivesPage(el)
 			&& (!names || (invasiveSheet(el, names) && !_owner.has(el) && !_silenced.has(el))));
 }
@@ -313,7 +312,7 @@ function documentPoisoned() {
  * already applying. Every footstrap rule lives in a @layer and an unlayered normal declaration
  * beats a layered one at any specificity, so a third-party `* { margin: 0; padding: 0 }` owns the
  * chrome outright — on a layer-less theme the same `*` (0,0,0) loses to any class selector. The
- * layers are what hand it the win (issue #8).
+ * layers are what hand it the win.
  *
  * So put the sheet back on specificity footing by re-hosting it into the EXISTING `theme` layer;
  * only same-layer arbitrates by specificity. Measured on the real cascade:
@@ -417,7 +416,7 @@ function fenceImported(styleEl, names, until) {
 
 /* what a sheet IS, as text: the rules that are applying, not the markup that may have produced
  * them. Serialised only to compare, never re-parsed. */
-const serializeRules = (rules) => Array.prototype.map.call(rules, (r) => r.cssText).join('\n');
+const serializeRules = (rules) => Array.from(rules, (r) => r.cssText).join('\n');
 
 /* ---- a <style>'s textContent is NOT its sheet ----
  *
@@ -536,13 +535,12 @@ function ownerKey() {
 	return (_ownerHint !== null) ? _ownerHint : currentKey();
 }
 
+/* L.env.dispatchpath (ctx.path) is stamped by luci-base's own header.ut before any theme script
+ * runs, on every page including blank_page — verified on openwrt-24.10, no location.pathname
+ * fallback needed. */
 function currentKey() {
 	if (_curKey !== null) return _curKey;
-	const dp = L.env && L.env.dispatchpath;
-	if (dp && dp.length) return appKey(dp);
-	/* no env to read (a document that never got the bootstrap): the URL is all there is */
-	const p = location.pathname.replace(/^.*\/cgi-bin\/luci\/?/, '').replace(/\/+$/, '');
-	return appKey(p ? p.split('/') : []);
+	return appKey(L.env.dispatchpath);
 }
 
 /* Both halves, for the reason silence() gives: el.disabled is the element's flag, el.sheet.disabled

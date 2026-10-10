@@ -12,7 +12,7 @@
  * write fails after the bytes have landed.
  *
  * It is a module of its own because of WHERE it is needed: this machinery is reached only from the
- * Appearance page, one out of nearly two hundred, and it was ~4 KB of DOMParser, canvas and rpc
+ * Appearance tab, one page out of nearly two hundred, and it was ~4 KB of DOMParser, canvas and rpc
  * plumbing downloaded to a router's browser on the way to the DHCP page.
  *
  * The token accessors and the two live appliers live in `fs-axes` beside the axes themselves — the
@@ -352,7 +352,7 @@ function _readText(file) {
  * The other axes are per-browser with a router default; this one has no browser layer. An admin
  * uploads an image once, it becomes the router-wide background for every device and shows
  * pre-login, so it is absent from AXIS_KEYS, snapshotAxes() and matchesSavedDefault() — it must not
- * move the Save button — and needs no factory, so tools/axes.mjs never sees it.
+ * move the Save button — and needs no factory, so axis-contract checks never see it.
  *
  * The image is a served file, uhttpd having no gzip to make inlining it in every <head> viable;
  * only its cache-bust token lives in uci -> window.__fsSD -> the url() head.ut stamps. The path is
@@ -490,7 +490,7 @@ function assetAxis(o) {
 				.catch((e) => _rollbackUpload(o.path, e))
 				.then(() => {
 					/* switch this browser onto it: the ordinary axis path, localStorage only */
-					axes.applyWallpaper(o.wallpaper);
+					axes.wallpaper.apply(o.wallpaper);
 					o.apply(tok);
 					return tok;
 				});
@@ -510,7 +510,7 @@ function assetAxis(o) {
  * back a raster, so the parsed-document check above stands in for it. */
 const PATTERN = assetAxis({
 	path: PAT_PATH, filename: 'pattern.svg', field: 'pattern', wallpaper: 'pattern',
-	apply: (tok) => axes.applyPattern(tok),
+	apply: (tok) => axes.pattern.apply(tok),
 	prepare: (file) => {
 		if (!file) return Promise.reject(new Error(MSG_PICK_SVG));
 		const isSvg = (/(^image\/svg\+xml$)/i).test(file.type || '') || (/\.svg$/i).test(file.name || '');
@@ -535,7 +535,7 @@ const PATTERN = assetAxis({
  * grant for BG_PATH. */
 const LOGIN_BG = assetAxis({
 	path: BG_PATH, filename: 'login-bg', field: 'login_bg', wallpaper: 'file',
-	apply: (tok) => axes.applyLoginBg(tok),
+	apply: (tok) => axes.loginBg.apply(tok),
 	prepare: (file) => {
 		if (!file || !(/^image\//).test(file.type || ''))
 			return Promise.reject(new Error(_('Please choose an image file.', 'footstrap')));

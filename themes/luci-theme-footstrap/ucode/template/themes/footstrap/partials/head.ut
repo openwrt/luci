@@ -21,7 +21,7 @@
 	let _sd_pink = index([ 'theme', 'original' ], fs_defaults.pattern_ink) >= 0 ? fs_defaults.pattern_ink : '';
 	let _sd_ac   = index([ 'on', 'off' ], fs_defaults.autocollapse) >= 0 ? fs_defaults.autocollapse : '';
 	let _sd_dens = index([ 'compact', 'normal', 'large' ], fs_defaults.density) >= 0 ? fs_defaults.density : '';
-	/* issue #44: how far the content column may grow past --fs-content-max's 1280px default.
+	/* how far the content column may grow past --fs-content-max's 1280px default.
 	   header.ut's FS_AXES carries 'content_width', so a saved router default reaches this. */
 	let _cw = int(fs_defaults.content_width);
 	let _sd_cwidth = (fs_defaults.content_width != '' && _cw >= 1280 && _cw <= 3840) ? _cw : -1;
@@ -30,8 +30,8 @@
 	   it is the way fs-prefs.js's normColor() does, so this passes through exactly those two shapes
 	   and turns everything else into ''. The hex charset is whitelisted because the value is
 	   interpolated into the inline data block below.
-	   (Do not write that block's tag name in a comment: tools/lib/ut-scripts.mjs finds the inline
-	   scripts by matching the opening tag, and a mention in prose is one it will match.) */
+	   (Do not write that block's tag name in a comment: the inline scripts are found by matching
+	   the opening tag, so a mention in prose would match too.) */
 	function _sd_color(v) {
 		if (type(v) == 'string' && match(lc(v), /^#[0-9a-f]{6}$/))
 			return lc(v);
@@ -154,18 +154,19 @@
 		<script>
 			/* Each IIFE below pre-paints one Appearance axis before the first frame, duplicating a
 			   live applier in fs-prefs.js. They cannot share code — this runs before the module
-			   loader exists — so tools/axes.mjs derives the contract (keys, attributes, properties,
-			   ranges, default, order) from the JS and holds this template to it.
+			   loader exists — so the contract (keys, attributes, properties,
+			   ranges, default, order) is derived from the JS and this template is held to it.
 
 			   ONE element for all of them, and exactly two in this file: the data blob above carries
-			   interpolations and this one carries none. That is the split tools/lib/ut-scripts.mjs
-			   keys off — an interpolated body is not JS until the server renders it, so it is exempt
-			   from the lint and everything mergeable into it would go unchecked with it. Two is also
-			   what a Content-Security-Policy would need nonces for, should uhttpd ever send one.
+			   interpolations and this one carries none. That is the split the inline-script
+			   lint keys off — an interpolated body is not JS until the server renders it, so it is
+			   exempt from the lint and everything mergeable into it would go unchecked with it. Two
+			   is also what a Content-Security-Policy would need nonces for, should uhttpd ever send
+			   one.
 			   Precedence for every axis: localStorage ?? router default (window.__fsSD) ?? built-in.
 			   Dark mode: a saved preference, else the router default, else the OS. */
 			(() => {
-				const root = document.querySelector(':root'),
+				const root = document.documentElement,
 				      sd = (window.__fsSD || {}).darkmode;
 				let saved = null;
 				try { saved = localStorage.getItem('fs-darkmode'); } catch (e) {}
@@ -209,7 +210,7 @@
 				   applier's lsGet means. The outer try is the last resort for everything else. */
 				const lsGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
 				try {
-					const root = document.querySelector(':root'),
+					const root = document.documentElement,
 					      sd = window.__fsSD || {};
 					let p = lsGet('fs-palette');
 					/* A stray or retired palette name needs no migration here: it fails the list
@@ -233,7 +234,7 @@
 					/* /cgi-bin, not a /www symlink: a plain static SVG is a same-origin document
 					   that runs script opened directly (OpenWrt forum thread 251930); this path
 					   is the CGI handler that answers with CSP 'none' + sandbox instead — see
-					   fs-axes.js's PAT_SERVE, which this string must keep matching. */
+					   the serve path of fs-axes.js's PATTERN, which this string must keep matching. */
 					if (pu) root.style.setProperty('--fs-pattern-url', 'url("/cgi-bin/luci-theme-footstrap-pattern?v=' + pu + '")');
 					const psRaw = lsGet('fs-pattern-size');
 					const ps = (psRaw !== null) ? parseInt(psRaw, 10) : sd.pattern_size;
@@ -259,7 +260,7 @@
 					if (dn === 'compact' || dn === 'large') root.setAttribute('data-density', dn);
 					else root.removeAttribute('data-density');
 
-					/* Content width (issue #44): how far the column may grow past the 1280px
+					/* Content width: how far the column may grow past the 1280px
 					   default, as a px length rather than a step name — the slider is continuous.
 					   Written only when it differs from the default, so an untouched theme paints
 					   from the bare :root exactly as it did before this axis existed.
@@ -350,7 +351,7 @@
 			(() => {
 				try {
 					if (localStorage.getItem('fs-rail') === 'true')
-						document.querySelector(':root').setAttribute('data-rail', 'true');
+						document.documentElement.setAttribute('data-rail', 'true');
 				} catch (e) {}
 			})();
 
@@ -361,7 +362,7 @@
 				try {
 					const saved = localStorage.getItem('fs-layout');
 					if (saved === 'top' || saved === 'sidebar')
-						document.querySelector(':root').setAttribute('data-layout', saved);
+						document.documentElement.setAttribute('data-layout', saved);
 				} catch (e) {}
 			})();
 		</script>
@@ -373,7 +374,7 @@
 		   The literal is the default palette's page colour and the SAME value manifest.json carries,
 		   for the same reason: neither file can be rendered per request. It is a starting value
 		   only — fs-prefs.js repaints this tag from the live body background, so it follows palette,
-		   mode and every tint axis. tests/theme-color.test.mjs holds the two literals equal.
+		   mode and every tint axis. The two literals must stay equal.
 
 		   One tag, no `media` pair: a media-qualified tag would win over this one for a viewer whose
 		   OS is dark but who chose light HERE, and the choice is the theme's to honour. #}
@@ -422,7 +423,7 @@
 		   JSON type only as `.json`. The map is compiled into uhttpd. #}
 		<link rel="manifest" href="{{ media }}/manifest.json?v={{ pkgs_update_time }}">
 		{# iOS reads this link and never the manifest's icons array, and it scales the 192 square the
-		   manifest also uses down to its own 180. One raster serves both — tools/build-icons.mjs. #}
+		   manifest also uses down to its own 180. One raster serves both. #}
 		<link rel="apple-touch-icon" href="{{ media }}/app-icon-192.png">
 		{% if (dispatched?.css): %}
 		{# The `css` property of the dispatched menu.d node: an app naming a stylesheet the server

@@ -177,7 +177,7 @@
 
 {# The two server values the script below needs, handed over as DATA: a `{{ … }}` block is not JS
    until the server renders it, so this line carries no logic at all and eslint's .ut processor
-   enforces that (tools/lib/ut-scripts.mjs). The script itself is plain JS and is linted. #}
+   enforces that. The script itself is plain JS and is linted. #}
 <script>window.__fsHttps={ports:{{ https_ports }},resource:"{{ resource }}"};</script>
 <script>
 	(() => {
