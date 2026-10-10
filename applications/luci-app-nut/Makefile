@@ -6,13 +6,13 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Network UPS Tools Configuration
-LUCI_DEPENDS:=+luci-base +nut +nut-upsmon +nut-server +nut-upsc +nut-web-cgi +nut-upscmd
+LUCI_DEPENDS:=+luci-base +nut +nut-upsmon +nut-server +nut-upsc +nut-web-cgi +nut-upscmd +USE_GLIBC:ldd
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca> \
 		Paul Donald <newtwen+github@gmail.com>
 
-EXTRA_DEPENDS:=nut (>= 2.8.4-3)
+LUCI_EXTRA_DEPENDS:=nut (>=2.8.4-r3)
 
 include ../../luci.mk
 

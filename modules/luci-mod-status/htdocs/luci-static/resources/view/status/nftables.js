@@ -703,7 +703,7 @@ return view.extend({
 			break;
 		}
 
-		const node = E('div', { 'class': 'nft-chain' }, [
+		const node = E('div', { 'class': 'nft-chain cbi-section' }, [
 			E('h4', {
 				'id': '%h.%h'.format(spec.table, spec.name)
 			}, [ title ])
@@ -775,14 +775,15 @@ return view.extend({
 		const node = E([], [
 			E('style', { 'type': 'text/css' }, [
 				'.nft-rules .ifacebadge { margin: .125em }',
-				'.nft-rules tr > td { padding: .25em !important }',
+				/* dense rows: a long chain would otherwise run off the screen */
+				'.nft-rules.cbi-section-table tr > td { padding: .25em }',
 				'.nft-set, .nft-list { display: inline-block; vertical-align: middle }',
 				'.nft-set-items, .nft-list-items { display: inline-block; vertical-align: middle; max-width: 200px; overflow: hidden; text-overflow: ellipsis }',
 				'.ifacebadge.cbi-tooltip-container { cursor: help }',
 				'.ifacebadge.cbi-tooltip-container .cbi-tooltip { padding: .5em }'
 			]),
 			E('div', { 'class': 'nft-table' }, [
-				E('h3', [ title ]),
+				E('div', { 'class': 'cbi-section' }, E('h3', [ title ])),
 				E('div', { 'class': 'nft-chains' })
 			])
 		]);

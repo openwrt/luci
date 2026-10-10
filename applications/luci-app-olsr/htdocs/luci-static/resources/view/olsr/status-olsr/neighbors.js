@@ -174,8 +174,8 @@ return olsr.olsrview.extend({
 					if (link.linkCost == 4194304) {
 						link.linkCost = 0;
 					}
-					const color = etx_color(link.linkCost);
-					const snr_color = snr_colors(link.snr);
+					const color = olsr.etx_color(link.linkCost);
+					const snr_color = olsr.snr_colors(link.snr);
 					let defaultgw_color = '';
 					if (link.defaultgw === 1) {
 						defaultgw_color = '#ffff99';
@@ -299,8 +299,8 @@ return olsr.olsrview.extend({
 						link.linkCost = 0;
 					}
 
-					const color = etx_color(link.linkCost);
-					const snr_color = snr_colors(link.snr);
+					const color = olsr.etx_color(link.linkCost);
+					const snr_color = olsr.snr_colors(link.snr);
 
 					if (link.snr === 0) {
 						link.snr = '?';
@@ -449,7 +449,7 @@ return olsr.olsrview.extend({
 				if (has_v4 && has_v6) {
 					statusOlsrCommonJs = E('script', {
 						type: 'text/javascript',
-						src: L.resource('common/common_js.js'),
+						src: L.resource('olsr/common_js.js'),
 					});
 				}
 

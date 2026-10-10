@@ -11,7 +11,7 @@ var pkg = {
 		return "pbr";
 	},
 	get LuciCompat() {
-		return 26;
+		return 27;
 	},
 	get ReadmeCompat() {
 		return "1.2.2";
@@ -44,7 +44,7 @@ var pkg = {
 				: template.format(info || " ")) + "<br />"
 		);
 	},
-	buildGatewayText: function (gw) {
+	buildGatewayText: function (gw, ipv6Enabled) {
 		const gateways = Array.isArray(gw) ? gw : Object.values(gw);
 		const lines = gateways.map((g) => {
 			const iface = g.name;
@@ -57,7 +57,7 @@ var pkg = {
 			const parts = [iface];
 			if (dev_ipv4 && dev_ipv4 !== iface) parts.push(dev_ipv4);
 			if (gw_ipv4) parts.push(gw_ipv4);
-			if (gw_ipv6) {
+			if (ipv6Enabled && gw_ipv6) {
 				if (dev_ipv6 && dev_ipv6 !== iface) parts.push(dev_ipv6);
 				parts.push(gw_ipv6);
 			}
@@ -293,7 +293,7 @@ var status = baseclass.extend({
 					{ class: "cbi-value-description" },
 					description,
 				);
-				text = pkg.buildGatewayText(reply.ubus.gateways);
+				text = pkg.buildGatewayText(reply.ubus.gateways, reply.status.ipv6_enabled);
 				var gatewaysText = E("div", {}, text);
 				var gatewaysField = E("div", { class: "cbi-value-field" }, [
 					gatewaysText,

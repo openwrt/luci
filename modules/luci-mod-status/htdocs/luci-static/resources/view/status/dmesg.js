@@ -119,7 +119,7 @@ return view.extend({
 		if (element) {
 			const log = await this.retrieveLog();
 			element.value = log.value;
-			element.rows = log.rows;
+			element.rows = log.rows + 1;
 		}
 	},
 
@@ -252,7 +252,7 @@ return view.extend({
 
 		return E([], [
 			E('h2', {}, [ _('Kernel Log') ]),
-			E('div', { 'id': 'content_syslog' }, [
+			E('div', { 'id': 'content_syslog', 'class': 'cbi-section' }, [
 				E('div', { 'style': 'margin-bottom:10px' }, [
 					E('label', { 'for': 'invertLogFacilitySearch', 'style': 'margin-right:5px' }, _('Not')),
 					rangeTimeInvert,
@@ -284,7 +284,7 @@ return view.extend({
 					'style': 'font-size:12px',
 					'readonly': 'readonly',
 					'wrap': 'off',
-					'rows': loglines.rows
+					'rows': loglines.rows + 1
 				}, [ loglines.value ]),
 				E('div', {'style': 'padding-bottom: 20px'}, [scrollUpButton])
 			])

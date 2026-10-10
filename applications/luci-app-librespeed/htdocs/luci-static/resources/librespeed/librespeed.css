@@ -1,0 +1,344 @@
+/* The theme's accent where the theme publishes one: --primary-color-medium
+ * exists only in luci-theme-bootstrap. Every other in-tree theme sees the
+ * fallback, which must clear 3:1 against a light page -- the arc and the
+ * history line are the only graphical encoding of the data. */
+:root {
+	--librespeed-accent: var(--primary-color-medium, #3c8dbc);
+}
+
+/* Dark is an attribute in LuCI, not a media preference: bootstrap stamps
+ * data-darkmode on the root and pins it for its light/dark variants, while
+ * the themes that actually reach the fallback have no dark mode at all --
+ * an OS-level preference must not darken their light pages. */
+:root[data-darkmode="true"] {
+	--librespeed-accent: var(--primary-color-medium, #6ab0de);
+}
+
+/* The one piece of CSS this application owns: layout and type scale. Colors,
+ * borders, buttons and spacing inside sections stay with the theme. */
+
+.librespeed-columns {
+	display: grid;
+	grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+	gap: 1.5rem;
+	align-items: start;
+}
+
+@media (max-width: 768px) {
+	.librespeed-columns {
+		grid-template-columns: 1fr;
+	}
+}
+
+.librespeed-metrics {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+	gap: 1rem;
+	text-align: center;
+	margin: 1rem 0;
+}
+
+.librespeed-value {
+	font-size: 2.2em;
+	font-weight: 500;
+	line-height: 1.2;
+}
+
+.librespeed-value-sm {
+	font-size: 1.5em;
+	line-height: 1.2;
+}
+
+/* Muted through opacity rather than a hardcoded grey, so it dims whatever
+ * foreground color the active theme uses. */
+.librespeed-muted {
+	opacity: .65;
+}
+
+.librespeed-caps {
+	font-size: .85em;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+}
+
+.librespeed-center {
+	text-align: center;
+	padding: 1.5em 1em;
+}
+
+.librespeed-progress {
+	width: 60%;
+	max-width: 20em;
+	display: inline-block;
+	vertical-align: middle;
+	accent-color: var(--librespeed-accent);
+}
+
+/* The chart takes its color from the theme where one is exposed, and falls
+ * back to a neutral accent where none is. */
+.librespeed-chart-line {
+	stroke: var(--librespeed-accent);
+	fill: none;
+	stroke-width: 1.5;
+}
+
+.librespeed-chart-fill {
+	fill: var(--librespeed-accent);
+	fill-opacity: .1;
+	stroke: none;
+}
+
+.librespeed-chart-band {
+	fill: var(--librespeed-accent);
+	fill-opacity: .18;
+	stroke: none;
+}
+
+.librespeed-chart-dot {
+	fill: var(--librespeed-accent);
+}
+
+.librespeed-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .5em;
+	margin: .4em 0;
+}
+
+.librespeed-push {
+	margin-left: auto;
+}
+
+.librespeed-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: .5em;
+	margin-top: .75em;
+}
+
+.librespeed-steps {
+	display: flex;
+	gap: 1.75em;
+	justify-content: center;
+	margin: .5em 0 0;
+}
+
+.librespeed-step { opacity: .35; }
+.librespeed-step-active { opacity: 1; font-weight: 600; }
+.librespeed-step-done { opacity: .65; }
+
+.librespeed-spark {
+	width: 100%;
+	height: 72px;
+	margin: .75em 0 0;
+	display: block;
+}
+
+.librespeed-gauge {
+	width: 250px;
+	max-width: 100%;
+	margin: .5em auto 0;
+	display: block;
+}
+
+.librespeed-gauge-bg {
+	fill: none;
+	stroke: currentColor;
+	stroke-opacity: .12;
+	stroke-width: 12;
+	stroke-linecap: round;
+}
+
+.librespeed-gauge-fill {
+	fill: none;
+	stroke: var(--librespeed-accent);
+	stroke-width: 12;
+	stroke-linecap: round;
+}
+
+.librespeed-gauge text { fill: currentColor; }
+
+.librespeed-gauge-tick {
+	stroke: currentColor;
+	stroke-opacity: .25;
+	stroke-width: 1.5;
+}
+
+.librespeed-gauge-needle {
+	stroke: currentColor;
+	stroke-width: 2.5;
+	stroke-linecap: round;
+	opacity: .85;
+}
+
+.librespeed-gauge-hub { fill: currentColor; }
+
+.librespeed-chart-holder { position: relative; }
+
+.librespeed-guide {
+	stroke: currentColor;
+	stroke-opacity: .3;
+	stroke-width: 1;
+}
+
+.librespeed-avg {
+	stroke: currentColor;
+	stroke-opacity: .45;
+	stroke-width: 1;
+	stroke-dasharray: 4 3;
+}
+
+.librespeed-tooltip {
+	position: absolute;
+	display: none;
+	pointer-events: none;
+	background: var(--background-color-high, #fff);
+	color: var(--text-color-high, #333);
+	border: 1px solid rgba(128, 128, 128, .4);
+	border-radius: 3px;
+	padding: .3em .6em;
+	font-size: .85em;
+	white-space: nowrap;
+	box-shadow: 0 1px 4px rgba(0, 0, 0, .2);
+	z-index: 50;
+}
+
+.librespeed-tooltip-row {
+	display: flex;
+	justify-content: space-between;
+	gap: 1.25em;
+}
+
+.librespeed-stats {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1.5em;
+	margin-top: .5em;
+}
+
+.librespeed-line { fill: none; stroke-width: 1.5; }
+.librespeed-area { stroke: none; fill-opacity: .1; }
+.librespeed-band { stroke: none; fill-opacity: .16; }
+.librespeed-dot { stroke: none; }
+
+.librespeed-avgline {
+	fill: none;
+	stroke-width: 1;
+	stroke-dasharray: 4 3;
+	stroke-opacity: .55;
+}
+
+/* One theme color for every series: the second one differs by pattern, not
+ * by a hardcoded hue -- a dashed line and a striped swatch survive any theme
+ * and read for color-blind users too. */
+.librespeed-stroke-0 { stroke: var(--librespeed-accent); }
+.librespeed-stroke-1 { stroke: var(--librespeed-accent); }
+polyline.librespeed-stroke-1 { stroke-dasharray: 6 3; }
+.librespeed-avgline.librespeed-stroke-1 { stroke-dasharray: 2 4; }
+.librespeed-fill-0 { fill: var(--librespeed-accent); }
+.librespeed-fill-1 { fill: var(--librespeed-accent); }
+circle.librespeed-fill-1 { fill-opacity: .55; }
+.librespeed-bg-0 { background: var(--librespeed-accent); }
+.librespeed-bg-1 {
+	background: repeating-linear-gradient(90deg,
+		var(--librespeed-accent) 0 4px, transparent 4px 7px);
+}
+
+.librespeed-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.5em;
+	margin: .35em 0 0;
+}
+
+.librespeed-legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: .4em;
+	cursor: pointer;
+}
+
+.librespeed-swatch {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	border-radius: 2px;
+}
+
+.librespeed-result-gauges {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 1.5em;
+	margin: .5em 0 0;
+}
+
+.librespeed-result-gauges .librespeed-gauge {
+	width: 200px;
+	margin: 0 auto;
+}
+
+.librespeed-fg-0 { color: var(--librespeed-accent); }
+.librespeed-fg-1 { color: var(--librespeed-accent); }
+
+.librespeed-cards {
+	display: flex;
+	flex-wrap: wrap;
+	gap: .75em;
+	margin: .35em 0 1em;
+}
+
+.librespeed-metric-card {
+	border: 1px solid rgba(128, 128, 128, .25);
+	border-top-width: 3px;
+	border-radius: 4px;
+	padding: .45em .9em;
+	min-width: 11em;
+	cursor: pointer;
+	/* Dim, still legible: .5 with the muted name inside multiplied down to
+	 * an unreadable third. */
+	opacity: .78;
+	user-select: none;
+}
+
+.librespeed-metric-card-on { opacity: 1; }
+.librespeed-metric-card:hover { border-color: rgba(128, 128, 128, .45); }
+
+.librespeed-accent-0 { border-top-color: var(--librespeed-accent); }
+.librespeed-accent-1 { border-top-color: var(--librespeed-accent); border-top-style: dashed; }
+
+.librespeed-card-value {
+	font-size: 1.3em;
+	font-weight: 600;
+	line-height: 1.35;
+}
+
+.librespeed-hint {
+	border-bottom: 1px dotted currentColor;
+	cursor: help;
+}
+
+.librespeed-meta {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: .15em 1.25em;
+	width: fit-content;
+	margin: 1em auto 0;
+	text-align: left;
+	font-size: .95em;
+}
+
+/* Off-screen but reachable: the live region announcing the running phase,
+ * and the gauge figures repeated as plain text for browse mode. */
+.librespeed-visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}

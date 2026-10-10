@@ -14,6 +14,7 @@ return view.extend({
 		s.nodescriptions = true;
 		s.anonymous = true;
 		s.addremove = true;
+		s.sortable = true;
 
 		o = s.option(form.Value, 'name', _('Name'),
 			_('A short name for the configured command'));

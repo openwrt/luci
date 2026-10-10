@@ -31,7 +31,7 @@ function timeValidator(value, desc) {
 			}
 		}
 	}
-	return _('The value %s is invalid'.format(desc));
+	return _('The value %s is invalid').format(desc);
 }
 
 return view.extend({

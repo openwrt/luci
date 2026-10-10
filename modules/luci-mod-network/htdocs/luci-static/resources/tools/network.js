@@ -140,6 +140,14 @@ function updatePlaceholders(opt, section_id) {
 	}
 }
 
+function formatLinkSpeed(link) {
+	let unit = ['Mbps', 'Gbps', 'Tbps', 'Pbps', 'Ebps', 'Zbps'];
+	let unit_index = 0;
+	while (link >= 1000 && unit_index < unit.length-1)
+		link /= 1000, unit_index++;
+	return '%f%s'.format(link, unit[unit_index]);
+}
+
 var cbiFlagTristate = form.ListValue.extend({
 	__init__(/* ... */) {
 		this.super('__init__', arguments);
@@ -428,7 +436,16 @@ return baseclass.extend({
 		return s.taboption(tabName, optionClass, optionName, optionTitle, optionDescription);
 	},
 
-	addDeviceOptions(s, dev, isNew, rtTables, hasPSE) {
+/**
+ *
+ * @param {any} s
+ * @param {any} dev
+ * @param {boolean} isNew
+ * @param {any} rtTables
+ * @param {boolean} hasPSE
+ * @param {{speed: number, duplex: "full"|"half", base: string}[]} phyLinkSpeeds
+ */
+	addDeviceOptions(s, dev, isNew, rtTables, hasPSE, phyLinkSpeeds) {
 		const parent_dev = dev ? dev.getParent() : null;
 		const devname = dev ? dev.getName() : null;
 		let o, ss;
@@ -779,10 +796,10 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.depends({'type': 'bonding', 'policy': '802.3ad'});
 
-		o = this.replaceOption(s, 'devadvanced', form.Value, 'packets_per_slave', _('Packets per slave'));
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'packets_per_port', _('Packets per slave'));
 		o.description = _('Number of packets to transmit through a slave before moving to the next one. Slave is chosen at random when 0.');
 		o.placeholder = '1';
-		o.datatype = 'range(1, 65535)';
+		o.datatype = 'range(0, 65535)';
 		o.depends({'type': 'bonding', 'policy': 'balance-rr'});
 
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'lp_interval', _('Learning packets Interval'));
@@ -806,7 +823,7 @@ return baseclass.extend({
 		o.description = _('Specify the number of peer notifications to be issued after a failover event.');
 		o.placeholder = '1';
 		o.datatype = 'range(0, 255)';
-		o.depends('type', 'bonding');		
+		o.depends('type', 'bonding');
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'primary_reselect', _('Primary port reselection policy'));
 		o.default = '';
@@ -886,7 +903,7 @@ return baseclass.extend({
 			}
 		};
 		o.depends('type', 'bonding');
-		
+
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'monitor_interval', _('Monitor Interval'));
 		o.description = _('Specifies the link monitoring frequency in milliseconds');
 		o.placeholder = '100';
@@ -1124,6 +1141,47 @@ return baseclass.extend({
 		o.rmempty = true;
 		o.datatype = 'macaddr';
 		o.depends('type', 'veth');
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'autoneg', _('Auto negotiation'),
+			_('Disable to manually control the duplex and link speed of the network device.'));
+		o.value('', _('automatic (enabled)'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
+		o.default = '';
+		o.rmempty = true;
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'duplex', _('Duplex'));
+		o.default = '';
+		o.rmempty = true;
+		o.depends('autoneg', '0');
+		o.value('', _('automatic'));
+		o.value('1', _('Full duplex'));
+		o.value('0', _('Half duplex'));
+
+		let devicePhySpeeds = phyLinkSpeeds
+			.reduce((a, b) => a.includes(b.speed) ? a : a.concat(b.speed), []);
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'speed', _('Speed'),
+			_('Use a speed compatible with your device, forcing a higher speed will result in the system setting a lower value, but one that is compatible with the network interface'));
+		o.datatype = "string";
+		o.rmempty = true;
+		o.depends('autoneg', '0');
+		o.value('', _('automatic'));
+		for (let link of devicePhySpeeds)
+			o.value('%d'.format(link), formatLinkSpeed(link));
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'rxpause', _('Controls the receive (RX) flow control'));
+		o.rmempty = true;
+		o.default = '';
+		o.value('', _('Default'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'txpause', _('Controls the transmission (TX) flow control'));
+		o.rmempty = true;
+		o.default = '';
+		o.value('', _('Default'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
 
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
 		o.placeholder = dev ? dev._devstate('qlen') : '';

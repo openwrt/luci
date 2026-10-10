@@ -1,17 +1,16 @@
 // Copyright 2022 Jo-Philipp Wich <jo@mein.io>
 // Licensed to the public under the Apache License 2.0.
 
-import { open, stat, glob, lsdir, unlink, basename } from 'fs';
+import { open, readfile, stat, glob, lsdir, unlink, basename } from 'fs';
 import { striptags, entityencode } from 'html';
 import { connect } from 'ubus';
 import { cursor } from 'uci';
-import { rand } from 'math';
 import { openlog, syslog, closelog, LOG_INFO, LOG_WARNING, LOG_AUTHPRIV } from 'log';
 
 import { hash, load_catalog, change_catalog, translate, ntranslate, getuid } from 'luci.core';
 import { revision as luciversion, branch as luciname } from 'luci.version';
 import { default as LuCIRuntime } from 'luci.runtime';
-import { urldecode } from 'luci.http';
+import { urldecode, urlencode } from 'luci.http';
 import { get_challenges, verify } from 'luci.authplugins';
 
 let ubus = connect();
@@ -351,6 +350,7 @@ function build_pagetree() {
 		action: 'object',
 		auth: 'object',
 		cors: 'bool',
+		css: 'string',
 		depends: 'object',
 		order: 'int',
 		setgroup: 'string',
@@ -487,12 +487,12 @@ function session_retrieve(sid, allowed_users) {
 }
 
 function randomid(num_bytes) {
-	let bytes = [];
+	let data = readfile('/dev/urandom', num_bytes);
 
-	while (num_bytes-- > 0)
-		push(bytes, sprintf('%02x', rand() % 256));
+	if (length(data) != num_bytes)
+		return null;
 
-	return join('', bytes);
+	return hexenc(data);
 }
 
 function session_setup(user, pass, path) {
@@ -509,14 +509,14 @@ function session_setup(user, pass, path) {
 			ubus_rpc_session: login.ubus_rpc_session,
 			values: { token: randomid(16) }
 		});
-		syslog(LOG_INFO|LOG_AUTHPRIV, sprintf("luci: accepted login on /%s for %s from %s",
-			join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+		syslog(LOG_INFO|LOG_AUTHPRIV, "luci: accepted login on /%s for %s from %s",
+			join('/', map(path, p => urlencode(p))), urlencode(user || "?"), http.getenv("REMOTE_ADDR") || "?");
 
 		return session_retrieve(login.ubus_rpc_session);
 	}
 
-	syslog(LOG_WARNING|LOG_AUTHPRIV, sprintf("luci: failed login on /%s for %s from %s",
-		join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+	syslog(LOG_WARNING|LOG_AUTHPRIV, "luci: failed login on /%s for %s from %s",
+		join('/', map(path, p => urlencode(p))), urlencode(user || "?"), http.getenv("REMOTE_ADDR") || "?");
 
 	closelog();
 }
@@ -759,7 +759,7 @@ function lookup(...segments) {
 			push(path, name);
 
 	for (let name in path) {
-		node = node.children[name];
+		node = node.children?.[name];
 
 		if (!node)
 			return null;

@@ -293,11 +293,14 @@ function run_ttyd(request) {
 	const port = int(request.args.port) || 7682;
 	const uid = request.args.uid || '';
 
-	if (!id) {
-		return { error: 'Container ID is required' };
+	if (!id || !match(id, /^[a-zA-Z0-9][a-zA-Z0-9_.\-]*$/)) {
+		return { error: 'Invalid container ID' };
 	}
 
-	let ttyd_cmd = `ttyd -q -d 2 --once --writable -p ${port} docker`;
+	if (port < 1 || port > 65535) {
+		return { error: 'Invalid port number' };
+	}
+
 	const sock_addr = ds.get_socket_dest();
 
 	/* Build the full command:
@@ -308,20 +311,28 @@ function run_ttyd(request) {
 	Note: invocations of docker -H x.x.x.x:2375 [..] will fail after v27 without --tls*
 	*/
 	const sock_str = index(sock_addr, '/') != -1 && index(sock_addr, 'unix://') == -1 ? 'unix://' + sock_addr : sock_addr;
-	ttyd_cmd = `${ttyd_cmd} -H "${sock_str}" exec -it`;
+
+	// Stop any existing ttyd
+	system(['start-stop-daemon', '-K', '-q', '-x', '/usr/bin/ttyd']);
+
+	// Build ttyd argv
+	let ttyd_argv = [
+		'-q', '-d', '2', '--once', '--writable',
+		'-p', port,
+		'/usr/bin/docker', '-H', sock_str, 'exec', '-it'
+	];
 	if (uid && uid !== '') {
-		ttyd_cmd = `${ttyd_cmd} -u ${uid}`;
+		push(ttyd_argv, '-u', uid);
 	}
+	push(ttyd_argv, id, cmd);
 
-	ttyd_cmd = `${ttyd_cmd} ${id} ${cmd} &`;
+	// Start ttyd as background daemon
+	let start_cmd = ['start-stop-daemon', '-S', '-x', '/usr/bin/ttyd', '-a', 'ttyd', '-b', '--'];
+	for (let arg in ttyd_argv)
+		push(start_cmd, arg);
+	system(start_cmd);
 
-	// Try to kill any existing ttyd processes on this port
-	system(`pkill -f "ttyd.*-p ${port}"` + ' 2>/dev/null; true');
-
-	// Start ttyd
-	system(ttyd_cmd);
-
-	return { status: 'ttyd started', command: ttyd_cmd };
+	return { status: 'ttyd started' };
 }
 
 // https://docs.docker.com/reference/api/engine/version/v1.47/

@@ -1,0 +1,137 @@
+#!/bin/sh
+# SPDX-License-Identifier: MIT
+#
+# Remove qosify qdiscs and ifb devices left behind after qosify exits.
+#
+# A clean stop only does part of this: interface_clear_qdisc() removes the root
+# qdisc, the bpf filters and the ifb device but not clsact, and main() never
+# calls qosify_dns_stop(), so ifb-dns stays up. A crash, a SIGKILL or a respawn
+# loop leaves the rest too. This script deliberately only touches the devices of
+# enabled qosify sections, the ifb names qosify derives from them and qosify's
+# own ifb-dns -- never a qdisc or ifb qosify did not create.
+#
+# `cleanup wait` is for a package removal: qosify is stopped by its own prerm,
+# which may run after ours, so the device names are read now and the sweep waits
+# up to 30 s for qosify to exit. If it is still running, nothing is touched.
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+
+# The lock is an flock on an open fd, not a directory plus an EXIT trap: rpcd
+# SIGKILLs this script at its exec timeout (rpc_file_exec_timeout_cb() in
+# file.c), the trap never runs, and the leftover directory would then make every
+# later run exit 0 without doing anything. The kernel drops an flock on process
+# exit however the process dies. The path differs from the old directory so a
+# stale one left by an earlier version cannot break the redirect. Without
+# busybox flock, run unlocked rather than not at all -- the worst a concurrent
+# run can do is repeat a tc delete.
+LOCK="/var/lock/qosify-luci-cleanup.lock"
+
+mkdir -p /var/lock
+exec 9>"$LOCK"
+command -v flock >/dev/null && { flock -n 9 || exit 0; }
+
+# Mirrors interface_ifb_name() in qosify: "ifb-<dev>" while strlen(dev) + 4 is
+# below IFNAMSIZ. Longer names take a different branch upstream which we do not
+# try to reproduce here.
+ifb_name() {
+	[ "${#1}" -lt 12 ] || return 1
+	echo "ifb-$1"
+}
+
+qosify_filter() {
+	tc filter show dev "$1" "$2" 2>/dev/null | grep -q ' qosify_'
+}
+
+# qosify's filters sit at QOSIFY_PRIO_BASE (0x110 = 272): its bpf classifier on
+# egress, and on ingress the classifier plus the DNS and ifb redirects up to 277.
+# A clean exit removes them and the root qdisc, so they only survive a crash, and
+# then the root cake is qosify's too. Another shaper's root qdisc, and a clsact
+# carrying anyone else's filters, are left alone.
+clear_dev() {
+	local dev="$1"
+	local ifb p
+
+	[ -n "$dev" ] || return 0
+
+	if [ -e "/sys/class/net/$dev" ]; then
+		if qosify_filter "$dev" egress; then
+			tc qdisc del dev "$dev" root 2>/dev/null
+			tc filter del dev "$dev" egress pref 272 2>/dev/null
+		fi
+		if qosify_filter "$dev" ingress; then
+			for p in 272 273 274 275 276 277; do
+				tc filter del dev "$dev" ingress pref "$p" 2>/dev/null
+			done
+		fi
+		[ -n "$(tc filter show dev "$dev" ingress 2>/dev/null)$(tc filter show dev "$dev" egress 2>/dev/null)" ] ||
+			tc qdisc del dev "$dev" clsact 2>/dev/null
+	fi
+
+	# An ifb outlives its parent, so this is not gated on $dev still existing.
+	# That only helps a `config device`, whose name survives the netdev.
+	ifb="$(ifb_name "$dev")" || return 0
+	[ -e "/sys/class/net/$ifb" ] || return 0
+
+	ip link set "$ifb" down 2>/dev/null
+	ip link del "$ifb" 2>/dev/null
+}
+
+# add_interface() in qosify.init returns before reading anything else when
+# disabled is set, so qosify never touched those devices.
+section_enabled() {
+	local disabled
+
+	config_get_bool disabled "$1" disabled 0
+	[ "$disabled" -eq 0 ]
+}
+
+# `config interface` names a netifd interface, not a device; qosify resolves it
+# to .l3_device before touching tc, so resolve it the same way. netifd drops
+# .l3_device when the interface goes down, so a vanished pppoe device leaves no
+# name to derive the ifb from here. qosify clears that one itself: on the next
+# up, interface_start() runs interface_clear_qdisc(), which deletes ifb-<dev>
+# before cmd_add_ingress() creates it again.
+collect_interface() {
+	local cfg="$1"
+	local name dev
+
+	section_enabled "$cfg" || return 0
+	config_get name "$cfg" name
+	[ -n "$name" ] || return 0
+
+	network_get_device dev "$name" && DEVS="$DEVS $dev"
+}
+
+# `config device` names a netdev directly.
+collect_device() {
+	local cfg="$1"
+	local name
+
+	section_enabled "$cfg" || return 0
+	config_get name "$cfg" name
+	[ -n "$name" ] && DEVS="$DEVS $name"
+}
+
+DEVS=""
+config_load qosify
+config_foreach collect_interface interface
+config_foreach collect_device device
+
+if [ "$1" = wait ]; then
+	n=30
+	while pidof qosify >/dev/null; do
+		[ "$n" -gt 0 ] || exit 0
+		n=$((n - 1))
+		sleep 1
+	done
+fi
+
+for dev in $DEVS; do clear_dev "$dev"; done
+
+# ifb-dns is qosify's fixed DNS ifb, not derived from any section, and a stop
+# leaves it up under the kernel's default fq_codel. Deleting its root qdisc only
+# re-attaches the default, so drop the device -- only once qosify has exited.
+pidof qosify >/dev/null || ip link del ifb-dns 2>/dev/null
+
+exit 0

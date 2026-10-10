@@ -59,7 +59,7 @@ return view.extend({
 			]));
 		}
 
-		return E('div', { 'class': 'cbi-section' }, table);
+		return table;
 	},
 
 	renderTable(data) {
@@ -80,12 +80,13 @@ return view.extend({
 			]));
 		}
 
-		return E('div', { 'class': 'cbi-section' }, table);
+		return table;
 	},
 
 	renderContent(data) {
 		return E([], [
 
+			E('div', { 'class': 'cbi-section' }, [
 			E('h3', {}, [ _('Connection State') ]),
 
 			this.renderSimpleTable([
@@ -94,16 +95,18 @@ return view.extend({
 				[ _('Line Uptime'), '%t'.format(data.uptime) ],
 				[ _('Annex'), data.annex ],
 				[ _('Power Management Mode'), data.power_state ]
-			]),
+			]) ]),
 
+			E('div', { 'class': 'cbi-section' }, [
 			E('h3', {}, [ _('Inventory') ]),
 
 			this.renderSimpleTable([
 				[ _('Modem Chipset'), data.chipset ],
 				[ _('Modem Firmware'), data.firmware_version ],
 				[ _('xTU-C Vendor ID'), data.atu_c.vendor || data.atu_c.vendor_id ]
-			]),
+			]) ]),
 
+			E('div', { 'class': 'cbi-section' }, [
 			E('h3', {}, [ _('Line Details') ]),
 
 			E('h4', {}, [ _('Data Rates') ]),
@@ -132,8 +135,9 @@ return view.extend({
 				[ _('Signal Attenuation (SATN)'), '%.1f dB', data.downstream.satn, data.upstream.satn ],
 				[ _('Noise Margin (SNRM)'), '%.1f dB', data.downstream.snr, data.upstream.snr ],
 				[ _('Aggregate Transmit Power (ACTATP)'), '%.1f dB', data.downstream.actatp, data.upstream.actatp ]
-			]),
+			]) ]),
 
+			E('div', { 'class': 'cbi-section' }, [
 			E('h3', {}, [ _('Error Counters') ]),
 
 			E('h4', {}, [ _('Error Seconds') ]),
@@ -164,7 +168,7 @@ return view.extend({
 				[ _('Retransmitted DTUs (rtx-tx)'), '%d', data.errors.far.tx_retransmitted, data.errors.near.tx_retransmitted ],
 				[ _('Corrected DTUs (rtx-c)'), '%d', data.errors.near.rx_corrected, data.errors.far.rx_corrected ],
 				[ _('Uncorrected DTUs (rtx-uc)'), '%d', data.errors.near.rx_uncorrected_protected, data.errors.far.rx_uncorrected_protected ]
-			])
+			]) ])
 
 		]);
 	},

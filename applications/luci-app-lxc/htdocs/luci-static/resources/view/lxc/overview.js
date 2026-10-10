@@ -73,44 +73,60 @@ return L.view.extend({
 			}
 
 			info_message(output_list, '');
-			let actions = '';
-			actions += `<input type='button' onclick='action_handler(this)' data-action='start' value='${_('Start')}' class='cbi-button cbi-button-apply' />`;
-			actions += `&#160;<input type='button' onclick='action_handler(this)' data-action='stop' value='${_('Stop')}' class='cbi-button cbi-button-reset' />`;
-			actions += `&#160;<input type='button' onclick='action_handler(this)' data-action='destroy' value='${_('Delete')}' class='cbi-button cbi-button-remove' />`;
-			actions += `&#160;<select class='cbi-input-select cbi-button' style='width:10em' onchange='action_more_handler(this)'>\
-							<option selected='selected' disabled='disabled'>more</option>\
-							<option>configure</option>\
-							<option>freeze</option>\
-							<option>unfreeze</option>\
-							<option>reboot</option>\
-						</select>`;
-			actions += `<span data-loader='' style='display:inline-block; width:16px; height:16px; margin:0 5px'></span>`;
 
-			const div0 = document.createElement('div');
-			div0.className = 'tr cbi-section-table-row';
-			div0.id = lxc_name;
-			div0.setAttribute('data-id', lxc_name);
-
-			const div1 = document.createElement('div');
-			div1.className = 'td';
-			div1.style.width = "30%";
-			div1.setAttribute('data-id', lxc_name);
-			div1.innerHTML = `<strong>${lxc_name}</strong>`;
-
-			const div2 = document.createElement('div');
-			div2.className = 'td statusimg';
-			div2.style.width = '20%';
-			div2.innerHTML = window.img[lxc_state];
-
-			const div3 = document.createElement('div');
-			div3.className = 'td';
-			div3.style.width = '50%';
-			div3.innerHTML = actions;
-
-			document.getElementById('t_lxc_list').appendChild(div0);
-			div0.appendChild(div1);
-			div0.appendChild(div2);
-			div0.appendChild(div3);
+			t_lxc_list.appendChild(E('div', {
+				'class': 'tr cbi-section-table-row',
+				'id': lxc_name,
+				'data-id': lxc_name
+			}, [
+				E('div', { 'class': 'td', 'style': 'width:30%', 'data-id': lxc_name }, [
+					E('strong', {}, [ lxc_name ])
+				]),
+				E('div', { 'class': 'td statusimg', 'style': 'width:20%' }, [
+					window.img[lxc_state]
+				]),
+				E('div', { 'class': 'td', 'style': 'width:50%' }, [
+					E('input', {
+						'type': 'button',
+						'class': 'cbi-button cbi-button-apply',
+						'value': _('Start'),
+						'data-action': 'start',
+						'click': function(ev) { action_handler(ev.target) }
+					}),
+					'\u00a0',
+					E('input', {
+						'type': 'button',
+						'class': 'cbi-button cbi-button-reset',
+						'value': _('Stop'),
+						'data-action': 'stop',
+						'click': function(ev) { action_handler(ev.target) }
+					}),
+					'\u00a0',
+					E('input', {
+						'type': 'button',
+						'class': 'cbi-button cbi-button-remove',
+						'value': _('Delete'),
+						'data-action': 'destroy',
+						'click': function(ev) { action_handler(ev.target) }
+					}),
+					'\u00a0',
+					E('select', {
+						'class': 'cbi-input-select cbi-button',
+						'style': 'width:10em',
+						'change': function(ev) { action_more_handler(ev.target) }
+					}, [
+						E('option', { 'selected': 'selected', 'disabled': 'disabled' }, [ 'more' ]),
+						E('option', {}, [ 'configure' ]),
+						E('option', {}, [ 'freeze' ]),
+						E('option', {}, [ 'unfreeze' ]),
+						E('option', {}, [ 'reboot' ])
+					]),
+					E('span', {
+						'data-loader': '',
+						'style': 'display:inline-block; width:16px; height:16px; margin:0 5px'
+					})
+				])
+			]));
 		}
 
 		function action_handler(self) {
@@ -197,11 +213,19 @@ return L.view.extend({
 		}
 
 		function lxc_configure_template(lxc_name, lxc_conf) {
-			const h = 
-				`<textarea data-id="${lxc_name}" rows="20" style="width:600px;font-family:monospace;white-space:pre;overflow-wrap:normal;overflow-x:scroll;">` +
-				lxc_conf + `</textarea>` +
-				`<input data-id="bt_confirm" onclick="lxc_configure_handler(this)" type="button" class="cbi-button" value="${_('Confirm')}" />`;
-			return h;
+			return E('div', {}, [
+				E('textarea', {
+					'data-id': lxc_name,
+					'rows': '20',
+					'style': 'width:600px;font-family:monospace;white-space:pre;overflow-wrap:normal;overflow-x:scroll;'
+				}, [ lxc_conf ]),
+				E('input', {
+					'type': 'button',
+					'class': 'cbi-button',
+					'value': _('Confirm'),
+					'click': function(ev) { lxc_configure_handler(ev.target) }
+				})
+			]);
 		}
 
 		function action_more_handler(self) {
@@ -218,13 +242,13 @@ return L.view.extend({
 
 			switch(option) {
 				case 'configure':
-					if (next_div && next_div.dataset['action'] !== null) {
+					if (next_div && next_div.dataset['action'] !== undefined) {
 						div1.parentNode.removeChild(next_div);
 					}
 
 					new window.XHR().get(L.url('admin/services/lxc/lxc_configuration_get/' + lxc_name), null,
 					function(x) {
-						div0.innerHTML=`<div>${lxc_configure_template(lxc_name, x.responseText)}</div>`;
+						div0.appendChild(lxc_configure_template(lxc_name, x.responseText));
 						div0.setAttribute('data-action','');
 						div1.parentNode.insertBefore(div0, div1.nextSibling);
 					})
@@ -382,12 +406,6 @@ return L.view.extend({
 				setTimeout(function(){ output.innerHTML=''}, timeout);
 			}
 		}
-
-		// expose handlers for generated inline attributes (keeps parity with legacy Lua view)
-		window.action_handler = action_handler;
-		window.action_more_handler = action_more_handler;
-		window.lxc_configure_handler = lxc_configure_handler;
-		window.lxc_create = lxc_create;
 
 		new window.XHR().get(L.url('admin/services/lxc/lxc_get_downloadable'), null,
 		function(x, data) {

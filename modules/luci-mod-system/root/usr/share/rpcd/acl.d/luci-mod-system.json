@@ -152,7 +152,6 @@
 		},
 		"write": {
 			"file": {
-				"/etc/crontabs/root": [ "write" ],
 				"/bin/umount": [ "exec" ],
 				"/sbin/block": [ "exec" ]
 			},
@@ -173,6 +172,7 @@
 				"/etc/sysupgrade.conf": [ "read" ],
 				"/lib/upgrade/platform.sh": [ "list" ],
 				"/proc/mounts": [ "read" ],
+				"/proc/*/mounts": [ "read" ],
 				"/proc/mtd": [ "read" ],
 				"/proc/partitions": [ "read" ],
 				"/proc/sys/kernel/hostname": [ "read" ],

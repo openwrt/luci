@@ -35,8 +35,8 @@
 		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="{{ media }}/mobile.css" />
 		<link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
 		<link rel="icon" href="{{ media }}/logo.svg" sizes="any">
-		{% if (node?.css): %}
-		<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">
+		{% if (dispatched?.css): %}
+		<link rel="stylesheet" href="{{ resource }}/{{ dispatched.css }}">
 		{% endif %}
 		{% if (css): %}
 		<style title="text/css">{{ css }}</style>
@@ -45,7 +45,7 @@
 		<script src="{{ resource }}/cbi.js"></script>
 	</head>
 
-	<body class="lang_{{ dispatcher.lang }} {{ entityencode(striptags(node?.title ?? ''), true) }}" data-page="{{ entityencode(join('-', length(ctx.request_path) ? ctx.request_path : ctx.path), true) }}">
+	<body class="lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', length(ctx.request_path) ? ctx.request_path : ctx.path), true) }}">
 		{% if (!blank_page): %}
 		<header>
 			<a class="brand" href="/">{{ striptags(boardinfo.hostname ?? '?') }}</a>

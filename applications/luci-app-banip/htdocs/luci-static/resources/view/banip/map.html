@@ -9,9 +9,83 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 		integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 	<style>
+		html {
+			color-scheme: light dark;
+			--banip-water: #d6e3ec;
+			--banip-land: #f4f1ea;
+			--banip-coast: #a9a396;
+			--banip-grid: #c2d2de;
+			--banip-label: #97a3ad;
+		}
+
+		@media (prefers-color-scheme: dark) {
+			html {
+				--banip-water: #151b21;
+				--banip-land: #2a3138;
+				--banip-coast: #4d5862;
+				--banip-grid: #232b33;
+				--banip-label: #5d6a75;
+			}
+		}
+
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+		}
+
+		body {
+			display: flex;
+			flex-direction: column;
+		}
+
+		#toolbar {
+			flex: 0 0 auto;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 0.6em;
+			padding: 0.5em 0.8em;
+			box-sizing: border-box;
+			font-family: sans-serif;
+			font-size: 14px;
+			color: CanvasText;
+			background: Canvas;
+			border-bottom: 1px solid ButtonBorder;
+		}
+
+		#setSelect {
+			min-width: 16em;
+			max-width: 70vw;
+			padding: 0.25em;
+		}
+
 		#map {
-			height: 97vh;
+			flex: 1 1 auto;
+			min-height: 0;
 			width: 100%;
+		}
+
+		.leaflet-container {
+			background: var(--banip-water);
+		}
+
+		.title {
+			display: block;
+			text-align: center;
+			font-weight: bold;
+		}
+
+		/* Leaflet positions the icon element itself, so center on the inner span */
+		.continent span {
+			position: absolute;
+			transform: translate(-50%, -50%);
+			white-space: nowrap;
+			font-size: 11px;
+			font-weight: 600;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--banip-label);
 		}
 
 		.mono {
@@ -24,6 +98,11 @@
 </head>
 
 <body>
+	<div id="toolbar">
+		<label for="setSelect">Set:</label>
+		<select id="setSelect"></select>
+	</div>
+
 	<div id="map"></div>
 
 	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -31,84 +110,446 @@
 	<script>
 		'use strict';
 
-		/* intialize map */
-		let map = L.map('map', {
+		/* maximum display length of the free form GeoIP fields */
+		const MAX_IP_LEN = 38;
+		const MAX_AS_LEN = 38;
+		const MAX_CITY_LEN = 33;
+
+		/* zoom level applied when the view is centered on a single point */
+		const POINT_ZOOM = 6;
+
+		/* zoom level of the initial view and of the 'All Sets' selection */
+		const OVERVIEW_ZOOM = 3;
+
+		/* continent labels are dropped as soon as the outlines carry the orientation */
+		const LABEL_ZOOM = 4;
+
+		/* The outlines are shipped without attributes, so the labels are placed here */
+		const CONTINENTS = [
+			{ name: 'North America', latlng: [48, -100] },
+			{ name: 'South America', latlng: [-13, -58] },
+			{ name: 'Europe', latlng: [56, 26] },
+			{ name: 'Africa', latlng: [4, 20] },
+			{ name: 'Asia', latlng: [46, 92] },
+			{ name: 'Oceania', latlng: [-25, 137] },
+			{ name: 'Antarctica', latlng: [-72, 15] }
+		];
+
+		/* country outlines shipped with the package, Natural Earth 1:110m, public domain */
+		const WORLD_FILE = 'world.json';
+
+		/* optional higher detail outlines, not shipped, see the banIP README */
+		const WORLD_FILE_HD = 'world-50m.json';
+
+		/* spacing of the graticule in degrees */
+		const GRID_STEP = 20;
+
+		/* mapData key holding the geo data of the local uplink(s) */
+		const HOME_KEY = 'homeIP';
+
+		const HOME_STYLE = { color: '#378242', opacity: 1.0, fillColor: '#378242', fillOpacity: 0.5, radius: 6 };
+		const BLOCKED_STYLE = { color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 3 };
+
+		/* initialize map, canvas rendering keeps the per Set marker volume cheap */
+		const map = L.map('map', {
 			zoom: 3,
 			minZoom: 2,
-			maxZoom: 18,
-			center: [50, 10]
-			}).setView([50, 10]);
-			L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		}).addTo(map);
+			maxZoom: 6,
+			center: [50, 10],
+			worldCopyJump: true,
+			preferCanvas: true
+		});
 
-		/* get mapData */
+		map.attributionControl.addAttribution('<a href="https://www.naturalearthdata.com">Natural Earth</a>');
+
+		/* the basemap is drawn from local country outlines instead of a tile service */
+		map.createPane('basemap');
+		map.getPane('basemap').style.zIndex = 200;
+
+		const basemapRenderer = L.canvas({ pane: 'basemap' });
+
+		function cssColor(name) {
+			return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+		}
+
+		function landStyle() {
+			return { color: cssColor('--banip-coast'), weight: 0.7, opacity: 1.0, fillColor: cssColor('--banip-land'), fillOpacity: 1.0 };
+		}
+
+		function gridStyle() {
+			return { color: cssColor('--banip-grid'), weight: 0.6, opacity: 1.0 };
+		}
+
+		/* the empty ocean is hard to read at low zoom levels, so add a plain graticule */
+		function graticule() {
+			const lines = [];
+			let value;
+
+			for (value = -80; value <= 80; value += GRID_STEP)
+				lines.push([[value, -180], [value, 180]]);
+
+			for (value = -180; value <= 180; value += GRID_STEP)
+				lines.push([[-85, value], [85, value]]);
+
+			return lines;
+		}
+
+		const gridLayer = L.polyline(graticule(), Object.assign({
+			pane: 'basemap',
+			renderer: basemapRenderer,
+			interactive: false
+		}, gridStyle())).addTo(map);
+
+		let landLayer = null;
+
+		const labelLayer = L.layerGroup(CONTINENTS.map(function (item) {
+			return L.marker(item.latlng, {
+				pane: 'basemap',
+				interactive: false,
+				keyboard: false,
+				icon: L.divIcon({
+					className: 'continent',
+					html: '<span>' + item.name + '</span>',
+					iconSize: [0, 0]
+				})
+			});
+		}));
+
+		function updateLabels() {
+			const wanted = map.getZoom() <= LABEL_ZOOM;
+
+			if (wanted !== map.hasLayer(labelLayer))
+				wanted ? labelLayer.addTo(map) : labelLayer.remove();
+		}
+
+		map.on('zoomend', updateLabels);
+		updateLabels();
+
+		function loadWorld(file) {
+			return fetch(file).then(function (response) {
+				if (!response.ok)
+					throw new Error(file + ': HTTP ' + response.status);
+
+				return response.json();
+			});
+		}
+
+		/* prefer the optional outlines, their absence is the normal case */
+		loadWorld(WORLD_FILE_HD)
+			.catch(function () {
+				return loadWorld(WORLD_FILE);
+			})
+			.then(function (world) {
+				landLayer = L.geoJSON(world, {
+					pane: 'basemap',
+					renderer: basemapRenderer,
+					interactive: false,
+					smoothFactor: 1.2,
+					style: landStyle
+				}).addTo(map);
+			})
+			.catch(function (error) {
+				/* the markers stay usable on the plain background */
+				console.error('banIP: unable to load the basemap,', error);
+			});
+
+		/* restyle in place when the browser switches between the light and dark scheme */
+		const colorScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+		if (colorScheme.addEventListener)
+			colorScheme.addEventListener('change', function () {
+				gridLayer.setStyle(gridStyle());
+
+				if (landLayer)
+					landLayer.setStyle(landStyle());
+			});
+
+		/* feature groups, so redrawing is a single clearLayers() and getBounds() is available */
+		const homeLayer = L.featureGroup().addTo(map);
+		const blockedLayer = L.featureGroup().addTo(map);
+
+		const setSelect = document.getElementById('setSelect');
+
+		/* accept a coordinate only if it is a finite number in range */
+		function toLatLng(geo) {
+			const lat = Number(geo.lat);
+			const lon = Number(geo.lon);
+
+			if (geo.lat === null || geo.lat === undefined || geo.lat === '' ||
+				geo.lon === null || geo.lon === undefined || geo.lon === '')
+				return null;
+
+			if (!Number.isFinite(lat) || !Number.isFinite(lon))
+				return null;
+
+			if (lat < -90 || lat > 90 || lon < -180 || lon > 180)
+				return null;
+
+			return [lat, lon];
+		}
+
+		/* GeoIP lookups regularly return empty city/as fields, keep the entry anyway */
+		function fieldText(value, maxLength) {
+			const text = String(value === null || value === undefined ? '' : value).trim();
+
+			if (!text)
+				return 'n/a';
+
+			return text.length > maxLength ? text.slice(0, maxLength - 1) + '\u2026' : text;
+		}
+
+		/*
+		 * Popups are built as DOM nodes, not as HTML strings, so the third party
+		 * GeoIP fields cannot be interpreted as markup. Passing a function to
+		 * bindPopup() defers this until the popup is actually opened.
+		 */
+		function buildPopup(title, entry) {
+			const content = document.createElement('div');
+			const heading = document.createElement('span');
+			const body = document.createElement('p');
+			const geo = entry.geo;
+			const latlng = entry.latlng;
+			const more = entry.count > 1 ? ' (+' + (entry.count - 1) + ' more)' : '';
+			const lines = [
+				'City: ' + fieldText(geo.city, MAX_CITY_LEN) + ' (' + fieldText(geo.countryCode, 8) + ')',
+				'Latitude : ' + latlng[0],
+				'Longitude: ' + latlng[1],
+				'IP: ' + fieldText(geo.query, MAX_IP_LEN) + more,
+				'AS: ' + fieldText(geo.as, MAX_AS_LEN)
+			];
+
+			heading.className = 'title';
+			heading.textContent = title;
+			body.className = 'mono';
+
+			lines.forEach(function (line, index) {
+				if (index)
+					body.appendChild(document.createElement('br'));
+
+				body.appendChild(document.createTextNode(line));
+			});
+
+			content.appendChild(heading);
+			content.appendChild(body);
+
+			return content;
+		}
+
+		function addMarker(layer, title, entry, style) {
+			L.circleMarker(entry.latlng, style)
+				.bindPopup(function () {
+					return buildPopup(title, entry);
+				})
+				.addTo(layer);
+		}
+
+		/*
+		 * GeoIP resolves to city level, so several IPs of one Set regularly share a
+		 * coordinate. Stacked markers are indistinguishable and only the topmost one
+		 * can be opened, so collapse them into one marker and count the IPs behind it.
+		 * Collapsing happens per Set, otherwise the Set that reaches a coordinate first
+		 * would swallow the points of every later Set and make the counts depend on the
+		 * order of ban_map.jsn.
+		 */
+		function addEntry(list, index, geo, latlng) {
+			const key = latlng[0] + ',' + latlng[1];
+			const known = index.get(key);
+
+			if (known) {
+				known.count++;
+				return;
+			}
+
+			const entry = { geo: geo, latlng: latlng, count: 1 };
+
+			index.set(key, entry);
+			list.push(entry);
+		}
+
+		/*
+		 * mapData is an array of single key objects, the key being the banIP Set name:
+		 *
+		 *   [ {}, { "homeIP": {...} }, { "country.ir.v4": {...} }, ... ]
+		 */
+		function collectEntries(parsedData) {
+			const result = { home: [], sets: {} };
+			const homeIndex = new Map();
+			const setIndex = new Map();
+
+			parsedData.forEach(function (item) {
+				if (!item || typeof item !== 'object')
+					return;
+
+				Object.keys(item).forEach(function (setName) {
+					const geo = item[setName];
+
+					if (!geo || typeof geo !== 'object')
+						return;
+
+					const latlng = toLatLng(geo);
+
+					if (!latlng)
+						return;
+
+					if (setName === HOME_KEY) {
+						addEntry(result.home, homeIndex, geo, latlng);
+						return;
+					}
+
+					if (!result.sets[setName]) {
+						result.sets[setName] = [];
+						setIndex.set(setName, new Map());
+					}
+
+					addEntry(result.sets[setName], setIndex.get(setName), geo, latlng);
+				});
+			});
+
+			return result;
+		}
+
+		function countIPs(entries) {
+			let total = 0;
+
+			entries.forEach(function (entry) {
+				total += entry.count;
+			});
+
+			return total;
+		}
+
+		function setNames(sets) {
+			return Object.keys(sets).sort();
+		}
+
+		/*
+		 * An empty selection renders all Sets, otherwise the selected one only.
+		 * Every mapped location of a rendered Set is drawn, no cap is applied, so
+		 * the result does not depend on how f_report() truncates set_elements.
+		 */
+		function renderBlocked(sets, selected) {
+			const names = selected ? [selected] : setNames(sets);
+
+			blockedLayer.clearLayers();
+
+			names.forEach(function (setName) {
+				const entries = sets[setName] || [];
+
+				entries.forEach(function (entry) {
+					addMarker(blockedLayer, 'blocked IP by ' + setName, entry, BLOCKED_STYLE);
+				});
+			});
+
+			/* the canvas renderer draws in insertion order, keep home on top */
+			homeLayer.eachLayer(function (marker) {
+				marker.bringToFront();
+			});
+		}
+
+		function fitLayer(layer) {
+			const layers = layer.getLayers();
+
+			if (!layers.length)
+				return false;
+
+			if (layers.length === 1)
+				map.setView(layers[0].getLatLng(), POINT_ZOOM);
+			else
+				map.fitBounds(layer.getBounds(), { maxZoom: POINT_ZOOM, padding: [30, 30] });
+
+			return true;
+		}
+
+		/* The overall view stays zoomed out */
+		function resetView() {
+			const home = homeLayer.getLayers();
+
+			if (home.length) {
+				map.setView(home[0].getLatLng(), OVERVIEW_ZOOM);
+				return;
+			}
+
+			if (blockedLayer.getLayers().length)
+				map.setView(blockedLayer.getBounds().getCenter(), OVERVIEW_ZOOM);
+		}
+
+		function addOption(value, label) {
+			const option = document.createElement('option');
+
+			option.value = value;
+			option.textContent = label;
+			setSelect.appendChild(option);
+		}
+
+		function setNotice(label) {
+			setSelect.textContent = '';
+			addOption('', label);
+			setSelect.disabled = true;
+		}
+
+		function plural(count, noun) {
+			return count + ' ' + noun + (count === 1 ? '' : 's');
+		}
+
+		function optionLabel(name, entries) {
+			return name + ' (' + plural(countIPs(entries), 'IP') +
+				' at ' + plural(entries.length, 'location') + ')';
+		}
+
+		function fillSelect(sets) {
+			const names = setNames(sets);
+			let all = [];
+
+			names.forEach(function (setName) {
+				all = all.concat(sets[setName]);
+			});
+
+			if (!names.length) {
+				setNotice('No mappable Set entries');
+				return;
+			}
+
+			setSelect.textContent = '';
+			setSelect.disabled = false;
+			addOption('', optionLabel('All Sets', all));
+
+			names.forEach(function (setName) {
+				addOption(setName, optionLabel(setName, sets[setName]));
+			});
+		}
+
+		/* load the data handed over by the banIP set report page */
 		const mapData = sessionStorage.getItem('mapData');
+		let parsedData = null;
+
 		if (mapData) {
-			let uniqueCoordinates = [];
-			let homeCoordinates = [];
-			const parsedData = JSON.parse(mapData);
-			parsedData.forEach(function (item, index) {
-				if (Object.keys(item).length !== 0) {
-					let keys = Object.keys(item);
-					keys.forEach(function (key) {
-						if (item[key] && item[key].lat && item[key].lon && item[key].query && item[key].as && item[key].city && item[key].countryCode) {
-							let coordObj = { lat: item[key].lat, lon: item[key].lon };
-							if (key === "homeIP" && !homeCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
-								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
-								homeCoordinates.push(coordObj);
-							}
-							if (key !== "homeIP" && !uniqueCoordinates.some(existingCoord => existingCoord.lat === coordObj.lat && existingCoord.lon === coordObj.lon)) {
-								coordObj = { key: key, lat: item[key].lat, lon: item[key].lon, query: item[key].query, as: item[key].as, city: item[key].city, cc: item[key].countryCode };
-								uniqueCoordinates.push(coordObj);
-							}
-						}
-					});
-				}
+			try {
+				parsedData = JSON.parse(mapData);
+			} catch (error) {
+				console.error('banIP: unable to parse mapData,', error);
+			}
+		}
+
+		if (!mapData) {
+			setNotice('No banIP map data available');
+		} else if (!Array.isArray(parsedData)) {
+			setNotice('Unable to load banIP map data');
+		} else {
+			const entries = collectEntries(parsedData);
+
+			entries.home.forEach(function (entry) {
+				addMarker(homeLayer, 'local IP', entry, HOME_STYLE);
 			});
 
-			/* render markers for local IPs, reset focus and zoom level */
-			homeCoordinates.forEach(function (coordObj) {
-				let latHome = coordObj.lat;
-				let lonHome = coordObj.lon;
-				let ipHome = coordObj.query.slice(0, 38);
-				let asHome = coordObj.as.slice(0, 38);
-				let cityHome = coordObj.city.slice(0, 33);
-				let ccHome = coordObj.cc;
+			fillSelect(entries.sets);
+			renderBlocked(entries.sets, '');
+			resetView();
 
-				map.setView([latHome, lonHome], 6);
+			setSelect.addEventListener('change', function () {
+				renderBlocked(entries.sets, setSelect.value);
 
-				let circle = L.circleMarker([latHome, lonHome]).addTo(map);
-				circle.setStyle({ color: '#378242', opacity: 1.0, fillColor: '#378242', fillOpacity: 0.5, radius: 6 });
-				circle.bindPopup("<b><center>local IP</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + cityHome + " (" + ccHome + ")" +
-					"<br />Latitude : " + latHome +
-					"<br />Longitude: " + lonHome +
-					"<br />IP: " + ipHome +
-					"<br />AS: " + asHome +
-					"</p>");
-			});
-
-			/* render markers for blocked IPs */
-			uniqueCoordinates.forEach(function (coordObj) {
-				let key = coordObj.key.slice(0, -3);
-				let lat = coordObj.lat;
-				let lon = coordObj.lon;
-				let ip = coordObj.query.slice(0, 38);
-				let as = coordObj.as.slice(0, 38);
-				let city = coordObj.city.slice(0, 33);
-				let cc = coordObj.cc;
-				let circle = L.circleMarker([lat, lon]).addTo(map);
-				circle.setStyle({ color: '#C22121', opacity: 1.0, fillColor: '#C22121', fillOpacity: 0.5, radius: 2 });
-				circle.bindPopup("<b><center>blocked IP by " + key + "</center></b>" +
-					"<p class=\"mono\">" +
-					"City: " + city + " (" + cc + ")" +
-					"<br />Latitude : " + lat +
-					"<br />Longitude: " + lon +
-					"<br />IP: " + ip +
-					"<br />AS: " + as +
-					"</p>");
+				if (!setSelect.value || !fitLayer(blockedLayer))
+					resetView();
 			});
 		}
 	</script>

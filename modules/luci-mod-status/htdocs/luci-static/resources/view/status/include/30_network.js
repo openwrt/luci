@@ -40,7 +40,7 @@ function renderbox(ifc, ipv6, dhcpv6_stats) {
 	}
 
 	function addDhcpv6Stats() {
-		if (ipv6 && ifc.getProtocol() === 'dhcpv6' && dhcpv6_stats && dhcpv6_stats[dev.device]) {
+		if (ipv6 && ifc.getProtocol() === 'dhcpv6' && dhcpv6_stats && dev && dhcpv6_stats[dev.device]) {
 			const arr = [];
 			for (const [pkt_type, count] of Object.entries(dhcpv6_stats[dev.device]))
 				arr.push(pkt_type.replace('dhcp_', _('DHCPv6') + ' '), `${count} ${_('pkts', 'packets, abbreviated')}`);

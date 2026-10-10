@@ -19,8 +19,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" media="screen" href="{{ media }}/cascade.css" />
-{% if (node?.css): %}
-<link rel="stylesheet" media="screen" href="{{ resource }}/{{ node.css }}" />
+{% if (dispatched?.css): %}
+<link rel="stylesheet" media="screen" href="{{ resource }}/{{ dispatched.css }}" />
 {% endif %}
 {% if (css): %}
 <style>{{ css }}</style>

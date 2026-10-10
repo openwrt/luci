@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-11-11 08:52+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2026-09-16 20:01+0000\n"
+"Last-Translator: Daniel Nylander <yeagersthlm@gmail.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsirqbalance/sv/>\n"
 "Language: sv\n"
@@ -10,96 +10,167 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:82
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:207
+msgid "%d of %d interrupts have fired since boot."
+msgstr "%d av %d avbrott har utlösts sedan uppstarten."
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:178
+msgid "Busiest interrupt"
+msgstr "Mest belastade avbrott"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:172
+msgid "CPUs"
+msgstr "Processorer"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:260
 msgid "Cache level at which irqbalance partitions cache domains."
-msgstr "Cache nivå där irqbalance partitionerar cache domäner."
+msgstr "Cachenivå där irqbalance delar upp cachedomäner."
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:82
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:153
+msgid "Counter"
+msgstr "Räknare"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:259
 msgid "Deepest cache"
-msgstr ""
+msgstr "Djupaste cache"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:78
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:153
+msgid "Description"
+msgstr "Beskrivning"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:152
+msgid "Device"
+msgstr "Enhet"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:255
 msgid "Enable"
 msgstr "Aktivera"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:92
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:275
 msgid "Exclude CPUs"
-msgstr ""
+msgstr "Uteslut processorer"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:104
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:285
 msgid "Exclude IRQs"
-msgstr ""
+msgstr "Uteslut IRQ:er"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:75
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:252
 msgid "General settings"
-msgstr ""
+msgstr "Allmänna inställningar"
 
 #: applications/luci-app-irqbalance/root/usr/share/rpcd/acl.d/luci-app-irqbalance.json:3
 msgid "Grant UCI access for luci-app-irqbalance"
-msgstr ""
+msgstr "Ge luci-app-irqbalance UCI-åtkomst"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:87
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:175
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:201
+msgid "Hardware interrupts"
+msgstr "Maskinvaruavbrott"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:152
+msgid "IRQ"
+msgstr "IRQ"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:265
 msgid "Interval"
 msgstr "Intervall"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:98
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:110
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:281
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:292
 msgid "Invalid"
-msgstr ""
+msgstr "Ogiltigt"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:92
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:276
 msgid ""
 "List of CPUs to ignore, can be an integer or integers separated by commas."
 msgstr ""
+"Lista över processorer som ska ignoreras. Kan vara ett heltal eller flera "
+"heltal avgränsade med kommatecken."
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:104
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:285
 msgid "List of IRQs to ignore."
-msgstr ""
+msgstr "Lista över IRQ:er som ska ignoreras."
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:56
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:68
-msgid "Loading..."
-msgstr "Laddar..."
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:90
+msgid "No data"
+msgstr "Inga data"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:30
-msgid "NOT RUNNING"
-msgstr "KÖRS INTE"
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:169
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:232
+msgid "Not running"
+msgstr "Körs inte"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:29
-msgid "RUNNING"
-msgstr "KÖRS"
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:169
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:232
+msgid "Running"
+msgstr "Körs"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:114
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:165
+msgid "Service"
+msgstr "Tjänst"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:295
 msgid "Show debug output"
-msgstr ""
+msgstr "Visa felsökningsutdata"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:114
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:295
 msgid "Show debug output in system log."
-msgstr ""
+msgstr "Visa felsökningsutdata i systemloggen."
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:60
-msgid "Snapshot of current IRQs"
-msgstr ""
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:203
+msgid "Show idle interrupts"
+msgstr "Visa inaktiva avbrott"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:43
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:219
+msgid "Software and inter-processor interrupts"
+msgstr "Programvaruavbrott och avbrott mellan processorer"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:162
+msgid "Status"
+msgstr "Status"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:158
 msgid ""
 "The purpose of irqbalance is to distribute hardware interrupts across "
 "processors/cores on a multiprocessor/multicore system in order to increase "
 "performance."
 msgstr ""
+"Syftet med irqbalance är att fördela maskinvaruavbrott mellan processorer/"
+"kärnor i ett system med flera processorer eller kärnor för att förbättra "
+"prestandan."
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:92
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:104
-msgid "Valid values: %s."
-msgstr ""
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:67
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:84
+msgid "Total"
+msgstr "Totalt"
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:87
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:265
 msgid "Value in seconds."
-msgstr ""
+msgstr "Värde i sekunder."
 
-#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:43
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:157
 #: applications/luci-app-irqbalance/root/usr/share/luci/menu.d/luci-app-irqbalance.json:3
 msgid "irqbalance"
 msgstr "irqbalance"
+
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:138
+#: applications/luci-app-irqbalance/htdocs/luci-static/resources/view/irqbalance.js:289
+msgid "unknown"
+msgstr "okänd"
+
+#~ msgid "Loading..."
+#~ msgstr "Laddar..."
+
+#~ msgid "NOT RUNNING"
+#~ msgstr "KÖRS INTE"
+
+#~ msgid "RUNNING"
+#~ msgstr "KÖRS"
+
+#~ msgid "Snapshot of current IRQs"
+#~ msgstr "Ögonblicksbild av aktuella IRQ:er"
+
+#~ msgid "Valid values: %s."
+#~ msgstr "Giltiga värden: %s."

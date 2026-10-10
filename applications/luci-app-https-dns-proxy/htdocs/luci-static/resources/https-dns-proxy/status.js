@@ -18,7 +18,7 @@ var pkg = {
 	},
 	get URL() {
 		return (
-			"https://docs.openwrt.melmac.ca/" +
+			"https://docs.mossdef.org/" +
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
@@ -26,7 +26,7 @@ var pkg = {
 	},
 	get DonateURL() {
 		return (
-			"https://docs.openwrt.melmac.ca/" +
+			"https://docs.mossdef.org/" +
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "") +
@@ -52,6 +52,12 @@ var pkg = {
 	templateToResolver: function (template, args) {
 		if (template) return template.replace(/{(\w+)}/g, (_, v) => args[v]);
 		return null;
+	},
+	// HTML-escape an untrusted scalar value with LuCI's %h format specifier so
+	// config-derived text (listen address, resolver URL) reflected into status
+	// cannot inject markup when appended via innerHTML by E()/dom.create.
+	escapeInfo: function (info) {
+		return info != null && info !== "" ? "%h".format(info) : info;
 	},
 };
 
@@ -266,18 +272,18 @@ var status = baseclass.extend({
 					if (address === "127.0.0.1")
 						text += _("%s%s%s proxy on port %s.%s").format(
 							"<strong>",
-							name,
+							pkg.escapeInfo(name),
 							"</strong>",
-							port,
+							pkg.escapeInfo(port),
 							"<br />"
 						);
 					else
 						text += _("%s%s%s proxy at %s on port %s.%s").format(
 							"<strong>",
-							name,
+							pkg.escapeInfo(name),
 							"</strong>",
-							address,
-							port,
+							pkg.escapeInfo(address),
+							pkg.escapeInfo(port),
 							"<br />"
 						);
 				});

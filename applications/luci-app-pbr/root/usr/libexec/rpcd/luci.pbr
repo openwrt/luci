@@ -10,7 +10,7 @@
 # ubus -S call luci.pbr getPlatformSupport '{"name": "pbr" }'
 # ubus -S call luci.pbr getInterfaces '{"name": "pbr" }'
 
-readonly rpcdCompat='26'
+readonly rpcdCompat='27'
 readonly pbrFunctionsFile="${IPKG_INSTROOT}/etc/init.d/pbr"
 if [ -s "$pbrFunctionsFile" ]; then
 # shellcheck source=../../../../../pbr/files/etc/init.d/pbr
@@ -108,6 +108,11 @@ get_init_status() {
 		json_add_boolean 'running_nft_file' '1'
 	else
 		json_add_boolean 'running_nft_file' '0'
+	fi
+	if [ "$(uci -q get "${packageName}.config.ipv6_enabled")" = '1' ]; then
+		json_add_boolean 'ipv6_enabled' '1'
+	else
+		json_add_boolean 'ipv6_enabled' '0'
 	fi
 	json_add_string 'version' "$PKG_VERSION"
 	json_add_int		'packageCompat'	"${packageCompat:-0}"

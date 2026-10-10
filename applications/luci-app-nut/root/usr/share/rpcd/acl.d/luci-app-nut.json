@@ -4,15 +4,20 @@
 		"read": {
 			"file": {
 				"/lib/nut/": [ "list" ],
-				"/usr/libexec/nut/": [ "list" ],
-				"/usr/bin/ldd /usr/sbin/upsmon": ["exec"],
-				"/usr/bin/ldd /usr/sbin/upsd": ["exec"]
+				"/usr/libexec/nut/": [ "list" ]
 			},
 			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
 		}
 	},
 	"luci-app-nut-admin": {
 		"description": "Grant admin UCI access for luci-app-nut",
+		"read": {
+			"file": {
+				"/usr/share/nut/ssl_backend": ["read"],
+				"/usr/bin/ldd /usr/sbin/upsmon": ["exec"],
+				"/usr/bin/ldd /usr/sbin/upsd": ["exec"]
+			}
+		},
 		"write": {
 			"uci": [ "nut_cgi", "nut_monitor", "nut_server" ]
 		}

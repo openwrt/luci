@@ -6,7 +6,7 @@
 import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, readlink, realpath, error } from 'fs';
 import { cursor } from 'uci';
 
-import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
+import { init_list, init_index, init_enabled, conntrack_list, process_list } from 'luci.sys';
 import { revision, branch } from 'luci.version';
 import { statvfs, uname } from 'luci.core';
 import { connect } from 'ubus';
@@ -132,29 +132,6 @@ const methods = {
 			}
 
 			return length(scripts) ? scripts : { error: 'No such init script' };
-		}
-	},
-
-	setInitAction: {
-		args: { name: 'name', action: 'action' },
-		call: function(request) {
-			switch (request.args.action) {
-			case 'enable':
-			case 'disable':
-			case 'start':
-			case 'stop':
-			case 'restart':
-			case 'reload':
-				const rc = init_action(request.args.name, request.args.action);
-
-				if (rc === false)
-					return { error: 'No such init script' };
-
-				return { result: rc == 0 };
-
-			default:
-				return { error: 'Invalid action' };
-			}
 		}
 	},
 

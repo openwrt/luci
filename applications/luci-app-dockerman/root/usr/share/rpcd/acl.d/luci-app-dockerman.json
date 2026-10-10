@@ -7,8 +7,12 @@
 				"/*": ["list", "read"]
 			},
 			"ubus": {
-				"docker": [ "*" ],
-				"docker.*": [ "*" ],
+				"docker": [ "df", "events", "info", "ping", "version" ],
+				"docker.container": [ "changes", "export", "get_archive", "info", "info_archive", "inspect", "list", "logs", "stats", "top" ],
+				"docker.exec": [ "inspect" ],
+				"docker.image": [ "get", "history", "inspect", "list", "load", "search" ],
+				"docker.network": [ "inspect", "list" ],
+				"docker.volume": [ "inspect", "list" ],
 				"file": [ "*" ],
 				"luci": [ "getMountPoints" ],
 				"network.interface": [ "dump" ],
@@ -18,8 +22,12 @@
 			},
 		"write": {
 			"ubus": {
-				"docker": [ "*" ],
-				"docker.*": [ "*" ],
+				"docker": [ "df", "events", "info", "ping", "version" ],
+				"docker.container": [ "changes", "create", "exec", "export", "get_archive", "info", "info_archive", "inspect", "kill", "list", "logs", "pause", "prune", "put_archive", "rename", "remove", "restart", "resize", "start", "stats", "stop", "top", "unpause", "update", "ttyd_start" ],
+				"docker.exec": [ "inspect", "resize", "start" ],
+				"docker.image": [ "build", "build_prune", "create", "get", "history", "inspect", "list", "load", "prune", "push", "remove", "search", "tag" ],
+				"docker.network": [ "connect", "create", "disconnect", "inspect", "list", "prune", "remove" ],
+				"docker.volume": [ "create", "inspect", "list", "prune", "remove", "update" ],
 				"rc": [ "init" ]
 			},
 			"uci": [ "dockerd" ]

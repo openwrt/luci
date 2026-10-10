@@ -64,7 +64,7 @@ return olsr.olsrview.extend({
 
 				for (let route of routes_res) {
 					const cost = (parseInt(route.tcEdgeCost) || 0).toFixed(3);
-					const color = etx_color(parseInt(cost));
+					const color = olsr.etx_color(parseInt(cost));
 					const lq = (parseInt(route.linkQuality) || 0).toFixed(3);
 					const nlq = (parseInt(route.neighborLinkQuality) || 0).toFixed(3);
 
@@ -117,7 +117,7 @@ return olsr.olsrview.extend({
 				let statusOlsrCommonJs = null;
 
 				if (has_v4 && has_v6) {
-					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('common/common_js.js') });
+					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('olsr/common_js.js') });
 				}
 
 				const fresult = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrLegend, statusOlsrCommonJs]);

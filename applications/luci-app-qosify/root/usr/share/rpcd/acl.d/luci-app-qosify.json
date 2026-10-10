@@ -1,0 +1,37 @@
+{
+	"luci-app-qosify": {
+		"description": "Grant access to LuCI app qosify",
+		"read": {
+			"ubus": {
+				"qosify": [ "status", "get_stats", "dump" ],
+				"rc": [ "list" ],
+				"service": [ "list" ],
+				"file": [ "read", "stat" ]
+			},
+			"uci": [ "qosify" ],
+			"file": {
+				"/etc/config/qosify": [ "read", "list" ],
+				"/etc/qosify/00-defaults.conf": [ "read", "list" ],
+				"/usr/share/qosify-luci/qosify": [ "read" ],
+				"/usr/share/qosify-luci/00-defaults.conf": [ "read" ],
+				"/proc/uptime": [ "read" ],
+				"/proc/[0-9]*/stat": [ "read" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"qosify": [ "reload", "check_devices" ],
+				"rc": [ "init" ],
+				"uci": [ "revert" ],
+				"file": [ "write", "exec" ]
+			},
+			"uci": [ "qosify" ],
+			"file": {
+				"/etc/config/qosify": [ "write" ],
+				"/etc/qosify/00-defaults.conf": [ "write" ],
+				"/usr/sbin/qosify-status": [ "exec" ],
+				"/usr/share/qosify-luci/cleanup": [ "exec" ]
+			}
+		}
+	}
+}

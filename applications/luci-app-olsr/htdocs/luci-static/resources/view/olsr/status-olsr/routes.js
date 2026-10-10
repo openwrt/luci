@@ -105,7 +105,7 @@ return olsr.olsrview.extend({
 						interface: route.networkInterface,
 						metric: route.metric,
 						etx: ETX,
-						color: etx_color(parseFloat(ETX)),
+						color: olsr.etx_color(parseFloat(ETX)),
 					});
 				}
 
@@ -172,7 +172,7 @@ return olsr.olsrview.extend({
 
 				for (let route of routes_res) {
 					const ETX = parseInt(route.etx) || 0;
-					const color = etx_color(ETX);
+					const color = olsr.etx_color(ETX);
 
 					const tr = E('div', { 'class': 'tr cbi-section-table-row cbi-rowstyle-' + i + ' proto-' + route.proto }, [
 						E('div', { 'class': 'td cbi-section-table-cell left' }, route.destination + '/' + route.genmask),
@@ -222,7 +222,7 @@ return olsr.olsrview.extend({
 				let statusOlsrCommonJs = null;
 
 				if (has_v4 && has_v6) {
-					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('common/common_js.js') });
+					statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('olsr/common_js.js') });
 				}
 
 				const fresult = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrLegend, statusOlsrCommonJs]);

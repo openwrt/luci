@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for VPNC VPN
 LUCI_DEPENDS:=+vpnc
 
-PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca>
+PKG_MAINTAINER:=
 PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk

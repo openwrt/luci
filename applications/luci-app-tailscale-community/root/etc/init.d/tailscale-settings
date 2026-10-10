@@ -23,27 +23,31 @@ version_gte() {
 
 # Add/remove DNS forward entry in dnsmasq for MagicDNS via OpenWrt
 setup_tailscale_dns_forward() {
+	if [ ! -f /etc/config/dhcp ] || [ ! -x /etc/init.d/dnsmasq ]; then
+		return 0
+	fi
+
 	if [ ! -x /usr/sbin/tailscale ] && [ ! -x /usr/bin/tailscale ]; then
 		return 0
 	fi
 
 	local entry="/.ts.net/100.100.100.100"
-	local found=0
+	local s
+	for s in $(uci -q get dhcp.@dnsmasq[0].server); do
+		[ "$s" = "$entry" ] && return 0
+	done
 
-	# Check if entry already exists in dnsmasq
-	if uci -q show dhcp.@dnsmasq[0].server 2>/dev/null | grep -Fqx "dhcp.@dnsmasq[0].server='$entry'"; then
-		found=1
-	fi
-
-	if [ "$found" = "0" ]; then
-		uci add_list dhcp.@dnsmasq[0].server="$entry"
-		uci commit dhcp
-		/etc/init.d/dnsmasq reload 2>/dev/null || /etc/init.d/dnsmasq restart 2>/dev/null
-		logger -t "$NAME" "Added DNS forward: $entry"
-	fi
+	uci add_list dhcp.@dnsmasq[0].server="$entry"
+	uci commit dhcp
+	/etc/init.d/dnsmasq reload 2>/dev/null || /etc/init.d/dnsmasq restart 2>/dev/null
+	logger -t "$NAME" "Added DNS forward: $entry"
 }
 
 remove_tailscale_dns_forward() {
+	if [ ! -f /etc/config/dhcp ] || [ ! -x /etc/init.d/dnsmasq ]; then
+		return 0
+	fi
+
 	local entry="/.ts.net/100.100.100.100"
 	local idx=0
 	local removed=0

@@ -40,12 +40,12 @@ methods.get_status = {
 		let data = {
 			status: '',
 			version: '',
-			TUNMode: '',
+			TUNMode: false,
 			health: '',
 			ipv4: "Not running",
-			ipv6: null,
+			ipv6: "",
 			domain_name: '',
-			peers: []
+			peers: {}
 		};
 		if (access('/usr/sbin/tailscale')==true || access('/usr/bin/tailscale')==true){ }else{
 			data.status = 'not_installed';
@@ -56,32 +56,34 @@ methods.get_status = {
 		let peer_map = {};
 		if (status_json_output.code == 0 && length(status_json_output.stdout) > 0) {
 			try {
-				let status_data = json(join('',status_json_output.stdout));
+				let status_data = json(join('', status_json_output.stdout));
 				data.version = status_data?.Version || 'Unknown';
-				data.health = status_data?.Health || '';
-				data.TUNMode = status_data?.TUN || 'true';
+				data.health = (status_data?.Health && length(status_data.Health) > 0) ? status_data.Health[0] : '';
+				data.TUNMode = (status_data?.TUN == true);
 				if (status_data?.BackendState == 'Running') { data.status =  'running'; }
 				if (status_data?.BackendState == 'NeedsLogin') { data.status =  'logout'; }
 
 				data.ipv4 = status_data?.Self?.TailscaleIPs?.[0] || 'No IP assigned';
-				data.ipv6 = status_data?.Self?.TailscaleIPs?.[1] || null;
+				data.ipv6 = status_data?.Self?.TailscaleIPs?.[1] || '';
 				data.domain_name = status_data?.CurrentTailnet?.Name || '';
 
 				// peers list
-				for (let p in status_data?.Peer) {
-					p = status_data.Peer[p];
-					peer_map[p.ID] = {
-						ip: join('<br>', p?.TailscaleIPs) || '',
-						hostname: split(p?.DNSName || '','.')[0] || '',
-						ostype: p?.OS,
-						online: p?.Online,
-						linkadress: (!p?.CurAddr) ? p?.Relay : p?.CurAddr,
-						lastseen: p?.LastSeen,
-						exit_node: !!p?.ExitNode,
-						exit_node_option: !!p?.ExitNodeOption,
-						tx: p?.TxBytes || '',
-						rx: p?.RxBytes || ''
-					};
+				if (status_data?.Peer) {
+					for (let p in status_data.Peer) {
+						let peer = status_data.Peer[p];
+						peer_map[peer.ID] = {
+							ip: join('<br>', peer?.TailscaleIPs || []),
+							hostname: split(peer?.DNSName || '', '.')[0] || peer?.HostName || '',
+							ostype: peer?.OS || '',
+							online: !!peer?.Online,
+							linkadress: (!peer?.CurAddr) ? (peer?.Relay || '') : peer?.CurAddr,
+							lastseen: peer?.LastSeen || '',
+							exit_node: !!peer?.ExitNode,
+							exit_node_option: !!peer?.ExitNodeOption,
+							tx: peer?.TxBytes || 0,
+							rx: peer?.RxBytes || 0
+						};
+					}
 				}
 			} catch (e) { /* ignore */ }
 		}

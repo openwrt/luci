@@ -6,7 +6,7 @@
 #   02: JavaScript template functions (templateToRegexp, templateToResolver)
 #   03: RPC backend script validation
 #
-# Usage: cd source.openwrt.melmac.ca/luci-app-https-dns-proxy && bash tests/run_tests.sh
+# Usage: cd source.mossdef.org/luci-app-https-dns-proxy && bash tests/run_tests.sh
 
 set -o pipefail
 

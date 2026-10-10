@@ -73,6 +73,14 @@ const openvpnOptions = [
 	},
 	{
 		tab: 'general',
+		type: form.FileUpload,
+		root_directory: '/etc/openvpn',
+		name: 'auth_user_pass',
+		label: _('Username and password file (one per line)'),
+		placeholder: '/etc/openvpn/some-client-auth-user-pass'
+	},
+	{
+		tab: 'general',
 		type: form.Value,
 		name: 'ifconfig',
 		datatype: 'tuple(ipaddr,ipaddr)',
@@ -1471,13 +1479,6 @@ const openvpnOptions = [
 		name: 'pull',
 		label: _('Accept options pushed from server'),
 		default: 0
-	},
-	{
-		tab: 'push_opt',
-		depends: { server: "", "!reverse": true },
-		type: form.Value,
-		name: 'auth_user_pass',
-		label: _('Authenticate using username/password')
 	},
 	{
 		tab: 'push_opt',

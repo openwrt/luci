@@ -25,7 +25,7 @@ return view.extend({
         if (element) {
             const log = await this.retrieveLog();
             element.value = log.value;
-            element.rows = log.rows;
+            element.rows = log.rows + 1;
         }
     },
 
@@ -61,7 +61,7 @@ return view.extend({
                     'style': 'font-size:12px',
                     'readonly': 'readonly',
                     'wrap': 'off',
-                    'rows': loglines.rows
+                    'rows': loglines.rows + 1
                 }, [loglines.value])
             ])
         ]);

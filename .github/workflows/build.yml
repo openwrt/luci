@@ -10,9 +10,14 @@ permissions:
 jobs:
   wait-for-formalities:
     name: Wait for FormalityCheck
+    if: github.event.pull_request.user.login != 'weblate'
     runs-on: ubuntu-slim
     steps:
       - name: Wait for Check Run
+        if: |
+          github.event.pull_request.user.login != 'dependabot[bot]' &&
+          github.event.pull_request.user.login != 'Copilot' &&
+          github.event.pull_request.user.type != 'Bot'
         uses: lewagon/wait-on-check-action@v1.8.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}

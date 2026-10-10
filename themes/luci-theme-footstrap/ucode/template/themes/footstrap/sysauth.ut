@@ -1,0 +1,225 @@
+{#
+ The LOGIN page.
+
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2012 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+
+ It exists because the generic template includes the header WITHOUT `blank_page: true`: with no
+ theme-local sysauth the dispatcher falls back to it and the whole chrome renders around the login
+ form with every control on it dead. Everything else here is a departure the notes below justify,
+ and none of them may drop a field the backend posts.
+
+ Do not re-introduce the `<section hidden>` shape that needs a view module to reveal the form: the
+ view bootstraps before a session exists, its RPCs answer "Access denied", the promise rejects and
+ render() never runs — a blank page with no way to log in. The server renders the form, so it works
+ with JS off and cannot be broken by a rejected promise.
+
+ styles/pages/10-login.css makes it the centred card, keyed off `.fs-login` below. The strings
+ carry no msgctxt on purpose — luci-base translates them in the ~40 languages this theme has no
+ catalogue for.
+-#}
+
+{%
+	/* Which router this is (openwrt/luci#8961): the login page has no chrome, so the only place the
+	   name appeared was the browser tab.
+
+	   A second `ubus.call('system', 'board')`, because header.ut makes its own inside its own scope
+	   and an include cannot hand a local back — one extra round trip on a page that renders once
+	   per session, against threading `boardinfo` through a global.
+
+	   It discloses nothing new: the same hostname already reaches an unauthenticated browser
+	   through <title>, as in every stock theme. */
+	const boardinfo = ubus.call('system', 'board') ?? {};
+-%}
+
+{% include('header', { blank_page: true }) %}
+
+{# the class is what 10-login.css hooks: the markup is ours, so the form is named rather than
+   found by a 49-character `:has()` selector repeated 17 times, ~0.8 KB #}
+<form method="post" class="fs-login">
+	{#
+	 The router's name, above everything else in the card: an admin with three of these open has no
+	 other way to tell the tabs apart once the form is focused. `?? 'OpenWrt'` is the fallback
+	 head.ut and brand.ut use, and the striptags/entityencode pair is theirs too and load-bearing —
+	 the hostname is admin-controlled text printed to an unauthenticated page.
+
+	 A <p> and not a heading: the card's h1 is `Authorization Required` and stays the page's one
+	 heading, or a screen reader walking the headings hears the router's name as a section title
+	 with the form nested under it.
+	-#}
+	<p class="fs-login-host">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</p>
+	{#
+	 Two independent alerts, because neither variable alone says which dispatcher branch rendered
+	 this page.
+
+	 `fuser` is the USERNAME the form posted, set in both branches — on the second step of a
+	 pluggable login (the OTP prompt, dispatcher.uc:1018) the credentials were correct and it is
+	 still set, so `auth_message && !fuser` reports "Invalid username and/or password!" about a
+	 password that was right and swallows the backend's own messages.
+
+	 `auth_message` does not mean the password was right either: the first branch copies it out of
+	 get_challenges() BEFORE the password is checked (dispatcher.uc:956), and that call answers with
+	 a message on every pending result. So with a 2FA plugin installed both are set whenever a
+	 password is rejected, and gating on `fuser` alone never tells that user their password was
+	 wrong.
+
+	 `auth_plugin` separates the branches: set only in the second one, i.e. exactly when
+	 session_setup() accepted the credentials. Gating the credentials alert on `!auth_plugin` and
+	 rendering the message beside it covers all four states — wrong password, wrong password with a
+	 challenge pending, the OTP prompt, a failed OTP.
+
+	 entityencode where upstream prints raw: without the `!fuser` gate the message renders on the
+	 request that posted the form too, and this page is unauthenticated. A plugin's markup travels
+	 in `auth_html` (dispatcher.uc:952), so this variable is text.
+	-#}
+	{% if (fuser && !auth_plugin): %}
+		<div class="alert-message error">
+			<p>{{ _('Invalid username and/or password! Please try again.') }}</p>
+		</div>
+	{% endif %}
+	{% if (auth_message): %}
+		<div class="alert-message{% if (auth_plugin): %} warning{% endif %}">
+			<p>{{ entityencode(auth_message, true) }}</p>
+		</div>
+	{% endif %}
+
+	<div class="cbi-map">
+		{#
+		 An h1, where every other LuCI theme leaves this an h2: the login page has no chrome, so
+		 header.ut's `.fs-title-main` h1 never renders here and the document would go out with no
+		 top-level heading for a screen reader's `1` shortcut to reach.
+
+		 `name="content"` is upstream's legacy anchor and travels with the element, not its level.
+		 10-login.css sets this h1 back to the h2's 20px: the level was wrong, not the size.
+		-#}
+		<h1 name="content">{{ _('Authorization Required') }}</h1>
+		<div class="cbi-map-descr">
+			{{ _('Please enter your username and password.') }}
+		</div>
+		<div class="cbi-section"><div class="cbi-section-node">
+			<div class="cbi-value">
+				<label class="cbi-value-title" for="luci_username">{{ _('Username') }}</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-text" type="text" name="luci_username" id="luci_username" autocomplete="username" value="{{ entityencode(duser, true) }}" />
+				</div>
+			</div>
+			<div class="cbi-value cbi-value-last">
+				<label class="cbi-value-title" for="luci_password">{{ _('Password') }}</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-text" type="password" name="luci_password" id="luci_password" autocomplete="current-password" autofocus />
+				</div>
+			</div>
+			{#
+			 The login backend's own fields. The dispatcher hands `auth_fields`, `auth_message`,
+			 `auth_html` and `auth_assets` to whichever sysauth template renders, and a pluggable
+			 backend puts its OTP input there. A theme-local sysauth that drops them never posts the
+			 field, so on a router with 2FA enabled nobody can log in while this theme is active.
+			 This template must stay a SUPERSET of the generic one's fields.
+
+			 The leading space inside each conditional attribute is load-bearing: ucode's template
+			 lexer eats the whitespace immediately before a `{%` tag and the newline immediately
+			 after a `%}`, so the indentation never reaches the output and the attributes would run
+			 together into one token — measured, the generic template's spelling renders
+			 `inputmode="numeric"pattern="[0-9]*"maxlength="6"required`.
+			-#}
+			{% if (auth_fields): %}
+				{% for (let field in auth_fields): %}
+					<div class="cbi-value">
+						<label class="cbi-value-title" for="{{ entityencode(field.name, true) }}">{{ _(field.label ?? field.name) }}</label>
+						<div class="cbi-value-field">
+							<input class="cbi-input-text"
+								type="{{ field.type ?? 'text' }}"
+								name="{{ field.name }}"
+								id="{{ entityencode(field.name, true) }}"
+								{% if (field.placeholder): %} placeholder="{{ field.placeholder }}"{% endif %}
+								{% if (field.inputmode): %} inputmode="{{ field.inputmode }}"{% endif %}
+								{% if (field.pattern): %} pattern="{{ field.pattern }}"{% endif %}
+								{% if (field.maxlength): %} maxlength="{{ field.maxlength }}"{% endif %}
+								{% if (field.autocomplete): %} autocomplete="{{ field.autocomplete }}"{% endif %}
+								{% if (field.required): %} required{% endif %}
+							/>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+			{% if (auth_html): %}
+				<div class="cbi-value">
+					{{ auth_html }}
+				</div>
+			{% endif %}
+			{% if (auth_assets): %}
+				{% for (let asset in auth_assets): %}
+					{% if (asset.type == 'script'): %}
+						<script src="{{ asset.src }}"></script>
+					{% endif %}
+				{% endfor %}
+			{% endif %}
+		</div></div>
+	</div>
+
+	<div class="cbi-page-actions">
+		<input type="submit" value="{{ _('Log in') }}" class="btn cbi-button cbi-button-apply" />
+	</div>
+</form>
+
+{%
+	let https_ports = uci.get('uhttpd', 'main', 'listen_https') ?? [];
+
+	https_ports = uniq(filter(
+		map(
+			(type(https_ports) == 'string') ? split(https_ports, /\s+/) : https_ports,
+			e => +match(e, /\d+$/)?.[0]
+		),
+		p => (p >= 0 && p <= 65535)
+	));
+%}
+
+{# The two server values the script below needs, handed over as DATA: a `{{ … }}` block is not JS
+   until the server renders it, so this line carries no logic at all and eslint's .ut processor
+   enforces that. The script itself is plain JS and is linted. #}
+<script>window.__fsHttps={ports:{{ https_ports }},resource:"{{ resource }}"};</script>
+<script>
+	(() => {
+		/* if the router also serves HTTPS, hop over to it before the password goes over this
+		 * connection; the <img> probe is upstream's trick for proving the TLS port answers first
+		 *
+		 * THE HOP CAN ARRIVE WITHOUT THE SESSION. On Chromium the jump from http to https is
+		 * cross-site — schemeful same-site puts the two schemes in different sites — so the
+		 * browser withholds LuCI's `SameSite=strict` cookie (dispatcher.uc) on exactly that
+		 * navigation and a reader already logged in over https lands back on this form: 403 to
+		 * the hop against 200 to curl carrying the cookie, measured on a stand serving both
+		 * schemes. Firefox sends it and answers 200 straight away.
+		 *
+		 * So where this form is what the hop landed on, it is asked again once, over the same
+		 * scheme: that navigation is same-site everywhere and carries the cookie. The retry is
+		 * bounded by the REFERRER rather than by a marker in the URL — after it, the referrer is
+		 * this https page instead of the http one, so a reader who genuinely has no session sees
+		 * this form once and stays on it. A `#…` marker was tried and is not what ships: on
+		 * Firefox the retry never runs, so nothing takes the fragment back off the address. */
+		if (document.location.protocol === 'https:') {
+			/* the host is compared as a PARSED origin, not as a prefix of the string:
+			 * `http://192.168.1.1.example.com` starts with `http://192.168.1.1` */
+			const from = document.referrer ? new URL(document.referrer) : null;
+
+			if (from && from.protocol === 'http:' && from.hostname === window.location.hostname)
+				window.location.replace(window.location.href);
+
+			return;
+		}
+
+		const { hostname, pathname } = window.location;
+
+		(window.__fsHttps.ports || []).forEach((port) => {
+			const url = `https://${hostname}:${port}${pathname}`;
+			const img = new Image();
+
+			img.onload = () => { window.location = url; };
+			img.src = `https://${hostname}:${port}${window.__fsHttps.resource}/icons/loading.svg?${Math.random()}`;
+
+			setTimeout(() => { img.src = ''; }, 5000);
+		});
+	})();
+</script>
+
+{% include('footer', { blank_page: true }) %}

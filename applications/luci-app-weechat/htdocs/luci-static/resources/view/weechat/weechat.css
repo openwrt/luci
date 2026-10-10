@@ -1,0 +1,65 @@
+.weechat-status-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1.25rem;
+	margin-bottom: 1.25rem;
+}
+
+@media (max-width: 840px) {
+	.weechat-status-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.weechat-panel {
+	border: 1px solid rgba(128, 128, 128, 0.22);
+	border-radius: 6px;
+	padding: 16px 20px;
+	background: rgba(128, 128, 128, 0.02);
+	display: flex;
+	flex-direction: column;
+}
+
+.weechat-panel h3 {
+	margin-top: 0;
+	margin-bottom: 14px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+	font-size: 1.15rem;
+	font-weight: 600;
+}
+
+.weechat-panel table {
+	width: 100%;
+	margin-bottom: 0;
+	border-collapse: collapse;
+	flex: 1;
+}
+
+.weechat-panel td {
+	padding: 10px 4px;
+	vertical-align: middle;
+	border: none;
+}
+
+.weechat-servers-panel {
+	border: 1px solid rgba(128, 128, 128, 0.22);
+	border-radius: 6px;
+	padding: 16px 20px;
+	background: rgba(128, 128, 128, 0.02);
+	margin-top: 0.5rem;
+}
+
+.weechat-servers-panel h3 {
+	margin-top: 0;
+	margin-bottom: 14px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgba(128, 128, 128, 0.15);
+	font-size: 1.15rem;
+	font-weight: 600;
+}
+
+.weechat-btn-control {
+	min-width: 72px;
+	margin-right: 6px;
+}

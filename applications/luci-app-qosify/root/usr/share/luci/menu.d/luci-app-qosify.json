@@ -1,0 +1,14 @@
+{
+	"admin/network/qosify": {
+		"title": "qosify",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "qosify/main"
+		},
+		"depends": {
+			"acl": [ "luci-app-qosify" ],
+			"fs": { "/usr/sbin/qosify": "executable" }
+		}
+	}
+}

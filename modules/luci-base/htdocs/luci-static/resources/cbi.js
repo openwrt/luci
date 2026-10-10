@@ -726,15 +726,15 @@ String.prototype.format = function()
 				param = arguments[numSubstitutions++];
 		}
 
-		if (param !== undefined) {
-			pad = '';
-			if (pPad && pPad.substr(0,1) == "'")
-				pad = pPad.substr(1,1);
-			else if (pPad)
-				pad = pPad;
-			else
-				pad = ' ';
+		pad = '';
+		if (pPad && pPad.substr(0,1) == "'")
+			pad = pPad.substr(1,1);
+		else if (pPad)
+			pad = pPad;
+		else
+			pad = ' ';
 
+		if (param !== undefined) {
 			precision = -1;
 			if (pPrecision && pType == 'f')
 				precision = +pPrecision.substring(1);
@@ -835,6 +835,16 @@ String.prototype.format = function()
 					pMinLength = null;
 					break;
 			}
+		}
+		else {
+			subst = '';
+
+			/* %m reuses the min-length slot as the metric divisor rather
+			   than a field width, so clear it here as the defined-argument
+			   %m path does; keep it for every other conversion so the
+			   padding below still applies, e.g. '%10s'.format(undefined). */
+			if (pType == 'm')
+				pMinLength = null;
 		}
 
 		if (pMinLength) {

@@ -1,9 +1,6 @@
 'use strict';
 'require form';
-'require fs';
 'require view';
-
-const upsmon_tool = '/usr/sbin/upsmon';
 
 function ESIFlags(o) {
 	o.value('EXEC', _('Execute notify command'));
@@ -50,19 +47,8 @@ function MonitorUserOptions(s) {
 }
 
 return view.extend({
-	load: function() {
-		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/usr/bin/ldd', [upsmon_tool]), []).catch(function(err) {
-				throw new Error(_('Unable to run ldd: %s').format(err.message));
-			}).then(function(stdout) {
-				return stdout.includes('libssl.so');
-			}),
-		])
-	},
-
-	render: function(loaded_promises) {
+	render: function() {
 		let m, s, o;
-		const have_ssl_support = loaded_promises[0];
 
 		m = new form.Map('nut_monitor', _('NUT Monitor'),
 			_('Network UPS Tools Monitoring Configuration'));
@@ -94,16 +80,6 @@ return view.extend({
 		o.datatype = 'uinteger'
 		o.optional = true;
 		o.placeholder = 15;
-
-		if (have_ssl_support) {
-			o = s.option(form.Value, 'certpath', _('CA Certificate path'), _('Path containing ca certificates to match against host certificate'));
-			o.optional = true;
-			o.placeholder = '/etc/ssl/certs'
-
-			o = s.option(form.Flag, 'certverify', _('Verify all connection with SSL'), _('Require SSL and make sure server CN matches hostname'));
-			o.optional = true;
-			o.default = false;
-		}
 
 		s = m.section(form.TypedSection, 'notifications', _('Notifications settings'));
 		s.optional = true;

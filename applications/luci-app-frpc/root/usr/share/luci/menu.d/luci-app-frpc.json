@@ -1,6 +1,14 @@
 {
-	"admin/services/frpc": {
-		"title": "frp Client",
+	"admin/services/frp": {
+		"order": 80,
+		"title": "frp",
+		"action": {
+			"type": "firstchild"
+		}
+	},
+	"admin/services/frp/client": {
+		"order": 20,
+		"title": "Client",
 		"action": {
 			"type": "view",
 			"path": "frpc"

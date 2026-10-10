@@ -527,7 +527,7 @@ const UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 			'placeholder': this.options.placeholder,
 			'style': style,
 			'cols': this.options.cols,
-			'rows': this.options.rows,
+			'rows': this.options.rows ? this.options.rows + 1 : this.options.rows,
 			'wrap': this.options.wrap ? 'soft' : 'off'
 		}, [ value ]));
 
@@ -3362,7 +3362,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 	 * @returns {Promise}
 	 */
 	handleDelete(path, fileStat, ev) {
-		const parent = path.replace(/\/[^\/]+$/, '') ?? '/';
+		const parent = path.replace(/\/[^/]+$/, '') ?? '/';
 		const name = path.replace(/^.+\//, '');
 		let msg;
 
@@ -4339,7 +4339,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 *
 	 * @see LuCI.dom.content
 	 *
-	 * @param {string} [title]
+	 * @param {?string} [title]
 	 * The title of the notification banner. If `null`, no title element
 	 * will be rendered.
 	 *
@@ -5102,7 +5102,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 				for (let i = 0; i < 2; i++)
 					for (let j = 0; j < ipaddrs.length; j++)
 						tasks.push(this.pingDevice(i ? 'https' : 'http', ipaddrs[j])
-							.then(ev => { reachable = ev.target.src.replace(/^(https?:\/\/[^\/]+).*$/, '$1/') }, () => {}));
+							.then(ev => { reachable = ev.target.src.replace(/^(https?:\/\/[^/]+).*$/, '$1/') }, () => {}));
 
 				return Promise.all(tasks).then(() => {
 					if (reachable) {
@@ -5715,7 +5715,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		const className = 'view.%s'.format(path.replace(/\//g, '.'));
 
 		return L.require(className).then(view => {
-			if (!(view instanceof View))
+			if (typeof view?.render !== 'function')
 				throw new TypeError('Loaded class %s is not a descendant of View'.format(className));
 
 			return view;

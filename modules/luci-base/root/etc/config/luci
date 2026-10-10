@@ -1,22 +1,23 @@
-config core main
-	option lang auto
-	option mediaurlbase /luci-static/bootstrap
-	option resourcebase /luci-static/resources
-	option ubuspath /ubus/
+config core 'main'
+	option lang 'auto'
+	option mediaurlbase '/luci-static/bootstrap'
+	option resourcebase '/luci-static/resources'
+	option ubuspath '/ubus/'
+	option pollinterval '5'
 
-config internal languages
+config internal 'languages'
 
-config internal sauth
-	option sessionpath "/tmp/luci-sessions"
-	option sessiontime 3600
+config internal 'sauth'
+	option sessionpath '/tmp/luci-sessions'
+	option sessiontime '3600'
 
-config internal ccache
-	option enable 1
+config internal 'ccache'
+	option enable '1'
 
-config internal themes
+config internal 'themes'
 
-config internal apply
-	option rollback 90
-	option holdoff 4
-	option timeout 5
-	option display 1.5
+config internal 'apply'
+	option rollback '90'
+	option holdoff '4'
+	option timeout '5'
+	option display '1.5'

@@ -133,6 +133,7 @@ return view.extend({
 						title || '-',
 						E('span', {
 							'class': includes[i].hide ? 'label notice' : 'label',
+							'role': 'button',
 							'style': 'display: flex; align-items: center; justify-content: center; min-width: 4em',
 							'data-style': includes[i].hide ? 'active' : 'inactive',
 							'data-indicator': 'poll-status',

@@ -34,8 +34,21 @@ return network.registerProtocol('dhcp', {
 		o = s.taboption('advanced', form.Flag, 'broadcast', _('Use broadcast flag'), _('Required for certain ISPs, e.g. Charter with DOCSIS 3'));
 		o.default = o.disabled;
 
+		o = s.taboption('advanced', form.ListValue, 'sendclientid', _('Preferred client ID'),
+			_('Selects the client identifier (DHCP option 61) to send when requesting DHCP.') + '<br />' +
+			_('<em>Automatic</em> uses the client ID configured below, else the default DUID of this device, else the MAC address of this interface.') + '<br />' +
+			_('<em>Default DUID</em> always uses the default DUID of this device, even if a client ID is configured below.') + '<br />' +
+			_('<em>Hardware address</em> always uses the MAC address of this interface.') + '<br />' +
+			_('<em>None</em> sends no client identifier at all.'));
+		o.value('auto', _('Automatic'));
+		o.value('global', _('Default DUID'));
+		o.value('hardware', _('Hardware address'));
+		o.value('none', _('None'));
+		o.default = 'auto';
+
 		o = s.taboption('advanced', form.Value, 'clientid', _('Client ID to send when requesting DHCP'));
 		o.datatype  = 'hexstring';
+		o.depends('sendclientid', 'auto');
 
 		s.taboption('advanced', form.Value, 'vendorid', _('Vendor Class to send when requesting DHCP'));
 	}

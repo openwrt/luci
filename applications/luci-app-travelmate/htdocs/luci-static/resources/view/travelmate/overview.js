@@ -54,6 +54,16 @@ function handleAction(ev) {
 			.then(() => waitForIface(ifaceValue, 20000))
 			.then(() => fs.exec('/etc/init.d/travelmate', ['start']))
 	}
+	if (ev === 'stopService') {
+		return fs.exec('/etc/init.d/travelmate', ['stop'])
+			.then(function () {
+				if (!poll.active())
+					poll.start();
+			})
+			.catch(function (err) {
+				ui.addNotification(null, E('p', _('Unable to stop the travelmate service: %s').format(err)), 'error');
+			})
+	}
 	if (ev === 'restartTravelmate') {
 		const map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
@@ -184,6 +194,128 @@ function handleAction(ev) {
 	}
 }
 
+/*
+	runtime string helpers
+
+	f_genstatus() packs several runtime fields into display strings, split them
+	up again so they can be rendered as chips and labelled key/value rows.
+*/
+function parsePairs(text) {
+	const pairs = [];
+	(text || '').split(', ').forEach(function (item) {
+		const idx = item.indexOf(': ');
+		if (idx > 0) {
+			pairs.push([item.substring(0, idx), item.substring(idx + 2)]);
+		} else if (item.trim()) {
+			pairs.push([null, item.trim()]);
+		}
+	});
+	return pairs;
+}
+
+function pickValue(pairs, key) {
+	for (let i = 0; i < pairs.length; i++) {
+		if (pairs[i][0] === key) {
+			return pairs[i][1];
+		}
+	}
+	return '-';
+}
+
+/*
+	system_info is "cores: n, fetch: cmd, model, target, distribution version".
+	Keep the named entries and the board model, drop target and release.
+*/
+function sysPairs(text) {
+	let plain = 0;
+	return parsePairs(text).filter(function (pair) {
+		return pair[0] || ++plain === 1;
+	});
+}
+
+/*
+	The container is a two column grid, so the nodes are emitted flat rather
+	than wrapped per row - that is what keeps the values aligned across rows.
+	Entries without a key span both columns. The trailing space in the key is
+	invisible but keeps the text copyable as "key value".
+*/
+function stackNodes(pairs) {
+	const nodes = [];
+	pairs.forEach(function (pair) {
+		if (pair[0]) {
+			nodes.push(E('span', { 'class': 'trm-key' }, [pair[0], ' ']));
+			nodes.push(E('span', {}, [pair[1]]));
+		} else {
+			nodes.push(E('span', { 'class': 'trm-full' }, [pair[1]]));
+		}
+	});
+	return nodes.length ? nodes : ['-'];
+}
+
+function flagChips(text) {
+	return parsePairs(text).filter(function (pair) {
+		return pair[0];
+	}).sort(function (a, b) {
+		return a[0].localeCompare(b[0]);
+	}).map(function (flag) {
+		const on = flag[1] === '\u2714';
+		return E('span', { 'class': 'trm-chip ' + (on ? 'trm-chip-on' : 'trm-chip-off') }, [
+			E('span', { 'class': 'trm-mark' }, [on ? '\u2714' : '\u2718']),
+			flag[0]
+		]);
+	});
+}
+
+/*
+	station_id is "radio/essid/bssid". An essid may itself contain a slash,
+	while the radio name and the bssid cannot, so the field is cut at the
+	first and the last separator rather than split on every one.
+*/
+function splitStationId(text) {
+	const value = text || '';
+	const first = value.indexOf('/');
+	const last = value.lastIndexOf('/');
+	if (first < 0 || last === first) {
+		return { 'radio': '-', 'essid': value || '-', 'bssid': '-' };
+	}
+	return {
+		'radio': value.substring(0, first) || '-',
+		'essid': value.substring(first + 1, last) || '-',
+		'bssid': value.substring(last + 1) || '-'
+	};
+}
+
+/* station_interfaces is "uplink, vpn" without keys, the order is fixed */
+function splitInterfaces(text) {
+	const parts = (text || '').split(', ');
+	return { 'uplink': parts[0] || '-', 'vpn': parts[1] || '-' };
+}
+
+/*
+	travelmate_status is either "connected, <detail>", "processing",
+	"not connected" or "program error". The backend only reports "processing"
+	while a run cycle is actually in progress, an idle daemon without uplink
+	reports "not connected". The state key drives the dot colour and decides
+	whether the action buttons are temporarily locked.
+*/
+function splitStatus(text) {
+	const value = text || '';
+	if (value === 'processing') {
+		return { 'state': 'processing', 'label': _('processing'), 'detail': '-' };
+	}
+	if (value === 'not connected') {
+		return { 'state': 'idle', 'label': _('not connected'), 'detail': '-' };
+	}
+	if (value === 'program error') {
+		return { 'state': 'error', 'label': _('program error'), 'detail': '-' };
+	}
+	if (value.indexOf('connected') === 0) {
+		const idx = value.indexOf(', ');
+		return { 'state': 'connected', 'label': _('connected'), 'detail': idx > 0 ? value.substring(idx + 2) : '-' };
+	}
+	return { 'state': '', 'label': value || '-', 'detail': '-' };
+}
+
 return view.extend({
 	load: function () {
 		return Promise.all([
@@ -200,9 +332,9 @@ return view.extend({
 
 	render: function (result) {
 		/*
-			basic result check
+			basic config check
 		*/
-		if (!result[0] || result[0].length === 0) {
+		if (!uci.get('travelmate', 'global')) {
 			ui.addNotification(null, E('p', _('No travelmate config found!')), 'error');
 			return;
 		} else if (!result[1] || result[1].length === 0) {
@@ -215,7 +347,7 @@ return view.extend({
 		*/
 		let m, s, o;
 		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
-			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' +
+			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' +
 			_('<b><em>Please note:</em></b> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
 
 		/*
@@ -229,17 +361,65 @@ return view.extend({
 		};
 
 		/*
+			set element content helper function
+		*/
+		const setNodes = (id, nodes) => {
+			const el = document.getElementById(id);
+			if (el) {
+				dom.content(el, nodes);
+			}
+		};
+
+		/*
+			action button helper
+
+			Only lock the buttons while a run cycle is actually in progress. The
+			service button is never locked, it is the escape hatch out of a long
+			running or stuck cycle.
+		*/
+		const setButtons = (locked) => {
+			document.querySelectorAll('.cbi-page-actions button:not(#btn_stop)').forEach(function (btn) {
+				btn.disabled = locked;
+				if (locked) {
+					btn.blur();
+				}
+			});
+		};
+
+		/*
+			stop button helper
+
+			The backend truncates the runtime file on service stop, so an empty
+			or missing file means 'not running'. The button is only greyed out
+			in that state, 'Save & Restart' brings the service back up.
+		*/
+		const setStop = (running) => {
+			const btn = document.getElementById('btn_stop');
+			if (btn) {
+				btn.disabled = !running;
+			}
+		};
+
+		/*
 			poll runtime information
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
 			return L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.runtime.json'), null).then(function (stat) {
-				if (!stat) {
+				const status = document.getElementById('status');
+				if (!stat || !stat.size) {
+					parseErrCount = 0;
+					setStop(false);
+					setButtons(false);
+					if (status) {
+						status.classList.remove('spinning');
+						status.setAttribute('data-state', 'stopped');
+						setText('state', _('stopped'));
+						setText('connection', '-');
+					}
 					return;
 				}
 				return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.runtime.json'), null).then(function (res) {
-					const status = document.getElementById('status');
-					const buttons = document.querySelectorAll('.cbi-page-actions button');
 					let info = null;
 					try {
 						info = JSON.parse(res);
@@ -250,11 +430,11 @@ return view.extend({
 					} catch (e) {
 						info = null;
 						parseErrCount++;
+						setStop(true);
+						setButtons(false);
 						if (status) {
-							status.textContent = '-';
-							buttons.forEach(function (btn) {
-								btn.disabled = false;
-							});
+							status.setAttribute('data-state', '');
+							setText('state', '-');
 							status.classList.remove('spinning');
 							if (parseErrCount >= 5) {
 								ui.addNotification(null, E('p', _('Unable to parse the travelmate runtime information!')), 'error');
@@ -263,42 +443,37 @@ return view.extend({
 						}
 						return;
 					}
+					setStop(true);
 					if (status && info) {
-						status.textContent = `${info.data.travelmate_status || '-'} (frontend: ${info.data.frontend_ver || '-'} / backend: ${info.data.backend_ver || '-'})`;
-						if (info.data.travelmate_status === 'processing') {
-							buttons.forEach(function (btn) {
-								btn.disabled = true;
-								btn.blur();
-							});
-							if (!status.classList.contains("spinning")) {
-								status.classList.add("spinning");
-							}
-						} else {
-							if (status.classList.contains("spinning")) {
-								status.classList.remove("spinning");
-							}
-							buttons.forEach(function (btn) {
-								btn.disabled = false;
-							});
-						}
+						const state = splitStatus(info.data.travelmate_status);
+						status.setAttribute('data-state', state.state);
+						setText('state', state.label);
+						setText('connection', state.detail);
+						setText('versions', `${info.data.frontend_ver || '-'} / ${info.data.backend_ver || '-'}`);
+						setButtons(state.state === 'processing');
+						status.classList.toggle('spinning', state.state === 'processing');
 					} else if (status) {
-						status.textContent = '-';
-						if (status.classList.contains("spinning")) {
-							status.classList.remove("spinning");
-						}
-						buttons.forEach(function (btn) {
-							btn.disabled = false;
-						});
+						status.setAttribute('data-state', '');
+						setText('state', '-');
+						status.classList.remove('spinning');
+						setButtons(false);
 					}
 					if (info) {
-						setText('station_id', info.data.station_id);
+						const station = splitStationId(info.data.station_id);
+						const ifaces = splitInterfaces(info.data.station_interfaces);
+						setText('essid', station.essid);
+						setText('radio', station.radio);
+						setText('station_bssid', station.bssid);
 						setText('station_mac', info.data.station_mac);
-						setText('station_interfaces', info.data.station_interfaces);
+						setText('iface_uplink', ifaces.uplink);
+						setText('iface_vpn', ifaces.vpn);
 						setText('station_subnet', info.data.station_subnet);
-						setText('run_flags', info.data.run_flags);
-						setText('ext_hooks', info.data.ext_hooks);
-						setText('run', info.data.last_run);
-						setText('sys', info.data.system);
+						const runPairs = parsePairs(info.data.last_run);
+						setNodes('run_flags', flagChips(info.data.run_flags));
+						setText('run', pickValue(runPairs, 'date / time'));
+						setText('run_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
+						pickValue(runPairs, 'memory')].filter(v => v !== '-').join(', '));
+						setNodes('sys', stackNodes(sysPairs(info.data.system_info)));
 					}
 				});
 			});
@@ -309,43 +484,113 @@ return view.extend({
 		*/
 		s = m.section(form.NamedSection, 'global');
 		s.render = function (section_id) {
-			return E('div', { 'class': 'cbi-section' }, [
-				E('h3', _('Information')),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Status / Version')),
-					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;color:#37c;' }, '\xa0')
+			/*
+				scoped theme palette
+
+				Neutral surfaces are derived from translucent grey so they work on
+				top of any LuCI theme background. Only the semantic colors are
+				switched per color scheme, and both variants are chosen to stay
+				readable either way.
+			*/
+			const style = E('style', { 'type': 'text/css' }, [
+				'#trm-status {' +
+				'--trm-card-bg: rgba(128,128,128,.07);' +
+				'--trm-card-border: rgba(128,128,128,.28);' +
+				'--trm-muted: GrayText;' +
+				'--trm-ok: #1f8a5f;' +
+				'--trm-err: #c0392b;' +
+				'--trm-info: #2f6fb0;' +
+				'--trm-warn: #b7791f;' +
+				'--trm-ok-bg: rgba(31,138,95,.14);' +
+				'}' +
+				'@media (prefers-color-scheme: dark) {' +
+				'#trm-status {' +
+				'--trm-ok: #63c79b;' +
+				'--trm-err: #e8897e;' +
+				'--trm-info: #7fb3e8;' +
+				'--trm-warn: #e0b35c;' +
+				'}}' +
+				'#trm-status .trm-grid { display: grid; gap: .75em; grid-template-columns: repeat(auto-fit, minmax(min(12em, 100%), 1fr)); margin-bottom: .75em; }' +
+				'#trm-status .trm-card { background: var(--trm-card-bg); border: 1px solid var(--trm-card-border); border-radius: 8px; padding: .7em .9em; min-width: 0; overflow-wrap: break-word; }' +
+				'#trm-status .trm-block { margin-bottom: .75em; }' +
+				'#trm-status .trm-label { font-size: .85em; color: var(--trm-muted); margin-bottom: .3em; }' +
+				'#trm-status .trm-sub { font-size: .8em; color: var(--trm-muted); margin-top: .3em; }' +
+				'#trm-status .trm-value { font-size: 1.5em; line-height: 1.3; }' +
+				'#trm-status .trm-ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }' +
+				'#trm-status .trm-state { display: flex; align-items: center; gap: .5em; }' +
+				'#trm-status .trm-dot { width: .6em; height: .6em; border-radius: 50%; background: var(--trm-muted); flex: 0 0 auto; }' +
+				'#trm-status .trm-state[data-state="connected"] .trm-dot { background: var(--trm-ok); }' +
+				'#trm-status .trm-state[data-state="processing"] .trm-dot { background: var(--trm-info); }' +
+				'#trm-status .trm-state[data-state="idle"] .trm-dot { background: var(--trm-warn); }' +
+				'#trm-status .trm-state[data-state="stopped"] .trm-dot { background: var(--trm-muted); }' +
+				'#trm-status .trm-state[data-state="error"] .trm-dot { background: var(--trm-err); }' +
+				'#trm-status .trm-title { font-weight: bold; margin-bottom: .6em; }' +
+				'#trm-status .trm-chips { display: flex; flex-wrap: wrap; gap: .35em; }' +
+				'#trm-status .trm-chip { font-size: .85em; padding: .15em .6em; border-radius: 6px; border: 1px solid transparent; }' +
+				'#trm-status .trm-chip-on { background: var(--trm-ok-bg); color: var(--trm-ok); }' +
+				'#trm-status .trm-chip-off { color: var(--trm-muted); border-color: var(--trm-card-border); }' +
+				'#trm-status .trm-mark { margin-right: .35em; }' +
+				'#trm-status .trm-stack { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25em .6em; font-size: .9em; }' +
+				'#trm-status .trm-key { color: var(--trm-muted); }' +
+				'#trm-status .trm-stack .trm-full { grid-column: 1 / -1; }' +
+				'#trm-status .trm-mono { font-family: monospace; word-break: break-all; }'
+			]);
+
+			/* static labels, only the value nodes are updated by the poll */
+			function kvRow(label, id, mono) {
+				return [
+					E('span', { 'class': 'trm-key' }, [label, ' ']),
+					E('span', { 'class': mono ? 'trm-mono' : '', 'id': id }, ['-'])
+				];
+			}
+
+			return E('div', { 'class': 'cbi-section', 'id': 'trm-status' }, [
+				style,
+				E('div', { 'class': 'trm-grid' }, [
+					E('div', { 'class': 'trm-card' }, [
+						E('div', { 'class': 'trm-label' }, [_('Status')]),
+						E('div', { 'class': 'trm-state spinning', 'id': 'status', 'data-state': '' }, [
+							E('span', { 'class': 'trm-dot' }),
+							E('span', { 'class': 'trm-value', 'id': 'state' }, ['-'])
+						]),
+						E('div', { 'class': 'trm-sub', 'id': 'connection' }, ['-']),
+						E('div', { 'class': 'trm-sub trm-mono', 'id': 'versions' }, ['-'])
+					]),
+					E('div', { 'class': 'trm-card' }, [
+						E('div', { 'class': 'trm-label' }, [_('Uplink')]),
+						E('div', { 'class': 'trm-value trm-ellipsis', 'id': 'essid' }, ['-']),
+						E('div', { 'class': 'trm-sub', 'id': 'radio' }, ['-'])
+					]),
+					E('div', { 'class': 'trm-card' }, [
+						E('div', { 'class': 'trm-label' }, [_('Last Run')]),
+						E('div', { 'class': 'trm-value', 'id': 'run' }, ['-']),
+						E('div', { 'class': 'trm-sub', 'id': 'run_sub' }, ['-'])
+					])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Station ID')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'station_id', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'trm-grid' }, [
+					E('div', { 'class': 'trm-card' }, [
+						E('div', { 'class': 'trm-title' }, [_('Station')]),
+						E('div', { 'class': 'trm-stack' }, [].concat(
+							kvRow(_('bssid'), 'station_bssid', true),
+							kvRow(_('mac'), 'station_mac', true)
+						))
+					]),
+					E('div', { 'class': 'trm-card' }, [
+						E('div', { 'class': 'trm-title' }, [_('Network')]),
+						E('div', { 'class': 'trm-stack' }, [].concat(
+							kvRow(_('uplink'), 'iface_uplink', true),
+							kvRow(_('vpn'), 'iface_vpn', true),
+							kvRow(_('subnet'), 'station_subnet', true)
+						))
+					]),
+					E('div', { 'class': 'trm-card' }, [
+						E('div', { 'class': 'trm-title' }, [_('System Info')]),
+						E('div', { 'class': 'trm-stack', 'id': 'sys' }, ['-'])
+					])
 				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Station MAC')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'station_mac', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Station Interfaces')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'station_interfaces', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Station Subnet')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'station_subnet', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Flags')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run_flags', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Ext. Hooks')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'ext_hooks', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('System Info')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'sys', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				E('div', { 'class': 'trm-card trm-block' }, [
+					E('div', { 'class': 'trm-title' }, [_('Run Flags')]),
+					E('div', { 'class': 'trm-chips', 'id': 'run_flags' }, ['-'])
 				])
 			]);
 		};
@@ -411,8 +656,7 @@ return view.extend({
 		o.nocreate = true;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'trm_netcheck', _('Net Error Check'), _('Treat missing internet availability as an error.'));
-		o.depends('trm_captive', '1');
+		o = s.taboption('general', form.Flag, 'trm_netcheck', _('Net Error Check'), _('Treat missing internet availability as an error. A detected captive portal does not count as an error.'));
 		o.default = 0;
 		o.rmempty = false;
 
@@ -546,9 +790,18 @@ return view.extend({
 		s.render = function () {
 			return E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
+					'class': 'btn cbi-button cbi-button-reset important',
+					'style': 'float:none;margin-right:.4em;',
+					'title': _('Stop the travelmate service'),
+					'id': 'btn_stop',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction('stopService');
+					})
+				}, [_('Stop')]),
+				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Interface Setup',
+					'title': _('Interface Setup'),
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('setup');
 					})
@@ -556,7 +809,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Restart Interface',
+					'title': _('Restart Interface'),
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restartInterface');
 					})
@@ -564,8 +817,8 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'QRCode',
-					'id': 'btn_suspend',
+					'title': _('QR-Code'),
+					'id': 'btn_qrcode',
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('qrcode');
 					})
@@ -573,7 +826,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
-					'title': 'Save & Restart',
+					'title': _('Save & Restart'),
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restartTravelmate');
 					})

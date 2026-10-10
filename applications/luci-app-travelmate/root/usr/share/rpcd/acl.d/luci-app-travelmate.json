@@ -5,31 +5,49 @@
 			"file": {
 				"/var/run/travelmate/travelmate.refresh": [
 					"write"
+				],
+				"/tmp/run/travelmate/travelmate.refresh": [
+					"write"
 				]
 			},
 			"uci": [
-				"travelmate"
+				"travelmate",
+				"wireless"
 			]
 		},
 		"read": {
 			"cgi-io": [
+				"download",
 				"exec"
 			],
 			"file": {
-				"/etc/travelmate/*.login": [
+				"/etc/travelmate": [
 					"list"
 				],
-				"/var/run/travelmate/travelmate.pid": [
-					"read"
+				"/etc/travelmate/*.login": [
+					"list"
 				],
 				"/var/run/travelmate/travelmate.scan": [
 					"read"
 				],
-				"/var/run/travelmate/travelmate.refresh": [
+				"/tmp/run/travelmate/travelmate.scan": [
 					"read"
 				],
+				"/var/run/travelmate/travelmate.refresh": [
+					"read",
+					"list"
+				],
+				"/tmp/run/travelmate/travelmate.refresh": [
+					"read",
+					"list"
+				],
 				"/var/run/travelmate/travelmate.runtime.json": [
-					"read"
+					"read",
+					"list"
+				],
+				"/tmp/run/travelmate/travelmate.runtime.json": [
+					"read",
+					"list"
 				],
 				"/sbin/ifup *": [
 					"exec"
@@ -48,6 +66,12 @@
 				],
 				"/etc/init.d/travelmate scan *": [
 					"exec"
+				]
+			},
+			"ubus": {
+				"file": [
+					"exec",
+					"stat"
 				]
 			},
 			"uci": [

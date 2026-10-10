@@ -1,0 +1,43 @@
+#!/bin/sh
+# Serves the admin-uploaded wallpaper pattern with headers a browser will not execute: opened
+# directly, the /www symlink this replaces was a same-origin document with an authenticated LuCI
+# session reachable from it (OpenWrt forum thread 251930, confirmed on a stand — a marker SVG set
+# document.title, read location.origin as the router's, and reached document.cookie, pre-login
+# too, since /www needs no session). The theme's own rendering never hits this: 15-wallpaper.css
+# paints the same file through mask-image or a tiled background-image, and neither ever runs
+# script inside it — the exposure was only the direct URL, which is what CSP 'none' + sandbox and
+# nosniff below close, without touching how the mask/background paints it.
+#
+# Deliberately unauthenticated, on purpose and not an oversight: the pattern paints before login
+# too (head.ut's pre-paint, from window.__fsSD). That is safe here ONLY because this script takes
+# NO input at all — FILE below is a shell constant, never $QUERY_STRING, $PATH_INFO or anything
+# else request-supplied — so there is nothing to traverse and nothing else this handler can be
+# made to read.
+#
+# The login background (/etc/footstrap/login-bg) stays a plain /www symlink and does NOT get this
+# treatment: fs-assets.js re-encodes every upload to a JPEG on a canvas before it is sent, so the
+# stored bytes are pixels only and there is no script grammar left in the file for a direct hit to
+# run — see docs/package.md.
+
+FILE=/etc/footstrap/pattern.svg
+
+if [ ! -r "$FILE" ]; then
+	printf 'Status: 404 Not Found\r\n'
+	printf 'Content-Type: text/plain\r\n'
+	printf '\r\n'
+	exit 0
+fi
+
+printf 'Status: 200 OK\r\n'
+printf 'Content-Type: image/svg+xml\r\n'
+# Cacheable forever, because the URL is not stable: fs-axes.js appends `?v=<token>` and the token
+# changes with every upload, so a new file is a new URL. Without this the /www symlink's ETag and
+# Last-Modified were gone and the tile was re-fetched on EVERY page load - a background image on a
+# router that serves it off flash with no gzip, which is the cost this handler must not add.
+printf 'Cache-Control: public, max-age=31536000, immutable\r\n'
+printf 'X-Content-Type-Options: nosniff\r\n'
+printf "Content-Security-Policy: default-src 'none'; sandbox\r\n"
+printf '\r\n'
+cat "$FILE"
+
+exit 0

@@ -18,7 +18,7 @@ return view.extend({
 		const title = '%s: %s'.format(_('Table'), table);
 
 		if (!tdiv) {
-			tdiv = E('div', { 'data-table': '%s-%s'.format(is_ipv6 ? 'ipv6' : 'ipv4', table) }, [
+			tdiv = E('div', { 'class': 'cbi-section', 'data-table': '%s-%s'.format(is_ipv6 ? 'ipv6' : 'ipv4', table) }, [
 				E('h3', {}, title),
 				E('div')
 			]);
@@ -165,10 +165,10 @@ return view.extend({
 						'data-format': '%.2mB',
 						'data-value': bytes
 					}, (raw ? '%d' : '%.2mB').format(bytes)),
-					target ? '<span class="target">%s</span>'.format(target) : '-',
+					target ? E('span', { 'class': 'target' }, [ target ]) : '-',
 					proto,
-					(indev !== '*') ? '<span class="ifacebadge nowrap">%s</span>'.format(indev) : '*',
-					(outdev !== '*') ? '<span class="ifacebadge nowrap">%s</span>'.format(outdev) : '*',
+					(indev !== '*') ? E('span', { 'class': 'ifacebadge nowrap' }, [ indev ]) : '*',
+					(outdev !== '*') ? E('span', { 'class': 'ifacebadge nowrap' }, [ outdev ]) : '*',
 					srcnet,
 					dstnet,
 					options,

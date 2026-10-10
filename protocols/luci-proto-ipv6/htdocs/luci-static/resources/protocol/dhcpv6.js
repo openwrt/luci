@@ -38,7 +38,18 @@ return network.registerProtocol('dhcpv6', {
 		o.default = '1';
 		o.rmempty = false;
 
+		o = s.taboption('advanced', form.ListValue, 'sendclientid', _('Preferred client ID'),
+			_('Selects the <abbr title="DHCP Unique Identifier">DUID</abbr> to send when requesting DHCPv6.') + '<br />' +
+			_('<em>Automatic</em> uses the client ID configured below, else the default DUID of this device, else a DUID-LL derived from the MAC address of this interface.') + '<br />' +
+			_('<em>Default DUID</em> always uses the default DUID of this device, even if a client ID is configured below.') + '<br />' +
+			_('<em>Hardware address</em> always uses a DUID-LL derived from the MAC address of this interface.'));
+		o.value('auto', _('Automatic'));
+		o.value('global', _('Default DUID'));
+		o.value('hardware', _('Hardware address'));
+		o.default = 'auto';
+
 		o = s.taboption('advanced', form.Value, 'clientid', _('Client ID to send when requesting DHCP'));
 		o.datatype  = 'hexstring';
+		o.depends('sendclientid', 'auto');
 	}
 });
