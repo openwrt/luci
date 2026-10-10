@@ -1,0 +1,429 @@
+// SPDX-License-Identifier: GPL-2.0-only
+// rpcd plugin for luci-app-veracrypt-lite (console veracrypt --text)
+
+'use strict';
+
+import { access, basename, dirname, lsdir, lstat, open, popen, readfile, realpath, stat } from 'fs';
+
+const VC = '/usr/bin/veracrypt';
+const JOB = '/usr/libexec/luci-veracrypt-lite-job';
+const RUN = '/var/run/luci-veracrypt-lite';
+
+const ENCRYPTION = [
+	'AES', 'Serpent', 'Twofish', 'Camellia', 'Kuznyechik',
+	'AES-Twofish', 'AES-Twofish-Serpent', 'Camellia-Kuznyechik',
+	'Camellia-Serpent', 'Kuznyechik-AES', 'Kuznyechik-Serpent-Camellia',
+	'Kuznyechik-Twofish', 'Serpent-AES', 'Serpent-Twofish-AES',
+	'Twofish-Serpent'
+];
+// Argon2id (BLAKE2b) is not in the packaged VeraCrypt 1.26 releases.
+const HASH = [ 'SHA-512', 'SHA-256', 'BLAKE2s-256', 'Whirlpool', 'Streebog' ];
+// Inner filesystem -> formatter that must be installed (VeraCrypt writes FAT itself).
+const FILESYSTEM = { none: null, fat: null, exfat: 'mkfs.exfat', ext4: 'mkfs.ext4' };
+
+// Candidate block devices: disk name, optional partition suffix.
+const DEVICE = /^(sd[a-z]+|vd[a-z]+|nvme[0-9]+n[0-9]+|mmcblk[0-9]+)(p?[0-9]+)?$/;
+
+const LIST_FIELDS = {
+	'Volume': 'volume', 'Virtual Device': 'vdev', 'Mount Directory': 'mountpoint',
+	'Size': 'size', 'Type': 'type', 'Read-Only': 'readonly'
+};
+
+function devno(st) {
+	return st ? `${st.dev.major}:${st.dev.minor}` : null;
+}
+
+function have_tool(name) {
+	for (let dir in [ '/usr/sbin', '/sbin', '/usr/bin', '/bin' ])
+		if (access(`${dir}/${name}`, 'x'))
+			return true;
+
+	return false;
+}
+
+function shellquote(s) {
+	return `'${replace(s, "'", "'\\''")}'`;
+}
+
+// fs.popen() takes a command string for /bin/sh, not an argv array, so every
+// argument is quoted. Values that reach here are validated.
+function run(argv) {
+	const p = popen(`LC_ALL=C ${join(' ', map(argv, shellquote))} </dev/null 2>&1`);
+	const output = p?.read('all') ?? '';
+
+	return { code: p?.close() ?? -1, output };
+}
+
+function slots() {
+	const out = run([ VC, '--text', '--non-interactive', '--list', '--verbose' ]).output;
+	let list = [], cur;
+
+	for (let line in split(out, '\n')) {
+		const m = match(line, /^([A-Za-z -]+): (.*)$/);
+
+		if (m?.[1] == 'Slot')
+			push(list, cur = { slot: int(m[2]) });
+		else if (cur && m && LIST_FIELDS[m[1]])
+			cur[LIST_FIELDS[m[1]]] = (m[1] == 'Read-Only') ? (m[2] == 'Yes') : m[2];
+	}
+
+	return list;
+}
+
+// Control characters would break the job helper's line protocol and ','
+// separates keyfiles.
+const BAD_CHARS = /[\x01-\x1f\x7f,]/;
+
+// Paths are limited to disks mounted under /mnt, which keeps the system's
+// own files out of reach. A new file must not exist and its directory must be
+// writable by root only, so nobody else can swap it for a symlink meanwhile.
+// The resolved path is what veracrypt gets, so it is checked like the request.
+function mnt_path(p, create) {
+	if (type(p) != 'string' || length(p) > 4095 || !match(p, /^\/mnt\/[^\/]/) ||
+	    match(p, BAD_CHARS) || match(p, /\/\.\.?(\/|$)|\/\/|\/$/))
+		die(`Invalid path: ${p}`);
+
+	let real = realpath(create ? dirname(p) : p);
+
+	if (!real || !match(real, /^\/mnt\/./))
+		die(`${p} does not exist or is outside /mnt`);
+
+	if (match(real, BAD_CHARS))
+		die(`${p} leads to a path with a control character or ","`);
+
+	const st = stat(real);
+
+	if (devno(st) == devno(stat('/mnt')))
+		die(`${p} is not on a mounted disk`);
+
+	if (!create)
+		return real;
+
+	if (st.type != 'directory')
+		die(`${dirname(p)} is not a directory`);
+
+	if (st.uid != 0 || st.perm.group_write || st.perm.other_write)
+		die(`${dirname(p)} is writable by other users or owned by another user; choose a directory owned by root that only root can write to`);
+
+	real += '/' + basename(p);
+
+	if (lstat(real))
+		die(`${p} already exists`);
+
+	return real;
+}
+
+function mnt_file(p) {
+	const real = mnt_path(p);
+
+	if (stat(real)?.type != 'file')
+		die(`${p} is not a file`);
+
+	return real;
+}
+
+function mountpoint(p) {
+	const name = match(p, /^\/mnt\/([A-Za-z0-9._-]{1,64})$/)?.[1];
+
+	if (!name || name == '.' || name == '..')
+		die('The mount directory must be /mnt/<name> (letters, digits, ".", "_", "-")');
+
+	const st = lstat(p);
+
+	// A missing directory is created by the job helper once it holds the lock.
+	if (st && (st.type != 'directory' || length(lsdir(p) ?? [ 1 ]) || devno(st) != devno(stat('/mnt'))))
+		die(`${p} must be an empty directory that is not in use`);
+
+	return p;
+}
+
+function password(pw) {
+	if (type(pw) != 'string' || length(pw) > 128 || match(pw, /[\r\n]/))
+		die('The password must be a single line of at most 128 bytes');
+
+	return pw;
+}
+
+function number(v, min, max, what) {
+	if (v != null && (type(v) != 'int' || v < min || v > max))
+		die(`Invalid ${what}`);
+
+	return v;
+}
+
+function one_of(v, list, what) {
+	if (!(v in list))
+		die(`Unsupported ${what}: ${v}`);
+
+	return v;
+}
+
+// Options shared by mount and create: PIM and keyfiles.
+function key_args(a) {
+	let args = [];
+
+	if (number(a.pim, 0, 2147468, 'PIM') != null)
+		push(args, `--pim=${a.pim}`);
+
+	if (a.keyfiles != null) {
+		if (type(a.keyfiles) != 'array' || length(a.keyfiles) > 16)
+			die('Invalid keyfile list');
+
+		// veracrypt separates keyfiles with ',' (refused in paths)
+		if (length(a.keyfiles))
+			push(args, `--keyfiles=${join(',', map(a.keyfiles, p => mnt_file(p)))}`);
+	}
+
+	return args;
+}
+
+// Unused disks and partitions. When any part of a disk is in use (mounted,
+// swap, a veracrypt volume, held by dm), none of it is offered: its other
+// partitions are likely system ones (boot, BIOS boot, firmware).
+function devices() {
+	let busy = {}, list = [];
+
+	// Mounted filesystems, by device name and by device number (/dev/root).
+	for (let line in split(readfile('/proc/mounts') ?? '', '\n')) {
+		const f = split(line, ' ');
+
+		if (match(f[0], /^\/dev\//)) {
+			busy[f[0]] = true;
+			busy[devno(stat(replace(f[1], /\\([0-7]{3})/g, (m, o) => chr(int(o, 8)))))] = true;
+		}
+	}
+
+	for (let line in slice(split(readfile('/proc/swaps') ?? '', '\n'), 1))
+		busy[split(line, /[ \t]/)[0]] = true;
+
+	for (let s in slots())
+		busy[s.volume] = true;
+
+	let disks = {}, used = {};
+
+	for (let n in sort(lsdir('/sys/class/block') ?? [])) {
+		const m = match(n, DEVICE);
+
+		if (!m)
+			continue;
+
+		const sys = `/sys/class/block/${n}`;
+
+		disks[n] = m[1];
+
+		// A whole disk with partitions counts as used: veracrypt refuses it.
+		if (m[2])
+			used[m[1]] ??= false;
+
+		if (busy[`/dev/${n}`] || busy[trim(readfile(`${sys}/dev`) ?? '')] ||
+		    length(lsdir(`${sys}/holders`) ?? []))
+			used[m[1]] = true;
+	}
+
+	for (let n, disk in disks) {
+		const sys = `/sys/class/block/${n}`;
+		const path = `/dev/${n}`;
+
+		// eMMC (type MMC, unlike SD cards) holds the system.
+		if (used[disk] || (n == disk && used[disk] != null) || stat(path)?.type != 'block' ||
+		    trim(readfile(`/sys/class/block/${disk}/device/type`) ?? '') == 'MMC')
+			continue;
+
+		push(list, {
+			path,
+			name: trim(readfile(`/sys/class/block/${disk}/device/model`) ??
+				readfile(`/sys/class/block/${disk}/device/name`) ?? ''),
+			size: int(readfile(`${sys}/size`) ?? 0) * 512
+		});
+	}
+
+	return list;
+}
+
+function device(p) {
+	for (let d in devices())
+		if (d.path == p)
+			return p;
+
+	die(`${p} is not an unused block device`);
+}
+
+const rd = f => trim(readfile(`${RUN}/${f}`) ?? '');
+
+// Whether pid is still the job's process: the helper stores its start time
+// (field 22 of /proc/<pid>/stat) next to the pid, so a reused pid differs.
+function job_alive(pid) {
+	const st = readfile(`/proc/${pid}/stat`);
+
+	return !!match(pid, /^[0-9]+$/) && st != null &&
+		split(replace(trim(st), /^.*\) /, ''), ' ')[19] === rd('stime');
+}
+
+function job_info(with_log) {
+	const op = rd('op'), rc = rd('rc'), pid = rd('pid');
+
+	if (op == '')
+		return null;
+
+	// No pid yet: the helper is still starting the job.
+	const running = rc == '' && (pid == '' || job_alive(pid));
+	const end = running ? time() : stat(`${RUN}/rc`)?.mtime;
+	let info = { op, running, rc: (rc != '') ? int(rc) : null, elapsed: end ? end - int(rd('start')) : null };
+
+	if (with_log) {
+		const f = open(`${RUN}/log`);
+		const size = stat(`${RUN}/log`)?.size ?? 0;
+
+		if (f && size > 8192)
+			f.seek(size - 8192);
+
+		info.log = f?.read('all') ?? '';
+		f?.close();
+	}
+
+	return info;
+}
+
+// Mount and create take minutes (key derivation), longer than an rpc call
+// may last, so the helper runs them in the background. It gets the password
+// on stdin and passes it to veracrypt --stdin.
+function start_job(op, pw, args) {
+	const p = popen(JOB, 'w');
+
+	if (!p)
+		die('Cannot start the job helper');
+
+	p.write(join('\n', [ op, pw, ...args ]) + '\n');
+
+	switch (p.close()) {
+	case 0: return { started: true };
+	case 1: return { error: 'Another VeraCrypt operation is still running' };
+	default: return { error: 'Cannot start the VeraCrypt operation' };
+	}
+}
+
+function status() {
+	return {
+		version: match(run([ VC, '--text', '--version' ]).output, /VeraCrypt (\S+)/)?.[1],
+		slots: slots(),
+		job: job_info(false),
+		tools: { 'mkfs.exfat': have_tool('mkfs.exfat'), 'mkfs.ext4': have_tool('mkfs.ext4') }
+	};
+}
+
+function mount(a) {
+	const vol = match(a.volume, /^\/dev\//) ? device(a.volume) : mnt_file(a.volume);
+	const pw = password(a.password);
+	let args = key_args(a), opts = [];
+
+	if (number(a.slot, 1, 64, 'slot') != null)
+		push(args, `--slot=${a.slot}`);
+
+	if (a.readonly)
+		push(opts, 'ro');
+
+	// The veracrypt package already uses FUSE when dmsetup is missing; this
+	// is for kernels without dm-crypt.
+	if (a.nokernelcrypto)
+		push(opts, 'nokernelcrypto');
+
+	if (length(opts))
+		push(args, `--mount-options=${join(',', opts)}`);
+
+	return start_job(`mount ${vol}`, pw, [ ...args, vol, mountpoint(a.mountpoint) ]);
+}
+
+function unmount(a) {
+	if (a.slot == null)
+		die('No slot given');
+
+	let argv = [ VC, '--text', '--non-interactive', '--unmount', `--slot=${number(a.slot, 1, 64, 'slot')}` ];
+
+	if (a.force)
+		push(argv, '--force');
+
+	return run(argv);
+}
+
+function create(a) {
+	const fs = one_of(a.filesystem ?? 'fat', keys(FILESYSTEM), 'filesystem');
+	let args = [
+		'--create', '--volume-type=normal', '--random-source=/dev/urandom',
+		`--encryption=${one_of(a.encryption ?? 'AES', ENCRYPTION, 'encryption')}`,
+		`--hash=${one_of(a.hash ?? 'SHA-512', HASH, 'hash')}`,
+		`--filesystem=${fs}`
+	];
+	let vol;
+
+	if (FILESYSTEM[fs] && !have_tool(FILESYSTEM[fs]))
+		die(`${FILESYSTEM[fs]} is not installed`);
+
+	if (a.device) {
+		vol = device(a.volume);
+	}
+	else {
+		if (type(a.size) != 'string' || !match(a.size, /^[1-9][0-9]{0,15}[KMGT]?$/))
+			die('Invalid size');
+
+		vol = mnt_path(a.volume, true);
+		push(args, `--size=${a.size}`);
+	}
+
+	if (a.quick)
+		push(args, '--quick');
+
+	return start_job(`create ${vol}`, password(a.password), [ ...args, ...key_args(a), vol ]);
+}
+
+function create_keyfile(a) {
+	return run([
+		VC, '--text', '--non-interactive', '--random-source=/dev/urandom',
+		'--create-keyfile', mnt_path(a.path, true)
+	]);
+}
+
+function abort() {
+	const pid = rd('pid');
+
+	if (rd('rc') != '' || !job_alive(pid))
+		die('No operation is running');
+
+	// The job runs in its own session: signal its whole process group.
+	system([ 'kill', '-TERM', `-${pid}` ]);
+
+	return { ok: true };
+}
+
+// Refused requests are answered with { error: "..." }.
+function method(fn, args) {
+	return {
+		args,
+		call: req => {
+			try {
+				return fn(req.args ?? {});
+			}
+			catch (e) {
+				return { error: e.message };
+			}
+		}
+	};
+}
+
+return {
+	'luci.veracrypt-lite': {
+		status: method(status),
+		devices: method(() => ({ devices: devices() })),
+		job: method(() => job_info(true) ?? {}),
+		mount: method(mount, {
+			volume: '', mountpoint: '', password: '', pim: 0, keyfiles: [],
+			slot: 0, readonly: false, nokernelcrypto: false
+		}),
+		unmount: method(unmount, { slot: 0, force: false }),
+		create: method(create, {
+			volume: '', size: '', device: false, password: '', pim: 0, keyfiles: [],
+			encryption: '', hash: '', filesystem: '', quick: false
+		}),
+		create_keyfile: method(create_keyfile, { path: '' }),
+		abort: method(abort)
+	}
+};
