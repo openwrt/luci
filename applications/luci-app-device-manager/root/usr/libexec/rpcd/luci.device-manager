@@ -1,0 +1,272 @@
+#!/bin/sh
+# SPDX-License-Identifier: MIT
+
+umask 077
+
+# A nonblocking kernel lock covers all rpcd clients and is released on exit,
+# including forced termination. Keep the lock file in place to preserve its inode.
+probe_neighbors() (
+	set -f
+	command -v ping >/dev/null 2>&1 && command -v flock >/dev/null 2>&1 || exit 2
+	flock -n 9 || exit 0
+
+	read -r uptime rest < /proc/uptime
+	now="${uptime%%.*}"
+	last=""; cursor=""
+	read -r last cursor < /tmp/luci-device-manager-probe.state 2>/dev/null
+	case "$last" in ''|*[!0-9]*) last=0 ;; esac
+	case "$cursor" in ''|*[!0-9]*) cursor=0 ;; esac
+	if [ "$last" -gt 0 ] && [ "$now" -ge "$last" ] && [ "$((now-last))" -lt 30 ]; then
+		exit 0
+	fi
+
+	# Resolve only explicitly selected logical LAN interfaces through netifd.
+	# Never infer a LAN from connected routes or invent a /24 fallback.
+	interfaces="$(uci -q get device_manager.settings.scan_interface 2>/dev/null || printf lan)"
+	lan_subnets="$(
+		selected=0
+		for interface in $interfaces; do
+			case "$interface" in ''|*[!a-zA-Z0-9_]*) continue ;; esac
+			selected=$((selected+1))
+			[ "$selected" -le 8 ] || break
+			status="$(ubus call "network.interface.$interface" status 2>/dev/null)" || continue
+			json_load "$status" || continue
+			json_get_var device l3_device
+			case "$device" in ''|*[!a-zA-Z0-9_.:-]*) continue ;; esac
+			ip -o -4 addr show dev "$device" 2>/dev/null |
+				awk -v dev="$device" '$3=="inet" {print $4, dev}'
+		done | sort -u
+	)"
+	[ -n "$lan_subnets" ] || exit 2
+	# Bind every target to its LAN device. Exclude router/network/broadcast
+	# addresses. Subnets exceeding 4096 addresses use known hosts only.
+	targets="$(
+		{
+			printf '%s\n' "$lan_subnets" | awk '{print "N", $1, $2}'
+			awk '{print "H", $1, $6}' /proc/net/arp 2>/dev/null
+			ip neigh show 2>/dev/null | awk '{dev=""; for(i=2;i<NF;i++) if($i=="dev") dev=$(i+1); print "H", $1, dev}'
+			awk '{print "H", $3}' /tmp/dhcp.leases /var/dhcp.leases 2>/dev/null
+		} | awk '
+			function number(ip, a,n,i,v) {
+				n=split(ip,a,"."); if(n!=4) return -1
+				v=0; for(i=1;i<=4;i++) {if(a[i]!~/^[0-9]+$/ || a[i]>255) return -1; v=v*256+a[i]}
+				if(a[1]==0 || a[1]==127 || a[1]>=224) return -1
+				return v
+			}
+			function literal(v, a,b,c) {
+				a=int(v/16777216); b=int(v/65536)%256; c=int(v/256)%256
+				return a "." b "." c "." v%256
+			}
+			function emit(v,i, key) {
+				key=v SUBSEP dev[i]
+				if(!own[v] && !seen[key]++) print literal(v), dev[i]
+			}
+			$1=="N" {
+				split($2,a,"/"); v=number(a[1]); p=a[2]
+				if(v<0 || p!~/^[0-9]+$/ || p>32 || count>=64) next
+				count++; size[count]=1; for(j=0;j<32-p;j++) size[count]*=2
+				lo[count]=int(v/size[count])*size[count]
+				hi[count]=lo[count]+size[count]-1; dev[count]=$3; own[v]=1
+				if(p<31) {lo[count]++; hi[count]--}
+				next
+			}
+			$1=="H" {
+				v=number($2); if(v<0) next
+				for(i=1;i<=count;i++) if(v>=lo[i] && v<=hi[i] && ($3=="" || $3==dev[i])) emit(v,i)
+			}
+			END {
+				for(i=1;i<=count;i++) if(size[i]<=4096) for(v=lo[i];v<=hi[i];v++) emit(v,i)
+			}'
+	)" || exit 2
+	[ -n "$targets" ] || exit 0
+	count="$(printf '%s\n' "$targets" | awk 'END {print NR}')"
+	[ "$cursor" -lt "$count" ] || cursor=0
+	targets="$(printf '%s\n' "$targets" | awk -v offset="$cursor" '
+		{ips[NR-1]=$0}
+		END {for (i=0; i<NR; i++) print ips[(offset+i)%NR]}
+	')"
+
+	processed=0; pending=0
+	while read -r address device; do
+		# At most 16 children, 128 addresses and about 8 seconds of probing.
+		# The cursor resumes the remaining addresses on a later eligible request.
+		[ "$processed" -lt 128 ] || break
+		if [ "$pending" -eq 0 ]; then
+			read -r uptime rest < /proc/uptime
+			[ "$((${uptime%%.*}-now))" -lt 8 ] || break
+		fi
+		ping -c 1 -w 1 -W 1 -q -I "$device" "$address" >/dev/null 2>&1 &
+		processed=$((processed+1))
+		pending=$((pending+1))
+		if [ "$pending" -ge 16 ]; then
+			wait 2>/dev/null
+			pending=0
+		fi
+	done <<EOF
+$targets
+EOF
+	wait 2>/dev/null
+	read -r uptime rest < /proc/uptime
+	printf '%s %s\n' "${uptime%%.*}" "$(((cursor+processed)%count))" > /tmp/luci-device-manager-probe.state
+) 9>/tmp/luci-device-manager-probe.lock 2>/dev/null
+
+ping_error() {
+	json_init
+	json_add_boolean ok 0
+	json_add_string error "$1"
+	json_dump
+}
+
+# Resolve the target on the router; callers provide a MAC, never a shell command
+# or an arbitrary destination. One global lock bounds simultaneous detail probes.
+ping_device() (
+	command -v flock >/dev/null 2>&1 || { ping_error 'Ping is unavailable'; exit 0; }
+	flock -n 9 || { ping_error 'Another device is being probed. Please retry.'; exit 0; }
+	json_load "$(cat)" || { ping_error 'Enter a valid MAC address'; exit 0; }
+	json_get_var mac mac
+	mac="$(printf '%s' "$mac" | tr 'A-F' 'a-f')"
+	if ! printf '%s\n' "$mac" | awk -F: '
+		NF != 6 {exit 1}
+		{for (i=1; i<=6; i++) if ($i !~ /^[0-9a-f][0-9a-f]$/) exit 1}
+		$0 == "00:00:00:00:00:00" || $0 == "ff:ff:ff:ff:ff:ff" {exit 1}
+	'; then
+		ping_error 'Enter a valid MAC address'; exit 0
+	fi
+	neighbors="$(ip neigh show 2>/dev/null)" || { ping_error 'Unable to read the kernel neighbor table'; exit 0; }
+	candidates="$(
+		{
+			printf '%s\n' "$neighbors" | awk -v mac="$mac" '
+				{
+					owner=""; dev=""; active=0
+					for (i=2; i<=NF; i++) {
+						if ($i=="lladdr") owner=tolower($(i+1))
+						if ($i=="dev") dev=$(i+1)
+						if ($i=="REACHABLE") active=1
+					}
+					if (owner==mac) {
+						priority=($1 ~ /:/) ? (tolower($1) ~ /^fe80:/ ? 4 : 3) : (active ? 0 : 2)
+						print priority, $1, dev
+					}
+				}'
+			awk -v mac="$mac" 'tolower($2)==mac {print 1, $3}' /tmp/dhcp.leases /var/dhcp.leases 2>/dev/null
+		} | sort -n -k1,1
+	)"
+	address=""; iface=""
+	while read -r priority candidate candidate_iface; do
+		# Only numeric IP literals and kernel interface names reach ping.
+		if printf '%s\n' "$candidate" | awk '
+			/^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/ {split($0,a,"."); for(i=1;i<=4;i++) if(a[i]>255) exit 1; exit 0}
+			/^[0-9a-fA-F:]+$/ && /:/ {exit 0}
+			{exit 1}'; then
+			case "$candidate_iface" in *[!a-zA-Z0-9_.:-]*) continue ;; esac
+			# A stale lease must not cause another device at a reassigned IP to
+			# be reported as this MAC. Scope link-local ownership by interface.
+			if ! printf '%s\n' "$neighbors" | awk -v address="$candidate" -v mac="$mac" -v iface="$candidate_iface" '
+				$1==address {
+					owner=""; dev=""
+					for(i=2;i<=NF;i++) {
+						if($i=="lladdr") owner=tolower($(i+1))
+						if($i=="dev") dev=$(i+1)
+					}
+					if(owner!="" && owner!=mac && (iface=="" || iface==dev)) exit 1
+				}'; then
+				continue
+			fi
+			address="$candidate"; iface="$candidate_iface"; break
+		fi
+	done <<EOF
+$candidates
+EOF
+	[ -n "$address" ] || { ping_error 'No known IP address for this device'; exit 0; }
+	set -- -c 1 -w 3 -W 2
+	[ -z "$iface" ] || set -- "$@" -I "$iface"
+	case "$address" in
+		*:*)
+			if command -v ping6 >/dev/null 2>&1; then
+				ping_command=ping6
+			else
+				ping_command=ping
+				set -- -6 "$@"
+			fi ;;
+		*) ping_command=ping ;;
+	esac
+	command -v "$ping_command" >/dev/null 2>&1 || { ping_error 'Ping is unavailable'; exit 0; }
+	output="$("$ping_command" "$@" "$address" 2>&1)"
+	result=$?
+	json_init
+	json_add_string ip "$address"
+	json_add_string interface "$iface"
+	json_add_string output "$output"
+	if [ "$result" -eq 0 ] || [ "$result" -eq 1 ]; then
+		json_add_boolean ok 1
+		json_add_boolean reachable "$((1-result))"
+	else
+		json_add_boolean ok 0
+		json_add_string error 'Ping could not be completed'
+	fi
+	json_dump
+) 9>/tmp/luci-device-manager-single-ping.lock 2>/dev/null
+
+case "$1:$2" in
+	list:*)
+		printf '{"get_online_status":{},"scan_devices":{},"ping_device":{"mac":"string"}}\n'
+		;;
+	call:ping_device)
+		. /usr/share/libubox/jshn.sh
+		ping_device
+		;;
+	call:scan_devices)
+		. /usr/share/libubox/jshn.sh
+		probe_neighbors
+		result=$?
+		json_init
+		if [ "$result" -eq 0 ]; then
+			json_add_boolean ok 1
+		else
+			json_add_boolean ok 0
+			json_add_string error 'LAN scanning is unavailable. Check the selected interfaces and probe dependencies.'
+		fi
+		json_dump
+		;;
+	call:get_online_status)
+		. /usr/share/libubox/jshn.sh
+		json_init
+		if ! neighbors="$(ip neigh show 2>/dev/null)"; then
+			json_add_boolean ok 0
+			json_add_string error 'Unable to read the kernel neighbor table'
+			json_dump
+			exit 0
+		fi
+		json_add_boolean ok 1
+		json_add_array neighbors
+		# A here document keeps parsing in this shell. jshn escapes all JSON strings.
+		while read -r address rest; do
+			[ -n "$address" ] || continue
+			mac=""; state=""; device=""; previous=""
+			set -f
+			for word in $rest; do
+				case "$previous" in
+					dev) device="$word" ;;
+					lladdr) mac="$word" ;;
+				esac
+				case "$word" in
+					REACHABLE|DELAY|PROBE|STALE|FAILED|INCOMPLETE|PERMANENT|NOARP|NONE) state="$word" ;;
+				esac
+				previous="$word"
+			done
+			[ -n "$device" ] || continue
+			# FAILED and INCOMPLETE commonly have no lladdr. Preserve their IP/state.
+			json_add_object ''
+			json_add_string ip "$address"
+			json_add_string mac "$mac"
+			json_add_string dev "$device"
+			json_add_string state "$state"
+			json_close_object
+		done <<EOF
+$neighbors
+EOF
+		json_close_array
+		json_dump
+		;;
+	*) exit 1 ;;
+esac
