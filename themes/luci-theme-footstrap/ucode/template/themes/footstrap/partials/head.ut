@@ -21,10 +21,21 @@
 	let _sd_pink = index([ 'theme', 'original' ], fs_defaults.pattern_ink) >= 0 ? fs_defaults.pattern_ink : '';
 	let _sd_ac   = index([ 'on', 'off' ], fs_defaults.autocollapse) >= 0 ? fs_defaults.autocollapse : '';
 	let _sd_dens = index([ 'compact', 'normal', 'large' ], fs_defaults.density) >= 0 ? fs_defaults.density : '';
+	/* Six numeric axes share this shape: '' (unset) must map to -1, never to 0, because 0 is a real
+	   value for every one of them (sharp corners, a transparent scrim, no tile). */
+	function _sd_range(raw, min, max) {
+		let n = int(raw);
+		return (raw != '' && n >= min && n <= max) ? n : -1;
+	}
+	/* a cache-bust TOKEN (the cgi-upload md5 for an uploaded background/pattern/font sheet), not a
+	   path — the served path is fixed. Whitelisted to hex so a hand-edited config cannot inject
+	   markup into an inline script that interpolates it. */
+	function _sd_token(v) {
+		return (type(v) == 'string' && match(v, /^[a-f0-9]{6,64}$/)) ? v : '';
+	}
 	/* how far the content column may grow past --fs-content-max's 1280px default.
 	   header.ut's FS_AXES carries 'content_width', so a saved router default reaches this. */
-	let _cw = int(fs_defaults.content_width);
-	let _sd_cwidth = (fs_defaults.content_width != '' && _cw >= 1280 && _cw <= 3840) ? _cw : -1;
+	let _sd_cwidth = _sd_range(fs_defaults.content_width, 1280, 3840);
 	/* The five colour axes each hold one of three things: '' or '0' for off, '1'..'360' for a hue,
 	   or '#rrggbb'. Both live forms reach the client as a string, and the pre-paint re-reads which
 	   it is the way fs-prefs.js's normColor() does, so this passes through exactly those two shapes
@@ -53,32 +64,14 @@
 	let _sd_ctrl = _sd_hex(fs_defaults.control);
 	let _sd_bar  = _sd_hex(fs_defaults.bar);
 	let _sd_line = _sd_hex(fs_defaults.line);
-	let _rr = int(fs_defaults.rounding);
-	/* rounding 0 is SHARP corners, a real choice, so '' (unset) must map to -1, not 0 */
-	let _sd_round = (fs_defaults.rounding != '' && _rr >= 0 && _rr <= 20) ? _rr : -1;
-	/* login_bg is the cache-bust TOKEN for the uploaded background (the cgi-upload md5), not the
-	   image and not a path — the served path is fixed. Whitelisted to hex so a hand-edited config
-	   cannot inject markup into the inline script that builds the url(). */
-	let _lb = fs_defaults.login_bg;
-	let _sd_lbg = (type(_lb) == 'string' && match(_lb, /^[a-f0-9]{6,64}$/)) ? _lb : '';
-	/* the Tint's strength 0-200 (% of the designed chroma). Unset -> -1, like rounding, because 0
-	   is a real value. */
-	let _ts = int(fs_defaults.tint_strength);
-	let _sd_tstr = (fs_defaults.tint_strength != '' && _ts >= 0 && _ts <= 200) ? _ts : -1;
-	/* the File photo's scrim opacity 0-100; unset -> -1, 0 being a real value (a transparent
-	   scrim) */
-	let _pd = int(fs_defaults.photo_dim);
-	let _sd_pdim = (fs_defaults.photo_dim != '' && _pd >= 0 && _pd <= 100) ? _pd : -1;
-	/* the uploaded pattern's cache-bust token, whitelisted like login_bg and for the same reason;
-	   the served path is fixed */
-	let _pt = fs_defaults.pattern;
-	let _sd_pat = (type(_pt) == 'string' && match(_pt, /^[a-f0-9]{6,64}$/)) ? _pt : '';
-	/* the pattern's tile edge in px and the layer's opacity 0-100; unset -> -1, since 0 is a real
-	   strength and 0 px is not a tile */
-	let _ps = int(fs_defaults.pattern_size);
-	let _sd_psize = (fs_defaults.pattern_size != '' && _ps >= 40 && _ps <= 1600) ? _ps : -1;
-	let _pst = int(fs_defaults.pattern_strength);
-	let _sd_pstr = (fs_defaults.pattern_strength != '' && _pst >= 0 && _pst <= 100) ? _pst : -1;
+	let _sd_round = _sd_range(fs_defaults.rounding, 0, 20);
+	let _sd_lbg = _sd_token(fs_defaults.login_bg);
+	let _sd_tstr = _sd_range(fs_defaults.tint_strength, 0, 200);
+	let _sd_pdim = _sd_range(fs_defaults.photo_dim, 0, 100);
+	let _sd_pat = _sd_token(fs_defaults.pattern);
+	/* the pattern's tile edge in px and the layer's opacity 0-100 */
+	let _sd_psize = _sd_range(fs_defaults.pattern_size, 40, 1600);
+	let _sd_pstr = _sd_range(fs_defaults.pattern_strength, 0, 100);
 	/* ---- the fonts ----
 	   The theme carries no faces, so the two stacks in styles/02-tokens.css are what everyone gets
 	   unless the router names something else here. Two independent options, either usable alone:
@@ -121,8 +114,7 @@
 	}
 	let _sd_fsans = _sd_family(fs_defaults.font_sans);
 	let _sd_fmono = _sd_family(fs_defaults.font_mono);
-	let _ft = fs_defaults.fonts;
-	let _sd_ftok = (type(_ft) == 'string' && match(_ft, /^[a-f0-9]{6,64}$/)) ? _ft : '';
+	let _sd_ftok = _sd_token(fs_defaults.fonts);
 	/* ---- writing direction ----
 	   Nothing in LuCI emits `dir`: the dispatcher stamps `lang` and stops, so a router in Arabic,
 	   Persian or Hebrew renders right-to-left text inside a left-to-right document — paragraphs
