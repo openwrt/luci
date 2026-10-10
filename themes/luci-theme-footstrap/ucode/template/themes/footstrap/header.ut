@@ -69,22 +69,10 @@
 	   it, so the CI gate cannot see the difference. */
 	fs_defaults.layout = fsd.layout || config.main?.footstrap_layout || '';
 
-	/* Optional companion packages announce themselves in the theme's own config —
-	   `uci add_list footstrap.settings.plugin=<module>` from the package's uci-defaults — rather
-	   than being named in this tree. The chrome requires each name and knows nothing else about it,
-	   so the edge points inwards exactly as fs-router.onNavigate does.
-
-	   Whitelisted to the shape of a LuCI module name before it is printed into a <script>: writing
-	   that file needs root, but a value that reaches an inline script is checked anyway. */
-	let fs_plugins = fsd.plugin ?? [];
-	if (type(fs_plugins) != 'array')
-		fs_plugins = [ fs_plugins ];
-	fs_plugins = filter(fs_plugins, (m) => type(m) == 'string' && match(m, /^[a-zA-Z0-9._-]{1,48}$/));
-
 	http.prepare_content('text/html; charset=UTF-8');
 -%}
 
-{% include('themes/footstrap/partials/head', { boardinfo, fs_defaults, fs_plugins }) %}
+{% include('themes/footstrap/partials/head', { boardinfo, fs_defaults }) %}
 
 	{#
 		data-page carries the DISPATCH path (ctx.path), not request_path: on a firstchild route
