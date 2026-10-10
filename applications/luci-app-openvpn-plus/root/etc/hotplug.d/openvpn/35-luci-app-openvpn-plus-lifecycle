@@ -1,0 +1,111 @@
+#!/bin/sh
+
+# Copyright (C) 2008-2026 The OpenWrt Project
+# Copyright (C) 2026 Manfred Jaider <info@masmbit.com>
+#
+# This is free software, licensed under the Apache License, Version 2.0.
+# See /LICENSE for more information.
+#
+# luci-app-openvpn-plus : OpenWrt hotplug lifecycle manager for ddns server and client common name
+# /etc/hotplug.d/openvpn/35-luci-app-openvpn-plus-lifecycle
+
+# Ensure we catch the active OpenVPN name context across all OpenWrt variants
+ovpn_instance="${INSTANCE:-$NAME}"
+
+# Fallback to $1 if $dev is empty depending on the environment context
+ovpn_dev="${dev:-$1}"
+
+if [ -z "$ovpn_instance" ]; then
+    exit 0
+fi
+
+CONF_FILE="/etc/openvpn/luci/${ovpn_instance}.conf"
+PID_FILE="/var/run/openvpn-ddns-${ovpn_instance}.pid"
+
+case "$ACTION" in
+
+    up)
+
+	    inst_role=$(uci -q get openvpn."$ovpn_instance".role)
+
+		# Save the active interface name into the OpenWrt UCI configuration
+		if [ "$inst_role" = "server" ] || [ "$inst_role" = "client" ]; then
+			if [ -n "$ovpn_dev" ]; then
+				current_devname=$(uci -q get openvpn."$ovpn_instance".devname)
+				if [ "$current_devname" != "$ovpn_dev" ]; then
+					uci -q set openvpn."$ovpn_instance".devname="$ovpn_dev"
+					uci commit openvpn
+					logger -t openvpn-luci "Hotplug (${ovpn_instance}): set devname ${ovpn_dev}"
+				fi
+			fi
+		fi
+
+		# SERVER: DDNS SERVICE START
+        if [ "$inst_role" = "server" ]; then
+
+			# Stop any old DDNS service processes if they are still running
+			if start-stop-daemon -K -q -p "$PID_FILE" -t 2>/dev/null; then
+				logger -t openvpn-luci "Hotplug: Stopping active DDNS service process for ${ovpn_instance} before configuration reload."
+				start-stop-daemon -K -q -p "$PID_FILE" 2>/dev/null
+			fi
+			rm -f "$PID_FILE"
+
+			# Process the new configuration only if the file exists
+			if [ -f "$CONF_FILE" ]; then
+				domain=$(grep -E "^setenv[[:space:]]+DDNS[[:space:]]+" "$CONF_FILE" | sed -E 's/^setenv[[:space:]]+DDNS[[:space:]]+"(.*)"/\1/')
+				url=$(grep -E "^setenv[[:space:]]+DDNS_URL[[:space:]]+" "$CONF_FILE" | sed -E 's/^setenv[[:space:]]+DDNS_URL[[:space:]]+"(.*)"/\1/')
+
+				if [ -n "$domain" ] && [ -n "$url" ]; then
+					logger -t openvpn-luci "Hotplug: Starting DDNS background service for ${ovpn_instance} (Domain: ${domain})"
+					start-stop-daemon -S -b -m -p "$PID_FILE" -x /usr/libexec/luci-app-openvpn-plus -- ddnsservice "$domain" "$url" "$ovpn_instance"
+				fi
+			fi
+		# CLIENT: EXTRACT COMMON NAME
+        elif [ "$inst_role" = "client" ]; then
+			cn_update="0"
+            # Extract the last connection initiation line from logread for this specific instance
+            log_line=$(logread | grep "openvpn(${ovpn_instance})" | grep "Peer Connection Initiated" | tail -n 1)
+
+            if [ -n "$log_line" ]; then
+                # Parse the pure CN string from inside the brackets (Example: [OfficeServer] -> OfficeServer)
+                server_cn=$(echo "$log_line" | sed -n 's/.*: \[\([^]]*\)\].*Peer Connection Initiated.*/\1/p')
+
+                if [ -n "$server_cn" ]; then
+                    # Write the resolved Common Name safely into the OpenWrt UCI configuration
+                    uci -q set openvpn."$ovpn_instance".server_common_name="$server_cn"
+                    uci commit openvpn
+					cn_update="1"
+                fi
+            fi
+            if [ "$cn_update" = "1" ]; then
+                logger -t openvpn-luci "Hotplug (${ovpn_instance}): Server Common Name '${server_cn}' resolved"
+            else
+                logger -t openvpn-luci "Hotplug (${ovpn_instance}): Server Common Name not found in Peer Connection log entry"
+            fi
+        fi
+        ;;
+
+    down)
+
+		inst_role=$(uci -q get openvpn."$ovpn_instance".role)
+
+		# Clear the mapped network device because the tunnel is offline
+		if [ "$inst_role" = "server" ] || [ "$inst_role" = "client" ]; then
+			uci -q delete openvpn."$ovpn_instance".devname
+			uci commit openvpn
+		fi
+
+        # SERVER: DDNS SERVICE STOP
+        if [ "$inst_role" = "server" ]; then
+
+			# Clean application stop via standard system manager signals
+			if start-stop-daemon -K -q -p "$PID_FILE" -t 2>/dev/null; then
+				logger -t openvpn-luci "Hotplug: Stopping DDNS service for ${ovpn_instance} because tunnel is down."
+				start-stop-daemon -K -q -p "$PID_FILE" 2>/dev/null
+			fi
+			rm -f "$PID_FILE"
+		fi
+        ;;
+esac
+
+exit 0

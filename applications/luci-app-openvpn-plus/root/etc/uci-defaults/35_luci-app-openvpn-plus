@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# Copyright (C) 2008-2026 The OpenWrt Project
+# Copyright (C) 2026 Manfred Jaider <info@masmbit.com>
+#
+# This is free software, licensed under the Apache License, Version 2.0.
+# See /LICENSE for more information.
+#
+# luci-app-openvpn-plus : clean default sample profiles and prepare empty configuration
+# /etc/uci-defaults/35_luci-app-openvpn-plus
+
+# Path to the UCI configuration file
+CONFIG_FILE="${IPKG_INSTROOT}/etc/config/openvpn"
+
+if [ -f "$CONFIG_FILE" ]; then
+	# 1. Verify that all three standard firmware sample entries exist exactly as delivered
+	if grep -q "config openvpn custom_config" "$CONFIG_FILE" 2>/dev/null && \
+	   grep -q "config openvpn sample_server" "$CONFIG_FILE" 2>/dev/null && \
+	   grep -q "config openvpn sample_client" "$CONFIG_FILE" 2>/dev/null; then
+
+		# 2. Check specifically for the UCI section pattern created by LuCI
+		if ! grep -q "config openvpn 'instance" "$CONFIG_FILE" 2>/dev/null; then
+			logger -t luci-app-openvpn-plus "Unmodified factory samples detected. Backing up to openvpn-def."
+
+			# Backup the cluttered firmware default file safely
+			cp -f "$CONFIG_FILE" "${IPKG_INSTROOT}/etc/config/openvpn-def" 2>/dev/null
+
+			# Create a clean, empty base configuration for your LuCI app
+			echo "# Clean OpenVPN base configuration" > "$CONFIG_FILE"
+
+			CLEAN_OPENVPN_SERVICE=1
+
+		fi
+	else
+		# If any check fails, the user has modified the file. DO NOT TOUCH IT!
+		logger -t luci-app-openvpn-plus "Modified or custom OpenVPN configuration detected. Keeping user data safe."
+	fi
+
+	# 3. Check if we are running on a live runtime system (opkg install / apk add)
+	if [ -z "${IPKG_INSTROOT}" ]; then
+		logger -t luci-app-openvpn-plus "Package installed at runtime. Clearing all cache and reloading services."
+
+		# Restart rpcd in the background after 3 seconds! This gives LuCI enough time to finish the installation in the browser.
+		(
+			# Restart the openvpn service only if we cleaned the config above
+			if [ "$CLEAN_OPENVPN_SERVICE" = "1" ] && [ -x "/etc/init.d/openvpn" ]; then
+				/etc/init.d/openvpn stop >/dev/null 2>&1
+				sleep 1
+				/etc/init.d/openvpn restart >/dev/null 2>&1
+				sleep 1
+				/etc/init.d/openvpn reload >/dev/null 2>&1
+				sleep 1
+			else
+				sleep 3
+			fi
+
+			# Delete ALL temporary LuCI files.
+			rm -rf /tmp/luci-* >/dev/null 2>&1
+
+			# Hard reset rpcd to finds the VPN menu and new ACL files.
+			if [ -x "/etc/init.d/rpcd" ]; then
+				/etc/init.d/rpcd restart >/dev/null 2>&1
+			fi
+		) &
+	else
+		logger -t luci-app-openvpn-plus "Image building state detected. Skipping live runtime triggers."
+	fi
+fi
+
+exit 0
