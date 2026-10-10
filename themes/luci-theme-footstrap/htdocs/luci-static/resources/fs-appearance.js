@@ -56,7 +56,10 @@ function probeColor(expr) {
 		 * shared with `luci-app-*`, and an app's unlayered `span { color: … !important }` outranks
 		 * a layer and a plain inline style alike. A probe that loses its own colour reports the
 		 * app's, which then becomes the admin's saved axis on the next confirm. */
-		_probe = E('span', { 'aria-hidden': 'true' });
+		/* the id is this probe's escape from fs-router.js's strayBodyNode(): it is
+		 * appended once and never removed, so without an fs-* id it would read as body litter and
+		 * force every navigation away from this page into a full load. */
+		_probe = E('span', { 'id': 'fs-appearance-probe', 'aria-hidden': 'true' });
 		_probe.style.cssText = 'position:fixed!important;left:-9999px!important;top:0!important;'
 			+ 'width:0!important;height:0!important;overflow:hidden!important;'
 			+ 'pointer-events:none!important;';
