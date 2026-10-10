@@ -1,0 +1,158 @@
+#!/bin/sh
+
+# Copyright (C) 2008-2026 The OpenWrt Project
+# Copyright (C) 2026 Manfred Jaider <info@masmbit.com>
+#
+# This is free software, licensed under the Apache License, Version 2.0.
+# See /LICENSE for more information.
+#
+# luci-app-openvpn : smart firewall rules
+
+#  USEFUL COMMANDS FOR FIREWALL MANAGEMENT & LIVE MONITORING
+#
+#  * Core Firewall Controls
+#    - Restart entire firewall framework:      /etc/init.d/firewall restart
+#    - Reload UCI configuration profiles:      /etc/init.d/firewall reload
+#    - View permanent firewall settings:       cat /etc/config/firewall
+#
+#  * Monitoring Chains & Structure
+#    - View entire dynamic fw4 table:          nft -a list table inet fw4
+#    - View main input chain with handles:     nft -a list chain inet fw4 input
+#    - View main forward chain with handles:   nft -a list chain inet fw4 forward
+#    - View your custom OpenVPN sub-chain:     nft -a list chain inet fw4 ovpn_filter_instance0
+#    - Quick view of custom sub-chain:         nft -a list chain inet fw4 ovpn_filter_instance0 | sed -E -n 's/.*(openvpn[^"]+).*counter (packets [0-9]+ bytes [0-9]+).*(# handle [0-9]+).*/\3 -> "\1" counter \2/p'
+#
+#  * Live Security & Attacker Tracking (The most useful commands)
+#    - View active IPv4 blocked IPs & timers:  nft list set inet fw4 ovpn_block_ipv4_instance0
+#    - Flush/Clear a specific ban list now:    nft flush set inet fw4 ovpn_block_ipv4_instance0
+
+fwPort=443
+fwProto="tcp"
+SUB_CHAIN="ovpn_filter_instance0"
+
+# STEP 1: CLEAN UP OLD RULES AND SETS (Prevents duplicates and memory leaks)
+
+# Find and delete the old jump rule handle inside the main input chain to unlock the sub-chain
+oldJumpHandle=$(nft -a list chain inet fw4 input | grep "jump $SUB_CHAIN" | grep -oE 'handle [0-9]+' | tail -n 1 | awk '{print $2}')
+if [ -n "$oldJumpHandle" ]; then
+    nft "delete rule inet fw4 input handle $oldJumpHandle"
+fi
+
+# Now the sub-chain is unlocked and can be safely deleted without resource busy errors
+nft "flush chain inet fw4 $SUB_CHAIN" 2>/dev/null
+nft "delete chain inet fw4 $SUB_CHAIN" 2>/dev/null
+nft "flush set inet fw4 ovpn_block_ipv4_instance0" 2>/dev/null
+nft "delete set inet fw4 ovpn_block_ipv4_instance0" 2>/dev/null
+nft "flush set inet fw4 ovpn_block_ipv6_instance0" 2>/dev/null
+nft "delete set inet fw4 ovpn_block_ipv6_instance0" 2>/dev/null
+
+# STEP 2: BUILD FRESH NAMED SETS WITH AUTOMATIC TIMEOUT
+nft "add set inet fw4 ovpn_block_ipv4_instance0 { type ipv4_addr ; flags timeout ; }"
+nft "add set inet fw4 ovpn_block_ipv6_instance0 { type ipv6_addr ; flags timeout ; }"
+
+# STEP 3: CREATE THE CLEAN SUB-CHAIN CONTAINER
+nft "add chain inet fw4 $SUB_CHAIN"
+
+# STEP 4: BUILD THE CASCADE RULES (based on protocol)
+if [ "$fwProto" = "tcp" ]; then
+
+	# TCP-S1: Instantly rejects traffic from IPv4/IPv6 addresses listed in the block sets.
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 ip saddr @ovpn_block_ipv4_instance0 log prefix \"openvpn(instance0)[firewall]{ban}: \" counter reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 ip6 saddr @ovpn_block_ipv6_instance0 log prefix \"openvpn(instance0)[firewall]{ban}: \" counter reject with tcp reset"
+
+	# TCP-S2: Blocks fragmented TCP packets before they can cause buffer overflows.
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 ip frag-off & 0x3fff != 0 log prefix \"openvpn(instance0)[firewall]{fragment}: \" counter reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 exthdr frag exists log prefix \"openvpn(instance0)[firewall]{fragment}: \" counter reject with tcp reset"
+
+	# TCP-S3: Validates strict TCP headers and forces standard handshake behaviors.
+	#  - TCP Timestamps is required (This forces the TCP header size to be exactly 32 bytes for every data packets)
+	#  - SYN packets must have maxseg, window and sack-perm option.
+	#  - Data packets are forbidden to have the maxseg option.
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp option timestamp missing log prefix \"openvpn(instance0)[firewall]{timestamp}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == syn tcp option maxseg missing log prefix \"openvpn(instance0)[firewall]{maxseg}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == 0 tcp option maxseg exists log prefix \"openvpn(instance0)[firewall]{maxseg}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == syn tcp option window missing log prefix \"openvpn(instance0)[firewall]{wscale}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == syn tcp option sack-perm missing log prefix \"openvpn(instance0)[firewall]{sack}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp option timestamp missing log prefix \"openvpn(instance0)[firewall]{timestamp}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == syn tcp option maxseg missing log prefix \"openvpn(instance0)[firewall]{maxseg}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == 0 tcp option maxseg exists log prefix \"openvpn(instance0)[firewall]{maxseg}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == syn tcp option window missing log prefix \"openvpn(instance0)[firewall]{wscale}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == syn tcp option sack-perm missing log prefix \"openvpn(instance0)[firewall]{sack}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+
+	# TCP-S4: Catches smart bots that delay data transmission to bypass early scanners.
+	# * CRITICAL MINIMUM DATA SIZES (Worst-Case Real OpenVPN Client):
+	#   - Smallest possible tls-crypt-v2 key payload from a real client: 264 Bytes.
+	#   - IPv4: Handshake (Packets 1-3) + Key (Packet 4) = 488 Bytes minimum.
+	#     If network reception is very bad up to Packet 10 (empty ACKs): 748 Bytes total min.
+	#   - IPv6: Handshake (Packets 1-3) + Key (Packet 4) = 548 Bytes minimum.
+	#     If network reception is very bad up to Packet 10 (empty ACKs): 928 Bytes total min.
+	# * SAFE LOCKOUT THRESHOLDS (How the firewall decides):
+	#   - IPv4 limit is set to < 700 Bytes. Bots with no data are smaller and get killed.
+	#   - IPv6 limit is set to < 900 Bytes. Bots with no data are smaller and get killed.
+	#   - Real worst-case OpenVPN users always stay safely above this byte radar.
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 ct packets > 9 meta nfproto ipv4 ct bytes < 700 log prefix \"openvpn(instance0)[firewall]{stealth}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 ct packets > 9 meta nfproto ipv6 ct bytes < 900 log prefix \"openvpn(instance0)[firewall]{stealth}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+
+	# TCP-S5: Blocks payload data hidden inside the very first SYN packet (80 bytes for IPv4 packets and max 100 bytes for IPv6)
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == syn tcp option maxseg exists meta length > 80 log prefix \"openvpn(instance0)[firewall]{fastopen}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == syn tcp option maxseg exists meta length > 100 log prefix \"openvpn(instance0)[firewall]{fastopen}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+
+	# TCP-S6: Deep Packet Inspection for bad protocol lengths and fake small sizes.
+	#  - Starts only when a data packet is bigger than 53 bytes (IPv4) or 73 bytes (IPv6).
+	#  - Reads the 16-bit OpenVPN packet length field at the exact bit offset pointer 256.
+	#  - Catches bad opcodes, web text (like GET/POST), and fake sizes (payload < 155, payload > 1499).
+	#  - Real users with tls-crypt-v2 are safe because encrypted traffic never matches this bad matrix.
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == 0 meta length > 53 @th,256,16 < 0x009b log prefix \"openvpn(instance0)[firewall]{payload}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv4 tcp flags & (syn) == 0 meta length > 53 @th,256,16 > 0x05db log prefix \"openvpn(instance0)[firewall]{payload}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == 0 meta length > 73 @th,256,16 < 0x009b log prefix \"openvpn(instance0)[firewall]{payload}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort ct packets < 12 meta nfproto ipv6 tcp flags & (syn) == 0 meta length > 73 @th,256,16 > 0x05db log prefix \"openvpn(instance0)[firewall]{payload}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } reject with tcp reset"
+
+	# TCP-S7: Packets that survived all previous checks are genuine.
+	nft "add rule inet fw4 $SUB_CHAIN tcp dport $fwPort accept"
+
+else
+
+	# UDP-S1: Instantly drops traffic from IPv4/IPv6 addresses listed in the block sets.
+	# (Bleibt bei ct state new, damit bestehender established Tunnel-Traffic niemals blockiert wird!)
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new ip saddr @ovpn_block_ipv4_instance0 log prefix \"openvpn(instance0)[firewall]{ban}: \" counter drop"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new ip6 saddr @ovpn_block_ipv6_instance0 log prefix \"openvpn(instance0)[firewall]{ban}: \" counter drop"
+
+	# UDP-S2: Blocks fragmented UDP packets before they can cause buffer overflows.
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv4 ip frag-off & 0x3fff != 0 log prefix \"openvpn(instance0)[firewall]{fragment}: \" counter drop"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv6 exthdr frag exists log prefix \"openvpn(instance0)[firewall]{fragment}: \" counter drop"
+
+	# UDP-S3: Smallest valid OpenVPN packet is 48 bytes. Anything smaller is dropped.
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new udp length < 48 log prefix \"openvpn(instance0)[firewall]{short}: \" counter drop"
+
+	# UDP-S4: Drops and bans new IPv4 bots that scan with a zero checksum to save time.
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv4 udp checksum 0 log prefix \"openvpn(instance0)[firewall]{chksum}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } drop"
+
+	# UDP-S5: Whitelist valid initial OpenVPN opcodes P_CONTROL_HARD_RESET_CLIENT_V1,2,3 (skipping the 64-bit UDP header)
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv4 @th,64,8 & 0xf8 == 0x08 udp length > 250 accept"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv4 @th,64,8 & 0xf8 == 0x38 udp length > 250 accept"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv4 @th,64,8 & 0xf8 == 0x50 udp length > 250 accept"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv6 @th,64,8 & 0xf8 == 0x08 udp length > 250 accept"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv6 @th,64,8 & 0xf8 == 0x38 udp length > 250 accept"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv6 @th,64,8 & 0xf8 == 0x50 udp length > 250 accept"
+
+	# UDP-S6: Instantly ban and drop any other packet that tries to start a new connection
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv4 log prefix \"openvpn(instance0)[firewall]{opcode}: \" counter update @ovpn_block_ipv4_instance0 { ip saddr timeout 5m } drop"
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort ct state new meta nfproto ipv6 log prefix \"openvpn(instance0)[firewall]{opcode}: \" counter update @ovpn_block_ipv6_instance0 { ip6 saddr timeout 5m } drop"
+
+	# UDP-S7: Packets that survived all previous checks are genuine.
+	nft "add rule inet fw4 $SUB_CHAIN udp dport $fwPort accept"
+
+fi
+
+# STEP 4: LINK THE SUB-CHAIN TO THE MAIN INPUT (single jump rule)
+
+# Find the starting anchor in the main input chain (Loopback handle)
+mainAnchorHandle=$(nft -a list chain inet fw4 input | grep -E 'iif ["'\'']?lo["'\'']? accept' | grep -oE 'handle [0-9]+' | tail -n 1 | awk '{print $2}')
+
+if [ -z "$mainAnchorHandle" ]; then
+    mainAnchorHandle=35
+fi
+
+# Inject the dynamic jump trigger right below the loopback anchor rule
+nft "add rule inet fw4 input handle $mainAnchorHandle $fwProto dport $fwPort jump $SUB_CHAIN"
+
