@@ -1,0 +1,233 @@
+#!/bin/sh
+# Fake veracrypt for the rpcd backend tests. State: one line per mounted
+# volume in $STATE as "slot<TAB>volume<TAB>vdev<TAB>mountpoint".
+STATE=${VCSTUB_STATE:-/tmp/vcstub.state}
+touch "$STATE"
+
+quote() {
+	case $1 in
+		*' '*) printf "'%s'" "$(printf '%s' "$1" | sed "s/'/''/g")" ;;
+		*) printf '%s' "$1" ;;
+	esac
+}
+
+slot= mode= fs= pos1= pos2= nonint= ph= ppim= pkf= kf= pimset=
+[ -n "$VCSTUB_ENV" ] && env > /tmp/vcstub.env
+echo $$ >> /tmp/vcstub.pids
+for a in "$@"; do
+	case $a in
+		--non-interactive) nonint=1 ;;
+		--stdin) stdinpw=1 ;;
+		--protect-hidden=*) ph=${a#--protect-hidden=} ;;
+		--protection-pim=*) ppim=1 ;;
+		--protection-keyfiles=*) pkf=1 ;;
+		--keyfiles=*) kf=1 ;;
+		--pim=*) pimset=1 ;;
+		--list|-l) mode=list ;;
+		--version) mode=version ;;
+		--help) mode=help ;;
+		--test) mode=test ;;
+		--create) mode=create ;;
+		--unmount|-d) mode=unmount ;;
+		--create-keyfile) mode=keyfile ;;
+		--volume-properties) mode=props ;;
+		--slot=*) slot=${a#--slot=} ;;
+		--filesystem=*) fs=${a#--filesystem=} ;;
+		-*) ;;
+		*) if [ -z "$pos1" ]; then pos1=$a; else pos2=$a; fi ;;
+	esac
+done
+PW=${VCSTUB_PW-x}
+# --stdin: the password is the first line of stdin.
+[ -n "$stdinpw" ] && { IFS= read -r STDINPW || STDINPW=; }
+ask() { printf '%s' "$1"; IFS= read -r REPLY || exit 1; }
+ask_pw() { # ask_pw <prompt>: loop until the right password, like veracrypt
+	while :; do
+		ask "$1"
+		[ "$REPLY" = "$PW" ] && return 0
+		printf '\nIncorrect password or not a VeraCrypt volume.\n'
+	done
+}
+ask_hpw() { # ask_hpw <prompt>: hidden password, re-asked while wrong (VCSTUB_HPW)
+	while :; do
+		ask "$1"
+		printf '%s' "$REPLY" > /tmp/vcstub.hiddenpw
+		{ [ -z "$VCSTUB_HPW" ] || [ "$REPLY" = "$VCSTUB_HPW" ]; } && return 0
+		printf '\nIncorrect hidden volume password.\n'
+	done
+}
+ask_keyfiles() { # ask_keyfiles <prompt> <record file>
+	: > "$2"
+	m="$1 [none]: "
+	while ask "$m" && [ -n "$REPLY" ]; do
+		printf '%s\n' "$REPLY" >> "$2"
+		m="$1 [finish]: "
+	done
+}
+
+for a in "$@"; do
+	case $a in
+		--change|--backup-headers|--restore-headers) imode=$a ;;
+	esac
+done
+if [ -n "${imode:-}" ]; then
+	[ -n "$VCSTUB_WEIRD" ] && { ask "Enter something unexpected: "; exit 0; }
+	case $imode in
+		--change)
+			ask_pw "Enter password: "
+			ask "Enter new password: "; np=$REPLY
+			ask "Re-enter password: "; [ "$REPLY" = "$np" ] || exit 1
+			if [ "${#np}" -lt 20 ]; then
+				printf '\nWARNING: Short passwords are easy to crack using brute force techniques!\n\n'
+				ask "Are you sure you want to use a short password? (y=Yes/n=No) [No]: "
+				[ "$REPLY" = y ] || exit 1
+			fi
+			printf '%s' "$np" > /tmp/vcstub.newpw
+			printf '\nPassword and/or keyfile(s) changed.\n'
+			;;
+		--backup-headers)
+			printf '\n'
+			ask_pw "Enter password for the normal/outer volume: "
+			ask "Enter PIM for the normal/outer volume: "
+			ask_keyfiles "Enter keyfile" /tmp/vcstub.kf
+			ask "
+Does the volume contain a hidden volume? (y=Yes/n=No) [No]: "
+			if [ "$REPLY" = y ]; then
+				ask_hpw "Enter password for the hidden volume: "
+				ask "Enter PIM for the hidden volume: "
+				ask_keyfiles "Enter keyfile" /tmp/vcstub.hkf
+			fi
+			ask "
+Are you sure you want to create volume header backup for $pos1?
+
+After you click Yes, you will prompted for a filename for the header backup.
+ (y=Yes/n=No) [Yes]: "
+			[ "$REPLY" = y ] || exit 1
+			printf '\n'
+			ask "Enter filename: "
+			printf 'HEADERS' > "$REPLY"
+			printf '\nVolume header backup has been successfully created.\n'
+			;;
+		--restore-headers)
+			printf 'Please select the type of volume header backup you want to use:\n\n1) Restore the volume header from the backup embedded in the volume\n2) Restore the volume header from an external backup file\n\n'
+			ask "Select: "
+			if [ "$REPLY" = 2 ]; then
+				ask "
+
+Are you sure you want to restore volume header of $pos1?
+
+WARNING: Restoring a volume header also restores the volume password that was valid when the backup was created.
+ (y=Yes/n=No) [Yes]: "
+				[ "$REPLY" = y ] || exit 1
+				printf '\n'
+				ask "Enter filename: "
+				[ -f "$REPLY" ] || { echo "Error: no such file" >&2; exit 1; }
+				ask_pw "
+Enter password for the header stored in backup file: "
+				ask "Enter PIM: "
+			else
+				printf '\n'
+				ask_pw "Enter password: "
+				ask "Enter new PIM: "
+			fi
+			ask_keyfiles "Enter keyfile" /tmp/vcstub.kf
+			# Like veracrypt: the volume is opened for writing only now.
+			[ -n "$VCSTUB_RDELAY" ] && sleep "$VCSTUB_RDELAY"
+			printf 'restored\n' >> "$pos1"
+			printf '\nThe volume header has been successfully restored.\n'
+			;;
+	esac
+	exit 0
+fi
+if [ -z "$mode" ] && [ -z "$nonint" ] && [ -n "$pos1" ]; then
+	# Interactive mount, as when the backend answers the prompts itself.
+	ask_pw "Enter password for $pos1: "
+	[ -n "$pimset" ] || ask "Enter PIM for $pos1: "
+	[ -n "$kf" ] || ask_keyfiles "Enter keyfile" /tmp/vcstub.kf
+	if [ "$ph" = yes ]; then
+		ask_hpw "Enter password for hidden volume: "
+		[ -n "$ppim" ] || ask "Enter PIM for hidden volume: "
+		[ -n "$pkf" ] || ask_keyfiles "Enter keyfile for hidden volume" /tmp/vcstub.hkf
+	fi
+	mode=mount
+fi
+if [ "$mode" = create ] && [ -z "$nonint" ]; then
+	case " $* " in
+		*" --quick "*)
+			ask "
+WARNING: You should use Quick Format only in the following cases:
+
+1) The device contains no sensitive data and you do not need plausible deniability.
+2) The device has already been securely and fully encrypted.
+
+Are you sure you want to use Quick Format? (y=Yes/n=No) [No]: "
+			[ "$REPLY" = y ] || exit 1
+			;;
+	esac
+fi
+[ "$mode" = mount ] || [ -t 0 ] || cat >/dev/null
+[ -n "$VCSTUB_DELAY" ] && sleep "$VCSTUB_DELAY"
+
+case $mode in
+	version) echo "VeraCrypt 1.26.29" ;;
+	props)
+		row=$(awk -F'\t' -v s="$slot" -v p="$pos1" '($1 == s && s != "") || ($2 == p && p != "") { print; exit }' "$STATE")
+		[ -n "$row" ] || { echo "Error: No such volume is mounted." >&2; exit 1; }
+		printf '%s\n' "$row" | while IFS='	' read -r s v d m; do
+			printf 'Slot: %s\nVolume: %s\nVirtual Device: %s\nMount Directory: %s\nType: Normal\n' "$s" "$v" "$d" "$m"
+		done
+		;;
+	help) echo "Usage: veracrypt ... --stdin" ;;
+	test) echo "Self-tests of all algorithms passed." ;;
+	list)
+		[ -s "$STATE" ] || { echo "Error: No volumes mounted." >&2; exit 1; }
+		while IFS='	' read -r s v d m; do
+			printf '%s: %s %s %s\n' "$s" "$(quote "$v")" "$d" "$(quote "$m")"
+		done < "$STATE"
+		;;
+	unmount)
+		tmp=$STATE.new
+		if [ -n "$slot" ]; then
+			awk -F'\t' -v s="$slot" '$1 != s' "$STATE" > "$tmp"
+		elif [ -n "$pos1" ]; then
+			awk -F'\t' -v p="$pos1" '$2 != p && $4 != p' "$STATE" > "$tmp"
+		else
+			: > "$tmp"
+		fi
+		mv "$tmp" "$STATE"
+		;;
+	create)
+		printf '%s\n' "$*" > /tmp/vcstub.createargs
+		[ -e /tmp/vcstub.fail.create ] && { echo "Error: create failed" >&2; exit 1; }
+		case " $* " in
+			*" --volume-type=hidden "*)
+				[ -f "$pos1" ] || { echo "Error: outer volume not found" >&2; exit 1; }
+				printf 'hidden\n' >> "$pos1" ;;
+			*) : > "$pos1" ;;
+		esac
+		echo "Done: 100.000%"
+		;;
+	keyfile)
+		head -c 64 /dev/urandom > "$pos1"
+		echo "Keyfile created."
+		;;
+	*)
+		# mount: <volume> [<mountpoint>]
+		[ -e /tmp/vcstub.fail.mount ] && { echo "Error: mount failed" >&2; exit 1; }
+		if [ -n "$stdinpw" ] && [ "$STDINPW" != "$PW" ]; then
+			echo "Error: Incorrect password or not a VeraCrypt volume." >&2
+			exit 1
+		fi
+		if [ -n "$slot" ] && awk -F'\t' -v s="$slot" '$1 == s { f = 1 } END { exit f ? 0 : 1 }' "$STATE"; then
+			echo "Error: The slot is already in use." >&2
+			exit 1
+		fi
+		# Like veracrypt: a volume is mounted at most once.
+		awk -F'\t' -v p="$pos1" '$2 == p { f = 1 } END { exit f ? 0 : 1 }' "$STATE" &&
+			{ echo "Error: The volume you are trying to mount is already mounted." >&2; exit 1; }
+		[ -n "$slot" ] || slot=$(( $(wc -l < "$STATE") + 1 ))
+		mp=${pos2:--}
+		[ "$fs" = none ] && mp=-
+		printf '%s\t%s\t/dev/mapper/veracrypt%s\t%s\n' "$slot" "$pos1" "$slot" "$mp" >> "$STATE"
+		;;
+esac
