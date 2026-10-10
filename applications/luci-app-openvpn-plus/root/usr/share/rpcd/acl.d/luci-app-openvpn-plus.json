@@ -1,0 +1,39 @@
+{
+	"luci-app-openvpn-plus": {
+		"description": "Configuration access for OpenVPN LuCI app",
+		"read": {
+			"cgi-bin": [ "luci" ],
+			"uci": [ "openvpn" ],
+			"ubus": {
+				"system": [ "info" ],
+				"service": [ "list" ],
+				"network": [ "status" ]
+			},
+			"file": {
+				"/etc/openvpn/luci/*": [ "read" ],
+				"/etc/openvpn/keys/*": [ "read" ],
+				"/var/run/openvpn.keygen.lock": [ "read" ],
+				"/proc/uptime": [ "read" ],
+				"/tmp/openvpn.keygen.log": [ "read" ],
+				"/tmp/openvpn.keygen.ca.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.server-key.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.client-key.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.server-cert.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.client-cert.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.dh.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.server-tls2.tmp": [ "read" ],
+				"/tmp/openvpn.keygen.client-tls2.tmp": [ "read" ],
+				"/sbin/logread": [ "exec" ],
+				"/usr/libexec/luci-app-openvpn-plus": [ "exec" ]
+			}
+		},
+		"write": {
+			"uci": [ "openvpn" ],
+			"file": {
+				"/etc/openvpn/luci/*": [ "write" ],
+				"/etc/openvpn/keys/*": [ "write" ],
+				"/etc/config/openvpn": [ "write" ]
+			}
+		}
+	}
+}

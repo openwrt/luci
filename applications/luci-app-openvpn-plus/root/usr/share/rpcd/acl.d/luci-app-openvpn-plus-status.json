@@ -1,0 +1,19 @@
+{
+	"luci-app-openvpn-plus-status": {
+		"description": "Status access for OpenVPN LuCI app",
+		"read": {
+			"cgi-bin": [ "luci" ],
+			"uci": [ "openvpn" ],
+			"ubus": {
+				"system": [ "info" ],
+				"service": [ "list" ],
+				"network": [ "status" ]
+			},
+			"file": {
+				"/etc/openvpn/luci/*": [ "read" ],
+				"/proc/uptime": [ "read" ],
+				"/usr/libexec/luci-app-openvpn-plus": [ "exec" ]
+			}
+		}
+	}
+}

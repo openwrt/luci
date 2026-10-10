@@ -1,0 +1,73 @@
+#!/bin/sh
+
+# Copyright (C) 2008-2026 The OpenWrt Project
+# Copyright (C) 2026 Manfred Jaider <info@masmbit.com>
+#
+# This is free software, licensed under the Apache License, Version 2.0.
+# See /LICENSE for more information.
+#
+# luci-app-openvpn-plus : Network-ready bootup event handler with race-condition lock
+# /etc/hotplug.d/iface/35-luci-app-openvpn-plus-bootup
+
+# Only trigger this script when an interface finishes initializing
+if [ "$ACTION" != "ifup" ]; then
+    exit 0
+fi
+
+# STRIP LOOPBACK: Ignore the internal system loopback to prevent a premature trigger
+if [ "$INTERFACE" = "loopback" ]; then
+    exit 0
+fi
+
+LOCK_FILE="/var/run/luci-app-openvpn-plus-bootup.lock"
+
+# Mutex implementation preventing parallel execution threads from racing each other
+if [ -f "$LOCK_FILE" ]; then
+    # Clean verification via signal 0: check if the holding PID is still alive
+    if kill -0 $(cat "$LOCK_FILE" 2>/dev/null) 2>/dev/null; then
+        exit 0
+    fi
+fi
+
+# Register active PID into the lock file to serialize the bootup checks
+echo "$$" > "$LOCK_FILE"
+
+# Set traps to delete the lock file reliably on unexpected script exits
+trap "rm -f $LOCK_FILE" EXIT INT TERM
+
+logger -t openvpn-luci "Bootup: Interface '${INTERFACE}' is up. Checking active OpenVPN profile running state in 10 seconds..."
+
+# Give the system firewall and routing tables enough time to init
+sleep 10
+
+# Loop through all configured openvpn sections inside the UCI configuration
+uci -q show openvpn | grep "=openvpn" | while read -r line; do
+    # Extract the pure instance identity string from the current UCI line
+    inst="${line##*.}"
+    inst="${inst%%=*}"
+
+    # Process the instance only if it is explicitly enabled by the user
+    if [ "$(uci -q get openvpn.${inst}.enabled)" = "1" ]; then
+        # Bulletproof process check utilizing the immune syslog tag pattern
+        if ! ps | grep -v "grep" | grep -q "openvpn(${inst})"; then
+            logger -t openvpn-luci "Bootup: Detected unstarted instance '${inst}'. Initializing process."
+
+            # Restart the service cleanly to clear out any dead zombie states or locked ports
+			/etc/init.d/openvpn stop "$inst" >/dev/null 2>&1
+			sleep 1 >/dev/null 2>&1
+            /etc/init.d/openvpn restart "$inst" >/dev/null 2>&1
+			sleep 1 >/dev/null 2>&1
+			/etc/init.d/openvpn reload "$inst" >/dev/null 2>&1
+        else
+            logger -t openvpn-luci "Bootup: Instance '${inst}' is already running safely."
+        fi
+    fi
+done
+
+# Delete the lock file manually after successful execution
+rm -f "$LOCK_FILE"
+
+# Unregister and reset all traps to system default values before exiting
+trap - EXIT INT TERM
+
+exit 0
