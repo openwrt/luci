@@ -18,7 +18,7 @@ return view.extend({
 		const title = '%s: %s'.format(_('Table'), table);
 
 		if (!tdiv) {
-			tdiv = E('div', { 'data-table': '%s-%s'.format(is_ipv6 ? 'ipv6' : 'ipv4', table) }, [
+			tdiv = E('div', { 'class': 'cbi-section', 'data-table': '%s-%s'.format(is_ipv6 ? 'ipv6' : 'ipv4', table) }, [
 				E('h3', {}, title),
 				E('div')
 			]);

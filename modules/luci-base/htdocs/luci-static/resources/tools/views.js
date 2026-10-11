@@ -251,7 +251,7 @@ var CBILogreadBox = function(logtag, name) {
 
 			return E([], [
 				E('h2', {}, [ this.logName ]),
-				E('div', { 'id': 'content_syslog' }, [
+				E('div', { 'id': 'content_syslog', 'class': 'cbi-section' }, [
 					E('div', { class: 'cbi-section-descr' }, this.logTagFilter ? _('The syslog output, pre-filtered for messages related to: ' + this.logTagFilter) : '') ,
 					E('div', { 'style': 'margin-bottom:10px' }, [
 						E('label', { 'for': 'invertLogFacilitySearch', 'style': 'margin-right:5px' }, _('Not')),
