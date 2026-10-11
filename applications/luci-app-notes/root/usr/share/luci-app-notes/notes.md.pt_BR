@@ -1,0 +1,119 @@
+# LuCI Notes
+
+Bem-vindo ao LuCI Notes. Suas notas são armazenadas em `/etc/notes.md` e preservadas durante atualizações de pacotes.
+
+Você pode substituir todo o conteúdo desta página por suas próprias notas.
+
+A formatação Markdown é aplicada depois de salvar e retornar ao modo de visualização.
+
+# Markdown
+
+O LuCI Notes oferece suporte a um pequeno subconjunto de Markdown. Os exemplos abaixo mostram a formatação disponível.
+
+---
+
+# Cabeçalho 1
+`# Cabeçalho 1`
+
+---
+
+## Cabeçalho 2
+`## Cabeçalho 2`
+
+---
+
+### Cabeçalho 3
+`### Cabeçalho 3`
+
+---
+
+**Texto em negrito**
+`**Texto em negrito**`
+
+---
+
+__Também texto em negrito__
+`__Também texto em negrito__`
+
+---
+
+*Texto em itálico*
+`*Texto em itálico*`
+
+---
+
+_Também texto em itálico_
+`_Também texto em itálico_`
+
+---
+
+`código`
+\`código\`
+
+---
+
+> Citação
+`> Citação`
+
+---
+
+- Item de lista não ordenada um
+- Item de lista não ordenada dois
++ Item de lista não ordenada três
++ Item de lista não ordenada quatro
+* Item de lista não ordenada cinco
+* Item de lista não ordenada seis
+`- Item de lista não ordenada um`
+`- Item de lista não ordenada dois`
+`+ Item de lista não ordenada três`
+`+ Item de lista não ordenada quatro`
+`* Item de lista não ordenada cinco`
+`* Item de lista não ordenada seis`
+
+---
+
+1. Item de lista ordenada um
+2. Item de lista ordenada dois
+`1. Item de lista ordenada um`
+`2. Item de lista ordenada dois`
+
+---
+
+```
+function example() {
+    return true;
+}
+```
+
+\```
+function example() {
+    return true;
+}
+\```
+
+---
+
+Caracteres especiais podem ser escapados com uma barra invertida:
+
+\*\*Este texto não está em negrito porque os asteriscos foram escapados\*\*
+`\*\*Este texto não está em negrito porque os asteriscos foram escapados\*\*`
+
+---
+
+Linhas horizontais:
+
+`---`
+
+---
+
+Espaços podem ser usados para recuo
+
+## Não suportado
+- Links
+- Imagens
+- Tabelas
+- Listas aninhadas
+- HTML direto (a entrada é escapada e não interpretada)
+- Pré-visualização em tempo real durante a edição
+
+---

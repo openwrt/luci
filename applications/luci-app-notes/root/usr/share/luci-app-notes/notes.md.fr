@@ -1,0 +1,119 @@
+# LuCI Notes
+
+Bienvenue dans LuCI Notes. Vos notes sont enregistrées dans `/etc/notes.md` et conservées lors des mises à jour du paquet.
+
+Vous pouvez remplacer tout le contenu de cette page par vos propres notes.
+
+La mise en forme Markdown est appliquée après l’enregistrement et le retour au mode d’affichage.
+
+# Markdown
+
+LuCI Notes prend en charge un sous-ensemble de Markdown. Les exemples ci-dessous présentent les formats disponibles.
+
+---
+
+# Titre 1
+`# Titre 1`
+
+---
+
+## Titre 2
+`## Titre 2`
+
+---
+
+### Titre 3
+`### Titre 3`
+
+---
+
+**Texte en gras**
+`**Texte en gras**`
+
+---
+
+__Également en gras__
+`__Également en gras__`
+
+---
+
+*Texte en italique*
+`*Texte en italique*`
+
+---
+
+_Également en italique_
+`_Également en italique_`
+
+---
+
+Code intégré `code` comme ceci
+\`code\`
+
+---
+
+> Une citation
+`> Une citation`
+
+---
+
+- Élément de liste non ordonnée un
+- Élément de liste non ordonnée deux
++ Élément de liste non ordonnée trois
++ Élément de liste non ordonnée quatre
+* Élément de liste non ordonnée cinq
+* Élément de liste non ordonnée six
+`- Élément de liste non ordonnée un`
+`- Élément de liste non ordonnée deux`
+`+ Élément de liste non ordonnée trois`
+`+ Élément de liste non ordonnée quatre`
+`* Élément de liste non ordonnée cinq`
+`* Élément de liste non ordonnée six`
+
+---
+
+1. Élément de liste ordonnée un
+2. Élément de liste ordonnée deux
+`1. Élément de liste ordonnée un`
+`2. Élément de liste ordonnée deux`
+
+---
+
+```
+function example() {
+    return true;
+}
+```
+
+\```
+function example() {
+    return true;
+}
+\```
+
+---
+
+Les caractères spéciaux peuvent être échappés avec une barre oblique inverse :
+
+\*\*Ce texte n’est pas en gras, car les astérisques sont échappés\*\*
+`\*\*Ce texte n’est pas en gras, car les astérisques sont échappés\*\*`
+
+---
+
+Lignes horizontales :
+
+`---`
+
+---
+
+Les espaces peuvent servir à l’indentation
+
+## Non pris en charge
+- Liens
+- Images
+- Tableaux
+- Listes imbriquées
+- HTML brut (les entrées sont échappées et non interprétées)
+- Aperçu en direct pendant la modification
+
+---

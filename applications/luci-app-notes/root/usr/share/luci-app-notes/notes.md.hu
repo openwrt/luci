@@ -1,0 +1,119 @@
+# LuCI Notes
+
+Üdvözli a LuCI Notes. A jegyzetek a `/etc/notes.md` fájlban tárolódnak, és csomagfrissítéskor megmaradnak.
+
+Az oldal teljes tartalmát lecserélheti saját jegyzeteire.
+
+A Markdown-formázás mentés és a megtekintési módba való visszatérés után lép érvénybe.
+
+# Markdown
+
+A LuCI Notes a Markdown egy kis részhalmazát támogatja. Az alábbi példák az elérhető formázást mutatják.
+
+---
+
+# Címsor 1
+`# Címsor 1`
+
+---
+
+## Címsor 2
+`## Címsor 2`
+
+---
+
+### Címsor 3
+`### Címsor 3`
+
+---
+
+**Félkövér szöveg**
+`**Félkövér szöveg**`
+
+---
+
+__Szintén félkövér szöveg__
+`__Szintén félkövér szöveg__`
+
+---
+
+*Dőlt szöveg*
+`*Dőlt szöveg*`
+
+---
+
+_Szintén dőlt szöveg_
+`_Szintén dőlt szöveg_`
+
+---
+
+`kód`
+\`kód\`
+
+---
+
+> Idézet
+`> Idézet`
+
+---
+
+- Rendezetlen lista eleme egy
+- Rendezetlen lista eleme kettő
++ Rendezetlen lista eleme három
++ Rendezetlen lista eleme négy
+* Rendezetlen lista eleme öt
+* Rendezetlen lista eleme hat
+`- Rendezetlen lista eleme egy`
+`- Rendezetlen lista eleme kettő`
+`+ Rendezetlen lista eleme három`
+`+ Rendezetlen lista eleme négy`
+`* Rendezetlen lista eleme öt`
+`* Rendezetlen lista eleme hat`
+
+---
+
+1. Rendezett lista eleme egy
+2. Rendezett lista eleme kettő
+`1. Rendezett lista eleme egy`
+`2. Rendezett lista eleme kettő`
+
+---
+
+```
+function example() {
+    return true;
+}
+```
+
+\```
+function example() {
+    return true;
+}
+\```
+
+---
+
+A speciális karakterek fordított perjellel védhetők:
+
+\*\*Ez a szöveg nem félkövér, mert a csillagok védettek\*\*
+`\*\*Ez a szöveg nem félkövér, mert a csillagok védettek\*\*`
+
+---
+
+Vízszintes vonalak:
+
+`---`
+
+---
+
+Behúzáshoz szóközök használhatók
+
+## Nem támogatott
+- Hivatkozások
+- Képek
+- Táblázatok
+- Egymásba ágyazott listák
+- Közvetlen HTML (a bemenet védett, és nem kerül értelmezésre)
+- Élő előnézet szerkesztés közben
+
+---

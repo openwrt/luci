@@ -1,0 +1,119 @@
+# LuCI Notes
+
+Chào mừng đến với LuCI Notes. Ghi chú của bạn được lưu trong `/etc/notes.md` và được giữ lại khi nâng cấp gói.
+
+Bạn có thể thay thế toàn bộ nội dung trên trang này bằng ghi chú của riêng mình.
+
+Định dạng Markdown được áp dụng sau khi bạn lưu và quay lại chế độ xem.
+
+# Markdown
+
+LuCI Notes hỗ trợ một tập con nhỏ của Markdown. Các ví dụ dưới đây cho thấy định dạng có sẵn.
+
+---
+
+# Tiêu đề 1
+`# Tiêu đề 1`
+
+---
+
+## Tiêu đề 2
+`## Tiêu đề 2`
+
+---
+
+### Tiêu đề 3
+`### Tiêu đề 3`
+
+---
+
+**Chữ đậm**
+`**Chữ đậm**`
+
+---
+
+__Cũng là chữ đậm__
+`__Cũng là chữ đậm__`
+
+---
+
+*Chữ nghiêng*
+`*Chữ nghiêng*`
+
+---
+
+_Cũng là chữ nghiêng_
+`_Cũng là chữ nghiêng_`
+
+---
+
+`mã`
+\`mã\`
+
+---
+
+> Trích dẫn
+`> Trích dẫn`
+
+---
+
+- Mục danh sách không thứ tự một
+- Mục danh sách không thứ tự hai
++ Mục danh sách không thứ tự ba
++ Mục danh sách không thứ tự bốn
+* Mục danh sách không thứ tự năm
+* Mục danh sách không thứ tự sáu
+`- Mục danh sách không thứ tự một`
+`- Mục danh sách không thứ tự hai`
+`+ Mục danh sách không thứ tự ba`
+`+ Mục danh sách không thứ tự bốn`
+`* Mục danh sách không thứ tự năm`
+`* Mục danh sách không thứ tự sáu`
+
+---
+
+1. Mục danh sách có thứ tự một
+2. Mục danh sách có thứ tự hai
+`1. Mục danh sách có thứ tự một`
+`2. Mục danh sách có thứ tự hai`
+
+---
+
+```
+function example() {
+    return true;
+}
+```
+
+\```
+function example() {
+    return true;
+}
+\```
+
+---
+
+Có thể thoát các ký tự đặc biệt bằng dấu gạch chéo ngược:
+
+\*\*Văn bản này không in đậm vì dấu sao đã được thoát\*\*
+`\*\*Văn bản này không in đậm vì dấu sao đã được thoát\*\*`
+
+---
+
+Đường kẻ ngang:
+
+`---`
+
+---
+
+Có thể dùng khoảng trắng để thụt lề
+
+## Không hỗ trợ
+- Liên kết
+- Hình ảnh
+- Bảng
+- Danh sách lồng nhau
+- HTML trực tiếp (đầu vào được thoát và không được diễn giải)
+- Xem trước trực tiếp khi chỉnh sửa
+
+---
