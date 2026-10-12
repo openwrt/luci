@@ -330,6 +330,16 @@ return view.extend({
 			return this.super('load', [section_id]);
 		};
 
+		o = s.taboption('advanced', form.Flag, 'pull', _('Pull'),
+			swanctlDescr(_('Pull virtual IP addresses and configuration attributes from the remote peer (Config Mode).') + '<br />' +
+			_('If disabled, the client waits for the server to push them.'),
+				'connections.<conn>.pull'));
+		o.default = '1';
+		o.modalonly = true;
+		o.rmempty = true;
+		o.depends('keyexchange', 'ikev1');
+		o.depends('keyexchange', 'ike');
+
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
 			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication'), 'connections.<conn>.proposals'));
 		o.load = function (section_id) {
