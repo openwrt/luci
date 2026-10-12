@@ -634,6 +634,15 @@ return view.extend({
 
 			return this.super('load', [section_id]);
 		}
+		o.tooltip = function () {
+			if (uci.get('ipsec', 'netlink', 'install_routes_xfrmi') == '1')
+				return null;
+
+			return _('This option must be enabled in the service configuration (Netlink Settings) for routes to be set automatically.') + '<br />' +
+				'<code>ipsec.netlink.install_routes_xfrmi</code><br />' +
+				_('Otherwise, routes for the XFRM interface must be set manually.');
+		};
+		o.tooltipicon = '⚠️';
 		o.optional = true;
 		o.modalonly = true;
 
