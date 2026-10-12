@@ -163,6 +163,7 @@ function sectionNameCheck(extra_class) {
 		nameEl = el.querySelector('.cbi-section-create-name');
 	ui.addValidator(nameEl, 'uciname', true, function(v) {
 		let sections = [
+			...uci.sections('ipsec', 'pools'),
 			...uci.sections('ipsec', 'connection'),
 			...uci.sections('ipsec', 'child'),
 			...uci.sections('ipsec', 'crypto_proposal'),
@@ -172,7 +173,7 @@ function sectionNameCheck(extra_class) {
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Connections, Encryption Proposals, Children, Locals and Remotes may not share the same names.') + ' ' +
+			return _('Pools, Connections, Encryption Proposals, Children, Locals and Remotes may not share the same names.') + ' ' +
 				_('Use combinations like child1_phase1.');
 		}
 		return true;
@@ -308,6 +309,26 @@ return view.extend({
 			swanctlDescr(_('Virtual IP addresses used as the source IP for outgoing traffic.'), 'connections.<conn>.vips'));
 		o.datatype = 'ipaddr';
 		o.modalonly = true;
+
+		o = s.taboption('advanced', form.MultiValue, 'pools', _('Pools'),
+			swanctlDescr(_('Pools from which virtual IP addresses and configuration attributes are assigned to the remote peers.') + '<br />' +
+			_('Pools can be defined on the general page.'),
+				'connections.<conn>.pools'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'pools');
+			if (sections.length == 0) {
+				this.value('', _('Please create a Pool first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
 
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
 			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication'), 'connections.<conn>.proposals'));
