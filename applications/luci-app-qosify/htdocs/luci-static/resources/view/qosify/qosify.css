@@ -9,21 +9,19 @@
 	--qos-hd: var(--background-color-low, rgba(128, 128, 128, .06));
 	--qos-r: 4px;
 	--qos-gap: .75em;
-	--qos-pad: .45em 1em;
+	/* The table cell padding; every box and row uses it, so all tabs line up. */
+	--qos-pad: .45em .75em;
 }
 
-/* The service bar sits outside any section, so it gets its own box. Flex
-   items ignore float, so the theme's page-actions floats cannot reorder the
-   buttons and they stay in declared order whatever their colour class. */
+/* The service bar is the theme's own .cbi-page-actions, sized and drawn as
+   the quick settings Save & Apply bar above it. Flex items ignore float, so the
+   theme's page-actions floats cannot reorder the buttons and they stay in
+   declared order whatever their colour class. */
 #qos-svc-btns {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: flex-end;
 	gap: .4em;
-	margin: 0 0 var(--qos-gap);
-	padding: var(--qos-pad);
-	border: 1px solid var(--qos-bd);
-	border-radius: var(--qos-r);
 }
 
 #qos-svc-btns::after {
@@ -46,7 +44,7 @@
 }
 
 #qos-app .table .td {
-	padding: .45em .75em;
+	padding: var(--qos-pad);
 	vertical-align: middle;
 	border-top-color: var(--qos-ln);
 }
@@ -99,12 +97,6 @@
 	font-weight: 600;
 	line-height: 1.4;
 	padding: 0;
-}
-
-/* The fold box sits just clear of its heading; the theme's h3 line-height
-   would otherwise double its depth. */
-#qos-app .qa > details.cbi-section {
-	padding: .4em .75em;
 }
 
 #qos-app .qos-box > h3 {
@@ -162,6 +154,16 @@
 	padding: .15em .3em;
 }
 
+/* The Dynamic Entries list is a table, not a form row: full cell padding. */
+#qos-app .qa #qos-dyn .th,
+#qos-app .qa #qos-dyn .td {
+	padding: var(--qos-pad);
+}
+
+#qos-app .qa .cbi-section-descr {
+	margin: 0 0 .4em;
+}
+
 #qos-app .qa .th {
 	font-size: .85em;
 	overflow: hidden;
@@ -197,7 +199,7 @@
 }
 
 #qos-app .qa details:not(.cbi-section) .td {
-	padding: .2em .5em;
+	padding: var(--qos-pad);
 	border-top: 1px solid var(--qos-ln);
 }
 
@@ -286,7 +288,8 @@
 }
 
 /* A header table above a boxed body; bars and figures are updated in place. */
-#qos-cn .qbox {
+#qos-cn .qbox,
+#qos-dyn .qbox {
 	overflow: hidden;
 	border: 1px solid var(--qos-bd);
 	border-radius: var(--qos-r);
@@ -296,19 +299,23 @@
 	margin-top: var(--qos-gap);
 }
 
-#qos-cn .qhead {
+#qos-cn .qhead,
+#qos-dyn .qhead {
 	background: var(--qos-hd);
 	border-bottom: 1px solid var(--qos-ln);
 }
 
 #qos-cn .qhead .th,
-#qos-cn .qbox .td {
+#qos-cn .qbox .td,
+#qos-dyn .qhead .th,
+#qos-dyn .qbox .td {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
-#qos-cn .qbox .tr:not(.table-titles):hover .td {
+#qos-cn .qbox .tr:not(.table-titles):hover .td,
+#qos-dyn .qbox .tr:not(.table-titles):hover .td {
 	background: var(--qos-hd);
 }
 
@@ -319,7 +326,8 @@
 	border-radius: var(--qos-r);
 }
 
-#qos-cn .qn {
+#qos-cn .qn,
+#qos-dyn .qn {
 	width: 1%;
 	text-align: right;
 	white-space: nowrap;
@@ -330,50 +338,92 @@
 	font-weight: 600;
 }
 
-#qos-cn-map-box {
+#qos-cn-map-box,
+#qos-dyn-box {
 	height: 24rem;
 	min-height: 6rem;
 	overflow-y: scroll;
 	resize: vertical;
 }
 
-/* Quick settings: one inner box per tab, rows split by the same line as the
-   tables, and the control then its hint on one line so every hint starts in
-   the same column. */
+/* A handful of dynamic entries is usual, so the box fits its rows up to the same height. */
+#qos-dyn-box {
+	height: auto;
+	min-height: 0;
+	max-height: 24rem;
+	overflow-y: auto;
+}
+
+/* Quick settings: unboxed, like the Service table above it, with its rows laid
+   out as that table's: the same cell padding, a 33% label column in the theme's
+   normal weight and a line above every row. The control then its hint on one
+   line, so every hint starts in the same column. */
+/* Clear of the Service table above, which ends without a bar of its own. */
+#qos-qs-sect {
+	--qos-ctl: 2.4em;
+	margin-top: 2em;
+}
+
+/* Every row is as deep as one holding an input box, checkbox rows included, and
+   the box fits its rows, with no blank space under the last one. */
 #qos-app .qs-box {
 	min-width: 0;
-	min-height: 13em;
-	padding: .3em 1.5em;
-	border: 1px solid var(--qos-bd);
-	border-radius: var(--qos-r);
+	padding: 0;
 }
 
+/* The theme wraps .cbi-value; a row here never wraps on a wide screen, and the
+   field takes what the label leaves (basis 0), not its content's width, so a
+   long hint cannot push the field onto a line of its own. */
 #qos-qs-sect .cbi-value {
-	align-items: flex-start;
+	flex-wrap: nowrap;
+	align-items: center;
 	margin: 0;
-	padding: .25em 0;
-}
-
-#qos-qs-sect .cbi-value + .cbi-value {
+	padding: 0;
 	border-top: 1px solid var(--qos-ln);
 }
 
+/* No line above a tab's first row: the tab bar already draws one there. */
+#qos-qs-sect .qs-box > .cbi-value:first-child {
+	border-top: 0;
+}
+
 #qos-qs-sect .cbi-value label.cbi-value-title {
-	flex: 0 0 16em;
-	padding-top: 0;
-	line-height: 30px;
-	font-weight: 600;
+	flex: 0 0 33%;
+	box-sizing: border-box;
+	padding: var(--qos-pad);
+	text-align: left;
+	font-weight: normal;
 }
 
 #qos-qs-sect .cbi-value-field {
 	display: grid;
-	grid-template-columns: minmax(0, 18em) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 28em) minmax(0, 1fr);
 	align-items: center;
 	gap: .3em 1.5em;
-	flex: 1 1 auto;
-	margin-left: 1.5em;
+	flex: 1 1 0;
+	box-sizing: border-box;
+	min-height: calc(var(--qos-ctl) + .9em);
+	margin: 0;
+	padding: var(--qos-pad);
 	min-width: 0;
-	line-height: 30px;
+}
+
+/* The tab panes share one grid cell, so the box is as deep as the tallest tab
+   and switching tabs never moves the page; a shorter tab leaves a gap under its
+   last row. A hidden pane keeps its size but cannot be seen, clicked or focused. */
+#qos-qs-sect .qs-panes {
+	display: grid;
+}
+
+#qos-qs-sect .qs-panes > [data-tab] {
+	grid-area: 1 / 1;
+	height: auto;
+	max-height: none;
+	overflow: visible;
+}
+
+#qos-qs-sect .qs-panes > [data-tab]:not([data-tab-active="true"]) {
+	visibility: hidden;
 }
 
 #qos-qs-sect .cbi-value-description {
@@ -398,6 +448,7 @@
 #qos-qs-sect .cbi-value-field input[type=text],
 #qos-qs-sect .cbi-value-field input[type=number],
 #qos-qs-sect .cbi-value-field select {
+	height: var(--qos-ctl);
 	max-width: 100%;
 	box-sizing: border-box;
 }
@@ -424,10 +475,6 @@
 	width: 18em;
 }
 
-#qos-qs-sect .qs-wide .cbi-value-field {
-	grid-template-columns: minmax(0, 28em) minmax(0, 1fr);
-}
-
 #qos-qs-sect [data-q$=opts] {
 	width: 100%;
 }
@@ -439,12 +486,11 @@
 	}
 
 	#qos-qs-sect .cbi-value label.cbi-value-title {
-		line-height: 1.5;
+		padding-bottom: 0;
 	}
 
 	#qos-qs-sect .cbi-value-field {
 		grid-template-columns: minmax(0, 1fr);
-		margin-left: 0;
 	}
 
 	#qos-qs-sect .cbi-value-field > * {

@@ -31,8 +31,8 @@ function dscpRank(v){return v<0?-1000:DSCP_BULK[v]?v-100:v===46?100:v>=10&&v<=38
 // Colour by sorted class name, so a class keeps its colour as the bars reorder.
 function qc(n){return 'var(--qos-c-'+n+')';}
 var CN_COLORS=['blue','green','orange','purple','red','cyan','brown','pink'].map(qc);
-// qosify_map_stats() appends these two default slots; they are not config classes.
-var CN_SKIP={tcp_default:1,udp_default:1};
+// qosify_map_stats() appends these two default slots for traffic no rule matched.
+var CN_DEF={tcp_default:'dscp_default_tcp',udp_default:'dscp_default_udp'};
 // A class with no codepoint to place in a tin.
 var CN_NONE=qc('none');
 // CAKE's DSCP to tin tables in sch_cake.c, already put through tin_order, so each
@@ -91,6 +91,12 @@ var OPT_DESC={
 };
 // Quick Add grids hold at most this many options per table.
 var QA_COLS=7;
+// tc get_rate() units, plus CAKE's unlimited; a bare number is bytes per second.
+var RATE=/^(unlimited|\d+(\.\d+)?((k|m|g|t)?(bit|bps)|(ki|mi|gi)(bit|bps))?)$/i;
+// interface_create() drops a name of IFNAMSIZ (16) or more, or with a quote.
+var NAME_MAX=15;
+// class_map has QOSIFY_MAX_CLASS_ENTRIES slots for class and alias sections.
+var CLASS_MAX=16;
 
 // luci.setInitAction was dropped from luci-base in 4440b267d; the rc namespace
 // (built into the rpcd core binary, so no extra dependency) replaces it.
@@ -147,6 +153,16 @@ var callQosifyDump=rpc.declare({
 	expect:{'':{}},
 	reject:true
 });
+// add takes a dscp, an optional timeout and string arrays per match type; remove
+// is the same method without dscp (UBUS_METHOD_MASK). Unset arguments drop out.
+var DYN_KEYS=['ipv4','ipv6','tcp_port','udp_port','dns'];
+var callQosifyAdd=rpc.declare({object:'qosify',method:'add',params:['dscp','timeout'].concat(DYN_KEYS),reject:true});
+var callQosifyRemove=rpc.declare({object:'qosify',method:'remove',params:DYN_KEYS,reject:true});
+// get_stats zeroes what it has just reported when reset is set.
+var callQosifyStatsReset=rpc.declare({object:'qosify',method:'get_stats',params:['reset'],expect:{'':{}},reject:true});
+// dump type_name to the add/remove argument it came from.
+var DYN_ARG={ipv4_addr:'ipv4',ipv6_addr:'ipv6',tcp_port:'tcp_port',udp_port:'udp_port',dns:'dns'};
+function dynArgs(k,v){return DYN_KEYS.map(function(x){return x===k?[v]:undefined;});}
 var callServiceList=rpc.declare({
 	object:'service',
 	method:'list',
@@ -272,6 +288,18 @@ function hasNat(v){return /(^|\s)nat(\s|$)/.test(v||'');}
 function ifLint(s,dev){
 	var w=[],c=ifCfg(s,dev);
 	if(!s.name)w.push(_('name is not set — qosify.init sends an empty device name and this section is never applied'));
+	else if(String(s.name).length>NAME_MAX||/'/.test(s.name))w.push(_('name "%s" is dropped by qosify — it takes at most %d characters and no quote').format(s.name,NAME_MAX));
+	if(s.mode&&MODES.indexOf(s.mode)<0)w.push(_('mode "%s" is not a CAKE diffserv mode — tc refuses the qdisc, so nothing is shaped although qosify reports the section active').format(s.mode));
+	['bandwidth_up','bandwidth_down','bandwidth'].forEach(function(k){
+		if(s[k]&&!RATE.test(String(s[k])))w.push(_('%s "%s" is not a tc rate — tc refuses the qdisc, so nothing is shaped although qosify reports the section active').format(k,s[k]));
+	});
+	if(s.overhead_type&&OVH.indexOf(s.overhead_type)<0)w.push(_('overhead_type "%s" is not one qosify.init knows, so no overhead is set').format(s.overhead_type));
+	if(s.overhead_type==='manual'){
+		if(s.overhead&&!/^-?\d+$/.test(s.overhead))w.push(_('%s "%s" is not a whole number — tc refuses the qdisc').format('overhead',s.overhead));
+		if(s.overhead_encap&&ENCAP.indexOf(s.overhead_encap)<0)w.push(_('overhead_encap "%s" is not atm, noatm or ptm — tc refuses the qdisc').format(s.overhead_encap));
+	}
+	if(s.overhead_mpu&&!/^\d+$/.test(s.overhead_mpu))w.push(_('%s "%s" is not a whole number — tc refuses the qdisc').format('overhead_mpu',s.overhead_mpu));
+	if(s.overhead_vlan&&!/^\d+$/.test(s.overhead_vlan))w.push(_('overhead_vlan "%s" is not 0, 1 or 2 — qosify.init adds no ether-vlan').format(s.overhead_vlan));
 	if(!c.host_isolate&&c.nat){
 		var ne=hasNat(s.options)||hasNat(s.egress_options);
 		var ni=hasNat(s.options)||hasNat(s.ingress_options);
@@ -311,7 +339,7 @@ function cfgSections(txt){
 // line continuation) or an open quote (a multi-line value) cannot be followed line by
 // line, so it is listed in '.bad' and refused by cfgLint(), as is a tc-bound key (TCK)
 // that is not one value.
-var TCK=/^(bandwidth(_up|_down)?|mode|(ingress_|egress_)?options)$/;
+var TCK=/^(bandwidth(_up|_down)?|mode|(ingress_|egress_)?options|overhead(_encap|_mpu)?)$/;
 function cfgStmts(l){return (l.replace(/^((?:[^'"#]|'[^']*'|"[^"]*")*)#.*$/,'$1').match(/(?:[^'";]|'[^']*'|"[^"]*"|['"])+/g)||[]);}
 function uciWords(st){
 	var w=[],cur=null,m,re=/\s+|'([^']*)'|"([^"\\]*)"|([^\s'"\\]+)|([\s\S])/g;
@@ -439,16 +467,29 @@ function ruleWarn(txt,names){
 // Defaults-level dscp_prio/dscp_bulk/dscp_icmp failing makes qosify_ubus_config()
 // return before the interfaces are applied; the rest is dropped quietly.
 // cmd_add_qdisc() pastes bandwidth, mode and the options unquoted into a tc
-// command run with sh -c as root, so a shell metacharacter there is refused too.
+// command run with sh -c as root, and qosify.init folds overhead, overhead_encap
+// and overhead_mpu into options, so a shell metacharacter in any of them is refused.
+// The integer keys go through jshn's atoll(), which keeps only leading digits.
+var INTK=['timeout','prio_max_avg_pkt_len','bulk_trigger_pps','bulk_trigger_timeout'];
 function cfgLint(secs){
-	var w=[],cls=[];
-	secs.forEach(function(s){if((s['.type']==='class'||s['.type']==='alias')&&s['.name'])cls.push(s['.name']);});
+	var w=[],cls=[],al=[],nc=0;
+	secs.forEach(function(s){
+		if(s['.type']!=='class'&&s['.type']!=='alias')return;
+		nc++;
+		if(s['.name'])(s['.type']==='class'?cls:al).push(s['.name']);
+	});
+	// qosify.init sends class sections, then alias sections, in file order.
+	cls=cls.concat(al);
+	if(nc>CLASS_MAX)w.push({load:true,t:_('%d class and alias sections — qosify has %d class slots, so %s and the rules using them are dropped').format(nc,CLASS_MAX,cls.slice(CLASS_MAX).join(', ')||'-')});
 	secs.forEach(function(s){
 		var t=s['.type'],n=s['.name']||t;
 		(s['.bad']||[]).forEach(function(k){w.push({hard:true,t:_('%s: %s cannot be checked — write it as one plain or fully quoted value, with no backslash').format(n,k)});});
+		if(t==='defaults'||t==='class'||t==='alias')INTK.forEach(function(k){
+			if(s[k]!=null&&s[k]!==''&&!/^\d+$/.test(String(s[k])))w.push({t:_('%s: %s "%s" is not a whole number — qosify.init passes it through atoll(), which keeps only the leading digits').format(n,k,s[k])});
+		});
 		if(t==='interface'||t==='device'){
-			['bandwidth_up','bandwidth_down','bandwidth','mode','ingress_options','egress_options','options'].forEach(function(k){
-				if(s[k]&&/['"`$;&|<>(){}\\\n]/.test(String(s[k])))w.push({hard:true,t:_('%s: %s contains shell metacharacters — qosify runs the tc command with sh -c as root, so they would break it or be executed').format(n,k)});
+			['bandwidth_up','bandwidth_down','bandwidth','mode','ingress_options','egress_options','options','overhead','overhead_encap','overhead_mpu'].forEach(function(k){
+				if(s[k]&&/['"`$;&|<>(){}\\\n#*?[\]~]/.test(String(s[k])))w.push({hard:true,t:_('%s: %s contains shell metacharacters — qosify runs the tc command with sh -c as root, so they would break it or be executed').format(n,k)});
 			});
 		}
 		else if(t==='defaults'){
@@ -618,6 +659,7 @@ return view.extend({
 				// this from a requestAnimationFrame, so the pane is in the DOM.
 				if(t[0]==='st')self.refreshStatus();
 				if(t[0]==='cn')self.refreshCounters();
+				if(t[0]==='ru')self.refreshDyn();
 				self.fitEditor();
 			});
 			group.appendChild(pane);
@@ -648,6 +690,7 @@ return view.extend({
 		poll.add(function(){if(self.currentTab!=='ov'||self._n)return;return self.refreshOverview();});
 		poll.add(function(){if(self.currentTab!=='st'||self._n)return;return self.refreshStatus();});
 		poll.add(function(){if(self.currentTab!=='cn'||self._n)return;return self.refreshCounters();});
+		poll.add(function(){if(self.currentTab!=='ru'||self._n)return;return self.refreshDyn();});
 	},
 
 	tabOverview:function(ctx){
@@ -712,7 +755,7 @@ return view.extend({
 		function syncOvh(){manRows.forEach(function(r){r.style.display=ovSel.value==='manual'?'':'none';});}
 		ovSel.addEventListener('change',syncOvh);
 		syncOvh();
-		var grp=E('div',{},[
+		var grp=E('div',{'class':'qs-panes'},[
 			pane('qs-basic',_('Basic'),[
 				[_('QoS Enabled'),[E('span',{'class':'qs-ctl'},[chk('enabled',enChecked),' ',enBadge]),desc(_('Unticked sets disabled 1 and qosify skips this section.'))]],
 				[isDev?_('Device'):_('Interface'),[txt('name',w.name||(sn?(isDev?'':sn.name):'wan'),_('e.g. %s').format(isDev?'eth0':'wan')),desc(isDev?_('Netdev to enable QoS on. Required.'):_('netifd interface to enable QoS on. Required.'))]],
@@ -1091,7 +1134,8 @@ return view.extend({
 			var b=$(id);
 			if(b)dom.content(b,self.classRows(classes));
 		});
-		var names=classes.map(function(c){return c.name;}).concat(dscpList());
+		var names=classes.map(function(c){return c.name;}).concat(dscpList()),dy=$('qdy-dscp');
+		if(dy){cur=dy.value;dom.content(dy,names.map(function(o){return E('option',{'value':o},o);}));if(names.indexOf(cur)>=0)dy.value=cur;}
 		['qac-opts-defaults','qac-opts-class'].forEach(function(id){
 			var p=$(id);if(!p)return;
 			var ss=p.querySelectorAll('select[data-opt^="dscp_"]');
@@ -1160,7 +1204,10 @@ return view.extend({
 		var qr=[['match',5,qarType],['',8,E('input',{'type':'text','class':'cbi-input-text','id':'qar-val','aria-label':_('value'),'placeholder':_('e.g. %s').format('4500')})],
 			['dscp',6,qarCls],['+',1,E('input',{'type':'checkbox','class':'cbi-input-checkbox','id':'qar-prio','aria-label':_('Only override the DSCP value if it is zero')})],
 			['',2,E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.qarAdd();}},_('Add'))]];
-		section.appendChild(E('div',{'class':'qa'},fold('qos-qa-rule',_('Quick Add'),[
+		// Two folds side by side in look: Quick Add writes the rules file, Dynamic
+		// Entries the running daemon; the line under each title says which.
+		section.appendChild(E('div',{'class':'qa'},[fold('qos-qa-rule',_('Quick Add'),[
+			sdesc(_('Adds a line to the editor below; Save & Apply writes it to the rules file, so it is kept.')),
 			colTable(qr,[E('tr',{'class':'tr cbi-section-table-titles'},qr.map(function(c){return E('th',{'class':'th','title':c[0]},c[0]);})),
 				E('tr',{'class':'tr cbi-section-table-row'},qr.map(function(c){return E('td',{'class':'td','data-title':c[0]},c[2]);}))]),
 			E('div',{'class':'qa-foot'},[refBox(_('Mapping file syntax'),_('Each line has two whitespace separated fields, match and dscp. dscp can be a raw value, a codepoint like CS0, or a class name. DNS entries are compared in the order in which they are specified, using the first matching entry.'),[
@@ -1174,10 +1221,100 @@ return view.extend({
 				['+<dscp>',_('Only override the DSCP value if it is zero')]
 			]),
 			this.classRef('qos-cls-ru')])
-		],false)));
+		],false),this.dynSect()]));
 		section.addEventListener('toggle',function(){self.fitEditor();},true);
 		section.appendChild(this.editorSect('qos-rules-ta',RULES_PATH,ctx.rulesText,ctx.rulesStat,function(){return self.clearRules();},function(){return self.saveRules();}));
 		return section;
+	},
+
+	// ubus call qosify add/remove. The entries live in the running daemon only:
+	// a reload keeps them, a restart drops them. dump lists them with user set, and
+	// one on a match from the files overrides it until it expires or is removed.
+	dynSect:function(){
+		var self=this,d=uci.sections('qosify','defaults')[0]||{};
+		var qr=[['match',4,E('select',{'class':'cbi-input-select','id':'qdy-type','aria-label':_('match')},DYN_KEYS.map(function(k){return E('option',{'value':k},k);}))],
+			['',8,E('input',{'type':'text','class':'cbi-input-text','id':'qdy-val','aria-label':_('value'),'placeholder':_('e.g. %s').format('1.1.1.1')})],
+			['dscp',5,E('select',{'class':'cbi-input-select','id':'qdy-dscp','aria-label':'dscp'},this.getClasses().map(function(c){return c.name;}).concat(dscpList()).map(function(o){return E('option',{'value':o},o);}))],
+			['+',1,E('input',{'type':'checkbox','class':'cbi-input-checkbox','id':'qdy-prio','aria-label':_('Only override the DSCP value if it is zero')})],
+			['timeout',4,E('input',{'type':'number','min':'1','class':'cbi-input-text','id':'qdy-tmo','aria-label':'timeout','placeholder':d.timeout||'3600'})],
+			['',2,E('button',{'class':'cbi-button cbi-button-add','click':function(){return self.dynAdd();}},_('Add'))]];
+		var f=fold('qos-dyn-sect',_('Dynamic Entries'),[
+			sdesc(_('Added to the running qosify at once and not saved: an entry expires after its timeout (the defaults timeout when left empty) and a qosify restart drops it. One on a match from the rules file overrides it until then.')),
+			colTable(qr,[E('tr',{'class':'tr cbi-section-table-titles'},qr.map(function(c){return E('th',{'class':'th','title':c[0]},c[0]);})),
+				E('tr',{'class':'tr cbi-section-table-row'},qr.map(function(c){return E('td',{'class':'td','data-title':c[0]},c[2]);}))]),
+			E('div',{'id':'qos-dyn'},emP(_('Loading...')))],false);
+		f.addEventListener('toggle',function(){if(f.open)self.refreshDyn(true);});
+		return f;
+	},
+
+	// qosify_map_set_entry() skips a value it cannot parse and still answers 0, so
+	// the value is checked here as the rules file is.
+	dynAdd:function(){
+		var self=this,k=$('qdy-type').value,v=trim($('qdy-val').value),c=$('qdy-dscp').value,t=trim($('qdy-tmo').value);
+		var ok=k==='ipv4'?ip4Ok(v):k==='ipv6'?ip6Ok(v):k==='dns'?/^\S+$/.test(v):portOk(v);
+		if(!ok){notify(_('"%s" is not a value qosify accepts for %s.').format(v,k),'danger');return;}
+		if(t&&!(/^\d+$/.test(t)&&+t>0)){notify(_('timeout must be a whole number of seconds above 0.'),'danger');return;}
+		if(!c){notify(_('No classes defined. Add classes in the Config tab first.'),'danger');return;}
+		self.lock();
+		return callQosifyAdd.apply(null,[($('qdy-prio').checked?'+':'')+c,t?+t:undefined].concat(dynArgs(k,v))).then(function(){
+			$('qdy-val').value='';
+			notify(_('Entry added.'),'info');
+		},function(e){notify(_('Add failed: %s').format(e),'danger');}).finally(function(){self.unlock();return self.refreshDyn(true);});
+	},
+
+	dynRemove:function(type,addr){
+		var self=this;
+		self.lock();
+		return callQosifyRemove.apply(null,dynArgs(DYN_ARG[type],addr)).then(function(){
+			notify(_('Entry removed.'),'info');
+		},function(e){notify(_('Remove failed: %s').format(e),'danger');}).finally(function(){self.unlock();return self.refreshDyn(true);});
+	},
+
+	// One service list and one dump per tick, only while Rules and the fold are open.
+	refreshDyn:function(force){
+		var self=this,box=$('qos-dyn'),f=$('qos-dyn-sect');
+		if(!box||(!force&&(self.currentTab!=='ru'||(f&&!f.open)))||self._dy)return Promise.resolve();
+		self._dy=true;
+		return callServiceList('qosify').then(isRunning,function(){return null;}).then(function(run){
+			if(!run)return [run,null];
+			return callQosifyDump().then(function(r){return [run,r];},function(){return [run,null];});
+		}).then(function(d){self.fillDyn(box,d[0],d[1]);}).finally(function(){self._dy=false;});
+	},
+
+	// Rebuilt when the listing changes, otherwise only the timeouts are rewritten,
+	// so the scroll position and a pending click survive a tick.
+	fillDyn:function(box,run,r){
+		var self=this,cols=[['type',14],['match',38],['dscp',14],['timeout',14,1],['',10,1]],rows,sig;
+		if(!run||!r){
+			box.qosSig=null;
+			dom.content(box,emP(run==null?_('rpcd is not answering for qosify, so the service state is unknown.'):!run?_('qosify is not running. Start from the Overview tab.'):_('dump did not answer.')));
+			return;
+		}
+		rows=(r.entries||[]).filter(function(e){return e&&e.user&&DYN_ARG[e.type];}).slice(0,MAP_ROWS+1);
+		if(!rows.length){box.qosSig=null;dom.content(box,emP(_('No dynamic entries.')));return;}
+		sig=rows.map(function(e){return [e.type,e.addr,e.dscp,e.file].join(',');}).join('\n');
+		if(box.qosSig!==sig){
+			var sb=$('qos-dyn-box'),st=sb?sb.scrollTop:0,trs;
+			box.qosSig=sig;
+			box.qosCells=[];
+			trs=rows.slice(0,MAP_ROWS).map(function(e){
+				var a=String(e.addr),c=E('td',{'class':'td qn'});
+				box.qosCells.push(c);
+				return E('tr',{'class':'tr'},[E('td',{'class':'td'},e.type),
+					E('td',{'class':'td','title':a},[E('code',{},a),e.file?' '+_('(over file)'):'']),
+					E('td',{'class':'td'},e.dscp||'-'),c,
+					E('td',{'class':'td qn'},self.readonly?'':E('button',{'class':'cbi-button cbi-button-remove','click':function(){return self.dynRemove(e.type,a);}},_('Remove')))]);
+			});
+			dom.content(box,[E('div',{'class':'qbox'},[colHead(cols,'qos-dyn-head'),E('div',{'id':'qos-dyn-box'},colTable(cols,trs))]),
+				rows.length>MAP_ROWS?emP(_('The first %d entries are shown.').format(MAP_ROWS)):'']);
+			$('qos-dyn-box').scrollTop=st;
+		}
+		rows.slice(0,MAP_ROWS).forEach(function(e,i){
+			var t=e.timeout!=null?'%t'.format(e.timeout):_('never'),c=box.qosCells[i];
+			if(c.textContent!==t)c.textContent=t;
+		});
+		var mb=$('qos-dyn-box'),mh=$('qos-dyn-head');
+		if(mb&&mh)mh.style.paddingRight=Math.max(0,mb.offsetWidth-mb.clientWidth)+'px';
 	},
 
 	tabAdvanced:function(ctx){
@@ -1406,32 +1543,84 @@ return view.extend({
 	},
 
 	tabCounters:function(){
+		var self=this;
 		return E('div',{'id':'qos-cn'},[
 			sect(_('Traffic by Class'),[E('div',{'id':'qos-cn-msg'}),E('div',{'id':'qos-cn-bars'})]),
+			sect(_('Traffic by DSCP'),E('div',{'id':'qos-cn-dscp'}),{'id':'qos-cn-dscp-sect','style':'display:none'}),
 			sect(_('Traffic by CAKE Tin'),E('div',{'id':'qos-cn-tins'},emP(_('Loading...'))),{'id':'qos-cn-tin-sect','style':'display:none'}),
 			sect('get_stats',E('div',{'id':'qos-cn-info'}),{'id':'qos-cn-info-sect','style':'display:none'}),
-			sect(_('DNS Entries'),E('div',{'id':'qos-cn-map'},emP(_('Loading...'))),{'id':'qos-cn-map-sect','style':'display:none'})
+			sect(_('DNS Entries'),E('div',{'id':'qos-cn-map'},emP(_('Loading...'))),{'id':'qos-cn-map-sect','style':'display:none'}),
+			E('div',{'class':'cbi-page-actions'},E('button',{'class':'cbi-button cbi-button-negative','id':'qos-btn-cnreset','disabled':'',
+				'click':function(){return self.resetCounters();}},_('Reset counters')))
 		]);
 	},
 
-	// Cumulative totals since the last reload, EF first and bulk last. A
-	// dscp_default_* naming a class is counted against that class, so the two
-	// default slots would double-count and are skipped.
+	// get_stats with reset zeroes the counters it reports: the classes, and on
+	// newer qosify the DSCP and DNS tables and the DNS cache hits. tc owns the tin
+	// counters, which only a new qdisc clears.
+	resetCounters:function(){
+		var self=this;
+		return confirmDialog(_('Reset counters'),_('Zero qosify\'s own counters (get_stats)? The CAKE tin counters belong to tc and are kept.'),_('Reset counters'),true).then(function(go){
+			if(!go)return null;
+			self.lock();
+			return callQosifyStatsReset(true).then(function(){
+				notify(_('Counters reset.'),'info');
+			},function(e){notify(_('Reset failed: %s').format(e),'danger');}).finally(function(){self.unlock();return self.refreshCounters();});
+		});
+	},
+
+	// get_stats dscp: every packet by the DSCP read back from it after the
+	// classifier, with the tin colours and order of the class chart. Codepoints
+	// only: a value none has (qosify's 0x%02x) is left out of rows and total.
+	dscpTotals:function(t,mode){
+		var rows=[],total=0,bytes=null,self=this,byTin=MODES.indexOf(mode)>=0;
+		Object.keys(t).sort().forEach(function(k,ix){
+			if(!t[k]||t[k].packets==null||DSCP_VAL[k]==null)return;
+			var v=self.dscpVal(k),tn=byTin&&v>=0?+TIN_MAP[mode].charAt(v):-1;
+			total+=t[k].packets;
+			if(t[k].bytes!=null)bytes=(bytes||0)+t[k].bytes;
+			rows.push({name:k,v:t[k].packets,bytes:t[k].bytes,tin:tn,rk:dscpRank(v),
+				color:!byTin?CN_COLORS[ix%CN_COLORS.length]:tn<0?CN_NONE:TIN_COLORS[mode][tn]});
+		});
+		rows.sort(function(a,b){return b.tin-a.tin||b.rk-a.rk||(a.name<b.name?-1:1);});
+		rows.total=total;
+		rows.bytes=bytes;
+		return rows;
+	},
+
+	// tcp_default/udp_default count what no rule matched while dscp_default_tcp/udp
+	// is a codepoint (CS0 when unset or rejected). A default naming a class sends
+	// that traffic to the class itself and leaves the slot idle, so it is skipped.
+	defMarks:function(){
+		var d=uci.sections('qosify','defaults')[0]||{},cls=this.getClasses().map(function(c){return c.name;}),m={},k,v;
+		for(k in CN_DEF){
+			v=d[CN_DEF[k]]?String(d[CN_DEF[k]]):'CS0';
+			if(cls.indexOf(v.replace(/^\+/,''))<0)m[k]=dscpOk(v)?v:'CS0';
+		}
+		return m;
+	},
+	// Cumulative totals since the last reload, EF first and bulk last.
 	// Grouped and coloured by the tin the class's egress codepoint lands in under
 	// mode, highest priority tin first as the tin bars are, then by codepoint within
 	// a tin. With no single mode to fold by, codepoint order and a colour per name.
 	classTotals:function(st,mode){
 		var cls=st&&st.classes,k,rows=[],names=[],total=0,bytes=null,self=this,
-			fold=MODES.indexOf(mode)>=0,rank=this.dscpRanks(),mark=this.dscpMarks(),tin={};
+			fold=MODES.indexOf(mode)>=0,rank=this.dscpRanks(),mark=this.dscpMarks(),tin={},def=this.defMarks();
 		if(fold)this.getClasses().forEach(function(c){
 			var v=self.dscpVal(c.egress||c.ingress);
 			tin[c.name]=v<0?-1:+TIN_MAP[mode].charAt(v);
 		});
+		for(k in def){
+			var dv=this.dscpVal(def[k]);
+			mark[k]=def[k];
+			rank[k]=dscpRank(dv);
+			if(fold)tin[k]=dv<0?-1:+TIN_MAP[mode].charAt(dv);
+		}
 		if(!cls){
 			cls={};
 			for(k in st)if(self.isCounter(st[k]))cls[k]=st[k];
 		}
-		for(k in cls)if(cls[k].packets!=null&&!CN_SKIP[k])names.push(k);
+		for(k in cls)if(cls[k].packets!=null&&(!CN_DEF[k]||def[k]))names.push(k);
 		names.sort();
 		names.forEach(function(n,ix){
 			var v=cls[n].packets||0;
@@ -1574,8 +1763,12 @@ return view.extend({
 	drawBars:function(){
 		var st=this._cnStats,box=$('qos-cn-bars'),m=this.cakeModes();
 		if(!box)return;
+		var ds=$('qos-cn-dscp'),dss=$('qos-cn-dscp-sect'),dt=st&&st.dscp;
 		if(st)this.drawChart(box,this.classTotals(st,m.length===1?m[0]:null),_('No per-class counters.'),'class');
 		else{box.qosChart=null;dom.content(box,'');}
+		// 1501e09 (24.10, 25.12) has no dscp table, so the section stays hidden there.
+		if(dss)dss.style.display=dt?'':'none';
+		if(ds){if(dt)this.drawChart(ds,this.dscpTotals(dt,m.length===1?m[0]:null),_('No DSCP traffic yet.'),'dscp');else{ds.qosChart=null;dom.content(ds,'');}}
 	},
 
 	// CAKE's own per-tin counters, per qdisc since it was created, so they need
@@ -1610,6 +1803,7 @@ return view.extend({
 		var msg=$('qos-cn-msg'),info=$('qos-cn-info'),is=$('qos-cn-info-sect'),
 			nodes=ctx.running&&ctx.stats?this.infoNodes(ctx.stats):null;
 		if(is)is.style.display=nodes?'':'none';
+		if($('qos-btn-cnreset'))$('qos-btn-cnreset').disabled=this.readonly||!ctx.running||!ctx.stats;
 		if(!ctx.running){
 			this._cnDns=false;
 			if(info)dom.content(info,'');
@@ -1661,7 +1855,7 @@ return view.extend({
 			});
 		}
 		if(!load){walk('interface',false);walk('device',true);}
-		cfgLint(all).forEach(function(x){if(!load||x.hard)out.push(x.t);});
+		cfgLint(all).forEach(function(x){if(!load||x.hard||x.load)out.push(x.t);});
 		if(!rulesLoaded(all))out.push(_('%s is not in the defaults list — qosify does not load it, so the Rules tab has no effect').format(RULES_PATH));
 		return out;
 	},
@@ -1764,7 +1958,6 @@ return view.extend({
 		var chk=function(id){var e=$('q-'+id);return e&&e.checked;};
 		var bw=function(s){return trim(s).replace(/\s+/g,'');};
 		var bwUp=bw(get('bw_up')),bwDn=bw(get('bw_down'));
-		var rate=/^(unlimited|\d+(\.\d+)?((k|m|g|t)?(bit|bps)|(ki|mi|gi)(bit|bps))?)$/i;
 		var ovh=get('overhead'),mode=get('mode'),mpu=trim(get('overhead_mpu')),vlan=get('overhead_vlan'),ob=trim(get('ovh_bytes'));
 		var iopts=trim(get('ing_opts')),eopts=trim(get('egr_opts')),gopts=trim(get('opts'));
 		var safe=/^[\w\s.:-]*$/;
@@ -1772,8 +1965,8 @@ return view.extend({
 			notify(_('Error: invalid characters in bandwidth or options fields. Use alphanumeric, spaces, hyphens, dots, colons only.'),'danger');
 			return;
 		}
-		if(bwUp&&!rate.test(bwUp))notify(_('bandwidth_up does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
-		if(bwDn&&!rate.test(bwDn))notify(_('bandwidth_down does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
+		if(bwUp&&!RATE.test(bwUp))notify(_('bandwidth_up does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
+		if(bwDn&&!RATE.test(bwDn))notify(_('bandwidth_down does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway').format(),'warning');
 		if(mpu&&!/^\d+$/.test(mpu)){notify(_('Error: overhead_mpu must be a whole number of bytes'),'danger');return;}
 		if(ovh==='manual'&&ob&&!/^-?\d+$/.test(ob)){notify(_('Error: overhead must be a whole number of bytes'),'danger');return;}
 		var en=chk('enabled'),s0=ifSect(),bwAll=((s0&&uci.get('qosify',s0.id))||{}).bandwidth;
@@ -1805,6 +1998,7 @@ return view.extend({
 		if(nmEl){
 			var nm=trim(nmEl.value);
 			if(nm&&!/^[\w.@:-]+$/.test(nm)){notify(_('Error: name must be a device or interface name'),'danger');return;}
+			if(nm.length>NAME_MAX){notify(_('Error: qosify drops a name longer than %d characters').format(NAME_MAX),'danger');return;}
 			kv.name=nm||null;
 		}
 
