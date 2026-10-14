@@ -52,7 +52,7 @@ function handleAction(ev) {
 		return fs.exec('/etc/init.d/travelmate', ['stop'])
 			.then(() => L.resolveDefault(fs.exec('/sbin/ifup', [ifaceValue])))
 			.then(() => waitForIface(ifaceValue, 20000))
-			.then(() => fs.exec('/etc/init.d/travelmate', ['start']))
+			.then(() => fs.exec('/etc/init.d/travelmate', ['start']));
 	}
 	if (ev === 'stopService') {
 		return fs.exec('/etc/init.d/travelmate', ['stop'])
@@ -62,7 +62,7 @@ function handleAction(ev) {
 			})
 			.catch(function (err) {
 				ui.addNotification(null, E('p', _('Unable to stop the travelmate service: %s').format(err)), 'error');
-			})
+			});
 	}
 	if (ev === 'restartTravelmate') {
 		const map = document.querySelector('.cbi-map');
@@ -70,22 +70,22 @@ function handleAction(ev) {
 			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
 				return fs.exec_direct('/etc/init.d/travelmate', ['restart']);
-			})
+			});
 	}
 	if (ev === 'setup') {
 		ifaceValue = String(uci.get('travelmate', 'global', 'trm_iface') || '');
 		ui.showModal(_('Interface Wizard'), [
 			E('p', _('To use Travelmate, you have to set up an uplink interface once. This wizard creates an IPv4- and an IPv6 alias network interface with all required network- and firewall settings.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
-				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em;' }, [
+				E('label', { 'style': 'padding-top:.5em;' }, [
 					E('input', { 'class': 'cbi-input-text', 'id': 'iface', 'placeholder': 'trm_wwan', 'value': ifaceValue, 'maxlength': '15', 'spellcheck': 'false', style: 'margin-right:.5em;' }),
 					_('The uplink interface name')
 				]),
-				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em;' }, [
+				E('label', { 'style': 'padding-top:.5em;' }, [
 					E('input', { 'class': 'cbi-input-text', 'id': 'zone', 'placeholder': 'wan', 'maxlength': '15', 'spellcheck': 'false', style: 'margin-right:.5em;' }),
 					_('The firewall zone name')
 				]),
-				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em;' }, [
+				E('label', { 'style': 'padding-top:.5em;' }, [
 					E('input', { 'class': 'cbi-input-text', 'id': 'metric', 'placeholder': '100', 'maxlength': '3', 'spellcheck': 'false', style: 'margin-right:.5em;' }),
 					_('The interface metric')
 				])
@@ -224,12 +224,15 @@ function pickValue(pairs, key) {
 
 /*
 	system_info is "cores: n, fetch: cmd, model, target, distribution version".
-	Keep the named entries and the board model, drop target and release.
+	Keep the named entries and the board model, drop target and release. The
+	model is the only unnamed entry, it gets the 'system' key for display.
 */
 function sysPairs(text) {
 	let plain = 0;
 	return parsePairs(text).filter(function (pair) {
 		return pair[0] || ++plain === 1;
+	}).map(function (pair) {
+		return pair[0] ? pair : ['system', pair[1]];
 	});
 }
 
@@ -347,7 +350,7 @@ return view.extend({
 		*/
 		let m, s, o;
 		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
-			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' +
+			For further information %s.').format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`) + '<br />' +
 			_('<b><em>Please note:</em></b> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
 
 		/*
@@ -571,16 +574,16 @@ return view.extend({
 					E('div', { 'class': 'trm-card' }, [
 						E('div', { 'class': 'trm-title' }, [_('Station')]),
 						E('div', { 'class': 'trm-stack' }, [].concat(
-							kvRow(_('bssid'), 'station_bssid', true),
-							kvRow(_('mac'), 'station_mac', true)
+							kvRow('bssid', 'station_bssid', true),
+							kvRow('mac', 'station_mac', true)
 						))
 					]),
 					E('div', { 'class': 'trm-card' }, [
 						E('div', { 'class': 'trm-title' }, [_('Network')]),
 						E('div', { 'class': 'trm-stack' }, [].concat(
-							kvRow(_('uplink'), 'iface_uplink', true),
-							kvRow(_('vpn'), 'iface_vpn', true),
-							kvRow(_('subnet'), 'station_subnet', true)
+							kvRow('uplink', 'iface_uplink', true),
+							kvRow('vpn', 'iface_vpn', true),
+							kvRow('subnet', 'station_subnet', true)
 						))
 					]),
 					E('div', { 'class': 'trm-card' }, [
@@ -831,7 +834,7 @@ return view.extend({
 						return handleAction('restartTravelmate');
 					})
 				}, [_('Save & Restart')])
-			])
+			]);
 		};
 		return m.render();
 	},
