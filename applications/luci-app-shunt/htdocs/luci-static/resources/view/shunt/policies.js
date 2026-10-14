@@ -5,6 +5,7 @@
 'require ui';
 'require uci';
 'require form';
+'require tools.widgets as widgets';
 
 function handleAction(ev) {
 	if (ev === 'restart') {
@@ -44,8 +45,16 @@ function handleAction(ev) {
 	return fs.exec_direct('/etc/init.d/shunt', [ev]);
 }
 
-// `shunt refresh` re-reads the domain files in the running daemon; its
-// output is the count and the issues, worth showing as is.
+// `shunt refresh` re-reads the domain and address files in the running
+// daemon; its output is the count and the issues, worth showing as is.
+// A list file is a bare name under /tmp/shunt or an absolute path.
+function validateFile(section_id, value) {
+	if (value && (/\s/.test(value) || (value.charAt(0) !== '/' && value.indexOf('/') !== -1))) {
+		return _('Expecting a bare file name or an absolute path, without whitespace');
+	}
+	return true;
+}
+
 function handleRefresh() {
 	return fs.exec('/usr/sbin/shunt', ['refresh'])
 		.then(function (res) {
@@ -159,6 +168,13 @@ return view.extend({
 		o.datatype = 'macaddr';
 		o.modalonly = true;
 
+		o = s.option(widgets.DeviceSelect, 'src_dev', _('Source Devices'),
+			_('Everything arriving on these devices, ORed with the client selectors \
+				above - a whole guest network or VLAN, in IPv4 and IPv6 alike, whatever prefix it gets. Not the router\'s own traffic. For domains, add the device to the observed devices as well.'));
+		o.multiple = true;
+		o.noaliases = true;
+		o.modalonly = true;
+
 		o = s.option(form.MultiValue, 'proto', _('Protocols'),
 			_('Restrict to tcp, udp or both. A port without a protocol covers both.'));
 		o.value('tcp', 'tcp');
@@ -166,7 +182,7 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.option(form.DynamicList, 'dport', _('Destination Ports'),
-			_('Single ports or ranges like 8000-8080, ANDed with the addresses below.'));
+			_('Single ports or ranges like 8000-8080, ANDed with the addresses below. Ports alone select that traffic from every client.'));
 		o.datatype = 'or(port, portrange)';
 		o.modalonly = true;
 
@@ -174,6 +190,13 @@ return view.extend({
 			_('Destination addresses or prefixes to route into this policy.'));
 		o.datatype = 'ipaddr';
 		o.modalonly = true;
+
+		o = s.option(form.DynamicList, 'dst_file', _('Destination Address Files'),
+			_('Files with one address or prefix per line, IPv4 and IPv6 mixed, \
+				for large published ranges. A bare name lives under /tmp/shunt, an absolute path is used as given. After the file changed, refresh below.'));
+		o.placeholder = 'ranges.txt';
+		o.modalonly = true;
+		o.validate = validateFile;
 
 		o = s.option(form.DynamicList, 'domain', _('Domains'),
 			_('example.com matches that name only, *.example.com matches its \
@@ -185,12 +208,7 @@ return view.extend({
 				community-maintained lists. A bare name lives under /tmp/shunt, an absolute path is used as given. Entries from a file are learned by the DNS observer only, never polled; after the file changed, refresh below.'));
 		o.placeholder = 'community.txt';
 		o.modalonly = true;
-		o.validate = function (section_id, value) {
-			if (value && (/\s/.test(value) || (value.charAt(0) !== '/' && value.indexOf('/') !== -1))) {
-				return _('Expecting a bare file name or an absolute path, without whitespace');
-			}
-			return true;
-		};
+		o.validate = validateFile;
 
 		o = s.option(form.Value, 'gw4', _('IPv4 Gateway Override'),
 			_('Only needed when the gateway discovered from netifd is wrong. \
@@ -221,7 +239,7 @@ return view.extend({
 					'click': ui.createHandlerFn(this, function () {
 						return handleRefresh();
 					})
-				}, [_('Refresh Domain Files')])
+				}, [_('Refresh List Files')])
 			]);
 		});
 
