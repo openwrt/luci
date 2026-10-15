@@ -34,6 +34,21 @@
 				],
 				"/tmp/run/banIP/banIP.report": [
 					"write"
+				],
+				"/etc/init.d/banip stop": [
+					"exec"
+				],
+				"/etc/init.d/banip reload": [
+					"exec"
+				],
+				"/etc/init.d/banip restart": [
+					"exec"
+				],
+				"/etc/init.d/banip report gen": [
+					"exec"
+				],
+				"/etc/init.d/banip search *": [
+					"exec"
 				]
 			}
 		},
@@ -70,25 +85,10 @@
 				"/usr/sbin/nft -tj list sets": [
 					"exec"
 				],
-				"/etc/init.d/banip stop": [
-					"exec"
-				],
-				"/etc/init.d/banip reload": [
-					"exec"
-				],
-				"/etc/init.d/banip restart": [
-					"exec"
-				],
 				"/etc/init.d/banip actual": [
 					"exec"
 				],
 				"/etc/init.d/banip report json": [
-					"exec"
-				],
-				"/etc/init.d/banip report gen": [
-					"exec"
-				],
-				"/etc/init.d/banip search *": [
 					"exec"
 				],
 				"/etc/init.d/banip content *": [
