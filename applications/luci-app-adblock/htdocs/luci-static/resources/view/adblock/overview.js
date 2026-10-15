@@ -10,15 +10,14 @@
 'require tools.widgets as widgets';
 
 /*
-	last rendered runtime information, reset on every action to force a refresh
-*/
-let lastRuntime = null;
-
-/*
 	button handling
 */
 function handleAction(ev) {
-	lastRuntime = null;
+	/* drop the rendered runtime marker to force a refresh */
+	const statusNode = document.getElementById('status');
+	if (statusNode) {
+		statusNode._adbRuntime = null;
+	}
 	const status = document.getElementById('status');
 	const map = document.querySelector('.cbi-map');
 	if (ev === 'restart' || ev === 'reload') {
@@ -211,11 +210,10 @@ return view.extend({
 		let parseErrCount = 0;
 		poll.add(function () {
 			return L.resolveDefault(fs.read_direct('/var/run/adblock/adblock.runtime.json'), null).then(function (res) {
-				/* missing file or unchanged content, nothing to do */
-				if (!res || res === lastRuntime) {
+				const status = document.getElementById('status');
+				if (!res || (status && status._adbRuntime === res)) {
 					return;
 				}
-				const status = document.getElementById('status');
 				const buttons = document.querySelectorAll('.cbi-page-actions button');
 				let info = null;
 				try {
@@ -279,7 +277,7 @@ return view.extend({
 				}
 				/* only remember the content once it has been rendered */
 				if (status) {
-					lastRuntime = res;
+					status._adbRuntime = res;
 				}
 			});
 		}, 2);
