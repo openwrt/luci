@@ -14,6 +14,17 @@
  * second fetch, since the entries are in memory anyway. */
 const pageSize = 50;
 
+/* Entries without an interface; '?' is outside the UCI name alphabet. */
+const UNKNOWN = '?';
+
+function ifaceKey(e) {
+	return e.interface || UNKNOWN;
+}
+
+function ifaceLabel(key) {
+	return (key == UNKNOWN) ? _('unknown') : key;
+}
+
 const callConfig = rpc.declare({
 	object: 'librespeed',
 	method: 'config',
@@ -36,6 +47,7 @@ return view.extend({
 	range: 86400,
 	server: '',
 	iface: '',
+	def: null,
 	page: 0,
 
 	/* Which entries come back -- and at which resolution -- is the server's
@@ -54,9 +66,9 @@ return view.extend({
 				? callHistory(now - 2 * this.range, now - this.range).catch(() => ({}))
 				: Promise.resolve({})
 		]).then(L.bind(function(data) {
-			this.entries = Array.isArray(data[0].entries) ? data[0].entries : [];
+			this.entries = lscommon.byTime(data[0].entries);
 			this.resolution = data[0].resolution || 'raw';
-			this.prevEntries = Array.isArray(data[1].entries) ? data[1].entries : [];
+			this.prevEntries = lscommon.byTime(data[1].entries);
 			this.prevResolution = data[1].resolution || 'raw';
 		}, this));
 	},
@@ -67,32 +79,50 @@ return view.extend({
 			speed: lscommon.GROUPS.speed.slice(),
 			latency: lscommon.GROUPS.latency.slice()
 		};
-		/* The config rides along for one purpose: with history keeping off,
-		 * the empty state must not send the user to run a test that will
-		 * never produce an entry. */
+		/* The config rides along for the default interface, and because
+		 * with history keeping off the empty state must not send the user
+		 * to run a test that will never produce an entry. */
 		return Promise.all([
 			this.fetch(),
-			callConfig().then(c => { this.config = c; }, () => {})
-		]);
+			callConfig().then(c => { this.config = c; }, () => {}),
+			lscommon.callLinks().catch(() => ({}))
+		]).then(data => {
+			const def = this.config && this.config.interface;
+
+			this.def = (data[2].interfaces || {})[def] || def;
+		});
 	},
 
 	/* The server/interface filters narrow the fetched range on the client;
-	 * daily aggregates carry neither field, so there the filters offer only
-	 * "All" and match everything. */
+	 * daily aggregates carry no server, so there that filter offers only
+	 * "All", which matches everything. */
 	applyFilters(entries) {
 		return (entries || []).filter(e =>
 			(!this.server || (e.server && e.server.name) == this.server) &&
-			(!this.iface || e.interface == this.iface));
+			ifaceKey(e) == this.iface);
+	},
+
+	/* The default interface first, then by name, unknown last. */
+	ifaceKeys(entries) {
+		const rank = k => (k == this.def) ? 0 : ((k == UNKNOWN) ? 2 : 1),
+		      keys = [];
+
+		entries.forEach(e => {
+			if (keys.indexOf(ifaceKey(e)) < 0)
+				keys.push(ifaceKey(e));
+		});
+
+		return keys.sort((a, b) => rank(a) - rank(b) || L.naturalCompare(a, b));
 	},
 
 	visible() {
 		return this.applyFilters(this.entries);
 	},
 
-	filterSelect(title, values, current, onpick) {
+	filterSelect(title, values, current, onpick, all, label) {
 		const sel = E('select', { 'class': 'cbi-input-select' },
-			[ E('option', { 'value': '' }, [ _('All') ]) ].concat(
-				values.map(v => E('option', { 'value': v }, [ v ]))));
+			(all ? [ E('option', { 'value': '' }, [ _('All') ]) ] : []).concat(
+				values.map(v => E('option', { 'value': v }, [ label ? label(v) : v ]))));
 
 		sel.value = values.indexOf(current) >= 0 ? current : '';
 		sel.addEventListener('change', ui.createHandlerFn(this, function() {
@@ -248,6 +278,10 @@ return view.extend({
 			this.chartNode.appendChild(E('p', { 'class': 'librespeed-muted' },
 				[ _('Daily minimum, average and maximum.') ]));
 
+		if (this.iface == UNKNOWN)
+			this.chartNode.appendChild(E('p', { 'class': 'librespeed-muted' },
+				[ _('These results name no interface: days archived before results were kept per interface, which mix all links.') ]));
+
 		/* The sort key carries the same decimal count as the display half:
 		 * ui.Table stringifies the whole cell and compares digit runs one by
 		 * one, so ragged fractions would put 94.4 above 94.35. */
@@ -274,7 +308,6 @@ return view.extend({
 		let rows = entries.slice().reverse().map(e => [
 			[ e.epoch ?? 0, cell(when(e)) ],
 			cell((e.server && e.server.name) || '–'),
-			cell(e.interface || '–'),
 			cell(protoCell(e)),
 			[ num(e.download_mbps, 2), cell(fmtNum(e.download_mbps, 2)) ],
 			[ num(e.upload_mbps, 2), cell(fmtNum(e.upload_mbps, 2)) ],
@@ -351,7 +384,7 @@ return view.extend({
 		 * shows a locale string, and numbers order numerically. The table is
 		 * where sorting belongs; the chart above never reorders time. */
 		this.table = new ui.Table([
-			_('Time'), _('Server'), _('Interface'), _('Protocol'),
+			_('Time'), _('Server'), _('Protocol'),
 			_('Download [Mbps]'), _('Upload [Mbps]'), _('Ping [ms]'), _('Jitter [ms]')
 		], { id: 'librespeed-history' });
 		this.tableNode = this.table.render();
@@ -383,32 +416,30 @@ return view.extend({
 			ranges.classList.add('librespeed-push');
 
 			/* Filter choices are whatever the fetched range actually contains. */
-			const servers = [], ifaces = [];
+			const servers = [], ifaces = this.ifaceKeys(this.entries);
 
 			this.entries.forEach(e => {
 				const s = e.server && e.server.name;
 				if (s && servers.indexOf(s) < 0)
 					servers.push(s);
-				if (e.interface && ifaces.indexOf(e.interface) < 0)
-					ifaces.push(e.interface);
 			});
 
 			/* The freshly fetched window may no longer contain the chosen
-			 * server or interface -- daily aggregates carry neither field at
+			 * server or interface -- daily aggregates may carry neither field at
 			 * all. The widget would then quietly repaint as "All" while the
 			 * model kept filtering everything out, with no control on screen
 			 * able to clear it; reconcile the model here, where the choice
 			 * lists are built. */
 			if (this.server && servers.indexOf(this.server) < 0)
 				this.server = '';
-			if (this.iface && ifaces.indexOf(this.iface) < 0)
-				this.iface = '';
+			if (ifaces.indexOf(this.iface) < 0)
+				this.iface = ifaces[0];
 
 			const filters = E('div', { 'class': 'librespeed-toolbar' }, [
 				this.filterSelect(_('Server'), servers.sort(), this.server,
-					function(v) { this.server = v; this.page = 0; this.redraw(); }),
-				this.filterSelect(_('Interface'), ifaces.sort(), this.iface,
-					function(v) { this.iface = v; this.page = 0; this.redraw(); })
+					function(v) { this.server = v; this.page = 0; this.redraw(); }, true),
+				ifaces.length ? this.filterSelect(_('Interface'), ifaces, this.iface,
+					function(v) { this.iface = v; this.page = 0; this.redraw(); }, false, ifaceLabel) : ''
 			]);
 
 			this.controls.innerHTML = '';

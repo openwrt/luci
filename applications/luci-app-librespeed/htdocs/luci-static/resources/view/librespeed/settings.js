@@ -2,8 +2,10 @@
 'require view';
 'require form';
 'require rpc';
-'require tools.widgets as widgets';
+'require uci';
 'require librespeed.common as lscommon';
+
+/* global lscommon */
 
 const callConfig = rpc.declare({
 	object: 'librespeed',
@@ -11,22 +13,49 @@ const callConfig = rpc.declare({
 	expect: { '': {} }
 });
 
+/* The intervals the init script can put in cron; it leaves out any other. */
+const INTERVAL_RE = /^(?:(?:[1-9]|[1-5][0-9])m|(?:[1-9]|1[0-9]|2[0-3])h|1d|7d)$/;
+
 return view.extend({
 	load() {
-		return callConfig().catch(() => ({}));
+		return Promise.all([
+			callConfig().catch(() => ({})),
+			lscommon.callLinks().catch(() => ({})),
+			uci.load('librespeed')
+		]);
 	},
 
-	render(config) {
+	render(data) {
+		const config = data[0],
+		      links = data[1].links || [],
+		      ifmap = data[1].interfaces || {},
+		      linkOf = n => ifmap[n] || n;
 		let m, s, o;
+
+		/* Links, plus stored names that are not links: a save drops what is not offered. */
+		const offer = (opt, stored) => {
+			const label = n => {
+				if (links.indexOf(ifmap[n]) >= 0)
+					return _('%s (recorded as %s)').format(n, ifmap[n]);
+				if (ifmap[n])
+					return _('%s (no gateway)').format(n);
+				return Object.keys(ifmap).length ? _('%s (not found)').format(n) : n;
+			};
+
+			links.forEach(n => opt.value(n));
+			stored.filter((n, i, a) => n && links.indexOf(n) < 0 && a.indexOf(n) == i)
+				.forEach(n => opt.value(n, label(n)));
+		};
 
 		m = new form.Map('librespeed', _('LibreSpeed – Settings'));
 
 		s = m.section(form.NamedSection, 'main', 'librespeed', _('Measurement'));
 
-		o = s.option(widgets.NetworkSelect, 'interface', _('Interface'),
-			_('Logical interface the measurement is bound to.'));
+		o = s.option(form.ListValue, 'interface', _('Interface'),
+			_('Logical interface measured by default: by the Test page unless another one is chosen there, and by an automatic test that names no interface.'));
 		o.default = 'wan';
-		o.nocreate = true;
+		offer(o, [ uci.get('librespeed', 'main', 'interface') || 'wan' ]);
+		const mainIface = o;
 
 		o = s.option(form.Value, 'server', _('Server'),
 			_("Numeric server id from the LibreSpeed server list, or 'auto' to pick the closest."));
@@ -54,34 +83,97 @@ return view.extend({
 		o.value('http', _('force HTTP'));
 		o.default = 'auto';
 
-		s = m.section(form.NamedSection, 'schedule', 'librespeed', _('Scheduled measurements'));
+		/* The help sits above the table, as a phone hides the column headings. */
+		s = m.section(form.TableSection, 'schedule', _('Scheduled measurements'), [
+			[ _('Enable'), _('Runs a measurement from cron at the chosen interval. Note that a measurement saturates the connection while it runs.') ],
+			[ _('Days'), _('Leave empty to run every day. A weekly test runs on one of the chosen days, or on any day when none is chosen; the day is drawn once and kept while it stays among the chosen days.') ],
+			[ _('Hours'), _('An hour window on the 24-hour clock, such as 2-5 for 02:00–05:59. A daily or weekly measurement runs at a random time inside it, drawn when the schedule is applied; shorter intervals only run within it. Leave empty for any time. A window across midnight is not supported.') ]
+		].map(h => E('p', {}, [ '%s: %s'.format(h[0], h[1]) ])));
+		s.anonymous = true;
+		s.addremove = true;
+		/* A new row gets the night window of the shipped first row. */
+		s.handleAdd = function(ev, name) {
+			const sid = this.map.data.add('librespeed', 'schedule', name);
 
-		o = s.option(form.Flag, 'enabled', _('Enable'),
-			_('Runs a measurement from cron at the chosen interval. Note that a measurement saturates the connection while it runs.'));
+			this.map.data.set('librespeed', sid, 'hours', '2-5');
+
+			return this.map.save(null, true);
+		};
+		/* The legacy named section first, as the init script reads it first. */
+		s.cfgsections = function() {
+			const legacy = (uci.get('librespeed', 'schedule') || {})['.type'] == 'librespeed';
+
+			return (legacy ? [ 'schedule' ] : []).concat(
+				uci.sections('librespeed', 'schedule').map(x => x['.name']));
+		};
+		const rows = s.cfgsections();
+
+		o = s.option(form.ListValue, 'interface', _('Interface'));
+		o.optional = true;
+		o.placeholder = _('Default interface');
+		offer(o, rows.map(sid => uci.get('librespeed', sid, 'interface')));
+		/* Only enabled tests reach the crontab, one per link. The legacy row
+		 * without an interface measures the default interface chosen above. */
+		const measured = (sid, v) => linkOf(v || (sid == 'schedule' ? mainIface.formvalue('main') : ''));
+		o.validate = function(section_id, value) {
+			if (!value && section_id != 'schedule')
+				return _('Choose the interface this test measures.');
+
+			if (enabled.formvalue(section_id) != '1')
+				return true;
+
+			const name = measured(section_id, value);
+			const taken = this.section.cfgsections().some(sid => sid != section_id &&
+				enabled.formvalue(sid) == '1' && measured(sid, this.formvalue(sid) ?? this.cfgvalue(sid)) == name);
+
+			return !taken || _('Another enabled automatic test already measures %s.').format(name);
+		};
+
+		o = s.option(form.Flag, 'enabled', _('Enable'));
+		const enabled = o;
 
 		o = s.option(form.ListValue, 'interval', _('Interval'));
 		/* From the shared table, so the Test page's status label and these
 		 * choices cannot drift apart. */
 		Object.keys(lscommon.INTERVALS).forEach(k =>
 			o.value(k, lscommon.INTERVALS[k]));
+		/* A hand-set interval is offered as it is, or a save would replace it. */
+		rows.map(sid => uci.get('librespeed', sid, 'interval'))
+			.filter((v, i, a) => v && !lscommon.INTERVALS[v] && a.indexOf(v) == i)
+			.forEach(v => o.value(v));
 		o.default = '1d';
 		o.depends('enabled', '1');
+		o.retain = true;
+		/* Without a width the table squeezes the column and cuts the labels. */
+		o.width = '13em';
+		o.validate = function(section_id, value) {
+			return INTERVAL_RE.test(value) ||
+				_('The interval %s is not supported. Use 1-59m, 1-23h, 1d or 7d.').format(value);
+		};
 
-		o = s.option(form.MultiValue, 'days', _('Days'),
-			_('Leave empty to run every day.'));
-		o.value('1', _('Monday'));
-		o.value('2', _('Tuesday'));
-		o.value('3', _('Wednesday'));
-		o.value('4', _('Thursday'));
-		o.value('5', _('Friday'));
-		o.value('6', _('Saturday'));
-		o.value('0', _('Sunday'));
+		o = s.option(form.MultiValue, 'days', _('Days'));
+		lscommon.DAYS.forEach(d => o.value(d[0], d[1]));
 		o.optional = true;
 		o.depends('enabled', '1');
+		o.retain = true;
 		/* The init script hands this straight to cron, which wants commas. */
 		o.cfgvalue = function(section_id) {
 			const v = form.MultiValue.prototype.cfgvalue.apply(this, arguments);
-			return (v == null || v == '*') ? [] : String(v).split(',');
+			const on = {};
+
+			if (v == null || v == '*')
+				return [];
+
+			/* A hand-set range (1-5) as its days, so an untouched save keeps it. */
+			String(v).split(',').forEach(p => {
+				const r = p.match(/^([0-6])(?:-([0-6]))?$/);
+
+				if (r)
+					for (let d = +r[1]; d <= +(r[2] ?? r[1]); d++)
+						on[d] = true;
+			});
+
+			return lscommon.DAYS.map(d => d[0]).filter(d => on[d]);
 		};
 		o.write = function(section_id, value) {
 			const list = Array.isArray(value) ? value.filter(v => v !== '') : [];
@@ -90,11 +182,11 @@ return view.extend({
 			return this.super('write', [ section_id, list.join(',') ]);
 		};
 
-		o = s.option(form.Value, 'hours', _('Hours'),
-			_('An hour window on the 24-hour clock, such as 2-5 for 02:00–05:59. A daily measurement runs at a random time inside it, drawn when the schedule is applied; shorter intervals only run within it. Leave empty for any time. A window across midnight is not supported.'));
+		o = s.option(form.Value, 'hours', _('Hours'));
 		o.placeholder = '2-5';
 		o.optional = true;
 		o.depends('enabled', '1');
+		o.retain = true;
 		o.validate = function(section_id, value) {
 			if (value == '')
 				return true;
@@ -138,22 +230,25 @@ return view.extend({
 		o.depends('enabled', '1');
 
 		return m.render().then(node => {
-			const cron = config && config.schedule && config.schedule.cron;
+			const scheds = config.schedules || [];
 			const box = E('div', { 'style': 'margin-top:1em' });
 
-			if (cron) {
+			if (scheds.length) {
 				/* Epochs computed by the backend in the router's timezone. */
-				const runs = (config && config.schedule && config.schedule.next_runs || [])
-					.map(e => new Date(e * 1000));
-
 				box.appendChild(E('h4', {}, [ _('Upcoming measurements') ]));
-				box.appendChild(E('table', { 'class': 'table', 'style': 'max-width:24em' },
-					runs.map(d => E('tr', { 'class': 'tr' }, [
-						E('td', { 'class': 'td' }, [ d.toLocaleDateString() ]),
-						E('td', { 'class': 'td' }, [ d.toLocaleTimeString() ])
-					]))));
+				box.appendChild(E('table', { 'class': 'table', 'style': 'max-width:32em' },
+					scheds.flatMap(sc => (sc.next_runs || []).map(e => {
+						const d = new Date(e * 1000);
+
+						return E('tr', { 'class': 'tr' }, [
+							E('td', { 'class': 'td' }, [ linkOf(sc.interface) ]),
+							E('td', { 'class': 'td' }, [ d.toLocaleDateString(undefined,
+								{ weekday: 'short', year: 'numeric', month: 'numeric', day: 'numeric' }) ]),
+							E('td', { 'class': 'td' }, [ d.toLocaleTimeString() ])
+						]);
+					}))));
 				box.appendChild(E('p', { 'style': 'color:#888' }, [
-					_('A daily measurement runs at a time drawn when the schedule is applied; saving draws it anew.')
+					_('The time of a daily measurement is drawn anew whenever the schedule is applied. A weekly measurement keeps its drawn day and time while they fit the chosen days and hours.')
 				]));
 			}
 			else {
