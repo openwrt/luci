@@ -1312,7 +1312,8 @@ return baseclass.extend({
 			o.sysfs = '/sys/class/net/%s/brport/isolated'.format(devname || 'default');
 
 			o = this.replaceOption(s, 'brport', form.ListValue, 'multicast_router', _('Multicast routing'));
-			o.value('', _('Never'));
+			o.value('', _('Auto (Learn)'));
+			o.value('0', _('Never'));
 			o.value('1', _('Learn'));
 			o.value('2', _('Always'));
 			o.depends('multicast', /1/);
