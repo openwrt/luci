@@ -139,10 +139,15 @@ endif
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
-PKG_PO_VERSION?=$(if $(DUMP),x,$(strip $(call findrev)))
-PKG_SRC_VERSION?=$(if $(DUMP),x,$(strip $(call findrev,1)))
+ifeq ($(origin PKG_PO_VERSION),undefined)
+PKG_PO_VERSION:=$(if $(DUMP),x,$(strip $(call findrev)))
+endif
+ifeq ($(origin PKG_SRC_VERSION),undefined)
+PKG_SRC_VERSION:=$(if $(DUMP),x,$(strip $(call findrev,1)))
+endif
 
-PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
+ifeq ($(origin PKG_GITBRANCH),undefined)
+PKG_GITBRANCH:=$(if $(DUMP),x,$(strip $(shell \
 	variant="LuCI"; \
 	if git log -1 >/dev/null 2>/dev/null; then \
 		branch=$$(git branch --format='%(refname:strip=3)' --remote --no-abbrev --contains 2>/dev/null | tail -n1); \
@@ -155,6 +160,7 @@ PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 	fi; \
 	echo "$$variant" \
 )))
+endif
 
 include $(INCLUDE_DIR)/package.mk
 

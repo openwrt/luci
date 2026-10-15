@@ -1,11 +1,10 @@
 {#
- Top-of-content notices: no-root-password warning, initramfs recovery warning, the <noscript>
- fallback, the #tabmenu container. include(…, { boardinfo, empty_password }) — empty_password
- is computed in the header, which already imports luci.core.
- The markup of a notice lives ONCE, in partials/notice.ut; this file decides only WHICH notices
- there are and what they say.
- The sentences carry no msgctxt on purpose: inheriting luci-base's translation is a feature in
- the ~40 languages this theme has no catalogue for (see header.ut).
+ Top-of-content notices: no-root-password, initramfs recovery, the <noscript> fallback and the
+ #tabmenu container. include(…, { boardinfo, empty_password }); empty_password is computed in the
+ header, which already imports luci.core. The markup lives in partials/notice.ut — this file
+ decides only which notices there are.
+ The sentences carry no msgctxt on purpose: inheriting luci-base's translation is a feature in the
+ ~40 languages this theme has no catalogue for (see header.ut).
  Licensed to the public under the Apache License 2.0.
 -#}
 {% if (empty_password): %}

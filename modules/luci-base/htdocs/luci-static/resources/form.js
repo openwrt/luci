@@ -162,7 +162,13 @@ const CBIJSONConfig = baseclass.extend({
 			next_index = Math.max(next_index, this.data[name]['.index']);
 		}
 
-		const section_id = sectionname ?? (sectiontype + num_sections_type);
+		let section_id = sectionname;
+
+		/* Anonymous sections loaded from an array are numbered across all section
+		   types, so the per-type count may already be taken; find a free name
+		   instead of returning an existing section. */
+		if (section_id == null)
+			for (let n = num_sections_type; this.data.hasOwnProperty(section_id = sectiontype + n); n++);
 
 		if (!this.data.hasOwnProperty(section_id)) {
 			this.data[section_id] = {
@@ -1033,18 +1039,16 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * Note that [taboption()]{@link LuCI.form.AbstractSection#taboption}
 	 * should be used instead if this form section element uses tabs.
 	 *
-	 * @param {LuCI.form.AbstractValue} optionclass
+	 * @param {LuCI.form.AbstractValue} cbiClass
 	 * The option class to use for rendering the configuration option. Note
 	 * that this value must be the class itself, not a class instance obtained
 	 * from calling `new`. It must also be a class derived from
-	 * {@link LuCI.form.AbstractSection AbstractSection}.
+	 * {@link LuCI.form.AbstractValue AbstractValue}.
 	 *
-	 * @param {object} cbiClass (classargs)
+	 * @param {...*} args (classargs)
 	 * Additional arguments which are passed as-is to the constructor of the
 	 * given option class. Refer to the class specific constructor
 	 * documentation for details.
-	 *
-	 * @param {...*} args argument array
 	 *
 	 * @throws {TypeError}
 	 * Throws a `TypeError` exception in case the passed class value is not a
@@ -1068,11 +1072,11 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * @param {string} tabName
 	 * The name of the section tab to add the option element to.
 	 *
-	 * @param {LuCI.form.AbstractValue} optionclass
+	 * @param {LuCI.form.AbstractValue} cbiClass
 	 * The option class to use for rendering the configuration option. Note
 	 * that this value must be the class itself, not a class instance obtained
 	 * from calling `new`. It must also be a class derived from
-	 * {@link LuCI.form.AbstractSection AbstractSection}.
+	 * {@link LuCI.form.AbstractValue AbstractValue}.
 	 *
 	 * @param {...*} args (classargs)
 	 * Additional arguments which are passed as-is to the constructor of the
@@ -1090,11 +1094,11 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * @returns {LuCI.form.AbstractValue}
 	 * Returns the instantiated option class instance.
 	 */
-	taboption(tabName, ...args) {
+	taboption(tabName, cbiClass, ...args) {
 		if (!this.tabs?.[tabName])
 			throw L.error('ReferenceError', 'Associated tab not declared');
 
-		const obj = this.option(...args);
+		const obj = this.option(cbiClass, ...args);
 		obj.tab = tabName;
 		this.tabs[tabName].children.push(obj);
 
@@ -4382,6 +4386,60 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 		this.vallist.push(dom.elem(val) ? val : String(val != null ? val : key));
 	},
 
+	/**
+	 * Set a tooltip for the option.
+	 *
+	 * Set to a string, it will be used as-is as a tooltip, `%s` is replaced
+	 * by the section ID. Set to a function, the function will be invoked
+	 * with the section ID and the return value will be shown as a tooltip.
+	 * If the return value of the function is `null` no tooltip will be set.
+	 * The value, or the return value of the function, may also be an array,
+	 * its items are then separated by line breaks.
+	 * The tooltip is shown next to the input widget when hovering the icon.
+	 *
+	 * @memberof LuCI.form.Value.prototype
+	 * @member {string|function()} tooltip
+	 * @default null
+	 */
+
+	/**
+	 * Set a tooltip icon for the option.
+	 *
+	 * If set, this icon will be shown instead of the default one.
+	 *
+	 * @memberof LuCI.form.Value.prototype
+	 * @member tooltipicon
+	 * @type {string}
+	 * @default 'ℹ️'
+	 */
+
+	/**
+	 * @private
+	 * @param {string} section_id
+	 * @returns {Node|null}
+	 */
+	renderTooltip(section_id) {
+		let tooltip = null;
+
+		if (typeof(this.tooltip) == 'function')
+			tooltip = this.tooltip(section_id);
+		else if (typeof(this.tooltip) == 'string')
+			tooltip = this.tooltip.format(section_id);
+		else if (Array.isArray(this.tooltip))
+			tooltip = this.tooltip;
+
+		if (tooltip == null)
+			return null;
+
+		if (Array.isArray(tooltip))
+			tooltip = tooltip.flatMap((line, i) => i ? [E('br'), line] : [line]);
+
+		return E('span', { 'class': 'cbi-tooltip-container' }, [
+			this.tooltipicon ?? 'ℹ️',
+			E('span', { 'class': 'cbi-tooltip' }, tooltip)
+		]);
+	},
+
 	/** @override */
 	render(option_index, section_id, in_table) {
 		return Promise.resolve(this.cfgvalue(section_id))
@@ -4420,6 +4478,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 	renderFrame(section_id, in_table, option_index, nodes) {
 		const config_name = this.uciconfig ?? this.section.uciconfig ?? this.map.config;
 		const depend_list = this.transformDepList(section_id);
+		const tooltipEl = this.renderTooltip(section_id);
 		let optionEl;
 
 		if (in_table) {
@@ -4474,6 +4533,15 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 				optionEl.appendChild(E('div', { 'class': 'cbi-value-field' }));
 			}
 		}
+
+		/* Keep the tooltip icon always behind the widget, independent of
+		 * whether the widget frame is a block or an inline element. */
+		if (tooltipEl && nodes)
+			nodes = E('div', {
+				'style': 'display:inline-flex; align-items:center; gap:.5em; max-width:100%'
+			}, [ nodes, tooltipEl ]);
+		else if (tooltipEl)
+			nodes = tooltipEl;
 
 		if (nodes)
 			(optionEl.lastChild ?? optionEl).appendChild(nodes);
@@ -5056,32 +5124,6 @@ const CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.Flag.prototype */ {
 	 */
 
 	/**
-	 * Set a tooltip for the flag option.
-	 *
-	 * Set to a string, it will be used as-is as a tooltip.
-	 *
-	 * Set to a function, the function will be invoked and the return
-	 * value will be shown as a tooltip. If the return value of the function
-	 * is `null` no tooltip will be set.
-	 *
-	 * @memberof LuCI.form.Flag.prototype
-	 * @member {string|function()} tooltip
-	 * @default null
-	 */
-
-	/**
-	 * Set a tooltip icon for the flag option.
-	 *
-	 * If set, this icon will be shown for the default one.
-	 * This could also be a png icon from the resources directory.
-	 *
-	 * @memberof LuCI.form.Flag.prototype
-	 * @member tooltipicon
-	 * @type {string}
-	 * @default 'ℹ️';
-	 */
-
-	/**
 	 * @private
 	 * @param {string} section_id
 	 * @param {number} option_index
@@ -5089,20 +5131,11 @@ const CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.Flag.prototype */ {
 	 * @returns {Node}
 	 */
 	renderWidget(section_id, option_index, cfgvalue) {
-		let tooltip = null;
-
-		if (typeof(this.tooltip) == 'function')
-			tooltip = this.tooltip(section_id);
-		else if (typeof(this.tooltip) == 'string')
-			tooltip = this.tooltip.format(section_id);
-
 		const widget = new ui.Checkbox((cfgvalue != null) ? cfgvalue : this.default, {
 			id: this.cbid(section_id),
 			value_enabled: this.enabled,
 			value_disabled: this.disabled,
 			validate: this.getValidator(section_id),
-			tooltip,
-			tooltipicon: this.tooltipicon,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 

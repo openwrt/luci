@@ -4339,7 +4339,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 *
 	 * @see LuCI.dom.content
 	 *
-	 * @param {string} [title]
+	 * @param {?string} [title]
 	 * The title of the notification banner. If `null`, no title element
 	 * will be rendered.
 	 *

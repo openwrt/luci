@@ -56,7 +56,16 @@ function handleAction(report, ev) {
 									let attempts = 0;
 									window._banipPoller = setInterval(function () {
 										attempts++;
+										/* stop polling once the modal has been closed */
+										if (!document.getElementById('result')) {
+											clearInterval(window._banipPoller);
+											window._banipPoller = null;
+											return;
+										}
 										L.resolveDefault(fs.read('/var/run/banIP/banIP.search'), '').then(function (res) {
+											if (!document.getElementById('result')) {
+												return;
+											}
 											if (res && res.trim()) {
 												clearInterval(window._banipPoller);
 												window._banipPoller = null;

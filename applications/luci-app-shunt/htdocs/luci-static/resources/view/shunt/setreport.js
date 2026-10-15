@@ -15,8 +15,9 @@ function setKind(name) {
 	return name.substring(0, 1);
 }
 
+// m_ and i_ carry no family digit, every other kind does.
 function setPolicy(name) {
-	return name.substring(name.substring(0, 1) === 'm' ? 2 : 3);
+	return name.substring('mi'.indexOf(name.substring(0, 1)) >= 0 ? 2 : 3);
 }
 
 function fmtExpiry(sec) {
@@ -175,7 +176,7 @@ return view.extend({
 			}
 
 			dom.content(target, [
-				renderCards(sets, ['c', 'm'], _('Client Selectors'),
+				renderCards(sets, ['c', 'm', 'i'], _('Client Selectors'),
 					_('No client is selected, so every client is covered.')),
 				renderCards(sets, ['s'], _('Static Destinations'), null),
 				renderLearned(sets)

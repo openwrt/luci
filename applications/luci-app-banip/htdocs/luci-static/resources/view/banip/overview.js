@@ -12,6 +12,11 @@
 	button handling
 */
 function handleAction(ev) {
+	/* drop the rendered runtime marker to force a refresh */
+	const statusNode = document.getElementById('status');
+	if (statusNode) {
+		statusNode._banRuntime = null;
+	}
 	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
@@ -105,12 +110,15 @@ function feedChips(feeds) {
 
 /*
 	system_info is "cores: n, log: cmd, fetch: cmd, model, target, release".
-	Keep the named entries and the board model, drop target and release.
+	Keep the named entries and the board model, drop target and release. The
+	model is the only unnamed entry, it gets the 'system' key for display.
 */
 function sysPairs(text) {
 	let plain = 0;
 	return parsePairs(text).filter(function (pair) {
 		return pair[0] || ++plain === 1;
+	}).map(function (pair) {
+		return pair[0] ? pair : ['system', pair[1]];
 	});
 }
 
@@ -208,85 +216,88 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/banIP/banIP.runtime.json'), null).then(function (stat) {
-				if (!stat) {
+			return Promise.all([
+				L.resolveDefault(fs.read_direct('/var/run/banIP/banIP.runtime.json'), null),
+				L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['actual']), '')
+			]).then(function (results) {
+				const res = results[0];
+				const actual = results[1]?.trim() || '';
+				const status = document.getElementById('status');
+				if (!res || (status && status._banRuntime === res + actual)) {
 					return;
 				}
-				return Promise.all([
-					L.resolveDefault(fs.read_direct('/var/run/banIP/banIP.runtime.json'), 'null'),
-					L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['actual']), '')
-				]).then(function (results) {
-					const res = results[0];
-					const actual = results[1]?.trim() || '';
-					const status = document.getElementById('status');
-					const buttons = document.querySelectorAll('.cbi-page-actions button');
-					let info = null;
-					try {
-						info = JSON.parse(res);
-						parseErrCount = 0;
-					} catch (e) {
-						info = null;
-						parseErrCount++;
-						if (status) {
-							status.setAttribute('data-state', '');
-							setText('state', '-');
+				const buttons = document.querySelectorAll('.cbi-page-actions button');
+				let info = null;
+				try {
+					info = JSON.parse(res);
+					parseErrCount = 0;
+				} catch (e) {
+					info = null;
+					parseErrCount++;
+					if (status) {
+						status.setAttribute('data-state', '');
+						setText('state', '-');
+						buttons.forEach(function (btn) {
+							btn.disabled = false;
+						});
+						status.classList.remove('spinning');
+						if (parseErrCount >= 3) {
+							ui.addNotification(null, E('p', _('Unable to parse the banIP runtime information!')), 'error');
+							poll.stop();
+						}
+					}
+					return;
+				}
+				if (status && info) {
+					const state = info.status || '-';
+					status.setAttribute('data-state', state);
+					setText('state', state);
+					setText('versions', `${info.frontend_ver || '-'} / ${info.backend_ver || '-'}`);
+					setNodes('actual', actual ? flagChips(actual) : ['-']);
+					if (info.status === "processing") {
+						buttons.forEach(function (btn) {
+							btn.disabled = true;
+							btn.blur();
+						});
+						if (!status.classList.contains("spinning")) {
+							status.classList.add("spinning");
+						}
+					} else {
+						if (status.classList.contains("spinning")) {
+							status.classList.remove("spinning");
 							buttons.forEach(function (btn) {
 								btn.disabled = false;
 							});
-							status.classList.remove('spinning');
-							if (parseErrCount >= 3) {
-								ui.addNotification(null, E('p', _('Unable to parse the banIP runtime information!')), 'error');
-								poll.stop();
-							}
-						}
-						return;
-					}
-					if (status && info) {
-						const state = info.status || '-';
-						status.setAttribute('data-state', state);
-						setText('state', state);
-						setText('versions', `${info.frontend_ver || '-'} / ${info.backend_ver || '-'}`);
-						setNodes('actual', actual ? flagChips(actual) : ['-']);
-						if (info.status === "processing") {
-							buttons.forEach(function (btn) {
-								btn.disabled = true;
-								btn.blur();
-							});
-							if (!status.classList.contains("spinning")) {
-								status.classList.add("spinning");
-							}
-						} else {
-							if (status.classList.contains("spinning")) {
-								status.classList.remove("spinning");
-								buttons.forEach(function (btn) {
-									btn.disabled = false;
-								});
-							}
 						}
 					}
-					if (info) {
-						const elements = splitCount(info.element_count);
-						const runPairs = parsePairs(info.last_run);
-						const join = list => (Array.isArray(list) && list.length) ? list.join(', ') : '-';
-						setText('elements', elements.count);
-						setText('elements_sub', elements.detail);
-						setText('last', pickValue(runPairs, 'date / time'));
-						setText('last_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
-						pickValue(runPairs, 'memory')].filter(v => v && v !== '-').join(', '));
-						setText('wan_dev', join(info.wan_devices));
-						setText('wan_if', join(info.wan_interfaces));
-						setText('vlan_allow', join(info.vlan_allow));
-						setText('vlan_block', join(info.vlan_block));
-						const uplinks = splitUplinks(info.active_uplink);
-						setText('uplink4', uplinks.v4);
-						setText('uplink6', uplinks.v6);
-						setNodes('nft', stackNodes(expandPairs(parsePairs(info.nft_info)), false));
-						setNodes('sys', stackNodes(sysPairs(info.system_info), false));
-						setNodes('feeds', feedChips(info.active_feeds));
-						setNodes('flags', flagChips(info.run_flags));
-						setNodes('run', stackNodes(parsePairs(info.run_info), true));
-					}
-				});
+				}
+				if (info) {
+					const elements = splitCount(info.element_count);
+					const runPairs = parsePairs(info.last_run);
+					const join = list => (Array.isArray(list) && list.length) ? list.join(', ') : '-';
+					setText('elements', elements.count);
+					setText('elements_sub', elements.detail);
+					setText('last', pickValue(runPairs, 'date / time'));
+					setText('last_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
+					pickValue(runPairs, 'memory')].filter(v => v && v !== '-').join(', '));
+					setText('trigger', join(info.trigger_interfaces));
+					setText('wan_dev', join(info.wan_devices));
+					setText('wan_if', join(info.wan_interfaces));
+					setText('vlan_allow', join(info.vlan_allow));
+					setText('vlan_block', join(info.vlan_block));
+					const uplinks = splitUplinks(info.active_uplink);
+					setText('uplink4', uplinks.v4);
+					setText('uplink6', uplinks.v6);
+					setNodes('nft', stackNodes(expandPairs(parsePairs(info.nft_info)), false));
+					setNodes('sys', stackNodes(sysPairs(info.system_info), false));
+					setNodes('feeds', feedChips(info.active_feeds));
+					setNodes('flags', flagChips(info.run_flags));
+					setNodes('run', stackNodes(parsePairs(info.run_info), true));
+				}
+				/* only remember the content once it has been rendered */
+				if (status) {
+					status._banRuntime = res + actual;
+				}
 			});
 		}, 2);
 
@@ -386,12 +397,13 @@ return view.extend({
 					E('div', { 'class': 'ban-card' }, [
 						E('div', { 'class': 'ban-title' }, [_('Interfaces')]),
 						E('div', { 'class': 'ban-stack' }, [].concat(
-							kvRow(_('wan-dev'), 'wan_dev'),
-							kvRow(_('wan-if'), 'wan_if'),
-							kvRow(_('vlan-allow'), 'vlan_allow'),
-							kvRow(_('vlan-block'), 'vlan_block'),
-							kvRow(_('uplink IPv4'), 'uplink4'),
-							kvRow(_('uplink IPv6'), 'uplink6')
+							kvRow('trigger', 'trigger'),
+							kvRow('wan-dev', 'wan_dev'),
+							kvRow('wan-if', 'wan_if'),
+							kvRow('vlan-allow', 'vlan_allow'),
+							kvRow('vlan-block', 'vlan_block'),
+							kvRow('uplink IPv4', 'uplink4'),
+							kvRow('uplink IPv6', 'uplink6')
 						))
 					]),
 					E('div', { 'class': 'ban-card' }, [
@@ -722,7 +734,7 @@ return view.extend({
 				ui.addNotification(null, E('p', _('Unable to parse the custom feed file!')), 'error');
 			}
 		}
-		if (!feeds && result[1] && result[1].trim() !== "") {
+		if ((!L.isObject(feeds) || !Object.keys(feeds).length) && result[1] && result[1].trim() !== "") {
 			try {
 				feeds = JSON.parse(result[1]);
 			} catch (e) {
@@ -1062,7 +1074,7 @@ return view.extend({
 		o.value('2h');
 		o.value('1d');
 		o.value('7d');
-		o.value('2w');
+		o.value('14d');
 		o.placeholder = _('-- default --');
 		o.optional = true;
 		o.rmempty = true;
@@ -1070,7 +1082,7 @@ return view.extend({
 			if (!value) {
 				return true;
 			}
-			if (!value.match(/^([1-9][0-9]*(ms|s|m|h|d|w))+$/)) {
+			if (!value.match(/^([1-9][0-9]*(ms|s|m|h|d))+$/)) {
 				return _('Invalid expiry format, e.g. 5m, 2h, 1d or 1h30m');
 			}
 			return true;

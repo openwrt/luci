@@ -16,7 +16,7 @@ msgstr ""
 msgid "-- default --"
 msgstr "-- ຄ່າເລີ່ມຕົ້ນ --"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:272
 msgid "0.0.0.0 <Domain>"
 msgstr "0.0.0.0 <ໂດເມນ>"
 
@@ -24,7 +24,7 @@ msgstr "0.0.0.0 <ໂດເມນ>"
 msgid "10 minutes"
 msgstr "10 ນາທີ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:227
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:271
 msgid "127.0.0.1 <Domain>"
 msgstr "127.0.0.1 <ໂດເມນ>"
 
@@ -48,11 +48,11 @@ msgstr "5 ນາທີ"
 msgid "60 minutes"
 msgstr "60 ນາທີ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:229
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
 msgid "<Adblock Plus Syntax>"
 msgstr "<ຮູບແບບ Adblock Plus>"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:226
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:270
 msgid "<Domain>"
 msgstr "<ໂດເມນ>"
 
@@ -102,6 +102,10 @@ msgstr "ເພີ່ມໂດເມນໃສ່ລາຍການອະນຸຍ
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
 msgid "Add Blocklist Domain"
 msgstr "ເພີ່ມໂດເມນໃສ່ລາຍການກີດກັນ"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:219
+msgid "Add feed"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:79
 msgid "Add this (sub-)domain to your local allowlist."
@@ -240,7 +244,7 @@ msgstr "ການປ່ຽນແປງໃນແຖບນີ້ຕ້ອງກາ
 msgid "Changes on this tab needs an adblock service restart to take effect."
 msgstr "ການປ່ຽນແປງໃນແຖບນີ້ຕ້ອງການການຣີສະຕາດບໍລິການ Adblock ເພື່ອໃຫ້ມີຜົນ."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:293
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:306
 msgid "Clear"
 msgstr "ລ້າງອອກ"
 
@@ -309,9 +313,17 @@ msgstr "Control D (ຄວາມປອດໄພ)"
 msgid "Control D (unfiltered)"
 msgstr "Control D (ບໍ່ກັ່ນກອງ)"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "Custom Feed"
+msgstr ""
+
 #: applications/luci-app-adblock/root/usr/share/luci/menu.d/luci-app-adblock.json:43
 msgid "Custom Feed Editor"
 msgstr "ແກ້ໄຂຟີດແບບກຳນົດເອງ"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+msgid "Custom feed file saved."
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:360
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:791
@@ -421,7 +433,7 @@ msgstr "ໂດເມນສຳລັບກວດສອບວ່າການຣີ
 msgid "Don't check SSL server certificates during download."
 msgstr "ບໍ່ຕ້ອງກວດສອບໃບຢັ້ງຢືນ SSL ຂອງເຄື່ອງແມ່ຂ່າຍໃນລະຫວ່າງການດາວໂຫຼດ."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:286
 msgid "Download"
 msgstr "ດາວໂຫຼດ"
 
@@ -440,6 +452,10 @@ msgstr "ຈຳນວນຄັ້ງການດາວໂຫຼດຄືນໃໝ
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:493
 msgid "Download Utility"
 msgstr "ເຄື່ອງມືດາວໂຫຼດ"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:443
 msgid "E-Mail Notification"
@@ -469,8 +485,9 @@ msgstr "ແກ້ໄຂລາຍການອະນຸຍາດ"
 msgid "Edit Blocklist"
 msgstr "ແກ້ໄຂລາຍການກີດກັນ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:206
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:245
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
 msgid "Empty field not allowed"
 msgstr "ຫ້າມປ່ອຍຫວ່າງ"
 
@@ -598,11 +615,11 @@ msgstr "ນະໂຍບາຍ DNS ທາງໄກພາຍນອກ (ຂ້າ�
 msgid "External Unfiltered DNS Policy (MAC-/Interface‑based DNS bypass)"
 msgstr "ນະໂຍບາຍ DNS ພາຍນອກແບບບໍ່ກັ່ນກອງ (ຂ້າມຜ່ານ DNS ຕາມ MAC/ອິນເຕີເຟດ)"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:238
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:255
 msgid "Extra Extra Large"
 msgstr "ໃຫຍ່ພິເສດສຸດ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:237
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:254
 msgid "Extra Large"
 msgstr "ໃຫຍ່ພິເສດ"
 
@@ -610,7 +627,7 @@ msgstr "ໃຫຍ່ພິເສດ"
 msgid "Failed to generate adblock report!"
 msgstr "ການສ້າງລາຍງານ Adblock ລົ້ມເຫຼວ!"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:224
 msgid "Feed Name"
 msgstr "ຊື່ຟີດ"
 
@@ -618,7 +635,11 @@ msgstr "ຊື່ຟີດ"
 msgid "Feed Selection"
 msgstr "ການເລືອກຟີດ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:283
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+msgid "Feed name already used"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:299
 msgid "Fill"
 msgstr "ຕື່ມ"
 
@@ -721,13 +742,17 @@ msgstr "ອິນເຕີເຟສ"
 msgid "Interface DNS Filter Targets"
 msgstr "ເປົ້າໝາຍການກັ່ນກອງ DNS ຂອງອິນເຕີເຟດ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:209
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:231
 msgid "Invalid characters"
 msgstr "ຕົວອັກສອນບໍ່ຖືກຕ້ອງ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "ຄ່າທີ່ປ້ອນບໍ່ຖືກຕ້ອງ, ບໍ່ສາມາດບັນທຶກການແກ້ໄຂໄດ້."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:53
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:98
@@ -738,7 +763,7 @@ msgstr "ຂໍ້ມູນເຂົ້າບໍ່ຖືກຕ້ອງ, ກະ�
 msgid "Jail Mode"
 msgstr "ໂໝດຄຸກ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:236
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:253
 msgid "Large"
 msgstr "ໃຫຍ່"
 
@@ -816,9 +841,17 @@ msgstr "ແຜນທີ່"
 msgid "Map Reset"
 msgstr "ຣີເຊັດແຜນທີ່"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:252
 msgid "Medium"
 msgstr "ປານກາງ"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:49
+msgid "Missing URL: %s"
+msgstr ""
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:46
+msgid "Missing description: %s"
+msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:473
 msgid "Nice Level"
@@ -997,7 +1030,7 @@ msgstr ""
 "ສົ່ງຜ່ານ MAC ຫຼືອິນເຕີເຟດທີ່ເລືອກ ໄປຍັງ DNS Resolver ພາຍນອກແບບບໍ່ກັ່ນກອງ, ໂດຍຂ້າມຜ່ານ Adblock "
 "ທ້ອງຖິ່ນ."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:225
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:268
 msgid "Rule"
 msgstr "ກົດ"
 
@@ -1015,7 +1048,7 @@ msgstr "ອິນເຕີເຟດການເຮັດວຽກ"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:71
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:116
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:303
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:312
 msgid "Save"
 msgstr "ບັນທຶກ"
 
@@ -1067,11 +1100,11 @@ msgstr ""
 "ໄປຍັງໄຟລ໌ນີ້ໃນໜ່ວຍຄວາມຈຳ. ຖ້າໄດເຣັກທໍຣີສຳຮອງຂອງທ່ານຢູ່ໃນໄດຣຟ໌ພາຍນອກ, "
 "ໃຫ້ເປີດໃຊ້ຕົວເລືອກນີ້ເພື່ອປະຢັດໜ່ວຍຄວາມຈຳ."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:233
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:250
 msgid "Size"
 msgstr "ຂະໜາດ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:234
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:251
 msgid "Small"
 msgstr "ນ້ອຍ"
 
@@ -1145,6 +1178,10 @@ msgstr ""
 "ການບີບອັດ Top level domain ຈະລຶບລາຍການ Host ທີ່ບໍ່ຈຳເປັນຫຼາຍພັນລາຍການອອກຈາກລາຍການກີດກັນ "
 "DNS ສຸດທ້າຍ."
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:38
 msgid ""
 "This is the local adblock allowlist to always-allow certain domains.<br /> "
@@ -1212,7 +1249,7 @@ msgstr "ເວລາໜ່ວງກະຕຸ້ນ"
 msgid "Type"
 msgstr "ປະເພດ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:214
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:259
 msgid "URL"
 msgstr "URL"
 
@@ -1232,21 +1269,25 @@ msgstr "ບໍ່ສາມາດວິເຄາະໄຟລ໌ຟີດທີ່
 msgid "Unable to parse the default feed file!"
 msgstr "ບໍ່ສາມາດວິເຄາະໄຟລ໌ຟີດເລີ່ມຕົ້ນ!"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:63
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:63
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "ບໍ່ສາມາດບັນທຶກການແກ້ໄຂ: %s"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:292
 msgid "Upload"
 msgstr "ອັບໂຫຼດ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:85
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "ການອັບໂຫຼດໄຟລ໌ຟີດທີ່ກຳນົດເອງລົ້ມເຫຼວ."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr ""
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:239
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:256
 msgid "Varying"
 msgstr "ປ່ຽນແປງ"
 
@@ -1258,7 +1299,7 @@ msgstr "ການບັນທຶກດີບັກລະອຽດ"
 msgid "Version"
 msgstr "ເວີຊັນ"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:187
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1312,6 +1353,10 @@ msgstr "ຂະໜາດຜົນລວມສູງສຸດ"
 msgid "max. top statistics"
 msgstr "ສະຖິຕິສູງສຸດ"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "new"
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:177
 msgid "online documentation"
 msgstr "ເອກະສານອອນລາຍ"
@@ -1327,6 +1372,12 @@ msgstr "smartdns"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:793
 msgid "unbound"
 msgstr "unbound"
+
+#~ msgid "Invalid input values, unable to save modifications."
+#~ msgstr "ຄ່າທີ່ປ້ອນບໍ່ຖືກຕ້ອງ, ບໍ່ສາມາດບັນທຶກການແກ້ໄຂໄດ້."
+
+#~ msgid "Upload of the custom feed file failed."
+#~ msgstr "ການອັບໂຫຼດໄຟລ໌ຟີດທີ່ກຳນົດເອງລົ້ມເຫຼວ."
 
 #~ msgid "Clients"
 #~ msgstr "ລູກຄ້າ"

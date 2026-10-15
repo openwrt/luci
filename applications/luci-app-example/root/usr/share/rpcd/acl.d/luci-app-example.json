@@ -2,6 +2,9 @@
   "luci-app-example": {
     "description": "Grant UCI and RPC access to LuCI app example",
     "read": {
+      "file": {
+        "/etc/example.json": [ "read" ]
+      },
       "ubus": {
         "luci.example": [
           "get_sample1",
@@ -13,6 +16,9 @@
       ]
     },
     "write": {
+      "file": {
+        "/etc/example.json": [ "write" ]
+      },
       "uci": [
         "example"
       ]

@@ -52,21 +52,56 @@ define Package/luci-theme-footstrap/conffiles
 /etc/config/footstrap
 endef
 
-# RELOAD, NOT RESTART: rpcd holds sessions in memory, so `restart` logs out every LuCI user —
-# including the admin who just installed the theme. `reload` sends SIGHUP, which re-reads
-# /usr/share/rpcd/acl.d/*, and that ACL refresh is the only thing this package needs from rpcd.
-# Verified on a live router: a session survives `reload` and dies across `restart`.
+# NO `rpcd reload` HERE, on install or on removal. Measured on a live router: `reload` is
+# procd_send_signal -> SIGHUP -> exec_self(), a full re-exec that re-scans the plugin dirs and
+# dlopen()s every .so, and a plugin that is absent or mid-write at that instant is DROPPED past
+# one stderr line and does not come back on its own. Losing `file` that way makes System ->
+# Backup / Flash Firmware's "Reset to defaults" row silently disappear, and the same race was
+# seen on the `luci` plugin, leaving getFeatures/getTimezones answering -32000 until a reboot.
+# This package registers no rpcd object of its own - only acl.d/*.json - so the reload ran that
+# risk for every OTHER plugin and refreshed nothing of ours.
+#
+# rpcd reads acl.d/*.json AT LOGIN, not only on SIGHUP, so a fresh login already sees a
+# just-installed ACL. The one case that leaves is a session opened BEFORE this install on a
+# restricted (non-'*') rpcd login: its in-memory ACL set predates the grant. That session is
+# ended below, and only when re-authenticating would actually hand it the theme's scope.
 define Package/luci-theme-footstrap/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {
-	# uci-defaults registers the theme; refresh rpcd + drop caches so LuCI sees it without a
-	# reboot. Calling it ourselves is belt-and-braces: OpenWrt's default_postinst also runs
-	# (then deletes) every /etc/uci-defaults/* we ship, so it executes twice per install. It is
+	# uci-defaults registers the theme; drop the LuCI caches so it is seen without a reboot.
+	# Calling it ourselves is belt-and-braces: OpenWrt's default_postinst also runs (then
+	# deletes) every /etc/uci-defaults/* we ship, so it executes twice per install. It is
 	# idempotent: the second pass finds the theme already registered and changes nothing.
 	[ -f /etc/uci-defaults/30_luci-theme-footstrap ] && \
 		sh /etc/uci-defaults/30_luci-theme-footstrap >/dev/null 2>&1 || true
 	rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/* >/dev/null 2>&1 || true
-	/etc/init.d/rpcd reload >/dev/null 2>&1 || true
+	# A blanket ('*') login is granted everything and answers true below, so it is never touched;
+	# neither is the unauthenticated all-zero session, nor a denied session whose own login does
+	# not list this theme's group - re-authenticating would deny it just the same. Guarded on
+	# rpcd having ubus session support at all.
+	ubus list 2>/dev/null | grep -qx session && {
+		for s in $$(ubus call session list 2>/dev/null | grep -o '"ubus_rpc_session": "[a-f0-9]*"' | cut -d'"' -f4); do
+			case "$$s" in *[!0]*) ;; *) continue ;; esac
+			ubus call session access "{\"ubus_rpc_session\":\"$$s\",\"scope\":\"uci\",\"object\":\"footstrap\",\"function\":\"write\"}" 2>/dev/null | grep -q true && continue
+			u=$$(ubus call session get "{\"ubus_rpc_session\":\"$$s\"}" 2>/dev/null | grep -o '"username": *"[^"]*"' | cut -d'"' -f4)
+			[ -n "$$u" ] || continue
+			# Every login section from `uci show`, not a `uci -q get` index walk: the latter stops
+			# at the first section with no username option. `while read` keeps a username with a
+			# space in one piece; the loop is a subshell, so its answer is echoed out, not stored.
+			grant=$$(uci show rpcd 2>/dev/null | grep -F .username= | while read -r kv; do
+				sect=$${kv%%.username=*}
+				un=$${kv#*.username=}
+				un=$${un#\'}
+				un=$${un%\'}
+				[ "$$un" = "$$u" ] || continue
+				for grp in $$(uci -q get "$$sect.read") $$(uci -q get "$$sect.write"); do
+					[ "$$grp" = luci-theme-footstrap ] && { echo 1; break 2; }
+				done
+			done)
+			[ -n "$$grant" ] || continue
+			ubus call session destroy "{\"ubus_rpc_session\":\"$$s\"}" >/dev/null 2>&1 || true
+		done
+	}
 }
 exit 0
 endef
@@ -95,7 +130,6 @@ case "$$1" in *upgrade*) exit 0 ;; esac
 	# survive an upgrade. A real removal is the one time they should go.
 	rm -rf /etc/footstrap >/dev/null 2>&1 || true
 	rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/* >/dev/null 2>&1 || true
-	/etc/init.d/rpcd reload >/dev/null 2>&1 || true	# see the postinst note: reload keeps sessions
 }
 endef
 

@@ -110,7 +110,7 @@ function urlValidator(section_id, value) {
 	if (!value) {
 		return true;
 	}
-	if (!value.match(/^https?:\/\/[A-Za-z0-9[\]/.?&+_@%=:~#-]+$/)) {
+	if (!value.match(/^https?:\/\/[A-Za-z0-9[\]{}/.?&+_@%=:~#-]+$/)) {
 		return _('Protocol/URL format not supported');
 	}
 	return true;
@@ -196,6 +196,11 @@ return view.extend({
 		if (result.error) {
 			notify(_('Unable to save modifications: %s').format(result.error), 'error');
 			return Promise.resolve();
+		}
+		if (Object.keys(result.feeds).length === 0) {
+			return fs.write(feedFile, null).then(function () {
+				notify(_('Custom feed file cleared, the maintainers feeds are used again.'), 'info');
+			});
 		}
 		return fs.write(feedFile, JSON.stringify(result.feeds, null, 4)).then(function () {
 			notify(_('Custom feed file saved.'), 'info');

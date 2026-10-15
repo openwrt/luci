@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-08-20 13:31+0000\n"
+"PO-Revision-Date: 2026-09-18 14:08+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/ga/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
 "6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 2026.9.dev0\n"
+"X-Generator: Weblate 2026.10.dev0\n"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:469
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:480
@@ -17,7 +17,7 @@ msgstr ""
 msgid "-- default --"
 msgstr "-- réamhshocraithe --"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:272
 msgid "0.0.0.0 <Domain>"
 msgstr "0.0.0.0 <Fearann>"
 
@@ -25,7 +25,7 @@ msgstr "0.0.0.0 <Fearann>"
 msgid "10 minutes"
 msgstr "10 nóiméad"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:227
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:271
 msgid "127.0.0.1 <Domain>"
 msgstr "127.0.0.1 <Fearann>"
 
@@ -49,11 +49,11 @@ msgstr "5 nóiméad"
 msgid "60 minutes"
 msgstr "60 nóiméad"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:229
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
 msgid "<Adblock Plus Syntax>"
 msgstr "<Comhréir Adblock Plus>"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:226
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:270
 msgid "<Domain>"
 msgstr "<Fearann>"
 
@@ -103,6 +103,10 @@ msgstr "Cuir Fearann Liosta Ceadaithe leis"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:33
 msgid "Add Blocklist Domain"
 msgstr "Cuir Fearann Blocliosta leis"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:219
+msgid "Add feed"
+msgstr "Cuir fotha leis"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:79
 msgid "Add this (sub-)domain to your local allowlist."
@@ -251,7 +255,7 @@ msgstr ""
 "Ní mór an tseirbhís blocála fógraí a atosú le go dtiocfaidh athruithe ar an "
 "táb seo i bhfeidhm."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:293
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:306
 msgid "Clear"
 msgstr "Glan"
 
@@ -320,9 +324,17 @@ msgstr "Rialú D (slándáil)"
 msgid "Control D (unfiltered)"
 msgstr "Rialú D (gan scagadh)"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "Custom Feed"
+msgstr "Fotha Saincheaptha"
+
 #: applications/luci-app-adblock/root/usr/share/luci/menu.d/luci-app-adblock.json:43
 msgid "Custom Feed Editor"
 msgstr "Eagarthóir Fotha Saincheaptha"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+msgid "Custom feed file saved."
+msgstr "Comhad fotha saincheaptha sábháilte."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:360
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:791
@@ -436,7 +448,7 @@ msgstr "Fearann le seiceáil an bhfuil atosú rathúil ar chúl-deireadh DNS ann
 msgid "Don't check SSL server certificates during download."
 msgstr "Ná seiceáil deimhnithe freastalaí SSL le linn íoslódála."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:286
 msgid "Download"
 msgstr "Íoslódáil"
 
@@ -455,6 +467,10 @@ msgstr "Íoslódáil Ath-Iarrachtaí"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:493
 msgid "Download Utility"
 msgstr "Íoslódáil Utility"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:75
+msgid "Duplicate feed name: %s"
+msgstr "Ainm fotha dúblach: %s"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:443
 msgid "E-Mail Notification"
@@ -484,8 +500,9 @@ msgstr "Cuir Liosta Ceadaithe in Eagar"
 msgid "Edit Blocklist"
 msgstr "Cuir an Liosta Bloctha in Eagar"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:206
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:228
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:245
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:263
 msgid "Empty field not allowed"
 msgstr "Ní cheadaítear réimse folamh"
 
@@ -638,11 +655,11 @@ msgstr ""
 "Polasaí DNS Neamhscaite Seachtrach (seachbhóthar DNS bunaithe ar MAC/"
 "Comhéadan)"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:238
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:255
 msgid "Extra Extra Large"
 msgstr "Breise Breise Mór"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:237
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:254
 msgid "Extra Large"
 msgstr "An-mhór"
 
@@ -650,7 +667,7 @@ msgstr "An-mhór"
 msgid "Failed to generate adblock report!"
 msgstr "Theip ar thuairisc blocála fógraí a ghiniúint!"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:201
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:224
 msgid "Feed Name"
 msgstr "Ainm an Bheatha"
 
@@ -658,7 +675,11 @@ msgstr "Ainm an Bheatha"
 msgid "Feed Selection"
 msgstr "Roghnú Beatha"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:283
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+msgid "Feed name already used"
+msgstr "Tá ainm an fhíid in úsáid cheana féin"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:299
 msgid "Fill"
 msgstr "Líon"
 
@@ -763,13 +784,17 @@ msgstr "Comhéadan"
 msgid "Interface DNS Filter Targets"
 msgstr "Spriocanna Scagaire DNS Comhéadain"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:209
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:231
 msgid "Invalid characters"
 msgstr "Carachtair neamhbhailí"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:125
-msgid "Invalid input values, unable to save modifications."
-msgstr "Luachanna ionchuir neamhbhailí, ní féidir na modhnuithe a shábháil."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:43
+msgid "Invalid feed entry: %s"
+msgstr "Iontráil fhotha neamhbhailí: %s"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:40
+msgid "Invalid feed name: %s"
+msgstr "Ainm fotha neamhbhailí: %s"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:53
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:98
@@ -781,7 +806,7 @@ msgstr ""
 msgid "Jail Mode"
 msgstr "Mód Príosúin"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:236
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:253
 msgid "Large"
 msgstr "Mór"
 
@@ -867,9 +892,17 @@ msgstr "Léarscáil"
 msgid "Map Reset"
 msgstr "Athshocrú Léarscáile"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:235
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:252
 msgid "Medium"
 msgstr "Meánach"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:49
+msgid "Missing URL: %s"
+msgstr "URL ar iarraidh: %s"
+
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:46
+msgid "Missing description: %s"
+msgstr "Cur síos ar iarraidh: %s"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:473
 msgid "Nice Level"
@@ -1055,7 +1088,7 @@ msgstr ""
 "Treoraíonn sé MACanna nó comhéadain roghnaithe chuig réiteoir DNS seachtrach "
 "neamhscagtha, ag seachaint an bhac fógraí áitiúil."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:225
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:268
 msgid "Rule"
 msgstr "Riail"
 
@@ -1073,7 +1106,7 @@ msgstr "Rith Comhéadain"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:71
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:116
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:303
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:312
 msgid "Save"
 msgstr "Sábháil"
 
@@ -1130,11 +1163,11 @@ msgstr ""
 "cúltaca ar thiomántán seachtrach, cumasaigh an rogha seo chun cuimhne a "
 "shábháil."
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:233
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:250
 msgid "Size"
 msgstr "Méid"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:234
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:251
 msgid "Small"
 msgstr "Beag"
 
@@ -1211,6 +1244,10 @@ msgstr ""
 "Baineann comhbhrú fearainn barrleibhéil na mílte iontráil óstaigh gan ghá ón "
 "liosta blocála DNS deiridh."
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:88
+msgid "The uploaded file is no valid custom feed file."
+msgstr "Ní comhad bailí sainfheidhmeach é an comhad a uaslódáladh."
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:38
 msgid ""
 "This is the local adblock allowlist to always-allow certain domains.<br /> "
@@ -1284,7 +1321,7 @@ msgstr "Moill Scorraitheoir"
 msgid "Type"
 msgstr "Cineál"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:214
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:259
 msgid "URL"
 msgstr "URL"
 
@@ -1304,21 +1341,25 @@ msgstr "Ní féidir an comhad beatha saincheaptha a pharsáil!"
 msgid "Unable to parse the default feed file!"
 msgstr "Ní féidir an comhad beatha réamhshocraithe a pharsáil!"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:182
+msgid "Unable to read the maintainers feed file."
+msgstr "Ní féidir comhad fotha na gcothaitheoirí a léamh."
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:63
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:63
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:197
 msgid "Unable to save modifications: %s"
 msgstr "Ní féidir na modhnuithe a shábháil: %s"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:273
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:292
 msgid "Upload"
 msgstr "Uaslódáil"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:85
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:91
-msgid "Upload of the custom feed file failed."
-msgstr "Theip ar uaslódáil an chomhaid beatha saincheaptha."
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:151
+msgid "Upload of the custom feed file failed: %s"
+msgstr "Theip ar uaslódáil an chomhaid fhíde shaincheaptha: %s"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:239
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:256
 msgid "Varying"
 msgstr "Éagsúil"
 
@@ -1330,7 +1371,7 @@ msgstr "Logáil Dífhabhtú Eorbhéiseach"
 msgid "Version"
 msgstr "Leagan"
 
-#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:187
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:210
 msgid ""
 "With this editor you can upload your local custom feed file or fill up an "
 "initial one (a 1:1 copy of the version shipped with the package). The file "
@@ -1386,6 +1427,10 @@ msgstr "max. méid socraithe torthaí"
 msgid "max. top statistics"
 msgstr "max. staitisticí barr"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:221
+msgid "new"
+msgstr "nua"
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:177
 msgid "online documentation"
 msgstr "doiciméadú ar líne"
@@ -1401,6 +1446,12 @@ msgstr "smartdns"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:793
 msgid "unbound"
 msgstr "neamhshrianta"
+
+#~ msgid "Invalid input values, unable to save modifications."
+#~ msgstr "Luachanna ionchuir neamhbhailí, ní féidir na modhnuithe a shábháil."
+
+#~ msgid "Upload of the custom feed file failed."
+#~ msgstr "Theip ar uaslódáil an chomhaid beatha saincheaptha."
 
 #~ msgid "Clients"
 #~ msgstr "Cliaint"

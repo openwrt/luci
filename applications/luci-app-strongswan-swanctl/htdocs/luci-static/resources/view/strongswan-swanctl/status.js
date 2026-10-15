@@ -1,5 +1,6 @@
 'use strict';
 'require view';
+'require strongswan-swanctl.ikev1 as ikev1';
 'require dom';
 'require poll';
 'require fs';
@@ -349,7 +350,11 @@ return view.extend({
 		dom.content(container, this.renderContent(results));
 		this.pollData(container);
 
-		return content;
+		return ikev1.banner().then(function (banner) {
+			if (banner)
+				content.insertBefore(banner, container);
+			return content;
+		});
 	},
 
 	handleSaveApply: null,
