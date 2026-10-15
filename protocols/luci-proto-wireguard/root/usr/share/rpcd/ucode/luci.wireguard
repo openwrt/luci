@@ -57,6 +57,122 @@ const methods = {
 		}
 	},
 
+	getNextPeerAddress: {
+		args: { interface: 'interface', reserved: [] },
+		call: function(req) {
+			const ifname = req.args?.interface ?? 'wg0';
+			const uci = cursor();
+
+			uci.load('network');
+
+			let ipv4_net = null, ipv4_plen = 0, ipv4_server = null;
+			let ipv6_template = null;
+
+			for (let addr in (uci.get('network', ifname, 'addresses') ?? [])) {
+				const parts = split(addr, '/');
+				const arr   = iptoarr(parts[0]);
+				const plen  = +(parts[1] ?? 0);
+
+				if (!arr)
+					continue;
+
+				if (length(arr) == 4) {
+					if (!ipv4_net && plen > 0) {
+						const ip32 = (arr[0] << 24) | (arr[1] << 16) | (arr[2] << 8) | arr[3];
+						const mask = ~0 << (32 - plen);
+						ipv4_net    = ip32 & mask;
+						ipv4_plen   = plen;
+						ipv4_server = ip32;
+					}
+				} else {
+					if (!ipv6_template)
+						ipv6_template = arr;
+				}
+			}
+
+			if (ipv4_net === null && !ipv6_template)
+				return { error: 'No server addresses configured on interface' };
+
+			// Collect used IPv4 host addresses and used IPv6 low-bytes (arr[15]).
+			const used_ipv4 = {};
+			const used_ipv6 = {};
+
+			uci.foreach('network', 'wireguard_' + ifname, (peer) => {
+				for (let cidr in (peer.allowed_ips ?? [])) {
+					const arr = iptoarr(split(cidr, '/')[0]);
+					if (!arr) continue;
+
+					if (ipv4_net !== null && length(arr) == 4) {
+						const ip32 = (arr[0] << 24) | (arr[1] << 16) | (arr[2] << 8) | arr[3];
+						const mask = ~0 << (32 - ipv4_plen);
+						if ((ip32 & mask) == ipv4_net)
+							used_ipv4[ip32] = true;
+
+					} else if (ipv6_template && length(arr) == 16) {
+						let match = true;
+						for (let i = 0; i < 15; i++) {
+							if (arr[i] != ipv6_template[i]) { match = false; break; }
+						}
+						if (match)
+							used_ipv6[arr[15]] = true;
+					}
+				}
+			});
+
+			// Session reservations: client pushes bare IPv4 strings or integer
+			// low-bytes for IPv6.
+			for (let r in (req.args?.reserved ?? [])) {
+				if (type(r) == 'string') {
+					const arr = iptoarr(r);
+					if (arr && length(arr) == 4)
+						used_ipv4[(arr[0] << 24) | (arr[1] << 16) | (arr[2] << 8) | arr[3]] = true;
+				} else {
+					used_ipv6[+r] = true;
+				}
+			}
+
+			const result = {};
+
+			if (ipv4_net !== null) {
+				const host_bits = 32 - ipv4_plen;
+				const total     = 1 << host_bits;
+				let   found     = null;
+
+				for (let i = 1; i < total - 1; i++) {
+					const last = i & 0xff;
+					if (last == 0 || last == 255) continue;
+					const candidate = ipv4_net + i;
+					if (candidate == ipv4_server) continue;
+					if (!used_ipv4[candidate]) { found = candidate; break; }
+				}
+
+				if (found === null)
+					return { error: 'No free addresses in pool' };
+
+				const bare      = arrtoip([(found >> 24) & 0xff, (found >> 16) & 0xff,
+				                           (found >>  8) & 0xff,  found        & 0xff]);
+				result.ipv4      = bare + '/32';
+				result.ipv4_bare = bare;
+			}
+
+			if (ipv6_template) {
+				let octet = 2;
+				while (used_ipv6[octet] && octet < 255)
+					octet++;
+
+				if (octet >= 255)
+					return { error: 'No free addresses in pool' };
+
+				const peer_arr = [...ipv6_template];
+				peer_arr[15]   = octet;
+				result.ipv6    = arrtoip(peer_arr) + '/128';
+				result.octet   = octet;
+			}
+
+			return result;
+		}
+	},
+
 	getWgInstances: {
 		call: function() {
 			const data = {};
