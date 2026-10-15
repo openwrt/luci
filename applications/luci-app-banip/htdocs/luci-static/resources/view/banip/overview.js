@@ -9,9 +9,15 @@
 'require tools.widgets as widgets';
 
 /*
+	last rendered runtime information, reset on every action to force a refresh
+*/
+let lastRuntime = null;
+
+/*
 	button handling
 */
 function handleAction(ev) {
+	lastRuntime = null;
 	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
@@ -211,86 +217,89 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/banIP/banIP.runtime.json'), null).then(function (stat) {
-				if (!stat) {
+			return Promise.all([
+				L.resolveDefault(fs.read_direct('/var/run/banIP/banIP.runtime.json'), null),
+				L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['actual']), '')
+			]).then(function (results) {
+				const res = results[0];
+				const actual = results[1]?.trim() || '';
+				/* missing file or unchanged content, nothing to do */
+				if (!res || res + actual === lastRuntime) {
 					return;
 				}
-				return Promise.all([
-					L.resolveDefault(fs.read_direct('/var/run/banIP/banIP.runtime.json'), 'null'),
-					L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['actual']), '')
-				]).then(function (results) {
-					const res = results[0];
-					const actual = results[1]?.trim() || '';
-					const status = document.getElementById('status');
-					const buttons = document.querySelectorAll('.cbi-page-actions button');
-					let info = null;
-					try {
-						info = JSON.parse(res);
-						parseErrCount = 0;
-					} catch (e) {
-						info = null;
-						parseErrCount++;
-						if (status) {
-							status.setAttribute('data-state', '');
-							setText('state', '-');
+				const status = document.getElementById('status');
+				const buttons = document.querySelectorAll('.cbi-page-actions button');
+				let info = null;
+				try {
+					info = JSON.parse(res);
+					parseErrCount = 0;
+				} catch (e) {
+					info = null;
+					parseErrCount++;
+					if (status) {
+						status.setAttribute('data-state', '');
+						setText('state', '-');
+						buttons.forEach(function (btn) {
+							btn.disabled = false;
+						});
+						status.classList.remove('spinning');
+						if (parseErrCount >= 3) {
+							ui.addNotification(null, E('p', _('Unable to parse the banIP runtime information!')), 'error');
+							poll.stop();
+						}
+					}
+					return;
+				}
+				if (status && info) {
+					const state = info.status || '-';
+					status.setAttribute('data-state', state);
+					setText('state', state);
+					setText('versions', `${info.frontend_ver || '-'} / ${info.backend_ver || '-'}`);
+					setNodes('actual', actual ? flagChips(actual) : ['-']);
+					if (info.status === "processing") {
+						buttons.forEach(function (btn) {
+							btn.disabled = true;
+							btn.blur();
+						});
+						if (!status.classList.contains("spinning")) {
+							status.classList.add("spinning");
+						}
+					} else {
+						if (status.classList.contains("spinning")) {
+							status.classList.remove("spinning");
 							buttons.forEach(function (btn) {
 								btn.disabled = false;
 							});
-							status.classList.remove('spinning');
-							if (parseErrCount >= 3) {
-								ui.addNotification(null, E('p', _('Unable to parse the banIP runtime information!')), 'error');
-								poll.stop();
-							}
-						}
-						return;
-					}
-					if (status && info) {
-						const state = info.status || '-';
-						status.setAttribute('data-state', state);
-						setText('state', state);
-						setText('versions', `${info.frontend_ver || '-'} / ${info.backend_ver || '-'}`);
-						setNodes('actual', actual ? flagChips(actual) : ['-']);
-						if (info.status === "processing") {
-							buttons.forEach(function (btn) {
-								btn.disabled = true;
-								btn.blur();
-							});
-							if (!status.classList.contains("spinning")) {
-								status.classList.add("spinning");
-							}
-						} else {
-							if (status.classList.contains("spinning")) {
-								status.classList.remove("spinning");
-								buttons.forEach(function (btn) {
-									btn.disabled = false;
-								});
-							}
 						}
 					}
-					if (info) {
-						const elements = splitCount(info.element_count);
-						const runPairs = parsePairs(info.last_run);
-						const join = list => (Array.isArray(list) && list.length) ? list.join(', ') : '-';
-						setText('elements', elements.count);
-						setText('elements_sub', elements.detail);
-						setText('last', pickValue(runPairs, 'date / time'));
-						setText('last_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
-						pickValue(runPairs, 'memory')].filter(v => v && v !== '-').join(', '));
-						setText('trigger', join(info.trigger_interfaces));
-						setText('wan_dev', join(info.wan_devices));
-						setText('wan_if', join(info.wan_interfaces));
-						setText('vlan_allow', join(info.vlan_allow));
-						setText('vlan_block', join(info.vlan_block));
-						const uplinks = splitUplinks(info.active_uplink);
-						setText('uplink4', uplinks.v4);
-						setText('uplink6', uplinks.v6);
-						setNodes('nft', stackNodes(expandPairs(parsePairs(info.nft_info)), false));
-						setNodes('sys', stackNodes(sysPairs(info.system_info), false));
-						setNodes('feeds', feedChips(info.active_feeds));
-						setNodes('flags', flagChips(info.run_flags));
-						setNodes('run', stackNodes(parsePairs(info.run_info), true));
-					}
-				});
+				}
+				if (info) {
+					const elements = splitCount(info.element_count);
+					const runPairs = parsePairs(info.last_run);
+					const join = list => (Array.isArray(list) && list.length) ? list.join(', ') : '-';
+					setText('elements', elements.count);
+					setText('elements_sub', elements.detail);
+					setText('last', pickValue(runPairs, 'date / time'));
+					setText('last_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
+					pickValue(runPairs, 'memory')].filter(v => v && v !== '-').join(', '));
+					setText('trigger', join(info.trigger_interfaces));
+					setText('wan_dev', join(info.wan_devices));
+					setText('wan_if', join(info.wan_interfaces));
+					setText('vlan_allow', join(info.vlan_allow));
+					setText('vlan_block', join(info.vlan_block));
+					const uplinks = splitUplinks(info.active_uplink);
+					setText('uplink4', uplinks.v4);
+					setText('uplink6', uplinks.v6);
+					setNodes('nft', stackNodes(expandPairs(parsePairs(info.nft_info)), false));
+					setNodes('sys', stackNodes(sysPairs(info.system_info), false));
+					setNodes('feeds', feedChips(info.active_feeds));
+					setNodes('flags', flagChips(info.run_flags));
+					setNodes('run', stackNodes(parsePairs(info.run_info), true));
+				}
+				/* only remember the content once it has been rendered */
+				if (status) {
+					lastRuntime = res + actual;
+				}
 			});
 		}, 2);
 
