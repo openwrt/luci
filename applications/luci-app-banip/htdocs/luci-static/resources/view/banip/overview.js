@@ -9,15 +9,14 @@
 'require tools.widgets as widgets';
 
 /*
-	last rendered runtime information, reset on every action to force a refresh
-*/
-let lastRuntime = null;
-
-/*
 	button handling
 */
 function handleAction(ev) {
-	lastRuntime = null;
+	/* drop the rendered runtime marker to force a refresh */
+	const statusNode = document.getElementById('status');
+	if (statusNode) {
+		statusNode._banRuntime = null;
+	}
 	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
@@ -223,11 +222,10 @@ return view.extend({
 			]).then(function (results) {
 				const res = results[0];
 				const actual = results[1]?.trim() || '';
-				/* missing file or unchanged content, nothing to do */
-				if (!res || res + actual === lastRuntime) {
+				const status = document.getElementById('status');
+				if (!res || (status && status._banRuntime === res + actual)) {
 					return;
 				}
-				const status = document.getElementById('status');
 				const buttons = document.querySelectorAll('.cbi-page-actions button');
 				let info = null;
 				try {
@@ -298,7 +296,7 @@ return view.extend({
 				}
 				/* only remember the content once it has been rendered */
 				if (status) {
-					lastRuntime = res + actual;
+					status._banRuntime = res + actual;
 				}
 			});
 		}, 2);
