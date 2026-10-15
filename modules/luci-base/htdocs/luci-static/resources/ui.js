@@ -2054,9 +2054,30 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	 * @param {Event} ev
 	 */
 	handleCreateBlur(ev) {
+		/* Switching to another window or tab blurs the field too, without
+		 * leaving it: it stays the focused element of the document, which
+		 * gives it the focus back on return. Leave the widget as it is,
+		 * locked in, with the text as typed. */
+		if (ev.type == 'blur' && !document.hasFocus())
+			return;
+
 		const input = ev.currentTarget;
 		const cbox = findParent(input, 'li').querySelector('input[type="checkbox"]');
 		const sb = findParent(input, '.cbi-dropdown');
+
+		/* Leaving the widget keeps a typed value as Enter does, instead of
+		 * dropping it: a click or tap elsewhere, or Tab, which reaches the
+		 * canary at the end of the open dropdown and closes it. Enter, Escape
+		 * and the arrow keys move the focus within the widget. It is still
+		 * locked in here, so createItems() doesn't take the focus back. */
+		const leaving = !sb.contains(ev.relatedTarget) ||
+			ev.relatedTarget === sb.lastElementChild;
+
+		if (ev.type == 'blur' && leaving &&
+		    input.value.trim() != '' && !input.classList.contains('cbi-input-invalid')) {
+			this.createItems(sb, input.value);
+			input.value = '';
+		}
 
 		if (cbox)
 			cbox.checked = false;
