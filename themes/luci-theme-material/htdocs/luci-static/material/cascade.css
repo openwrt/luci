@@ -1737,6 +1737,11 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	border-radius: 3px !important;
 	background: var(--white-color);
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .16), 0 0 2px 0 rgba(0, 0, 0, .12);
+	white-space: normal;
+	text-align: left;
+	text-transform: none;
+	padding-bottom: 0.2rem;
+	padding-top: 0.2rem;
 }
 
 .modal > * {
@@ -1778,16 +1783,6 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .modal p {
 	padding-left: .25rem;
 	word-break: break-word;
-}
-
-.modal label.btn {
-	display: flex;
-	align-items: center;
-	white-space: normal;
-	text-align: left;
-	text-transform: none;
-	padding-bottom: 0.2rem;
-	padding-top: 0.2rem;
 }
 
 .modal.cbi-modal {
@@ -2247,9 +2242,36 @@ span[data-tooltip] .label {
 	text-shadow: none;
 }
 
+p > label[for] {
+	cursor: pointer;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+p > input[type="checkbox"],
+p > input[type="radio"],
 label > input[type="checkbox"],
 label > input[type="radio"] {
 	margin-right: 0.8rem;
+}
+
+p.cbi-checkbox {
+	background-color: var(--gray-color);
+	position: relative;
+	flex-basis: auto;
+	padding: .2rem .6rem;
+	line-height: normal;
+	align-items: center;
+	white-space: normal;
+	text-align: left;
+	text-transform: none;
+	border: 0;
+	border-radius: .2rem;
+	display: flex;
+	cursor: pointer;
 }
 
 label[data-index][data-depends] {
