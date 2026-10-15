@@ -1,0 +1,53 @@
+{
+	"admin/services/singbox": {
+		"title": "sing-box",
+		"order": 60,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/singbox/overview"
+		},
+		"depends": {
+			"fs": "/usr/bin/sing-box"
+		}
+	},
+	"admin/services/singbox/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "singbox/overview"
+		}
+	},
+	"admin/services/singbox/servers": {
+		"title": "Servers",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "singbox/servers"
+		}
+	},
+	"admin/services/singbox/routing": {
+		"title": "Routing",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "singbox/routing"
+		}
+	},
+	"admin/services/singbox/logs": {
+		"title": "Logs",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "singbox/logs"
+		}
+	},
+	"admin/services/singbox/settings": {
+		"title": "Settings",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "singbox/settings"
+		}
+	}
+}
