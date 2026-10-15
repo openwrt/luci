@@ -1,0 +1,18 @@
+{
+	"admin/services/led-nightmode": {
+		"title": "LED Night Mode",
+		"order": 75,
+		"action": {
+			"type": "view",
+			"path": "led-nightmode"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-led-nightmode"
+			],
+			"uci": {
+				"led-nightmode": true
+			}
+		}
+	}
+}
