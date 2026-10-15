@@ -1,0 +1,24 @@
+{
+	"luci-app-device-manager": {
+		"description": "Grant access to LAN device manager",
+		"read": {
+			"ubus": {
+				"luci-rpc": [ "getHostHints", "getDHCPLeases", "getWirelessDevices" ],
+				"luci.device-manager": [ "get_online_status", "ping_device" ],
+				"iwinfo": [ "assoclist" ],
+				"file": [ "read" ]
+			},
+			"file": {
+				"/proc/net/arp": [ "read" ]
+			},
+			"uci": [ "device_manager" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.device-manager": [ "scan_devices" ],
+				"uci": [ "add", "set", "delete", "commit", "revert" ]
+			},
+			"uci": [ "device_manager" ]
+		}
+	}
+}
