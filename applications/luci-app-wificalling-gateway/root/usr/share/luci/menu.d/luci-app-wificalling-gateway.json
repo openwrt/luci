@@ -1,0 +1,23 @@
+{
+  "admin/services/wificalling-gateway": {
+    "title": "Wi-Fi Calling Gateway",
+    "order": 70,
+    "action": { "type": "firstchild" },
+    "depends": { "acl": [ "luci-app-wificalling-gateway" ] }
+  },
+  "admin/services/wificalling-gateway/settings": {
+    "title": "Settings",
+    "order": 10,
+    "action": { "type": "view", "path": "wificalling-gateway/overview" }
+  },
+  "admin/services/wificalling-gateway/status": {
+    "title": "Wi-Fi Calling Status",
+    "order": 20,
+    "action": { "type": "view", "path": "wificalling-gateway/status" }
+  },
+  "admin/services/wificalling-gateway/events": {
+    "title": "Activity Log",
+    "order": 30,
+    "action": { "type": "view", "path": "wificalling-gateway/events" }
+  }
+}
