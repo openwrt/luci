@@ -26,10 +26,14 @@ function Logview(logtag, name) {
 							const time = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 							return `[${date}-${time}] ${entry.msg}`;
 						});
-					logEl.value = filtered.length > 0
+					const text = filtered.length > 0
 						? filtered.join('\n')
 						: _('No %s related logs yet!').format(name);
-					logEl.scrollTop = logEl.scrollHeight;
+					/* skip unchanged content, only follow the tail if the view is already at the bottom */
+					if (text === logEl.value) return;
+					const atBottom = logEl.scrollHeight - logEl.scrollTop - logEl.clientHeight < 20;
+					logEl.value = text;
+					if (atBottom) logEl.scrollTop = logEl.scrollHeight;
 				});
 			};
 

@@ -177,7 +177,16 @@ function handleAction(ev) {
 							let attempts = 0;
 							window._adbSearchPoller = setInterval(function () {
 								attempts++;
+								/* stop polling once the modal has been closed */
+								if (!document.getElementById('result')) {
+									clearInterval(window._adbSearchPoller);
+									window._adbSearchPoller = null;
+									return;
+								}
 								L.resolveDefault(fs.read('/var/run/adblock/adblock.search'), '').then(function (res) {
+									if (!document.getElementById('result')) {
+										return;
+									}
 									if (res && res.trim()) {
 										clearInterval(window._adbSearchPoller);
 										window._adbSearchPoller = null;
