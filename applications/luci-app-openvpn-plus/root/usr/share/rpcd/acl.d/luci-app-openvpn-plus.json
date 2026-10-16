@@ -1,0 +1,23 @@
+{
+	"luci-app-openvpn-plus": {
+		"description": "Configuration access for OpenVPN LuCI app",
+		"read": {
+			"cgi-bin": [ "luci" ],
+			"uci": [ "openvpn" ],
+			"ubus": {
+				"system": [ "info" ],
+				"service": [ "list" ],
+				"network": [ "status" ]
+			},
+			"file": {
+				"/sbin/logread": [ "exec" ]
+			}
+		},
+		"write": {
+			"uci": [ "openvpn" ],
+			"file": {
+				"/usr/libexec/luci-app-openvpn-plus": [ "exec" ]
+			}
+		}
+	}
+}
