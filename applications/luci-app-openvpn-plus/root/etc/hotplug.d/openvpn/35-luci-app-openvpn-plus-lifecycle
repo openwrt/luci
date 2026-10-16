@@ -85,27 +85,15 @@ case "$ACTION" in
         fi
         ;;
 
-    down)
+    route-pre-down|down)
 
-		inst_role=$(uci -q get openvpn."$ovpn_instance".role)
-
-		# Clear the mapped network device because the tunnel is offline
-		if [ "$inst_role" = "server" ] || [ "$inst_role" = "client" ]; then
-			uci -q delete openvpn."$ovpn_instance".devname
-			uci commit openvpn
+		# Clean application stop via standard system manager signals
+		if start-stop-daemon -K -q -p "$PID_FILE" -t 2>/dev/null; then
+			logger -t openvpn-luci "Hotplug: Stopping DDNS service for ${ovpn_instance} because tunnel is down."
+			start-stop-daemon -K -q -p "$PID_FILE" 2>/dev/null
 		fi
+		rm -f "$PID_FILE"
 
-        # SERVER: DDNS SERVICE STOP
-        if [ "$inst_role" = "server" ]; then
-
-			# Clean application stop via standard system manager signals
-			if start-stop-daemon -K -q -p "$PID_FILE" -t 2>/dev/null; then
-				logger -t openvpn-luci "Hotplug: Stopping DDNS service for ${ovpn_instance} because tunnel is down."
-				start-stop-daemon -K -q -p "$PID_FILE" 2>/dev/null
-			fi
-			rm -f "$PID_FILE"
-		fi
-        ;;
 esac
 
 exit 0

@@ -190,9 +190,85 @@ const sanitizeInputText = function (value) {
 
 
 /**
+ *  Cryptographic Asset Identity Enum
+ */
+const CRYPTO_TYPE = Object.freeze({
+	CA_TRUE: 'CA_TRUE',
+	STANDARD_CERTIFICATE: 'STANDARD_CERTIFICATE',
+	PUBLIC_KEY: 'PUBLIC_KEY',
+	PRIVATE_KEY: 'PRIVATE-KEY',
+	TLS2_SERVER_KEY: 'TLS2_SERVER_KEY',
+	TLS2_CLIENT_KEY: 'TLS2_CLIENT_KEY',
+	DH_PARAMETERS: 'DH_PARAMETERS',
+	INVALID_KEY: 'INVALID_KEY',
+});
+
+/**
+ * Reads, validates, and categorizes cryptographic files using a secure Enum mapper
+ */
+const getKeyMeta = async function (keyfile, luci_app_openvpn_plus_callback) {
+	const result = {
+		valid: false,
+		type: CRYPTO_TYPE.INVALID_KEY,
+		metadata: { type: _('Unknown Structure'), subject: '', expires: '', algo: '', curve: '' },
+		raw: ''
+	};
+
+	// 1. Guard check: Ensure keyfile is given and callback is a callable execution pipe
+	if (!keyfile || typeof luci_app_openvpn_plus_callback !== 'function') {
+		console.error("getKeyMeta execution aborted: keyfile is missing or callback parameter is not a valid function.");
+		return result;
+	}
+
+	// 2. Safely trigger the verified callback mechanism
+	const res = await luci_app_openvpn_plus_callback([CFG.LIBEXEC.keymeta, keyfile]);
+
+	// Early escape if the backend fails or outputs errors
+	if (!res || res.length === 0 || res.startsWith('ERROR') || res.toUpperCase().indexOf('ERROR') !== -1) {
+		return result;
+	}
+
+	result.raw = res;
+	result.valid = true;
+	const rawUpper = res.toUpperCase();
+
+	// DETERMINISTIC ENUM MAPPER (Maps backend strings directly to your explicit Enum keys)
+	if (rawUpper.indexOf('AUTHORITY') !== -1 || rawUpper.indexOf('CA:TRUE') !== -1) {
+		result.type = CRYPTO_TYPE.CA_TRUE;
+	} else if (rawUpper.indexOf('STANDARD CERTIFICATE') !== -1) {
+		result.type = CRYPTO_TYPE.STANDARD_CERTIFICATE;
+	} else if (rawUpper.indexOf('PUBLIC-KEY') !== -1) {
+		result.type = CRYPTO_TYPE.PUBLIC_KEY;
+	} else if (rawUpper.indexOf('PRIVATE-KEY') !== -1) {
+		result.type = CRYPTO_TYPE.PRIVATE_KEY;
+	} else if (rawUpper.indexOf('TLSV2-SERVER-KEY') !== -1) {
+		result.type = CRYPTO_TYPE.TLS2_SERVER_KEY;
+	} else if (rawUpper.indexOf('TLSV2-CLIENT-KEY') !== -1) {
+		result.type = CRYPTO_TYPE.TLS2_CLIENT_KEY;
+	} else if (rawUpper.indexOf('DH PARAMETERS') !== -1) {
+		result.type = CRYPTO_TYPE.DH_PARAMETERS;
+	}
+
+	// Parse human-readable lines for UI panels
+	const lines = res.split('\n');
+	for (let i = 0; i < lines.length; i++) {
+		const line = lines[i].trim();
+		if (line === '') continue;
+
+		if (line.startsWith('TYPE:')) result.metadata.type = line.replace('TYPE:', '').trim();
+		else if (line.startsWith('Subject:')) result.metadata.subject = line.replace('Subject:', '').trim();
+		else if (line.startsWith('Not After :') || line.startsWith('Not After:')) result.metadata.expires = line.replace(/Not After\s*:\s*/, '').trim();
+		else if (line.startsWith('Public-Key:') || line.startsWith('Private-Key:')) result.metadata.algo = line.trim();
+		else if (line.startsWith('ASN1 OID:') || line.startsWith('NIST Curve:') || line.startsWith('Curve:')) result.metadata.curve = line.trim();
+	}
+
+	return result;
+};
+
+/**
  * Show simple key editor that verifies and displays key metadata.
  */
-const openKeyEditorModal = function (filename, instance_id, displayId, role, appData, uciSaveApplyRestartCallback, rpcFileCallbacks) {
+const openKeyEditorModal = function (filename, instance_id, displayId, role, appData, uciSaveApplyRestartCallback, secureFileCallbacks) {
 	const absolutePath = CFG.FILE.dir_keys + filename;
 	let hasSaved = false;
 
@@ -208,70 +284,86 @@ const openKeyEditorModal = function (filename, instance_id, displayId, role, app
 	});
 
 	// Update the quick info box content
-	const quickInfoBoxUpdate = function (rawMeta) {
+	const quickInfoBoxUpdate = function (keyInfo) {
 		let keyTypeInfo = TXT.KEY.unknown_asset;
 		let expirationInfo = TXT.KEY.not_applicable;
 		let commonNameInfo = '';
 		let isInvalid = false;
-		const cleanMeta = String(rawMeta || '').trim();
 
-		// Parse expiration date safely
-		const expiryMatch = cleanMeta.match(/Not After\s*:\s*([^\n\r]+)/i);
-		if (expiryMatch && expiryMatch[1]) {
-			expirationInfo = expiryMatch[1].trim();
-		}
+		// 1. Map directly from our clean metadata object if the key is valid
+		if (keyInfo && keyInfo.valid === true) {
+			const meta = keyInfo.metadata;
+			const rawUpper = String(keyInfo.raw || '').toUpperCase();
 
-		// Extract Subject Common Name perfectly supporting optional spaces
-		const cnMatch = cleanMeta.match(/Subject\s*:\s*CN\s*=\s*([^,\n\r]+)/i);
-		if (cnMatch && cnMatch[1]) {
-			commonNameInfo = cnMatch[1].trim();
-		}
+			if (meta.expires) {
+				expirationInfo = meta.expires;
+			}
 
-		// Identify key type and strength using clean text patterns
-		if ((cleanMeta.indexOf('Public-Key: (4096 bit)') !== -1) || (cleanMeta.indexOf('Private-Key: (4096 bit)') !== -1)) {
-			keyTypeInfo = 'RSA 4096 Bit';
-		} else if (cleanMeta.indexOf('Public-Key: (256 bit)') !== -1 || cleanMeta.indexOf('prime256v1') !== -1) {
-			keyTypeInfo = 'ECC Prime256v1';
-		} else if ((cleanMeta.indexOf('Public-Key: (2048 bit)') !== -1) || (cleanMeta.indexOf('Private-Key: (2048 bit)') !== -1 || cleanMeta.indexOf('PRIVATE-KEY') !== -1)) {
-			keyTypeInfo = 'RSA 2048 Bit';
-		} else if (cleanMeta.indexOf('DH PARAMETERS') !== -1 || cleanMeta.indexOf('bit') !== -1) {
-			const dhBits = cleanMeta ? cleanMeta.match(/([0-9]+)\s*bit/i) : null;
-			const dbits_info = dhBits ? '(' + dhBits[1] + ' Bit)' : '';
-			keyTypeInfo = 'Diffie-Hellman ' + dbits_info;
-		} else if (cleanMeta.indexOf('TLSv2-Server-Key') !== -1) {
-			keyTypeInfo = 'TLS Crypt v2';
-		} else if (cleanMeta.indexOf('TLSv2-Client-Key') !== -1) {
-			keyTypeInfo = 'TLS Crypt v2';
-		} else if (cleanMeta.indexOf('Unsupported') !== -1) {
-			keyTypeInfo = '<span style="color:var(--success-color-high, #00ac59); font-weight:bold;">' + ICON.WARNING + TXT.WARNING.key_decrepted + '</span>';
-			isInvalid = true;
-		} else if (cleanMeta.indexOf('ERROR') !== -1) {
+			// Extract Subject Common Name perfectly supporting optional spaces
+			const cnMatch = meta.subject.match(/CN\s*=\s*([^,\n\r]+)/i);
+			if (cnMatch && cnMatch[1]) {
+				commonNameInfo = cnMatch[1].trim();
+			}
+
+			// Identify key type and strength using clean Enum keys
+			switch (keyInfo.type) {
+				case CRYPTO_TYPE.CA_TRUE:
+				case CRYPTO_TYPE.STANDARD_CERTIFICATE:
+				case CRYPTO_TYPE.PUBLIC_KEY:
+				case CRYPTO_TYPE.PRIVATE_KEY:
+					if (rawUpper.indexOf('4096 BIT') !== -1) {
+						keyTypeInfo = 'RSA 4096 Bit';
+					} else if (rawUpper.indexOf('256 BIT') !== -1 || rawUpper.indexOf('PRIME256V1') !== -1) {
+						keyTypeInfo = 'ECC Prime256v1';
+					} else {
+						keyTypeInfo = 'RSA 2048 Bit';
+					}
+					break;
+				case CRYPTO_TYPE.DH_PARAMETERS: {
+					const dhBits = rawUpper.match(/([0-9]+)\s*BIT/i);
+					const dbits_info = dhBits ? '(' + dhBits[1] + ' Bit)' : '';
+					keyTypeInfo = 'Diffie-Hellman ' + dbits_info;
+					break;
+				}
+				case CRYPTO_TYPE.TLS2_SERVER_KEY:
+				case CRYPTO_TYPE.TLS2_CLIENT_KEY:
+					keyTypeInfo = 'TLS Crypt v2';
+					break;
+				default:
+					if (rawUpper.indexOf('UNSUPPORTED') !== -1) {
+						keyTypeInfo = '<span style="color:var(--success-color-high, #00ac59); font-weight:bold;">' + ICON.WARNING + TXT.WARNING.key_decrepted + '</span>';
+						isInvalid = true;
+					}
+					break;
+			}
+
+			// Add dynamic Role identity decorations to the type string
+			if (!isInvalid) {
+				const strRole = (role === OPENVPN.ROLE.SERVER) ? TXT.INFO.server : TXT.INFO.client;
+
+				if (keyInfo.type === CRYPTO_TYPE.CA_TRUE) {
+					if (rawUpper.indexOf('SECRET-KEY-CA') !== -1) {
+						keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.master_ca + ' ' + TXT.KEY.certificate + ' ' + TXT.KEY.secret_ca + ']</span>';
+					} else {
+						keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.master_ca + ' ' + TXT.KEY.certificate + ']</span>';
+					}
+				} else if (keyInfo.type === CRYPTO_TYPE.STANDARD_CERTIFICATE) {
+					keyTypeInfo += ' - <span style="color:var(--primary-color-high, #1976d2); font-weight:bold;">[' + strRole + ' ' + TXT.KEY.certificate + ']</span>';
+				} else if (keyInfo.type === CRYPTO_TYPE.PRIVATE_KEY) {
+					keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + strRole + ' ' + TXT.KEY.private_key + ']</span>';
+				} else if (keyInfo.type === CRYPTO_TYPE.TLS2_SERVER_KEY) {
+					keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.tls_key_server + ']</span>';
+				} else if (keyInfo.type === CRYPTO_TYPE.TLS2_CLIENT_KEY) {
+					keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.tls_key_client + ']</span>';
+				}
+			}
+		} else {
+			// Fallback state if getKeyMeta marked the asset file as invalid
 			keyTypeInfo = '<span style="color:var(--success-color-high, #00ac59); font-weight:bold;">' + ICON.ERROR + TXT.ERROR.format_corruption + '</span>';
 			isInvalid = true;
 		}
 
-		// Role identities to make the type text easy to read for the admin
-		if (!isInvalid) {
-			const strRole = (role === OPENVPN.ROLE.SERVER) ? TXT.INFO.server : TXT.INFO.client;
-
-			if (cleanMeta.indexOf('AUTHORITY') !== -1 || cleanMeta.indexOf('CA:TRUE') !== -1) {
-				if (cleanMeta.indexOf('SECRET-KEY-CA') !== -1) {
-					keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.master_ca + ' ' + TXT.KEY.certificate + ' ' + TXT.KEY.secret_ca + ']</span>';
-				} else {
-					keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.master_ca + ' ' + TXT.KEY.certificate + ']</span>';
-				}
-			} else if (cleanMeta.indexOf('STANDARD CERTIFICATE') !== -1) {
-				keyTypeInfo += ' - <span style="color:var(--primary-color-high, #1976d2); font-weight:bold;">[' + strRole + ' ' + TXT.KEY.certificate + ']</span>';
-			} else if (cleanMeta.indexOf('Private-Key') !== -1 || cleanMeta.indexOf('PRIVATE-KEY') !== -1) {
-				keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + strRole + ' ' + TXT.KEY.private_key + ']</span>';
-			} else if (cleanMeta.indexOf('TLSv2-Server-Key') !== -1) {
-				keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.tls_key_server + ']</span>';
-			} else if (cleanMeta.indexOf('TLSv2-Client-Key') !== -1) {
-				keyTypeInfo += ' - <span style="color:var(--success-color-high, #00ac59); font-weight:bold;">[' + TXT.KEY.tls_key_client + ']</span>';
-			}
-		}
-
-		// Apply styles and render HTML nodes dynamically
+		// 3. Apply styles and render HTML nodes dynamically
 		if (isInvalid) {
 			quickInfoBox.style.borderLeftColor = 'var(--success-color-high, #00ac59)';
 			quickInfoBox.innerHTML = keyTypeInfo;
@@ -288,17 +380,22 @@ const openKeyEditorModal = function (filename, instance_id, displayId, role, app
 		quickInfoBox.style.display = 'block';
 	};
 
-	// Read file and parse metadata
-	rpcFileCallbacks.rpcReadFile(absolutePath).then(function (content) {
+	// Read file and parse metadata asynchronously
+	secureFileCallbacks.secureReadFile(absolutePath).then(async function (content) {
+		// 1. Fill the textarea workspace panel instantly
 		modalKeyTextArea.value = content ? content.trim() + '\n' : '--- EMPTY OR BLANK KEY FILE ---';
 
-		if (!content || content.trim() === '') return;
+		// 2. Early escape if the file is completely empty to prevent unneeded backend queries
+		if (!content || content.trim() === '') {
+			quickInfoBoxUpdate({ valid: false });
+			return;
+		}
 
-		rpcFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keymeta, filename]).then(function (res) {
-			if (res.length > 0) {
-				quickInfoBoxUpdate(res);
-			}
-		});
+		// 3. FIX: 'async function' allows using 'await' here flawlessly!
+		const keyInfo = await getKeyMeta(filename, secureFileCallbacks.luci_app_openvpn_plus);
+
+		// 4. Update the visual UI panel metrics
+		quickInfoBoxUpdate(keyInfo);
 	});
 
 	const modalSaveApplyBtn = E('button', {
@@ -306,45 +403,45 @@ const openKeyEditorModal = function (filename, instance_id, displayId, role, app
 		'style': 'margin-right:10px;'
 	}, [TXT.BTN.save_apply]);
 
-	modalSaveApplyBtn.addEventListener('click', function () {
+	modalSaveApplyBtn.addEventListener('click', async function () {
 		modalSaveApplyBtn.disabled = true;
 		modalSaveApplyBtn.textContent = TXT.BTN.saving;
 
 		// Standardize all copy-pasted line endings instantly (Supports UNIX \n, Windows \r\n, and Mac \r)
 		const sanitizedKeyContent = sanitizeInputText(modalKeyTextArea.value) + '\n';
 
-		// Write file and re-validate key metadata (Using our clean sanitized text string)
-		rpcFileCallbacks.rpcWriteFile(absolutePath, sanitizedKeyContent)
-			.then(function () {
-				return rpcFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keymeta, filename]);
-			})
-			.then(function (keymeta) {
+		try {
+			// 1. Write the clean sanitized text string to disk
+			await secureFileCallbacks.secureWriteFile(absolutePath, sanitizedKeyContent);
 
-				if (keymeta.indexOf('ERROR') !== -1) {
-					quickInfoBoxUpdate(keymeta);
-					modalSaveApplyBtn.disabled = false;
-					modalSaveApplyBtn.textContent = TXT.BTN.save_apply;
-					return Promise.reject(new Error('Editor validation failed'));
-				}
+			// 2. Re-validate key metadata using our smart callback engine
+			const keyInfo = await getKeyMeta(filename, secureFileCallbacks.luci_app_openvpn_plus);
 
-				hasSaved = true;
-				modalSaveApplyBtn.textContent = TXT.BTN.saved;
+			// 3. Evaluate the cryptographic validation status
+			if (keyInfo.valid === false) {
+				quickInfoBoxUpdate(keyInfo); // Renders the error state inside the UI box
+				modalSaveApplyBtn.disabled = false;
+				modalSaveApplyBtn.textContent = TXT.BTN.save_apply;
+				return; // Stop execution instantly
+			}
 
-				setTimeout(function () {
-					modalSaveApplyBtn.disabled = false;
-					modalSaveApplyBtn.textContent = TXT.BTN.save_apply;
-					if (keymeta !== '') {
-						quickInfoBoxUpdate(keymeta);
-					}
-				}, 1200);
-			})
-			.catch(function (err) {
-				if (err.message !== 'Editor validation failed') {
-					console.error('Editor save chain caught unhandled error context:', err);
-					modalSaveApplyBtn.disabled = false;
-					modalSaveApplyBtn.textContent = TXT.BTN.save_apply;
-				}
-			});
+			// 4. Success path: Key is good!
+			hasSaved = true;
+			modalSaveApplyBtn.textContent = TXT.BTN.saved;
+
+			// Quick temporary visual feedback loop for the administrator
+			setTimeout(function () {
+				modalSaveApplyBtn.disabled = false;
+				modalSaveApplyBtn.textContent = TXT.BTN.save_apply;
+				quickInfoBoxUpdate(keyInfo);
+			}, 1200);
+
+		} catch (err) {
+			console.error('Editor save chain caught unhandled error context:', err);
+			modalSaveApplyBtn.disabled = false;
+			modalSaveApplyBtn.textContent = TXT.BTN.save_apply;
+			quickInfoBoxUpdate({ valid: false });
+		}
 	});
 
 	const modalDownloadKeyBtn = E('button', {
@@ -394,7 +491,7 @@ const openKeyEditorModal = function (filename, instance_id, displayId, role, app
 /**
  * Creates keys and certificates using background background scripts
  */
-const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSelection, selectedYears, targetCnName, customCliString, statusOutputNode, rpcFileCallbacks, finalCallback, displayMode) {
+const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSelection, selectedYears, targetCnName, customCliString, statusOutputNode, secureFileCallbacks, finalCallback, displayMode) {
 	if (!statusOutputNode) {
 		return;
 	}
@@ -404,7 +501,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 		return;
 	}
 
-	const keygenCleanUp = function () { rpcFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygenclean]); };
+	const keygenCleanUp = function () { secureFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygenclean]); };
 
 	const days = (parseInt(selectedYears, 10) * 365).toString();
 
@@ -465,7 +562,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 	}
 
 	// Run the system command to start the key background script
-	rpcFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygen, backendType, instance_id, caBits, days, targetCnName, step1Custom]);
+	secureFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygen, backendType, instance_id, caBits, days, targetCnName, step1Custom]);
 
 	if (active_mode === KEYTYPE.pki) {
 		accumulatedPkiLog = ICON.ARROW + TXT.KEY.pki_step1 + '\n';
@@ -487,7 +584,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 	const logPollerInterval = setInterval(function () {
 		pollCount++;
 
-		rpcFileCallbacks.rpcReadFile(CFG.FILE.openvpn_keygen_log).then(function (logContent) {
+		secureFileCallbacks.secureReadFile(CFG.FILE.openvpn_keygen_log).then(function (logContent) {
 			if (logContent && logContent.trim() !== '') {
 				const beautifiedLog = logContent.replace(/\[CMD\]/g, ICON.LAPTOP);
 				statusOutputNode.value = accumulatedPkiLog + beautifiedLog;
@@ -500,7 +597,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 					let targetTmpFile = CFG.FILE.temp_openvpn_keygen + backendType + '.tmp';
 
 					// Read the temporary file containing the generated text data
-					rpcFileCallbacks.rpcReadFile(targetTmpFile).then(function (finalAsset) {
+					secureFileCallbacks.secureReadFile(targetTmpFile).then(function (finalAsset) {
 
 						if (!finalAsset || finalAsset.trim() === '') {
 							return;
@@ -516,7 +613,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 								backendType = KEYTYPE.server_key;
 								accumulatedPkiLog += finalBeautifiedLog + log_separator_line + ICON.ARROW + TXT.KEY.pki_step2 + '\n';
 
-								rpcFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygen, backendType, instance_id, bits, days, targetCnName, step2Custom]);
+								secureFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygen, backendType, instance_id, bits, days, targetCnName, step2Custom]);
 
 							} else if (currentPkiStep === 2) {
 								pki_payload.key = finalAsset;
@@ -526,7 +623,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 								const displayStepText = (active_mode === KEYTYPE.client_pki) ? TXT.KEY.signing_client_using_server_ca : TXT.KEY.pki_step3;
 								accumulatedPkiLog += finalBeautifiedLog + log_separator_line + ICON.ARROW + displayStepText + '\n';
 
-								rpcFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygen, backendType, instance_id, bits, days, targetCnName, step3Custom]);
+								secureFileCallbacks.luci_app_openvpn_plus([CFG.LIBEXEC.keygen, backendType, instance_id, bits, days, targetCnName, step3Custom]);
 
 							} else if (currentPkiStep === 3) {
 								pki_payload.cert = finalAsset;
@@ -537,7 +634,7 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 
 								if (active_mode === KEYTYPE.client_pki) {
 									// Read the file and use empty string if it fails
-									caPromise = rpcFileCallbacks.rpcReadFile(CFG.FILE.dir_keys + 'ca_' + instance_id + '.crt');
+									caPromise = secureFileCallbacks.secureReadFile(CFG.FILE.dir_keys + 'ca_' + instance_id + '.crt');
 								} else {
 									// Do not read the file, just send an empty string immediately
 									caPromise = Promise.resolve('');
@@ -611,19 +708,19 @@ const executeAsynchronousKeyGen = function (instance_id, active_mode, rawBitsSel
 /**
  * Commits raw cryptographic key components or single key assets sequentially to disk storage.
  */
-const saveKeysToDisk = function (instance_id, active_mode, pkiPayload, singlePayload, rpcFileCallbacks) {
+const saveKeysToDisk = function (instance_id, active_mode, pkiPayload, singlePayload, secureFileCallbacks) {
 	if (active_mode === KEYTYPE.pki) {
 		if (!pkiPayload || !pkiPayload.ca || !pkiPayload.key || !pkiPayload.cert) {
 			return Promise.reject(new Error('Incomplete multi-stage PKI suite payload buffer contents.'));
 		}
 
 		// Write PKI certificates and keys sequentially to disk
-		return rpcFileCallbacks.rpcWriteFile(CFG.FILE.dir_keys + 'ca_' + instance_id + '.crt', pkiPayload.ca.trim() + '\n')
+		return secureFileCallbacks.secureWriteFile(CFG.FILE.dir_keys + 'ca_' + instance_id + '.crt', pkiPayload.ca.trim() + '\n')
 			.then(function () {
-				return rpcFileCallbacks.rpcWriteFile(CFG.FILE.dir_keys + 'server_' + instance_id + '.key', pkiPayload.key.trim() + '\n');
+				return secureFileCallbacks.secureWriteFile(CFG.FILE.dir_keys + 'server_' + instance_id + '.key', pkiPayload.key.trim() + '\n');
 			})
 			.then(function () {
-				return rpcFileCallbacks.rpcWriteFile(CFG.FILE.dir_keys + 'server_' + instance_id + '.crt', pkiPayload.cert.trim() + '\n');
+				return secureFileCallbacks.secureWriteFile(CFG.FILE.dir_keys + 'server_' + instance_id + '.crt', pkiPayload.cert.trim() + '\n');
 			});
 	} else {
 		if (!singlePayload) {
@@ -640,7 +737,7 @@ const saveKeysToDisk = function (instance_id, active_mode, pkiPayload, singlePay
 			targetFile = 'client_' + instance_id + '.tls2.key';
 		}
 		if (targetFile) {
-			return rpcFileCallbacks.rpcWriteFile(CFG.FILE.dir_keys + targetFile, singlePayload.trim() + '\n');
+			return secureFileCallbacks.secureWriteFile(CFG.FILE.dir_keys + targetFile, singlePayload.trim() + '\n');
 		} else {
 			return Promise.reject(new Error('Unknown keytype.'));
 		}
@@ -751,7 +848,7 @@ const openAutomatedPostKeyGenModal = async function (newInstanceItem, appData, w
 
 		await callbacks.createInstance(newInstanceItem, appData, wizardParams);
 
-		executeAsynchronousKeyGen(instance_id, KEYTYPE.pki, KEYTYPE.rsa2048_ec, KEYTYPE.y100, cnName, '', progressTextArea, callbacks.rpcFileCallbacks, function (pkiSuccess, pkiData, nullData) {
+		executeAsynchronousKeyGen(instance_id, KEYTYPE.pki, KEYTYPE.rsa2048_ec, KEYTYPE.y100, cnName, '', progressTextArea, callbacks.secureFileCallbacks, function (pkiSuccess, pkiData, nullData) {
 			if (!pkiSuccess || !pkiData) {
 				progressTextArea.value += '\n' + ICON.ERROR + ' PKI generation failed.';
 				closeBtn.disabled = false;
@@ -762,7 +859,7 @@ const openAutomatedPostKeyGenModal = async function (newInstanceItem, appData, w
 			progressTextArea.value += log_separator_line + ICON.ARROW + TXT.KEY.generate_tls_key + '\n';
 			progressTextArea.scrollTop = progressTextArea.scrollHeight;
 
-			executeAsynchronousKeyGen(instance_id, KEYTYPE.server_tls2, 'none', '0', cnName, '', progressTextArea, callbacks.rpcFileCallbacks, function (tlsSuccess, nullData, tlsData) {
+			executeAsynchronousKeyGen(instance_id, KEYTYPE.server_tls2, 'none', '0', cnName, '', progressTextArea, callbacks.secureFileCallbacks, function (tlsSuccess, nullData, tlsData) {
 				if (!tlsSuccess || !tlsData) {
 					progressTextArea.value += '\n' + ICON.ERROR + 'TLS crypt v2 server master key generation failed.';
 					closeBtn.disabled = false;
@@ -770,8 +867,8 @@ const openAutomatedPostKeyGenModal = async function (newInstanceItem, appData, w
 					return;
 				}
 				Promise.all([
-					saveKeysToDisk(instance_id, KEYTYPE.pki, pkiData, null, callbacks.rpcFileCallbacks),
-					saveKeysToDisk(instance_id, KEYTYPE.server_tls2, null, tlsData, callbacks.rpcFileCallbacks)
+					saveKeysToDisk(instance_id, KEYTYPE.pki, pkiData, null, callbacks.secureFileCallbacks),
+					saveKeysToDisk(instance_id, KEYTYPE.server_tls2, null, tlsData, callbacks.secureFileCallbacks)
 				]).then(function () {
 					progressTextArea.value += '\n' + ICON.SAVE + ' ' + TXT.KEY.pki_saved + '\n' + ICON.SAVE + ' ' + TXT.KEY.tls_key_saved;
 					progressTextArea.scrollTop = progressTextArea.scrollHeight;
@@ -918,7 +1015,7 @@ const createKeyGenUiElements = function (role, defaultName, appData) {
 /**
  * Connects all interactive timers, actions and file saving events
  */
-const setupKeyGenEvents = function (ui, instance_id, state, appData, uciSaveApplyRestartCallback, rpcFileCallbacks) {
+const setupKeyGenEvents = function (ui, instance_id, state, appData, uciSaveApplyRestartCallback, secureFileCallbacks) {
 	// Use ui.nodes.options to safely find the unique mode dropdown element layout
 	const modeSelect = (ui.nodes && ui.nodes.options) ? ui.nodes.options.querySelector('#' + CFG.ID.central_keygen_mode) : null;
 
@@ -1046,7 +1143,7 @@ const setupKeyGenEvents = function (ui, instance_id, state, appData, uciSaveAppl
 		modeSelect.disabled = true;
 
 		// STEP 1: Start core asynchronous cryptographic generation
-		executeAsynchronousKeyGen(instance_id, state.mode, rawBitsSelection, selectedYears, finalCn, baseCustomArgs, ui.nodes.output, rpcFileCallbacks, function (isSuccessful, pkiData, singleData) {
+		executeAsynchronousKeyGen(instance_id, state.mode, rawBitsSelection, selectedYears, finalCn, baseCustomArgs, ui.nodes.output, secureFileCallbacks, function (isSuccessful, pkiData, singleData) {
 			if (isSuccessful) {
 				// Scenario A: If a Site-to-Site client bundle is requested, chain the asymmetric client token derivation instantly
 				if (state.mode === KEYTYPE.client_pki) {
@@ -1055,7 +1152,7 @@ const setupKeyGenEvents = function (ui, instance_id, state, appData, uciSaveAppl
 					ui.nodes.output.scrollTop = ui.nodes.output.scrollHeight;
 
 					// STEP 2: Asynchronously generate the client-tls2 credentials into the volatile RAM buffer
-					executeAsynchronousKeyGen(instance_id, KEYTYPE.client_tls2, 'none', '0', finalCn, '', ui.nodes.output, rpcFileCallbacks, function (tlsSuccess, nullData, tlsData) {
+					executeAsynchronousKeyGen(instance_id, KEYTYPE.client_tls2, 'none', '0', finalCn, '', ui.nodes.output, secureFileCallbacks, function (tlsSuccess, nullData, tlsData) {
 						ui.buttons.generate.disabled = false;
 						modeSelect.disabled = false;
 
@@ -1114,7 +1211,7 @@ const setupKeyGenEvents = function (ui, instance_id, state, appData, uciSaveAppl
 		ui.buttons.save.disabled = true;
 		ui.buttons.save.style.opacity = '0.5';
 
-		saveKeysToDisk(instance_id, state.mode, state.pkiData, state.singleData, rpcFileCallbacks)
+		saveKeysToDisk(instance_id, state.mode, state.pkiData, state.singleData, secureFileCallbacks)
 			.then(function () {
 				state.hasSaved = true;
 				state.isGenerated = false;
@@ -1191,7 +1288,7 @@ const setupKeyGenEvents = function (ui, instance_id, state, appData, uciSaveAppl
 /**
  * Opens the key generator window to create keys and certificates (Slim and Modular)
  */
-const openKeyGenModal = function (instance_id, displayId, role, appData, uciSaveApplyRestartCallback, rpcFileCallbacks) {
+const openKeyGenModal = function (instance_id, displayId, role, appData, uciSaveApplyRestartCallback, secureFileCallbacks) {
 	// Create the configuration elements and buttons using our sub-routines
 	const ui = createKeyGenUiElements(role, displayId, appData);
 
@@ -1205,7 +1302,7 @@ const openKeyGenModal = function (instance_id, displayId, role, appData, uciSave
 	};
 
 	// Setup all interactive listeners and event routing logic
-	setupKeyGenEvents(ui, instance_id, state, appData, uciSaveApplyRestartCallback, rpcFileCallbacks);
+	setupKeyGenEvents(ui, instance_id, state, appData, uciSaveApplyRestartCallback, secureFileCallbacks);
 
 	// Render the complete key generator overlay view layout structure
 	L.ui.showModal(TXT.KEY.title_main + ' (' + displayId + ')', [
@@ -1244,6 +1341,8 @@ const openKeyGenModal = function (instance_id, displayId, role, appData, uciSave
 return L.Class.extend(
 	{
 		KEYTYPE: KEYTYPE,
+		CRYPTO_TYPE: CRYPTO_TYPE,
+		getKeyMeta: getKeyMeta,
 		executeAsynchronousKeyGen: executeAsynchronousKeyGen,
 		openKeyEditorModal: openKeyEditorModal,
 		openAutomatedPostKeyGenModal: openAutomatedPostKeyGenModal,

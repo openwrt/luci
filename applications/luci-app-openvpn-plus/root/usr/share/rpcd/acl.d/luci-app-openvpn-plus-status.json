@@ -10,9 +10,11 @@
 				"network": [ "status" ]
 			},
 			"file": {
-				"/etc/openvpn/luci/*": [ "read" ],
-				"/proc/uptime": [ "read" ],
-				"/usr/libexec/luci-app-openvpn-plus": [ "exec" ]
+				"/usr/libexec/luci-app-openvpn-plus getmac": [ "exec" ],
+				"/usr/libexec/luci-app-openvpn-plus ovpnver": [ "exec" ],
+				"/usr/libexec/luci-app-openvpn-plus getnetstat *": [ "exec" ],
+				"/usr/libexec/luci-app-openvpn-plus readstatus *": [ "exec" ],
+				"/usr/libexec/luci-app-openvpn-plus statfile *": [ "exec" ]
 			}
 		}
 	}

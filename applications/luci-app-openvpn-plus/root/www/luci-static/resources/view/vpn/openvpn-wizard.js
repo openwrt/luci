@@ -225,8 +225,8 @@ const OPENVPN = Object.freeze({
 		SITETOSITE: 'sitetosite'
 	}),
 	PROTO: Object.freeze({
-		TCP: 'tcp',
-		UDP: 'udp'
+		tcp: 'tcp',
+		udp: 'udp'
 	}),
 	PORT: Object.freeze({
 		s1194: '1194',
@@ -271,7 +271,7 @@ const WIZARD_PARAMS_TEMPLATE = Object.freeze({
 	role: OPENVPN.ROLE.SERVER,					// Target configuration profile role mapping (server or client)
 	port: OPENVPN.PORT.n1194,					// Internal numeric system port assignment for the local process listener
 	portExtern: OPENVPN.PORT.n1194,				// External port offset mapping used for firewall rule deployments
-	proto: OPENVPN.PROTO.UDP,					// Transport layer connection protocol string selection (udp or tcp)
+	proto: OPENVPN.PROTO.udp,					// Transport layer connection protocol string selection (udp or tcp)
 	displayName: '',							// Localized custom alias name assigned to distinguish the specific tunnel
 	strategy: OPENVPN.STRATEGY.STANDARD,		// Network traffic management profile (standard, redirect, or sitetosite)
 	remoteServer: '',							// Client role parameter: Target remote server public IP or domain string
@@ -1147,10 +1147,7 @@ const importClientInstance = async function (elements, wizardData, nextBtn, prev
 	}
 
 	try {
-		const extractedParams = await wizardData.importOvpnClientProfileCallback(
-			activeSubParams.importedRawOvpn,
-			targetInstanceId
-		);
+		const extractedParams = await wizardData.importOvpnClientProfileCallback(activeSubParams.importedRawOvpn, targetInstanceId, wizardData.appData);
 
 		// Path A: Update security keys only
 		if (extractedParams.isCryptoUpdateOnly === true) {
@@ -1647,7 +1644,7 @@ const renderOptionSiteClient = function (buttons, messageBox) {
 					E('span', {}, [
 						ICON.ARROW + ' ' + TXT.INFO.server_address + ': ',
 						E('code', { 'style': 'font-weight:bold; color:var(--primary-color-high, #1976d2);' },
-							remoteServerMatch[1] + ':' + remoteServerMatch[2] + ' (' + (protoMatch ? protoMatch[1] : OPENVPN.PROTO.UDP) + ')'
+							remoteServerMatch[1] + ':' + remoteServerMatch[2] + ' (' + (protoMatch ? protoMatch[1] : OPENVPN.PROTO.udp) + ')'
 						)
 					])
 				]);
@@ -1975,8 +1972,8 @@ const createWizardInputElements = function (buttons, wizardData, selectedScenari
 		radioSiteClient.disabled = true;
 	}
 
-	const radioUdp = E('input', { 'type': 'radio', 'name': 'wizard_proto_group', 'value': OPENVPN.PROTO.UDP, 'style': 'width:18px; height:18px; margin:0; cursor:pointer;' });
-	const radioTcp = E('input', { 'type': 'radio', 'name': 'wizard_proto_group', 'value': OPENVPN.PROTO.TCP, 'style': 'width:18px; height:18px; margin:0; cursor:pointer;' });
+	const radioUdp = E('input', { 'type': 'radio', 'name': 'wizard_proto_group', 'value': OPENVPN.PROTO.udp, 'style': 'width:18px; height:18px; margin:0; cursor:pointer;' });
+	const radioTcp = E('input', { 'type': 'radio', 'name': 'wizard_proto_group', 'value': OPENVPN.PROTO.tcp, 'style': 'width:18px; height:18px; margin:0; cursor:pointer;' });
 	const displayNameInput = E('input', { 'type': 'text', 'class': 'cbi-input-text', 'placeholder': TXT.MSG.placeholder_myhomevpn, 'style': 'width:100%;' });
 	const ddnsInput = E('input', { 'type': 'text', 'class': 'cbi-input-text', 'placeholder': TXT.MSG.placeholder_mydomain_publicip, 'style': 'width:100%; font-weight:bold; color:var(--primary-color-high, #1976d2);' });
 	const portInput = E('input', { 'type': 'text', 'class': 'cbi-input-text', 'style': 'font-family:var(--font-monospace, monospace)' });
@@ -2060,7 +2057,7 @@ const createWizardNavigationButtons = function () {
 const updateDefaultWizardPorts = async function (protoValue, portForwardingAlert, portInput, externPortInput, scenario, wizardData) {
 	let defaultPort;
 	let defaultPortExtern;
-	const isTcp = (protoValue === OPENVPN.PROTO.TCP);
+	const isTcp = (protoValue === OPENVPN.PROTO.tcp);
 	if (isTcp) {
 		const ports = getPortsTcp(wizardData);
 		defaultPort = ports.port
@@ -2142,7 +2139,7 @@ const syncScenarioSubNodeVisibility = function (elements) {
  * Find out if UDP or TCP is selected
  */
 const getActiveProtoValue = function (elements) {
-	const protoValue = elements.radios.tcp.checked ? OPENVPN.PROTO.TCP : OPENVPN.PROTO.UDP;
+	const protoValue = elements.radios.tcp.checked ? OPENVPN.PROTO.tcp : OPENVPN.PROTO.udp;
 	return protoValue;
 };
 
@@ -2299,7 +2296,7 @@ const getPortsTcp = function (wizardData) {
 
 		// 1. Just count how many TCP instances are currently registered in total
 		for (let i = 0; i < instances.length; i++) {
-			if (instances[i] && instances[i].proto === OPENVPN.PROTO.TCP) {
+			if (instances[i] && instances[i].proto === OPENVPN.PROTO.tcp) {
 				tcpInstanceCount++;
 			}
 		}

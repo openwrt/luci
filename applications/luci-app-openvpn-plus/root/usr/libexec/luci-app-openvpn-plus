@@ -9,14 +9,9 @@
 # luci-app-openvpn-plus : helper tools and background workers
 # /usr/libexec/luci-app-openvpn-plus
 
-# Check if the user gave an argument
-if [ -z "$1" ]; then
-	echo "Usage: $0 {getmac|lanip|getnetstat|bestcrypto|ovpnver|ovpnstart|ovpnrestart|ovpnstop|ovpnservice|firewallservice|firewallnft|openssldgst|symlink|readstatus|iroute|cleanipdns|checkip|resolveip|checkport|checksroute|checkddns|publicip|wgetddns|ddnsservice|ucisortovpn|cleanup|keymeta|keygenclean|initkeys|keygen} [parameters]"
-	exit 1
-fi
-
 # Get mac address of lan interface
 getmac() {
+	# no arguments (no shift)
 	if [ -f "/sys/class/net/br-lan/address" ]; then
 		cat /sys/class/net/br-lan/address
 	else
@@ -29,11 +24,12 @@ getmac() {
 lanip() {
 	shift # Remove "lanip" from the arguments list
 	local cidr="$1"
-	local dump=$(ubus call network.interface.lan status 2>/dev/null)
 
 	# Try to extract the first IPv4 address and subnet mask from the JSON data
-	local ip=$(echo "$dump" | jsonfilter -e '@["ipv4-address"][0].address' 2>/dev/null)
-	local mask=$(echo "$dump" | jsonfilter -e '@["ipv4-address"][0].mask' 2>/dev/null)
+	local dump ip mask
+	dump=$(ubus call network.interface.lan status 2>/dev/null)
+	ip=$(echo "$dump" | jsonfilter -e '@["ipv4-address"][0].address' 2>/dev/null)
+	mask=$(echo "$dump" | jsonfilter -e '@["ipv4-address"][0].mask' 2>/dev/null)
 
 	# If no IPv4 address exists, try to get the first IPv6 address and prefix length
 	if [ -z "$ip" ]; then
@@ -72,10 +68,11 @@ getnetstat() {
 	fi
 
 	# Read statistics directly from sysfs files
-	local rxb=$(cat /sys/class/net/"$interface"/statistics/rx_bytes 2>/dev/null || echo 0)
-	local txb=$(cat /sys/class/net/"$interface"/statistics/tx_bytes 2>/dev/null || echo 0)
-	local rxp=$(cat /sys/class/net/"$interface"/statistics/rx_packets 2>/dev/null || echo 0)
-	local txp=$(cat /sys/class/net/"$interface"/statistics/tx_packets 2>/dev/null || echo 0)
+	local rxb txb rxp txp
+	rxb=$(cat /sys/class/net/"$interface"/statistics/rx_bytes 2>/dev/null || echo 0)
+	txb=$(cat /sys/class/net/"$interface"/statistics/tx_bytes 2>/dev/null || echo 0)
+	rxp=$(cat /sys/class/net/"$interface"/statistics/rx_packets 2>/dev/null || echo 0)
+	txp=$(cat /sys/class/net/"$interface"/statistics/tx_packets 2>/dev/null || echo 0)
 
 	echo "$rxb|$txb|$rxp|$txp|true|$interface"
 	return 0
@@ -83,6 +80,7 @@ getnetstat() {
 
 # Evaluates system hardware to determine the highest-performing cipher suite anchor
 bestcrypto() {
+	# no arguments (no shift)
 	if grep -E -q 'aes|pmull' /proc/cpuinfo; then
 		echo "AES"
 	else
@@ -91,18 +89,266 @@ bestcrypto() {
 	return 0
 }
 
+# readstatus only allows access to: /proc/uptime, /var/run/openvpn.*.status, /tmp/run/openvpn.*.status, and /etc/openvpn/luci/*.conf
+readstatus() {
+	shift # Remove "readstatus" from the arguments list
+	if [ "$#" -ne 1 ]; then
+		echo "ERROR: Invalid number of parameters."  >&2
+		return 1
+	fi
+
+	local requested_path="$1"
+
+	# 1. Critical Guard: Block empty inputs or directory traversal hacks (..)
+	if [ -z "$requested_path" ] || echo "$requested_path" | grep -q '\.\.'; then
+		echo "ERROR: Structural security barrier rejection."  >&2
+		return 1
+	fi
+
+	# 2. Fix: If the path does not start with a slash, add it dynamically
+	case "$requested_path" in
+		/*) ;;
+		*) requested_path="/$requested_path" ;;
+	esac
+
+	# 3. Strict White-Box Pattern Validation matching the openwrt/luci ACL expectations
+	case "$requested_path" in
+		/proc/uptime)
+			;;
+		/var/run/openvpn.*.status)
+			;;
+		/tmp/run/openvpn.*.status)
+			;;
+		/etc/openvpn/luci/*.conf)
+			;;
+		*)
+			echo "ERROR: Access denied. Protected path." >&2
+			return 1
+			;;
+	esac
+
+	# 4. Output the file content securely
+	if [ -e "$requested_path" ]; then
+		cat "$requested_path"
+		return 0
+	else
+		# Return an explicit empty line for valid but empty status files
+		echo ""
+		return 0
+	fi
+}
+
+# Central security gate to format and validate paths
+internal_securepath() {
+	# internal (no shift)
+	local target_path="$1"
+	local block_access="$2" # Optional: "write" to block read-only folders
+
+	# 1. Critical Guard: Block empty inputs or directory traversal hacks (..)
+	if [ -z "$target_path" ] || echo "$target_path" | grep -q '\.\.'; then
+		return 1
+	fi
+
+	# 2. Fix: If the path does not start with a slash, add it dynamically
+	case "$target_path" in
+		/*) ;;
+		*) target_path="/$target_path" ;;
+	esac
+
+	# 3. Check if the absolute path is inside the allowed sandbox folders
+	case "$target_path" in
+		/proc/uptime)
+			# Strictly read-only /proc/uptime
+			[ "$block_access" = "write" ] && return 1
+			echo "$target_path"
+			return 0
+			;;
+		/proc/*)
+			# Strictly read-only PID checks!
+			# Validate that the path contains ONLY digits after /proc/ (e.g., /proc/1234)
+			[ "$block_access" = "write" ] && return 1
+			if echo "$target_path" | grep -q -E '^/proc/[0-9]+$'; then
+				echo "$target_path"
+				return 0
+			fi
+			return 1
+			;;
+		/var/run/openvpn.keygen.lock|/var/run/fw4.state|/var/run/openvpn.*.status)
+			# Read-only files! Block if write access is requested.
+			[ "$block_access" = "write" ] && return 1
+			echo "$target_path"
+			return 0
+			;;
+		/tmp/openvpn.keygen*|/tmp/run/openvpn.*.status)
+			# Read-only files! Block if write access is requested.
+			[ "$block_access" = "write" ] && return 1
+			echo "$target_path"
+			return 0
+			;;
+		/etc/config/openvpn|/etc/config/openvpn-def)
+			# Isolated Config Files: Full read and write access for configuration
+			echo "$target_path"
+			return 0
+			;;
+		/etc/openvpn/luci/*|/etc/openvpn/keys/*)
+			# Isolated App Storage: Full read and write access for certificates and profiles
+			echo "$target_path"
+			return 0
+			;;
+		*)
+			# Any other file, system folder, or unlisted path is strictly blocked
+			return 1
+			;;
+	esac
+}
+
+# Securely read file from disk (Only called by administrative full-access scopes)
+readfile() {
+	shift # Remove "readfile" from the arguments list
+	if [ "$#" -ne 1 ]; then
+		echo "ERROR: Invalid number of parameters." >&2
+		return 1
+	fi
+
+	# Get the validated absolute path from internal_securepath
+	local filepath
+	filepath=$(internal_securepath "$1" "read")
+	if [ -z "$filepath" ]; then
+		echo "ERROR: Access denied. Protected path." >&2
+		return 1
+	fi
+	if [ -e "$filepath" ]; then
+		cat "$filepath"
+		return 0
+	else
+		echo ""
+		return 0
+	fi
+}
+
+# Securely write to disk with root-only access (0600)
+writefile() {
+	shift # Remove "writefile" from the arguments list
+	if [ "$#" -ne 2 ]; then
+		echo "ERROR: Invalid number of parameters."
+		return 1
+	fi
+
+	# Get the validated absolute path from securepath with write permission check
+	local filepath
+	filepath=$(internal_securepath "$1" "write")
+	local content="$2"
+	if [ -z "$filepath" ]; then
+		echo "ERROR: Access denied. Protected path."
+		return 1
+	fi
+
+	# Ensure the target folder exists before writing files into it
+	mkdir -p "$(dirname "$filepath")"
+
+	# Restrict umask inline to block race conditions without subshell (prevents LuCI/rpcd process blocking and premature termination)
+	local old_umask
+	old_umask=$(umask)
+	umask 077
+	printf '%s' "$content" > "$filepath"
+	umask "$old_umask"
+
+	# Restrict permissions permanently so only root can access it
+	chmod 600 "$filepath"
+	return 0
+}
+
+# Securely remove files from disk
+removefile() {
+	shift # Remove "removefile" from the arguments list
+	if [ "$#" -ne 1 ]; then
+		echo "ERROR: Invalid number of parameters." >&2
+		return 1
+	fi
+
+	# Get the validated absolute path from securepath with write permission check
+	local filepath
+	filepath=$(internal_securepath "$1" "write")
+	if [ -z "$filepath" ]; then
+		echo "ERROR: Access denied. Protected path." >&2
+		return 1
+	fi
+
+	# Delete the file safely without generating errors if it does not exist
+	rm -f "$filepath"
+	return 0
+}
+
+# Securely get file statistics
+statfile() {
+	shift # Remove "statfile" from the arguments list
+	if [ "$#" -ne 1 ]; then
+		echo "ERROR: Invalid number of parameters." >&2
+		return 1
+	fi
+
+	# Get the validated absolute path from securepath
+	local filepath
+	filepath=$(internal_securepath "$1" "read")
+	if [ -z "$filepath" ]; then
+		echo "ERROR: Access denied. Protected path." >&2
+		return 1
+	fi
+
+	# Check if something exists at the path (file, directory or symlink)
+	if [ -e "$filepath" ] || [ -L "$filepath" ]; then
+		local file_type="file"
+		local file_size=0
+
+		[ -d "$filepath" ] && file_type="directory"
+		[ -L "$filepath" ] && file_type="symlink"
+
+		if [ "$file_type" = "file" ]; then
+			# wc -c returns "123 /path/to/file", we use awk to extract just the number
+			file_size=$(wc -c "$filepath" 2>/dev/null | awk '{print $1}')
+			[ -z "$file_size" ] && file_size=0
+		fi
+
+		# Get modification time
+		local mtime
+		mtime=$(date -r "$filepath" +%s 2>/dev/null || echo 0)
+
+		# Print simulated JSON string
+		echo "{\"type\":\"$file_type\",\"size\":$file_size,\"mtime\":$mtime}"
+		return 0
+	fi
+	return 1
+}
+
 # OpenVPN version
 ovpnver() {
+	# no arguments (no shift)
 	openvpn --version
 	return 0;
+}
+
+# Central validator for sleep seconds parameter
+internal_validatesleep() {
+	# internal (no shift)
+	local sec="$1"
+	# Check if empty, contains non-digits, is less than 1, or greater than 60
+	if [ -z "$sec" ] || ! echo "$sec" | grep -q '^[0-9]\+$' || [ "$sec" -lt 1 ] || [ "$sec" -gt 60 ]; then
+		return 1
+	fi
+	return 0
 }
 
 # OpenVPN self healing start engine
 ovpnstart() {
 	shift # Remove "ovpnstart" from the arguments list
 	local inst="$1"
+	local sleepsec="$2"
 
-	# If $inst contains only spaces or is empty, ensure it is completely empty
+	# Execute optional validated sleep delay before doing any work
+	if internal_validatesleep "$sleepsec"; then
+		sleep "$sleepsec"
+	fi
+
 	if [ -z "$(echo "$inst" | tr -d ' ')" ]; then
 		inst=""
 	fi
@@ -117,25 +363,22 @@ ovpnstart() {
 	else
 		# B) GLOBAL MODE: Check all enabled profiles in the configuration
 		uci -q show openvpn | grep "=openvpn" | while read -r line; do
-			local check_inst="${line##*.}"
+			local check_inst
+			check_inst="${line##*.}"
 			check_inst="${check_inst%%=*}"
 
-			# Only check profiles that are enabled by the user
 			if [ "$(uci -q get openvpn."${check_inst}".enabled)" = "1" ]; then
-				# If an enabled instance process is not running, trigger the repair
 				if ! ps | grep -v "grep" | grep -q "openvpn(${check_inst})"; then
 					exit 1
 				fi
 			fi
 		done
 
-		# Catch the result from the pipeline while-loop check safely
 		if [ "$?" -ne 0 ]; then
 			all_running="0"
 		fi
 	fi
 
-	# Recovery cascade: runs only if one or more instances failed to start
 	if [ "$all_running" = "0" ]; then
 		/etc/init.d/openvpn stop "$inst" >/dev/null 2>&1
 		sleep 1
@@ -147,15 +390,19 @@ ovpnstart() {
 
 # OpenVPN self healing restart engine
 ovpnrestart() {
-	shift # Remove "ovpnstart" from the arguments list
+	shift # Remove "ovpnrestart" from the arguments list
 	local inst="$1"
+	local sleepsec="$2"
 
-	# If $inst contains only spaces or is empty, ensure it is completely empty
+	# Execute optional validated sleep delay before doing any work
+	if internal_validatesleep "$sleepsec"; then
+		sleep "$sleepsec"
+	fi
+
 	if [ -z "$(echo "$inst" | tr -d ' ')" ]; then
 		inst=""
 	fi
 
-	# Failsave restart cascade
 	/etc/init.d/openvpn stop "$inst" >/dev/null 2>&1
 	sleep 1
 	/etc/init.d/openvpn restart "$inst" >/dev/null 2>&1
@@ -167,77 +414,57 @@ ovpnrestart() {
 ovpnstop() {
 	shift # Remove "ovpnstop" from the arguments list
 	local inst="$1"
+	local sleepsec="$2"
 
-	# If $inst contains only spaces or is empty, ensure it is completely empty
+	# Execute optional validated sleep delay before doing any work
+	if internal_validatesleep "$sleepsec"; then
+		sleep "$sleepsec"
+	fi
+
 	if [ -z "$(echo "$inst" | tr -d ' ')" ]; then
 		inst=""
 	fi
 
-	# Double stop sequence with 1 second delay to clear locked procd pids safely
 	/etc/init.d/openvpn stop "$inst" >/dev/null 2>&1
 	sleep 1
 	/etc/init.d/openvpn stop "$inst" >/dev/null 2>&1
 }
 
-# openvpn service stop/start (PID-guarded with dynamic stop and restart/reload)
-ovpnservice() {
-	shift # Remove "ovpnservice" from the arguments list
-	local action_cmd="$1"
-	local inst="$2"
-	local pid_file="/var/run/luci-app-openvpn-plus-ovpn-service.pid"
-
-	# If $inst contains only spaces or is empty, ensure it is completely empty
-	if [ -z "$(echo "$inst" | tr -d ' ')" ]; then
-		inst=""
-	fi
-
-	if [ "$action_cmd" = "stop" ] || [ "$action_cmd" = "start" ] || [ "$action_cmd" = "restart" ]; then
-		# 1. Clean up any stale or previous ghost workers instantly
-		start-stop-daemon -K -q -p "$pid_file" 2>/dev/null
-		rm -f "$pid_file"
-
-		# 2. Start the self-healing sequence asynchronously in the background
-		if [ "$action_cmd" = "start" ]; then
-			start-stop-daemon -S -b -m -p "$pid_file" -x /bin/sh -- -c "sleep 3; /usr/libexec/luci-app-openvpn-plus ovpnstart \"$inst\"; rm -f $pid_file"
-		elif [ "$action_cmd" = "restart" ]; then
-			start-stop-daemon -S -b -m -p "$pid_file" -x /bin/sh -- -c "sleep 3; /usr/libexec/luci-app-openvpn-plus ovpnrestart \"$inst\"; rm -f $pid_file"
-		elif [ "$action_cmd" = "stop" ]; then
-			start-stop-daemon -S -b -m -p "$pid_file" -x /bin/sh -- -c "sleep 3; /usr/libexec/luci-app-openvpn-plus ovpnstop \"$inst\"; rm -f $pid_file"
-		fi
-	fi
-	return 0
-}
-
-# firewall service stop/start (PID-guarded with automatic self-cleanup)
-firewallservice() {
+# firewall stop/start/restart engine
+firewallservice () {
 	shift # Remove "firewallservice" from the arguments list
 	local action_cmd="$1"
-	local pid_file="/var/run/luci-app-openvpn-plus-firewall-service.pid"
+	local sleepsec="$2"
 
-	if [ "$action_cmd" = "stop" ] || [ "$action_cmd" = "start" ] || [ "$action_cmd" = "restart" ]; then
-		# 1. Clean up any stale or previous ghost workers instantly
-		start-stop-daemon -K -q -p "$pid_file" 2>/dev/null
-		rm -f "$pid_file"
-
-		# 2. Start worker and append the self-delete command to the end of the execution chain
-		start-stop-daemon -S -b -m -p "$pid_file" -x /bin/sh -- -c "sleep 3; /etc/init.d/firewall $action_cmd >/dev/null 2>&1; rm -f $pid_file"
+	# 1. Execute optional validated sleep delay before doing any work
+	if internal_validatesleep "$sleepsec"; then
+		sleep "$sleepsec"
 	fi
+
+	# 2. Call the standard OpenWrt system firewall controller safely
+	if [ "$action_cmd" = "stop" ] || [ "$action_cmd" = "start" ] || [ "$action_cmd" = "restart" ] || [ "$action_cmd" = "reload" ]; then
+		/etc/init.d/firewall "$action_cmd" >/dev/null 2>&1
+	fi
+
 	return 0
 }
 
 # Secure helper to read and change firewall rules from LuCI without restrictions
 firewallnft() {
 	shift # Remove "firewallnft" from the arguments list
-	# 2>&1 redirects stderr to stdout so LuCI catches syntax errors cleanly.
-	/usr/sbin/nft "$@" 2>&1
-	return 0
+	local chain="$1"
+	# Check if the chain name is empty or contains bad characters (only letters, numbers, and underscores are allowed)
+	if [ -z "$chain" ] || ! echo "$chain" | grep -Eq '^[A-Za-z0-9_]+$'; then
+		return 1
+	fi
+	/usr/sbin/nft list chain inet fw4 "$chain" 2>&1
 }
 
-# Secure helper to calculate cryptographic hashes using openssl dgst
+# Secure helper to calculate cryptographic hashes using openssl dgst (openssldgst -sha256 test)
 openssldgst() {
 	shift # Remove "openssldgst" from the arguments list
-	# We safely pipe the text inside the secure script layer
-	echo -n "$2" | /usr/bin/openssl dgst "$1" -r 2>&1
+	# printf '%s' "test" | /usr/bin/openssl dgst "-sha256" -r 2>&1 (result: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08)
+	printf '%s' "$2" | /usr/bin/openssl dgst "$1" -r 2>&1
 	return 0
 }
 
@@ -251,52 +478,63 @@ symlink() {
 	local lan_ip=""
 	local link_filename=""
 
-	# Check if instance number is a valid digit
+	# Check if instance number is a valid digit.
 	if [ -z "$ovpn_num" ] || ! echo "$ovpn_num" | grep -q '^[0-9]\+$'; then
 		echo "ERROR: Invalid instance number."
 		return 1
 	fi
 
-	# Replace spaces with underscores or use instance name as fallback
+	# Clean the display name. Only letters, numbers, hyphens, and underscores are allowed.
 	if [ -n "$raw_display_name" ]; then
-		link_filename=`echo "$raw_display_name" | tr ' ' '_'`
-	else
+		link_filename=$(echo "$raw_display_name" | tr -cd 'A-Za-z0-9_-')
+	fi
+
+	# Fallback if the cleaned name is empty.
+	if [ -z "$link_filename" ]; then
 		link_filename="instance${ovpn_num}"
 	fi
 
-	# Full path for the web root link
-	local public_symlink_path="/www/${link_filename}_client.ovpn"
-
 	case "$action" in
 		create)
-			# Check if the source profile exists on disk
+			# Check if the source profile exists on disk.
 			if [ ! -f "$export_static_path" ]; then
 				echo "ERROR: Profile file missing at $export_static_path"
 				return 1
 			fi
 
-			# Create the web link
-			ln -sf "$export_static_path" "$public_symlink_path"
+			# Create a random crypt-token (9 random bytes as hex).
+			local secret_token
+			secret_token=$(dd if=/dev/urandom bs=9 count=1 2>/dev/null | hexdump -e '"%02x"')
 
-			# Verify link and find active local router IP
-			if [ -L "$public_symlink_path" ]; then
-				lan_ip=`uci -q get network.lan.ipaddr`
-				if [ -z "$lan_ip" ]; then
-					lan_ip=`ubus call network.interface.lan status 2>/dev/null | jsonfilter -e '@["ipv4-address"].address'`
-				fi
-				if [ -z "$lan_ip" ]; then
+			# Path to the temporary session folder.
+			local session_dir="/www/ovpn-tmp-${secret_token}-${link_filename}"
+			local token_protected_file="${session_dir}/${link_filename}_client.ovpn"
+
+			# Create the directory safely.
+			mkdir -p "$session_dir"
+
+			# SECURITY FIX: create token-protected copy for the webserver
+			cp -f "$export_static_path" "$token_protected_file" 2>/dev/null
+			chmod 644 "$token_protected_file"
+
+			# Verify that the file copy exists and is valid.
+			if [ -f "$token_protected_file" ]; then
+				lan_ip=$(lanip)
+				if [ -z "$lan_ip" ] || [ "$lan_ip" = "0.0.0.0" ]; then
 					lan_ip="localhost"
 				fi
-				echo "SUCCESS: Link created at http://${lan_ip}/${link_filename}_client.ovpn"
+				# Return SUCCESS and the clean download link with sub-folder
+				echo "SUCCESS: http://${lan_ip}/ovpn-tmp-${secret_token}-${link_filename}/${link_filename}_client.ovpn"
 			else
-				echo "ERROR: Failed to create web link."
+				echo "ERROR: Failed to create web export file."
 				return 1
 			fi
 			;;
 		delete)
-			# Remove the link from the web root
-			rm -f "$public_symlink_path"
-			echo "SUCCESS: Link deleted from web root."
+			# Safe clean up using wildcard on the directory name.
+			# This removes the folder, the temporary copy, and deletes the static file.
+			rm -rf /www/ovpn-tmp-*-"${link_filename}"
+			echo "SUCCESS: Link directory and static profile deleted."
 			;;
 		*)
 			echo "Usage: /usr/libexec/luci-app-openvpn-plus symlink [num] [create|delete] [display_name]"
@@ -306,32 +544,17 @@ symlink() {
 	return 0
 }
 
-# Read active multi-user server status logs securely bypassing rpcd nobody restrictions in LuCI
-readstatus() {
-	shift # Remove the "readstatus" command word from the arguments list
-	local instance_id="$1"
-
-	if [ -z "$instance_id" ]; then
-		echo "ERROR: Missing instance ID parameter."
-		return 1
-	fi
-
-	local status_path="/var/run/openvpn.${instance_id}.status"
-
-	# Check if the targeted runtime status file exists and contains real data payload
-	if [ -s "$status_path" ]; then
-		cat "$status_path"
-		return 0
-	else
-		# Return an explicit empty line to indicate a non-initialized routing socket channel
-		echo ""
-		return 0
-	fi
-}
-
 # Validates connecting clients and applies dynamic routing topologies
 iroute() {
 	shift # Remove "iroute" from the arguments list
+
+	# EXTERNAL ENVIRONMENT VARIABLES (Provided dynamically by OpenVPN Daemon):
+	#   $common_name  - Common Name (CN) of the connecting client certificate
+	#   $trusted_ip   - Real public WAN IP address of the remote client
+	#   $proto        - Protocol used by the client connection (tcp/udp)
+	local common_name="${common_name}"
+	local trusted_ip="${trusted_ip}"
+	local proto="${proto}"
 
 	case $proto in
 		*tcp*) proto="tcp" ;;
@@ -378,7 +601,7 @@ iroute() {
 
 # Clean any string from spaces, tabs, newlines, http(s)://, paths, ports and URL brackets
 cleanipdns() {
-	shift # Remove the command word from the arguments list
+	shift # Remove "cleanipdns" from the arguments list
 	local input="$1"
 
 	# 1. Delete spaces, tabs, and carriage returns
@@ -415,7 +638,7 @@ cleanipdns() {
 
 # Validate and clean any given IPv4 or IPv6 address string
 checkip() {
-	shift # Remove the command word from the arguments list
+	shift # Remove "checkip" from the arguments list
 	local ip="$1"
 
 	# Delete all spaces, tabs and hidden lines from the text
@@ -448,7 +671,7 @@ checkip() {
 
 # Resolve domain name to IP or validate raw IPv4/IPv6 input
 resolveip() {
-	shift # Remove the command word from the arguments list
+	shift # Remove "resolveip" from the arguments list
 	local target="$1"
 
 	# Use cleanipdns to fix the input string first
@@ -503,7 +726,7 @@ resolveip() {
 
 # Check if TCP or UDP port is accessible from outside on Double NAT
 checkport() {
-	shift # Remove the word "checkport" from the arguments list
+	shift # Remove "checkport" from the arguments list
 
 	local public_host="$1"   # Public WAN IP or DDNS domain name
 	local ext_port="$2"      # External Port on WAN main modem (e.g. 58493)
@@ -545,7 +768,8 @@ checkport() {
 	fi
 
 	# check and resolve ip from hostname
-	local resolved_ip=$(resolveip "resolveip" "$public_host")
+	local resolved_ip
+	resolved_ip=$(resolveip "resolveip" "$public_host")
 	if [ -z "$resolved_ip" ]; then
 		printf "ERROR: Invalid public hostname or ip: '%s'.%b" "$public_host" "$usage"
 		return 1
@@ -624,7 +848,8 @@ checkport() {
 	fi
 
 	# 3. Read the nftables chain and verify if packets hit the internal counter of rule a)
-	local packet_count=$(nft list chain inet fw4 "$checkport_id" 2>/dev/null | grep "dport $int_port" | grep -oE "counter packets [0-9]+" | awk '{print $3}')
+	local packet_count
+	packet_count=$(nft list chain inet fw4 "$checkport_id" 2>/dev/null | grep "dport $int_port" | grep -oE "counter packets [0-9]+" | awk '{print $3}')
 	[ -z "$packet_count" ] && packet_count=0
 
 	local scan_res="PORT_CLOSED"
@@ -643,15 +868,16 @@ checkport() {
 		echo "---"
 
 		# 4. Clean up ALL old ghost firewall rules to keep the router fast and safe
-		local handle_ids=$(nft -a list chain inet fw4 input | grep "jump $checkport_id" | grep -oE "handle [0-9]+" | awk '{print $2}')
+		local handle_ids
+		handle_ids=$(nft -a list chain inet fw4 input | grep "jump $checkport_id" | grep -oE "handle [0-9]+" | awk '{print $2}')
 		for handle in $handle_ids; do
 			nft delete rule inet fw4 input handle "$handle"
 		done
 		nft delete chain inet fw4 "$checkport_id"
 
 	else
-
-		local handle_ids=$(nft -a list chain inet fw4 input | grep "jump $checkport_id" | grep -oE "handle [0-9]+" | awk '{print $2}')
+		local handle_ids
+		handle_ids=$(nft -a list chain inet fw4 input | grep "jump $checkport_id" | grep -oE "handle [0-9]+" | awk '{print $2}')
 		for handle in $handle_ids; do
 			nft delete rule inet fw4 input handle "$handle" 2>/dev/null
 		done
@@ -681,8 +907,9 @@ checksroute() {
 		return 1
 	fi
 	# Clean trailing slashes, prefixes or spaces
-	local clean_netip=$(echo "$remote_test_net" | cut -d'/' -f1 | tr -d ' ')
-	local clean_wanip=$(echo "$wan_router_ip" | cut -d'/' -f1 | tr -d ' ')
+	local clean_netip clean_wanip
+	clean_netip=$(echo "$remote_test_net" | cut -d'/' -f1 | tr -d ' ')
+	clean_wanip=$(echo "$wan_router_ip" | cut -d'/' -f1 | tr -d ' ')
 
 	# Check if IPs contain only good characters (numbers, letters a-f, dots, colons)
 	case "${clean_netip}:${clean_wanip}" in
@@ -712,8 +939,9 @@ checksroute() {
 	fi
 
 	# Change dots (.) and colons (:) to underscores (_) to make the IDs
-	local netid=$(echo "$clean_netip" | tr '.:' '__')
-	local wanid=$(echo "$clean_wanip" | tr '.:' '__')
+	local netid wanid
+	netid=$(echo "$clean_netip" | tr '.:' '__')
+	wanid=$(echo "$clean_wanip" | tr '.:' '__')
 
 	# create id for firewall table
 	local checksroute_id="luci_app_openvpn_plus_checksroute_${netid}__${wanid}"
@@ -727,7 +955,8 @@ checksroute() {
 		ping_cmd="ping6"
 
 		# Remove any trailing colons first
-		local base_v6=$(echo "$clean_netip" | sed 's/:*$//')
+		local base_v6
+		base_v6=$(echo "$clean_netip" | sed 's/:*$//')
 
 		# If the subnet ends with a double colon (e.g., fd00:1::)
 		if echo "$clean_netip" | grep -q "::$"; then
@@ -795,8 +1024,8 @@ checksroute() {
 checkddns() {
 	shift # Remove the command word from the arguments list
 	local target="$1"
-
-	local resolved_ip=$(resolveip "resolveip" "$target")
+	local resolved_ip
+	resolved_ip=$(resolveip "resolveip" "$target")
 	[ -z "$resolved_ip" ] && return 1
 
 	# Live connection verification via native OpenWrt core ping utilities
@@ -820,6 +1049,8 @@ checkddns() {
 
 # Detect the real public WAN IP (IPv4 or IPv6)
 publicip() {
+	# no arguments (no shift)
+
 	local resolved_ip=""
 	local valid_ip=""
 
@@ -861,7 +1092,7 @@ wgetddns() {
 	local attempt=1
 	local max_attempts=3
 	while [ $attempt -le $max_attempts ]; do
-		wget_output=$(wget -T 10 --no-check-certificate --user-agent="'Mozilla/5.0'" -qO- "$url" 2>&1)
+		wget_output=$(wget -T 10 --user-agent="'Mozilla/5.0'" -qO- "$url" 2>&1)
 		wget_status=$?
 
 		# ok - break
@@ -1018,7 +1249,8 @@ ddnsservice() {
 
 		# Process evaluation logic
 		if [ "$current_router_ip" != "$last_resolved_ip" ]; then
-			local current_uptime=$(awk '{print int($1)}' /proc/uptime)
+			local current_uptime
+			current_uptime=$(awk '{print int($1)}' /proc/uptime)
 			local last_update_uptime=0
 			local last_url=""
 
@@ -1043,15 +1275,17 @@ ddnsservice() {
 
 				logger -t openvpn-luci "DDNS Service: ${wgetddns_response}"
 
-				local fresh_uptime=$(awk '{print int($1)}' /proc/uptime)
+				local fresh_uptime
+				fresh_uptime=$(awk '{print int($1)}' /proc/uptime)
 				echo "$fresh_uptime" > "$status_file"
 				echo "$url" >> "$status_file"
 			fi
 		else
 			# Flash-safe evaluation window prevents loop locks on identical states
 			if [ -f "$status_file" ]; then
-				local current_uptime=$(awk '{print int($1)}' /proc/uptime)
-				local last_update_uptime=$(sed -n '1p' "$status_file" | tr -d '[:space:]' | grep -E -o "^[0-9]+$")
+				local current_uptime last_update_uptime
+				current_uptime=$(awk '{print int($1)}' /proc/uptime)
+				last_update_uptime=$(sed -n '1p' "$status_file" | tr -d '[:space:]' | grep -E -o "^[0-9]+$")
 				[ -z "$last_update_uptime" ] && last_update_uptime=0
 				local seconds_passed=$((current_uptime - last_update_uptime))
 
@@ -1068,9 +1302,11 @@ ddnsservice() {
 
 # This function dynamically check and sort if necessary sorts all openvpn sections
 ucisortovpn() {
+	# no arguments (no shift)
 
 	# 1. Get the current raw list of instances from the file
-	local sections=$(uci -q show openvpn | grep "=openvpn" | cut -d. -f2 | cut -d= -f1)
+	local sections
+	sections=$(uci -q show openvpn | grep "=openvpn" | cut -d. -f2 | cut -d= -f1)
 	[ -z "$sections" ] && return 0
 
 	local previous_num=-1
@@ -1079,7 +1315,8 @@ ucisortovpn() {
 	# 2. Check if a smaller number comes after a bigger number
 	for section_name in $sections; do
 		# Extract only the digits from the name (e.g., "instance2" -> "2")
-		local current_num=$(echo "$section_name" | grep -oE "[0-9]+")
+		local current_num
+		current_num=$(echo "$section_name" | grep -oE "[0-9]+")
 		[ -z "$current_num" ] && continue
 
 		# If the current number is smaller than the last one, we must reorder!
@@ -1095,7 +1332,8 @@ ucisortovpn() {
 		local index=0
 
 		# Get the naturally sorted list (instance1, instance2)
-		local sorted_sections=$(echo "$sections" | sort -V)
+		local sorted_sections
+		sorted_sections=$(echo "$sections" | sort -V)
 
 		for section_name in $sorted_sections; do
 			[ -z "$section_name" ] && continue
@@ -1134,6 +1372,7 @@ cleanup() {
 			if ! uci -q get openvpn."$instname" >/dev/null; then
 				rm -f "$conf_file"
 				rm -f "$conf_dir/${instname}.nft"
+				rm -f "$conf_dir/${instname}.jmp.nft"
 				rm -f "$conf_dir/${instname}.s2s.nft"
 				rm -f "$key_dir/ca_${instname}.crt"
 				rm -f "$key_dir/dh_${instname}.pem"
@@ -1148,7 +1387,7 @@ cleanup() {
 	done
 
 	# Step 4: Delete all remaining temporary symlink files from the system
-	rm -f /www/*.ovpn
+	rm -rf /www/ovpn-tmp-*
 	rm -f "$conf_dir"/instance*.ovpn
 	return 0
 }
@@ -1246,6 +1485,7 @@ keymeta() {
 
 # Remove keygen_worker temporary keys
 keygenclean() {
+	shift # Remove "keygenclean" from the arguments list
 	rm -f /tmp/openvpn.keygen.*
 	return 0
 }
@@ -1259,15 +1499,24 @@ initkeys() {
 	local exit_code=0
 	local dummy_payload="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzV1c4B9x9C3x"
 
+	local ca_default_crt="$key_dir/ca_default.crt"
+	local server_default_crt="$key_dir/server_default.crt"
+	local server_default_key="$key_dir/server_default.key"
+	local client_default_crt="$key_dir/client_default.crt"
+	local client_default_key="$key_dir/client_default.key"
+	local dh_default_pem="$key_dir/dh_default.pem"
+	local server_default_tls2_key="$key_dir/server_default.tls2.key"
+	local client_default_tls2_key="$key_dir/client_default.tls2.key"
+
 	# Step 1: Check if all default files exist on the disk (Including new client-cert nodes)
-	[ -f "$key_dir/ca_default.crt" ] || missing=1
-	[ -f "$key_dir/server_default.crt" ] || missing=1
-	[ -f "$key_dir/server_default.key" ] || missing=1
-	[ -f "$key_dir/client_default.crt" ] || missing=1
-	[ -f "$key_dir/client_default.key" ] || missing=1
-	[ -f "$key_dir/dh_default.pem" ] || missing=1
-	[ -f "$key_dir/server_default.tls2.key" ] || missing=1
-	[ -f "$key_dir/client_default.tls2.key" ] || missing=1
+	[ -f "$ca_default_crt" ] || missing=1
+	[ -f "$server_default_crt" ] || missing=1
+	[ -f "$server_default_key" ] || missing=1
+	[ -f "$client_default_crt" ] || missing=1
+	[ -f "$client_default_key" ] || missing=1
+	[ -f "$dh_default_pem" ] || missing=1
+	[ -f "$server_default_tls2_key" ] || missing=1
+	[ -f "$client_default_tls2_key" ] || missing=1
 
 	# If all files exist, delete the lock file and stop immediately
 	if [ "$missing" -eq 0 ]; then
@@ -1275,10 +1524,15 @@ initkeys() {
 		return 0
 	fi
 
+	if [ ! -d "$key_dir" ]; then
+		mkdir -p "$key_dir"
+		# SECURITY: Force the directory permissions strictly to 0700 (root only)
+		chmod 700 "$key_dir"
+	fi
+
 	# Step 2: Files are missing, create lock file and set clean traps
-	mkdir -p "$key_dir"
 	touch "$lock_file"
-	trap "rm -f $lock_file" EXIT INT TERM
+	trap 'rm -f "$lock_file"' EXIT INT TERM
 
 	# Step 3: Check if openssl and openvpn are installed on this router
 	if command -v openssl >/dev/null 2>&1 && command -v openvpn >/dev/null 2>&1; then
@@ -1289,7 +1543,8 @@ initkeys() {
 		if [ -z "$router_name" ]; then router_name="OpenWrt"; fi
 
 		# Clean the router name string from bad characters and spaces
-		router_name=$(echo "$router_name" | tr -d '"'\''\\' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
+		# Using octal codes \042 (") \047 (') and \134 (\) to avoid single-quote escaping
+		router_name=$(echo "$router_name" | tr -d '\042\047\134' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')
 
 		# Create temporary extension configuration files in RAM
 		local ext_server_tmp="/tmp/openvpn.initkeys.server.ext.$$"
@@ -1307,48 +1562,48 @@ initkeys() {
 
 		# 4a) Generate Certificate Authority (CA)
 		openssl req -new -x509 -nodes -days 36500 -newkey rsa:2048 \
-			-keyout "$key_dir/ca_default.crt" \
+			-keyout "$ca_default_crt" \
 			-subj "/CN=${router_name} (OpenVPN CA)" 2>/dev/null && \
-		openssl req -new -x509 -nodes -days 36500 -key "$key_dir/ca_default.crt" \
-			-subj "/CN=${router_name} (OpenVPN CA)" 2>/dev/null >> "$key_dir/ca_default.crt" && \
+		openssl req -new -x509 -nodes -days 36500 -key "$ca_default_crt" \
+			-subj "/CN=${router_name} (OpenVPN CA)" 2>/dev/null >> "$ca_default_crt" && \
 		\
 		# 4b) Generate Server Private Key and CSR
 		openssl req -new -nodes -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
-			-keyout "$key_dir/server_default.key" \
+			-keyout "$server_default_key" \
 			-out "$key_dir/server_default.csr" \
 			-subj "/CN=${router_name} (OpenVPN Server)" 2>/dev/null && \
 		\
 		# 4c) Sign Server Certificate using stable RAM config file
 		openssl x509 -req -days 36500 \
 			-in "$key_dir/server_default.csr" \
-			-CA "$key_dir/ca_default.crt" \
-			-CAkey "$key_dir/ca_default.crt" \
+			-CA "$ca_default_crt" \
+			-CAkey "$ca_default_crt" \
 			-set_serial "$$" \
 			-extfile "$ext_server_tmp" \
-			-out "$key_dir/server_default.crt" 2>/dev/null && \
+			-out "$server_default_crt" 2>/dev/null && \
 		\
 		# 4d) Generate Client Private Key and CSR
 		openssl req -new -nodes -newkey ec -pkeyopt ec_paramgen_curve:prime256v1 \
-			-keyout "$key_dir/client_default.key" \
+			-keyout "$client_default_key" \
 			-out "$key_dir/client_default.csr" \
 			-subj "/CN=${router_name} (OpenVPN Client)" 2>/dev/null && \
 		\
 		# 4e) Sign Client Certificate using stable RAM config file
 		openssl x509 -req -days 36500 \
 			-in "$key_dir/client_default.csr" \
-			-CA "$key_dir/ca_default.crt" \
-			-CAkey "$key_dir/ca_default.crt" \
+			-CA "$ca_default_crt" \
+			-CAkey "$ca_default_crt" \
 			-set_serial "$(( $$ + 1 ))" \
 			-extfile "$ext_client_tmp" \
-			-out "$key_dir/client_default.crt" 2>/dev/null && \
+			-out "$client_default_crt" 2>/dev/null && \
 		\
 		# 4f) Generate DH Parameters and OpenVPN static server keys
-		openssl dhparam -dsaparam -out "$key_dir/dh_default.pem" 2048 2>/dev/null && \
-		openvpn --genkey tls-crypt-v2-server "$key_dir/server_default.tls2.key" 2>/dev/null && \
+		openssl dhparam -dsaparam -out "$dh_default_pem" 2048 2>/dev/null && \
+		openvpn --genkey tls-crypt-v2-server "$server_default_tls2_key" 2>/dev/null && \
 		\
 		# 4g) Derive OpenVPN static client keys
-		client_name=$(echo -n "$router_name (OpenVPN Client TLSv2)" | openssl enc -base64) && \
-		openvpn --tls-crypt-v2 "$key_dir/server_default.tls2.key" --genkey tls-crypt-v2-client "$key_dir/client_default.tls2.key" "$client_name"
+		client_name=$(printf '%s' "$router_name (OpenVPN Client TLSv2)" | openssl enc -base64) && \
+		openvpn --tls-crypt-v2 "$server_default_tls2_key" --genkey tls-crypt-v2-client "$client_default_tls2_key" "$client_name"
 
 		# Save the status code of the complete command chain
 		exit_code=$?
@@ -1361,19 +1616,21 @@ initkeys() {
 			missing=1
 		else
 			missing=0
+			# SECURITY: Enforce 0600 on all successfully generated key files
+			chmod 600 "$key_dir"/*_default.*
 		fi
 	fi
 
 	# Step 5: If generation failed, create dummy files so openvpn does not crash
 	if [ "$missing" -eq 1 ] ; then
-		[ -f "$key_dir/ca_default.crt" ] || printf -- "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" "$dummy_payload" > "$key_dir/ca_default.crt"
-		[ -f "$key_dir/server_default.crt" ] || printf -- "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" "$dummy_payload" > "$key_dir/server_default.crt"
-		[ -f "$key_dir/server_default.key" ] || printf -- "-----BEGIN PRIVATE KEY-----\n%s\n-----END PRIVATE KEY-----\n" "$dummy_payload" > "$key_dir/server_default.key"
-		[ -f "$key_dir/client_default.crt" ] || printf -- "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" "$dummy_payload" > "$key_dir/client_default.crt"
-		[ -f "$key_dir/client_default.key" ] || printf -- "-----BEGIN PRIVATE KEY-----\n%s\n-----END PRIVATE KEY-----\n" "$dummy_payload" > "$key_dir/client_default.key"
-		[ -f "$key_dir/dh_default.pem" ] || printf -- "-----BEGIN DH PARAMETERS-----\n%s\n-----END DH PARAMETERS-----\n" "$dummy_payload" > "$key_dir/dh_default.pem"
-		[ -f "$key_dir/server_default.tls2.key" ] || printf -- "-----BEGIN OpenVPN tls-crypt-v2 server key-----\n%s\n-----END OpenVPN tls-crypt-v2 server key-----\n" "$dummy_payload" > "$key_dir/server_default.tls2.key"
-		[ -f "$key_dir/client_default.tls2.key" ] || printf -- "-----BEGIN OpenVPN tls-crypt-v2 client key-----\n%s\n-----END OpenVPN tls-crypt-v2 client key-----\n" "$dummy_payload" > "$key_dir/client_default.tls2.key"
+		[ -f "$ca_default_crt" ] || printf -- "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" "$dummy_payload" > "$ca_default_crt"
+		[ -f "$server_default_crt" ] || printf -- "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" "$dummy_payload" > "$server_default_crt"
+		[ -f "$server_default_key" ] || printf -- "-----BEGIN PRIVATE KEY-----\n%s\n-----END PRIVATE KEY-----\n" "$dummy_payload" > "$server_default_key"
+		[ -f "$client_default_crt" ] || printf -- "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----\n" "$dummy_payload" > "$client_default_crt"
+		[ -f "$client_default_key" ] || printf -- "-----BEGIN PRIVATE KEY-----\n%s\n-----END PRIVATE KEY-----\n" "$dummy_payload" > "$client_default_key"
+		[ -f "$dh_default_pem" ] || printf -- "-----BEGIN DH PARAMETERS-----\n%s\n-----END DH PARAMETERS-----\n" "$dummy_payload" > "$dh_default_pem"
+		[ -f "$server_default_tls2_key" ] || printf -- "-----BEGIN OpenVPN tls-crypt-v2 server key-----\n%s\n-----END OpenVPN tls-crypt-v2 server key-----\n" "$dummy_payload" > "$server_default_tls2_key"
+		[ -f "$client_default_tls2_key" ] || printf -- "-----BEGIN OpenVPN tls-crypt-v2 client key-----\n%s\n-----END OpenVPN tls-crypt-v2 client key-----\n" "$dummy_payload" > "$client_default_tls2_key"
 	fi
 
 	# Step 6: Delete the lock file and remove all system traps when finished
@@ -1383,7 +1640,7 @@ initkeys() {
 }
 
 # Asynchronous key and certificate generator
-keygen_worker() {
+keygen() {
 	shift # Remove "keygen" from the arguments list
 	local type="${1:-unknown}"
 	local instance="${2:-default}"
@@ -1393,6 +1650,7 @@ keygen_worker() {
 	local custom="$6"
 	local log_file="/tmp/openvpn.keygen.log"
 	local out_ca_file="/tmp/openvpn.keygen.ca.tmp"
+	local ec_param_tmp="/tmp/openvpn.keygen.ec.tmp"
 	local out_server_key_file="/tmp/openvpn.keygen.server-key.tmp"
 	local out_server_cert_file="/tmp/openvpn.keygen.server-cert.tmp"
 	local out_client_key_file="/tmp/openvpn.keygen.client-key.tmp"
@@ -1404,9 +1662,14 @@ keygen_worker() {
 	local ca_key_buffer=""
 	local ca_cert_buffer=""
 	local ca_engine=""
-	local ec_param_tmp=""
 
-	rm -f "$log_file" && touch "$log_file" && chmod 666 "$log_file"
+	if [ ! -d "$key_dir" ]; then
+		mkdir -p "$key_dir"
+		# SECURITY: Force the directory permissions strictly to 0700 (root only)
+		chmod 700 "$key_dir"
+	fi
+
+	rm -f "$log_file" && touch "$log_file" && chmod 600 "$log_file"
 	case "$type" in
 		"ca")
 			active_out="$out_ca_file"
@@ -1415,10 +1678,10 @@ keygen_worker() {
 			ca_cert_buffer="$out_server_cert_file"
 			ca_engine="-newkey rsa:$bits"
 			if [ "$bits" = "ec" ]; then
-				ec_param_tmp="/tmp/openvpn.keygen.dh.tmp"
 				rm -f "$ec_param_tmp"
 				echo "[CMD] openssl ecparam -name prime256v1 -out $ec_param_tmp" >> "$log_file"
 				openssl ecparam -name prime256v1 -out "$ec_param_tmp" 2>> "$log_file"
+				chmod 600 "$ec_param_tmp"
 				ca_engine="-newkey ec:$ec_param_tmp"
 			fi
 			local target_cn="OpenVPN-CA-$instance"
@@ -1430,7 +1693,7 @@ keygen_worker() {
 				openssl req -new -x509 -nodes -days "$days" $ca_engine -subj "/CN=$target_cn" -keyout "$ca_key_buffer" -out "$ca_cert_buffer" $custom >/dev/null 2>> "$log_file"
 				if [ -f "$ca_key_buffer" ] && [ -s "$ca_key_buffer" ] && [ -f "$ca_cert_buffer" ] && [ -s "$ca_cert_buffer" ]; then
 					cat "$ca_cert_buffer" >> "$ca_key_buffer"
-					chmod 644 "$active_out"
+					chmod 600 "$active_out"
 					echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 				else
 					echo "ERROR: Cryptographic CA asset generation returned structural failure." >> "$log_file"
@@ -1454,7 +1717,7 @@ keygen_worker() {
 					openssl genrsa -out "$active_out" $custom "$bits" 2>> "$log_file"
 				fi
 				if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-					chmod 644 "$active_out"
+					chmod 600 "$active_out"
 					echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 				else
 					echo "ERROR: Server private key buffer generation returned structural failure." >> "$log_file"
@@ -1492,7 +1755,7 @@ keygen_worker() {
 					rm -f "$ext_tmp"
 
 					if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-						chmod 644 "$active_out"
+						chmod 600 "$active_out"
 						echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 					else
 						echo "ERROR: Server certificate dynamic signing pipeline returned structural failure." >> "$log_file"
@@ -1517,7 +1780,7 @@ keygen_worker() {
 					openssl genrsa -out "$active_out" $custom "$bits" 2>> "$log_file"
 				fi
 				if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-					chmod 644 "$active_out"
+					chmod 600 "$active_out"
 					echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 				else
 					echo "ERROR: Client private key buffer generation returned structural failure." >> "$log_file"
@@ -1557,7 +1820,7 @@ keygen_worker() {
 					rm -f "$ext_tmp"
 
 					if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-						chmod 644 "$active_out"
+						chmod 600 "$active_out"
 						echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 					else
 						echo "ERROR: Client certificate dynamic signing pipeline returned structural failure." >> "$log_file"
@@ -1576,7 +1839,7 @@ keygen_worker() {
 				echo "[CMD] openssl dhparam -dsaparam $custom -out '$active_out' '$bits'" >> "$log_file"
 				openssl dhparam -dsaparam $custom -out "$active_out" "$bits" >> "$log_file" 2>&1
 				if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-					chmod 644 "$active_out"
+					chmod 600 "$active_out"
 					echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 				else
 					echo "ERROR: Diffie-Hellman cryptographic prime generation returned structural failure." >> "$log_file"
@@ -1593,7 +1856,7 @@ keygen_worker() {
 				echo "[CMD] openvpn --genkey tls-crypt-v2-server '$active_out'" >> "$log_file"
 				openvpn --genkey tls-crypt-v2-server "$active_out" 2>> "$log_file"
 				if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-					chmod 644 "$active_out"
+					chmod 600 "$active_out"
 					echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 				else
 					echo "ERROR: Asymmetric v2 master server key engine tokens returned structural failure." >> "$log_file"
@@ -1611,11 +1874,12 @@ keygen_worker() {
 			(
 				set +e
 				echo "LOG: Invoking openvpn engine for asymmetric tls-crypt-v2 client key generation..." >> "$log_file"
-				local target_tls_name_base64=$(echo -n "$target_tls_name" | openssl enc -base64)
+				local target_tls_name_base64
+				target_tls_name_base64=$(printf '%s' "$target_tls_name" | openssl enc -base64)
 				echo "[CMD] openvpn --tls-crypt-v2 '$server_tls2_key' --genkey tls-crypt-v2-client '$active_out' '$target_tls_name_base64'" >> "$log_file"
 				openvpn --tls-crypt-v2 "$server_tls2_key" --genkey tls-crypt-v2-client "$active_out" "$target_tls_name_base64" 2>> "$log_file"
 				if [ -f "$active_out" ] && [ -s "$active_out" ]; then
-					chmod 644 "$active_out"
+					chmod 600 "$active_out"
 					echo "LOG: WORKFLOW_SUCCESSFUL" >> "$log_file"
 				else
 					echo "ERROR: Asymmetric v2 client key derivation engine tokens returned structural failure." >> "$log_file"
@@ -1631,74 +1895,175 @@ keygen_worker() {
 	return 0
 }
 
+# async worker with start-stop-daemon
+
+ovpnservice_async() {
+	shift # Remove "ovpnservice_async" from the arguments list
+	local action_cmd="$1"
+	local inst="$2"
+	local pid_file="/var/run/luci-app-openvpn-plus-ovpn-service.pid"
+	if [ -z "$(echo "$inst" | tr -d ' ')" ]; then
+		inst=""
+	fi
+	if [ "$action_cmd" = "stop" ] || [ "$action_cmd" = "start" ] || [ "$action_cmd" = "restart" ]; then
+		# 1. Clean up any stale or previous ghost workers instantly
+		start-stop-daemon -K -q -p "$pid_file" 2>/dev/null
+		rm -f "$pid_file"
+
+		# 2. Start the target command via worker wrapper to handle absolute lifecycle traps
+		start-stop-daemon -S -b -m -p "$pid_file" -x "$0" -- ovpnservice_worker "$action_cmd" "$inst"
+	fi
+	return 0
+}
+ovpnservice_worker() {
+	shift # Remove "ovpnservice_worker" from the arguments list
+	local pid_file="/var/run/luci-app-openvpn-plus-ovpn-service.pid"
+	local cmd="$1"
+	local inst="$2"
+	trap 'rm -f "$pid_file"' EXIT INT TERM
+	if [ "$cmd" = "start" ]; then
+		ovpnstart "ovpnstart" "$inst" 3
+	elif [ "$cmd" = "restart" ]; then
+		ovpnrestart "ovpnrestart" "$inst" 3
+	elif [ "$cmd" = "stop" ]; then
+		ovpnstop "ovpnstop" "$inst" 3
+	fi
+	rm -f "$pid_file"
+	return 0
+}
+
+firewallservice_async() {
+	shift # Remove "firewallservice_async" from the arguments list
+	local action_cmd="$1"
+	local pid_file="/var/run/luci-app-openvpn-plus-firewall-service.pid"
+	if [ "$action_cmd" = "stop" ] || [ "$action_cmd" = "start" ] || [ "$action_cmd" = "restart" ]; then
+		# 1. Clean up any stale or previous ghost workers instantly
+		start-stop-daemon -K -q -p "$pid_file" 2>/dev/null
+		rm -f "$pid_file"
+
+		# 2. Start the worker directly via the main script frame context
+		# Inside the worker, we use a trap to cleanly remove the pid_file upon exit
+		start-stop-daemon -S -b -m -p "$pid_file" -x "$0" -- firewallservice_worker "$action_cmd"
+	fi
+	return 0
+}
+firewallservice_worker() {
+	shift # Remove "firewallservice_worker" from the arguments list
+	local cmd="$1"
+	local pid_file="/var/run/luci-app-openvpn-plus-firewall-service.pid"
+	trap 'rm -f "$pid_file"' EXIT INT TERM
+	firewallservice "firewallservice" "$cmd" 3
+	rm -f "$pid_file"
+	return 0
+}
+
+initkeys_async() {
+	shift # Remove "initkeys_async" from the arguments list
+	local pid_file="/var/run/openvpn.initkeys.pid"
+	# 1. Check if the key generator is running
+	if start-stop-daemon -K -q -p "$pid_file" -t 2>/dev/null; then
+		exit 0
+	fi
+	# 2. Start the background worker and create the PID file automatically
+	start-stop-daemon -S -b -m -p "$pid_file" -x "$0" -- "initkeys_worker"
+	return 0
+}
+initkeys_worker() {
+	shift # Remove "initkeys_worker" from the arguments list
+	local pid_file="/var/run/openvpn.initkeys.pid"
+	# 3. Secure the PID file lifecycle instantly with a trap framework
+	trap 'rm -f "$pid_file"' EXIT INT TERM
+	# 4. Run the key creation function quietly in the background
+	initkeys "initkeys" >/dev/null 2>&1
+	rm -f "$pid_file"
+	return 0
+}
+
+keygen_async() {
+	shift # Remove "keygen" from the arguments list
+	local type="$1"
+	local instance="$2"
+	if [ -z "$instance" ] || ! echo "$instance" | grep -Eq '^[A-Za-z0-9_-]+$'; then
+		echo "ERROR: Invalid instance name." >&2
+		return 1
+	fi
+	local pid_file="/var/run/openvpn.keygen-${instance}.pid"
+	# 1. Start the background keygen worker and create the PID file automatically
+	start-stop-daemon -S -b -m -p "$pid_file" -x "$0" -- "keygen_worker" "$instance" "$@"
+	return 0
+}
+keygen_worker() {
+	shift # Remove "keygen_worker" from the arguments list
+	local instance="$1"
+	if [ -z "$instance" ] || ! echo "$instance" | grep -Eq '^[A-Za-z0-9_-]+$'; then
+		return 1
+	fi
+	local pid_file="/var/run/openvpn.keygen-${instance}.pid"
+	shift # Remove "instance" from the arguments list
+	# 3. Secure the dynamic PID node tracking with a strict trap guard
+	trap 'rm -f "$pid_file"' EXIT INT TERM
+	# 4. Run the certificate engine pipeline with corrected original parameters ($@: type="$1", instance="$2")
+	keygen "keygen" "$@"
+	rm -f "$pid_file"
+	return 0
+}
+
+usage() {
+	local args="{getmac|lanip|getnetstat|bestcrypto|readstatus|readfile|writefile|removefile|statfile|ovpnver|ovpnstart|ovpnrestart|ovpnstop|ovpnservice|firewallservice|firewallnft|openssldgst|symlink|iroute|cleanipdns|checkip|resolveip|checkport|checksroute|checkddns|publicip|wgetddns|ddnsservice|ucisortovpn|cleanup|keymeta|keygenclean|initkeys|keygen} [parameters]"
+	# Check if the user gave an argument
+	if [ -z "$1" ]; then
+		echo "Usage: $0 $args"
+	else
+		echo "Error: Unknown command '$1'"
+		echo "Valid commands:  $args"
+	fi
+	return 1
+}
+
 # Main entry point
 case "$1" in
-	getmac)				getmac ;;
-	lanip)				lanip "$@" ;;
-	getnetstat)			getnetstat "$@" ;;
-	bestcrypto)			bestcrypto ;;
-	ovpnver)			ovpnver ;;
-	ovpnstart)			ovpnstart "$@" ;;
-	ovpnrestart)		ovpnrestart "$@" ;;
-	ovpnstop)			ovpnstop "$@" ;;
-	ovpnservice)		ovpnservice "$@" ;;
-	firewallservice)	firewallservice "$@" ;;
-	firewallnft)		firewallnft "$@" ;;
-	openssldgst)        openssldgst "$@" ;;
-	symlink)        	symlink "$@" ;;
-	readstatus)			readstatus "$@" ;;
-	iroute) 			iroute "$@" ;;
-	cleanipdns)			cleanipdns "$@" ;;
-	checkip)			checkip "$@" ;;
-	resolveip)			resolveip "$@" ;;
-	checkport) 			checkport "$@" ;;
-	checksroute)		checksroute "$@" ;;
-	checkddns)			checkddns "$@" ;;
-	publicip)			publicip ;;
-	wgetddns)			wgetddns "$@" ;;
-	ddnsservice)		ddnsservice "$@" ;;
-	ucisortovpn)		ucisortovpn ;;
-	cleanup)        	cleanup "$@" ;;
-	keymeta)        	keymeta "$@" ;;
-	keygenclean)		keygenclean ;;
+	getmac)			getmac ;;
+	lanip)			lanip "$@" ;;
+	getnetstat)		getnetstat "$@" ;;
+	bestcrypto)		bestcrypto ;;
+	readstatus)		readstatus "$@" ;;
+	readfile)		readfile "$@" ;;
+	writefile)		writefile "$@" ;;
+	removefile)		removefile "$@" ;;
+	statfile)		statfile "$@" ;;
+	ovpnver)		ovpnver ;;
+	ovpnstart)		ovpnstart "$@" ;;
+	ovpnrestart)	ovpnrestart "$@" ;;
+	ovpnstop)		ovpnstop "$@" ;;
+	firewallnft)	firewallnft "$@" ;;
+	openssldgst)	openssldgst "$@" ;;
+	symlink)        symlink "$@" ;;
+	iroute) 		iroute "$@" ;;
+	cleanipdns)		cleanipdns "$@" ;;
+	checkip)		checkip "$@" ;;
+	resolveip)		resolveip "$@" ;;
+	checkport) 		checkport "$@" ;;
+	checksroute)	checksroute "$@" ;;
+	checkddns)		checkddns "$@" ;;
+	publicip)		publicip ;;
+	wgetddns)		wgetddns "$@" ;;
+	ddnsservice)	ddnsservice "$@" ;;
+	ucisortovpn)	ucisortovpn ;;
+	cleanup)        cleanup "$@" ;;
+	keymeta)        keymeta "$@" ;;
+	keygenclean)	keygenclean ;;
 
-	initkeys)
-		# 1. Check if the key generator is running
-		if start-stop-daemon -K -q -p "/var/run/openvpn.initkeys.pid" -t 2>/dev/null; then
-			exit 0
-		fi
-		# 2. Start the background worker and create the PID file automatically
-		start-stop-daemon -S -b -m -p "/var/run/openvpn.initkeys.pid" -x "$0" -- "initkeys_worker"
-		exit 0
-		;;
+	# async worker with start-stop-daemon
+	firewallservice)		firewallservice_async "$@" ;;
+	firewallservice_worker)	firewallservice_worker "$@" ;;
+	ovpnservice) 			ovpnservice_async "$@" ;;
+	ovpnservice_worker) 	ovpnservice_worker "$@" ;;
+	initkeys) 				initkeys_async "$@" ;;
+	initkeys_worker) 		initkeys_worker "$@" ;;
+	keygen) 				keygen_async "$@" ;;
+	keygen_worker) 			keygen_worker "$@" ;;
 
-	initkeys_worker)
-		# 3. Run the key creation function quietly in the background
-		initkeys >/dev/null 2>&1
-		# 4. Delete the PID file when the keys are finished
-		rm -f "/var/run/openvpn.initkeys.pid"
-		exit 0
-		;;
-
-	keygen)
-		# 1. Start the background keygen worker and create the PID file automatically
-		start-stop-daemon -S -b -m -p "/var/run/openvpn.keygen-${2}.pid" -x "$0" -- "keygen_worker" "$@"
-		exit 0
-		;;
-
-	keygen_worker)
-		# 2. Run the key creation function quietly in the background
-		shift # Remove "keygen_worker" from the arguments list to fix $@
-		keygen_worker "$@"
-		# 3. Delete the PID file when keygen finished
-		rm -f "/var/run/openvpn.keygen-${2}.pid"
-		;;
-
-	*)
-		echo "Error: Unknown command '$1'"
-		echo "Valid commands: getmac lanip getnetstat bestcrypto ovpnver ovpnstart ovpnrestart ovpnstop ovpnservice firewallservice firewallnft openssldgst symlink readstatus iroute cleanipdns checkip resolveip checkport checksroute checkddns publicip wgetddns ddnsservice ucisortovpn cleanup keymeta keygenclean initkeys keygen"
-		exit 1
-		;;
+	*)	usage "$@" ;;
 esac
 
 # Global exit handler guarantees instant thread termination
