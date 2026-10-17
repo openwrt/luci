@@ -16,17 +16,6 @@ define Package/luci-app-notes/conffiles
 /etc/notes.md
 endef
 
-define Package/luci-app-notes/postinst
-#!/bin/sh
-[ -n "$${IPKG_INSTROOT}" ] || {
-	rm -f /tmp/luci-indexcache.*
-	rm -rf /tmp/luci-modulecache/
-	/etc/init.d/rpcd reload 2>/dev/null || true
-	/etc/init.d/ucitrack reload 2>/dev/null || true
-}
-exit 0
-endef
-
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

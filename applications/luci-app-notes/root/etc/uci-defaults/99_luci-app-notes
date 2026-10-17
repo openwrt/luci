@@ -1,4 +1,6 @@
 #!/bin/sh
-
-# Apply the localized default notes template on first boot.
-sh /usr/libexec/luci-app-notes-init >/dev/null 2>&1
+# Create initial notes only when no notes file exists.
+# Existing files, including intentionally empty ones, are never overwritten.
+TARGET=/etc/notes.md
+[ -e "$TARGET" ] && exit 0
+(umask 022; printf '# LuCI Notes\n' > "$TARGET")

@@ -59,3 +59,35 @@
 	border-top: 1px solid var(--border-color-medium);
 	margin: 1em 0;
 }
+
+/* Help stays below the action buttons; each topic is independently collapsible. */
+.notes-help { margin: 1em 0; padding: 0.8em 0; border-top: 0; }
+.notes-help summary { cursor: pointer; font-weight: 600; }
+.notes-help-columns, .notes-help-example { display: grid; grid-template-columns: minmax(0, 35%) minmax(0, 25%); column-gap: 0; }
+.notes-help-columns { margin: 0.8em 0; padding: 0.4em 0.6em; }
+.notes-help-group { margin: 0.5em 0; }
+.notes-help-group > summary { padding: 0.45em 0.6em; }
+.notes-help-rows { padding: 0 0.6em; }
+.notes-help-example { align-items: center; min-height: 2.5em; padding: 0.25em 0; border-bottom: 1px solid var(--border-color-medium); }
+.notes-help-result { min-width: 0; overflow-wrap: anywhere; }
+/* Preserve visible Markdown heading hierarchy in the help examples. */
+.notes-help-result :is(h1,h2,h3,h4,h5,h6) { font-weight: 600; line-height: 1.3; margin: 0; padding: 0; }
+.notes-help-result h1 { font-size: 2em; }
+.notes-help-result h2 { font-size: 1.7em; }
+.notes-help-result h3 { font-size: 1.45em; }
+.notes-help-result h4 { font-size: 1.25em; }
+.notes-help-result h5 { font-size: 1.1em; }
+.notes-help-result h6 { font-size: 1em; }
+.notes-help-result > :first-child { margin-top: 0; }
+.notes-help-result > :last-child { margin-bottom: 0; }
+.notes-help-result :is(ul,ol) { margin: 0; padding-left: 1.6em; }
+.notes-help-result blockquote { margin: 0; padding: 0.15em 0.6em; }
+.notes-help-result pre { margin: 0; padding: 0.35em; }
+.notes-help-result hr { margin: 0.65em 0; }
+.notes-help-source { margin: 0; padding: 0.35em 0.5em; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--background-color-high); border-radius: 3px; }
+.notes-help-unsupported { margin: 0.4em 0 0.8em 1.5em; }
+.notes-content-preview { min-height: 260px; }
+@media (max-width: 600px) {
+	.notes-help-columns { display: none; }
+	.notes-help-example { grid-template-columns: 1fr; row-gap: 0.3em; }
+}
