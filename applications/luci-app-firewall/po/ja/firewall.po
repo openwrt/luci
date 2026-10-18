@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2025-12-08 14:03+0000\n"
+"PO-Revision-Date: 2026-10-18 16:40+0000\n"
 "Last-Translator: Monarch <monarch.scrap-0p@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/openwrt/"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -379,7 +379,7 @@ msgstr "有効"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:206
 msgid "Enables packet and byte count tracking for the set."
-msgstr ""
+msgstr "セットのパケット数とバイト数のカウントを有効にします。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "Expecting: %s"
@@ -453,12 +453,12 @@ msgstr "ファイアウォール設定の移行"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:80
 msgid "Flow offloading type"
-msgstr ""
+msgstr "フローオフロードの種類"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
 msgctxt "firewall forward"
 msgid "Forward"
-msgstr ""
+msgstr "転送"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -469,6 +469,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
+"%{ipv6?%{ipv4?<var>IPv4</var> と <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</"
+"var>} の転送%{proto?, プロトコル %{proto#%{next?, }<var>%{item.name}</var>}}%"
+"{mark?, マーク <var%{mark.inv? data-tooltip=\"Match fwmarks except %"
+"{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-"
+"tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
+"</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:489
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:359
@@ -542,7 +548,7 @@ msgstr "ファイアウォール構成へのアクセスを許可"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Hardware based offloading for routing with/without NAT."
-msgstr ""
+msgstr "NAT の有無にかかわらず、ルーティングをハードウェアでオフロードします。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Hardware flow offloading"
@@ -624,16 +630,27 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
+"%{ipv6?%{ipv4?<var>IPv4</var> と <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</"
+"var>} の受信%{proto?, プロトコル %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">含ま"
+"れる ICMP タイプ - %{item.types#%{next?, }<var>%{item}</var>}</span></var>"
+":<var>%{item.name}</var>}}}%{mark?, マーク <var%{mark.inv? data-"
+"tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with mask %"
+"{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with %"
+"{mark.mask} before compare.\"}}>%{mark.val}</var>}%{helper?, ヘルパー %"
+"{helper.inv?<var data-tooltip=\"Match any helper except &quot;%{helper.name}"
+"&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
+"{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:181
 msgid "Initial Hash Size"
-msgstr ""
+msgstr "初期ハッシュサイズ"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
 msgctxt "firewall input"
 msgid "Input"
-msgstr ""
+msgstr "受信"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:290
 msgid "Internal IP address"
@@ -694,13 +711,13 @@ msgstr "トラフィックを指定されたレートに制限します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:297
 msgid "Log matched packets on the selected tables to syslog."
-msgstr ""
+msgstr "選択したテーブルで一致したパケットを syslog に記録します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:346
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:465
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:339
 msgid "Log matched packets to syslog."
-msgstr ""
+msgstr "一致したパケットを syslog に記録します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:309
 msgid "Loopback source IP"
@@ -792,7 +809,7 @@ msgstr "指定された DSCP マークを持っているトラフィックが対
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:114
 msgid "Max Entries"
-msgstr ""
+msgstr "最大エントリー数"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:173
 msgid "Max Length"
@@ -884,11 +901,11 @@ msgstr "送信側ゾーン"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
 msgctxt "firewall output"
 msgid "Output"
-msgstr ""
+msgstr "送信"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
-msgstr ""
+msgstr "パケットフィールドの一致"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:77
 msgid ""
@@ -897,6 +914,11 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
+"一致の対象とするパケットフィールドです。<br />構文: <em>方向_データ型</em>。"
+"例: <code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。"
+"データ型: <code>ip, port, mac, net, set</code>。<br />方向の接頭辞は省略可能"
+"です。<br />*注: データ型 <code>set</code> は fw4 ではサポートされていません"
+"。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:356
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:475
@@ -922,7 +944,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:189
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
-msgstr ""
+msgstr "CIDR、サブネット、ホスト IP などを記載したファイルへのパス。<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:152
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:26
@@ -959,11 +981,11 @@ msgstr "ルールに一致した受信トラフィックを、設定された内
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:123
 msgid "Refer To External Set"
-msgstr ""
+msgstr "外部セットを参照"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:318
 msgid "Reflection zones"
-msgstr ""
+msgstr "リフレクションゾーン"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Requires hardware NAT support."
@@ -1029,7 +1051,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
 msgid "Software based offloading for routing/NAT."
-msgstr ""
+msgstr "ルーティング/NAT をソフトウェアでオフロードします。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
 msgid "Software flow offloading"
@@ -1098,7 +1120,7 @@ msgstr "停止時刻 (hh:mm:ss)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:131
 msgid "Storage Method"
-msgstr ""
+msgstr "保存方式"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:354
@@ -1248,6 +1270,8 @@ msgid ""
 "Unit: seconds. Default <code>0</code> means the entry is added permanently "
 "to the set.<br />Max: 2147483 seconds."
 msgstr ""
+"単位: 秒。デフォルトの <code>0</code> は、エントリーがセットに永続的に追加さ"
+"れることを意味します。<br />最大: 2147483 秒。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:339
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:457
@@ -1360,6 +1384,8 @@ msgid ""
 "Zones from which reflection rules shall be created. If unset, only the "
 "destination zone is used."
 msgstr ""
+"リフレクションルールを作成する元のゾーンです。未設定の場合は宛先ゾーンのみが"
+"使用されます。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:411
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68
@@ -1414,7 +1440,7 @@ msgstr "ビットマップ"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:138
 msgid "bitmap is ipv4 only"
-msgstr ""
+msgstr "bitmap は IPv4 専用です"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
@@ -1424,23 +1450,23 @@ msgstr "日"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:94
 msgid "dest_ip: Destination IP"
-msgstr ""
+msgstr "dest_ip: 宛先 IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:96
 msgid "dest_mac: Destination MAC addr"
-msgstr ""
+msgstr "dest_mac: 宛先 MAC アドレス"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:97
 msgid "dest_net: Destination (sub)net"
-msgstr ""
+msgstr "dest_net: 宛先 (サブ)ネット"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:95
 msgid "dest_port: Destination Port"
-msgstr ""
+msgstr "dest_port: 宛先ポート"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:99
 msgid "dest_set: Destination ipset*"
-msgstr ""
+msgstr "dest_set: 宛先 ipset*"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:314
 msgid "do not rewrite"
@@ -1462,10 +1488,13 @@ msgid ""
 "large address lists without the need to create one rule per item to match. "
 "Port ranges in ipsets are unsupported by firewall4.<br />"
 msgstr ""
+"firewall4 は IP セットの参照と作成に対応しており、項目ごとにルールを作成する"
+"ことなく、大量のアドレスリストとの照合を簡素化できます。firewall4 では ipset "
+"内のポート範囲はサポートされていません。<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:160
 msgid "fromport-toport"
-msgstr ""
+msgstr "開始ポート-終了ポート"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:133
 msgid "hash"
@@ -1479,15 +1508,15 @@ msgstr "時間"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:82
 msgid "ip: IP addr"
-msgstr ""
+msgstr "ip: IP アドレス"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:154
 msgid "ip[/cidr]<br />"
-msgstr ""
+msgstr "ip[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:146
 msgid "ip[/cidr]<br />For use with Match datatypes: <code>*_ip</code>."
-msgstr ""
+msgstr "ip[/cidr]<br />一致データ型 <code>*_ip</code> で使用します。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:134
 msgid "list"
@@ -1495,11 +1524,11 @@ msgstr "リスト"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:84
 msgid "mac: MAC addr"
-msgstr ""
+msgstr "mac: MAC アドレス"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:109
 msgid "macaddr|ip[/cidr]<br />"
-msgstr ""
+msgstr "macaddr|ip[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
@@ -1509,7 +1538,7 @@ msgstr "分"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:85
 msgid "net: (sub)net"
-msgstr ""
+msgstr "net: (サブ)ネット"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:83
 msgid "port: Port"
@@ -1529,27 +1558,27 @@ msgstr "秒"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:87
 msgid "set: ipset*"
-msgstr ""
+msgstr "set: ipset*"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:93
 msgid "src_Set: Source ipset*"
-msgstr ""
+msgstr "src_Set: 送信元 ipset*"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:88
 msgid "src_ip: Source IP"
-msgstr ""
+msgstr "src_ip: 送信元 IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:90
 msgid "src_mac: Source MAC addr"
-msgstr ""
+msgstr "src_mac: 送信元 MAC アドレス"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:91
 msgid "src_net: Source (sub)net"
-msgstr ""
+msgstr "src_net: 送信元 (サブ)ネット"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:89
 msgid "src_port: Source Port"
-msgstr ""
+msgstr "src_port: 送信元ポート"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:53
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:62
@@ -1577,7 +1606,7 @@ msgstr "未設定"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:115
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:174
 msgid "up to 65536 entries."
-msgstr ""
+msgstr "最大 65536 エントリー。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "valid firewall mark"
