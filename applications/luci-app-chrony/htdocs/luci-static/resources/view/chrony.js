@@ -158,6 +158,23 @@ return view.extend({
 		s.anonymous = true;
 		insertTypedSectionOptions(m, s, o, 'dhcp_ntp_server', features);
 
+		// Drift file
+		s = m.section(form.NamedSection, 'driftfile', 'driftfile', _('Drift file'),
+			_('Configure the drift file and restore the system time at startup.'));
+		s.anonymous = true;
+		s.singular = true;
+
+		o = s.option(form.Flag, 'restore_time', _('Restore system time'),
+			_('Restore the system time at startup using the last modification time of the drift file.'));
+		o.rmempty = false;
+
+		o = s.option(form.Value, 'file', _('Drift file path'),
+			_('Path to the drift file. Use persistent storage to preserve it across reboots.'));
+		o.datatype = 'string';
+		o.rmempty = false;
+
+		o = s.option(form.Value, 'interval', _('Update interval'), _('Interval between drift file updates, in seconds.'));
+		o.datatype = 'and(uinteger,min(1))';
 
 		return m.render();
 	}
