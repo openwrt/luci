@@ -47,6 +47,47 @@ function validateTimeFormat(section_id, value) {
 	return true;
 }
 
+/**
+ * Validate a mark value.
+ *
+ * Mirrors swanctl_is_valid_mark() of the init script: %unique, %unique-dir
+ * or <value>[/<mask>], with decimal or hexadecimal (0x...) numbers.
+ */
+function validateMark(section_id, value) {
+	if (!value || value == '%unique' || value == '%unique-dir')
+		return true;
+
+	const decimal = '[0-9]+';
+	const hexadecimal = '0[xX][0-9a-fA-F]+';
+	const number = '(?:%s|%s)'.format(decimal, hexadecimal);
+
+	// '^%s(?:/%s)?$' matches the whole string as <number> or <number>/<number>:
+	//   ^ and $       anchor the pattern to the start and end of the value
+	//   %s            a decimal or hexadecimal number (the value)
+	//   (?:/%s)?      an optional, non-capturing group: a slash followed by
+	//                 another number (the mask)
+	const markRegex = new RegExp('^%s(?:/%s)?$'.format(number, number));
+
+	if (!markRegex.test(value))
+		return _('Expecting: %s').format(
+			_('%s, %s or %s with decimal or hexadecimal (0x...) numbers')
+				.format('%unique', '%unique-dir', '<value>[/<mask>]'));
+
+	return true;
+}
+
+function markDescription() {
+	return [
+		_('Format:'),
+		'<code>&lt;value&gt;[/&lt;mask&gt;]</code>: ' + _('Decimal or hexadecimal (0x prefix) numbers.') + ' ' +
+			_('The mask defaults to 0xffffffff.'),
+		'<code>%unique</code>: ' + _('A unique mark is allocated for each CHILD_SA.') + ' ' +
+			_('If set for Mark In and Mark Out, both directions use the same mark.'),
+		'<code>%unique-dir</code>: ' + _('A unique mark is allocated for each CHILD_SA and direction, so Mark In and Mark Out differ.'),
+		_('Leave empty to not set a mark.')
+	].join('<br />');
+}
+
 function addAlgorithms(o, algorithms) {
 	algorithms?.forEach(function (algorithm) {
 		const { name: name, insecure: insecure } = algorithm;
@@ -775,6 +816,26 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
 			swanctlDescr(_('Priority of the CHILD_SA'), 'connections.<conn>.children.<child>.priority'));
 		o.datatype = 'uinteger';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'mark_in', _('Mark In'),
+			swanctlDescr(_('Netfilter mark on inbound traffic, used to match the policy.') + '<br />' +
+				markDescription(),
+				'connections.<conn>.children.<child>.mark_in'));
+		o.value('%unique');
+		o.value('%unique-dir');
+		o.optional = true;
+		o.validate = validateMark;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'mark_out', _('Mark Out'),
+			swanctlDescr(_('Netfilter mark applied to outbound traffic, used to match the policy.') + '<br />' +
+				markDescription(),
+				'connections.<conn>.children.<child>.mark_out'));
+		o.value('%unique');
+		o.value('%unique-dir');
+		o.optional = true;
+		o.validate = validateMark;
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),
