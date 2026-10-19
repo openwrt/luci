@@ -735,6 +735,13 @@ return view.extend({
 		o.default = '0';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Flag, 'policies', _('Policies'),
+			swanctlDescr(_('Whether to install IPsec policies or not.') + ' ' +
+			_('Disabling this is only useful in special cases, e.g. with route based routing.'),
+				'connections.<conn>.children.<child>.policies'));
+		o.default = '1';
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
 			swanctlDescr(_('Enable Hardware offload'), 'connections.<conn>.children.<child>.hw_offload'));
 		o.value('yes');
