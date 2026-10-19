@@ -2159,9 +2159,13 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 				}
 				else {
 					const title = this.stripTags(this.title).trim();
+					const message = _('Option "%s" must not be empty.').format(title || this.option);
 
-					return Promise.reject(new TypeError(
-						_('Option "%s" must not be empty.').format(title || this.option)));
+					// The modal dialog saves silently, so mark the field and refresh the tab error counts.
+					this.getUIElement(section_id)?.setInvalid(message);
+					ui.tabs.updateTabs(null, this.map.root);
+
+					return Promise.reject(new TypeError(message));
 				}
 			}
 			else if (this.forcewrite || !isEqual(cval, fval)) {
