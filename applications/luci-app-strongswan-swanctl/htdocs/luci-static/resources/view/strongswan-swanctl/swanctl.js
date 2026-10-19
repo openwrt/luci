@@ -463,6 +463,15 @@ return view.extend({
 		o.placeholder = '30s';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'dpd_timeout', _('DPD Timeout'),
+			swanctlDescr(_('Timeout to close connection if no response to DPD is received.'),
+				'connections.<conn>.dpd_timeout'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
+		o.modalonly = true;
+		o.depends('keyexchange', 'ikev1');
+		o.depends('keyexchange', 'ike');
+
 		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
 			swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
 		o.validate = validateTimeFormat;
