@@ -380,24 +380,35 @@ return view.extend({
 		};
 		o.rmempty = false;
 
-		o = s.taboption('authentication', form.MultiValue, 'local', _('Local Authentication'),
+		o = s.taboption('authentication', form.DynamicList, 'local', _('Local Authentication'),
 			swanctlDescr(_('Local authentication sections used for this connection.') + ' ' +
-			_('Each section corresponds to one authentication round.'),
+			_('Each section corresponds to one authentication round.') + ' ' +
+			_('The order matters: the sections are used in the order they are listed.'),
 				'connections.<conn>.local<suffix>'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
 
 			var sections = uci.sections('ipsec', 'local');
+			this.placeholder = _('Select a section');
 			if (sections.length == 0) {
-				this.value('', _('Please create a Local section first'));
+				this.tooltip = _('No local section exists yet.') + ' ' +
+					_('Create a local section first.');
+				this.tooltipicon = '⚠️';
 			} else {
+				this.tooltip = null;
+				this.tooltipicon = null;
 				sections.forEach(L.bind(function (section) {
 					this.value(section['.name']);
 				}, this));
 			}
 
 			return this.super('load', [section_id]);
+		};
+		o.validate = function (section_id, value) {
+			if (value == '' || uci.get('ipsec', value, '.type') == 'local')
+				return true;
+			return _('Unknown Local section');
 		};
 
 		o = s.taboption('authentication', form.MultiValue, 'remote', _('Remote Authentication'),
