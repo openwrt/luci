@@ -47,9 +47,7 @@ function getServiceStatus() {
 }
 
 function smartdnsServiceStatus() {
-	return Promise.all([
-		getServiceStatus()
-	]);
+	return getServiceStatus();
 }
 
 function smartdnsRenderStatus(isRunning) {
