@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LibreSpeed internet speed measurements
-LUCI_DEPENDS:=+luci-base +librespeed-common
+LUCI_DEPENDS:=+luci-base +librespeed-cli +librespeed-common
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Josef Schlehofer <pepe.schlehofer@gmail.com>
