@@ -116,6 +116,31 @@ function proposalTooltip() {
 }
 
 /**
+ * Tooltip for a form.MultiValue whose choices are sections of another type.
+ *
+ * The dropdown of a MultiValue only shows values which are available as
+ * choice, so warn about configured values which are not available (anymore),
+ * e.g. if the section was deleted. Otherwise warn if there is nothing to
+ * select at all.
+ * Used as o.tooltip, both arguments are arrays of tooltip lines, %s in the
+ * first line of missing is replaced by the unavailable values.
+ */
+function multiValueSectionTooltip(missing, empty) {
+	return function (section_id) {
+		const values = L.toArray(this.cfgvalue(section_id));
+		const unavailable = values.filter(value => !this.keylist.includes(value));
+
+		if (unavailable.length > 0)
+			return [ missing[0].format(unavailable.join(', ')), ...missing.slice(1) ];
+
+		if (this.keylist.length > 0 || values.length > 0)
+			return null;
+
+		return empty;
+	};
+}
+
+/**
  * Show "none" in the overview table while a custom proposal is used.
  *
  * Otherwise the table would list the default algorithms, although they are
@@ -359,17 +384,19 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'pools');
-			if (sections.length == 0) {
-				this.value('', _('Please create a Pool first'));
-			} else {
-				sections.forEach(L.bind(function (section) {
-					this.value(section['.name']);
-				}, this));
-			}
+			uci.sections('ipsec', 'pools').forEach(L.bind(function (section) {
+				this.value(section['.name']);
+			}, this));
 
 			return this.super('load', [section_id]);
 		};
+		o.tooltip = multiValueSectionTooltip([
+			_('Configured pools do not exist: %s'),
+			_('Select existing pools or create the missing ones on the general page.')
+		], [
+			_('No pool exists yet.'),
+			_('Create a pool on the general page first.')
+		]);
 
 		o = s.taboption('advanced', form.Flag, 'pull', _('Pull'),
 			swanctlDescr(_('Pull virtual IP addresses and configuration attributes from the remote peer (Config Mode).') + '<br />' +
@@ -387,19 +414,22 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+			uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
 				return section.is_esp != '1';
-			});
-			if (sections.length == 0) {
-				this.value('', _('Please create a Proposal first'));
-			} else {
-				sections.forEach(L.bind(function (section) {
-					this.value(section['.name']);
-				}, this));
-			}
+			}).forEach(L.bind(function (section) {
+				this.value(section['.name']);
+			}, this));
 
 			return this.super('load', [section_id]);
 		};
+		o.tooltip = multiValueSectionTooltip([
+			_('Configured proposals are not available as IKE proposal: %s'),
+			_('Check the ESP Proposal option of the proposals or create the missing ones.')
+		], [
+			_('No IKE proposal exists yet.'),
+			_('Create a proposal with the ESP Proposal option disabled first.')
+		]);
+		o.tooltipicon = '⚠️';
 		o.rmempty = true;
 
 		o = s.taboption('general', form.MultiValue, 'child', _('Children'),
@@ -408,17 +438,20 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'child');
-			if (sections.length == 0) {
-				this.value('', _('Please create a Children first'));
-			} else {
-				sections.forEach(L.bind(function (section) {
-					this.value(section['.name'], '%s (%s)'.format(section['.name'], section['mode']));
-				}, this));
-			}
+			uci.sections('ipsec', 'child').forEach(L.bind(function (section) {
+				this.value(section['.name'], '%s (%s)'.format(section['.name'], section['mode']));
+			}, this));
 
 			return this.super('load', [section_id]);
 		};
+		o.tooltip = multiValueSectionTooltip([
+			_('Configured child sections do not exist: %s'),
+			_('Select existing child sections or create the missing ones.')
+		], [
+			_('No child section exists yet.'),
+			_('Create a child section first.')
+		]);
+		o.tooltipicon = '⚠️';
 		o.rmempty = false;
 
 		o = s.taboption('authentication', form.DynamicList, 'local', _('Local Authentication'),
@@ -741,19 +774,22 @@ return view.extend({
 			this.keylist = [];
 			this.vallist = [];
 
-			var sections = uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+			uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
 				return section.is_esp == '1';
-			});
-			if (sections.length == 0) {
-				this.value('', _('Please create an ESP Proposal first'));
-			} else {
-				sections.forEach(L.bind(function (section) {
-					this.value(section['.name']);
-				}, this));
-			}
+			}).forEach(L.bind(function (section) {
+				this.value(section['.name']);
+			}, this));
 
 			return this.super('load', [section_id]);
 		};
+		o.tooltip = multiValueSectionTooltip([
+			_('Configured proposals are not available as ESP proposal: %s'),
+			_('Check the ESP Proposal option of the proposals or create the missing ones.')
+		], [
+			_('No ESP proposal exists yet.'),
+			_('Create a proposal with the ESP Proposal option enabled first.')
+		]);
+		o.tooltipicon = '⚠️';
 		o.rmempty = true;
 
 		o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
