@@ -1322,6 +1322,11 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	openDropdown(sb) {
 		const ul = sb.querySelector('ul');
 		const li = ul.querySelectorAll('li');
+
+		/* nothing to select, e.g. no choices and no create input */
+		if (!li.length)
+			return;
+
 		const fl = findParent(sb, '.cbi-value-field');
 		const sel = ul.querySelector('[selected]');
 		const rect = sb.getBoundingClientRect();
