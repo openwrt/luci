@@ -535,12 +535,6 @@ return view.extend({
 		o.depends('keyexchange', 'ikev1');
 		o.depends('keyexchange', 'ike');
 
-		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
-			swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
-		o.validate = validateTimeFormat;
-		o.placeholder = '0s';
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
 			swanctlDescr(_('IKEv2 interval to refresh keying material; also used to compute lifetime'), 'connections.<conn>.rekey_time'));
 		o.validate = validateTimeFormat;
@@ -773,6 +767,12 @@ return view.extend({
 		o.default = '';
 		o.rmempty = true;
 		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
+			swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
