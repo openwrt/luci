@@ -67,7 +67,7 @@ const methods = {
 
 			if (nft) {
 				for (let line = nft.read('line'), num = 1; length(line); line = nft.read('line')) {
-					let m = match(line, /^\t\tiif ".+" @nh,72,8 (0x6|0x11) th dport ([0-9]+) dnat ip to ([0-9.]+):([0-9]+)/);
+					let m = match(line, /^\s*iif ".+" @nh,72,8 (0x6|0x11) th dport ([0-9]+) .*dnat ip to ([0-9.]+):([0-9]+)/);
 
 					if (m) {
 						push(rules, {
