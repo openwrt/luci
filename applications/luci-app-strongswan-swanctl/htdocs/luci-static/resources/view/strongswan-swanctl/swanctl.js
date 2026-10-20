@@ -515,9 +515,11 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'keyingtries', _('Keying Retries'),
-			swanctlDescr(_('Number of retransmissions attempts during initial negotiation'), 'connections.<conn>.keyingtries'));
-		o.datatype = 'or(uinteger, "%forever")';
-		o.placeholder = '3';
+			swanctlDescr(_('Number of retransmissions attempts during initial negotiation.') + '<br />' +
+			_('Use %s to retry until the connection is established or fails with a permanent error.').format('<code>0</code>'),
+				'connections.<conn>.keyingtries'));
+		o.datatype = 'uinteger';
+		o.placeholder = '1';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'dpd_delay', _('DPD Delay'),
