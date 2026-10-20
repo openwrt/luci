@@ -525,7 +525,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'dpd_delay', _('DPD Delay'),
 			swanctlDescr(_('Interval to check liveness of a peer'), 'connections.<conn>.dpd_delay'));
 		o.validate = validateTimeFormat;
-		o.placeholder = '30s';
+		o.placeholder = '0s';
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'dpd_timeout', _('DPD Timeout'),
