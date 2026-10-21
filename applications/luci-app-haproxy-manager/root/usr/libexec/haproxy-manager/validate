@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+
+CFG="${1:-/etc/haproxy.cfg}"
+if [ "$CFG" != "$HAPROXY_CFG" ]; then
+	is_safe_temp_path "$CFG" || { echo "Refusing unsafe HAProxy config path: $CFG" >&2; exit 1; }
+fi
+if ! command -v haproxy >/dev/null 2>&1; then
+	echo "haproxy binary is not installed" >&2
+	exit 1
+fi
+
+haproxy -c -f "$CFG"

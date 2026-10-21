@@ -1,0 +1,65 @@
+#!/bin/sh
+. /usr/libexec/haproxy-manager/common.sh
+
+ZONE="$(uci_get main firewall_zone wan)"
+MANAGED="$(uci_get main manage_firewall 0)"
+MODE="$(uci_get main firewall_conflict_mode warn)"
+PORTS="$(required_ports)"
+WAN_POLICY=unknown
+HAS_MANAGED_RULE=0
+CONFLICTS=0
+
+for zone in $(uci -q show firewall | sed -n 's/^firewall\.\(@zone\[[0-9][0-9]*\]\)=zone/\1/p'); do
+	[ "$(uci -q get "firewall.$zone.name")" = "$ZONE" ] || continue
+	WAN_POLICY="$(uci -q get "firewall.$zone.input" 2>/dev/null || echo REJECT)"
+	break
+done
+
+for rule in $(uci -q show firewall | sed -n 's/^firewall\.\(@rule\[[0-9][0-9]*\]\)=rule/\1/p'); do
+	name="$(uci -q get "firewall.$rule.name" 2>/dev/null || true)"
+	[ "$name" = "$FIREWALL_RULE_NAME" ] || continue
+	HAS_MANAGED_RULE=1
+	break
+done
+
+printf 'enabled\t%s\n' "$MANAGED"
+printf 'zone\t%s\n' "$ZONE"
+printf 'policy\t%s\n' "$WAN_POLICY"
+printf 'mode\t%s\n' "$MODE"
+printf 'managed_rule\t%s\n' "$HAS_MANAGED_RULE"
+
+for port in $PORTS; do
+	printf 'port\t%s\n' "$port"
+done
+
+for redirect in $(uci -q show firewall | sed -n 's/^firewall\.\(@redirect\[[0-9][0-9]*\]\)=redirect/\1/p'); do
+	redirect_enabled="$(uci -q get "firewall.$redirect.enabled" 2>/dev/null || echo 1)"
+	redirect_name="$(uci -q get "firewall.$redirect.name" 2>/dev/null || true)"
+	if [ "$redirect_enabled" != 1 ]; then
+		case "$redirect_name" in
+			"$FIREWALL_DISABLED_PREFIX"*)
+				[ "$MANAGED" = 1 ] && [ "$MODE" != disable ] || continue
+			;;
+			*) continue ;;
+		esac
+	fi
+	[ "$(uci -q get "firewall.$redirect.src" 2>/dev/null || true)" = "$ZONE" ] || continue
+
+	proto="$(uci -q get "firewall.$redirect.proto" 2>/dev/null || echo 'tcp udp')"
+	case " $proto " in *' tcp '*|*' tcpudp '*) ;; *) continue ;; esac
+
+	spec="$(uci -q get "firewall.$redirect.src_dport" 2>/dev/null || true)"
+	[ -n "$spec" ] || continue
+
+	for port in $PORTS; do
+		port_spec_contains "$spec" "$port" || continue
+		name="${redirect_name:-$redirect}"
+		dest_ip="$(uci -q get "firewall.$redirect.dest_ip" 2>/dev/null || true)"
+		dest_port="$(uci -q get "firewall.$redirect.dest_port" 2>/dev/null || true)"
+		printf 'conflict\t%s\t%s\t%s\t%s\t%s\n' "$redirect" "$name" "$spec" "$dest_ip" "$dest_port"
+		CONFLICTS=$((CONFLICTS + 1))
+		break
+	done
+done
+
+printf 'conflicts\t%s\n' "$CONFLICTS"
