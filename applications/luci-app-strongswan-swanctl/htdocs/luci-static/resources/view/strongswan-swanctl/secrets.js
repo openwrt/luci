@@ -3,6 +3,7 @@
 'require fs';
 'require view';
 'require strongswan-swanctl.ikev1 as ikev1';
+'require strongswan-swanctl.service as service';
 
 /**
  * Append the matching swanctl.conf setting (dotted path) to a description.
@@ -178,6 +179,9 @@ return view.extend({
 		o.modalonly = true;
 
 		return m.render().then(function (node) {
+			return service.prepend(node,
+				_('Changes take effect once the IPsec service is enabled.'));
+		}).then(function (node) {
 			return ikev1.prepend(node);
 		});
 	}
