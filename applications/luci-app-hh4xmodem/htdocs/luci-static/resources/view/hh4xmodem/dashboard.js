@@ -29,6 +29,20 @@ const callAll = rpc.declare({
 	method: 'get_all'
 });
 
+const callSetUpnp = rpc.declare({
+	object: 'hh4xmodem',
+	method: 'set_upnp',
+	params: { enabled: true },
+	reject: true
+});
+
+const callSetDmz = rpc.declare({
+	object: 'hh4xmodem',
+	method: 'set_dmz',
+	params: { enabled: false, ip: '' },
+	reject: true
+});
+
 const callSetMode = rpc.declare({
 	object: 'hh4xmodem',
 	method: 'set_network_mode',
@@ -162,6 +176,41 @@ function formatDuration(seconds) {
 	return s + 's';
 }
 
+function isValidIPv4(value) {
+	var parts = String(value || '').trim().split('.');
+	if (parts.length !== 4) return false;
+	for (var i = 0; i < 4; i++) {
+		if (!/^[0-9]{1,3}$/.test(parts[i])) return false;
+		var n = parseInt(parts[i], 10);
+		if (isNaN(n) || n < 0 || n > 255) return false;
+	}
+	return true;
+}
+
+// Mirrors the backend validation so obvious mistakes are caught before an
+// RPC round-trip. The backend still validates: this is convenience, not a
+// security boundary.
+function dmzIpProblem(ip, lan) {
+	if (!isValidIPv4(ip)) return _('Enter a valid IPv4 address.');
+	var p = ip.split('.').map(Number);
+	if (p[0] === 0 || p[0] === 127 || p[0] >= 224)
+		return _('Enter a unicast LAN address.');
+	if (p[3] === 0 || p[3] === 255)
+		return _('Enter a host address, not the network or broadcast address.');
+	lan = lan || {};
+	var lanIp = lan.LanIp || lan.IPv4IPAddress;
+	var mask = lan.Submask || lan.SubnetMask;
+	if (lanIp && isValidIPv4(lanIp)) {
+		if (ip === lanIp) return _('The DMZ host cannot be the modem itself.');
+		if (mask === '255.255.255.0') {
+			var l = lanIp.split('.').map(Number);
+			if (p[0] !== l[0] || p[1] !== l[1] || p[2] !== l[2])
+				return _('The DMZ host must be inside the modem LAN subnet (%s.%s.%s.x).').format(l[0], l[1], l[2]);
+		}
+	}
+	return null;
+}
+
 function signalQualityClass(value, type) {
 	if (value == null) return 'signal-unknown';
 	if (type === 'rsrp') {
@@ -229,8 +278,8 @@ function createCard(title, content, icon) {
 	]);
 }
 
-function createInfoRow(label, value, className) {
-	return E('div', { 'class': 'hh4x-info-row' + (className ? ' ' + className : '') }, [
+function createInfoRow(label, value, className, id) {
+	return E('div', { 'class': 'hh4x-info-row' + (className ? ' ' + className : ''), 'id': id || undefined }, [
 		E('span', { 'class': 'hh4x-info-label' }, [label]),
 		E('span', { 'class': 'hh4x-info-value' }, [value != null ? String(value) : '--'])
 	]);
@@ -691,6 +740,7 @@ function parseContext(modemData) {
 	var smsSto  = modemData.GetSMSStorageState || {};
 	var lan     = modemData.GetLanSettings || {};
 	var upnp    = modemData.GetUpnpSettings || {};
+	var dmz     = modemData.getDMZInfo || {};
 	var lang    = modemData.GetCurrentLanguage || {};
 	var connSet = modemData.GetConnectionSettings || {};
 
@@ -699,7 +749,7 @@ function parseContext(modemData) {
 		network: network, reg: reg, profiles: profiles, curProfile: curProfile,
 		sysinfo: sysinfo, sim: sim, simPinLocked: simPinLocked,
 		simReady: simReady, simPinSet: simPinSet, smsSet: smsSet,
-		smsSto: smsSto, lan: lan, upnp: upnp, lang: lang, connSet: connSet
+		smsSto: smsSto, lan: lan, upnp: upnp, dmz: dmz, lang: lang, connSet: connSet
 	};
 }
 
@@ -1091,6 +1141,154 @@ function renderNetworkTab(ctx) {
 	]);
 }
 
+function renderNatTab(ctx) {
+	var upnp = ctx.upnp || {};
+	var dmz = ctx.dmz || {};
+	var lan = ctx.lan || {};
+	var upnpKnown = (upnp.upnp_switch != null);
+	var dmzKnown = (dmz.dmz_status != null);
+	var upnpOn = (upnp.upnp_switch == 1);
+	var dmzOn = (dmz.dmz_status == 1);
+
+	return E('div', {
+		'data-tab': 'nat',
+		'data-tab-title': _('NAT')
+	}, [
+		E('div', { 'class': 'hh4x-row hh4x-row-2col' }, [
+			createCard(_('UPnP'), [
+				createInfoRow(_('Current State'),
+					upnpKnown ? (upnpOn ? _('Enabled') : _('Disabled')) : _('Unavailable'),
+					null, 'upnp-state'),
+				E('hr', { 'class': 'hh4x-divider' }),
+				upnpKnown ? E('div', {}, [
+					E('label', { 'style': 'display:flex;align-items:center;gap:8px;' }, [
+						E('input', { 'type': 'checkbox', 'id': 'upnp-enable', 'checked': upnpOn ? true : undefined }),
+						_('Enable UPnP')
+					]),
+					E('div', { 'style': 'color:var(--text-color-medium);font-size:0.85em;margin-top:0.5em;' }, [
+						_('UPnP lets LAN applications open ports automatically. This is the modem\'s UPnP, not the router\'s. Disable it if you do not need it.')
+					]),
+					E('br'),
+					E('button', {
+						'class': 'cbi-button cbi-button-apply',
+						'id': 'upnp-apply',
+						'click': function (e) {
+							e.preventDefault();
+							var box = document.getElementById('upnp-enable');
+							var btn = document.getElementById('upnp-apply');
+							var want = box.checked;
+							btn.disabled = true;
+							btn.textContent = _('Saving...');
+							callSetUpnp({ enabled: want }).then(function (r) {
+								if (r && r.error == null) {
+									updateInfoValue(document.getElementById('upnp-state'), want ? _('Enabled') : _('Disabled'));
+									btn.textContent = _('✓ Saved');
+									setTimeout(function () { btn.disabled = false; btn.textContent = _('Apply'); }, 2000);
+								} else {
+									ui.addNotification(null, E('p', [_('Save failed: ') + ((r && r.error) || _('Unknown error'))]), 'error');
+									box.checked = !want;
+									btn.disabled = false;
+									btn.textContent = _('Apply');
+								}
+							}).catch(function (err) {
+								ui.addNotification(null, E('p', [_('Error: ') + String(err)]), 'error');
+								box.checked = !want;
+								btn.disabled = false;
+								btn.textContent = _('Apply');
+							});
+						}
+					}, [_('Apply')])
+				]) : E('div', { 'style': 'padding:0.5em 0;color:var(--text-color-medium);' }, [
+					_('This modem firmware did not report a UPnP setting.')
+				])
+			]),
+			createCard(_('DMZ'), [
+				createInfoRow(_('Current State'),
+					dmzKnown ? (dmzOn ? _('Enabled') : _('Disabled')) : _('Unavailable'),
+					null, 'dmz-state'),
+				dmzKnown ? createInfoRow(_('DMZ Host'), dmz.dmz_ip || '--', null, 'dmz-host') : null,
+				E('hr', { 'class': 'hh4x-divider' }),
+				dmzKnown ? E('div', {}, [
+					E('div', { 'class': 'hh4x-warning' }, [
+						E('span', { 'class': 'hh4x-warning-icon' }, ['⚠']),
+						E('span', {}, [_('DMZ forwards all inbound traffic that is not otherwise port-forwarded to one host. Prefer a port forward for a single service.')])
+					]),
+					E('br'),
+					E('label', { 'style': 'display:flex;align-items:center;gap:8px;' }, [
+						E('input', {
+							'type': 'checkbox', 'id': 'dmz-enable', 'checked': dmzOn ? true : undefined,
+							'change': function (e) {
+								var inp = document.getElementById('dmz-ip');
+								if (inp) inp.disabled = !e.target.checked;
+							}
+						}),
+						_('Enable DMZ')
+					]),
+					E('div', { 'class': 'hh4x-form-group', 'style': 'margin-top:8px;' }, [
+						E('label', { 'class': 'hh4x-form-label' }, [_('DMZ Host IP:')]),
+						E('input', {
+							'type': 'text', 'class': 'cbi-input-text', 'id': 'dmz-ip',
+							'value': dmz.dmz_ip || '', 'placeholder': '192.168.225.100',
+							'disabled': dmzOn ? undefined : true, 'style': 'width:100%;'
+						})
+					]),
+					E('div', { 'style': 'color:var(--text-color-medium);font-size:0.85em;' }, [
+						_('Use the modem LAN address of the host. If this is the router WAN address, the OpenWrt firewall still applies.')
+					]),
+					E('br'),
+					E('button', {
+						'class': 'cbi-button cbi-button-apply',
+						'id': 'dmz-apply',
+						'click': function (e) {
+							e.preventDefault();
+							var box = document.getElementById('dmz-enable');
+							var input = document.getElementById('dmz-ip');
+							var btn = document.getElementById('dmz-apply');
+							var want = box.checked;
+							var ip = (input.value || '').trim();
+							if (want) {
+								var problem = dmzIpProblem(ip, lan);
+								if (problem) {
+									ui.addNotification(null, E('p', [problem]), 'warning');
+									input.focus();
+									return;
+								}
+								if (!confirm(_('Enabling DMZ forwards all inbound traffic to %s. This exposes that host to the internet. Continue?').format(ip)))
+									return;
+							}
+							btn.disabled = true;
+							btn.textContent = _('Saving...');
+							callSetDmz({ enabled: want, ip: ip }).then(function (r) {
+								if (r && r.error == null) {
+									updateInfoValue(document.getElementById('dmz-state'), want ? _('Enabled') : _('Disabled'));
+									var host = (r.dmz_ip != null) ? r.dmz_ip : (want ? ip : (dmz.dmz_ip || '--'));
+									updateInfoValue(document.getElementById('dmz-host'), host || '--');
+									btn.textContent = _('✓ Saved');
+									setTimeout(function () { btn.disabled = false; btn.textContent = _('Apply'); }, 2000);
+								} else {
+									ui.addNotification(null, E('p', [_('Save failed: ') + ((r && r.error) || _('Unknown error'))]), 'error');
+									box.checked = !want;
+									input.disabled = !box.checked;
+									btn.disabled = false;
+									btn.textContent = _('Apply');
+								}
+							}).catch(function (err) {
+								ui.addNotification(null, E('p', [_('Error: ') + String(err)]), 'error');
+								box.checked = !want;
+								input.disabled = !box.checked;
+								btn.disabled = false;
+								btn.textContent = _('Apply');
+							});
+						}
+					}, [_('Apply')])
+				]) : E('div', { 'style': 'padding:0.5em 0;color:var(--text-color-medium);' }, [
+					_('This modem firmware did not report a DMZ setting.')
+				])
+			])
+		])
+	]);
+}
+
 function renderUsageTab(ctx) {
 	var usage = ctx.usage, conn = ctx.conn;
 	var usedBytes = usage.HUseData || 0;
@@ -1242,7 +1440,7 @@ function renderInfoTab(ctx) {
 	var status = ctx.status, network = ctx.network, sim = ctx.sim,
 		sysinfo = ctx.sysinfo, simPinLocked = ctx.simPinLocked,
 		simReady = ctx.simReady, simPinSet = ctx.simPinSet,
-		lan = ctx.lan, upnp = ctx.upnp, lang = ctx.lang;
+		lan = ctx.lan, lang = ctx.lang;
 
 	var infoTab = E('div', {
 		'data-tab': 'info',
@@ -1517,8 +1715,7 @@ function renderInfoTab(ctx) {
 				createInfoRow(_('DHCP End'), lan.EndIPAddress || '--'),
 				createInfoRow(_('DNS'), lan.IPv4IPAddress || '--'),
 				E('hr', { 'class': 'hh4x-divider' }),
-				createInfoRow(_('UI Language'), lang.Language || '--'),
-				createInfoRow(_('UPnP'), upnp.upnp_switch == 1 ? _('Enabled') : _('Disabled'))
+				createInfoRow(_('UI Language'), lang.Language || '--')
 			])
 		]),
 		E('div', { 'class': 'hh4x-row' }, [
@@ -1607,11 +1804,12 @@ return view.extend({
 		// ========== Build Tabs ==========
 		var statusTab  = renderStatusTab(ctx);
 		var networkTab = renderNetworkTab(ctx);
+		var natTab     = renderNatTab(ctx);
 		var usageTab   = renderUsageTab(ctx);
 		var infoTab    = renderInfoTab(ctx);
 
 		var paneContainer = E('div', { 'class': 'hh4x-tab-panes' }, [
-			statusTab, networkTab, usageTab, infoTab
+			statusTab, networkTab, natTab, usageTab, infoTab
 		]);
 
 		setTimeout(function () {

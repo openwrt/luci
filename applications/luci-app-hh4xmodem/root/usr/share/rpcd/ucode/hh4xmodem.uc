@@ -60,6 +60,7 @@ function get_lan_settings() { return pack_call('GetLanSettings'); }
 function get_sms_storage() { return pack_call('GetSMSStorageState'); }
 function get_sms_settings() { return pack_call('GetSMSSettings'); }
 function get_upnp() { return pack_call('GetUpnpSettings'); }
+function get_dmz() { return pack_call('getDMZInfo'); }
 function get_language() { return pack_call('GetCurrentLanguage'); }
 function get_connection_settings() { return pack_call('GetConnectionSettings'); }
 function get_registration_state() { return pack_call('GetNetworkRegisterState'); }
@@ -92,6 +93,108 @@ function disconnect_modem() {
 // non-zero) error is an actual failure.
 function pack_ok(r) {
 	return r != null && (r.error == null || r.error == 0 || r.error == '0' || length(r) == 0);
+}
+
+function truthy(v) {
+	return v == true || v == 1 || v == '1';
+}
+
+function valid_ipv4(value) {
+	if (type(value) != 'string') return false;
+	let parts = split(value, '.');
+	if (length(parts) != 4) return false;
+	for (let p in parts) {
+		if (!length(p) || length(p) > 3) return false;
+		for (let i = 0; i < length(p); i++)
+			if (index('0123456789', substr(p, i, 1)) < 0) return false;
+		if (int(p) > 255) return false;
+	}
+	return true;
+}
+
+// The stock WebUI only checks the dotted-quad format. Reject unusable
+// addresses too, and when the LAN settings are readable require the host to
+// be in the modem's LAN subnet. A wrong value would otherwise be accepted by
+// the UI and only rejected (or silently ignored) by the modem.
+function validate_dmz_ip(ip, lan) {
+	if (!valid_ipv4(ip)) return 'Enter a valid IPv4 address';
+	let p = split(ip, '.');
+	let first = int(p[0]);
+	let last = int(p[3]);
+	if (first == 0 || first == 127 || first >= 224)
+		return 'The DMZ host must be a unicast LAN address';
+	if (last == 0 || last == 255)
+		return 'The DMZ host cannot be the network or broadcast address';
+	let lan_ip = lan.LanIp || lan.IPv4IPAddress;
+	let mask = lan.Submask || lan.SubnetMask;
+	if (valid_ipv4(lan_ip)) {
+		if (ip == lan_ip) return 'The DMZ host cannot be the modem itself';
+		let l = split(lan_ip, '.');
+		// The modem LAN is normally a /24. For other masks fall back to the
+		// modem's own validation instead of guessing.
+		if (mask == '255.255.255.0' && (p[0] != l[0] || p[1] != l[1] || p[2] != l[2]))
+			return sprintf('The DMZ host must be inside the modem LAN subnet (%s.%s.%s.x)', l[0], l[1], l[2]);
+	}
+	return null;
+}
+
+function set_upnp(enabled) {
+	let want = truthy(enabled) ? 1 : 0;
+	let before = get_upnp();
+	if (type(before) == 'object' && before.upnp_switch != null && int(before.upnp_switch) == want)
+		return { error: null, upnp_switch: want };
+	let r = pack_call('SetUpnpSettings', sprintf('{"upnp_switch":%d}', want));
+	if (r != null && r.error != null) return r;
+	// A SET is usually acknowledged with {}; trust the stored value, not the
+	// empty reply. Retry briefly in case the modem applies it asynchronously.
+	let last = null;
+	for (let i = 0; i < 3; i++) {
+		if (i > 0) sleep(300);
+		let cur = get_upnp();
+		if (type(cur) == 'object' && cur.upnp_switch != null) {
+			last = int(cur.upnp_switch);
+			if (last == want) return { error: null, upnp_switch: want };
+		}
+	}
+	return { error: sprintf('Modem did not apply the UPnP setting (reported %s)', last != null ? last : 'unknown'), code: -1 };
+}
+
+function set_dmz(enabled, ip) {
+	let cur = get_dmz();
+	if (type(cur) != 'object' || cur.dmz_status == null) {
+		if (type(cur) == 'object' && cur.error != null) return cur;
+		return { error: 'DMZ is not supported by this modem firmware', code: -1 };
+	}
+	let want = truthy(enabled) ? 1 : 0;
+	ip = trim(ip || '');
+	if (want == 0 && int(cur.dmz_status) == 0)
+		return { error: null, dmz_status: 0, dmz_ip: cur.dmz_ip || '' };
+	if (want == 1 && int(cur.dmz_status) == 1 && ip == (cur.dmz_ip || ''))
+		return { error: null, dmz_status: 1, dmz_ip: ip };
+	if (want == 1) {
+		if (!length(ip)) return { error: 'Enter the DMZ host IP address', code: -1 };
+		let lan = pack_call('GetLanSettings');
+		if (type(lan) != 'object' || lan.error != null) lan = {};
+		let problem = validate_dmz_ip(ip, lan);
+		if (problem != null) return { error: problem, code: -1 };
+	} else {
+		// Keep the stored host address when turning DMZ off, so a later
+		// re-enable starts from the same address (the stock UI does this).
+		ip = cur.dmz_ip || ip;
+	}
+	let r = pack_call('setDMZInfo', sprintf('{"dmz_status":%d,"dmz_ip":%J}', want, ip));
+	if (r != null && r.error != null) return r;
+	let last = null;
+	for (let i = 0; i < 3; i++) {
+		if (i > 0) sleep(300);
+		let after = get_dmz();
+		if (type(after) == 'object' && after.dmz_status != null) {
+			last = int(after.dmz_status);
+			if (last == want && (want == 0 || after.dmz_ip == ip))
+				return { error: null, dmz_status: want, dmz_ip: after.dmz_ip };
+		}
+	}
+	return { error: sprintf('Modem did not apply the DMZ setting (reported status %s)', last != null ? last : 'unknown'), code: -1 };
 }
 
 function unlock_pin(pin) {
@@ -479,6 +582,9 @@ const methods = {
 	get_sms_settings:       { call: get_sms_settings },
 	get_lan_settings:       { call: get_lan_settings },
 	get_upnp:               { call: get_upnp },
+	get_dmz:                { call: get_dmz },
+	set_upnp:               { args: { enabled: true }, call: function(request) { return set_upnp(request.args.enabled); } },
+	set_dmz:                { args: { enabled: false, ip: '' }, call: function(request) { return set_dmz(request.args.enabled, request.args.ip); } },
 	get_language:           { call: get_language },
 	get_connection_settings:{ call: get_connection_settings },
 	get_registration_state: { call: get_registration_state },
