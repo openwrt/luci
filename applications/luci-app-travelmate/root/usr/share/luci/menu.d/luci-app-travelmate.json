@@ -7,12 +7,16 @@
 			"path": "admin/services/travelmate/overview"
 		},
 		"depends": {
-			"acl": [ "luci-app-travelmate" ],
+			"acl": [
+				"luci-app-travelmate"
+			],
 			"fs": {
-				"/usr/bin/travelmate-service.sh": "executable",
+				"/usr/sbin/travelmate": "executable",
 				"/etc/init.d/travelmate": "executable"
 			},
-			"uci": { "travelmate": true }
+			"uci": {
+				"travelmate": true
+			}
 		}
 	},
 	"admin/services/travelmate/overview": {

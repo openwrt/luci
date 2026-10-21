@@ -642,16 +642,10 @@ return view.extend({
 		o.default = 0;
 		o.rmempty = false;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'trm_vpnifacelist', _('Limit VPN processing'), _('Limit VPN processing to certain interfaces.'));
+		o = s.taboption('general', widgets.NetworkSelect, 'trm_vpnifacelist', _('Limit VPN processing'), _('Limit VPN processing to certain interfaces. By default all wireguard and openvpn interfaces and all vpn interfaces referenced by an uplink are processed.'));
 		o.depends('trm_vpn', '1');
 		o.multiple = true;
 		o.nocreate = true;
-		o.rmempty = true;
-
-		o = s.taboption('general', form.Value, 'trm_stdvpnservice', _('Standard VPN Service'), _('Standard VPN service which will be automatically added to new STA profiles.'));
-		o.depends('trm_vpn', '1');
-		o.value('wireguard');
-		o.value('openvpn');
 		o.rmempty = true;
 
 		o = s.taboption('general', widgets.NetworkSelect, 'trm_stdvpniface', _('Standard VPN interface'), _('Standard VPN interface which will be automatically added to new STA profiles.'));
@@ -734,7 +728,7 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.Value, 'trm_timeout', _('Overall Timeout'), _('Overall retry timeout in seconds.'));
-		o.placeholder = '60';
+		o.placeholder = '30';
 		o.datatype = 'range(30,300)';
 		o.rmempty = true;
 
