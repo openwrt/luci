@@ -2,6 +2,7 @@
 'require uci';
 'require form';
 'require network';
+'require tools.widgets as widgets';
 
 network.registerPatternVirtual(/^6in4-.+$/);
 
@@ -89,5 +90,9 @@ return network.registerProtocol('6in4', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Use MTU on tunnel interface'));
 		o.placeholder = '1280';
 		o.datatype    = 'max(9200)';
+
+		o = s.taboption('advanced', widgets.NetworkSelect, 'tunlink', _('Underlying interface'), _('Optional. Bind to a specific interface.'));
+		o.exclude = s.section;
+		o.nocreate = true;
 	}
 });
