@@ -17,7 +17,7 @@ function addLogLevel(o) {
 	o.default = '';
 }
 
-function addLogSubsystems(s) {
+function addLogSubsystems(s, depends) {
 	const subsystems = [
 		[ 'app', _('Applications other than daemons') ],
 		[ 'asn', _('Low-level encoding/decoding (ASN.1, X.509 etc.)') ],
@@ -43,6 +43,8 @@ function addLogSubsystems(s) {
 	subsystems.forEach(function (subsys) {
 		const o = s.option(form.ListValue, subsys[0], subsys[0], subsys[1]);
 		addLogLevel(o);
+		if (depends)
+			o.depends(depends);
 	});
 }
 
@@ -57,6 +59,11 @@ return view.extend({
 
 			if (uci.get('ipsec', 'syslog') == null) {
 				uci.add('ipsec', 'syslog', 'syslog');
+				save = true;
+			}
+
+			if (uci.get('ipsec', 'filelog') == null) {
+				uci.add('ipsec', 'filelog', 'filelog');
 				save = true;
 			}
 
@@ -97,6 +104,44 @@ return view.extend({
 			_('Configure how strongswan logs events, errors, and debug information.'));
 
 		addLogSubsystems(s);
+
+		// filelog settings
+		s = m.section(form.NamedSection, 'filelog', 'filelog', _('File Log Settings'),
+			_('Configure whether and how strongswan logs events, errors, and debug information to a file.'));
+
+		o = s.option(form.Flag, 'enabled', _('Enable file logging'));
+		o.default = '0';
+		o.rmempty = false;
+
+		o = s.option(form.Value, 'path', _('Log file'),
+			_('Absolute path of the log file below <code>/tmp</code> or <code>/var/log</code>.'));
+		o.placeholder = '/var/log/charon.log';
+		o.validate = function (section_id, value) {
+			if (value == '')
+				return true;
+			if (!/^\/(tmp|var\/log)\/[^/]/.test(value) || /(^|\/)\.\.(\/|$)/.test(value))
+				return _('Expecting a path below /tmp or /var/log');
+			return true;
+		};
+		o.depends('enabled', '1');
+
+		o = s.option(form.Value, 'time_format', _('Time format'),
+			_('Prefix each log entry with a timestamp in <code>strftime(3)</code> format.'));
+		o.placeholder = '%b %e %T';
+		o.depends('enabled', '1');
+
+		o = s.option(form.Flag, 'append', _('Append'),
+			_('Append to an existing log file instead of truncating it on daemon start.'));
+		o.default = '0';
+		o.depends('enabled', '1');
+
+		o = s.option(form.Flag, 'flush_line', _('Flush every line'),
+			_('Write each log entry to the file immediately.'));
+		o.default = '1';
+		o.rmempty = false;
+		o.depends('enabled', '1');
+
+		addLogSubsystems(s, { enabled: '1' });
 
 		// kernel-netlink plugin settings
 		s = m.section(form.NamedSection, 'netlink', 'netlink', _('Netlink Settings'),
