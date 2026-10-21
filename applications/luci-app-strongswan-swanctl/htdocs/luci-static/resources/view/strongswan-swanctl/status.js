@@ -159,12 +159,24 @@ function renderChildDetailsSection(childName, child) {
 }
 
 function handleChildDetails(connection, childName, child) {
-	ui.showModal(_('Child Details'), [renderChildDetailsSection(childName, child), E('div', { 'class': 'right' }, [
+	const container = E('div', {}, [renderChildDetailsSection(childName, child)]);
+
+	ui.showModal(_('Child Details'), [container, E('div', { 'class': 'right' }, [
 		E('button', {
 			'class': 'btn cbi-button',
 			'click': ui.createHandlerFn(null, handleChildDetailsDismiss, connection)
 		}, [_('Dismiss')])
 	])], 'cbi-modal');
+
+	openModal = {
+		connectionName: connection.name,
+		node: container,
+		update: freshConnection => {
+			const freshChild = freshConnection.children[childName];
+			if (freshChild)
+				dom.content(container, renderChildDetailsSection(childName, freshChild));
+		}
+	};
 }
 
 function renderChildTable(connection, container) {
