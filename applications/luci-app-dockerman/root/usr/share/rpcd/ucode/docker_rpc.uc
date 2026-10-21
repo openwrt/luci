@@ -100,6 +100,23 @@ function coerce_values_to_string(obj) {
 	return obj;
 };
 
+// Parse the docker multiplexed stream format, https://docs.docker.com/reference/api/engine/version/v1.43/#stream-format
+function parse_multiplexed_stream(buffer) {
+	let output = [];
+
+	while (length(buffer) > 0) {
+		if (length(buffer) < 8) break; // Not enough data for header
+		let stream_type = ord(buffer, 0);
+		let payload_length = ord(buffer, 4) << 24 | ord(buffer, 5) << 16 | ord(buffer, 6) << 8 | ord(buffer, 7);
+		if (length(buffer) < 8 + payload_length) break; // Not enough data for payload
+		let payload = substr(buffer, 8, payload_length);
+		push(output, { type: stream_type, payload: payload });
+		buffer = substr(buffer, 8 + payload_length);
+	}
+
+	return output;
+};
+
 function call_docker(method, path, options) {
 	options = options || {};
 	const headers = options.headers || {};
@@ -277,6 +294,8 @@ function call_docker(method, path, options) {
 		} else {
 			response_body = data;
 		}
+	} else if (response_headers['content-type'] === 'application/vnd.docker.multiplexed-stream' && response_body) {
+		response_body = parse_multiplexed_stream(response_body);
 	}
 
 	return {
