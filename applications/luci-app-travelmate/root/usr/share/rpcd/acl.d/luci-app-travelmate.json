@@ -2,12 +2,38 @@
 	"luci-app-travelmate": {
 		"description": "Grant access to LuCI app travelmate",
 		"write": {
+			"cgi-io": [
+				"exec"
+			],
 			"file": {
 				"/var/run/travelmate/travelmate.refresh": [
 					"write"
 				],
 				"/tmp/run/travelmate/travelmate.refresh": [
 					"write"
+				],
+				"/sbin/ifup *": [
+					"exec"
+				],
+				"/etc/init.d/travelmate start": [
+					"exec"
+				],
+				"/etc/init.d/travelmate restart": [
+					"exec"
+				],
+				"/etc/init.d/travelmate stop": [
+					"exec"
+				],
+				"/etc/init.d/travelmate setup *": [
+					"exec"
+				],
+				"/etc/init.d/travelmate scan *": [
+					"exec"
+				]
+			},
+			"ubus": {
+				"file": [
+					"exec"
 				]
 			},
 			"uci": [
@@ -17,14 +43,13 @@
 		},
 		"read": {
 			"cgi-io": [
-				"download",
-				"exec"
+				"download"
 			],
 			"file": {
 				"/etc/travelmate": [
 					"list"
 				],
-				"/etc/travelmate/*.login": [
+				"/etc/travelmate/*.uc": [
 					"list"
 				],
 				"/var/run/travelmate/travelmate.scan": [
@@ -48,29 +73,10 @@
 				"/tmp/run/travelmate/travelmate.runtime.json": [
 					"read",
 					"list"
-				],
-				"/sbin/ifup *": [
-					"exec"
-				],
-				"/etc/init.d/travelmate start": [
-					"exec"
-				],
-				"/etc/init.d/travelmate restart": [
-					"exec"
-				],
-				"/etc/init.d/travelmate stop": [
-					"exec"
-				],
-				"/etc/init.d/travelmate setup *": [
-					"exec"
-				],
-				"/etc/init.d/travelmate scan *": [
-					"exec"
 				]
 			},
 			"ubus": {
 				"file": [
-					"exec",
 					"stat"
 				]
 			},
