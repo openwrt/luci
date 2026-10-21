@@ -1,6 +1,7 @@
 'use strict';
 'require view';
 'require strongswan-swanctl.ikev1 as ikev1';
+'require strongswan-swanctl.service as service';
 'require dom';
 'require poll';
 'require fs';
@@ -322,7 +323,8 @@ return view.extend({
 		return Promise.all([
 			fs.exec_direct('/usr/sbin/swanmon', ['version'], 'json'),
 			fs.exec_direct('/usr/sbin/swanmon', ['stats'], 'json'),
-			callMapConns()
+			callMapConns(),
+			service.getState()
 		]);
 	},
 
@@ -343,9 +345,17 @@ return view.extend({
 	renderContent(results, container) {
 		const refresh = () => this.refreshContent(container)
 			.catch(e => ui.addNotification(null, E('p', e.message)));
-		const [versionResult, statsResult, connectionResult] = results;
+		const [versionResult, statsResult, connectionResult, serviceState] = results;
 		const node = E('div', [E('div')]);
 		const firstNode = node.firstElementChild;
+
+		const banner = service.banner(serviceState,
+			_('Enable the IPsec service to see the IPsec status.'));
+		if (banner) {
+			firstNode.appendChild(banner);
+
+			return node;
+		}
 
 		const errorMessages = collectSwanmonErrorMessages([versionResult, statsResult]);
 		if (connectionResult.error)
@@ -356,8 +366,10 @@ return view.extend({
 				return E('li', message);
 			});
 
-			firstNode.appendChild(E('h4', _('Querying strongSwan failed')));
-			firstNode.appendChild(E('ul', messageEls));
+			firstNode.appendChild(E('div', { 'class': 'alert-message error' }, [
+				E('h4', _('Querying strongSwan failed')),
+				E('ul', messageEls)
+			]));
 
 			return node;
 		}

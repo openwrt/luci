@@ -3,6 +3,7 @@
 'require uci';
 'require view';
 'require strongswan-swanctl.ikev1 as ikev1';
+'require strongswan-swanctl.service as service';
 'require tools.widgets as widgets';
 
 function addLogLevel(o) {
@@ -49,6 +50,11 @@ return view.extend({
 		// general settings
 		s = m.section(form.NamedSection, 'globals', 'globals', _('General Settings'),
 			_('Configure global service parameters.'));
+
+		o = s.option(form.Flag, 'enabled', _('Enabled'),
+			_('Start the IPsec service.'));
+		o.default = '1';
+		o.rmempty = false;
 
 		o = s.option(widgets.NetworkSelect, 'interface', _('Listening Interfaces'),
 			_('Interfaces that accept VPN traffic.') + '<br /> ' +
@@ -127,6 +133,9 @@ return view.extend({
 		o.default = '0';
 
 		return m.render().then(function (node) {
+			return service.prepend(node,
+				_('Changes take effect once the IPsec service is enabled.'));
+		}).then(function (node) {
 			return ikev1.prepend(node);
 		});
 	}

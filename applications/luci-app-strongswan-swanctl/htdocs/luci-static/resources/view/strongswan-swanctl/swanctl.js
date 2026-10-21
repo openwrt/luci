@@ -1,6 +1,7 @@
 'use strict';
 'require view';
 'require strongswan-swanctl.ikev1 as ikev1';
+'require strongswan-swanctl.service as service';
 'require form';
 'require rpc';
 'require uci';
@@ -319,11 +320,13 @@ return view.extend({
 			callListAlgorithms(),
 			L.resolveDefault(uci.load('network'), null),
 			L.resolveDefault(uci.load('ipsec'), null),
+			service.getState(),
 		]).then(function (data) {
 			let hasNoGlobals = uci.sections('ipsec', 'globals').length === 0;
 			return {
 				algorithms: data[0],
 				legacyConfig: hasNoGlobals,
+				serviceState: data[3],
 			};
 		});
 	},
@@ -331,10 +334,11 @@ return view.extend({
 	render: function (result) {
 		let m, s, o;
 		const legacyConfig = result.legacyConfig;
+		const serviceState = result.serviceState;
 		const algorithms = result.algorithms.data ?? {};
 		const error = result.algorithms.error;
 
-		if (error)
+		if (error && serviceState.running)
 			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
 
 		m = new form.Map('ipsec', _('Connection configurations'),
@@ -1010,6 +1014,10 @@ return view.extend({
 		hideForCustomProposal(o);
 
 		return m.render().then(function (node) {
+			const banner = service.banner(serviceState,
+				_('Some options are unavailable until the IPsec service is enabled.'));
+			if (banner)
+				node.insertBefore(banner, node.firstChild);
 			if (legacyConfig)
 				showMigrationOverlay(node);
 			return ikev1.prepend(node);
