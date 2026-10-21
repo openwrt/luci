@@ -17,6 +17,35 @@ function addLogLevel(o) {
 	o.default = '';
 }
 
+function addLogSubsystems(s) {
+	const subsystems = [
+		[ 'app', _('Applications other than daemons') ],
+		[ 'asn', _('Low-level encoding/decoding (ASN.1, X.509 etc.)') ],
+		[ 'cfg', _('Configuration management and plugins') ],
+		[ 'chd', _('CHILD_SA/IPsec_SA') ],
+		[ 'dmn', _('Main daemon setup/cleanup/signal handling') ],
+		[ 'enc', _('Packet encoding/decoding encryption/decryption operations') ],
+		[ 'esp', '%s (%s)'.format(_('Library messages'), 'libipsec') ],
+		[ 'ike', _('IKE_SA / ISAKMP SA') ],
+		[ 'imc', _('Integrity Measurement Collector') ],
+		[ 'imv', _('Integrity Measurement Verifier') ],
+		[ 'job', _('Jobs queuing/processing and thread pool management') ],
+		[ 'wch', _('File descriptor watcher') ],
+		[ 'knl', _('IPsec/Networking kernel interface') ],
+		[ 'lib', '%s (%s)'.format(_('Library messages'), 'libstrongswan') ],
+		[ 'mgr', _('IKE_SA manager, handling synchronization for IKE_SA access') ],
+		[ 'net', _('IKE network communication') ],
+		[ 'pts', _('Platform Trust Service') ],
+		[ 'tls', '%s (%s)'.format(_('Library messages'), 'libtls') ],
+		[ 'tnc', _('Trusted Network Connect') ]
+	];
+
+	subsystems.forEach(function (subsys) {
+		const o = s.option(form.ListValue, subsys[0], subsys[0], subsys[1]);
+		addLogLevel(o);
+	});
+}
+
 return view.extend({
 	load: function () {
 		return uci.load('ipsec').then(function () {
@@ -67,62 +96,7 @@ return view.extend({
 		s = m.section(form.NamedSection, 'syslog', 'syslog', _('Syslog Settings'),
 			_('Configure how strongswan logs events, errors, and debug information.'));
 
-		o = s.option(form.ListValue, 'app', 'app', _('Applications other than daemons'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'asn', 'asn', _('Low-level encoding/decoding (ASN.1, X.509 etc.)'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'cfg', 'cfg', _('Configuration management and plugins'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'chd', 'chd', _('CHILD_SA/IPsec_SA'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'dmn', 'dmn', _('Main daemon setup/cleanup/signal handling'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'enc', 'enc', _('Packet encoding/decoding encryption/decryption operations'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'esp', 'esp', '%s (%s)'.format(_('Library messages'), 'libipsec'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'ike', 'ike', _('IKE_SA / ISAKMP SA'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'imc', 'imc', _('Integrity Measurement Collector'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'imv', 'imv', _('Integrity Measurement Verifier'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'job', 'job', _('Jobs queuing/processing and thread pool management'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'wch', 'wch', _('File descriptor watcher'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'knl', 'knl', _('IPsec/Networking kernel interface'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'lib', 'lib', '%s (%s)'.format(_('Library messages'), 'libstrongswan'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'mgr', 'mgr', _('IKE_SA manager, handling synchronization for IKE_SA access'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'net', 'net', _('IKE network communication'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'pts', 'pts', _('Platform Trust Service'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'tls', 'tls', '%s (%s)'.format(_('Library messages'), 'libtls'));
-		addLogLevel(o);
-
-		o = s.option(form.ListValue, 'tnc', 'tnc', _('Trusted Network Connect'));
-		addLogLevel(o);
+		addLogSubsystems(s);
 
 		// kernel-netlink plugin settings
 		s = m.section(form.NamedSection, 'netlink', 'netlink', _('Netlink Settings'),
