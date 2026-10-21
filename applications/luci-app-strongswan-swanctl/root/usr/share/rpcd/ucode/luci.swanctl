@@ -2,7 +2,8 @@
 
 'use strict';
 
-import { popen } from 'fs';
+import { access, popen } from 'fs';
+import { cursor } from 'uci';
 
 const encryption_map = {
 	'3DES_CBC': [
@@ -465,6 +466,59 @@ const methods = {
 			 *		}]
 			 *	}
 			 */
+			return result;
+		}
+	},
+	'read-log': {
+		args: { lines: 0 },
+		call: function(req) {
+			const result = {
+				error: null,
+				enabled: false,
+				path: null,
+				data: null
+			};
+			const uci = cursor();
+			let lines = +(req?.args?.lines ?? 0);
+
+			if (lines <= 0 || lines > 10000)
+				lines = 1000;
+
+			/* only the configured log file may be read */
+			result.enabled = (uci.get('ipsec', 'filelog', 'enabled') == '1');
+			result.path = uci.get('ipsec', 'filelog', 'path') || '/var/log/charon.log';
+
+			/*
+			 * The path comes from UCI and this method runs as root, so only
+			 * allow files below /tmp or /var/log without any '..' component.
+			 */
+			if (!match(result.path, /^\/(tmp|var\/log)\/[^\/]/) ||
+			    match(result.path, /(^|\/)\.\.(\/|$)/)) {
+				result.error = 'Log file path not allowed';
+				return result;
+			}
+
+			if (!access(result.path, 'r')) {
+				result.error = 'Log file not found';
+				return result;
+			}
+
+			/*
+			 * Escape single quotes, so the path cannot inject shell commands.
+			 * tail is used instead of fs.open() to not load the whole file
+			 * into memory.
+			 */
+			const path = replace(result.path, "'", "'\\''");
+			const tail = popen(`tail -n ${lines} '${path}' 2>/dev/null`);
+
+			if (!tail) {
+				result.error = 'Unable to read log file';
+				return result;
+			}
+
+			result.data = tail.read('all');
+			tail.close();
+
 			return result;
 		}
 	}
