@@ -88,7 +88,7 @@
 	));
 %}
 
-<script>
+<script nonce="{{ ctx?.csp_nonce }}">
 	var input = document.getElementsByName('luci_password')[0];
 
 	if (input)
