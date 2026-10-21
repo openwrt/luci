@@ -119,8 +119,10 @@ function renderDetailsSection(connection) {
 	]));
 }
 
-function handleChildDetails(connection, childName, child, childSa) {
-	const modal = buildSection(_('Details'), buildKeyValueTable([
+function renderChildDetailsSection(childName, child) {
+	const childSa = child.childSa;
+
+	return buildSection(_('Details'), buildKeyValueTable([
 		[_('Name'), childName],
 		[_('Mode'), child.mode],
 		[_('Protocol'), childSa ? childSa.protocol : ''],
@@ -136,8 +138,10 @@ function handleChildDetails(connection, childName, child, childSa) {
 		[_('SPI in'), childSa ? childSa['spi-in'] : ''],
 		[_('SPI out'), childSa ? childSa['spi-out'] : '']
 	]));
+}
 
-	ui.showModal(_('Child Details'), [modal, E('div', { 'class': 'right' }, [
+function handleChildDetails(connection, childName, child) {
+	ui.showModal(_('Child Details'), [renderChildDetailsSection(childName, child), E('div', { 'class': 'right' }, [
 		E('button', {
 			'class': 'btn cbi-button',
 			'click': ui.createHandlerFn(null, handleChildDetailsDismiss, connection)
@@ -180,7 +184,7 @@ function renderChildTable(connection, container) {
 				E('button', {
 					'title': _('Details'),
 					'class': 'btn cbi-button cbi-button-primary',
-					'click': ui.createHandlerFn(null, handleChildDetails, connection, childName, child, childSa)
+					'click': ui.createHandlerFn(null, handleChildDetails, connection, childName, child)
 				}, [_('Details')])
 			],
 			[
@@ -230,23 +234,25 @@ function filterConnectionAuths(connection, prefix) {
 	return auths.map(([key, value]) => value);
 }
 
-function handleConnectionDetails(connection) {
-	const detailSection = renderDetailsSection(connection);
-	const childContainer = E('div', { 'class': 'cbi-section', 'data-tab': 'children', 'data-tab-title': _('Children') });
-	dom.content(childContainer, renderChildTable(connection, childContainer));
+function renderConnectionTab(connection) {
 	const localAuths = filterConnectionAuths(connection, 'local-');
 	const remoteAuths = filterConnectionAuths(connection, 'remote-');
-	const localAuthTable = renderAuthTable(localAuths);
-	const remoteAuthTable = renderAuthTable(remoteAuths);
+
+	return [
+		renderDetailsSection(connection),
+		E('h3', _('Local Auth')),
+		renderAuthTable(localAuths),
+		E('h3', _('Remote Auth')),
+		renderAuthTable(remoteAuths)
+	];
+}
+
+function handleConnectionDetails(connection) {
+	const childContainer = E('div', { 'class': 'cbi-section', 'data-tab': 'children', 'data-tab-title': _('Children') });
+	dom.content(childContainer, renderChildTable(connection, childContainer));
 
 	const modal = E([], [E('div', {}, [
-		E('div', { 'class': 'cbi-section', 'data-tab': 'details', 'data-tab-title': _('Connection') }, [
-			detailSection,
-			E('h3', _('Local Auth')),
-			localAuthTable,
-			E('h3', _('Remote Auth')),
-			remoteAuthTable
-		]),
+		E('div', { 'class': 'cbi-section', 'data-tab': 'details', 'data-tab-title': _('Connection') }, renderConnectionTab(connection)),
 		childContainer
 	])]);
 
