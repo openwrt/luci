@@ -61,12 +61,14 @@ function swanctlCommand(parameters) {
 		.catch(e => ui.addNotification(null, E('p', e.message)));
 }
 
-function handleConnectionUp(connectionName) {
-	return swanctlCommand(['--initiate', '--ike', connectionName]);
+function handleConnectionUp(connectionName, refresh) {
+	return swanctlCommand(['--initiate', '--ike', connectionName])
+		.then(() => refresh());
 }
 
-function handleConnectionDown(connectionName) {
-	return swanctlCommand(['--terminate', '--ike', connectionName]);
+function handleConnectionDown(connectionName, refresh) {
+	return swanctlCommand(['--terminate', '--ike', connectionName])
+		.then(() => refresh());
 }
 
 function fetchConnection(connectionName) {
@@ -277,15 +279,19 @@ return view.extend({
 		]);
 	},
 
-	pollData(container) {
-		poll.add(L.bind(function () {
-			return this.load().then(L.bind(function (results) {
-				dom.content(container, this.renderContent(results));
-			}, this));
+	refreshContent(container) {
+		return this.load().then(L.bind(function (results) {
+			dom.content(container, this.renderContent(results, container));
 		}, this));
 	},
 
-	renderContent(results) {
+	pollData(container) {
+		poll.add(L.bind(this.refreshContent, this, container));
+	},
+
+	renderContent(results, container) {
+		const refresh = () => this.refreshContent(container)
+			.catch(e => ui.addNotification(null, E('p', e.message)));
 		const [versionResult, statsResult, connectionResult] = results;
 		const node = E('div', [E('div')]);
 		const firstNode = node.firstElementChild;
@@ -344,13 +350,13 @@ return view.extend({
 						'title': _('Start'),
 						'class': 'btn cbi-button cbi-button-positive',
 						...(isDown ? {} : { 'disabled': 'disabled' }),
-						'click': ui.createHandlerFn(null, handleConnectionUp, connection.name)
+						'click': ui.createHandlerFn(null, handleConnectionUp, connection.name, refresh)
 					}, [_('Start')]),
 					E('button', {
 						'title': _('Stop'),
 						'class': 'btn cbi-button cbi-button-negative',
 						...(isDown ? { 'disabled': 'disabled' } : {}),
-						'click': ui.createHandlerFn(null, handleConnectionDown, connection.name)
+						'click': ui.createHandlerFn(null, handleConnectionDown, connection.name, refresh)
 					}, [_('Stop')])
 				])
 			]));
@@ -371,7 +377,7 @@ return view.extend({
 		]);
 		const container = content.lastElementChild;
 
-		dom.content(container, this.renderContent(results));
+		dom.content(container, this.renderContent(results, container));
 		this.pollData(container);
 
 		return ikev1.banner().then(function (banner) {
