@@ -71,6 +71,24 @@ function handleConnectionDown(connectionName, refresh) {
 		.then(() => refresh());
 }
 
+// The currently shown details modal, updated on every poll
+let openModal = null;
+
+function updateOpenModal(connections) {
+	if (!openModal)
+		return;
+
+	// ui.hideModal() keeps the content in the DOM, ui.showModal() replaces it
+	if (!document.body.classList.contains('modal-overlay-active') || !openModal.node.isConnected) {
+		openModal = null;
+		return;
+	}
+
+	const connection = connections.find(connection => connection.name === openModal.connectionName);
+	if (connection)
+		openModal.update(connection);
+}
+
 function fetchConnection(connectionName) {
 	return callMapConns().then(result => {
 		if (result.error)
@@ -248,11 +266,16 @@ function renderConnectionTab(connection) {
 }
 
 function handleConnectionDetails(connection) {
+	const connectionContainer = E('div', { 'class': 'cbi-section', 'data-tab': 'details', 'data-tab-title': _('Connection') });
 	const childContainer = E('div', { 'class': 'cbi-section', 'data-tab': 'children', 'data-tab-title': _('Children') });
-	dom.content(childContainer, renderChildTable(connection, childContainer));
+	const update = freshConnection => {
+		dom.content(connectionContainer, renderConnectionTab(freshConnection));
+		dom.content(childContainer, renderChildTable(freshConnection, childContainer));
+	};
+	update(connection);
 
 	const modal = E([], [E('div', {}, [
-		E('div', { 'class': 'cbi-section', 'data-tab': 'details', 'data-tab-title': _('Connection') }, renderConnectionTab(connection)),
+		connectionContainer,
 		childContainer
 	])]);
 
@@ -263,6 +286,12 @@ function handleConnectionDetails(connection) {
 			'click': ui.hideModal
 		}, [_('Dismiss')])
 	])], 'cbi-modal');
+
+	openModal = {
+		connectionName: connection.name,
+		node: connectionContainer,
+		update: update
+	};
 }
 
 function collectSwanmonErrorMessages(results) {
@@ -287,7 +316,11 @@ return view.extend({
 
 	refreshContent(container) {
 		return this.load().then(L.bind(function (results) {
+			const connectionResult = results[2];
+
 			dom.content(container, this.renderContent(results, container));
+			if (!connectionResult.error && connectionResult.data)
+				updateOpenModal(connectionResult.data);
 		}, this));
 	},
 
