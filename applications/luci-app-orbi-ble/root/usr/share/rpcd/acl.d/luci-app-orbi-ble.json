@@ -1,0 +1,15 @@
+{
+	"luci-app-orbi-ble": {
+		"description": "Grant access to Orbi BLE Central management",
+		"read": {
+			"ubus": {
+				"ble": [ "status" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"ble": [ "start", "stop", "scan", "connect", "disconnect" ]
+			}
+		}
+	}
+}
