@@ -600,6 +600,64 @@ function setReferences(connection, option, list) {
 }
 
 /**
+ * Return the names of the connections referencing a section in a list option,
+ * except the connection `exclude`.
+ */
+function getReferencingConnections(option, section_id, exclude) {
+	return uci.sections('ipsec', 'connection').filter(function (connection) {
+		return connection['.name'] != exclude && L.toArray(connection[option]).includes(section_id);
+	}).map(connection => connection['.name']);
+}
+
+/**
+ * Show the connections referencing a section in a list option.
+ *
+ * Only shown in the table, since it is not configurable.
+ */
+function addConnectionsOption(s, option, title) {
+	const o = s.option(form.DummyValue, '_connections', title);
+
+	o.modalonly = false;
+	o.cfgvalue = function (section_id) {
+		const names = getReferencingConnections(option, section_id);
+
+		return names.length > 0 ? names.join(', ') : null;
+	};
+
+	return o;
+}
+
+/**
+ * Prevent deleting sections which are referenced by a connection.
+ *
+ * If the section `s` belongs to a connection, the references of that
+ * connection are ignored. Call it after setting a custom handleRemove.
+ */
+function preventReferencedRemove(s, option) {
+	const handleRemove = s.handleRemove;
+
+	s.renderRowActions = function (section_id) {
+		const tdEl = form.GridSection.prototype.renderRowActions.apply(this, arguments);
+		const button = tdEl.querySelector('.cbi-button-remove');
+		const names = getReferencingConnections(option, section_id, this.connection);
+
+		if (button && names.length > 0) {
+			button.disabled = true;
+			button.title = _('Referenced by %s').format(names.join(', '));
+		}
+
+		return tdEl;
+	};
+
+	s.handleRemove = function (section_id, ev) {
+		if (getReferencingConnections(option, section_id, this.connection).length > 0)
+			return Promise.resolve();
+
+		return handleRemove.apply(this, arguments);
+	};
+}
+
+/**
  * Parse a mandatory list option of a connection referencing other sections.
  *
  * Used as o.parse. The list may be empty while the connection dialog is saved
@@ -663,8 +721,8 @@ function handleConnectionModalCancel(modalMap, ev, isSaving) {
  *
  * The option name equals the type of the sections. The table shows all
  * sections of the type, like the table on the main page. A section added here
- * is appended to the list once its dialog is saved. Deleting a section here
- * removes it from the list as well.
+ * is appended to the list once its dialog is saved. A section can only be
+ * deleted here if no other connection references it.
  */
 function addEmbeddedSection(s, tab, option, title, description, addOptions) {
 	const o = s.taboption(tab, form.SectionValue, '_' + option, form.GridSection, option, title, description);
@@ -706,7 +764,10 @@ function addEmbeddedSection(s, tab, option, title, description, addOptions) {
 		return withEmbeddedSave(L.bind(this.map.save, this.map, null, true));
 	};
 
+	preventReferencedRemove(ss, option);
+
 	addOptions(ss);
+	addConnectionsOption(ss, option, _('Referenced by'));
 }
 
 let migrationOverlay = null;
@@ -1079,15 +1140,18 @@ return view.extend({
 		};
 
 		addEmbeddedSection(s, 'children', 'child', _('Children'),
-			_('The children of this connection are selected on the General tab.'),
+			_('The children of this connection are selected on the General tab.') + ' ' +
+			_('Children used by other connections cannot be deleted here.'),
 			addChildOptions);
 
 		addEmbeddedSection(s, 'locals', 'local', _('Local'),
-			_('The locals of this connection and their order are selected on the Authentication tab.'),
+			_('The locals of this connection and their order are selected on the Authentication tab.') + ' ' +
+			_('Locals used by other connections cannot be deleted here.'),
 			addLocalOptions);
 
 		addEmbeddedSection(s, 'remotes', 'remote', _('Remote'),
-			_('The remotes of this connection and their order are selected on the Authentication tab.'),
+			_('The remotes of this connection and their order are selected on the Authentication tab.') + ' ' +
+			_('Remotes used by other connections cannot be deleted here.'),
 			addRemoteOptions);
 
 		// Local Configuration
@@ -1098,6 +1162,8 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		addLocalOptions(s);
+		addConnectionsOption(s, 'local', _('Referenced by'));
+		preventReferencedRemove(s, 'local');
 
 		// Remote Configuration
 		s = m.section(form.GridSection, 'remote', _('Remote'),
@@ -1107,6 +1173,8 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		addRemoteOptions(s);
+		addConnectionsOption(s, 'remote', _('Referenced by'));
+		preventReferencedRemove(s, 'remote');
 
 		// Children Configuration
 		s = m.section(form.GridSection, 'child', _('Children'),
@@ -1116,6 +1184,8 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		addChildOptions(s);
+		addConnectionsOption(s, 'child', _('Referenced by'));
+		preventReferencedRemove(s, 'child');
 
 		// Crypto Proposals
 		s = m.section(form.GridSection, 'crypto_proposal',
