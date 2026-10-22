@@ -175,7 +175,9 @@ const UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype 
 			return;
 
 		// Themes only draw a border on the input itself, not on the widget container.
-		const field = this.node.querySelector('.add-item input, input:not([type="hidden"]), textarea, select') ?? this.node;
+		// The input of a dropdown is only visible while it is open, so mark the dropdown instead.
+		const field = this.node.matches('.cbi-dropdown') ? this.node :
+			(this.node.querySelector('.add-item .cbi-dropdown, .add-item input, input:not([type="hidden"]), textarea, select') ?? this.node);
 		const events = [ 'widget-update', 'input' ];
 
 		const clear = () => {
