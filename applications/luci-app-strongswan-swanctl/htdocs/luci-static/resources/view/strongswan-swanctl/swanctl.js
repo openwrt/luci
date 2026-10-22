@@ -631,11 +631,18 @@ function setReferences(connection, option, list) {
 
 /**
  * Return the names of the connections referencing a section in a list option,
- * except the connection `exclude`.
+ * except the connection `exclude`. Other section types are searched as well
+ * if they are passed in `types`.
  */
-function getReferencingConnections(option, section_id, exclude) {
-	return uci.sections('ipsec', 'connection').filter(function (connection) {
-		return connection['.name'] != exclude && L.toArray(connection[option]).includes(section_id);
+function getReferencingConnections(option, section_id, exclude, types) {
+	return uci.sections('ipsec').filter(function (connection) {
+		if (!types.includes(connection['.type']))
+			return false;
+
+		if (connection['.name'] == exclude)
+			return false;
+
+		return L.toArray(connection[option]).includes(section_id);
 	}).map(connection => connection['.name']);
 }
 
@@ -653,20 +660,24 @@ function getListWidget(map, connection, option) {
 }
 
 /**
- * Show the connections referencing a section in a list option.
+ * Show the sections of the given `types` referencing a section in a list
+ * option.
  *
  * Only shown in the table, since it is not configurable. If the section `s`
  * belongs to a connection, the form value of its list option is used, since
  * it may not be saved yet. See updateConnectionsOption().
  */
-function addConnectionsOption(s, option, title) {
+function addConnectionsOption(s, option, title, types) {
 	const o = s.option(form.DummyValue, '_connections', title);
 
 	o.modalonly = false;
 	o.cfgvalue = function (section_id) {
 		const connection = this.section.connection;
 		const widget = connection ? getListWidget(this.map, connection, option) : null;
-		const names = uci.sections('ipsec', 'connection').filter(function (section) {
+		const names = uci.sections('ipsec').filter(function (section) {
+			if (!types.includes(section['.type']))
+				return false;
+
 			const list = (widget && section['.name'] == connection) ? widget.getValue() : section[option];
 
 			return L.toArray(list).includes(section_id);
@@ -699,18 +710,19 @@ function updateConnectionsOption(map, connection, option) {
 }
 
 /**
- * Prevent deleting sections which are referenced by a connection.
+ * Prevent deleting sections which are referenced by a section of the given
+ * `types` in a list option.
  *
  * If the section `s` belongs to a connection, the references of that
  * connection are ignored. Call it after setting a custom handleRemove.
  */
-function preventReferencedRemove(s, option) {
+function preventReferencedRemove(s, option, types) {
 	const handleRemove = s.handleRemove;
 
 	s.renderRowActions = function (section_id) {
 		const tdEl = form.GridSection.prototype.renderRowActions.apply(this, arguments);
 		const button = tdEl.querySelector('.cbi-button-remove');
-		const names = getReferencingConnections(option, section_id, this.connection);
+		const names = getReferencingConnections(option, section_id, this.connection, types);
 
 		if (button && names.length > 0) {
 			button.disabled = true;
@@ -721,7 +733,7 @@ function preventReferencedRemove(s, option) {
 	};
 
 	s.handleRemove = function (section_id, ev) {
-		if (getReferencingConnections(option, section_id, this.connection).length > 0)
+		if (getReferencingConnections(option, section_id, this.connection, types).length > 0)
 			return Promise.resolve();
 
 		return handleRemove.apply(this, arguments);
@@ -834,10 +846,10 @@ function addEmbeddedSection(s, tab, option, title, description, addOptions) {
 		return withEmbeddedSave(L.bind(this.map.save, this.map, null, true));
 	};
 
-	preventReferencedRemove(ss, option);
+	preventReferencedRemove(ss, option, [ 'connection' ]);
 
 	addOptions(ss);
-	addConnectionsOption(ss, option, _('Referenced by'));
+	addConnectionsOption(ss, option, _('Referenced by'), [ 'connection' ]);
 }
 
 let migrationOverlay = null;
@@ -1241,8 +1253,8 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		addLocalOptions(s);
-		addConnectionsOption(s, 'local', _('Referenced by'));
-		preventReferencedRemove(s, 'local');
+		addConnectionsOption(s, 'local', _('Referenced by'), [ 'connection' ]);
+		preventReferencedRemove(s, 'local', [ 'connection' ]);
 
 		// Remote Configuration
 		s = m.section(form.GridSection, 'remote', _('Remote'),
@@ -1252,8 +1264,8 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		addRemoteOptions(s);
-		addConnectionsOption(s, 'remote', _('Referenced by'));
-		preventReferencedRemove(s, 'remote');
+		addConnectionsOption(s, 'remote', _('Referenced by'), [ 'connection' ]);
+		preventReferencedRemove(s, 'remote', [ 'connection' ]);
 
 		// Children Configuration
 		s = m.section(form.GridSection, 'child', _('Children'),
@@ -1263,8 +1275,8 @@ return view.extend({
 		s.renderSectionAdd = sectionNameCheck;
 
 		addChildOptions(s);
-		addConnectionsOption(s, 'child', _('Referenced by'));
-		preventReferencedRemove(s, 'child');
+		addConnectionsOption(s, 'child', _('Referenced by'), [ 'connection' ]);
+		preventReferencedRemove(s, 'child', [ 'connection' ]);
 
 		// Crypto Proposals
 		s = m.section(form.GridSection, 'crypto_proposal',
