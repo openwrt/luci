@@ -1,6 +1,7 @@
 'use strict';
 'require view';
 'require form';
+'require uci';
 
 return view.extend({
 	render() {
@@ -20,9 +21,18 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = 'OpenWrt';
 
+		o = s.option(form.Flag, 'use_alt_config_file', _('Use alternative config file'),
+			_('Bypass UCI-generated configuration and load a native keepalived.conf directly from a file you provide.'));
+		/* UI-only switch: its state is derived from alt_config_file and never stored */
+		o.cfgvalue = function(section_id) {
+			return uci.get('keepalived', section_id, 'alt_config_file') ? this.enabled : this.disabled;
+		};
+		o.write = function() {};
+		o.remove = function() {};
+
 		o = s.option(form.FileUpload, 'alt_config_file', _('Alternative config'));
 		o.optional = true;
-		o.default = '/etc/keepalived/keepalived.conf';
+		o.depends('use_alt_config_file', '1');
 		o.root_directory = '/etc/';
 
 		o = s.option(form.Flag, 'linkbeat_use_polling', _('Link Polling'),
