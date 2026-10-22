@@ -47,6 +47,47 @@ function validateTimeFormat(section_id, value) {
 	return true;
 }
 
+/**
+ * Validate a mark value.
+ *
+ * Mirrors swanctl_is_valid_mark() of the init script: %unique, %unique-dir
+ * or <value>[/<mask>], with decimal or hexadecimal (0x...) numbers.
+ */
+function validateMark(section_id, value) {
+	if (!value || value == '%unique' || value == '%unique-dir')
+		return true;
+
+	const decimal = '[0-9]+';
+	const hexadecimal = '0[xX][0-9a-fA-F]+';
+	const number = '(?:%s|%s)'.format(decimal, hexadecimal);
+
+	// '^%s(?:/%s)?$' matches the whole string as <number> or <number>/<number>:
+	//   ^ and $       anchor the pattern to the start and end of the value
+	//   %s            a decimal or hexadecimal number (the value)
+	//   (?:/%s)?      an optional, non-capturing group: a slash followed by
+	//                 another number (the mask)
+	const markRegex = new RegExp('^%s(?:/%s)?$'.format(number, number));
+
+	if (!markRegex.test(value))
+		return _('Expecting: %s').format(
+			_('%s, %s or %s with decimal or hexadecimal (0x...) numbers')
+				.format('%unique', '%unique-dir', '<value>[/<mask>]'));
+
+	return true;
+}
+
+function markDescription() {
+	return [
+		_('Format:'),
+		'<code>&lt;value&gt;[/&lt;mask&gt;]</code>: ' + _('Decimal or hexadecimal (0x prefix) numbers.') + ' ' +
+			_('The mask defaults to 0xffffffff.'),
+		'<code>%unique</code>: ' + _('A unique mark is allocated for each CHILD_SA.') + ' ' +
+			_('If set for Mark In and Mark Out, both directions use the same mark.'),
+		'<code>%unique-dir</code>: ' + _('A unique mark is allocated for each CHILD_SA and direction, so Mark In and Mark Out differ.'),
+		_('Leave empty to not set a mark.')
+	].join('<br />');
+}
+
 function addAlgorithms(o, algorithms) {
 	algorithms?.forEach(function (algorithm) {
 		const { name: name, insecure: insecure } = algorithm;
@@ -163,6 +204,7 @@ function sectionNameCheck(extra_class) {
 		nameEl = el.querySelector('.cbi-section-create-name');
 	ui.addValidator(nameEl, 'uciname', true, function(v) {
 		let sections = [
+			...uci.sections('ipsec', 'pools'),
 			...uci.sections('ipsec', 'connection'),
 			...uci.sections('ipsec', 'child'),
 			...uci.sections('ipsec', 'crypto_proposal'),
@@ -172,7 +214,7 @@ function sectionNameCheck(extra_class) {
 		if (sections.find(function(s) {
 			return s['.name'] == v;
 		})) {
-			return _('Connections, Encryption Proposals, Children, Locals and Remotes may not share the same names.') + ' ' +
+			return _('Pools, Connections, Encryption Proposals, Children, Locals and Remotes may not share the same names.') + ' ' +
 				_('Use combinations like child1_phase1.');
 		}
 		return true;
@@ -309,6 +351,36 @@ return view.extend({
 		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.MultiValue, 'pools', _('Pools'),
+			swanctlDescr(_('Pools from which virtual IP addresses and configuration attributes are assigned to the remote peers.') + '<br />' +
+			_('Pools can be defined on the general page.'),
+				'connections.<conn>.pools'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'pools');
+			if (sections.length == 0) {
+				this.value('', _('Please create a Pool first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					this.value(section['.name']);
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
+
+		o = s.taboption('advanced', form.Flag, 'pull', _('Pull'),
+			swanctlDescr(_('Pull virtual IP addresses and configuration attributes from the remote peer (Config Mode).') + '<br />' +
+			_('If disabled, the client waits for the server to push them.'),
+				'connections.<conn>.pull'));
+		o.default = '1';
+		o.modalonly = true;
+		o.rmempty = true;
+		o.depends('keyexchange', 'ikev1');
+		o.depends('keyexchange', 'ike');
+
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
 			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication'), 'connections.<conn>.proposals'));
 		o.load = function (section_id) {
@@ -349,18 +421,24 @@ return view.extend({
 		};
 		o.rmempty = false;
 
-		o = s.taboption('authentication', form.MultiValue, 'local', _('Local Authentication'),
+		o = s.taboption('authentication', form.DynamicList, 'local', _('Local Authentication'),
 			swanctlDescr(_('Local authentication sections used for this connection.') + ' ' +
-			_('Each section corresponds to one authentication round.'),
+			_('Each section corresponds to one authentication round.') + ' ' +
+			_('The order matters: the sections are used in the order they are listed.'),
 				'connections.<conn>.local<suffix>'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
 
 			var sections = uci.sections('ipsec', 'local');
+			this.placeholder = _('Select a section');
 			if (sections.length == 0) {
-				this.value('', _('Please create a Local section first'));
+				this.tooltip = _('No local section exists yet.') + ' ' +
+					_('Create a local section first.');
+				this.tooltipicon = '⚠️';
 			} else {
+				this.tooltip = null;
+				this.tooltipicon = null;
 				sections.forEach(L.bind(function (section) {
 					this.value(section['.name']);
 				}, this));
@@ -368,25 +446,41 @@ return view.extend({
 
 			return this.super('load', [section_id]);
 		};
+		o.validate = function (section_id, value) {
+			if (value == '' || uci.get('ipsec', value, '.type') == 'local')
+				return true;
+			return _('Unknown Local section');
+		};
 
-		o = s.taboption('authentication', form.MultiValue, 'remote', _('Remote Authentication'),
+		o = s.taboption('authentication', form.DynamicList, 'remote', _('Remote Authentication'),
 			swanctlDescr(_('Remote authentication sections used for this connection.') + ' ' +
-			_('Each section corresponds to one authentication round.'),
+			_('Each section corresponds to one authentication round.') + ' ' +
+			_('The order matters: the sections are used in the order they are listed.'),
 				'connections.<conn>.remote<suffix>'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
 
 			var sections = uci.sections('ipsec', 'remote');
+			this.placeholder = _('Select a section');
 			if (sections.length == 0) {
-				this.value('', _('Please create a Remote section first'));
+				this.tooltip = _('No remote section exists yet.') + ' ' +
+					_('Create a remote section first.');
+				this.tooltipicon = '⚠️';
 			} else {
+				this.tooltip = null;
+				this.tooltipicon = null;
 				sections.forEach(L.bind(function (section) {
 					this.value(section['.name']);
 				}, this));
 			}
 
 			return this.super('load', [section_id]);
+		};
+		o.validate = function (section_id, value) {
+			if (value == '' || uci.get('ipsec', value, '.type') == 'remote')
+				return true;
+			return _('Unknown Remote section');
 		};
 		o.rmempty = false;
 
@@ -431,6 +525,15 @@ return view.extend({
 		o.validate = validateTimeFormat;
 		o.placeholder = '30s';
 		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'dpd_timeout', _('DPD Timeout'),
+			swanctlDescr(_('Timeout to close connection if no response to DPD is received.'),
+				'connections.<conn>.dpd_timeout'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
+		o.modalonly = true;
+		o.depends('keyexchange', 'ikev1');
+		o.depends('keyexchange', 'ike');
 
 		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
 			swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
@@ -603,6 +706,15 @@ return view.extend({
 
 			return this.super('load', [section_id]);
 		}
+		o.tooltip = function () {
+			if (uci.get('ipsec', 'netlink', 'install_routes_xfrmi') == '1')
+				return null;
+
+			return _('This option must be enabled in the service configuration (Netlink Settings) for routes to be set automatically.') + '<br />' +
+				'<code>ipsec.netlink.install_routes_xfrmi</code><br />' +
+				_('Otherwise, routes for the XFRM interface must be set manually.');
+		};
+		o.tooltipicon = '⚠️';
 		o.optional = true;
 		o.modalonly = true;
 
@@ -686,6 +798,13 @@ return view.extend({
 		o.default = '0';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Flag, 'policies', _('Policies'),
+			swanctlDescr(_('Whether to install IPsec policies or not.') + ' ' +
+			_('Disabling this is only useful in special cases, e.g. with route based routing.'),
+				'connections.<conn>.children.<child>.policies'));
+		o.default = '1';
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
 			swanctlDescr(_('Enable Hardware offload'), 'connections.<conn>.children.<child>.hw_offload'));
 		o.value('yes');
@@ -697,6 +816,26 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
 			swanctlDescr(_('Priority of the CHILD_SA'), 'connections.<conn>.children.<child>.priority'));
 		o.datatype = 'uinteger';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'mark_in', _('Mark In'),
+			swanctlDescr(_('Netfilter mark on inbound traffic, used to match the policy.') + '<br />' +
+				markDescription(),
+				'connections.<conn>.children.<child>.mark_in'));
+		o.value('%unique');
+		o.value('%unique-dir');
+		o.optional = true;
+		o.validate = validateMark;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Value, 'mark_out', _('Mark Out'),
+			swanctlDescr(_('Netfilter mark applied to outbound traffic, used to match the policy.') + '<br />' +
+				markDescription(),
+				'connections.<conn>.children.<child>.mark_out'));
+		o.value('%unique');
+		o.value('%unique-dir');
+		o.optional = true;
+		o.validate = validateMark;
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),

@@ -1,6 +1,8 @@
 'use strict';
 'require form';
 'require fs';
+'require ui';
+'require uci';
 'require view';
 'require strongswan-swanctl.ikev1 as ikev1';
 
@@ -90,6 +92,35 @@ function addFileOption(s, name, ucioption, title, descr, root, type) {
 	return o;
 }
 
+/**
+ * Reject names of new named sections that are already used by a section of
+ * another type, as UCI section names are shared by the whole config.
+ *
+ * Keep the list in sync with sectionNameCheck() in swanctl.js.
+ */
+function sectionNameCheck(extra_class) {
+	const el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
+		nameEl = el.querySelector('.cbi-section-create-name');
+
+	ui.addValidator(nameEl, 'uciname', true, function (v) {
+		const sections = [
+			...uci.sections('ipsec', 'pools'),
+			...uci.sections('ipsec', 'connection'),
+			...uci.sections('ipsec', 'child'),
+			...uci.sections('ipsec', 'crypto_proposal'),
+			...uci.sections('ipsec', 'local'),
+			...uci.sections('ipsec', 'remote'),
+		];
+
+		if (sections.find(function (s) { return s['.name'] == v; }))
+			return _('Pools, Connections, Encryption Proposals, Children, Locals and Remotes may not share the same names.');
+
+		return true;
+	}, 'blur', 'keyup');
+
+	return el;
+}
+
 return view.extend({
 	render: function (result) {
 		let m, s, o;
@@ -170,86 +201,91 @@ return view.extend({
 		o.placeholder = 'http://ocsp.example.com';
 		o.modalonly = true;
 
-		// Secrets Configuration
-		s = m.section(form.GridSection, 'secret', _('Secrets'),
-			_('Define shared secrets and private key passphrases used for authentication.'));
+		// Pool Configuration
+		// The section name is used as pool name, so it is not anonymous.
+		s = m.section(form.GridSection, 'pools', _('Pools'),
+			_('A pool is a named range of virtual IP addresses that the IKE daemon hands out to remote peers ' +
+				'(road warriors) when they connect, so that they get an address inside your network.') + '<br />' +
+			_('Besides the addresses, a pool can also carry additional configuration attributes ' +
+				'such as DNS servers or split tunneling networks, which are sent to the peer together with the address.') + '<br />' +
+			_('The name of the section is the name of the pool, under which a connection refers to it.') + ' ' +
+			_('Pools are only needed on the responder side, a connection that only initiates tunnels does not need one.'));
 		s.addremove = true;
 		s.nodescriptions = true;
-		s.anonymous = true;
+		s.renderSectionAdd = sectionNameCheck;
 
-		o = s.option(form.Value, 'description', _('Description'),
-			_('An optional description of what this secret is used for.'));
+		s.tab('general', _('General'));
+		s.tab('advanced', _('Advanced'));
 
-		o = s.option(form.ListValue, 'type', _('Type'),
-			swanctlDescr(_('Kind of secret to define'), 'secrets.<type>'));
+		o = s.taboption('general', form.Value, 'addrs', _('Addresses'),
+			swanctlDescr(_('Addresses that are allocated to the peers from this pool, one address per connected peer.') + '<br />' +
+			_('Either a subnet in CIDR notation or an address range can be given.') + '<br />' +
+			_('Choose a range that is not used by any local network and large enough for all peers that connect at the same time.'),
+				'pools.<name>.addrs'));
+		o.datatype = 'or(cidr,iprange)';
+		o.placeholder = '10.0.0.0/24 ' + _('or') + ' 10.0.0.10-10.0.0.200';
 		o.rmempty = false;
-		o.default = 'ike';
-		o.value('eap');
-		o.value('xauth');
-		o.value('ntlm');
-		o.value('ike');
-		o.value('ppk');
-		o.value('private');
-		o.value('rsa');
-		o.value('ecdsa');
-		o.value('pkcs8');
-		o.value('pkcs12');
-		o.value('token');
 
-		o = s.option(form.DynamicList, 'id', _('Identity'),
-			swanctlDescr(_('Identities this secret is valid for'), 'secrets.<type>.id<suffix>'));
-		o.depends('type', 'eap');
-		o.depends('type', 'xauth');
-		o.depends('type', 'ntlm');
-		o.depends('type', 'ike');
-		o.depends('type', 'ppk');
-
-		o = s.option(form.Value, 'secret', _('Secret'),
-			swanctlDescr(_('Shared secret for authentication, or passphrase to decrypt a private key.'), 'secrets.<type>.secret'));
-		o.datatype = 'string';
-		o.password = true;
-		o.depends('type', 'eap');
-		o.depends('type', 'xauth');
-		o.depends('type', 'ntlm');
-		o.depends('type', 'ike');
-		o.depends('type', 'ppk');
-		o.depends('type', 'private');
-		o.depends('type', 'rsa');
-		o.depends('type', 'ecdsa');
-		o.depends('type', 'pkcs8');
-		o.depends('type', 'pkcs12');
+		o = s.taboption('general', form.DynamicList, 'dns', _('DNS Servers'),
+			swanctlDescr(_('IP addresses of DNS servers that are sent to the peers.') + '<br />' +
+			_('The peers use them to resolve names while the tunnel is up, e.g. for hosts in the remote network.') + '<br />' +
+			_('Whether the attribute is applied depends on the client.'),
+				'pools.<name>.dns'));
+		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
-		// One file picker per key type, each rooted in its swanctl directory.
-		// The stored value is relative to that directory, like cacert.
-		// Unique option name per type, all mapped to the UCI option 'file'.
-		['private', 'rsa', 'ecdsa', 'pkcs8', 'pkcs12'].forEach(function (type) {
-			o = addFileOption(s, 'file_' + type, 'file', _('Key File'),
-				swanctlDescr(_('Key file to use, relative to %s.'), 'secrets.' + type + '.file'),
-				'/etc/swanctl/' + type, type);
-			o.modalonly = true;
-		});
-
-		o = s.option(form.Value, 'handle', _('Handle'),
-			swanctlDescr(_('Handle of the private key on the smartcard.'), 'secrets.token.handle'));
-		o.depends('type', 'token');
+		o = s.taboption('advanced', form.DynamicList, 'nbns', _('NBNS Servers'),
+			swanctlDescr(_('IP addresses of NBNS (NetBIOS name service, also known as WINS) servers that are sent to the peers.') + '<br />' +
+			_('Only relevant for legacy Windows clients that resolve NetBIOS names.'),
+				'pools.<name>.nbns'));
+		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
-		o = s.option(form.Value, 'slot', _('Slot'),
-			swanctlDescr(_('Slot of the smartcard to use.'), 'secrets.token.slot'));
-		o.depends('type', 'token');
+		o = s.taboption('advanced', form.DynamicList, 'dhcp', _('DHCP Servers'),
+			swanctlDescr(_('IP addresses of DHCP servers that are sent to the peers.') + '<br />' +
+			_('Peers can use them to request further configuration over the tunnel.'),
+				'pools.<name>.dhcp'));
+		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
-		o = s.option(form.Value, 'module', _('Module'),
-			swanctlDescr(_('PKCS#11 module to use.'), 'secrets.token.module'));
-		o.depends('type', 'token');
+		o = s.taboption('advanced', form.DynamicList, 'netmask', _('Netmask'),
+			swanctlDescr(_('Netmask that is sent to the peers together with their virtual IP address.') + '<br />' +
+			_('Usually not required, as most clients derive it on their own.'),
+				'pools.<name>.netmask'));
+		o.datatype = 'ipaddr';
 		o.modalonly = true;
 
-		o = s.option(form.Value, 'pin', _('PIN'),
-			swanctlDescr(_('PIN to access the private key on the smartcard.'), 'secrets.token.pin'));
-		o.datatype = 'string';
-		o.password = true;
-		o.depends('type', 'token');
+		o = s.taboption('advanced', form.DynamicList, 'server', _('Server'),
+			swanctlDescr(_('IP addresses of the server that are sent to the peers as an additional attribute.') + '<br />' +
+			_('Usually not required.'),
+				'pools.<name>.server'));
+		o.datatype = 'ipaddr';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.DynamicList, 'subnet', _('Subnet'),
+			swanctlDescr(_('Subnets in CIDR notation that are announced to the peers as protected by the tunnel.') + '<br />' +
+			_('Clients that support the attribute (e.g. Cisco Unity) use them to decide which traffic is sent through the tunnel.'),
+				'pools.<name>.subnet'));
+		o.datatype = 'cidr';
+		o.placeholder = '192.168.1.0/24';
+		o.modalonly = true;
+
+		o = s.taboption('general', form.DynamicList, 'split_include', _('Split Include'),
+			swanctlDescr(_('Subnets in CIDR notation that the peers send through the tunnel (split tunneling).') + '<br />' +
+			_('All other traffic of the peer bypasses the tunnel.') + '<br />' +
+			_('Only supported by clients that implement the split tunneling attribute.'),
+				'pools.<name>.split_include'));
+		o.datatype = 'cidr';
+		o.placeholder = '192.168.1.0/24';
+		o.modalonly = true;
+
+		o = s.taboption('general', form.DynamicList, 'split_exclude', _('Split Exclude'),
+			swanctlDescr(_('Subnets in CIDR notation that the peers must not send through the tunnel.') + '<br />' +
+			_('All other traffic of the peer is sent through the tunnel.') + '<br />' +
+			_('Only supported by clients that implement the split tunneling attribute.'),
+				'pools.<name>.split_exclude'));
+		o.datatype = 'cidr';
+		o.placeholder = '192.168.2.0/24';
 		o.modalonly = true;
 
 		return m.render().then(function (node) {
