@@ -610,21 +610,62 @@ function getReferencingConnections(option, section_id, exclude) {
 }
 
 /**
+ * Return the widget of the list option of a connection in the map, or null
+ * if it is not rendered.
+ */
+function getListWidget(map, connection, option) {
+	if (!map.root)
+		return null;
+
+	const [ listOption ] = map.lookupOption(option, connection) ?? [];
+
+	return listOption?.getUIElement(connection) ?? null;
+}
+
+/**
  * Show the connections referencing a section in a list option.
  *
- * Only shown in the table, since it is not configurable.
+ * Only shown in the table, since it is not configurable. If the section `s`
+ * belongs to a connection, the form value of its list option is used, since
+ * it may not be saved yet. See updateConnectionsOption().
  */
 function addConnectionsOption(s, option, title) {
 	const o = s.option(form.DummyValue, '_connections', title);
 
 	o.modalonly = false;
 	o.cfgvalue = function (section_id) {
-		const names = getReferencingConnections(option, section_id);
+		const connection = this.section.connection;
+		const widget = connection ? getListWidget(this.map, connection, option) : null;
+		const names = uci.sections('ipsec', 'connection').filter(function (section) {
+			const list = (widget && section['.name'] == connection) ? widget.getValue() : section[option];
+
+			return L.toArray(list).includes(section_id);
+		}).map(section => section['.name']);
 
 		return names.length > 0 ? names.join(', ') : null;
 	};
 
 	return o;
+}
+
+/**
+ * Update the connections column of the section embedded for a list option.
+ *
+ * Used as o.onchange of the list option, so the column follows the form value.
+ */
+function updateConnectionsOption(map, connection, option) {
+	const [ embedded ] = map.lookupOption('_' + option, connection) ?? [];
+	const field = embedded ? map.findElement('data-field', embedded.cbid(connection)) : null;
+	const column = embedded?.subsection.children.find(o => o.option == '_connections');
+
+	if (!field || !column)
+		return;
+
+	field.querySelectorAll('tr[data-sid] > td[data-name="_connections"]').forEach(function (td) {
+		const value = column.textvalue(td.parentNode.getAttribute('data-sid'));
+
+		td.replaceChildren(value ?? E('em', _('none')));
+	});
 }
 
 /**
@@ -751,8 +792,7 @@ function addEmbeddedSection(s, tab, option, title, description, addOptions) {
 	};
 
 	ss.handleRemove = function (section_id, ev) {
-		const [ listOption ] = this.map.lookupOption(option, this.connection) ?? [];
-		const widget = listOption?.getUIElement(this.connection);
+		const widget = getListWidget(this.map, this.connection, option);
 
 		if (!widget)
 			return Promise.resolve();
@@ -985,6 +1025,9 @@ return view.extend({
 		o.tooltipicon = '⚠️';
 		o.rmempty = false;
 		o.parse = parseReferenceList;
+		o.onchange = function (ev, section_id) {
+			updateConnectionsOption(this.map, section_id, 'child');
+		};
 
 		o = s.taboption('authentication', form.DynamicList, 'local', _('Local Authentication'),
 			swanctlDescr(_('Local authentication sections used for this connection.') + ' ' +
@@ -1015,6 +1058,9 @@ return view.extend({
 			if (value == '' || uci.get('ipsec', value, '.type') == 'local')
 				return true;
 			return _('Unknown Local section');
+		};
+		o.onchange = function (ev, section_id) {
+			updateConnectionsOption(this.map, section_id, 'local');
 		};
 
 		o = s.taboption('authentication', form.DynamicList, 'remote', _('Remote Authentication'),
@@ -1049,6 +1095,9 @@ return view.extend({
 		};
 		o.rmempty = false;
 		o.parse = parseReferenceList;
+		o.onchange = function (ev, section_id) {
+			updateConnectionsOption(this.map, section_id, 'remote');
+		};
 
 		o = s.taboption('authentication', form.ListValue, 'send_cert', _('Send Certificate'),
 			swanctlDescr(_('Whether to send our own certificate to the remote peer'), 'connections.<conn>.send_cert'));
