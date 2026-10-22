@@ -142,18 +142,48 @@ function multiValueSectionTooltip(missing, empty) {
 }
 
 /**
- * Show "none" in the overview table while a custom proposal is used.
+ * Whether the cipher is an authenticated encryption (AEAD) algorithm.
  *
- * Otherwise the table would list the default algorithms, although they are
- * ignored in favor of the custom proposal string.
+ * Mirrors is_aead() of the init script.
  */
-function hideForCustomProposal(o) {
-	o.textvalue = function (section_id) {
-		if (uci.get('ipsec', section_id, 'use_custom_proposal') == '1')
-			return null;
+function isAead(cipher) {
+	return /^(aes.*(gcm|ccm|gmac)|chacha20poly1305$)/.test(cipher ?? '');
+}
 
-		return this.super('textvalue', [section_id]);
-	};
+/**
+ * Assemble the proposal string of a crypto_proposal section.
+ *
+ * Mirrors config_ike_proposal(), config_esp_proposal() and append_ke() of
+ * the init script, so the overview table shows the same string as written to
+ * the swanctl configuration. See proposalTooltip().
+ */
+function assembleProposal(section_id) {
+	const get = option => uci.get('ipsec', section_id, option);
+
+	if (get('use_custom_proposal') == '1')
+		return get('custom_proposal') || null;
+
+	const encryption = get('encryption_algorithm');
+
+	if (!encryption)
+		return null;
+
+	const parts = [ encryption ];
+
+	if (!isAead(encryption) && get('hash_algorithm'))
+		parts.push(get('hash_algorithm'));
+
+	if (get('is_esp') != '1' && get('prf_algorithm'))
+		parts.push(get('prf_algorithm'));
+
+	if (get('dh_group'))
+		parts.push(get('dh_group'));
+
+	L.toArray(get('ke')).filter(ke => ke).slice(0, 7).forEach(function (ke, i) {
+		parts.push(/^ke[1-7]_/.test(ke) ? ke : 'ke%d_%s'.format(i + 1, ke));
+	});
+
+	return parts.join('-');
 }
 
 /**
@@ -1259,8 +1289,13 @@ return view.extend({
 			_('You are responsible for maintaining compatibility!') + '<br />' +
 			_('The string is used verbatim as the proposal instead of the assembled one.'),
 				'connections.<conn>.proposals, connections.<conn>.children.<child>.esp_proposals'));
+		o.modalonly = true;
 		o.depends('use_custom_proposal', '1');
 		o.rmempty = false;
+
+		o = s.option(form.DummyValue, '_proposal', _('Proposal'));
+		o.modalonly = false;
+		o.cfgvalue = assembleProposal;
 
 		o = s.option(form.ListValue, 'encryption_algorithm',
 			_('Encryption Algorithm'),
@@ -1270,7 +1305,7 @@ return view.extend({
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.encryption);
 		addAlgorithms(o, algorithms.aead);
-		hideForCustomProposal(o);
+		o.modalonly = true;
 
 		const encryptionAlgorithmNames = algorithms.encryption?.map(algorithm => algorithm.name);
 		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
@@ -1282,7 +1317,7 @@ return view.extend({
 		o.default = 'sha512';
 		o.rmempty = false;
 		addAlgorithms(o, algorithms.integrity);
-		hideForCustomProposal(o);
+		o.modalonly = true;
 
 		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
 			_('Algorithms marked with * are considered insecure'));
@@ -1290,7 +1325,7 @@ return view.extend({
 		o.default = 'modp3072';
 		o.depends('use_custom_proposal', '0');
 		addAlgorithms(o, algorithms.ke);
-		hideForCustomProposal(o);
+		o.modalonly = true;
 
 		o = s.option(form.DynamicList, 'ke', _('Multiple Key Exchanges'),
 			_('With peers that support multiple IKEv2 key exchanges (RFC 9370), ' +
@@ -1318,7 +1353,7 @@ return view.extend({
 		o.optional = true;
 		o.depends({'is_esp': '0', 'use_custom_proposal': '0'});
 		addAlgorithms(o, algorithms.prf);
-		hideForCustomProposal(o);
+		o.modalonly = true;
 
 		return m.render().then(function (node) {
 			const banner = service.banner(serviceState,
