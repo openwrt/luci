@@ -567,6 +567,148 @@ function sectionNameCheck(extra_class) {
 	return el;
 };
 
+/**
+ * Dialog of a section embedded in the connection dialog.
+ *
+ * Holds the connection, the list option referencing the section and the
+ * section shown in the dialog. Null if no such dialog is open.
+ */
+let embeddedModal = null;
+
+/**
+ * Set while the connection dialog is saved because of an embedded section.
+ *
+ * This happens before the dialog of an embedded section opens and when an
+ * embedded section is removed from the connection.
+ */
+let embeddedSave = false;
+
+function withEmbeddedSave(fn) {
+	embeddedSave = true;
+
+	return Promise.resolve().then(fn).finally(function () {
+		embeddedSave = false;
+	});
+}
+
+function getReferences(connection, option) {
+	return L.toArray(uci.get('ipsec', connection, option));
+}
+
+function setReferences(connection, option, list) {
+	uci.set('ipsec', connection, option, list.length > 0 ? list : null);
+}
+
+/**
+ * Parse a mandatory list option of a connection referencing other sections.
+ *
+ * Used as o.parse. The list may be empty while the connection dialog is saved
+ * because of an embedded section, since the referenced sections are just
+ * being created or removed. Saving the connection dialog itself still
+ * requires at least one entry.
+ */
+function parseReferenceList(section_id) {
+	if (embeddedSave && L.toArray(this.formvalue(section_id)).length == 0)
+		return Promise.resolve(this.remove(section_id));
+
+	return form.AbstractValue.prototype.parse.apply(this, [section_id]);
+}
+
+/**
+ * Save the dialog of the connection or of an embedded section.
+ *
+ * Used as handleModalSave of the connection section. The dialog of an
+ * embedded section is stacked onto the connection dialog and keeps its
+ * buttons, so it is saved here as well. A new embedded section is appended
+ * to the list of the connection first.
+ */
+function handleConnectionModalSave(modalMap, ev) {
+	if (this.getPreviousModalMap() && embeddedModal) {
+		const { connection, option, section_id } = embeddedModal;
+		const list = getReferences(connection, option);
+
+		if (!list.includes(section_id)) {
+			setReferences(connection, option, [ ...list, section_id ]);
+			embeddedModal.added = true;
+		}
+	}
+
+	return form.GridSection.prototype.handleModalSave.apply(this, arguments);
+}
+
+/**
+ * Close the dialog of the connection or of an embedded section.
+ *
+ * Used as handleModalCancel of the connection section. If the dialog of a new
+ * embedded section is dismissed after saving it failed, the section is
+ * removed from the list of the connection again.
+ */
+function handleConnectionModalCancel(modalMap, ev, isSaving) {
+	if (this.getPreviousModalMap() && embeddedModal) {
+		const { connection, option, section_id, added } = embeddedModal;
+
+		if (added && !isSaving)
+			setReferences(connection, option,
+				getReferences(connection, option).filter(name => name != section_id));
+
+		embeddedModal = null;
+	}
+
+	return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
+}
+
+/**
+ * Embed the sections which can be referenced by a list option of the
+ * connection into a tab of the connection dialog.
+ *
+ * The option name equals the type of the sections. The table shows all
+ * sections of the type, like the table on the main page. A section added here
+ * is appended to the list once its dialog is saved. Deleting a section here
+ * removes it from the list as well.
+ */
+function addEmbeddedSection(s, tab, option, title, description, addOptions) {
+	const o = s.taboption(tab, form.SectionValue, '_' + option, form.GridSection, option, title, description);
+	const ss = o.subsection;
+
+	o.modalonly = true;
+
+	// The embedded section needs the connection to look up the references.
+	o.load = function (section_id) {
+		this.subsection.connection = section_id;
+
+		return form.SectionValue.prototype.load.apply(this, [section_id]);
+	};
+
+	ss.addremove = true;
+	ss.nodescriptions = true;
+	ss.renderSectionAdd = sectionNameCheck;
+	ss.modaltitle = function (section_id) {
+		return '%s - %s'.format(title, section_id);
+	};
+
+	ss.renderMoreOptionsModal = function (section_id, ev) {
+		embeddedModal = { connection: this.connection, option: option, section_id: section_id };
+
+		return withEmbeddedSave(L.bind(form.GridSection.prototype.renderMoreOptionsModal, this, section_id, ev));
+	};
+
+	ss.handleRemove = function (section_id, ev) {
+		const [ listOption ] = this.map.lookupOption(option, this.connection) ?? [];
+		const widget = listOption?.getUIElement(this.connection);
+
+		if (!widget)
+			return Promise.resolve();
+
+		// Saving the connection dialog writes the form value, so change that instead of the UCI value.
+		widget.setValue(L.toArray(widget.getValue()).filter(name => name != section_id));
+		this.map.data.remove('ipsec', section_id);
+
+		return withEmbeddedSave(L.bind(this.map.save, this.map, null, true));
+	};
+
+	addOptions(ss);
+}
+
 let migrationOverlay = null;
 
 function renderMigrationContent(errorMessage) {
@@ -670,10 +812,15 @@ return view.extend({
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck
+		s.handleModalSave = handleConnectionModalSave;
+		s.handleModalCancel = handleConnectionModalCancel;
 
 		o = s.tab('general', _('General'));
 		o = s.tab('authentication', _('Authentication'));
 		o = s.tab('advanced', _('Advanced'));
+		o = s.tab('children', _('Children'));
+		o = s.tab('locals', _('Locals'));
+		o = s.tab('remotes', _('Remotes'));
 
 		o = s.taboption('general', form.Flag, 'enabled', _('Enabled'),
 			_('Configuration is enabled or not'));
@@ -776,6 +923,7 @@ return view.extend({
 		]);
 		o.tooltipicon = '⚠️';
 		o.rmempty = false;
+		o.parse = parseReferenceList;
 
 		o = s.taboption('authentication', form.DynamicList, 'local', _('Local Authentication'),
 			swanctlDescr(_('Local authentication sections used for this connection.') + ' ' +
@@ -839,6 +987,7 @@ return view.extend({
 			return _('Unknown Remote section');
 		};
 		o.rmempty = false;
+		o.parse = parseReferenceList;
 
 		o = s.taboption('authentication', form.ListValue, 'send_cert', _('Send Certificate'),
 			swanctlDescr(_('Whether to send our own certificate to the remote peer'), 'connections.<conn>.send_cert'));
@@ -928,6 +1077,18 @@ return view.extend({
 		o.onchange = function (ev, section_id, value) {
 			showIkev1Hint(ev.target.closest('.cbi-value'), value);
 		};
+
+		addEmbeddedSection(s, 'children', 'child', _('Children'),
+			_('The children of this connection are selected on the General tab.'),
+			addChildOptions);
+
+		addEmbeddedSection(s, 'locals', 'local', _('Local'),
+			_('The locals of this connection and their order are selected on the Authentication tab.'),
+			addLocalOptions);
+
+		addEmbeddedSection(s, 'remotes', 'remote', _('Remote'),
+			_('The remotes of this connection and their order are selected on the Authentication tab.'),
+			addRemoteOptions);
 
 		// Local Configuration
 		s = m.section(form.GridSection, 'local', _('Local'),
