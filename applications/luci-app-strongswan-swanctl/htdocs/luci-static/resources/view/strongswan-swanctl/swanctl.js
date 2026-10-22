@@ -225,6 +225,241 @@ function addFileOption(s, name, title, descr, root) {
 	return o;
 }
 
+/**
+ * Add the tabs and options of a child section (ESP, phase 2) to `s`.
+ */
+function addChildOptions(s) {
+	let o;
+
+	o = s.tab('general', _('General'));
+	o = s.tab('advanced', _('Advanced'));
+
+	o = s.taboption('general', form.ListValue, 'mode', _('Child mode'), swanctlDescr(null, 'connections.<conn>.children.<child>.mode'));
+	o.rmempty = false;
+	o.value('tunnel', _('Tunnel'));
+	o.value('transport', _('Transport'));
+	o.default = 'tunnel';
+
+	o = s.taboption('general', form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
+		swanctlDescr(_('Local network(s)'), 'connections.<conn>.children.<child>.local_ts'));
+	o.datatype = 'cidr';
+	o.placeholder = '192.168.1.1/24';
+	o.rmempty = false;
+
+	o = s.taboption('general', form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
+		swanctlDescr(_('Remote network(s)'), 'connections.<conn>.children.<child>.remote_ts'));
+	o.datatype = 'cidr';
+	o.placeholder = '192.168.2.1/24';
+	o.rmempty = false;
+
+	o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
+		swanctlDescr(_('XFRM interface ID set on input and output interfaces'), 'connections.<conn>.children.<child>.if_id_in, connections.<conn>.children.<child>.if_id_out'));
+	o.load = function (section_id) {
+		this.keylist = [];
+		this.vallist = [];
+
+		var xfrmSections = uci.sections('network').filter(function (section) {
+			return section.proto == 'xfrm';
+		});
+
+		xfrmSections.forEach(L.bind(function (section) {
+			this.value(section.ifid,
+				'%s (%s)'.format(section.ifid, section['.name']));
+		}, this));
+
+		return this.super('load', [section_id]);
+	}
+	o.tooltip = function () {
+		if (uci.get('ipsec', 'netlink', 'install_routes_xfrmi') == '1')
+			return null;
+
+		return _('This option must be enabled in the service configuration (Netlink Settings) for routes to be set automatically.') + '<br />' +
+			'<code>ipsec.netlink.install_routes_xfrmi</code><br />' +
+			_('Otherwise, routes for the XFRM interface must be set manually.');
+	};
+	o.tooltipicon = '⚠️';
+	o.optional = true;
+	o.modalonly = true;
+
+	o = s.taboption('general', form.ListValue, 'start_action', _('Start Action'),
+		swanctlDescr(_('Action on initial configuration load'), 'connections.<conn>.children.<child>.start_action'));
+	o.value('', '%s (%s)'.format('none', _('default')));
+	o.value('trap');
+	o.value('start');
+	o.optional = true;
+	o.default = '';
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
+		swanctlDescr(_('Action when CHILD_SA is closed'), 'connections.<conn>.children.<child>.close_action'));
+	o.value('', '%s (%s)'.format('none', _('default')));
+	o.value('trap');
+	o.value('start');
+	o.optional = true;
+	o.default = '';
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('general', form.MultiValue, 'crypto_proposal',
+		_('Crypto Proposal (Phase 2)'),
+		swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'), 'connections.<conn>.children.<child>.esp_proposals'));
+	o.load = function (section_id) {
+		this.keylist = [];
+		this.vallist = [];
+
+		uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+			return section.is_esp == '1';
+		}).forEach(L.bind(function (section) {
+			this.value(section['.name']);
+		}, this));
+
+		return this.super('load', [section_id]);
+	};
+	o.tooltip = multiValueSectionTooltip([
+		_('Configured proposals are not available as ESP proposal: %s'),
+		_('Check the ESP Proposal option of the proposals or create the missing ones.')
+	], [
+		_('No ESP proposal exists yet.'),
+		_('Create a proposal with the ESP Proposal option enabled first.')
+	]);
+	o.tooltipicon = '⚠️';
+	o.rmempty = true;
+
+	o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
+		swanctlDescr(_('Path to script to run on CHILD_SA up/down events'), 'connections.<conn>.children.<child>.updown'));
+	o.datatype = 'file';
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.ListValue, 'dpd_action', _('DPD Action'),
+		swanctlDescr(_('Action when DPD timeout occurs'), 'connections.<conn>.children.<child>.dpd_action'));
+	o.value('', '%s (%s)'.format('clear', _('default')));
+	o.value('trap');
+	o.value('restart');
+	o.default = '';
+	o.rmempty = true;
+	o.optional = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
+		swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
+	o.validate = validateTimeFormat;
+	o.placeholder = '0s';
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
+		swanctlDescr(_('Interval before a CHILD_SA is rekeyed.') + ' ' +
+		_('Also used to derive lifetime (110% of this value).') + '<br />' +
+		_('If not configured, the default value is "1h".'),
+			'connections.<conn>.children.<child>.rekey_time')
+	);
+	o.placeholder = '1h';
+	o.validate = validateTimeFormat;
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
+		swanctlDescr(_('Maximum time before the CHILD_SA gets closed, as a hard limit.'), 'connections.<conn>.children.<child>.life_time')
+	);
+	o.validate = validateTimeFormat;
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Flag, 'ipcomp', _('IPComp'),
+		swanctlDescr(_('Enable ipcomp compression'), 'connections.<conn>.children.<child>.ipcomp'));
+	o.default = '0';
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Flag, 'policies', _('Policies'),
+		swanctlDescr(_('Whether to install IPsec policies or not.') + ' ' +
+		_('Disabling this is only useful in special cases, e.g. with route based routing.'),
+			'connections.<conn>.children.<child>.policies'));
+	o.default = '1';
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
+		swanctlDescr(_('Enable Hardware offload'), 'connections.<conn>.children.<child>.hw_offload'));
+	o.value('yes');
+	o.value('no');
+	o.value('auto');
+	o.optional = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
+		swanctlDescr(_('Priority of the CHILD_SA'), 'connections.<conn>.children.<child>.priority'));
+	o.datatype = 'uinteger';
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'mark_in', _('Mark In'),
+		swanctlDescr(_('Netfilter mark on inbound traffic, used to match the policy.') + '<br />' +
+			markDescription(),
+			'connections.<conn>.children.<child>.mark_in'));
+	o.value('%unique');
+	o.value('%unique-dir');
+	o.optional = true;
+	o.validate = validateMark;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'mark_out', _('Mark Out'),
+		swanctlDescr(_('Netfilter mark applied to outbound traffic, used to match the policy.') + '<br />' +
+			markDescription(),
+			'connections.<conn>.children.<child>.mark_out'));
+	o.value('%unique');
+	o.value('%unique-dir');
+	o.optional = true;
+	o.validate = validateMark;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),
+		swanctlDescr('%s; %s'.format(_('Replay Window of the CHILD_SA'),
+			_('Values larger than 32 are supported by the Netlink backend only')),
+			'connections.<conn>.children.<child>.replay_window'));
+	o.datatype = 'uinteger';
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'rekey_bytes', _('Rekey Bytes'),
+		swanctlDescr(_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
+		_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
+		_('Use "0" to disable byte based rekeying.'),
+			'connections.<conn>.children.<child>.rekey_bytes')
+	);
+	o.datatype = 'uinteger';
+	o.placeholder = '0';
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'life_bytes', _('Life Bytes'),
+		swanctlDescr(_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
+		_('Use "0" to disable (default).'),
+			'connections.<conn>.children.<child>.life_bytes')
+	);
+	o.datatype = 'uinteger';
+	o.placeholder = '0';
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'rekey_packets', _('Rekey Packets'),
+		swanctlDescr(_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
+		_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
+		_('Use "0" to disable packet based rekeying (default).'),
+			'connections.<conn>.children.<child>.rekey_packets')
+	);
+	o.datatype = 'uinteger';
+	o.placeholder = '0';
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('advanced', form.Value, 'life_packets', _('Life Packets'),
+		swanctlDescr(_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
+		_('Use "0" to disable (default).'),
+			'connections.<conn>.children.<child>.life_packets')
+	);
+	o.datatype = 'uinteger';
+	o.placeholder = '0';
+	o.rmempty = true;
+	o.modalonly = true;
+}
+
 function sectionNameCheck(extra_class) {
 	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
 		nameEl = el.querySelector('.cbi-section-create-name');
@@ -701,233 +936,7 @@ return view.extend({
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
 
-		o = s.tab('general', _('General'));
-		o = s.tab('advanced', _('Advanced'));
-
-		o = s.taboption('general', form.ListValue, 'mode', _('Child mode'), swanctlDescr(null, 'connections.<conn>.children.<child>.mode'));
-		o.rmempty = false;
-		o.value('tunnel', _('Tunnel'));
-		o.value('transport', _('Transport'));
-		o.default = 'tunnel';
-
-		o = s.taboption('general', form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
-			swanctlDescr(_('Local network(s)'), 'connections.<conn>.children.<child>.local_ts'));
-		o.datatype = 'cidr';
-		o.placeholder = '192.168.1.1/24';
-		o.rmempty = false;
-
-		o = s.taboption('general', form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
-			swanctlDescr(_('Remote network(s)'), 'connections.<conn>.children.<child>.remote_ts'));
-		o.datatype = 'cidr';
-		o.placeholder = '192.168.2.1/24';
-		o.rmempty = false;
-
-		o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
-			swanctlDescr(_('XFRM interface ID set on input and output interfaces'), 'connections.<conn>.children.<child>.if_id_in, connections.<conn>.children.<child>.if_id_out'));
-		o.load = function (section_id) {
-			this.keylist = [];
-			this.vallist = [];
-
-			var xfrmSections = uci.sections('network').filter(function (section) {
-				return section.proto == 'xfrm';
-			});
-
-			xfrmSections.forEach(L.bind(function (section) {
-				this.value(section.ifid,
-					'%s (%s)'.format(section.ifid, section['.name']));
-			}, this));
-
-			return this.super('load', [section_id]);
-		}
-		o.tooltip = function () {
-			if (uci.get('ipsec', 'netlink', 'install_routes_xfrmi') == '1')
-				return null;
-
-			return _('This option must be enabled in the service configuration (Netlink Settings) for routes to be set automatically.') + '<br />' +
-				'<code>ipsec.netlink.install_routes_xfrmi</code><br />' +
-				_('Otherwise, routes for the XFRM interface must be set manually.');
-		};
-		o.tooltipicon = '⚠️';
-		o.optional = true;
-		o.modalonly = true;
-
-		o = s.taboption('general', form.ListValue, 'start_action', _('Start Action'),
-			swanctlDescr(_('Action on initial configuration load'), 'connections.<conn>.children.<child>.start_action'));
-		o.value('', '%s (%s)'.format('none', _('default')));
-		o.value('trap');
-		o.value('start');
-		o.optional = true;
-		o.default = '';
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
-			swanctlDescr(_('Action when CHILD_SA is closed'), 'connections.<conn>.children.<child>.close_action'));
-		o.value('', '%s (%s)'.format('none', _('default')));
-		o.value('trap');
-		o.value('start');
-		o.optional = true;
-		o.default = '';
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('general', form.MultiValue, 'crypto_proposal',
-			_('Crypto Proposal (Phase 2)'),
-			swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'), 'connections.<conn>.children.<child>.esp_proposals'));
-		o.load = function (section_id) {
-			this.keylist = [];
-			this.vallist = [];
-
-			uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
-				return section.is_esp == '1';
-			}).forEach(L.bind(function (section) {
-				this.value(section['.name']);
-			}, this));
-
-			return this.super('load', [section_id]);
-		};
-		o.tooltip = multiValueSectionTooltip([
-			_('Configured proposals are not available as ESP proposal: %s'),
-			_('Check the ESP Proposal option of the proposals or create the missing ones.')
-		], [
-			_('No ESP proposal exists yet.'),
-			_('Create a proposal with the ESP Proposal option enabled first.')
-		]);
-		o.tooltipicon = '⚠️';
-		o.rmempty = true;
-
-		o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
-			swanctlDescr(_('Path to script to run on CHILD_SA up/down events'), 'connections.<conn>.children.<child>.updown'));
-		o.datatype = 'file';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.ListValue, 'dpd_action', _('DPD Action'),
-			swanctlDescr(_('Action when DPD timeout occurs'), 'connections.<conn>.children.<child>.dpd_action'));
-		o.value('', '%s (%s)'.format('clear', _('default')));
-		o.value('trap');
-		o.value('restart');
-		o.default = '';
-		o.rmempty = true;
-		o.optional = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'inactivity', _('Inactivity'),
-			swanctlDescr(_('Interval before closing an inactive CHILD_SA'), 'connections.<conn>.children.<child>.inactivity'));
-		o.validate = validateTimeFormat;
-		o.placeholder = '0s';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'rekey_time', _('Rekey Time'),
-			swanctlDescr(_('Interval before a CHILD_SA is rekeyed.') + ' ' +
-			_('Also used to derive lifetime (110% of this value).') + '<br />' +
-			_('If not configured, the default value is "1h".'),
-				'connections.<conn>.children.<child>.rekey_time')
-		);
-		o.placeholder = '1h';
-		o.validate = validateTimeFormat;
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
-			swanctlDescr(_('Maximum time before the CHILD_SA gets closed, as a hard limit.'), 'connections.<conn>.children.<child>.life_time')
-		);
-		o.validate = validateTimeFormat;
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Flag, 'ipcomp', _('IPComp'),
-			swanctlDescr(_('Enable ipcomp compression'), 'connections.<conn>.children.<child>.ipcomp'));
-		o.default = '0';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Flag, 'policies', _('Policies'),
-			swanctlDescr(_('Whether to install IPsec policies or not.') + ' ' +
-			_('Disabling this is only useful in special cases, e.g. with route based routing.'),
-				'connections.<conn>.children.<child>.policies'));
-		o.default = '1';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
-			swanctlDescr(_('Enable Hardware offload'), 'connections.<conn>.children.<child>.hw_offload'));
-		o.value('yes');
-		o.value('no');
-		o.value('auto');
-		o.optional = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
-			swanctlDescr(_('Priority of the CHILD_SA'), 'connections.<conn>.children.<child>.priority'));
-		o.datatype = 'uinteger';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'mark_in', _('Mark In'),
-			swanctlDescr(_('Netfilter mark on inbound traffic, used to match the policy.') + '<br />' +
-				markDescription(),
-				'connections.<conn>.children.<child>.mark_in'));
-		o.value('%unique');
-		o.value('%unique-dir');
-		o.optional = true;
-		o.validate = validateMark;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'mark_out', _('Mark Out'),
-			swanctlDescr(_('Netfilter mark applied to outbound traffic, used to match the policy.') + '<br />' +
-				markDescription(),
-				'connections.<conn>.children.<child>.mark_out'));
-		o.value('%unique');
-		o.value('%unique-dir');
-		o.optional = true;
-		o.validate = validateMark;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),
-			swanctlDescr('%s; %s'.format(_('Replay Window of the CHILD_SA'),
-				_('Values larger than 32 are supported by the Netlink backend only')),
-				'connections.<conn>.children.<child>.replay_window'));
-		o.datatype = 'uinteger';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'rekey_bytes', _('Rekey Bytes'),
-			swanctlDescr(_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
-			_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
-			_('Use "0" to disable byte based rekeying.'),
-				'connections.<conn>.children.<child>.rekey_bytes')
-		);
-		o.datatype = 'uinteger';
-		o.placeholder = '0';
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'life_bytes', _('Life Bytes'),
-			swanctlDescr(_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
-			_('Use "0" to disable (default).'),
-				'connections.<conn>.children.<child>.life_bytes')
-		);
-		o.datatype = 'uinteger';
-		o.placeholder = '0';
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'rekey_packets', _('Rekey Packets'),
-			swanctlDescr(_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
-			_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
-			_('Use "0" to disable packet based rekeying (default).'),
-				'connections.<conn>.children.<child>.rekey_packets')
-		);
-		o.datatype = 'uinteger';
-		o.placeholder = '0';
-		o.rmempty = true;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'life_packets', _('Life Packets'),
-			swanctlDescr(_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
-			_('Use "0" to disable (default).'),
-				'connections.<conn>.children.<child>.life_packets')
-		);
-		o.datatype = 'uinteger';
-		o.placeholder = '0';
-		o.rmempty = true;
-		o.modalonly = true;
+		addChildOptions(s);
 
 		// Crypto Proposals
 		s = m.section(form.GridSection, 'crypto_proposal',
