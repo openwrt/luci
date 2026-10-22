@@ -1285,6 +1285,7 @@ return view.extend({
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
+		preventReferencedRemove(s, 'crypto_proposal', [ 'connection', 'child' ]);
 
 		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
 			_('Whether this is an ESP (phase 2) proposal or not'));
@@ -1366,6 +1367,8 @@ return view.extend({
 		o.depends({'is_esp': '0', 'use_custom_proposal': '0'});
 		addAlgorithms(o, algorithms.prf);
 		o.modalonly = true;
+
+		addConnectionsOption(s, 'crypto_proposal', _('Referenced by'), [ 'connection', 'child' ]);
 
 		return m.render().then(function (node) {
 			const banner = service.banner(serviceState,
