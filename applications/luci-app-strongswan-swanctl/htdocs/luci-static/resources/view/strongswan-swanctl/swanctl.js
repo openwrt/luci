@@ -460,6 +460,58 @@ function addChildOptions(s) {
 	o.modalonly = true;
 }
 
+/**
+ * Add the options of a remote authentication round to `s`.
+ */
+function addRemoteOptions(s) {
+	let o;
+
+	o = s.option(form.ListValue, 'auth', _('Authentication Method'),
+		swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.remote<suffix>.auth'));
+	o.value('psk', _('Pre-shared Key'));
+	o.value('pubkey', _('Public Key'));
+	o.value('eap-mschapv2', 'EAP MSCHAPv2');
+	o.value('eap-tls', 'EAP TLS');
+	o.default = 'psk';
+	o.rmempty = false;
+
+	o = s.option(form.Value, 'id', _('Remote Identifier'),
+		swanctlDescr(_('Remote identifier for IKE (phase 1)'), 'connections.<conn>.remote<suffix>.id'));
+	o.datatype = 'string';
+	o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
+	o.modalonly = true;
+
+	o = s.option(form.DynamicList, 'cacerts', _('Remote CA Certificates'),
+		swanctlDescr(_('Restrict the remote peer\'s certificate to be issued by one of these CAs.') + '<br />' +
+		_('Select a file relative to /etc/swanctl/x509ca. CA certificates can be uploaded in the authorities section.'),
+			'connections.<conn>.remote<suffix>.cacerts'));
+	o.load = function (section_id) {
+		this.keylist = [];
+		this.vallist = [];
+
+		return L.resolveDefault(fs.list('/etc/swanctl/x509ca'), []).then(L.bind(function (entries) {
+			entries.filter(function (entry) {
+				return entry.type == 'file';
+			}).forEach(L.bind(function (entry) {
+				this.value(entry.name);
+			}, this));
+
+			return this.super('load', [section_id]);
+		}, this));
+	};
+	o.modalonly = true;
+	o.depends('auth', 'pubkey');
+	o.depends('auth', 'eap-tls');
+
+	o = s.option(form.Value, 'eap_id', _('EAP ID'),
+		swanctlDescr(_('EAP identity to use with the remote peer'), 'connections.<conn>.remote<suffix>.eap_id'));
+	o.datatype = 'string';
+	o.default = '%any';
+	o.depends('auth', 'eap-mschapv2');
+	o.depends('auth', 'eap-tls');
+	o.modalonly = true;
+}
+
 function sectionNameCheck(extra_class) {
 	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
 		nameEl = el.querySelector('.cbi-section-create-name');
@@ -884,50 +936,7 @@ return view.extend({
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
 
-		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
-			swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.remote<suffix>.auth'));
-		o.value('psk', _('Pre-shared Key'));
-		o.value('pubkey', _('Public Key'));
-		o.value('eap-mschapv2', 'EAP MSCHAPv2');
-		o.value('eap-tls', 'EAP TLS');
-		o.default = 'psk';
-		o.rmempty = false;
-
-		o = s.option(form.Value, 'id', _('Remote Identifier'),
-			swanctlDescr(_('Remote identifier for IKE (phase 1)'), 'connections.<conn>.remote<suffix>.id'));
-		o.datatype = 'string';
-		o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
-		o.modalonly = true;
-
-		o = s.option(form.DynamicList, 'cacerts', _('Remote CA Certificates'),
-			swanctlDescr(_('Restrict the remote peer\'s certificate to be issued by one of these CAs.') + '<br />' +
-			_('Select a file relative to /etc/swanctl/x509ca. CA certificates can be uploaded in the authorities section.'),
-				'connections.<conn>.remote<suffix>.cacerts'));
-		o.load = function (section_id) {
-			this.keylist = [];
-			this.vallist = [];
-
-			return L.resolveDefault(fs.list('/etc/swanctl/x509ca'), []).then(L.bind(function (entries) {
-				entries.filter(function (entry) {
-					return entry.type == 'file';
-				}).forEach(L.bind(function (entry) {
-					this.value(entry.name);
-				}, this));
-
-				return this.super('load', [section_id]);
-			}, this));
-		};
-		o.modalonly = true;
-		o.depends('auth', 'pubkey');
-		o.depends('auth', 'eap-tls');
-
-		o = s.option(form.Value, 'eap_id', _('EAP ID'),
-			swanctlDescr(_('EAP identity to use with the remote peer'), 'connections.<conn>.remote<suffix>.eap_id'));
-		o.datatype = 'string';
-		o.default = '%any';
-		o.depends('auth', 'eap-mschapv2');
-		o.depends('auth', 'eap-tls');
-		o.modalonly = true;
+		addRemoteOptions(s);
 
 		// Children Configuration
 		s = m.section(form.GridSection, 'child', _('Children'),
