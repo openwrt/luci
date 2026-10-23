@@ -2,7 +2,7 @@
 
 'use strict';
 
-import { readfile, popen, stat, glob } from 'fs';
+import { readfile, writefile, mkdir, popen, stat, glob } from 'fs';
 import { init_enabled } from 'luci.sys';
 import { isnan } from 'math';
 import { cursor } from 'uci';
@@ -115,8 +115,10 @@ const methods = {
 				if (section == '.anonymous')
 					return;
 
-				if (stat(`${rundir}/${section}.ip`)?.type == 'file') {
-					ip = readfile(`${rundir}/${section}.ip`);
+				const ipFile = `${rundir}/${section}.ip`;
+
+				if (stat(ipFile)?.type == 'file') {
+					ip = readfile(ipFile);
 				} else {
 					const dnsServer = s['dns_server'] || '';
 					const forceIpVersion = int(s['force_ipversion'] || 0);
@@ -136,7 +138,14 @@ const methods = {
 					if (length(dnsServer) > 0) push(command, '-d', shellquote(dnsServer));
 					push(command, '-- get_registered_ip');
 
-					const result = system(`${join(' ', command)}`);
+					/* Without a working DNS the lookup takes 10 s or more, and LuCI fetches
+					this status together with the rest of a page such as the Overview. So the
+					lookup runs in the background, and the helper writes its result to the IP
+					file for a later call. The file is created empty first, so that the calls
+					in between do not start the lookup again. */
+					mkdir(rundir);
+					writefile(ipFile, '');
+					system(`${join(' ', command)} >/dev/null 2>&1 &`);
 				}
 
 				lastUpdate = int(readfile(`${rundir}/${section}.update`) || 0);
