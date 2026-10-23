@@ -236,6 +236,7 @@ hr {
 	flex-basis: 100%;
 	line-height: normal;
 	margin-bottom: .5em;
+	max-width: 100%;
 }
 
 .modal > pre,
@@ -632,10 +633,37 @@ input.cbi-input-password + img {
 	vertical-align: middle;
 }
 
+p > label[for] {
+	cursor: pointer;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+p > input[type="checkbox"],
+p > input[type="radio"],
 label > input[type="checkbox"],
 label > input[type="radio"] {
-	vertical-align: bottom;
+	vertical-align: text-bottom;
 	margin: 0;
+	margin-right: .5em;
+}
+
+p.cbi-checkbox {
+	position: relative;
+	flex-basis: auto;
+	padding: 0 .5em;
+	font-size: inherit;
+	font-weight: bold;
+	text-align: start;
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	min-height: 22px;
+	line-height: 20px;
+	display: inline-block;
+	cursor: pointer;
 }
 
 .td select,
