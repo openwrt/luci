@@ -1,0 +1,65 @@
+// Copyright 2026 Jan Froch <jan@froch.eu>
+// Licensed to the public under the Apache License 2.0.
+
+'use strict';
+
+import { cursor } from 'uci';
+import { popen, open } from 'fs';
+
+function command(cmd) {
+	return trim(popen(cmd)?.read?.('all'));
+}
+
+const apkproc = popen(`apk info 2>/dev/null | grep '^batctl-\\(default\\|full\\)$'`);
+apkproc.read('all');
+const batctl_debug_tables = !apkproc.close();
+
+const methods = {
+	getBatadvInstances: {
+		call: function() {
+			const data = {};
+			let device;
+
+			data.batctl_debug_tables = batctl_debug_tables;
+
+			if(batctl_debug_tables){
+				data.devices = {};
+				const fh = open('/etc/bat-hosts', 'r');
+				let bat_hosts = {};
+
+				if (fh){
+					for (let line = fh.read("line"); length(line); line = fh.read("line")){
+						let entry = split(rtrim(line, '\n'), /\s+/);
+						if(length(entry) == 2){
+							bat_hosts[entry[0]] = entry[1];
+						}
+					}
+					fh.close();
+				}
+
+				data.hostnames = bat_hosts;
+				const uci = cursor();
+				uci.load("network");
+				uci.foreach('network', 'interface', (s) => {
+					if (s.proto == 'batadv'){
+						device = s['.name'];
+						let out = command(`batctl ${device} mj 2>/dev/null`);
+						if (out) {
+							data.devices[device] = json(out);
+							out = command(`batctl ${device} nj 2>/dev/null`);
+							data.devices[device].neighbors = out ? json(out) : [];
+							out = command(`batctl ${device} hj 2>/dev/null`);
+							data.devices[device].hardifs = out ? json(out) : [];
+						}
+					}
+				});
+
+				uci.unload();
+			}
+
+			return data;
+		}
+	}
+};
+
+return { 'luci.batadv': methods };
