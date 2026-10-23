@@ -514,6 +514,14 @@
 
 	const requestQueue = [];
 
+	/* Requests made within BACKGROUND_THRESHOLD ms of a user gesture are
+	 * foreground (session-touching); all others are background.
+	 */
+	const BACKGROUND_THRESHOLD = 5000;
+	for (const type of ['click', 'submit', 'change', 'input', 'keydown', 'mousedown', 'touchstart', 'wheel']) {
+		document.addEventListener(type, () => { Request.lastUserInteraction = Date.now() }, { capture: true, passive: true });
+	}
+
 	/**
 	 * Check whether a Request.options object is eligible to be queued for RPC
 	 * batching.
@@ -570,6 +578,8 @@
 			reqopt.content[i] = batch[i][0].content;
 		}
 
+		reqopt.background = batch.every(e => e[0].background);
+
 		requestQueue.length = 0;
 
 		Request.request(rpcBaseURL, reqopt).then(reply => {
@@ -604,6 +614,8 @@
 		__name__: 'LuCI.request',
 
 		interceptors: [],
+
+		lastUserInteraction: 0,
 
 		/**
 		 * Turn the given relative URL into an absolute URL if necessary.
@@ -665,6 +677,11 @@
 		 * @property {Object<string, string>} [header]
 		 * Specifies HTTP headers to set for the request.
 		 *
+		 * @property {boolean} [background]
+		 * Whether the request is a background poll that should not reset the
+		 * server-side session idle timer.  Determined automatically from
+		 * recent user interaction; set explicitly to override.
+		 *
 		 * @property {function()} [progress]
 		 * An optional request callback function which receives ProgressEvent
 		 * instances as sole argument during the HTTP request transfer.
@@ -689,6 +706,9 @@
 		 * The resulting HTTP response.
 		 */
 		request(target, options) {
+			const background = options?.background ??
+				(Date.now() - Request.lastUserInteraction) > BACKGROUND_THRESHOLD;
+
 			return Promise.resolve(target).then(url => {
 				const state = { xhr: new XMLHttpRequest(), url: this.expandURL(url), start: Date.now() };
 				const opt = Object.assign({}, options, state);
@@ -698,6 +718,9 @@
 
 				return new Promise((resolveFn, rejectFn) => {
 					opt.xhr.onreadystatechange = callback.bind(opt, resolveFn, rejectFn);
+
+					opt.background = background;
+
 					opt.method = String(opt.method ?? 'GET').toUpperCase();
 
 					if ('query' in opt) {
@@ -786,6 +809,9 @@
 								else
 									contenttype = opt.headers[header];
 							}
+
+					if (opt.background && new URL(opt.url, location.href).origin == location.origin)
+						opt.xhr.setRequestHeader('X-Ubus-No-Touch', '1');
 
 					if ('progress' in opt && 'upload' in opt.xhr)
 						opt.xhr.upload.addEventListener('progress', opt.progress);
