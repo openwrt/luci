@@ -1,5 +1,6 @@
 'use strict';
 'require baseclass';
+'require rpc';
 'require ui';
 
 /* Shared between the Test page's recent-history block and the full History
@@ -164,19 +165,53 @@ return baseclass.extend({
 	/* One token->label table for the schedule intervals: Settings builds
 	 * its choices from it and the Test page looks the status label up, so
 	 * the two cannot drift. The init script accepts more shapes than these
-	 * six, so readers must fall back to the raw token. */
+	 * seven, so readers must fall back to the raw token. */
 	INTERVALS: {
 		'15m': _('Every 15 minutes'),
 		'30m': _('Every 30 minutes'),
 		'1h': _('Hourly'),
 		'6h': _('Every 6 hours'),
 		'12h': _('Every 12 hours'),
-		'1d': _('Daily')
+		'1d': _('Daily'),
+		'7d': _('Weekly')
 	},
+
+	/* Cron's weekday numbers, Monday first; an array keeps that order. */
+	DAYS: [
+		[ '1', _('Monday') ], [ '2', _('Tuesday') ], [ '3', _('Wednesday') ],
+		[ '4', _('Thursday') ], [ '5', _('Friday') ], [ '6', _('Saturday') ],
+		[ '0', _('Sunday') ]
+	],
+
+	/* The interval and the weekdays as set; a token it does not know shows as it is. */
+	scheduleLabel(interval, days) {
+		const every = this.INTERVALS[interval || '1d'] || interval;
+		const day = d => (this.DAYS.find(x => x[0] == d) || [ d, d ])[1];
+
+		if (!days || days == '*')
+			return every;
+
+		return _('%s on %s', 'schedule interval on weekdays').format(every,
+			String(days).split(',').map(p => p.split('-').map(day).join('–')).join(', '));
+	},
+
+	/* Each interface's link: the name the backend records its results under. */
+	callLinks: rpc.declare({
+		object: 'librespeed',
+		method: 'links',
+		expect: { '': {} }
+	}),
 
 	/* Exported alongside the chart: every timestamp a page prints should
 	 * come through here, or the date-only guard gets lost in a copy. */
 	chartStampFull: chartStampFull,
+
+	/* By epoch: the backend lists runs as recorded, which is out of order
+	 * for a run recorded before NTP set the clock. */
+	byTime(entries) {
+		return (Array.isArray(entries) ? entries.slice() : [])
+			.sort((a, b) => (a.epoch ?? 0) - (b.epoch ?? 0));
+	},
 
 	/* Plain figures of one series: what is normal, how much it wobbles, and
 	 * where it stands now. The story sentences are built from these. On
