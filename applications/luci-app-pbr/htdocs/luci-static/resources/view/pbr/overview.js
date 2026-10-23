@@ -5,6 +5,7 @@
 "require form";
 "require rpc";
 "require view";
+"require dom";
 "require pbr.status as pbr";
 /* global pbr */
 
@@ -13,27 +14,24 @@ var pkg = pbr.pkg;
 return view.extend({
 	load: function () {
 		return Promise.all([
-			L.resolveDefault(pbr.getInterfaces(pkg.Name), {}),
-			L.resolveDefault(pbr.getPlatformSupport(pkg.Name), {}),
+			L.resolveDefault(pbr.getInitStatus(pkg.Name), {}),
 			L.resolveDefault(L.uci.load(pkg.Name), {}),
 		]);
 	},
 
 	render: function (data) {
 		var status, m, s, o;
+		var statusData = (data[0] && data[0][pkg.Name]) || {};
 		var reply = {
-			interfaces: (data[0] &&
-				data[0][pkg.Name] &&
-				data[0][pkg.Name].interfaces) || ["wan"],
-			platform: (data[1] && data[1][pkg.Name]) || {
-				ipset_installed: null,
-				nft_installed: null,
-				adguardhome_installed: null,
-				dnsmasq_installed: null,
-				unbound_installed: null,
-				adguardhome_ipset_support: null,
-				dnsmasq_ipset_support: null,
-				dnsmasq_nftset_support: null,
+			interfaces: statusData.interfaces || ["wan"],
+			interface_labels: statusData.interface_labels || {},
+			protocols: statusData.protocols || [],
+			platform: statusData.platform || {
+				nft_installed: false,
+				adguardhome_installed: false,
+				dnsmasq_installed: false,
+				unbound_installed: false,
+				dnsmasq_nftset_support: false,
 			},
 		};
 
@@ -58,8 +56,6 @@ return view.extend({
 				"<br/><br/>"
 			)
 		);
-
-		s.tab("tab_webui", _("Web UI Configuration"));
 
 		o = s.taboption(
 			"tab_basic",
@@ -113,18 +109,25 @@ return view.extend({
 			text
 		);
 		o.value("none", _("Disabled"));
-		if (reply.platform.adguardhome_ipset_support) {
-			o.value("adguardhome.ipset", _("AdGuardHome ipset"));
-			o.default = "adguardhome.ipset";
-		}
-		if (reply.platform.dnsmasq_ipset_support) {
-			o.value("dnsmasq.ipset", _("Dnsmasq ipset"));
-			o.default = "dnsmasq.ipset";
-		}
+		o.default = "none";
 		if (reply.platform.dnsmasq_nftset_support) {
 			o.value("dnsmasq.nftset", _("Dnsmasq nft set"));
 			o.default = "dnsmasq.nftset";
+		} else if (
+			L.uci.get(pkg.Name, "config", "resolver_set") === "dnsmasq.nftset"
+		) {
+			// Support detection can fail transiently, for instance when dnsmasq
+			// is not installed or not yet running. Without the stored value in
+			// the choice list the select falls back to its first entry and
+			// saving would silently rewrite resolver_set to "none". The
+			// description above already states that support is missing.
+			o.value("dnsmasq.nftset", _("Dnsmasq nft set"));
 		}
+		// luci-base 974b5864e05e removes options whose value equals their
+		// default. pbr provisions resolver_set in /etc/config/pbr and in
+		// uci-defaults, so without this the stored dnsmasq.nftset would be
+		// deleted on the first Save and nft set handling silently disabled.
+		o.rmempty = false;
 
 		o = s.taboption(
 			"tab_basic",
@@ -189,10 +192,53 @@ return view.extend({
 		o.value("", _("No Change"));
 		reply.interfaces.forEach((element) => {
 			if (element.toLowerCase() !== "ignore") {
-				o.value(element);
+				o.value(element, reply.interface_labels[element] || element);
 			}
 		});
 		o.rmempty = true;
+
+		o = s.taboption(
+			"tab_advanced",
+			form.Value,
+			"uplink_interface",
+			_("Default Uplink Interface (IPv4)"),
+			_("Force the default IPv4 uplink interface used by the service. " +
+				"Select from the list of known interfaces or enter a custom interface name.")
+		);
+		if (Array.isArray(reply.interfaces)) {
+			reply.interfaces.forEach((element) => {
+				if (element.toLowerCase() !== "ignore") {
+					o.value(element, reply.interface_labels[element] || element);
+				}
+			});
+		}
+		o.datatype = "network";
+		o.default = "wan";
+		// Keeps the default visible in /etc/config/pbr. luci-base 974b5864e05e
+		// removes values equal to the default and made forcewrite unreachable
+		// in exactly that case, so rmempty is what forces the write now.
+		o.rmempty = false;
+
+		o = s.taboption(
+			"tab_advanced",
+			form.Value,
+			"uplink_interface6",
+			_("Default Uplink Interface (IPv6)"),
+			_("Force the default IPv6 uplink interface used by the service. " +
+				"Select from the list of known interfaces or enter a custom interface name.")
+		);
+		if (Array.isArray(reply.interfaces)) {
+			reply.interfaces.forEach((element) => {
+				if (element.toLowerCase() !== "ignore") {
+					o.value(element, reply.interface_labels[element] || element);
+				}
+			});
+		}
+		o.datatype = "network";
+		o.default = "wan6";
+		// See uplink_interface above.
+		o.rmempty = false;
+		o.depends("ipv6_enabled", "1");
 
 		o = s.taboption(
 			"tab_advanced",
@@ -240,34 +286,8 @@ return view.extend({
 		);
 		o.rmempty = true;
 		o.placeholder = "30000";
-		o.datatype = "uinteger";
+		o.datatype = "range(99,32765)";
 		o.default = "30000";
-
-		o = s.taboption(
-			"tab_webui",
-			form.ListValue,
-			"webui_show_ignore_target",
-			_("Add Ignore Target"),
-			_(
-				"Adds 'ignore' to the list of interfaces for policies. See the %sREADME%s for details."
-			).format(
-				'<a href="' + pkg.URL + '#ignore-target" target="_blank">',
-				"</a>"
-			)
-		);
-		o.value("0", _("Disabled"));
-		o.value("1", _("Enabled"));
-		o.default = "0";
-		o.optional = false;
-
-		o = s.taboption(
-			"tab_webui",
-			form.DynamicList,
-			"webui_supported_protocol",
-			_("Supported Protocols"),
-			_("Display these protocols in protocol column in Web UI.")
-		);
-		o.optional = false;
 
 		s = m.section(
 			form.GridSection,
@@ -318,21 +338,97 @@ return view.extend({
 		o.default = "";
 
 		o = s.option(form.ListValue, "proto", _("Protocol"));
-		var proto = L.toArray(
-			L.uci.get(pkg.Name, "config", "webui_supported_protocol")
-		);
-		if (!proto.length) {
-			proto = ["all", "tcp", "udp", "tcp udp", "icmp"];
+		o.value("", _("all"));
+		o.default = "";
+		// 'proto' only ever reaches a rule as a prefix on sport/dport, so a
+		// protocol that cannot carry a port cannot work here: with a port it
+		// emits e.g. 'icmp dport { 53 }', which nft refuses -- rejecting the
+		// whole ruleset -- and without one it is dropped and the policy matches
+		// every protocol. reply.protocols is built from /etc/protocols, so most
+		// of what it lists is unusable; offer only what nft can actually match.
+		// To route ICMP use "Default ICMP Interface" on the Advanced tab.
+		var portCapable = ["tcp", "udp", "sctp", "dccp", "udplite"];
+		var usableProtos = reply.protocols.filter(function (p) {
+			return portCapable.indexOf(p) !== -1;
+		});
+		// "tcp udp" is a composite value, not a protocol: pbr splits proto on
+		// whitespace and emits one rule per token, and it is by far the most
+		// common pairing, so it stays as a single convenient choice.
+		var popularProtos = ["tcp", "udp", "tcp udp"];
+		// Every value actually offered, so the fallback below can tell whether a
+		// configured value is still in the list. Added in the same place as
+		// o.value() so the two cannot drift apart.
+		var offered = [""];
+		function offer(p, label) {
+			if (offered.indexOf(p) !== -1) return false;
+			label ? o.value(p, label) : o.value(p);
+			offered.push(p);
+			return true;
 		}
-		proto.forEach((element) => {
-			if (element === "all") {
-				o.value("", _("all"));
-				o.default = "";
-			} else {
-				o.value(element.toLowerCase());
+		var hasPopular = false;
+		popularProtos.forEach(function (p) {
+			if (p === "tcp udp") {
+				if (usableProtos.indexOf("tcp") !== -1 && usableProtos.indexOf("udp") !== -1) {
+					if (offer(p)) hasPopular = true;
+				}
+			} else if (usableProtos.indexOf(p) !== -1) {
+				if (offer(p)) hasPopular = true;
 			}
 		});
+		var hasOther = false;
+		usableProtos.forEach(function (p) {
+			if (popularProtos.indexOf(p) === -1) {
+				if (offer(p)) hasOther = true;
+			}
+		});
+		// Keep whatever an existing config already holds, even though it is no
+		// longer offered -- otherwise opening this page silently rewrites the
+		// policy to 'all' on the next save, changing what it matches.
+		L.uci.sections(pkg.Name, "policy", function (sec) {
+			var cur = sec.proto;
+			if (cur) offer(cur, cur + " " + _("(unsupported)"));
+		});
 		o.rmempty = true;
+		if (hasPopular && hasOther) {
+			var _protoRenderWidget = o.renderWidget;
+			o.renderWidget = function () {
+				var node = _protoRenderWidget.apply(this, arguments);
+				var sel = node.querySelector ? node.querySelector("select") : null;
+				if (!sel && node.nodeName === "SELECT") sel = node;
+				if (sel) {
+					var lastOpt = null;
+					sel.querySelectorAll("option").forEach(function (opt) {
+						if (popularProtos.indexOf(opt.value) !== -1)
+							lastOpt = opt;
+					});
+					if (lastOpt && lastOpt.nextElementSibling) {
+						sel.insertBefore(
+							E("option", { "disabled": "", "style": "text-align:center" },
+								"── " + _("All Protocols") + " ──"),
+							lastOpt.nextSibling
+						);
+					}
+				}
+				var ul = node.querySelector ? node.querySelector("ul") : null;
+				if (ul) {
+					var lastLi = null;
+					ul.querySelectorAll("li[data-value]").forEach(function (li) {
+						if (popularProtos.indexOf(li.getAttribute("data-value")) !== -1)
+							lastLi = li;
+					});
+					if (lastLi && lastLi.nextElementSibling) {
+						lastLi.parentNode.insertBefore(
+							E("li", {
+								"unselectable": "",
+								"style": "text-align:center;opacity:0.6;font-size:90%"
+							}, "── " + _("All Protocols") + " ──"),
+							lastLi.nextSibling
+						);
+					}
+				}
+				return node;
+			};
+		}
 
 		o = s.option(form.ListValue, "chain", _("Chain"));
 		o.value("", "prerouting");
@@ -343,7 +439,7 @@ return view.extend({
 
 		o = s.option(form.ListValue, "interface", _("Interface"));
 		reply.interfaces.forEach((element) => {
-			o.value(element);
+			o.value(element, reply.interface_labels[element] || element);
 		});
 		o.datatype = "network";
 		o.rmempty = false;
@@ -384,7 +480,7 @@ return view.extend({
 		o.rmempty = false;
 		o.datatype = "list(or(cidr,host,network,ipaddr))";
 		reply.interfaces.forEach((element) => {
-			element === "ignore" || o.value(element);
+			element === "ignore" || o.value(element, reply.interface_labels[element] || element);
 		});
 
 		o = s.option(form.Value, "dest_dns_port", _("Remote DNS Port"));
@@ -442,6 +538,132 @@ return view.extend({
 		o.editable = true;
 		o.rmempty = false;
 
-		return Promise.all([status.render(), m.render()]);
+		return Promise.all([status.render(), m.render()]).then(function (nodes) {
+			var statusNode = nodes[0];
+
+			// Saving settings fires pbr's procd config.change trigger, which
+			// reloads the service asynchronously. LuCI reloads the page once the
+			// apply completes, so getInitStatus() often lands mid-reload and
+			// reports state that is already out of date -- and nothing ever
+			// re-checks it. Nothing in this app registers a poll, so whatever is
+			// on screen after that first fetch stays there until the user
+			// refreshes by hand.
+			//
+			// Two ways that shows up. A service caught mid-restart reads as
+			// stopped and stays "Stopped". And -- since r97 reports a policy's
+			// 'proto' and rejects an unusable chain -- a warning the user has
+			// just corrected stays on screen, because the reload never makes the
+			// service look stopped, so the old check (enabled && !running) never
+			// armed for it.
+			//
+			// So arm whenever there is something that could still change: the
+			// service is not running yet, or the status carries messages that a
+			// reload may be about to revise.
+			//
+			// This deliberately uses setTimeout rather than LuCI's poll module
+			// (same approach as pollServiceStatus() in pbr/status.js): a
+			// registered poll drives LuCI's global auto-refresh indicator, which
+			// would sit at "Paused" once we unregistered, as if the page had
+			// stalled.
+			var hasMessages = function (reply) {
+				return (
+					((reply.errors || []).length > 0) ||
+					((reply.warnings || []).length > 0)
+				);
+			};
+
+			// Everything the status box shows that a config change can alter.
+			// Comparing it across ticks lets us stop as soon as the service has
+			// settled, instead of guessing how long a reload takes -- a large
+			// config can take the better part of a minute.
+			var stateSignature = function (reply) {
+				// Sorted, so a reload that reports the same messages in a
+				// different order counts as settled instead of flip-flopping
+				// until the attempt limit. The order pbr emits them in follows
+				// its policy processing and is not something the panel depends
+				// on.
+				var codes = function (list) {
+					return (list || [])
+						.map(function (m) {
+							return m.code + "\u0000" + m.info;
+						})
+						.sort();
+				};
+				return JSON.stringify([
+					!!reply.running,
+					!!reply.enabled,
+					codes(reply.errors),
+					codes(reply.warnings),
+				]);
+			};
+
+			if (statusData.enabled && (!statusData.running || hasMessages(statusData))) {
+				var attempts = 0;
+				var maxAttempts = 22; // give up after ~90s
+				var initialSig = stateSignature(statusData);
+				var lastSig = initialSig;
+
+				// Check quickly at first, since a reload normally completes
+				// within a few seconds, then ease off so that a slow restart
+				// doesn't hammer an RPC this expensive -- and doesn't compete
+				// for CPU with the very reload we're waiting on.
+				var delayFor = function (done) {
+					if (done < 4) return 1500;
+					if (done < 8) return 3000;
+					return 5000;
+				};
+
+				// Re-render only once the state settles, so the service control
+				// buttons inside the status box aren't torn out from under the
+				// user on every tick.
+				var refreshStatus = function () {
+					return status.render().then(function (freshNode) {
+						if (statusNode.isConnected === false) return;
+						dom.content(
+							statusNode,
+							Array.prototype.slice.call(freshNode.childNodes)
+						);
+					});
+				};
+
+				var checkStatus = function () {
+					// Stop if the user has navigated away: LuCI replaces the
+					// view but pending timers keep running, and getInitStatus()
+					// is expensive enough that polling a page nobody is looking
+					// at is worth avoiding. Written as `=== false` so a browser
+					// without isConnected simply behaves as before.
+					if (statusNode.isConnected === false) return;
+
+					attempts++;
+					L.resolveDefault(pbr.getInitStatus(pkg.Name), {})
+						.then(function (res) {
+							var reply = (res && res[pkg.Name]) || {};
+							var sig = stateSignature(reply);
+
+							// Settled once two consecutive reads agree, or we
+							// have waited long enough.
+							if (sig === lastSig || attempts >= maxAttempts) {
+								// Only redraw if what is on screen is actually
+								// out of date. A service sitting on a permanent
+								// warning therefore costs one extra RPC per page
+								// load and no redraw at all.
+								if (sig !== initialSig) return refreshStatus();
+								return;
+							}
+
+							lastSig = sig;
+							setTimeout(checkStatus, delayFor(attempts));
+						})
+						.catch(function () {
+							if (attempts < maxAttempts)
+								setTimeout(checkStatus, delayFor(attempts));
+						});
+				};
+
+				setTimeout(checkStatus, delayFor(0));
+			}
+
+			return nodes;
+		});
 	},
 });
