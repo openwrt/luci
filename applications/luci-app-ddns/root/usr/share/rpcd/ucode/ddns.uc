@@ -115,6 +115,8 @@ const methods = {
 				if (section == '.anonymous')
 					return;
 
+				// ddns-scripts runs a service only if it is enabled; it is disabled by default
+				const enabled = s['enabled'] in [ '1', 'on', 'true', 'yes', 'enabled' ];
 				const ipFile = `${rundir}/${section}.ip`;
 
 				if (stat(ipFile)?.type == 'file') {
@@ -187,9 +189,9 @@ const methods = {
 					nextUpdate = 'Verify';
 				} else if (forcedUpdateInterval === 0) {
 					nextUpdate = 'Run once';
-				} else if (pid == 0 && s['enabled'] == '0') {
+				} else if (pid == 0 && !enabled) {
 					nextUpdate = 'Disabled';
-				} else if (pid == 0 && s['enabled'] != '0') {
+				} else if (pid == 0) {
 					nextUpdate = 'Stopped';
 				}
 
