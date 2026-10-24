@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-10-18 16:40+0000\n"
+"PO-Revision-Date: 2026-10-23 20:11+0000\n"
 "Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/>"
 "\n"
@@ -624,12 +624,17 @@ msgid ""
 "DUID of this device, else a DUID-LL derived from the MAC address of this "
 "interface."
 msgstr ""
+"<em>자동</em>은 아래에 설정된 클라이언트 ID를 사용하며, 없으면 이 장치의 "
+"기본 DUID를, 그마저도 없으면 이 인터페이스의 MAC 주소에서 파생된 DUID-LL을 "
+"사용합니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:39
 msgid ""
 "<em>Automatic</em> uses the client ID configured below, else the default "
 "DUID of this device, else the MAC address of this interface."
 msgstr ""
+"<em>자동</em>은 아래에 설정된 클라이언트 ID를 사용하며, 없으면 이 장치의 "
+"기본 DUID를, 그마저도 없으면 이 인터페이스의 MAC 주소를 사용합니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:44
@@ -637,21 +642,25 @@ msgid ""
 "<em>Default DUID</em> always uses the default DUID of this device, even if a "
 "client ID is configured below."
 msgstr ""
+"<em>기본 DUID</em>는 아래에 클라이언트 ID가 설정되어 있더라도 항상 이 장치의 "
+"기본 DUID를 사용합니다."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:45
 msgid ""
 "<em>Hardware address</em> always uses a DUID-LL derived from the MAC address "
 "of this interface."
 msgstr ""
+"<em>하드웨어 주소</em>는 항상 이 인터페이스의 MAC 주소에서 파생된 DUID-LL을 "
+"사용합니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:41
 msgid ""
 "<em>Hardware address</em> always uses the MAC address of this interface."
-msgstr ""
+msgstr "<em>하드웨어 주소</em>는 항상 이 인터페이스의 MAC 주소를 사용합니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:42
 msgid "<em>None</em> sends no client identifier at all."
-msgstr ""
+msgstr "<em>없음</em>은 클라이언트 식별자를 전혀 전송하지 않습니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
@@ -1142,7 +1151,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:219
 msgid "Add local domain suffix to names served from hosts files."
-msgstr "hosts 파일에 등록된 이름 뒤에 로컬 도메인 접미사를 추가합니다."
+msgstr "Hosts 파일에 등록된 이름 뒤에 로컬 도메인 접미사를 추가합니다."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:285
 msgid "Add multicast rule"
@@ -1296,6 +1305,10 @@ msgid ""
 "it is offered. Enabled by default only in Compatibility Mode on a Wi-Fi 7 "
 "(EHT) radio, disabled otherwise."
 msgstr ""
+"GCMP-256 페어와이즈 암호화를 알립니다. Wi-Fi 7 (EHT)에서는 필수이며 그 외의 "
+"경우에도 권장됩니다. 하지만 일부 클라이언트 및 칩셋은 이를 제공할 때 연결에 "
+"실패할 수 있습니다. Wi-Fi 7 (EHT) 무선의 호환성 모드에서만 기본적으로 "
+"활성화되고, 그 외에는 비활성화됩니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2188
 msgid ""
@@ -1305,6 +1318,11 @@ msgid ""
 "by default only in Compatibility Mode on a Wi-Fi 7 (EHT) radio, disabled "
 "otherwise."
 msgstr ""
+"SAE-EXT-KEY AKM (그룹 종속 해시를 사용하는 SAE)을 알립니다. Wi-Fi 7 (EHT)"
+"에서는 필수이며 그 외의 경우에도 권장됩니다. 하지만 일부 클라이언트는 이를 "
+"제공할 때, 특히 802.11r 고속 로밍(Fast Transition)과 함께 사용할 때 "
+"비정상적으로 동작할 수 있습니다. Wi-Fi 7 (EHT) 무선의 호환성 모드에서만 "
+"기본적으로 활성화되고, 그 외에는 비활성화됩니다."
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1690,11 +1708,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:672
 msgid "Assign VLAN %d as tagged on selected ports"
-msgstr ""
+msgstr "선택한 포트에 Tagged로 VLAN %d 할당"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:678
 msgid "Assign VLAN %d as untagged (native) on selected ports"
-msgstr ""
+msgstr "선택한 포트에 Untagged (네이티브)로 VLAN %d 할당"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1271
 msgid ""
@@ -1703,7 +1721,7 @@ msgstr "모든 공인 IPv6 접두사 중 지정된 길이만큼을 인터페이�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:459
 msgid "Assign membership"
-msgstr ""
+msgstr "멤버십 할당"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1276
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -2523,7 +2541,7 @@ msgstr "초기화 후 디렉터리로 chroot"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1329
 msgid "Cipher"
-msgstr "암호 알고리즘"
+msgstr "암호화 알고리듬"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:91
 msgid "Cisco UDP encapsulation"
@@ -2684,7 +2702,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Compute outgoing checksum (optional)."
-msgstr ""
+msgstr "송신 체크섬을 계산합니다. (선택 사항)"
 
 #: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1582
@@ -3341,7 +3359,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:648
 msgid "Delay n seconds after connection"
-msgstr ""
+msgstr "연결 후 지연 시간 (초)"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:367
 msgid "Delay tun/tap open and up script execution"
@@ -3552,7 +3570,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:935
 msgid "Diffie-Hellman parameters"
-msgstr ""
+msgstr "디피-헬먼 매개변수"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:483
 msgctxt "footstrap"
@@ -3776,7 +3794,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:595
 msgid "Do not bind to local address and port"
-msgstr ""
+msgstr "로컬 주소 및 포트에 바인딩 안 함"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:663
 msgid "Do not cache negative replies, e.g. for non-existent domains."
@@ -3879,7 +3897,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:655
 msgid "Don't add routes automatically"
-msgstr ""
+msgstr "경로(Route) 자동 추가 안 함"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1205
 msgid "Don't cache --askpass or --auth-user-pass passwords"
@@ -3899,7 +3917,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:662
 msgid "Don't pull routes automatically"
-msgstr ""
+msgstr "경로(Route) 자동 가져오기 안 함"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:843
 msgid "Don't re-read key on restart"
@@ -4218,7 +4236,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:688
 msgid "Empirically measure MTU"
-msgstr ""
+msgstr "MTU 경험적 측정"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1148
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1176
@@ -4294,7 +4312,7 @@ msgstr "IPv6 협상 사용"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:67
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:93
 msgid "Enable IPv6 negotiation on the PPP link"
-msgstr ""
+msgstr "PPP 링크에서 IPv6 협상을 활성화합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1270
 msgid "Enable IPv6 segment routing"
@@ -4318,11 +4336,11 @@ msgstr "NTP 클라이언트 활성화"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:999
 msgid "Enable OpenSSL hardware crypto engines"
-msgstr ""
+msgstr "OpenSSL 하드웨어 암호화 엔진 활성화"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:681
 msgid "Enable Path MTU discovery"
-msgstr ""
+msgstr "경로 MTU 탐색 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1713
 msgid "Enable Private PSK (PPSK)"
@@ -4342,11 +4360,11 @@ msgstr "TFTP 서버 활성화"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1050
 msgid "Enable TLS and assume client role"
-msgstr ""
+msgstr "TLS 활성화 및 클라이언트 역할 수행"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1043
 msgid "Enable TLS and assume server role"
-msgstr ""
+msgstr "TLS 활성화 및 서버 역할 수행"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1337
 msgid "Enable VLAN filtering"
@@ -4383,7 +4401,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:743
 msgid "Enable internal datagram fragmentation"
-msgstr ""
+msgstr "내부 데이터그램 단편화 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2181
 msgid "Enable key reinstallation (KRACK) countermeasures"
@@ -4574,7 +4592,7 @@ msgstr "암호화"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:975
 msgid "Encryption cipher for packets"
-msgstr ""
+msgstr "패킷 암호화 알고리듬"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:64
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:84
@@ -4724,7 +4742,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:218
 msgid "Expand hosts"
-msgstr "hosts 이름 확장"
+msgstr "Hosts 이름 확장"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-chrome.js:470
 msgid "Expand menu"
@@ -5380,7 +5398,7 @@ msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2184
 msgid "GCMP-256 pairwise cipher"
-msgstr "GCMP-256 페어와이즈 암호"
+msgstr "GCMP-256 페어와이즈 암호화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:194
@@ -5593,7 +5611,7 @@ msgstr "LuCI openfortivpn 프로시저에 접근 권한 부여"
 
 #: protocols/luci-proto-openvpn/root/usr/share/rpcd/acl.d/luci-proto-openvpn.json:3
 msgid "Grant access to LuCI openvpn procedures"
-msgstr ""
+msgstr "LuCI OpenVPN 프로시저에 접근 권한 부여"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:67
 msgid "Grant access to Plugin management"
@@ -5719,7 +5737,7 @@ msgstr "HE.net 사용자 이름"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:956
 msgid "HMAC authentication for packets"
-msgstr ""
+msgstr "패킷 HMAC 인증"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:118
 msgid "HTTP error %d"
@@ -5822,7 +5840,7 @@ msgstr "훅: <strong>%h</strong> (%h), 우선순위: <strong>%d</strong>"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:92
 msgid "Hop Penalty"
-msgstr ""
+msgstr "홉 페널티"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2671
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
@@ -6430,7 +6448,7 @@ msgstr "무시"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:803
 msgid "Ignore hosts files directory"
-msgstr "hosts 파일 디렉터리 무시"
+msgstr "Hosts 파일 디렉터리 무시"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:731
 msgid "Ignore interface"
@@ -6560,14 +6578,14 @@ msgstr "수신 인터페이스"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:99
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:64
 msgid "Incoming key"
-msgstr ""
+msgstr "수신 키"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
 msgid "Incoming serialization"
-msgstr ""
+msgstr "수신 순서화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:551
 msgid "Indoor Only Channel Selected"
@@ -7051,7 +7069,7 @@ msgstr "키 파일 크기 초과"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:99
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:64
 msgid "Key for incoming packets (optional)."
-msgstr ""
+msgstr "수신 패킷에 사용할 키를 지정합니다. (선택 사항)"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:96
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:101
@@ -7059,7 +7077,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:68
 msgid "Key for outgoing packets (optional)."
-msgstr ""
+msgstr "송신 패킷에 사용할 키를 지정합니다. (선택 사항)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:522
 msgctxt "Label indicating that WireGuard peer lacks public key"
@@ -7857,7 +7875,7 @@ msgstr "메일 (Mail)"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:545
 msgid "Major mode"
-msgstr ""
+msgstr "주요 모드"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:282
 msgid ""
@@ -8150,7 +8168,7 @@ msgstr "Mesh 라우팅"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh and routing related options"
-msgstr ""
+msgstr "Mesh 및 라우팅 관련 옵션"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Method not found"
@@ -8638,7 +8656,7 @@ msgstr "네트워크 인터페이스"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1590
 msgid "Networking"
-msgstr ""
+msgstr "네트워크"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1315
 msgid "Never"
@@ -9303,7 +9321,7 @@ msgstr "통신사 이름"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:289
 msgid "Optimize TUN/TAP/UDP writes"
-msgstr ""
+msgstr "TUN/TAP/UDP 쓰기 최적화"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2145
 #: modules/luci-base/htdocs/luci-static/resources/form.js:5150
@@ -9497,14 +9515,14 @@ msgstr "송신 인터페이스"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:68
 msgid "Outgoing key"
-msgstr ""
+msgstr "송신 키"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Outgoing serialization"
-msgstr ""
+msgstr "송신 순서화"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:50
 msgid "Output Interface"
@@ -9996,7 +10014,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Perform outgoing packets serialization (optional)."
-msgstr ""
+msgstr "송신 패킷 순서화를 수행합니다. (선택 사항)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:34
 msgid "Perform reboot"
@@ -10268,7 +10286,7 @@ msgstr "선호 클라이언트 ID"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
-msgstr ""
+msgstr "선호 네트워크 기술"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Prefix Delegated"
@@ -10975,27 +10993,27 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:509
 msgid "Remove VLAN %d"
-msgstr ""
+msgstr "VLAN %d 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:675
 msgid "Remove VLAN %d as tagged from all selected ports"
-msgstr ""
+msgstr "모든 선택한 포트에서 Tagged인 VLAN %d 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:674
 msgid "Remove VLAN %d as tagged from selected ports that have it"
-msgstr ""
+msgstr "설정된 선택한 포트에서 Tagged인 VLAN %d 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:681
 msgid "Remove VLAN %d as untagged (native) from all selected ports"
-msgstr ""
+msgstr "모든 선택한 포트에서 Untagged (네이티브)인 VLAN %d 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:680
 msgid "Remove VLAN %d as untagged (native) from selected ports that have it"
-msgstr ""
+msgstr "설정된 선택한 포트에서 Untagged (네이티브)인 VLAN %d 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:826
 msgid "Remove VLAN %d?"
-msgstr ""
+msgstr "VLAN %d 제거?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:701
 msgid ""
@@ -11114,14 +11132,14 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:107
 msgid "Require incoming checksum (optional)."
-msgstr ""
+msgstr "수신 체크섬을 요구합니다. (선택 사항)"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
 msgid "Require incoming packets serialization (optional)."
-msgstr ""
+msgstr "수신 패킷 순서화를 요구합니다. (선택 사항)"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1231
 msgid "Require remote cert extended key usage on certificate"
@@ -11795,7 +11813,7 @@ msgstr "일정 관리 데몬"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1592
 msgid "Scripting"
-msgstr ""
+msgstr "스크립트"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:168
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:145
@@ -11904,7 +11922,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:458
 msgid "Select ports"
-msgstr ""
+msgstr "포트 선택"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:42
 msgid ""
@@ -12051,7 +12069,7 @@ msgstr "syslog 항목의 로그 클래스/분류(Facility)를 설정합니다."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:532
 msgid "Set output verbosity"
-msgstr ""
+msgstr "출력 상세 수준 설정"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1430
 msgid "Set size of real and virtual address hash tables"
@@ -12084,12 +12102,12 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:775
 msgid "Set tun/tap TX queue length"
-msgstr ""
+msgstr "TUN/TAP TX 대기열 길이 설정"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:88
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:96
 msgid "Set tun/tap adapter parameters"
-msgstr ""
+msgstr "TUN/TAP 어댑터 매개변수 설정"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:727
 msgid "Set tun/tap device MTU"
@@ -12110,7 +12128,7 @@ msgstr "프록시 IPv6 이웃에 대한 경로를 설정합니다."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:751
 msgid "Set upper bound on TCP MSS"
-msgstr ""
+msgstr "TCP MSS 상한 설정"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1247
 msgid "Sets default route for all traffic"
@@ -12132,7 +12150,7 @@ msgstr ""
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:109
 msgid "Setting the preferred network technology."
-msgstr ""
+msgstr "선호하는 네트워크 기술을 설정합니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:11
 msgid "Settings"
@@ -12148,7 +12166,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:783
 msgid "Shaping for peer bandwidth"
-msgstr ""
+msgstr "피어 대역폭 셰이핑"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:359
 msgid "Shell cmd to execute after tun device open"
@@ -12235,6 +12253,9 @@ msgid ""
 "mode for this SSID. The advertised bitmap is derived from the encryption "
 "mode."
 msgstr ""
+"한 번 연결된 클라이언트가 이 SSID에 대해 더 취약한 보안 모드로 "
+"다운그레이드하지 않도록 전환 비활성화 (WPA3 규격 v3.5 섹션 13) 신호를 "
+"보냅니다. 알림 비트맵은 암호화 모드에서 파생됩니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:262
 msgid "Signal:"
@@ -12528,7 +12549,7 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:142
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:142
 msgid "Specify a TOS (Type of Service)."
-msgstr ""
+msgstr "TOS (서비스 유형)를 지정합니다."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:74
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:79
@@ -12546,6 +12567,8 @@ msgid ""
 "Specify a TTL (Time to Live) for the encapsulating packet other than the "
 "default (64) (optional)."
 msgstr ""
+"기본값 (64) 대신 캡슐화 패킷에 사용할 TTL (생존 시간)을 지정합니다. (선택 "
+"사항)"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:58
@@ -12554,7 +12577,7 @@ msgstr ""
 msgid ""
 "Specify a TTL (Time to Live) for the encapsulating packet other than the "
 "default (64)."
-msgstr ""
+msgstr "기본값 (64) 대신 캡슐화 패킷에 사용할 TTL (생존 시간)을 지정합니다."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:84
 msgid ""
@@ -12575,12 +12598,14 @@ msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes) (optional)."
 msgstr ""
+"기본값 (1280바이트) 대신 사용할 MTU (최대 전송 단위)를 지정합니다. (선택 "
+"사항)"
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes)."
-msgstr ""
+msgstr "기본값 (1280바이트) 대신 사용할 MTU (최대 전송 단위)를 지정합니다."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1008
 msgid "Specify the curve to use for ECDH"
@@ -12860,7 +12885,7 @@ msgstr "CIDR 목록 형식으로 전환"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
 msgid "Switch/VLAN config"
-msgstr ""
+msgstr "스위치/VLAN 설정"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3203
 msgid "Symbolic link"
@@ -12983,7 +13008,7 @@ msgstr "TFTP 서버 루트"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1109
 msgid "TLS 1.3 or newer cipher"
-msgstr ""
+msgstr "TLS 1.3 이상 암호화 알고리듬"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1283
 msgid "TLS cert profile"
@@ -12991,7 +13016,7 @@ msgstr "TLS 인증서 프로필"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1065
 msgid "TLS cipher"
-msgstr "TLS 암호화 방식"
+msgstr "TLS 암호화 알고리듬"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:274
 msgid "TOS passthrough (applies to IPv4 only)"
@@ -13291,7 +13316,7 @@ msgstr ""
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:45
 msgid "The algorithm that is used to discover mesh routes"
-msgstr ""
+msgstr "Mesh 경로를 탐색하는 데 사용되는 알고리즘입니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2516
 msgid ""
@@ -13450,7 +13475,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1273
 msgid "The highest supported TLS version"
-msgstr ""
+msgstr "TLS 최대 지원 버전"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:93
 msgid ""
@@ -13459,6 +13484,9 @@ msgid ""
 "forwarded OGM, thereby propagating the cost of an extra hop (the packet has "
 "to be received and retransmitted which costs airtime)"
 msgstr ""
+"홉 페널티 설정을 통해 batman-adv가 멀티 홉 경로와 짧은 경로 중 어느 쪽을 "
+"선호할지 조정할 수 있습니다. 이 값은 전달되는 각 OGM의 TQ에 적용되어, 추가 "
+"홉 비용 (패킷 수신 및 재전송에 소요되는 에어타임)을 반영합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:940
 msgid "The hostname for this host (optional)."
@@ -13516,7 +13544,7 @@ msgstr "터널이 생성되는 데 사용되는 로컬 IPv6 주소입니다. (�
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1263
 msgid "The lowest supported TLS version"
-msgstr ""
+msgstr "TLS 최소 지원 버전"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1102
 msgid ""
@@ -13915,7 +13943,7 @@ msgstr "이 옵션은 캐시에 추가적인 레코드 유형을 추가합니다
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2084
 msgid ""
 "This option cannot be used because the ca-bundle package is not installed."
-msgstr ""
+msgstr "ca-bundle 패키지가 설치되어 있지 않아 이 옵션을 사용할 수 없습니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:422
 msgid "This page displays the active connections via this device."
@@ -14220,7 +14248,7 @@ msgstr "서비스 유형(TOS)"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:203
 msgid "Type of used device"
-msgstr ""
+msgstr "사용할 장치 유형"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:646
 msgid "UC"
@@ -14253,7 +14281,7 @@ msgstr "UDP:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:168
 msgid "UID-range"
-msgstr ""
+msgstr "UID 범위"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1856
 msgid "ULA for IPv6 is analogous to IPv4 private network addressing."
@@ -14323,7 +14351,7 @@ msgstr "클라이언트 ID 할당 실패"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:200
 msgid "Unable to obtain mount information"
-msgstr ""
+msgstr "마운트 정보를 가져올 수 없음"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:310
 msgid "Unable to reset ip6tables counters: %s"
@@ -14619,14 +14647,14 @@ msgstr "ISO/IEC 3166 alpha2 국가 코드를 사용합니다."
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:78
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:84
 msgid "Use MTU on tunnel interface"
-msgstr ""
+msgstr "터널 인터페이스에 MTU 사용"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:85
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:65
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:49
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:80
 msgid "Use TTL on tunnel interface"
-msgstr ""
+msgstr "터널 인터페이스에 TTL 사용"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:217
 msgid "Use VLAN tagging"
@@ -14681,13 +14709,15 @@ msgstr "게이트웨이 메트릭 사용"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:88
 msgid "Use legacy MAP"
-msgstr ""
+msgstr "레거시 MAP 사용"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:88
 msgid ""
 "Use legacy MAP interface identifier format (draft-ietf-softwire-map-00) "
 "instead of RFC7597"
 msgstr ""
+"RFC7597 대신 레거시 MAP 인터페이스 식별자 형식 (draft-ietf-softwire-map-00)"
+"을 사용합니다"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:581
 msgid "Use protocol"
@@ -14708,7 +14738,7 @@ msgstr "시스템 인증서 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2077
 msgid "Use system certificates for inner-tunnel"
-msgstr ""
+msgstr "내부 터널에 시스템 인증서 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:656
 msgctxt "use the add button to add a new tag"
@@ -14747,7 +14777,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:210
 msgid "Use tun/tap device node"
-msgstr ""
+msgstr "사용할 TUN/TAP 장치 노드"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1472
 msgid "Use username as common name"
@@ -14841,11 +14871,11 @@ msgstr "VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1016
 msgid "VLAN %d does not exist."
-msgstr ""
+msgstr "VLAN %d가 존재하지 않습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:794
 msgid "VLAN %d is already configured."
-msgstr ""
+msgstr "VLAN %d가 이미 설정되어 있습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:472
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1744
@@ -14915,7 +14945,7 @@ msgstr "VPN 서버 포트"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:141
 msgid "VPN Server's certificate SHA1 hash"
-msgstr ""
+msgstr "VPN 서버 인증서 SHA-1 해시"
 
 #: modules/luci-compat/luasrc/model/network/proto_vpnc.lua:8
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:9
@@ -14961,6 +14991,8 @@ msgid ""
 "Validate server certificate using built-in system CA bundle,<br />requires "
 "the \"ca-bundle\" package"
 msgstr ""
+"내장 시스템 CA 번들을 사용하여 서버 인증서를 검증합니다.<br />\"ca-bundle\" "
+"패키지가 필요합니다"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:73
 msgid "Vendor"
