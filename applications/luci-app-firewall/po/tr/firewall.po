@@ -134,8 +134,8 @@ msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"SNAT\">Statik olarak yeniden yaz</var> kaynağa %"
-"{snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
+"<var data-tooltip=\"SNAT\">Statik olarak yeniden yaz</var> kaynağa %{snat_ip?"
+"IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:305
 msgid "A rewrite IP must be specified!"
@@ -682,6 +682,10 @@ msgstr "Geçersiz DSCP işareti"
 msgid "Invalid limit value"
 msgstr "Geçersiz sınır değeri"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:47
+msgid "Invalid set name"
+msgstr "Geçersiz küme adı"
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:382
 msgid "Limit burst"
 msgstr "Sınır patlaması"
@@ -853,6 +857,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:42
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:52
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:204
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:188
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:128
@@ -1171,8 +1176,8 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
-"Bu bölüm,%q öğesinin ortak özelliklerini tanımlar. <em>giriş</em> ve <em>"
-"çıkış</em> seçenekleri, bu bölgeye giren ve çıkan trafik için varsayılan "
+"Bu bölüm,%q öğesinin ortak özelliklerini tanımlar. <em>giriş</em> ve "
+"<em>çıkış</em> seçenekleri, bu bölgeye giren ve çıkan trafik için varsayılan "
 "politikaları ayarlarken, <em>yönlendir</em> seçeneği farklı ağlar arasında "
 "yönlendirilen trafik için politikayı açıklar bölge içinde. <em>Kapsanan "
 "ağla</em>, hangi kullanılabilir ağların bu bölgenin üyesi olduğunu belirtir."
@@ -1296,6 +1301,10 @@ msgstr "İsimsiz yönlendirme"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:205
 msgid "Unnamed rule"
 msgstr "İsimsiz kural"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:57
+msgid "Unnamed set"
+msgstr "Adsız küme"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:129
 msgid "Unnamed zone"
@@ -1626,9 +1635,3 @@ msgstr "geçerli güvenlik duvarı işareti"
 
 #~ msgid "Output"
 #~ msgstr "Çıkış"
-
-#~ msgid "Invalid set name"
-#~ msgstr "Geçersiz küme adı"
-
-#~ msgid "Unnamed set"
-#~ msgstr "Adsız küme"

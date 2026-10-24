@@ -633,8 +633,8 @@ msgstr ""
 "%{ipv6?%{ipv4?<var>IPv4</var> と <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</"
 "var>} の受信%{proto?, プロトコル %{proto#%{next?, }%{item.types?<var "
 "class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">含ま"
-"れる ICMP タイプ - %{item.types#%{next?, }<var>%{item}</var>}</span></var>"
-":<var>%{item.name}</var>}}}%{mark?, マーク <var%{mark.inv? data-"
+"れる ICMP タイプ - %{item.types#%{next?, }<var>%{item}</var>}</span></var>:"
+"<var>%{item.name}</var>}}}%{mark?, マーク <var%{mark.inv? data-"
 "tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with mask %"
 "{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with %"
 "{mark.mask} before compare.\"}}>%{mark.val}</var>}%{helper?, ヘルパー %"
@@ -675,6 +675,10 @@ msgstr "無効な DSCP マーク"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:372
 msgid "Invalid limit value"
 msgstr "無効な制限値"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:47
+msgid "Invalid set name"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:382
 msgid "Limit burst"
@@ -848,6 +852,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:42
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:52
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:204
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:188
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:128
@@ -915,10 +920,9 @@ msgid ""
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
 "一致の対象とするパケットフィールドです。<br />構文: <em>方向_データ型</em>。"
-"例: <code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。"
-"データ型: <code>ip, port, mac, net, set</code>。<br />方向の接頭辞は省略可能"
-"です。<br />*注: データ型 <code>set</code> は fw4 ではサポートされていません"
-"。"
+"例: <code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。デー"
+"タ型: <code>ip, port, mac, net, set</code>。<br />方向の接頭辞は省略可能で"
+"す。<br />*注: データ型 <code>set</code> は fw4 ではサポートされていません。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:356
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:475
@@ -1292,6 +1296,10 @@ msgstr "名称未設定の転送"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:205
 msgid "Unnamed rule"
 msgstr "名称未設定のルール"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:57
+msgid "Unnamed set"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:129
 msgid "Unnamed zone"

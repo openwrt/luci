@@ -34,14 +34,13 @@ msgstr ""
 "container\">%{item.name}<span class=\"cbi-tooltip\">ICMP med typer %"
 "{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</"
 "var>}}}%{mark?, markering <var%{mark.inv? data-tooltip=\"Matcha "
-"brandväggsmarkeringar utom %{mark.num}%{mark.mask? med mask %{mark.mask}}"
-".\":%{mark.mask? data-tooltip=\"Maskera brandväggsmarkeringen med %"
-"{mark.mask} före jämförelse.\"}}>%{mark.val}</var>}%{dscp?, DSCP %"
-"{dscp.inv?<var data-tooltip=\"Matcha DSCP-klassificeringar utom %{dscp.num?:%"
-"{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, hjälpare "
-"%{helper.inv?<var data-tooltip=\"Matcha alla hjälpare utom &quot;%"
-"{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}"
-"\">%{helper.val}</var>}}"
+"brandväggsmarkeringar utom %{mark.num}%{mark.mask? med mask %{mark.mask}}.\":"
+"%{mark.mask? data-tooltip=\"Maskera brandväggsmarkeringen med %{mark.mask} "
+"före jämförelse.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?<var data-"
+"tooltip=\"Matcha DSCP-klassificeringar utom %{dscp.num?:%{dscp.name}}\">%"
+"{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, hjälpare %{helper.inv?"
+"<var data-tooltip=\"Matcha alla hjälpare utom &quot;%{helper.name}&quot;\">%"
+"{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:462
 msgid "-- add IP --"
@@ -390,7 +389,8 @@ msgstr "Förväntat: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:291
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
-msgstr "Väljer uttryckligen tillåtna anslutningsspårningshjälpare för zontrafik"
+msgstr ""
+"Väljer uttryckligen tillåtna anslutningsspårningshjälpare för zontrafik"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:272
 msgid "External IP address"
@@ -475,9 +475,9 @@ msgstr ""
 "Vidarebefordrad %{ipv6?%{ipv4?<var>IPv4</var> och <var>IPv6</var>:<var>IPv6</"
 "var>}:<var>IPv4</var>}%{proto?, protokoll %{proto#%{next?, }<var>%{item.name}"
 "</var>}}%{mark?, markering <var%{mark.inv? data-tooltip=\"Matcha "
-"brandväggsmarkeringar utom %{mark.num}%{mark.mask? med mask %{mark.mask}}"
-".\":%{mark.mask? data-tooltip=\"Maskera brandväggsmarkeringen med %"
-"{mark.mask} före jämförelse.\"}}>%{mark.val}</var>}"
+"brandväggsmarkeringar utom %{mark.num}%{mark.mask? med mask %{mark.mask}}.\":"
+"%{mark.mask? data-tooltip=\"Maskera brandväggsmarkeringen med %{mark.mask} "
+"före jämförelse.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:489
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:359
@@ -633,14 +633,14 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Inkommande %{ipv6?%{ipv4?<var>IPv4</var> och <var>IPv6</var>:<var>IPv6</var>}"
-":<var>IPv4</var>}%{proto?, protokoll %{proto#%{next?, }%{item.types?<var "
-"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
-"med typer %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%"
-"{item.name}</var>}}}%{mark?, markering <var%{mark.inv? data-tooltip=\"Matcha "
-"brandväggsmarkeringar utom %{mark.num}%{mark.mask? med mask %{mark.mask}}"
-".\":%{mark.mask? data-tooltip=\"Maskera brandväggsmarkeringen med %"
-"{mark.mask} före jämförelse.\"}}>%{mark.val}</var>}%{helper?, hjälpare %"
+"Inkommande %{ipv6?%{ipv4?<var>IPv4</var> och <var>IPv6</var>:<var>IPv6</"
+"var>}:<var>IPv4</var>}%{proto?, protokoll %{proto#%{next?, }%{item.types?"
+"<var class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-"
+"tooltip\">ICMP med typer %{item.types#%{next?, }<var>%{item}</var>}</span></"
+"var>:<var>%{item.name}</var>}}}%{mark?, markering <var%{mark.inv? data-"
+"tooltip=\"Matcha brandväggsmarkeringar utom %{mark.num}%{mark.mask? med mask "
+"%{mark.mask}}.\":%{mark.mask? data-tooltip=\"Maskera brandväggsmarkeringen "
+"med %{mark.mask} före jämförelse.\"}}>%{mark.val}</var>}%{helper?, hjälpare %"
 "{helper.inv?<var data-tooltip=\"Matcha alla hjälpare utom &quot;%"
 "{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}"
 "\">%{helper.val}</var>}}"
@@ -678,6 +678,10 @@ msgstr "Ogiltig DSCP-markering"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:372
 msgid "Invalid limit value"
 msgstr "Ogiltigt gränsvärde"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:47
+msgid "Invalid set name"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:382
 msgid "Limit burst"
@@ -856,6 +860,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:42
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:52
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:204
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:188
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:128
@@ -1176,11 +1181,12 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
-"Det här avsnittet definierar gemensamma egenskaper för %q. Alternativen <em>"
-"input</em> och <em>output</em> anger standardpolicyerna för trafik som går "
-"in i respektive ut ur zonen, medan alternativet <em>forward</em> beskriver "
-"policyn för vidarebefordrad trafik mellan olika nätverk inom zonen. <em>"
-"Omfattade nätverk</em> anger vilka tillgängliga nätverk som ingår i zonen."
+"Det här avsnittet definierar gemensamma egenskaper för %q. Alternativen "
+"<em>input</em> och <em>output</em> anger standardpolicyerna för trafik som "
+"går in i respektive ut ur zonen, medan alternativet <em>forward</em> "
+"beskriver policyn för vidarebefordrad trafik mellan olika nätverk inom "
+"zonen. <em>Omfattade nätverk</em> anger vilka tillgängliga nätverk som ingår "
+"i zonen."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:488
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:358
@@ -1301,6 +1307,10 @@ msgstr "Namnlös vidarebefordran"
 msgid "Unnamed rule"
 msgstr "Regel utan namn"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:57
+msgid "Unnamed set"
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:129
 msgid "Unnamed zone"
 msgstr "Zon utan namn"
@@ -1315,8 +1325,8 @@ msgid ""
 "be converted to \"nat\" sections and the firewall will be restarted to apply "
 "the updated configuration."
 msgstr ""
-"När du trycker på ”Fortsätt” konverteras ”redirect”-sektioner med målet ”SNAT"
-"” till ”nat”-sektioner och brandväggen startas om för att tillämpa den "
+"När du trycker på ”Fortsätt” konverteras ”redirect”-sektioner med målet "
+"”SNAT” till ”nat”-sektioner och brandväggen startas om för att tillämpa den "
 "uppdaterade konfigurationen."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:313
