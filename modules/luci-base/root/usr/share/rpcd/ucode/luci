@@ -282,6 +282,12 @@ const methods = {
 				vrf:        access('/sys/module/vrf/refcnt') == true, // vrf.ko is loaded
 				netifd_vrf: false,
 				mptcp:      access('/proc/sys/net/mptcp/enabled'),
+				dsl_datalink_ptm: access('/usr/sbin/rbctl-dsl') == true,
+				dsl_datalink_atm: access('/usr/sbin/rbctl-dsl') == true,
+				dsl_bitswap:      access('/usr/sbin/rbctl-dsl') == true,
+				dsl_sra:          access('/usr/sbin/rbctl-dsl') == true,
+				dsl_snr_offset:   access('/sbin/vdsl_cpe_control') == true,
+				dsl_firmware:     access('/sbin/dsl_cpe_control') == true || access('/sbin/vdsl_cpe_control') == true,
 			};
 
 			const wifi_features = [ 
