@@ -394,6 +394,8 @@ function initNetworkState(refresh) {
 					type:     dev.type,
 					devtype:  dev.devtype,
 					mtu:      dev.mtu,
+					min_mtu:  dev.min_mtu,
+					max_mtu:  dev.max_mtu,
 					qlen:     dev.qlen,
 					wireless: dev.wireless,
 					parent:   dev.parent,
@@ -2940,6 +2942,26 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 */
 	getMTU() {
 		return this._devstate('mtu');
+	},
+
+	/**
+	 * Get the minimum MTU supported by the device.
+	 *
+	 * @returns {number}
+	 * Returns the minimum MTU of the device.
+	 */
+	getMinMTU() {
+		return this._devstate('min_mtu');
+	},
+
+	/**
+	 * Get the maximum MTU supported by the device.
+	 *
+	 * @returns {number}
+	 * Returns the maximum MTU of the device.
+	 */
+	getMaxMTU() {
+		return this._devstate('max_mtu');
 	},
 
 	/**
