@@ -570,14 +570,26 @@ select {
 	width: 100%;
 }
 
+p > label[for] {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+p > input[type="checkbox"],
+p > input[type="radio"],
 label > input[type="checkbox"],
 label > input[type="radio"] {
 	vertical-align: text-top;
 	margin: 0;
+	margin-right: .5em;
 }
 
 label[for] {
 	cursor: pointer;
+	word-break: normal;
 }
 
 input,
@@ -697,6 +709,19 @@ select,
 	height: 30px;
 	display: inline-flex;
 	align-items: center;
+}
+
+p.cbi-checkbox {
+	position: relative;
+	background: transparent;
+	text-align: start;
+	padding: 0 14px;
+	font-size: 13px;
+	line-height: 2em;
+	border: 1px solid var(--border-color-high);
+	border-radius: 4px;
+	display: inline-block;
+	cursor: pointer;
 }
 
 .cbi-radio {
