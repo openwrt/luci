@@ -1,0 +1,14 @@
+#!/bin/sh
+
+action=$1
+shift
+
+case "$action" in
+	conntrack)
+		if [[ -f /proc/net/nf_conntrack ]]; then
+			/bin/grep -vF TIME_WAIT /proc/net/nf_conntrack
+		elif [[ -x /usr/sbin/conntrack ]]; then
+			/usr/sbin/conntrack -L -o extended | /bin/grep -vF TIME_WAIT
+		fi
+	;;
+esac
