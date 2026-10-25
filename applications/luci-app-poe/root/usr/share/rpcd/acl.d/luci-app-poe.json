@@ -1,0 +1,25 @@
+{
+	"luci-app-poe": {
+		"description": "Edit PoE configuration",
+		"read": {
+			"uci": [ "poe" ]
+		},
+		"write": {
+			"uci": [ "poe" ]
+		}
+	},
+
+	"luci-app-poe-status": {
+		"description": "View PoE status and toggle ports",
+		"read": {
+			"ubus": {
+				"poe": [ "info" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"poe": [ "manage" ]
+			}
+		}
+	}
+}
