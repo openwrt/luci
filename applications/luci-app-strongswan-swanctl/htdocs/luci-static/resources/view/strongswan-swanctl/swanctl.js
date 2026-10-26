@@ -388,6 +388,16 @@ function addChildOptions(s) {
 	o.rmempty = true;
 	o.modalonly = true;
 
+	o = s.taboption('advanced', form.Value, 'rand_time', _('Random Time'),
+		swanctlDescr(_('Time range from which to choose a random value to subtract from the rekey time.') + '<br />' +
+		_('If not configured, the difference between life time and rekey time is used.') + '<br />' +
+		_('Use %s to disable randomization.').format('<code>0s</code>'),
+			'connections.<conn>.children.<child>.rand_time')
+	);
+	o.validate = validateTimeFormat;
+	o.rmempty = true;
+	o.modalonly = true;
+
 	o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
 		swanctlDescr(_('Maximum time before the CHILD_SA gets closed, as a hard limit.'), 'connections.<conn>.children.<child>.life_time')
 	);
