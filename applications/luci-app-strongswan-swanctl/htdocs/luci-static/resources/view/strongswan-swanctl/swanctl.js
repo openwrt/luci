@@ -1204,6 +1204,14 @@ return view.extend({
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'reauth_time', _('Reauthentication Time'),
+			swanctlDescr(_('Interval to reauthenticate the IKE SA by creating a new one from scratch.') + '<br />' +
+			_('The default is %s, which means that reauthentication is off.').format('<code>0s</code>'),
+				'connections.<conn>.reauth_time'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.Flag, 'encap', _('ESP Encapsulation'),
 			swanctlDescr(_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
 			_('This makes the peer believe that a NAT situation exist on the transmission path, forcing it to encapsulate ESP packets in UDP.') + '<br />' +
