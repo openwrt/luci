@@ -1230,6 +1230,22 @@ return view.extend({
 			showIkev1Hint(ev.target.closest('.cbi-value'), value);
 		};
 
+		o = s.taboption('advanced', form.Flag, 'aggressive', _('Aggressive Mode'),
+			swanctlDescr(_('Use IKEv1 Aggressive Mode instead of IKEv1 Main Mode'), 'connections.<conn>.aggressive'));
+		o.tooltip = function () {
+			if (uci.get('ipsec', 'globals', 'aggressive') == '1')
+				return null;
+
+			return _('Aggressive Mode with PSK authentication is rejected as responder unless it is allowed in the service configuration (General Settings).') + '<br />' +
+				'<code>ipsec.globals.aggressive</code><br />' +
+				'<code>strongswan.conf: charon.i_dont_care_about_security_and_use_aggressive_mode_psk</code>';
+		};
+		o.tooltipicon = '⚠️';
+		o.default = '0';
+		o.modalonly = true;
+		o.depends('keyexchange', 'ikev1');
+		o.depends('keyexchange', 'ike');
+
 		addEmbeddedSection(s, 'children', 'child', _('Children'),
 			_('The children of this connection are selected on the General tab.') + ' ' +
 			_('Children used by other connections cannot be deleted here.'),
