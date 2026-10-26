@@ -1263,6 +1263,22 @@ return view.extend({
 		};
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.ListValue, 'unique', _('Uniqueness Policy'),
+			swanctlDescr(_('Connection uniqueness policy to avoid multiple connections from the same user.') + '<br />' +
+			'<code>no</code>: ' + _('Replace an existing connection if the peer sends an INITIAL_CONTACT notify.') + '<br />' +
+			'<code>never</code>: ' + _('Never replace an existing connection, even if the peer sends an INITIAL_CONTACT notify.') + '<br />' +
+			'<code>keep</code>: ' + _('Reject a new connection and keep the existing one.') + '<br />' +
+			'<code>replace</code>: ' + _('Delete an existing connection if a new one is established.'),
+				'connections.<conn>.unique'));
+		o.value('', '%s (%s)'.format('no', _('default')));
+		o.value('never');
+		o.value('keep');
+		o.value('replace');
+		o.optional = true;
+		o.default = '';
+		o.rmempty = true;
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
 			swanctlDescr(_('Version of IKE for negotiation'), 'connections.<conn>.version'));
 		o.value('ikev1', 'IKEv1 (%s)'.format(_('deprecated')));
