@@ -99,6 +99,11 @@ return view.extend({
 		o.nocreate = true;
 		o.optional = true;
 
+		o = s.option(form.Flag, 'aggressive', _('Allow Aggressive Mode with PSK'),
+			_('Accept IKEv1 Aggressive Mode with pre-shared keys as responder. This is insecure.') + '<br />' +
+			'<code>strongswan.conf: charon.i_dont_care_about_security_and_use_aggressive_mode_psk</code>');
+		o.default = '0';
+
 		// syslog plugin settings
 		s = m.section(form.NamedSection, 'syslog', 'syslog', _('Syslog Settings'),
 			_('Configure how strongswan logs events, errors, and debug information.'));
