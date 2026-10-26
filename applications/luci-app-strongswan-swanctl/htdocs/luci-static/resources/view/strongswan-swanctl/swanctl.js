@@ -1212,6 +1212,14 @@ return view.extend({
 		o.placeholder = '0s';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'rand_time', _('Random Time'),
+			swanctlDescr(_('Time range from which to choose a random value to subtract from the rekey and reauthentication times.') + '<br />' +
+			_('If not configured, the overtime is used.') + '<br />' +
+			_('Use %s to disable randomization.').format('<code>0s</code>'),
+				'connections.<conn>.rand_time'));
+		o.validate = validateTimeFormat;
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.Flag, 'encap', _('ESP Encapsulation'),
 			swanctlDescr(_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
 			_('This makes the peer believe that a NAT situation exist on the transmission path, forcing it to encapsulate ESP packets in UDP.') + '<br />' +
