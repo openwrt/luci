@@ -1213,6 +1213,30 @@ return view.extend({
 		o.default = '0';
 		o.rmempty = true;
 
+		o = s.taboption('advanced', form.Value, 'dscp', _('DSCP'),
+			swanctlDescr(_('Differentiated Services Field Codepoint to set on outgoing IKE packets as six digit binary string'),
+				'connections.<conn>.dscp'));
+		o.value('000000', '%s / %s (000000)'.format(_('CS0'), _('Default')));
+		o.value('001000', '%s (001000)'.format(_('CS1')));
+		o.value('010000', '%s (010000)'.format(_('CS2')));
+		o.value('011000', '%s (011000)'.format(_('CS3')));
+		o.value('100000', '%s (100000)'.format(_('CS4')));
+		o.value('101000', '%s (101000)'.format(_('CS5')));
+		o.value('110000', '%s (110000)'.format(_('CS6')));
+		o.value('111000', '%s (111000)'.format(_('CS7')));
+		o.value('101110', '%s (101110)'.format(_('EF')));
+		o.value('001010', '%s (001010)'.format(_('AF11')));
+		o.value('010010', '%s (010010)'.format(_('AF21')));
+		o.value('011010', '%s (011010)'.format(_('AF31')));
+		o.value('100010', '%s (100010)'.format(_('AF41')));
+		o.validate = function (section_id, value) {
+			if (value && !value.match(/^[01]{6}$/))
+				return _('Expecting a six digit binary string');
+
+			return true;
+		};
+		o.modalonly = true;
+
 		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
 			swanctlDescr(_('Version of IKE for negotiation'), 'connections.<conn>.version'));
 		o.value('ikev1', 'IKEv1 (%s)'.format(_('deprecated')));
