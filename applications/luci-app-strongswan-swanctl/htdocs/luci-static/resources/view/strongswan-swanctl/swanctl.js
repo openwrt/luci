@@ -525,6 +525,17 @@ function addLocalOptions(s) {
 	o.modalonly = true;
 	o.depends('auth', 'pubkey');
 
+	o = s.option(form.FileUploadList, 'pubkeys', _('Local Public Keys'),
+		swanctlDescr(_('Raw public keys to use for authentication.') + '<br />' +
+		_('Select a file relative to /etc/swanctl/pubkey or upload a new one.'),
+			'connections.<conn>.local<suffix>.pubkeys'));
+	o.root_directory = '/etc/swanctl/pubkey';
+	o.absolute_path = false;
+	o.enable_upload = true;
+	o.enable_remove = true;
+	o.modalonly = true;
+	o.depends('auth', 'pubkey');
+
 	o = addFileOption(s, 'key', _('Local Key'),
 		_('Private key to use with the certificate, relative to %s.'),
 		'/etc/swanctl/private');
