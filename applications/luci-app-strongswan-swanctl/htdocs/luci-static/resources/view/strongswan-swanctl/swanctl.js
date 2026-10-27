@@ -551,6 +551,15 @@ function addLocalOptions(s) {
 	o.depends('auth', 'pubkey');
 	o.depends('auth', 'eap-tls');
 
+	o = s.option(form.Value, 'eap_id', _('EAP ID'),
+		swanctlDescr(_('Client EAP identity to use in the EAP method.') + ' ' +
+			_('Defaults to the local identity.'),
+			'connections.<conn>.local<suffix>.eap_id'));
+	o.datatype = 'string';
+	o.modalonly = true;
+	o.depends('auth', 'eap-mschapv2');
+	o.depends('auth', 'eap-tls');
+
 	o = s.option(form.Value, 'aaa_id', _('AAA ID'),
 		swanctlDescr(_('Server side EAP identity to expect in the EAP method.') + ' ' +
 			_('Defaults to the remote identity.'),
