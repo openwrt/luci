@@ -512,6 +512,7 @@ function addLocalOptions(s) {
 	o.value('pubkey', _('Public Key'));
 	o.value('eap-mschapv2', _('EAP MSCHAPv2'));
 	o.value('eap-tls', _('EAP TLS'));
+	o.value('xauth', _('XAuth (IKEv1 only)'));
 	o.default = 'psk';
 	o.rmempty = false;
 
@@ -568,6 +569,15 @@ function addLocalOptions(s) {
 	o.modalonly = true;
 	o.depends('auth', 'eap-mschapv2');
 	o.depends('auth', 'eap-tls');
+
+	o = s.option(form.Value, 'xauth_id', _('XAuth ID'),
+		swanctlDescr(_('Client XAuth username used in the XAuth exchange.') + ' ' +
+			_('Defaults to the local identity.') + ' ' +
+			_('Only supported with IKEv1.'),
+			'connections.<conn>.local<suffix>.xauth_id'));
+	o.datatype = 'string';
+	o.modalonly = true;
+	o.depends('auth', 'xauth');
 }
 
 /**
