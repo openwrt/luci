@@ -510,6 +510,8 @@ function addLocalOptions(s) {
 		swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.local<suffix>.auth'));
 	o.value('psk', _('Pre-shared Key'));
 	o.value('pubkey', _('Public Key'));
+	o.value('eap-mschapv2', _('EAP MSCHAPv2'));
+	o.value('eap-tls', _('EAP TLS'));
 	o.default = 'psk';
 	o.rmempty = false;
 
@@ -546,6 +548,15 @@ function addLocalOptions(s) {
 		'/etc/swanctl/private');
 	o.modalonly = true;
 	o.depends('auth', 'pubkey');
+
+	o = s.option(form.Value, 'aaa_id', _('AAA ID'),
+		swanctlDescr(_('Server side EAP identity to expect in the EAP method.') + ' ' +
+			_('Defaults to the remote identity.'),
+			'connections.<conn>.local<suffix>.aaa_id'));
+	o.datatype = 'string';
+	o.modalonly = true;
+	o.depends('auth', 'eap-mschapv2');
+	o.depends('auth', 'eap-tls');
 }
 
 /**
