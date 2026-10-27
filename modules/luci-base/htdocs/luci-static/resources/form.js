@@ -5875,6 +5875,144 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 });
 
 /**
+ * @class FileUploadList
+ * @memberof LuCI.form
+ * @augments LuCI.form.DynamicList
+ * @hideconstructor
+ * @classdesc
+ *
+ * The `FileUploadList` element wraps a {@link LuCI.ui.FileUploadList} widget
+ * and offers the ability to select multiple remote files below a root
+ * directory, to upload further files into it and to delete files from it.
+ * The values are stored as absolute paths unless
+ * [absolute_path]{@link LuCI.form.FileUploadList#absolute_path} is disabled.
+ *
+ * @param {LuCI.form.Map|LuCI.form.JSONMap} form
+ * The configuration form to which this section is added. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {LuCI.form.AbstractSection} section
+ * The configuration section this option is added. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {string} option
+ * The name of the UCI option to map.
+ *
+ * @param {string} [title]
+ * The title caption of the option element.
+ *
+ * @param {string} [description]
+ * The description text of the option element.
+ */
+const CBIFileUploadList = CBIDynamicList.extend(/** @lends LuCI.form.FileUploadList.prototype */ {
+	__name__: 'CBI.FileUploadList',
+
+	__init__(...args) {
+		this.super('__init__', args);
+
+		this.enable_upload = false;
+		this.enable_remove = false;
+		this.root_directory = '/etc/luci-uploads';
+		this.absolute_path = true;
+	},
+
+	/**
+	 * Toggle file upload functionality.
+	 *
+	 * When set to `true`, the underlying widget provides a button which lets
+	 * the user select and upload local files into the root directory.
+	 * Note that this is merely a cosmetic feature: remote upload access is
+	 * controlled by the session ACL rules.
+	 * The default of `false` means file upload functionality is hidden.
+	 * The default of `true` means file upload functionality is displayed.
+	 *
+	 * @memberof LuCI.form.FileUploadList.prototype
+	 * @member enable_upload
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	/**
+	 * Toggle remote file delete functionality.
+	 *
+	 * When set to `true`, the underlying widget provides buttons which let
+	 * the user delete files from the root directory. Note that this is merely
+	 * a cosmetic feature: remote delete permissions are controlled by the
+	 * session ACL rules.
+	 * The default of `false` means file removal buttons are hidden.
+	 * The default of `true` means file removal buttons are displayed.
+	 *
+	 * @memberof LuCI.form.FileUploadList.prototype
+	 * @member enable_remove
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	/**
+	 * Specify the directory holding the selectable files.
+	 *
+	 * The files in this directory are offered as choices and uploaded files
+	 * are stored here. Note that this is merely a cosmetic feature: remote
+	 * file access and directory listing permissions are controlled by the
+	 * session ACL rules.
+	 *
+	 * The default is `/etc/luci-uploads`.
+	 *
+	 * @memberof LuCI.form.FileUploadList.prototype
+	 * @member root_directory
+	 * @type {string}
+	 * @default /etc/luci-uploads
+	 */
+
+	/**
+	 * Store absolute paths instead of file names.
+	 *
+	 * When set to `true`, the values are the absolute paths of the selected
+	 * files like with {@link LuCI.form.FileUpload}. When set to `false`, the
+	 * values are the file names relative to the root directory.
+	 *
+	 * The default is `true`.
+	 *
+	 * @memberof LuCI.form.FileUploadList.prototype
+	 * @member absolute_path
+	 * @type {boolean}
+	 * @default true
+	 */
+
+	/**
+	 * @private
+	 * @param {string} section_id
+	 * @param {number} option_index
+	 * @param {string} cfgvalue
+	 * @returns {Node}
+	 */
+	renderWidget(section_id, option_index, cfgvalue) {
+		const value = (cfgvalue != null) ? cfgvalue : this.default;
+
+		const widget = new ui.FileUploadList(L.toArray(value), this.transformChoices(), {
+			id: this.cbid(section_id),
+			sort: this.keylist,
+			allowduplicates: this.allowduplicates,
+			optional: this.optional || this.rmempty,
+			datatype: this.datatype,
+			placeholder: this.placeholder,
+			validate: this.getValidator(section_id),
+			enable_upload: this.enable_upload,
+			enable_remove: this.enable_remove,
+			root_directory: this.root_directory,
+			absolute_path: this.absolute_path,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
+		});
+
+		return widget.render();
+	}
+});
+
+/**
  * @class DirectoryPicker
  * @memberof LuCI.form
  * @augments LuCI.form.Value
@@ -6244,6 +6382,7 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
 	Button: CBIButtonValue,
 	HiddenValue: CBIHiddenValue,
 	FileUpload: CBIFileUpload,
+	FileUploadList: CBIFileUploadList,
 	DirectoryPicker: CBIDirectoryPicker,
 	SectionValue: CBISectionValue
 });

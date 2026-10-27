@@ -3708,6 +3708,263 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 });
 
 /**
+ * Instantiate a file upload list widget.
+ *
+ * @class FileUploadList
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.DynamicList
+ *
+ * @classdesc
+ *
+ * The `FileUploadList` class implements a widget which allows the user to
+ * select multiple files beneath a predefined remote directory, to upload
+ * further files into it and to delete files from it. The values are the
+ * absolute paths of the files or, without `absolute_path`, the file names
+ * relative to the remote directory.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly, instead they're implicitly created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.FileUploadList`. To import it
+ * in external JavaScript, use `L.require("ui").then(...)` and access the
+ * `FileUploadList` property of the class instance value.
+ *
+ * @param {string|string[]} [values=null]
+ * The initial input value(s).
+ *
+ * @param {Object<string, *>} [choices]
+ * Object containing additional selectable choices besides the files of
+ * the remote directory.
+ *
+ * @param {LuCI.ui.FileUploadList.InitOptions} [options]
+ * Object describing the widget specific options to initialize the file
+ * upload list.
+ */
+const UIFileUploadList = UIDynamicList.extend(/** @lends LuCI.ui.FileUploadList.prototype */ {
+	/**
+	 * In addition to the [DynamicList.InitOptions]{@link LuCI.ui.DynamicList.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.DynamicList.InitOptions} InitOptions
+	 * @memberof LuCI.ui.FileUploadList
+	 * @param {string|string[]} values
+	 * @param {object} choices
+	 * @param {object} options
+	 *
+	 * @property {boolean} [enable_upload=false]
+	 * Specifies whether the widget allows the user to upload files. If set to
+	 * `false`, only existing files may be selected. Note that this is not a
+	 * security feature. Whether file upload requests are accepted remotely
+	 * depends on the ACL setup for the current session. This option merely
+	 * controls whether the upload controls are rendered or not.
+	 *
+	 * @property {boolean} [enable_remove=false]
+	 * Specifies whether the widget allows the user to delete files. Deleted
+	 * files are removed from the selection as well. Note that this is not a
+	 * security feature. Whether file delete requests are accepted remotely
+	 * depends on the ACL setup for the current session. This option merely
+	 * controls whether the file remove controls are rendered or not.
+	 *
+	 * @property {string} [root_directory=/etc/luci-uploads]
+	 * Specifies the remote directory whose files are offered as choices and
+	 * which uploaded files are stored in. Note that this is not a security
+	 * feature. Whether remote directories are listable or not solely depends
+	 * on the ACL setup for the current session.
+	 *
+	 * @property {boolean} [absolute_path=true]
+	 * Specifies whether the values are the absolute paths of the files
+	 * instead of the file names relative to the root directory. This is the
+	 * same behaviour as with {@link LuCI.ui.FileUpload}.
+	 */
+	__init__(values, choices, options) {
+		this.super('__init__', [ values, L.isObject(choices) ? choices : {}, Object.assign({
+			enable_upload: false,
+			enable_remove: false,
+			root_directory: '/etc/luci-uploads',
+			absolute_path: true
+		}, options) ]);
+
+		this.files = [];
+	},
+
+	/**
+	 * @private
+	 * @param {string} name
+	 * @returns {string}
+	 */
+	fileValue(name) {
+		return this.options.absolute_path ? `${this.options.root_directory}/${name}` : name;
+	},
+
+	/** @override */
+	render() {
+		const listEl = this.super('render', []);
+		const buttons = [];
+
+		this.filesEl = E('div', { 'class': 'cbi-filelist', 'style': 'display:none' });
+
+		if (this.options.enable_upload) {
+			const fileinput = E('input', {
+				'type': 'file',
+				'style': 'display:none',
+				'change': ev => this.handleUpload(ev)
+			});
+
+			buttons.push(fileinput, E('button', {
+				'class': 'btn cbi-button-action',
+				'disabled': this.options.disabled ? '' : null,
+				'click': (ev) => {
+					ev.preventDefault();
+					fileinput.click();
+				}
+			}, [ _('Upload file…') ]));
+		}
+
+		if (this.options.enable_remove) {
+			buttons.push(' ', E('button', {
+				'class': 'btn cbi-button-negative',
+				'disabled': this.options.disabled ? '' : null,
+				'click': (ev) => {
+					ev.preventDefault();
+
+					if (this.filesEl.style.display == 'none') {
+						this.renderFiles();
+						this.filesEl.style.display = '';
+					}
+					else {
+						this.filesEl.style.display = 'none';
+					}
+				}
+			}, [ _('Delete file…') ]));
+		}
+
+		this.loadFiles();
+
+		if (!buttons.length)
+			return listEl;
+
+		return E('div', {}, [
+			listEl,
+			E('div', { 'class': 'control-group' }, buttons),
+			this.filesEl
+		]);
+	},
+
+	/**
+	 * @private
+	 * @returns {Promise}
+	 */
+	loadFiles() {
+		return L.resolveDefault(fs.list(this.options.root_directory), []).then((entries) => {
+			/*
+			 * Hide dotfiles like ".placeholder".
+			 * They are only technical helper files and should not be
+			 * shown as selectable or deletable entries.
+			 * This matches the behavior of ui.FileUpload.
+			 */
+			this.files = entries.filter(e => e.type == 'file' && e.name.charAt(0) != '.').map(e => e.name);
+			this.updateChoices();
+		});
+	},
+
+	/**
+	 * @private
+	 */
+	updateChoices() {
+		this.clearChoices();
+		this.addChoices(Object.keys(this.choices).concat(this.files.map(f => this.fileValue(f))), this.choices);
+		this.renderFiles();
+	},
+
+	/**
+	 * @private
+	 * @param {Event} ev
+	 * @returns {Promise}
+	 */
+	handleUpload(ev) {
+		const file = ev.target.files[0];
+		const name = file ? file.name.replace(/^.*[\\/]/, '') : '';
+
+		ev.target.value = '';
+
+		if (name == '')
+			return;
+
+		if (this.files.indexOf(name) > -1 &&
+		    !confirm(_('Overwrite existing file "%s" ?').format(name)))
+			return;
+
+		const data = new FormData();
+
+		data.append('sessionid', rpc.getSessionID());
+		data.append('filename', `${this.options.root_directory}/${name}`);
+		data.append('filedata', file);
+
+		return request.post(`${L.env.cgi_base}/cgi-upload`, data).then((res) => {
+			const reply = res.json();
+
+			if (L.isObject(reply) && reply.failure)
+				return alert(_('Upload request failed: %s').format(reply.message));
+
+			if (this.files.indexOf(name) == -1)
+				this.files.push(name);
+
+			const value = this.fileValue(name);
+
+			// Offer the uploaded file and add it to the selection
+			this.updateChoices();
+			this.setValue(this.getValue().filter(v => v != value).concat([ value ]));
+		}, (err) => {
+			alert(_('Upload request failed: %s').format(err.message));
+		});
+	},
+
+	/**
+	 * @private
+	 * @param {string} name
+	 * @param {Event} ev
+	 * @returns {Promise}
+	 */
+	handleRemove(name, ev) {
+		ev.preventDefault();
+
+		if (!confirm(_('Do you really want to delete "%s" ?').format(name)))
+			return;
+
+		return fs.remove(`${this.options.root_directory}/${name}`).then(() => {
+			const value = this.fileValue(name);
+
+			this.files = this.files.filter(f => f != name);
+
+			// Drop the deleted file from the choices and the selection
+			this.updateChoices();
+			this.setValue(this.getValue().filter(v => v != value));
+		}).catch((err) => {
+			alert(_('Delete request failed: %s').format(err.message));
+		});
+	},
+
+	/**
+	 * @private
+	 */
+	renderFiles() {
+		if (!this.filesEl)
+			return;
+
+		dom.content(this.filesEl, this.files.length ? this.files.map(name => E('div', { 'class': 'control-group' }, [
+			E('button', {
+				'class': 'btn cbi-button-negative',
+				'disabled': this.options.disabled ? '' : null,
+				'click': ev => this.handleRemove(name, ev)
+			}, [ _('Delete') ]),
+			' ', name
+		])) : E('em', [ _('No entries in this directory') ]));
+	}
+});
+
+/**
  * Erase the menu node
  * @param {Node} node
  * @returns {Node}
@@ -5782,7 +6039,8 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	Combobox: UICombobox,
 	ComboButton: UIComboButton,
 	Hiddenfield: UIHiddenfield,
-	FileUpload: UIFileUpload
+	FileUpload: UIFileUpload,
+	FileUploadList: UIFileUploadList
 });
 
 return UI;
