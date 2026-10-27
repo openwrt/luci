@@ -571,8 +571,8 @@ function addRemoteOptions(s) {
 		swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.remote<suffix>.auth'));
 	o.value('psk', _('Pre-shared Key'));
 	o.value('pubkey', _('Public Key'));
-	o.value('eap-mschapv2', 'EAP MSCHAPv2');
-	o.value('eap-tls', 'EAP TLS');
+	o.value('eap-mschapv2', _('EAP MSCHAPv2'));
+	o.value('eap-tls', _('EAP TLS'));
 	o.default = 'psk';
 	o.rmempty = false;
 
