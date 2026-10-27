@@ -569,24 +569,14 @@ function addRemoteOptions(s) {
 	o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
 	o.modalonly = true;
 
-	o = s.option(form.DynamicList, 'cacerts', _('Remote CA Certificates'),
+	o = s.option(form.FileUploadList, 'cacerts', _('Remote CA Certificates'),
 		swanctlDescr(_('Restrict the remote peer\'s certificate to be issued by one of these CAs.') + '<br />' +
-		_('Select a file relative to /etc/swanctl/x509ca. CA certificates can be uploaded in the authorities section.'),
+		_('Select a file relative to /etc/swanctl/x509ca or upload a new one.'),
 			'connections.<conn>.remote<suffix>.cacerts'));
-	o.load = function (section_id) {
-		this.keylist = [];
-		this.vallist = [];
-
-		return L.resolveDefault(fs.list('/etc/swanctl/x509ca'), []).then(L.bind(function (entries) {
-			entries.filter(function (entry) {
-				return entry.type == 'file';
-			}).forEach(L.bind(function (entry) {
-				this.value(entry.name);
-			}, this));
-
-			return this.super('load', [section_id]);
-		}, this));
-	};
+	o.root_directory = '/etc/swanctl/x509ca';
+	o.absolute_path = false;
+	o.enable_upload = true;
+	o.enable_remove = true;
 	o.modalonly = true;
 	o.depends('auth', 'pubkey');
 	o.depends('auth', 'eap-tls');
