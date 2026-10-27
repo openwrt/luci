@@ -575,6 +575,17 @@ function addRemoteOptions(s) {
 	o.depends('auth', 'pubkey');
 	o.depends('auth', 'eap-tls');
 
+	o = s.option(form.FileUploadList, 'pubkeys', _('Remote Public Keys'),
+		swanctlDescr(_('Raw public keys accepted for authentication of the remote peer.') + '<br />' +
+		_('Select a file relative to /etc/swanctl/pubkey or upload a new one.'),
+			'connections.<conn>.remote<suffix>.pubkeys'));
+	o.root_directory = '/etc/swanctl/pubkey';
+	o.absolute_path = false;
+	o.enable_upload = true;
+	o.enable_remove = true;
+	o.modalonly = true;
+	o.depends('auth', 'pubkey');
+
 	o = s.option(form.Value, 'eap_id', _('EAP ID'),
 		swanctlDescr(_('EAP identity to use with the remote peer'), 'connections.<conn>.remote<suffix>.eap_id'));
 	o.datatype = 'string';

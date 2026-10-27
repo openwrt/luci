@@ -18,6 +18,8 @@
 				"/etc/swanctl/pkcs8/*": [ "stat" ],
 				"/etc/swanctl/pkcs12": [ "list" ],
 				"/etc/swanctl/pkcs12/*": [ "stat" ],
+				"/etc/swanctl/pubkey": [ "list" ],
+				"/etc/swanctl/pubkey/*": [ "stat" ],
 				"/usr/sbin/swanmon version": [ "exec" ],
 				"/usr/sbin/swanmon stats": [ "exec" ]
 			},
@@ -38,6 +40,7 @@
 				"/etc/swanctl/ecdsa/*": [ "write" ],
 				"/etc/swanctl/pkcs8/*": [ "write" ],
 				"/etc/swanctl/pkcs12/*": [ "write" ],
+				"/etc/swanctl/pubkey/*": [ "write" ],
 				"/usr/sbin/swanctl --initiate --ike *": [ "exec" ],
 				"/usr/sbin/swanctl --initiate --child *": [ "exec" ],
 				"/usr/sbin/swanctl --terminate --ike *": [ "exec" ],
