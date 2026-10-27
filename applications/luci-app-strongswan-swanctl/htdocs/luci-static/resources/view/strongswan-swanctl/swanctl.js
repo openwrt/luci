@@ -531,6 +531,7 @@ function addLocalOptions(s) {
 	o.enable_remove = true;
 	o.modalonly = true;
 	o.depends('auth', 'pubkey');
+	o.depends('auth', 'eap-tls');
 
 	o = s.option(form.FileUploadList, 'pubkeys', _('Local Public Keys'),
 		swanctlDescr(_('Raw public keys to use for authentication.') + '<br />' +
@@ -548,6 +549,7 @@ function addLocalOptions(s) {
 		'/etc/swanctl/private');
 	o.modalonly = true;
 	o.depends('auth', 'pubkey');
+	o.depends('auth', 'eap-tls');
 
 	o = s.option(form.Value, 'aaa_id', _('AAA ID'),
 		swanctlDescr(_('Server side EAP identity to expect in the EAP method.') + ' ' +
