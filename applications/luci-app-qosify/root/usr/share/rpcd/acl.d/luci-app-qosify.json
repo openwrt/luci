@@ -6,16 +6,19 @@
 				"qosify": [ "status", "get_stats", "dump" ],
 				"rc": [ "list" ],
 				"service": [ "list" ],
-				"file": [ "read", "stat" ]
+				"network.interface": [ "status" ],
+				"file": [ "read", "stat", "list" ]
 			},
 			"uci": [ "qosify" ],
 			"file": {
 				"/etc/config/qosify": [ "read", "list" ],
 				"/etc/qosify/00-defaults.conf": [ "read", "list" ],
+				"/etc/init.d/qosify": [ "read" ],
 				"/usr/share/qosify-luci/qosify": [ "read" ],
 				"/usr/share/qosify-luci/00-defaults.conf": [ "read" ],
 				"/proc/uptime": [ "read" ],
-				"/proc/[0-9]*/stat": [ "read" ]
+				"/proc/[0-9]*/stat": [ "read" ],
+				"/sys/class/net/*/queues": [ "list" ]
 			}
 		},
 		"write": {
