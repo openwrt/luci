@@ -519,9 +519,14 @@ function addLocalOptions(s) {
 	o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
 	o.modalonly = true;
 
-	o = addFileOption(s, 'certs', _('Local Certificate'),
-		swanctlDescr(_('Certificate to use for authentication, relative to %s.'), 'connections.<conn>.local<suffix>.certs'),
-		'/etc/swanctl/x509');
+	o = s.option(form.FileUploadList, 'certs', _('Local Certificates'),
+		swanctlDescr(_('Certificates to use for authentication.') + '<br />' +
+		_('Select a file relative to /etc/swanctl/x509 or upload a new one.'),
+			'connections.<conn>.local<suffix>.certs'));
+	o.root_directory = '/etc/swanctl/x509';
+	o.absolute_path = false;
+	o.enable_upload = true;
+	o.enable_remove = true;
 	o.modalonly = true;
 	o.depends('auth', 'pubkey');
 
