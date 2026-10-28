@@ -461,6 +461,38 @@ function addChildOptions(s) {
 }
 
 /**
+ * Add the options of a local authentication round to `s`.
+ */
+function addLocalOptions(s) {
+	let o;
+
+	o = s.option(form.ListValue, 'auth', _('Authentication Method'),
+		swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.local<suffix>.auth'));
+	o.value('psk', _('Pre-shared Key'));
+	o.value('pubkey', _('Public Key'));
+	o.default = 'psk';
+	o.rmempty = false;
+
+	o = s.option(form.Value, 'id', _('Local Identifier'),
+		swanctlDescr(_('Local identifier for IKE (phase 1)'), 'connections.<conn>.local<suffix>.id'));
+	o.datatype = 'string';
+	o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
+	o.modalonly = true;
+
+	o = addFileOption(s, 'certs', _('Local Certificate'),
+		swanctlDescr(_('Certificate to use for authentication, relative to %s.'), 'connections.<conn>.local<suffix>.certs'),
+		'/etc/swanctl/x509');
+	o.modalonly = true;
+	o.depends('auth', 'pubkey');
+
+	o = addFileOption(s, 'key', _('Local Key'),
+		_('Private key to use with the certificate, relative to %s.'),
+		'/etc/swanctl/private');
+	o.modalonly = true;
+	o.depends('auth', 'pubkey');
+}
+
+/**
  * Add the options of a remote authentication round to `s`.
  */
 function addRemoteOptions(s) {
@@ -904,30 +936,7 @@ return view.extend({
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
 
-		o = s.option(form.ListValue, 'auth', _('Authentication Method'),
-			swanctlDescr(_('IKE authentication (phase 1)'), 'connections.<conn>.local<suffix>.auth'));
-		o.value('psk', _('Pre-shared Key'));
-		o.value('pubkey', _('Public Key'));
-		o.default = 'psk';
-		o.rmempty = false;
-
-		o = s.option(form.Value, 'id', _('Local Identifier'),
-			swanctlDescr(_('Local identifier for IKE (phase 1)'), 'connections.<conn>.local<suffix>.id'));
-		o.datatype = 'string';
-		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
-		o.modalonly = true;
-
-		o = addFileOption(s, 'certs', _('Local Certificate'),
-			swanctlDescr(_('Certificate to use for authentication, relative to %s.'), 'connections.<conn>.local<suffix>.certs'),
-			'/etc/swanctl/x509');
-		o.modalonly = true;
-		o.depends('auth', 'pubkey');
-
-		o = addFileOption(s, 'key', _('Local Key'),
-			_('Private key to use with the certificate, relative to %s.'),
-			'/etc/swanctl/private');
-		o.modalonly = true;
-		o.depends('auth', 'pubkey');
+		addLocalOptions(s);
 
 		// Remote Configuration
 		s = m.section(form.GridSection, 'remote', _('Remote'),
