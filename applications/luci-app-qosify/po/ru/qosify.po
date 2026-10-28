@@ -9,18 +9,20 @@ msgstr ""
 "luciapplicationsqosify/ru/>\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"PO-Revision-Date: 2026-10-20 02:19+0000\n"
+"PO-Revision-Date: 2026-10-25 04:14+0000\n"
 "X-Generator: Weblate 2026.11.dev0\n"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1255
 msgid "\"%s\" is not a value qosify accepts for %s."
-msgstr ""
+msgstr "\"%s\" не является значением, которое qosify принимает для %s."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:483
 msgid ""
 "%d class and alias sections — qosify has %d class slots, so %s and the rules "
 "using them are dropped"
 msgstr ""
+"Разделов class и alias — %d; у qosify %d слотов классов, поэтому %s и "
+"использующие их правила отбрасываются"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:925
 msgid "%d interface"
@@ -48,11 +50,13 @@ msgid ""
 "%s \"%s\" is not a tc rate — tc refuses the qdisc, so nothing is shaped "
 "although qosify reports the section active"
 msgstr ""
+"%s \"%s\" не является скоростью tc — tc отклоняет qdisc, поэтому ничего не "
+"шейпится, хотя qosify считает раздел активным"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:298
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:301
 msgid "%s \"%s\" is not a whole number — tc refuses the qdisc"
-msgstr ""
+msgstr "%s \"%s\" не является целым числом — tc отклоняет qdisc"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:725
 msgid "%s (current)"
@@ -182,6 +186,8 @@ msgid ""
 "%s: %s \"%s\" is not a whole number — qosify.init passes it through atoll(), "
 "which keeps only the leading digits"
 msgstr ""
+"%s: %s \"%s\" не является целым числом — qosify.init передаёт его через atoll"
+"(), который сохраняет только ведущие цифры"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:486
 msgid ""
@@ -205,7 +211,7 @@ msgstr "(псевдоним)"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1304
 msgid "(over file)"
-msgstr ""
+msgstr "(переопределено файлом)"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:463
 msgid "(this qosify build has no NQB)"
@@ -221,7 +227,7 @@ msgstr "Имя секции может содержать только букв�
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1352
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:899
 msgid "Active"
@@ -235,7 +241,7 @@ msgstr "Добавить"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1262
 msgid "Add failed: %s"
-msgstr ""
+msgstr "Не удалось добавить: %s"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1242
 msgid ""
@@ -243,12 +249,17 @@ msgid ""
 "its timeout (the defaults timeout when left empty) and a qosify restart "
 "drops it. One on a match from the rules file overrides it until then."
 msgstr ""
+"Добавляется в работающий qosify сразу и не сохраняется: запись истекает по "
+"своему тайм-ауту (при пустом поле используется тайм-аут по умолчанию), а "
+"перезапуск qosify удаляет её. До этого её переопределяет запись по "
+"совпадению из файла правил."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1210
 msgid ""
 "Adds a line to the editor below; Save & Apply writes it to the rules file, "
 "so it is kept."
 msgstr ""
+"«Сохранить и применить» записывает её в файл правил, поэтому она сохраняется."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:85
 msgid "Adds atm, noatm or ptm when overhead_type is manual"
@@ -430,7 +441,7 @@ msgstr "Счётчики"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1567
 msgid "Counters reset."
-msgstr ""
+msgstr "Счётчики сброшены."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1552
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1830
@@ -518,7 +529,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1352
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:761
 msgid "Device"
@@ -567,7 +578,7 @@ msgstr "Скачать текущие файлы с маршрутизатора
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1241
 msgid "Dynamic Entries"
-msgstr ""
+msgstr "Динамические записи"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1213
 msgid ""
@@ -662,11 +673,11 @@ msgstr "Записи"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1261
 msgid "Entry added."
-msgstr ""
+msgstr "Запись добавлена."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1269
 msgid "Entry removed."
-msgstr ""
+msgstr "Запись удалена."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2051
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2164
@@ -699,7 +710,7 @@ msgstr "Ошибка: overhead_mpu должно быть целым числом
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2001
 msgid "Error: qosify drops a name longer than %d characters"
-msgstr ""
+msgstr "Ошибка: qosify отбрасывает имя длиннее %d символов"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2273
 msgid "Errors:"
@@ -711,6 +722,10 @@ msgid ""
 "started and one whose device has gone is stopped. Nothing is reported back "
 "by the call — the result shows in the Service table on the Overview tab."
 msgstr ""
+"Каждый шейпингуемый раздел проверяется заново: раздел, устройство которого "
+"теперь существует, запускается, а раздел, устройство которого исчезло, "
+"останавливается. Вызов ничего не возвращает — результат отображается в "
+"таблице «Сервис» на вкладке «Обзор»."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:984
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1336
@@ -855,7 +870,7 @@ msgstr "Нет цели DSCP в строке %s — qosify пропускает 
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1771
 msgid "No DSCP traffic yet."
-msgstr ""
+msgstr "Трафика DSCP пока нет."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1151
 msgid "No classes defined in %s"
@@ -869,7 +884,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1294
 msgid "No dynamic entries."
-msgstr ""
+msgstr "Нет динамических записей."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1328
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1329
@@ -1003,7 +1018,7 @@ msgstr "Перечитывание файлов сопоставлений..."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1351
 msgid "Re-runs the daemon's own device pass."
-msgstr ""
+msgstr "Повторно запускает собственный проход демона по устройствам."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2227
 msgid "Read error"
@@ -1035,15 +1050,15 @@ msgstr "Перезагрузка не удалась: %s"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1306
 msgid "Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1270
 msgid "Remove failed: %s"
-msgstr ""
+msgstr "Не удалось удалить: %s"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1360
 msgid "Replaced with"
-msgstr ""
+msgstr "Заменено на"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1787
 msgid "Requires write access."
@@ -1057,7 +1072,7 @@ msgstr "Сброс"
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1554
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1563
 msgid "Reset counters"
-msgstr ""
+msgstr "Сбросить счётчики"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1568
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2323
@@ -1087,6 +1102,7 @@ msgstr "Восстановить"
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1359
 msgid "Restore qosify defaults. Shaping is left disabled."
 msgstr ""
+"Восстановить настройки qosify по умолчанию. Шейпинг остаётся отключённым."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2298
 msgid "Restoring defaults..."
@@ -1225,7 +1241,7 @@ msgstr "Подробный вывод tc требует доступа на за
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1309
 msgid "The first %d entries are shown."
-msgstr ""
+msgstr "Показаны первые %d записей."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:631
 msgid ""
@@ -1263,7 +1279,7 @@ msgstr "Трафик по классам"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1549
 msgid "Traffic by DSCP"
-msgstr ""
+msgstr "Трафик по DSCP"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:637
 msgid "Traffic shaping and DSCP classification via qosify"
@@ -1379,6 +1395,8 @@ msgid ""
 "Zero qosify's own counters (get_stats)? The CAKE tin counters belong to tc "
 "and are kept."
 msgstr ""
+"Обнулить собственные счётчики qosify (get_stats)? Счётчики CAKE tin "
+"принадлежат tc и сохраняются."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:944
 msgid "active"
@@ -1426,7 +1444,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1290
 msgid "dump did not answer."
-msgstr ""
+msgstr "dump не ответил."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:743
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:761
@@ -1473,12 +1491,16 @@ msgid ""
 "mode \"%s\" is not a CAKE diffserv mode — tc refuses the qdisc, so nothing "
 "is shaped although qosify reports the section active"
 msgstr ""
+"режим \"%s\" не является режимом diffserv CAKE — tc отклоняет qdisc, поэтому "
+"ничего не шейпится, хотя qosify считает раздел активным"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:291
 msgid ""
 "name \"%s\" is dropped by qosify — it takes at most %d characters and no "
 "quote"
 msgstr ""
+"имя \"%s\" отбрасывается qosify — допускается не более %d символов и без "
+"кавычек"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:290
 msgid ""
@@ -1519,7 +1541,7 @@ msgstr "Интерфейс netifd, на котором включить QoS. О�
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1313
 msgid "never"
-msgstr ""
+msgstr "никогда"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:945
 msgid "no"
@@ -1548,15 +1570,20 @@ msgstr ""
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:299
 msgid "overhead_encap \"%s\" is not atm, noatm or ptm — tc refuses the qdisc"
 msgstr ""
+"overhead_encap \"%s\" не является atm, noatm или ptm — tc отклоняет qdisc"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:296
 msgid ""
 "overhead_type \"%s\" is not one qosify.init knows, so no overhead is set"
 msgstr ""
+"overhead_type \\\"%s\\\" не относится к известным qosify.init, поэтому "
+"overhead не задаётся"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:302
 msgid "overhead_vlan \"%s\" is not 0, 1 or 2 — qosify.init adds no ether-vlan"
 msgstr ""
+"overhead_vlan \"%s\" не равен 0, 1 или 2 — qosify.init не добавляет ether-"
+"vlan"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:636
 #: applications/luci-app-qosify/root/usr/share/luci/menu.d/luci-app-qosify.json:3
@@ -1589,7 +1616,7 @@ msgstr "qosify всё ещё работает — не трогаю qdisc"
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1361
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1362
 msgid "qosify package template"
-msgstr ""
+msgstr "шаблон пакета qosify"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1399
 msgid "qosify-status"
@@ -1632,7 +1659,7 @@ msgstr "доля"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1256
 msgid "timeout must be a whole number of seconds above 0."
-msgstr ""
+msgstr "тайм-аут должен быть целым числом секунд больше 0."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1739
 msgid "total"

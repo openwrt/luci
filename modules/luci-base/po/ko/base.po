@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-10-23 20:11+0000\n"
+"PO-Revision-Date: 2026-10-28 06:37+0000\n"
 "Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/>"
 "\n"
@@ -196,6 +196,11 @@ msgid ""
 "selection). Optional labels for ports and VLANs are stored in the LuCI "
 "configuration and are for human reference only."
 msgstr ""
+"에서 VLAN 및 포트별 VLAN 멤버십을 설정합니다. 포트 선택 후 각 VLAN 행의 T와 "
+"U를 사용하여 Tagged 또는 Untagged (네이티브) 멤버십을 할당하거나 제거하세요. "
+"(현재 선택에 따라 비어 있음, 일부 선택, 전체 선택 상태가 됩니다.) 포트 및 "
+"VLAN의 선택적 레이블은 LuCI 설정에 저장되며 오직 사용자의 식별 용도로만 "
+"사용됩니다."
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:59
 msgctxt "sstp log level value"
@@ -1443,7 +1448,7 @@ msgstr "클라이언트 간 트래픽 허용"
 
 #: modules/luci-compat/root/usr/share/rpcd/acl.d/luci-compat.json:3
 msgid "Allow full UCI access for legacy applications"
-msgstr "이전 애플리케이션을 위해 완전한 UCI 접근 허용"
+msgstr "레거시 애플리케이션을 위해 전체 UCI 접근 허용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1025
 msgid "Allow legacy 802.11b rates"
@@ -2732,7 +2737,7 @@ msgstr "설정 실패"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:139
 msgid "Configure VLANs and per-port VLAN membership on bridge device"
-msgstr ""
+msgstr "브리지 장치"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:39
 msgid "Configure client mode"
@@ -3041,15 +3046,15 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:82
 #: modules/luci-compat/luasrc/view/cbi/network_ifacelist.htm:83
 msgid "Custom Interface"
-msgstr "임의의 인터페이스"
+msgstr "사용자 정의 인터페이스"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:408
 msgid ""
 "Custom files (certificates, scripts) may remain on the system. To prevent "
 "this, perform a factory-reset first."
 msgstr ""
-"사용자 지정 파일(인증서, 스크립트)이 시스템에 남아 있을 수 있습니다. 이를 방"
-"지하려면 먼저 공장 초기화를 수행하세요."
+"시스템에 사용자 정의 파일 (인증서, 스크립트)이 남아있을 수 있습니다. 이를 "
+"방지하려면 먼저 공장 초기화를 수행하세요."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:6
 msgid "Custom flash interval (kernel: timer)"
@@ -3359,11 +3364,11 @@ msgstr "지연 시간"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:982
 msgid "Delay before enabling port after MII link down event (msec)"
-msgstr ""
+msgstr "MII 링크 단절 이벤트 발생 후 포트를 활성화하기 전의 대기 시간 (밀리초)입니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:976
 msgid "Delay before enabling port after MII link up event (msec)"
-msgstr ""
+msgstr "MII 링크 연결 이벤트 발생 후 포트를 활성화하기 전의 대기 시간 (밀리초)입니다"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:648
 msgid "Delay n seconds after connection"
@@ -3873,7 +3878,7 @@ msgstr "하위 항목을 포함하여 \"%s\" 디렉터리 삭제를 진행하시
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:206
 msgid "Do you really want to delete the following SSH key?"
-msgstr ""
+msgstr "다음 SSH 키를 삭제하시겠습니까?"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:94
 msgid "Do you really want to erase all settings?"
@@ -4869,7 +4874,7 @@ msgstr "DHCP 로그 상세 기록"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
-msgstr ""
+msgstr "추가 SSH 명령어 옵션"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:378
 msgid "Extra config"
@@ -4960,7 +4965,7 @@ msgstr "모뎀 초기화 실패"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:1089
 msgid "Failed to save configuration: %s"
-msgstr ""
+msgstr "설정 저장 실패: %s"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:30
 msgid "Failed to set operating mode"
@@ -6320,7 +6325,7 @@ msgstr "IPv6 트래픽 테이블 \"%h\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:778
 msgid "IPv6-Only Preferred"
-msgstr "IPv6-Only 선호"
+msgstr "IPv6 전용 선호"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:122
 msgid "IPv6-PD"
@@ -6874,6 +6879,8 @@ msgid ""
 "Invalid DHCP lease time format. Use integer values optionally followed by s, "
 "m, h, d, or w."
 msgstr ""
+"잘못된 DHCP 임대 시간 형식. 정수 값 입력 후 필요에 따라 s(초), m(달), h(시간)"
+", d(일), w(주) 중 1개를 입력하세요."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:118
 msgid "Invalid IPv6 address"
@@ -6891,11 +6898,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:283
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
-msgstr ""
+msgstr "잘못된 VLAN ID 지정! %d 이상 %d 이하의 ID만 허용됩니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:292
 msgid "Invalid VLAN ID given! Only unique IDs are allowed"
-msgstr ""
+msgstr "잘못된 VLAN ID 지정! 중복되지 않는 ID만 허용됩니다"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:410
 msgid "Invalid argument"
@@ -7431,7 +7438,7 @@ msgstr ""
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:82
 msgid "List of SSH key files for auth"
-msgstr ""
+msgstr "인증용 SSH 키 파일 목록"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:609
 msgid "List of domains to allow {rfc_1918_link} responses for."
@@ -8900,7 +8907,7 @@ msgstr "정의된 피어가 없습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:258
 msgid "No ports are configured on this bridge."
-msgstr ""
+msgstr "이 브리지에 설정된 포트 없음."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:15
 msgid "No preferred mode configuration found."
@@ -10120,7 +10127,7 @@ msgstr "이미지 파일을 선택해 주세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:788
 msgid "Please enter a VLAN ID between %d and %d."
-msgstr ""
+msgstr "%d 이상 %d 이하의 VLAN ID를 입력해 주세요."
 
 #: modules/luci-base/ucode/template/sysauth.ut:25
 #: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:98
@@ -10229,21 +10236,25 @@ msgid ""
 "Port \"%s\" has the primary VLAN flag together with tagged egress on VLAN %d "
 "(PVID ≠ untagged VLAN)."
 msgstr ""
+"\"%s\" 포트는 VLAN %d에서 Tagged 이그레스와 함께 기본 VLAN 플래그가 설정되어 "
+"있습니다. (PVID ≠ untagged VLAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:245
 msgid "Port \"%s\" is both tagged and untagged on VLAN %d."
-msgstr ""
+msgstr "\"%s\" 포트가 VLAN %d에서 Tagged 및 Untagged로 동시 설정되어 있습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:251
 msgid ""
 "Port \"%s\" is configured as untagged on more than one VLAN (%d and %d)."
-msgstr ""
+msgstr "\"%s\" 포트가 2개 이상의 VLAN (%d 및 %d)에서 Untagged로 설정되어 있습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:247
 msgid ""
 "Port \"%s\" is the primary VLAN on VLAN %d but has no untagged egress (PVID "
 "≠ untagged VLAN)."
 msgstr ""
+"\"%s\" 포트가 VLAN %d의 기본 VLAN이지만 Untagged 이그레스가 없습니다. (PVID "
+"≠ untagged VLAN)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:152
 msgctxt "WireGuard listen port"
@@ -10264,7 +10275,7 @@ msgstr "포트 우선순위"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:235
 msgid "Port specification \"%s\" on VLAN %d cannot be parsed."
-msgstr ""
+msgstr "VLAN %d의 \"%s\" 포트 지정을 파싱할 수 없습니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:375
 msgid "Port status"
@@ -11231,7 +11242,7 @@ msgstr "hostapd가 필요합니다"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1446
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1447
 msgid "Requires hostapd with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B 지원 hostapd가 필요합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1443
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1444
@@ -11266,7 +11277,7 @@ msgstr "wpa-supplicant가 필요합니다"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1461
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1462
 msgid "Requires wpa-supplicant with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B 지원 wpa-supplicant가 필요합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1459
@@ -12210,7 +12221,7 @@ msgstr ""
 msgid ""
 "Settings used when attaching to the 4G/5G network, before the data "
 "connection is established."
-msgstr ""
+msgstr "데이터 연결이 수립되기 전, 4G/5G 네트워크에 접속할 때 사용되는 설정입니다."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:783
 msgid "Shaping for peer bandwidth"
@@ -12479,6 +12490,8 @@ msgid ""
 "Specifies how often (in seconds) clients should check whether IPv6-only mode "
 "is still preferred (see %s, odhcpd only)."
 msgstr ""
+"클라이언트가 IPv6 전용 모드가 여전히 선호되는지 확인해야 하는 주기를 (초 "
+"단위로) 지정합니다. (%s 참조, odhcpd 전용)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:207
 msgid "Specifies the TOS value to match in IP headers"
@@ -13457,7 +13470,7 @@ msgstr "장비 이름(\"%s\")이 이미 사용 중입니다"
 msgid ""
 "The existing network configuration needs to be changed for LuCI to function "
 "properly."
-msgstr "LuCI가 올바르게 작동하려면 기존 네트워크 설정을 변경해야 합니다."
+msgstr "LuCI가 정상적으로 작동하려면 기존 네트워크 설정을 변경해야 합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:870
 msgid ""
@@ -14632,12 +14645,16 @@ msgid ""
 "Upon pressing \"Continue\", bridges configuration will be updated and the "
 "network will be restarted to apply the updated configuration."
 msgstr ""
+"\"계속\"을 누르면, 브리지 설정이 업데이트되며 변경된 설정을 적용하기 위해 "
+"네트워크가 재시작됩니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:472
 msgid ""
 "Upon pressing \"Continue\", ifname options will get renamed and the network "
 "will be restarted to apply the updated configuration."
 msgstr ""
+"\"계속\"을 누르면, ifname 옵션 이름이 변경되며 변경된 설정을 적용하기 위해 "
+"네트워크가 재시작됩니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:116
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:73
@@ -14715,6 +14732,8 @@ msgid ""
 "in the system setting a lower value, but one that is compatible with the "
 "network interface"
 msgstr ""
+"장치와 호환되는 속도를 사용하세요. 더 높은 속도를 강제로 설정하면 시스템이 "
+"네트워크 인터페이스와 호환되는 더 낮은 값으로 자동 설정합니다"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:274
 msgid "Use as external overlay (/overlay)"
@@ -14944,7 +14963,7 @@ msgstr "VLAN ID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:226
 msgid "VLAN ID %s is outside the valid range %d–%d."
-msgstr ""
+msgstr "VLAN ID %s가 유효 범위 %d~%d를 벗어났습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:447
 msgid "VLANs"
