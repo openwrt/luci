@@ -13,7 +13,8 @@ Visual dashboard for SFP/QSFP optical transceiver diagnostics via `ethtool --jso
 ## Dependencies
 
 - `luci-base`
-- `ethtool-full` (>= 7.0 for JSON output support)
+- `ethtool-full` (>= 7.0 for JSON output support; 7.2 array-valued
+  `transceiver_type` is supported)
 - `ucode-mod-math` (mW to dBm conversion in the rpcd backend)
 
 ## RPC API
