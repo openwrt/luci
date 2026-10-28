@@ -4,16 +4,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-10-06 19:51+0000\n"
-"Last-Translator: Hosted Weblate user 54392 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-27 15:07+0000\n"
+"Last-Translator: nKsyn <nksyn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1330
 msgid "!known (not known)"
@@ -1086,7 +1085,7 @@ msgstr "对于旧版应用，授予完全的 UCI 访问权限"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:993
 msgid "Allow legacy 802.11b rates"
-msgstr "允许使用旧的 802.11b 速率"
+msgstr "允许使用过时的 802.11b 速率"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1147
 msgid "Allow listed only"
@@ -2109,11 +2108,11 @@ msgid ""
 "the basic rate. Supported rates lower than the minimum basic rate are not "
 "offered."
 msgstr ""
-"根据无线信号覆盖密度来配置数据速率。Normal（正常）：如果不使用旧的 802.11b 速"
-"率，则将基础速率配置为 6、12、24 Mbps，否则配置为 5.5、11 Mbps。High（高）："
-"如果不使用旧的 802.11b 速率，则将基础速率配置为 12、24 Mbps，否则配置为 11 "
-"Mbps 速率。Very High（非常高）：配置 24 Mbps 为基础速率，不提供低于最低基础速"
-"率的支持速率。"
+"根据无线信号覆盖密度来配置数据速率。Normal（正常）：如果不使用过时的 802.11b "
+"速率，则将基础速率配置为 6、12、24 Mbps，否则配置为 5.5、11 Mbps。High"
+"（高）：如果不使用过时的 802.11b 速率，则将基础速率配置为 12、24 Mbps，否则配"
+"置为 11 Mbps 速率。Very High（非常高）：基础速率配置为 24 Mbps。不提供低于最"
+"低基础速率的速率。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:806
 msgid ""
@@ -3726,7 +3725,7 @@ msgstr "请输入用冒号分隔的两个优先级"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:204
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:208
 msgid "Expecting: %s"
-msgstr "请输入：%s"
+msgstr "期待：%s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
 msgid "Expires"
@@ -5899,8 +5898,8 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"过时或兼容性不佳的设备可能需要旧的 802.11b 速率才能连接。在使用这些速率的情况"
-"下，空口利用率可能会显著降低。建议尽可能不使用 802.11b 速率。"
+"过时或兼容性不佳的设备可能需要过时的 802.11b 速率才能连接。在使用这些速率的情"
+"况下，空口利用率可能会显著降低。建议尽可能不使用 802.11b 速率。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:680
 msgid "Legacy rules detected"
@@ -7512,6 +7511,10 @@ msgstr "打开 iptables 规则概况…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:474
 msgid "Open list..."
 msgstr "打开列表…"
+
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:63
+msgid "OpenConnect"
+msgstr "OpenConnect"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -10976,6 +10979,7 @@ msgstr "中继的 IPv4 地址"
 msgid "This authentication type is not applicable to the selected EAP method."
 msgstr "此身份验证类型不适用于所选的 EAP 方法。"
 
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:48
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
 msgid "This does not look like a valid PEM file"
 msgstr "这不是有效的 PEM 文件"
@@ -11881,6 +11885,11 @@ msgstr "VPN 本地地址"
 msgid "VPN Local port"
 msgstr "VPN 本地端口"
 
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:95
+msgid "VPN Protocol"
+msgstr "VPN 协议"
+
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:104
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39

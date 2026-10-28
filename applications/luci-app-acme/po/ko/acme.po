@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-10-08 15:51+0000\n"
-"Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
+"PO-Revision-Date: 2026-10-24 11:31+0000\n"
+"Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/ko/>\n"
 "Language: ko\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:28
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
@@ -17,7 +17,7 @@ msgstr "ACME 인증서"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:39
 msgid "ACME global config"
-msgstr "ACME 전역 구성"
+msgstr "ACME 전역 설정"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:511
 msgid "ACME server URL"
@@ -41,7 +41,7 @@ msgstr "인증서 파일은 다음에 저장됩니다:"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:52
 msgid "Certificate config"
-msgstr "인증서 구성"
+msgstr "인증서 설정"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:625
 msgid "Certificates"
@@ -53,7 +53,7 @@ msgstr "챌린지 별칭"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:512
 msgid "Custom ACME server directory URL."
-msgstr "사용자 지정 ACME 서버 디렉터리 URL."
+msgstr "사용자 정의 ACME 서버 디렉터리 URL입니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:77
 msgid "DNS"
@@ -69,11 +69,11 @@ msgstr "DNS API 자격 증명"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "DNS Challenge Validation"
-msgstr "DNS 챌린지 확인"
+msgstr "DNS 챌린지 검증"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:518
 msgid "Days until renewal"
-msgstr "갱신일"
+msgstr "갱신 시도 잔여 일수"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid "Default"
@@ -119,7 +119,7 @@ msgstr "계정 키에 연결할 이메일 주소입니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
 msgid "Enable debug logging"
-msgstr "디버그 로그 기록 사용"
+msgstr "디버그 로그 기록 활성화"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:62
 msgid "Enabled"
@@ -134,8 +134,8 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
-"Let's Encrypt 테스트 서버에서 인증서를 가져옵니다 (테스트 용이며, 발급된 인증"
-"서는 유효하지 않음)."
+"Let's Encrypt 스테이징 서버에서 인증서를 발급받습니다. (테스트용, 발급된 인증"
+"서는 유효하지 않음)"
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
@@ -145,15 +145,15 @@ msgstr "luci-app-acme에 UCI 접근 권한 부여"
 msgid ""
 "If a certificate wasn't renewed in time then you'll receive a notice at 20 "
 "days before expiry."
-msgstr "증명서를 제때 갱신하지 않으면 만료일 20일 전에 알림을 받게 됩니다."
+msgstr "인증서가 제시간에 갱신되지 않으면 만료 20일 전에 알림을 받게 됩니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:607
 msgid "Issued on"
-msgstr "발급 일자"
+msgstr "발급일"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:480
 msgid "Key size (and type) for the generated certificate."
-msgstr "생성된 인증서의 키 크기(및 유형)."
+msgstr "생성된 인증서의 키 크기 (및 유형)입니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:479
 msgid "Key type"
@@ -210,7 +210,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:75
 msgid "Standalone"
-msgstr "독립형"
+msgstr "독립 실행형"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:72
 msgid ""
@@ -219,10 +219,10 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
-"인증서를 발행하기 위해 독립형 모드에서는 내부에 설치된 acme.sh의 웹서버를 사"
-"용하게 됩니다. 웹루트(Webroot) 모드에서는 인증서 발행에 기존의 웹서버를 사용"
-"합니다. DNS 모드는 인증서 발행에 DNS 를 제공하는 업체의 DNS API를 사용하게 됩"
-"니다."
+"독립 실행형(Standalone) 모드는 acme.sh의 내장 웹 서버를 사용하여 인증서를 발"
+"급합니다. 웹루트(Webroot) 모드는 기존 웹 서버를 사용하여 인증서를 발급합니"
+"다. DNS 모드는 DNS 서비스의 DNS API를 사용하여 인증서를 발급할 수 있도록 합니"
+"다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:456
 msgid ""
@@ -296,15 +296,15 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:512
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr "Let's Encrypt 대신 사용자 지정 CA를 사용합니다."
+msgstr "Let's Encrypt 대신 사용자 정의 CA를 사용합니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:470
 msgid "Use staging server"
-msgstr "테스트 서버 사용"
+msgstr "스테이징 서버 사용"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:71
 msgid "Validation method"
-msgstr "유효성 검증 방법"
+msgstr "검증 방식"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid "Webroot"
@@ -312,11 +312,11 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
 msgid "Webroot Challenge Validation"
-msgstr "Webroot 챌린지 확인"
+msgstr "웹루트 챌린지 검증"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:80
 msgid "Webroot directory"
-msgstr "Webroot 디렉터리"
+msgstr "웹루트 디렉터리"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
 msgid ""
@@ -324,6 +324,6 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
-"웹서버 루트 디렉터리입니다. ACME를 웹루트(Webroot) 모드로 실행하기 위해선 웹 "
-"서버 문서 루트 디렉터리를 설정하세요. 웹 서버는 80번 포트에서 인터넷 접근이 "
-"가능해야 합니다."
+"웹 서버 루트 디렉터리입니다. ACME를 웹루트 모드로 실행하려면, 이 값을 웹 서버"
+"의 문서 루트로 설정하세요. 웹 서버는 인터넷에서 80번 포트로 접근할 수 있어야 "
+"합니다."
