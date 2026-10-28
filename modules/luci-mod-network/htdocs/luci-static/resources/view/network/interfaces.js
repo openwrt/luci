@@ -1634,7 +1634,6 @@ return view.extend({
 					"link-partner-advertising": linkPartnerAdvertising,
 					"link-supported": linkSupported
 				}) => {
-					const hasPSE = (pse != null);
 					let phy_links = ([
 						...(linkAdvertising || []),
 						...(linkPartnerAdvertising || []),
@@ -1642,10 +1641,10 @@ return view.extend({
 					]);
 					if (!phy_links || phy_links.length === 0)
 						phy_links = phyLinkSpeeds;
-					nettools.addDeviceOptions(s, dev, isNew, rtTables, hasPSE, parseLinks(phy_links));
+					nettools.addDeviceOptions(s, dev, isNew, rtTables, pse || null, parseLinks(phy_links));
 				});
 			} else {
-				nettools.addDeviceOptions(s, dev, isNew, rtTables, false, parseLinks(phyLinkSpeeds));
+				nettools.addDeviceOptions(s, dev, isNew, rtTables, null, parseLinks(phyLinkSpeeds));
 				return Promise.resolve();
 			}
 		};
