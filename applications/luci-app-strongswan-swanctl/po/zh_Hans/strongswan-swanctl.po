@@ -1,8 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-10-15 11:02+0000\n"
-"Last-Translator: Hosted Weblate user 54392 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-27 15:07+0000\n"
+"Last-Translator: nKsyn <nksyn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsstrongswan-swanctl/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -20,7 +19,7 @@ msgstr "%d 秒"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:73
 msgid "%s, %s or %s with decimal or hexadecimal (0x...) numbers"
-msgstr ""
+msgstr "%s、%s 或带十进制或十六进制数 (0x...) 的 %s"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:76
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/secrets.js:74
@@ -29,7 +28,7 @@ msgstr "必须选中一个文件。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:236
 msgid "A legacy IPsec configuration was found."
-msgstr "找到了旧的 IPsec 配置。"
+msgstr "找到了过时的 IPsec 配置。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:191
 msgid "A local file must be given as a file URI, e.g. %s."
@@ -41,16 +40,18 @@ msgid ""
 "out to remote peers (road warriors) when they connect, so that they get an "
 "address inside your network."
 msgstr ""
+"地址池是虚拟 IP 地址的命名区间，IKE daemon 程序在远程对等方（经常出差在外的人"
+"）连接时将池子信息交出去以便这些人可以获得你网络内部的一个地址。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:86
 msgid ""
 "A unique mark is allocated for each CHILD_SA and direction, so Mark In and "
 "Mark Out differ."
-msgstr ""
+msgstr "为每个 CHILD_SA 和方向都分配唯一的记号，因此 Mark In 和 Mark out 有区别。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:84
 msgid "A unique mark is allocated for each CHILD_SA."
-msgstr ""
+msgstr "每个 CHILD_SA 都会分配到唯一的标记。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:10
 msgid "Absolutely silent"
@@ -74,13 +75,13 @@ msgstr "活动的 IKE_SA"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:220
 msgid "Addresses"
-msgstr ""
+msgstr "地址"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:221
 msgid ""
 "Addresses that are allocated to the peers from this pool, one address per "
 "connected peer."
-msgstr ""
+msgstr "这个地址池中分配给 peer 的地址，每个已连接的 peer 一个地址。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:218
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:328
@@ -97,11 +98,11 @@ msgstr "带有 * 标记的算法被视为不安全"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:275
 msgid "All other traffic of the peer bypasses the tunnel."
-msgstr ""
+msgstr "peer 的所有其他流量都绕过该隧道。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:284
 msgid "All other traffic of the peer is sent through the tunnel."
-msgstr ""
+msgstr "peer 的所有其他流量都经过该隧道发送。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:15
 msgid "Also include sensitive material in dumps, e.g. keys"
@@ -160,6 +161,8 @@ msgid ""
 "attributes such as DNS servers or split tunneling networks, which are sent "
 "to the peer together with the address."
 msgstr ""
+"除了地址，地址池也可以携带额外的配置属性，比如 DNS 服务器或分流拆分隧道网络等"
+"，这些属性和地址一起被发送给对端。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:107
 msgid "Bytes in"
@@ -215,7 +218,7 @@ msgstr "子"
 msgid ""
 "Choose a range that is not used by any local network and large enough for "
 "all peers that connect at the same time."
-msgstr ""
+msgstr "选择一个未被任何本地网络使用且大到足以让所有对端同时连接的地址区间。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:188
 msgid "Class"
@@ -226,6 +229,8 @@ msgid ""
 "Clients that support the attribute (e.g. Cisco Unity) use them to decide "
 "which traffic is sent through the tunnel."
 msgstr ""
+"支持这些属性的客户端（如 Cisco Unity）使用它们来决定哪些流量经该隧道进行发送"
+"。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:731
 msgid "Close Action"
@@ -277,11 +282,11 @@ msgstr "连接"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:437
 msgid "Create a local section first."
-msgstr ""
+msgstr "先创建本地部分。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:468
 msgid "Create a remote section first."
-msgstr ""
+msgstr "先创建远程部分。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:384
 msgid "Crypto Proposal"
@@ -297,11 +302,11 @@ msgstr "自定义提议"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:244
 msgid "DHCP Servers"
-msgstr ""
+msgstr "DHCP 服务器"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:229
 msgid "DNS Servers"
-msgstr ""
+msgstr "DNS 服务器"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:768
 msgid "DPD Action"
@@ -313,7 +318,7 @@ msgstr "DPD 延迟"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:529
 msgid "DPD Timeout"
-msgstr ""
+msgstr "DPD 超时"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:292
 msgid "Daemon"
@@ -329,7 +334,7 @@ msgstr "天"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:82
 msgid "Decimal or hexadecimal (0x prefix) numbers."
-msgstr ""
+msgstr "十进制或十六进制（0x 前缀）数字。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:168
 msgid ""
@@ -379,7 +384,7 @@ msgstr "DH 组 (Diffie-Hellman)"
 msgid ""
 "Disabling this is only useful in special cases, e.g. with route based "
 "routing."
-msgstr ""
+msgstr "禁用这个仅在特殊情形下有用，比如基于路由的 routing。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:119
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:232
@@ -417,7 +422,7 @@ msgstr "每个部分对应一轮身份认证。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:222
 msgid "Either a subnet in CIDR notation or an address range can be given."
-msgstr ""
+msgstr "可以给 CIDR 表示的子网或一个地址段。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:809
 msgid "Enable Hardware offload"
@@ -451,7 +456,7 @@ msgstr "已建立"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:72
 msgid "Expecting: %s"
-msgstr ""
+msgstr "期待：%s"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:97
 msgid "File descriptor watcher"
@@ -459,7 +464,7 @@ msgstr "文件描述符监测器"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:81
 msgid "Format:"
-msgstr ""
+msgstr "格式："
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:217
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:326
@@ -566,23 +571,23 @@ msgstr "隧道远程端点的 IP 地址或 FQDN 名称。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:245
 msgid "IP addresses of DHCP servers that are sent to the peers."
-msgstr ""
+msgstr "发送给 peer 的 DHCP 服务器的 IP 地址。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:230
 msgid "IP addresses of DNS servers that are sent to the peers."
-msgstr ""
+msgstr "发送给 peer 的 DNS 服务器的 IP 地址。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:238
 msgid ""
 "IP addresses of NBNS (NetBIOS name service, also known as WINS) servers that "
 "are sent to the peers."
-msgstr ""
+msgstr "发送给对端的 NBNS（NetBIOS 名称服务，也叫 WINS）服务器的 IP 地址。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:259
 msgid ""
 "IP addresses of the server that are sent to the peers as an additional "
 "attribute."
-msgstr ""
+msgstr "作为额外属性发送给 peer 的服务器的 IP 地址。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:796
 msgid "IPComp"
@@ -602,7 +607,7 @@ msgstr "身份"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:376
 msgid "If disabled, the client waits for the server to push them."
-msgstr ""
+msgstr "如禁用，客户端等待服务器推送它们。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:949
 msgid ""
@@ -622,7 +627,7 @@ msgstr "如未配置，默认值为“1 小时”。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:85
 msgid "If set for Mark In and Mark Out, both directions use the same mark."
-msgstr ""
+msgstr "如果为 Mark in 和 Mark Out 进行了设置，那么两个方向使用相同的掩码。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:143
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:307
@@ -712,7 +717,7 @@ msgstr "要定义的 secret 的类型"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:87
 msgid "Leave empty to not set a mark."
-msgstr ""
+msgstr "留空不设置掩码。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:82
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:103
@@ -834,11 +839,11 @@ msgstr "手动定义提议可能破坏与 peer 的兼容性或导致连接失败
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:821
 msgid "Mark In"
-msgstr ""
+msgstr "Mark In"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:831
 msgid "Mark Out"
-msgstr ""
+msgstr "Mark Out"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:860
 msgid "Maximum number of bytes processed before the CHILD_SA gets closed."
@@ -898,7 +903,7 @@ msgstr "多个密钥交换"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:237
 msgid "NBNS Servers"
-msgstr ""
+msgstr "NBNS 服务器"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:84
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:99
@@ -909,11 +914,11 @@ msgstr "名称"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:832
 msgid "Netfilter mark applied to outbound traffic, used to match the policy."
-msgstr ""
+msgstr "应用到入站流量的 Netfilter 标记，用于匹配策略。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:822
 msgid "Netfilter mark on inbound traffic, used to match the policy."
-msgstr ""
+msgstr "入站流量的 Netfilter 标记，用于匹配策略。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:122
 msgid "Netlink Settings"
@@ -921,12 +926,12 @@ msgstr "Netlink 设置"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:251
 msgid "Netmask"
-msgstr ""
+msgstr "网络掩码"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:252
 msgid ""
 "Netmask that is sent to the peers together with their virtual IP address."
-msgstr ""
+msgstr "和 peer 的虚拟 IP 地址一起发给 peer 的网络掩码。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:163
 msgid "Network interface to bind the shunt policy to"
@@ -934,11 +939,11 @@ msgstr "要将 shunt 策略绑定到的网络接口"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:436
 msgid "No local section exists yet."
-msgstr ""
+msgstr "本地部分尚不存在。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:467
 msgid "No remote section exists yet."
-msgstr ""
+msgstr "远程部分还不存在。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:44
 msgid "Number must have suffix s, m, h or d"
@@ -976,20 +981,20 @@ msgstr "此页面上可以配置 IPsec 连接的常规配置。"
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/secrets.js:98
 msgid ""
 "On this page, you can configure the secrets used for IPsec authentication."
-msgstr ""
+msgstr "在本页面上可以配置用于 IPsec 身份认证的 secrets 信息。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:239
 msgid "Only relevant for legacy Windows clients that resolve NetBIOS names."
-msgstr ""
+msgstr "仅对解析 NetBIOS 名称的老旧 Windows 客户端有关。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:276
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:285
 msgid "Only supported by clients that implement the split tunneling attribute."
-msgstr ""
+msgstr "只有实施隧道分流属性的客户端支持。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:715
 msgid "Otherwise, routes for the XFRM interface must be set manually."
-msgstr ""
+msgstr "否则，XFRM 接口的路由必须手动设置。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:549
 msgid "Overtime"
@@ -1035,7 +1040,7 @@ msgstr "CHILD_SA 上线/下线事件发生时运行的脚本路径"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:246
 msgid "Peers can use them to request further configuration over the tunnel."
-msgstr ""
+msgstr "Peer 可以用它们请求关于该隧道的进一步配置。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:112
 msgid "Platform Trust Service"
@@ -1047,7 +1052,7 @@ msgstr "请先创建一个 Children"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:364
 msgid "Please create a Pool first"
-msgstr ""
+msgstr "请先创建一个地址池"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:394
 msgid "Please create a Proposal first"
@@ -1063,35 +1068,35 @@ msgstr "请升级连接到 IKEv2。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:801
 msgid "Policies"
-msgstr ""
+msgstr "策略"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:206
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:354
 msgid "Pools"
-msgstr ""
+msgstr "池子"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:212
 msgid ""
 "Pools are only needed on the responder side, a connection that only "
 "initiates tunnels does not need one."
-msgstr ""
+msgstr "仅响应侧需要地址池，只发起隧道的连接不需要池子。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:356
 msgid "Pools can be defined on the general page."
-msgstr ""
+msgstr "可以在常规页面定义池子。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:355
 msgid ""
 "Pools from which virtual IP addresses and configuration attributes are "
 "assigned to the remote peers."
-msgstr ""
+msgstr "给远程 peer 分配虚拟 IP 地址和配置属性的地址池。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:116
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:217
 msgid ""
 "Pools, Connections, Encryption Proposals, Children, Locals and Remotes may "
 "not share the same names."
-msgstr ""
+msgstr "地址池、连接、加密提议、Children、本地和远端不能共享相同的名称。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:589
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:621
@@ -1127,13 +1132,13 @@ msgstr "公钥"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:374
 msgid "Pull"
-msgstr ""
+msgstr "拉取"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:375
 msgid ""
 "Pull virtual IP addresses and configuration attributes from the remote peer "
 "(Config Mode)."
-msgstr ""
+msgstr "从远程 peer 拉取虚拟 IP 地址和配置属性（配置模式）。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:278
 msgid "Querying strongSwan failed"
@@ -1268,7 +1273,7 @@ msgstr ""
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:434
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:465
 msgid "Select a section"
-msgstr ""
+msgstr "选择一个部分"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/strongswan.js:55
 msgid "Select an interface or leave empty for all interfaces."
@@ -1290,7 +1295,7 @@ msgstr "发送证书请求载荷将受信任的 root CA 证书提供给对端"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:258
 msgid "Server"
-msgstr ""
+msgstr "服务器"
 
 #: applications/luci-app-strongswan-swanctl/root/usr/share/luci/menu.d/luci-app-strongswan-swanctl.json:32
 msgid "Service"
@@ -1327,11 +1332,11 @@ msgstr "一些选项不可用，因 swanctl 未能加载：%s"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:282
 msgid "Split Exclude"
-msgstr ""
+msgstr "Split Exclude"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:273
 msgid "Split Include"
-msgstr ""
+msgstr "Split Include"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:163
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/status.js:167
@@ -1358,24 +1363,24 @@ msgstr "停止"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:265
 msgid "Subnet"
-msgstr ""
+msgstr "子网"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:266
 msgid ""
 "Subnets in CIDR notation that are announced to the peers as protected by the "
 "tunnel."
-msgstr ""
+msgstr "通告到受隧道保护的 peer 的 CIDR 子网。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:283
 msgid ""
 "Subnets in CIDR notation that the peers must not send through the tunnel."
-msgstr ""
+msgstr "不准 peer 通过隧道发送的 CIDR 子网."
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:274
 msgid ""
 "Subnets in CIDR notation that the peers send through the tunnel (split "
 "tunneling)."
-msgstr ""
+msgstr "peer 通过隧道发送的 CIDR 子网（隧道分流）。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:190
 msgid "Supported schemes are http, ldap and file."
@@ -1410,7 +1415,7 @@ msgstr "认证加密（AEAD）算法省去该哈希。PRF 仅用于 IKE 提议�
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:83
 msgid "The mask defaults to 0xffffffff."
-msgstr ""
+msgstr "掩码默认为 0xffffffff。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:240
 msgid "The migration may require manual intervention."
@@ -1420,18 +1425,18 @@ msgstr "该迁移可能需要人工干预。"
 msgid ""
 "The name of the section is the name of the pool, under which a connection "
 "refers to it."
-msgstr ""
+msgstr "该部分的名称是地址池名称，下方的连接指的是它。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:427
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:458
 msgid "The order matters: the sections are used in the order they are listed."
-msgstr ""
+msgstr "顺序很重要：将按照这些部分被列出的顺序使用它们。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:231
 msgid ""
 "The peers use them to resolve names while the tunnel is up, e.g. for hosts "
 "in the remote network."
-msgstr ""
+msgstr "在隧道正常运转时， peer 使用它们来解析各种名称，比如远程网络中的主机的名称。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:911
 msgid ""
@@ -1456,11 +1461,11 @@ msgstr "这让对端相信传输路径上存在 NAT 状况，强制它用 UDP �
 msgid ""
 "This option must be enabled in the service configuration (Netlink Settings) "
 "for routes to be set automatically."
-msgstr ""
+msgstr "要自动设置路由，必须在服务配置（Netlink 设置）中启用这个选项。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:530
 msgid "Timeout to close connection if no response to DPD is received."
-msgstr ""
+msgstr "如果没收到对 DPD 的响应过多久关闭连接。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:555
 msgid ""
@@ -1502,11 +1507,11 @@ msgstr "唯一 ID"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:452
 msgid "Unknown Local section"
-msgstr ""
+msgstr "未知的本地部分"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:483
 msgid "Unknown Remote section"
-msgstr ""
+msgstr "未知的远程部分"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:763
 msgid "Up/Down Script Path"
@@ -1555,11 +1560,11 @@ msgstr "使用这个设置可能阻止未来更新或迁移。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:253
 msgid "Usually not required, as most clients derive it on their own."
-msgstr ""
+msgstr "通常不需要，因为多数客户端自行获取。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:260
 msgid "Usually not required."
-msgstr ""
+msgstr "通常不需要。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:557
 msgid ""
@@ -1610,7 +1615,7 @@ msgstr "启用后会自动设置所有 XFRM 接口的路由。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:232
 msgid "Whether the attribute is applied depends on the client."
-msgstr ""
+msgstr "该属性是否应用取决于客户端。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:899
 msgid "Whether this is an ESP (phase 2) proposal or not"
@@ -1618,7 +1623,7 @@ msgstr "这是否是一个 ESP (阶段 2) 提议"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:802
 msgid "Whether to install IPsec policies or not."
-msgstr ""
+msgstr "是否安装 IPsec 策略。"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/swanctl.js:488
 msgid "Whether to send our own certificate to the remote peer"
@@ -1662,7 +1667,7 @@ msgstr "不建议使用 (弃用)"
 
 #: applications/luci-app-strongswan-swanctl/htdocs/luci-static/resources/view/strongswan-swanctl/general.js:226
 msgid "or"
-msgstr ""
+msgstr "或"
 
 #: applications/luci-app-strongswan-swanctl/root/usr/share/luci/menu.d/luci-app-strongswan-swanctl.json:3
 #: applications/luci-app-strongswan-swanctl/root/usr/share/luci/menu.d/luci-app-strongswan-swanctl.json:48

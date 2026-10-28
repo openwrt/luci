@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-10-24 16:39+0000\n"
-"Last-Translator: Hannu Nyman <hnyman@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-27 15:07+0000\n"
+"Last-Translator: nKsyn <nksyn@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -1416,7 +1416,7 @@ msgstr "对于旧版应用，授予完全的 UCI 访问权限"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1025
 msgid "Allow legacy 802.11b rates"
-msgstr "允许使用旧的 802.11b 速率"
+msgstr "允许使用过时的 802.11b 速率"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1180
 msgid "Allow listed only"
@@ -2694,11 +2694,11 @@ msgid ""
 "the basic rate. Supported rates lower than the minimum basic rate are not "
 "offered."
 msgstr ""
-"根据无线信号覆盖密度来配置数据速率。Normal（正常）：如果不使用旧的 802.11b 速"
-"率，则将基础速率配置为 6、12、24 Mbps，否则配置为 5.5、11 Mbps。High（高）："
-"如果不使用旧的 802.11b 速率，则将基础速率配置为 12、24 Mbps，否则配置为 11 "
-"Mbps 速率。Very High（非常高）：配置 24 Mbps 为基础速率，不提供低于最低基础速"
-"率的支持速率。"
+"根据无线信号覆盖密度来配置数据速率。Normal（正常）：如果不使用过时的 802.11b "
+"速率，则将基础速率配置为 6、12、24 Mbps，否则配置为 5.5、11 Mbps。High（高）"
+"：如果不使用过时的 802.11b 速率，则将基础速率配置为 12、24 Mbps，否则配置为 "
+"11 Mbps 速率。Very High（非常高）：基础速率配置为 24 Mbps。不提供低于最低基础"
+"速率的速率。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:903
 msgid ""
@@ -2966,7 +2966,7 @@ msgstr "当前工作日"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:175
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:721
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:723
@@ -2990,7 +2990,7 @@ msgstr "自定义闪烁间隔（kernel: timer）"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:171
 msgid "Custom: Use different options (these options are prefixed with %s)."
-msgstr ""
+msgstr "自定义：使用不同选项（这些选项前缀为 %s）。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:54
 msgid ""
@@ -4712,7 +4712,7 @@ msgstr "请输入用冒号分隔的两个优先级"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:83
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:87
 msgid "Expecting: %s"
-msgstr "请输入：%s"
+msgstr "期待：%s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:161
 msgid "Experimental view"
@@ -7202,11 +7202,11 @@ msgstr "留空则使用当前 WAN 地址"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:172
 msgid "Leave unchanged (stored on modem)"
-msgstr ""
+msgstr "保持不变（存储在调制解调器上）"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:168
 msgid "Leave unchanged: Keep the settings stored on the modem."
-msgstr ""
+msgstr "保持不变：保留存储在调制解调器上的设置。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1025
 msgid ""
@@ -7214,8 +7214,8 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"过时或兼容性不佳的设备可能需要旧的 802.11b 速率才能连接。在使用这些速率的情况"
-"下，空口利用率可能会显著降低。建议尽可能不使用 802.11b 速率。"
+"过时或兼容性不佳的设备可能需要过时的 802.11b 速率才能连接。在使用这些速率的情"
+"况下，空口利用率可能会显著降低。建议尽可能不使用 802.11b 速率。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:800
 msgid "Legacy rules detected"
@@ -8563,13 +8563,13 @@ msgstr "网络接口"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:173
 msgid "Network-assigned"
-msgstr ""
+msgstr "Network-assigned"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:169
 msgid ""
 "Network-assigned: Clear the settings stored on the modem, the network "
 "assigns the APN."
-msgstr ""
+msgstr "Network-assigned：清理存储在调制解调器上的设置，由网络分配 APN。"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1590
 msgid "Networking"
@@ -9306,6 +9306,8 @@ msgid ""
 "interface with the most specific route to the peer endpoint is used, usually "
 "the WAN. It must have a route for the address family of the peer endpoints."
 msgstr ""
+"可选。通过这个接口创建到 peer 的主机路由。如为空，将使用到 peer 端点的路由最"
+"具体的接口，通常是 WAN。它必须有一条 peer 端点地址族的路由。"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:196
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:196
@@ -11634,12 +11636,12 @@ msgstr "交换分区"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:174
 msgid "Same as connection"
-msgstr ""
+msgstr "和连接相同"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:170
 msgid ""
 "Same as connection: Use the configuration options above (APN, IP Type, ...)."
-msgstr ""
+msgstr "和连接相同：使用上方的配置选项（APN、IP 类型......）."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3916
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2216
@@ -12069,7 +12071,7 @@ msgstr "协助无线客户端在多个 AP 之间漫游的设置：802.11r、802.
 msgid ""
 "Settings used when attaching to the 4G/5G network, before the data "
 "connection is established."
-msgstr ""
+msgstr "数据连接建立前连接到 4G/5G 网络时使用的设置。"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:783
 msgid "Shaping for peer bandwidth"
