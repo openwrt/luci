@@ -173,18 +173,15 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		for (const c in r) {
 			const o = [ ];
 
-			// skip deletes within re-orders
-			if (d[c])
-				continue;
-
 			// push creates
 			if (n[c])
 				for (const s in n[c])
 					o.push(n[c][s]);
 
-			// push values
+			// push values, skipping fully deleted sections
 			for (const s in v[c])
-				o.push(v[c][s]);
+				if (d[c]?.[s] !== true)
+					o.push(v[c][s]);
 
 			if (o.length > 0) {
 				o.sort((a, b) => a['.index'] - b['.index']);
