@@ -21,6 +21,7 @@ LUCI_DESCRIPTION:=A standalone LuCI theme with a collapsible sidebar or top bar,
 # framework and every page it draws is drawn by luci-base's own view JS.
 LUCI_DEPENDS:=+luci-base
 LUCI_PKGARCH:=all
+PKG_PROVIDES:=luci-theme-openwrt-2020
 
 # csstidy is old enough to mangle :has() and color-mix(), both of which this sheet uses heavily —
 # it silently drops the declarations and the layout goes with them. The stylesheet is already
