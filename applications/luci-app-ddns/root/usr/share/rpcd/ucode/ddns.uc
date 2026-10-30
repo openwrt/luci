@@ -298,15 +298,11 @@ const methods = {
 
 			res['has_bindhost'] = cache['has_bindhost'] || hasBindHost();
 
-			const hasHostIp = () => {
-				return hasCommand('hostip');
-			};
-
 			const hasNslookup = () => {
 				return hasCommand('nslookup');
 			};
 
-			res['has_dnsserver'] = cache['has_bindhost'] || hasNslookup() || hasHostIp() || hasBindHost();
+			res['has_dnsserver'] = cache['has_bindhost'] || hasNslookup() || hasBindHost();
 
 			const checkCerts = () => {
 				let present = false;

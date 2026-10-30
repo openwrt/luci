@@ -358,7 +358,7 @@ return view.extend({
 			o.titleref = L.url("admin", "system", "package-manager")
 			o.rawhtml  = true;
 			o.title = '<b>' + _("DNS requests via TCP not supported") + '</b>';
-			o.cfgvalue = function() { return _("BusyBox's nslookup and hostip do not support TCP " +
+			o.cfgvalue = function() { return _("BusyBox's nslookup does not support TCP " +
 				"instead of the default UDP when sending requests to the DNS server!") +
 				"<br />- " +
 				_("Install 'bind-host' or 'knot-host' or 'drill' package if you know you need TCP for DNS requests.")};
@@ -372,7 +372,7 @@ return view.extend({
 			o.cfgvalue = function() { return _("BusyBox's nslookup in the current compiled version " +
 			"does not handle given DNS Servers correctly!") +
 			"<br />- " +
-			_("You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' package, " +
+			_("You should install 'bind-host' or 'knot-host' or 'drill' package, " +
 			"if you need to specify a DNS server to detect your registered IP.")};
 		}
 
