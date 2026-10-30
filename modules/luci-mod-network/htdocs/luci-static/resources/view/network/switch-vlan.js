@@ -1,7 +1,8 @@
 /* Switch/VLAN configuration view.
  *
  * Operates on a single vlan-aware bridge identified by bvtool.findActiveBridge
- * (every member must be a physical ethernet/DSA port). Renders two blocks:
+ * (wireless members are ignored, every other member must be a physical
+ * ethernet/DSA port). Renders two blocks:
  * a Ports section (clickable port tiles whose selection drives the rest of the
  * view) and a VLANs section (one row per bridge-vlan with tri-state T/U
  * buttons that assign/remove tagged/untagged membership across the current
@@ -68,7 +69,7 @@ function renderNoBridgeBlocker() {
 		E('h2', _('Switch / VLAN Configuration')),
 		E('div', { 'class': 'alert-message warning' }, [
 			E('h4', _('No managed switch found')),
-			E('p', _('No bridge eligible for switch-style configuration was found. This view requires a bridge with VLAN filtering enabled (explicitly or implicitly via bridge-vlan sections) whose member ports are all physical ethernet or DSA switch ports. Bridges containing wireless, tunnel, VLAN sub-interfaces or other virtual members are intentionally excluded.')),
+			E('p', _('No bridge eligible for switch-style configuration was found. This view requires a bridge with VLAN filtering enabled (explicitly or implicitly via bridge-vlan sections) whose member ports are all physical ethernet or DSA switch ports. Bridges containing tunnel, VLAN sub-interfaces or other virtual members are intentionally excluded; wireless members are ignored.')),
 			E('p', [
 				_('You can enable VLAN filtering on a bridge from the '),
 				E('a', { 'href': L.url('admin/network/network') }, _('Interfaces → Devices')),
