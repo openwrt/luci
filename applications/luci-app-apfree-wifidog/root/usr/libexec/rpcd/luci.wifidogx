@@ -1,0 +1,144 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+fetch_url() {
+	local url="$1"
+	if command -v uclient-fetch >/dev/null 2>&1; then
+		uclient-fetch -q --timeout=10 -O - "$url" 2>/dev/null
+	elif command -v curl >/dev/null 2>&1; then
+		curl -s --connect-timeout 10 --max-time 30 "$url" 2>/dev/null
+	elif command -v wget >/dev/null 2>&1; then
+		wget -q -T 10 -O - "$url" 2>/dev/null
+	fi
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "get_location"
+		json_close_object
+		json_add_object "get_wan_mac"
+		json_close_object
+		json_dump
+		;;
+	call)
+		case "$2" in
+			get_wan_mac)
+				# Method 1: Try to get WAN interface device name from UCI (newer OpenWrt)
+				wan_device=$(uci get network.wan.device 2>/dev/null)
+				
+				# Method 2: Try legacy ifname (older OpenWrt)
+				if [ -z "$wan_device" ]; then
+					wan_device=$(uci get network.wan.ifname 2>/dev/null)
+				fi
+				
+				# Method 3: Try to resolve logical interface to physical interface
+				if [ -z "$wan_device" ]; then
+					# Get the physical interface for logical wan interface
+					wan_device=$(ubus call network.interface.wan status 2>/dev/null | jsonfilter -e '@.l3_device' 2>/dev/null)
+					if [ -z "$wan_device" ]; then
+						wan_device=$(ubus call network.interface.wan status 2>/dev/null | jsonfilter -e '@.device' 2>/dev/null)
+					fi
+				fi
+				
+				# Method 4: Try to find WAN interface from routing table
+				if [ -z "$wan_device" ]; then
+					wan_device=$(ip route | grep default | awk '{print $5}' | head -n1)
+				fi
+				
+				# Method 5: Try common WAN interface names
+				if [ -z "$wan_device" ]; then
+					for iface in eth0 eth1 eth0.2 pppoe-wan; do
+						if [ -e "/sys/class/net/$iface" ]; then
+							wan_device="$iface"
+							break
+						fi
+					done
+				fi
+				
+				if [ -n "$wan_device" ] && [ -e "/sys/class/net/$wan_device" ]; then
+					# Get MAC address from the interface
+					mac_addr=$(cat "/sys/class/net/$wan_device/address" 2>/dev/null)
+					
+					if [ -n "$mac_addr" ] && [ "$mac_addr" != "00:00:00:00:00:00" ]; then
+						json_init
+						json_add_object "result"
+						json_add_string "status" "success"
+						json_add_string "mac" "$mac_addr"
+						json_add_string "interface" "$wan_device"
+						json_close_object
+						json_dump
+					else
+						json_init
+						json_add_object "result"
+						json_add_string "status" "fail"
+						json_add_string "message" "Failed to read valid MAC address from interface $wan_device"
+						json_close_object
+						json_dump
+					fi
+				else
+					json_init
+					json_add_object "result"
+					json_add_string "status" "fail"
+					json_add_string "message" "WAN interface not found"
+					json_close_object
+					json_dump
+				fi
+				;;
+			get_location)
+				# Try multiple location APIs for better reliability
+				
+				# First try ipapi.co (HTTPS, more reliable)
+				result=$(fetch_url "https://ipapi.co/json")
+				
+				if [ $? -eq 0 ] && [ -n "$result" ]; then
+					# Check if we got valid latitude/longitude
+					lat=$(echo "$result" | jsonfilter -e '@.latitude' 2>/dev/null)
+					lon=$(echo "$result" | jsonfilter -e '@.longitude' 2>/dev/null)
+					
+					if [ -n "$lat" ] && [ -n "$lon" ] && [ "$lat" != "null" ] && [ "$lon" != "null" ]; then
+						json_init
+						json_add_object "result"
+						json_add_string "status" "success"
+						json_add_string "lat" "$lat"
+						json_add_string "lon" "$lon"
+						json_close_object
+						json_dump
+						exit 0
+					fi
+				fi
+				
+				# If first API failed, try ipinfo.io as backup
+				result=$(fetch_url "https://ipinfo.io/json")
+				
+				if [ $? -eq 0 ] && [ -n "$result" ]; then
+					# Extract lat,lon from loc field (format: "lat,lon")
+					loc=$(echo "$result" | jsonfilter -e '@.loc' 2>/dev/null)
+					if [ -n "$loc" ] && [ "$loc" != "null" ]; then
+						lat=$(echo "$loc" | cut -d',' -f1)
+						lon=$(echo "$loc" | cut -d',' -f2)
+						
+						# Format response to match expected format
+						json_init
+						json_add_object "result"
+						json_add_string "status" "success"
+						json_add_string "lat" "$lat"
+						json_add_string "lon" "$lon"
+						json_close_object
+						json_dump
+						exit 0
+					fi
+				fi
+				
+				# If both APIs failed, return error instead of fallback
+				json_init
+				json_add_object "result"
+				json_add_string "status" "fail"
+				json_add_string "message" "Location services unavailable - please check network connection"
+				json_close_object
+				json_dump
+				;;
+		esac
+		;;
+esac
