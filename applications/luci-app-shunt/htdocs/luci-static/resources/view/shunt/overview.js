@@ -244,8 +244,12 @@ function renderIssues(st) {
 		return '';
 	}
 
+	// Config issues name a section and an option, all others a policy and
+	// an entry.
 	const items = st.issues.map(function (i) {
-		const where = i.entry ? '%s: %s'.format(i.policy, i.entry) : i.policy;
+		const name = i.policy || i.section;
+		const entry = i.entry || i.option;
+		const where = entry ? '%s: %s'.format(name, entry) : name;
 		return E('li', {}, ['%s - %s'.format(where, i.reason)]);
 	});
 
