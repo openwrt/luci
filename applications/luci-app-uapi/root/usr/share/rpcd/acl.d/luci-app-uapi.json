@@ -1,0 +1,25 @@
+{
+	"luci-app-uapi": {
+		"description": "Manage the uapi REST API: tokens, settings and status",
+		"read": {
+			"ubus": {
+				"luci.uapi": [
+					"get_status",
+					"list_tokens",
+					"list_scopes"
+				]
+			},
+			"uci": [ "uapi" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.uapi": [
+					"create_token",
+					"revoke_token",
+					"set_insecure"
+				]
+			},
+			"uci": [ "uapi" ]
+		}
+	}
+}
