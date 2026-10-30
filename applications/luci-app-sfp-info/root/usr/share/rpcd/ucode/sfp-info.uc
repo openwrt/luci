@@ -66,16 +66,47 @@ function parse_ethtool_json(eth_data, iface) {
 			data.vendor_oui[1],
 			data.vendor_oui[2]) : null;
 
-	/* transceiver types -- ethtool may output a single string */
+	/* transceiver types -- ethtool 7.2+ outputs an array containing all
+	 * compliance codes, older versions output a single string */
 	let transceiver_types = [];
+	let tt = data.transceiver_type;
 
-	if (data.transceiver_type)
-		push(transceiver_types, data.transceiver_type);
+	if (type(tt) == 'array') {
+		for (let i = 0; i < length(tt); i++) {
+			if (type(tt[i]) == 'string' && length(tt[i]) > 0)
+				push(transceiver_types, tt[i]);
+		}
+	} else if (type(tt) == 'string' && length(tt) > 0) {
+		push(transceiver_types, tt);
+	}
 
-	/* detect multi-channel (QSFP/CMIS) by array bias current */
+	/*
+	 * Detect multi-channel (QSFP/CMIS) modules. Channel-level values are
+	 * emitted as arrays, but a CMIS module may advertise TX/RX power
+	 * monitoring without bias current monitoring, so do not rely on the
+	 * bias array alone.
+	 */
 	let bias = data.laser_tx_bias_current;
-	let is_multi_ch = type(bias) == 'array';
-	let ch_count = is_multi_ch ? min(length(bias), 4) : 1;
+	let tx_val = data.transmit_avg_optical_power;
+	let rx_obj = data.rx_power;
+	let rx_arr = (type(rx_obj) == 'object' &&
+		type(rx_obj.values) == 'array') ? rx_obj.values : null;
+
+	let is_multi_ch = type(bias) == 'array' ||
+		type(tx_val) == 'array' || rx_arr != null;
+
+	let ch_count = 1;
+
+	if (type(bias) == 'array')
+		ch_count = max(ch_count, length(bias));
+
+	if (type(tx_val) == 'array')
+		ch_count = max(ch_count, length(tx_val));
+
+	if (rx_arr != null)
+		ch_count = max(ch_count, length(rx_arr));
+
+	ch_count = min(ch_count, 4);
 
 	let diag = {};
 
@@ -90,22 +121,17 @@ function parse_ethtool_json(eth_data, iface) {
 
 			/* bias current per channel */
 			diag[`bias_current_ma_ch${ci}`] =
-				bias[ch] != null ? +bias[ch] : null;
+				(type(bias) == 'array' && bias[ch] != null) ?
+				+bias[ch] : null;
 
 			/* TX power per channel */
-			let tx_arr = data.transmit_avg_optical_power;
-			let tx_mw = (type(tx_arr) == 'array' &&
-				tx_arr[ch] != null) ? +tx_arr[ch] : null;
+			let tx_mw = (type(tx_val) == 'array' &&
+				tx_val[ch] != null) ? +tx_val[ch] : null;
 
 			diag[`tx_power_mw_ch${ci}`] = tx_mw;
 			diag[`tx_power_dbm_ch${ci}`] = mw_to_dbm(tx_mw);
 
-			/* RX power per channel -- QSFP: rx_power.values array */
-			let rx_obj = data.rx_power;
-			let rx_arr = (type(rx_obj) == 'object' &&
-				type(rx_obj.values) == 'array') ?
-				rx_obj.values : null;
-
+			/* RX power per channel -- QSFP/CMIS: rx_power.values array */
 			let rx_mw = (rx_arr != null && rx_arr[ch] != null) ?
 				+rx_arr[ch] : null;
 
@@ -123,13 +149,10 @@ function parse_ethtool_json(eth_data, iface) {
 		/* SFP: single-channel values */
 		diag.bias_current_ma = bias != null ? +bias : null;
 
-		let tx_val = data.transmit_avg_optical_power;
-
 		diag.tx_power_mw  = tx_val != null ? +tx_val : null;
 		diag.tx_power_dbm = mw_to_dbm(tx_val != null ? +tx_val : null);
 
 		/* SFP: rx_power is { value, type } */
-		let rx_obj = data.rx_power;
 		let rx_val = (type(rx_obj) == 'object') ? rx_obj.value : null;
 
 		diag.rx_power_mw  = rx_val != null ? +rx_val : null;
