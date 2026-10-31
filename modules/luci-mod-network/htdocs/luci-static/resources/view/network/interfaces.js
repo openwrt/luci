@@ -19,6 +19,13 @@ const callNetworkDeviceStatus = rpc.declare({
 	expect: { '': {} }
 });
 
+const callEthtoolStatus = rpc.declare({
+	object: 'luci',
+	method: 'getEthtoolStatus',
+	params: [ 'devices' ],
+	expect: { result: {} }
+});
+
 const speedBaseParse = /^(\d+)base(\w+)-(H|F)$/;
 const phyLinkSpeeds = [
 	"10baseT-F", "10baseT-H",
@@ -409,6 +416,7 @@ return view.extend({
 			network.getDevices(),
 			fs.lines('/etc/iproute2/rt_tables'),
 			L.resolveDefault(callNetworkDeviceStatus(), {}),
+			network.getDevices().then((devs) => L.resolveDefault(callEthtoolStatus(devs.map((d) => d.getName())), {})),
 			uci.changes()
 		]);
 	},
@@ -507,7 +515,7 @@ return view.extend({
 		]);
 	},
 
-	render([dslModemType, netDevs, rtTables, devStatus]) {
+	render([dslModemType, netDevs, rtTables, devStatus, ethStatus]) {
 
 		if (this.interfaceBridgeWithIfnameSections().length)
 			return this.renderBridgeMigration();
@@ -1850,6 +1858,88 @@ return view.extend({
 				}, [ fmt(cur) ]);
 
 			return fmt(cur);
+		};
+
+		/* "10000baseT/Full" -> "10G", ascending */
+		const fmtModes = (modes) => {
+			const speeds = [];
+
+			for (const mode of L.toArray(modes)) {
+				const mbit = parseInt(mode);
+
+				if (mbit > 0 && !speeds.includes(mbit))
+					speeds.push(mbit);
+			}
+
+			if (!speeds.length)
+				return _('none');
+
+			speeds.sort((a, b) => a - b);
+
+			return speeds.map((mbit) => (mbit >= 1000) ? (mbit / 1000) + 'G' : mbit + 'M').join(', ');
+		};
+
+		const fmtPauseDirection = (pause) => {
+			if (pause.rx && pause.tx)
+				return _('RX/TX');
+
+			if (pause.rx)
+				return _('RX');
+
+			if (pause.tx)
+				return _('TX');
+
+			return _('Off');
+		};
+
+		const fmtEEEStatus = (status) => {
+			switch (status) {
+			case 'active':   return _('Active');
+			case 'inactive': return _('Inactive');
+			case 'disabled': return _('Disabled');
+			default:         return status ?? '-';
+			}
+		};
+
+		const getEthStatus = (dev) => dev ? ethStatus[dev.getName()] : null;
+
+		o = s.option(form.DummyValue, '_flowctl', _('Flow Control'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const dev = getDevice(section_id);
+			const status = getEthStatus(dev);
+			const pause = status?.pause;
+
+			if (!pause || !dev.getCarrier())
+				return '-';
+
+			/* without pause autonegotiation the configured RX/TX values apply as they are */
+			if (!pause.autonegotiate)
+				return E('span', { 'data-tooltip': _('Forced, not negotiated') }, [ fmtPauseDirection(pause) ]);
+
+			if (!pause.negotiated)
+				return '-';
+
+			const advertised = status.link?.['advertised-pause-frame-use'] ?? '-';
+			const partner = status.link?.['link-partner-advertised-pause-frame-use'] ?? '-';
+			const tooltip = _('Advertised: %s, link partner: %s').format(advertised, partner);
+
+			return E('span', { 'data-tooltip': tooltip }, [ fmtPauseDirection(pause.negotiated) ]);
+		};
+
+		o = s.option(form.DummyValue, '_eee', _('EEE'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const eee = getEthStatus(getDevice(section_id))?.eee;
+
+			if (!eee)
+				return '-';
+
+			const advertised = fmtModes(eee['advertised-eee-link-modes']);
+			const partner = fmtModes(eee['link-partner-advertised-eee-link-modes']);
+			const tooltip = _('Advertised: %s, link partner: %s').format(advertised, partner);
+
+			return E('span', { 'data-tooltip': tooltip }, [ fmtEEEStatus(eee.status) ]);
 		};
 
 		o = s.option(form.DummyValue, 'macaddr', _('MAC Address'));
