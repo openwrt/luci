@@ -952,6 +952,17 @@ return view.extend({
 			o.rmempty = true;
 		}
 
+		o = s.taboption('feeds', form.Value, 'ban_authkey', _('Feed Auth-Key'), _('Personal auth-key for feeds with an \'{authkey}\' URL placeholder, e.g. the free abuse.ch key required by the \'urlhaus\' feed.'));
+		o.password = true;
+		o.validate = function (section_id, value) {
+			if (value && !value.match(/^[A-Za-z0-9_-]+$/)) {
+				return _('Invalid characters');
+			}
+			return true;
+		};
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('feeds', form.DummyValue, '_feeds1');
 		o.rawhtml = true;
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('Country Selection') + '</em>';
