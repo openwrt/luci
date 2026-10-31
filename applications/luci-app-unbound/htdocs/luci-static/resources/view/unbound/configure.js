@@ -38,8 +38,10 @@ return view.extend({
 		const leasetrig = uci.get('dhcp', 'odhcpd', 'leasetrigger') || 'undefined';
 
 		if (manual === '0' && dhcpLink === 'odhcpd' && leasetrig !== '/usr/lib/unbound/odhcpd.sh') {
-			ui.addTimeLimitedNotification(null, E('p', _('Note: local DNS is configured to look at odhpcd, but odhpcd UCI lease trigger is incorrectly set:') +
-				"dhcp.odhcpd.leasetrigger='" + leasetrig + "'"), 15000, 'note');
+			ui.addTimeLimitedNotification(null, E('p', [
+				_('Note: local DNS is configured to look at odhcpd, but odhcpd UCI lease trigger is incorrectly set:'),
+				" dhcp.odhcpd.leasetrigger='" + leasetrig + "'"
+			]), 15000, 'note');
 		}
 
 		// Tabs
