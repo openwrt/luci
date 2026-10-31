@@ -1183,6 +1183,14 @@ return baseclass.extend({
 		o.value('1', _('Enable'));
 		o.value('0', _('Disable'));
 
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'eee', _('Energy Efficient Ethernet (EEE)'),
+			_('Advertise EEE to the link partner. It is only used if both sides support it.'));
+		o.rmempty = true;
+		o.default = '';
+		o.value('', _('Default'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
+
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
