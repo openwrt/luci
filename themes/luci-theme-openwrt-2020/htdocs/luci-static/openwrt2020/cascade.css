@@ -1028,14 +1028,14 @@ input[type="radio"]::after {
 
 input[type="checkbox"]:checked::after,
 input[type="radio"]:checked::after {
-	--checkmark-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><path d='m2.5 7.4 7.5 7.5-2.5 2.4L0 10Zm15-5L20 4.9 7.5 17.3 5 15Z'/></svg>");
+	--checkmark-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='m2.5 7.4 7.5 7.5-2.5 2.4L0 10Zm15-5L20 4.9 7.5 17.3 5 15Z'/%3E%3C/svg%3E");
 	-webkit-mask: var(--checkmark-icon) center/cover no-repeat;
 	mask: var(--checkmark-icon) center/cover no-repeat;
 	background: var(--fg-color);
 }
 
 input[type="radio"]:checked:after {
-	--checkmark-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='7'/></svg>");
+	--checkmark-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='7'/%3E%3C/svg%3E");
 }
 
 input[type="checkbox"].cbi-input-invalid,
