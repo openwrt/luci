@@ -745,6 +745,46 @@ const methods = {
 		}
 	},
 
+	getEthtoolStatus: {
+		args: { devices: [] },
+		call: function(request) {
+			const query = (opts, dev) => {
+				const fd = popen(`ethtool --json ${opts} ${shellquote(dev)} 2>/dev/null`);
+
+				if (!fd)
+					return null;
+
+				const out = fd.read('all');
+
+				/* ethtool prints [ {} ] for an unsupported query; only its exit status tells */
+				if (fd.close() != 0)
+					return null;
+
+				try {
+					return json(out)?.[0];
+				}
+				catch (e) {
+					return null;
+				}
+			};
+
+			const result = {};
+
+			for (let dev in request.args.devices) {
+				if (type(dev) != 'string' || !match(dev, /^[^-.\/][^\/]*$/) || !access(`/sys/class/net/${dev}`))
+					continue;
+
+				result[dev] = {
+					link: query('', dev),
+					pause: query('-a', dev),
+					eee: query('--show-eee', dev)
+				};
+			}
+
+			return { result };
+		}
+	},
+
 	getOdhcp6cStats: {
 		call: function() {
 			const ubus = connect();
