@@ -13,6 +13,15 @@
 		}
 	},
 
+	"luci-mod-status-ports": {
+		"description": "Grant access to Ethernet port status",
+		"read": {
+			"ubus": {
+				"luci": [ "getBuiltinEthernetPorts", "getEthtoolStatus" ]
+			}
+		}
+	},
+
 	"luci-mod-status-processes": {
 		"description": "Grant access to process status",
 		"read": {

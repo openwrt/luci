@@ -110,6 +110,19 @@
 		}
 	},
 
+	"admin/status/ports": {
+		"title": "Ports",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "status/ports"
+		},
+		"depends": {
+			"acl": [ "luci-mod-status-ports" ],
+			"fs": { "/usr/sbin/ethtool": "executable" }
+		}
+	},
+
 	"admin/status/processes": {
 		"title": "Processes",
 		"order": 6,
