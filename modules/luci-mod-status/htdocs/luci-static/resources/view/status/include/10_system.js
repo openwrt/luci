@@ -25,6 +25,11 @@ var callSystemInfo = rpc.declare({
 	method: 'info'
 });
 
+var callCPUTemperature = rpc.declare({
+	object: 'luci',
+	method: 'getCPUTemperature'
+});
+
 return baseclass.extend({
 	title: _('System'),
 
@@ -34,7 +39,8 @@ return baseclass.extend({
 			L.resolveDefault(callSystemInfo(), {}),
 			L.resolveDefault(callLuciVersion(), { revision: _('unknown version'), branch: 'LuCI' }),
 			L.resolveDefault(callGetUnixtime(), 0),
-			uci.load('system')
+			uci.load('system'),
+			L.resolveDefault(callCPUTemperature(), {})
 		]);
 	},
 
@@ -42,7 +48,8 @@ return baseclass.extend({
 		var boardinfo   = data[0],
 		    systeminfo  = data[1],
 		    luciversion = data[2],
-		    unixtime    = data[3];
+		    unixtime    = data[3],
+		    cputemp     = data[5];
 
 		luciversion = luciversion.branch + ' ' + luciversion.revision;
 
@@ -77,6 +84,8 @@ return baseclass.extend({
 				systeminfo.load[2] / 65535.0
 			) : null
 		];
+
+		fields.push(_('CPU Temperature'), (cputemp.temperature != null) ? '%.1f\u202f°C (%s)'.format(cputemp.temperature, cputemp.zone) : '-');
 
 		var table = E('table', { 'class': 'table' });
 
