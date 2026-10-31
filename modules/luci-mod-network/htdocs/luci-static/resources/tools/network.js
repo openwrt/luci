@@ -1046,6 +1046,15 @@ return baseclass.extend({
 		o.default = o.disabled;
 		o.depends('type', 'bridge');
 
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'stp_proto', _('STP protocol'),
+			_('Used by the ustp daemon, which defaults to RSTP. Without the ustp package the kernel runs classic STP and ignores this setting.'));
+		o.value('', _('Default'));
+		o.value('stp', _('STP (IEEE 802.1D)'));
+		o.value('rstp', _('RSTP (IEEE 802.1w)'));
+		o.value('mstp', _('MSTP (IEEE 802.1s)'));
+		o.rmempty = true;
+		o.depends({ type: 'bridge', stp: '1' });
+
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'hello_time', _('Hello interval'), _('Interval in seconds for STP hello packets'));
 		o.placeholder = '1';
 		o.datatype = 'range(1, 10)';
