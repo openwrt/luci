@@ -1169,6 +1169,14 @@ return baseclass.extend({
 		for (let link of devicePhySpeeds)
 			o.value('%d'.format(link), formatLinkSpeed(link));
 
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'pause', _('Advertise flow control'),
+			_('Advertise pause frame support to the link partner. Flow control is used only if both sides support it. Setting the RX or TX option below forces flow control without autonegotiation; this option then also applies to any direction left at Default, and Disable turns both directions off.'));
+		o.rmempty = true;
+		o.default = '';
+		o.value('', _('Default'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
+
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'rxpause', _('Controls the receive (RX) flow control'));
 		o.rmempty = true;
 		o.default = '';
