@@ -3230,64 +3230,69 @@ legend.cbi-section-legend {
 .darkstrap-help-open .cbi-tab-descr.darkstrap-help-managed,
 .darkstrap-help-open .description.darkstrap-help-managed,
 .darkstrap-help-open .help-block.darkstrap-help-managed,
-.darkstrap-help-open .help-inline.darkstrap-help-managed,
-.darkstrap-help-hover > .cbi-value-description.darkstrap-help-managed,
-.darkstrap-help-hover > .cbi-section-descr.darkstrap-help-managed,
-.darkstrap-help-hover > .cbi-section-table-descr.darkstrap-help-managed,
-.darkstrap-help-hover > .cbi-tab-descr.darkstrap-help-managed,
-.darkstrap-help-hover > .description.darkstrap-help-managed,
-.darkstrap-help-hover > .help-block.darkstrap-help-managed,
-.darkstrap-help-hover > .help-inline.darkstrap-help-managed,
-.darkstrap-help-hover .cbi-value-description.darkstrap-help-managed,
-.darkstrap-help-hover .cbi-section-descr.darkstrap-help-managed,
-.darkstrap-help-hover .cbi-section-table-descr.darkstrap-help-managed,
-.darkstrap-help-hover .cbi-tab-descr.darkstrap-help-managed,
-.darkstrap-help-hover .description.darkstrap-help-managed,
-.darkstrap-help-hover .help-block.darkstrap-help-managed,
-.darkstrap-help-hover .help-inline.darkstrap-help-managed,
-.darkstrap-help-btn:hover ~ .cbi-value-description.darkstrap-help-managed,
-.darkstrap-help-btn:focus-visible ~ .cbi-value-description.darkstrap-help-managed {
+.darkstrap-help-open .help-inline.darkstrap-help-managed {
   display: block !important;
   opacity: 1 !important;
   visibility: visible !important;
-  margin-top: 8px;
-  padding: 8px 14px;
-  border: 1px solid rgba(255, 176, 32, 0.35);
-  border-radius: 8px;
-  background: rgba(10, 16, 28, 0.96);
-  color: #e2eeff !important;
+  margin: 6px 0 10px 0;
+  padding: 8px 12px;
+  border-left: 2px solid var(--darkstrap-accent, #ffb020);
+  border-top: 1px solid rgba(255, 176, 32, 0.2);
+  border-right: 1px solid rgba(255, 176, 32, 0.2);
+  border-bottom: 1px solid rgba(255, 176, 32, 0.2);
+  border-radius: 6px;
+  background: rgba(13, 20, 36, 0.95);
+  color: #cbd5e1 !important;
   font-size: 11.5px;
-  line-height: 1.45;
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 176, 32, 0.15);
-  transition: opacity 0.12s ease-in;
+  line-height: 1.5;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  animation: darkstrapHelpReveal 0.16s ease-out;
 }
+
+@keyframes darkstrapHelpReveal {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .darkstrap-help-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  margin-left: 7px;
+  width: 17px;
+  height: 17px;
+  min-width: 17px;
+  margin-left: 8px;
   padding: 0;
-  border: 1px solid rgba(255, 176, 32, 0.45);
+  border: 1px solid rgba(255, 176, 32, 0.35);
   border-radius: 50%;
-  background: rgba(255, 176, 32, 0.14) !important;
+  background: rgba(255, 176, 32, 0.08) !important;
   color: #ffb020 !important;
-  font: 700 11px/1 system-ui, sans-serif;
   cursor: pointer;
   vertical-align: middle;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.3);
+  position: relative;
+  top: -1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
   transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+.darkstrap-help-btn svg {
+  display: block;
+  pointer-events: none;
 }
 .darkstrap-help-btn:hover,
-.darkstrap-help-btn:focus,
-.darkstrap-help-open .darkstrap-help-btn {
-  background: rgba(255, 176, 32, 0.32) !important;
+.darkstrap-help-btn:focus-visible {
+  background: rgba(255, 176, 32, 0.22) !important;
   border-color: #ffb020;
   color: #ffffff !important;
-  box-shadow: 0 0 8px rgba(255, 176, 32, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 2px rgba(255, 176, 32, 0.25);
   outline: none;
+}
+.darkstrap-help-open .darkstrap-help-btn,
+.darkstrap-help-btn[aria-expanded="true"] {
+  background: #ffb020 !important;
+  border-color: #ffb020 !important;
+  color: #0b0f19 !important;
+  box-shadow: 0 0 0 2px rgba(255, 176, 32, 0.35);
 }
 
 .darkstrap-help-managed::before,
@@ -7433,6 +7438,26 @@ img[src*="/icons/"] {
 .cbi-tooltip.darkstrap-tooltip-below {
   top: calc(100% + 8px);
   bottom: auto;
+}
+
+/* Edge fallback for first and last port cards */
+.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip {
+  left: var(--darkstrap-tt-left, 0);
+  transform: var(--darkstrap-tt-transform, none);
+}
+.ifacebox:first-child .cbi-tooltip-container .cbi-tooltip::after {
+  left: var(--darkstrap-arrow-left, 24px);
+  transform: translateX(var(--darkstrap-arrow-tx, -50%));
+}
+.ifacebox:last-child .cbi-tooltip-container .cbi-tooltip {
+  left: var(--darkstrap-tt-left, auto);
+  right: var(--darkstrap-tt-right, 0);
+  transform: var(--darkstrap-tt-transform, none);
+}
+.ifacebox:last-child .cbi-tooltip-container .cbi-tooltip::after {
+  left: var(--darkstrap-arrow-left, auto);
+  right: var(--darkstrap-arrow-right, 24px);
+  transform: translateX(var(--darkstrap-arrow-tx, 50%));
 }
 
 /* Tooltip Flip Top: when near bottom of viewport */

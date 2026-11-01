@@ -61,7 +61,9 @@
     qsa(selector, root).forEach(function (desc) {
       var text = (desc.textContent || '').trim();
       if (!text) return;
-      if (desc.closest('.alert-message, .alert, .notice, .zonebadge, .ifacebadge, .ifacebox, .modal.login')) return;
+      // Never fold alerts, notices, port boxes, logins, or active validation errors
+      if (desc.closest('.alert-message, .alert, .notice, .zonebadge, .ifacebadge, .ifacebox, .modal.login, .cbi-value-error, .error')) return;
+      if (desc.classList.contains('cbi-value-error') || desc.classList.contains('error') || desc.querySelector('.cbi-value-error, .error')) return;
 
       var container = descriptionContainer(desc);
       if (!container) return;
@@ -70,35 +72,25 @@
       if (!desc.id) desc.id = 'darkstrap-help-' + Math.random().toString(36).slice(2, 10);
       if (container.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
 
+      var titleEl = container.querySelector('.cbi-value-title') ||
+                    container.querySelector('legend') ||
+                    container.querySelector('h3, h2, h1') ||
+                    container.querySelector('label') ||
+                    container.querySelector('.td:first-child') ||
+                    container.firstElementChild;
+      if (!titleEl) return;
+
+      // Avoid duplicate buttons on re-renders
+      if (titleEl.parentElement && titleEl.parentElement.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
+
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'darkstrap-help-btn';
-      btn.textContent = '?';
-      btn.setAttribute('aria-label', 'Show help');
+      btn.setAttribute('aria-label', 'Toggle help details');
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-controls', desc.id);
       btn.setAttribute('data-darkstrap-help-for', desc.id);
-
-      var hoverTimer = null;
-      btn.addEventListener('mouseenter', function () {
-        hoverTimer = setTimeout(function () {
-          if (!container.classList.contains('darkstrap-help-open')) {
-            container.classList.add('darkstrap-help-hover');
-          }
-        }, 120);
-      });
-      btn.addEventListener('mouseleave', function () {
-        if (hoverTimer) clearTimeout(hoverTimer);
-        container.classList.remove('darkstrap-help-hover');
-      });
-      btn.addEventListener('focus', function () {
-        if (!container.classList.contains('darkstrap-help-open')) {
-          container.classList.add('darkstrap-help-hover');
-        }
-      });
-      btn.addEventListener('blur', function () {
-        container.classList.remove('darkstrap-help-hover');
-      });
+      btn.innerHTML = '<svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.8"/><path d="M6.2 6.1a2 2 0 0 1 3.5 1.2c0 .9-.9 1.4-1.7 1.8v.7"/><circle cx="8" cy="12.2" r="0.8" fill="currentColor" stroke="none"/></svg>';
 
       btn.addEventListener('touchstart', function (ev) {
         ev.stopPropagation();
@@ -108,24 +100,17 @@
         ev.preventDefault();
         ev.stopPropagation();
         var open = !container.classList.contains('darkstrap-help-open');
-        qsa('.darkstrap-help-open').forEach(function (el) {
-          if (el !== container) {
-            el.classList.remove('darkstrap-help-open');
-            var b = el.querySelector('.darkstrap-help-btn');
-            if (b) {
-              b.setAttribute('aria-expanded', 'false');
-              b.setAttribute('aria-label', 'Show help');
-            }
-          }
-        });
         container.classList.toggle('darkstrap-help-open', open);
-        container.classList.remove('darkstrap-help-hover');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        btn.setAttribute('aria-label', open ? 'Hide help' : 'Show help');
+        btn.setAttribute('aria-label', open ? 'Hide help details' : 'Show help details');
       });
 
-      var target = buttonTarget(container, desc);
-      if (target) target.appendChild(btn);
+      // Insert immediately after <label> to prevent click activation of the associated input control
+      if (titleEl.tagName === 'LABEL') {
+        titleEl.insertAdjacentElement('afterend', btn);
+      } else {
+        titleEl.appendChild(btn);
+      }
     });
   }
 
@@ -770,20 +755,30 @@
         tt.classList.remove('darkstrap-tooltip-above');
       }
 
-      // 2. Horizontal positioning & arrow alignment
+      // 2. Horizontal positioning & arrow alignment:
+      // Keep tooltip body clamped within both card container and viewport margins
+      var card = container.closest('.cbi-section, .cbi-tblsection, #maincontent') || document.body;
+      var cardRect = card.getBoundingClientRect();
+      var minLeft = Math.max(pad, cardRect.left + 4);
+      var maxRight = Math.min(winW - pad, cardRect.right - 4);
+
       var targetCenterX = cRect.left + cRect.width / 2;
-      var ttWidth = ttRect.width;
+      var ttWidth = ttRect.width || 220;
       var desiredTtLeft = targetCenterX - ttWidth / 2;
 
-      // Clamp tooltip body within viewport margins
+      // Clamp within card boundaries
+      if (desiredTtLeft < minLeft) {
+        desiredTtLeft = minLeft;
+      }
+      if (desiredTtLeft + ttWidth > maxRight) {
+        desiredTtLeft = maxRight - ttWidth;
+      }
       if (desiredTtLeft < pad) {
         desiredTtLeft = pad;
-      } else if (desiredTtLeft + ttWidth > winW - pad) {
-        desiredTtLeft = winW - pad - ttWidth;
       }
 
       var relativeTtLeft = desiredTtLeft - cRect.left;
-      var arrowX = Math.max(14, Math.min(ttWidth - 14, targetCenterX - desiredTtLeft));
+      var arrowX = Math.max(16, Math.min(ttWidth - 16, targetCenterX - desiredTtLeft));
 
       tt.style.setProperty('--darkstrap-tt-left', relativeTtLeft + 'px');
       tt.style.setProperty('--darkstrap-tt-right', 'auto');
@@ -841,16 +836,17 @@
     initTooltipViewportGuards();
     run(document);
     document.addEventListener('click', function (ev) {
-      if (!ev.target.closest('.darkstrap-help-btn, .darkstrap-help-managed')) {
-        qsa('.darkstrap-help-open').forEach(function (el) {
-          el.classList.remove('darkstrap-help-open');
-          var b = el.querySelector('.darkstrap-help-btn');
-          if (b) {
-            b.setAttribute('aria-expanded', 'false');
-            b.setAttribute('aria-label', 'Show help');
-          }
-        });
+      if (ev.target.closest('.darkstrap-help-btn, .darkstrap-help-managed, .cbi-value, .cbi-section, .cbi-tabcontainer')) {
+        return; // Don't dismiss help while interacting with form fields
       }
+      qsa('.darkstrap-help-open').forEach(function (el) {
+        el.classList.remove('darkstrap-help-open');
+        var b = el.querySelector('.darkstrap-help-btn');
+        if (b) {
+          b.setAttribute('aria-expanded', 'false');
+          b.setAttribute('aria-label', 'Toggle help details');
+        }
+      });
     });
     if ('MutationObserver' in window && document.body) {
       new MutationObserver(scheduleFromMutations).observe(document.body, { childList: true, subtree: true });
