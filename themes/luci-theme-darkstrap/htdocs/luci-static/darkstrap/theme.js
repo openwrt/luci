@@ -39,11 +39,32 @@
   }
 
   function descriptionContainer(desc) {
-    return desc.closest('.cbi-value') || desc.closest('.cbi-section') || desc.closest('.cbi-tabcontainer') || desc.closest('.tr') || desc.closest('tr') || desc.parentElement;
+    if (desc.matches && desc.matches('.cbi-section-descr, .cbi-section-table-descr, .cbi-tblsection-descr')) {
+      return desc.closest('.cbi-section, .cbi-tblsection') || desc.parentElement;
+    }
+    if (desc.matches && desc.matches('.cbi-tab-descr')) {
+      return desc.closest('.cbi-tabcontainer, .tab-pane') || desc.parentElement;
+    }
+    return desc.closest('.cbi-value') || desc.closest('.tr') || desc.closest('tr') || desc.closest('.cbi-section') || desc.parentElement;
   }
 
-  function buttonTarget(container, desc) {
-    return (container && (container.querySelector('.cbi-value-title') || container.querySelector('legend') || container.querySelector('h3') || container.querySelector('h2') || container.querySelector('label') || container.querySelector('.td:first-child') || container.firstElementChild)) || desc.parentElement;
+  function findTitleElement(container, desc) {
+    if (container.classList.contains('cbi-section') || container.classList.contains('cbi-tblsection')) {
+      var header = container.querySelector('legend, h3, h2, h1, .cbi-title');
+      if (header) return header;
+    }
+    var title = container.querySelector('.cbi-value-title, label.cbi-value-title');
+    if (title) return title;
+    var legend = container.querySelector('legend, h3, h2, h1');
+    if (legend) return legend;
+    var label = container.querySelector('label');
+    if (label) return label;
+    // In tables, only use td if it does not contain empty state messages
+    var firstTd = container.querySelector('.td:first-child, td:first-child');
+    if (firstTd && !firstTd.textContent.includes('no values') && !firstTd.querySelector('.alert, .notice')) {
+      return firstTd;
+    }
+    return null;
   }
 
   function addHelpButtons(root) {
@@ -61,7 +82,7 @@
     qsa(selector, root).forEach(function (desc) {
       var text = (desc.textContent || '').trim();
       if (!text) return;
-      // Never fold alerts, notices, port boxes, logins, or active validation errors
+      // Never fold alerts, notices, port boxes, logins, empty states, or active validation errors
       if (desc.closest('.alert-message, .alert, .notice, .zonebadge, .ifacebadge, .ifacebox, .modal.login, .cbi-value-error, .error')) return;
       if (desc.classList.contains('cbi-value-error') || desc.classList.contains('error') || desc.querySelector('.cbi-value-error, .error')) return;
 
@@ -70,27 +91,32 @@
       desc.classList.add('darkstrap-help-managed');
 
       if (!desc.id) desc.id = 'darkstrap-help-' + Math.random().toString(36).slice(2, 10);
-      if (container.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
+      if (root.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
 
-      var titleEl = container.querySelector('.cbi-value-title') ||
-                    container.querySelector('legend') ||
-                    container.querySelector('h3, h2, h1') ||
-                    container.querySelector('label') ||
-                    container.querySelector('.td:first-child') ||
-                    container.firstElementChild;
+      var titleEl = findTitleElement(container, desc);
       if (!titleEl) return;
 
       // Avoid duplicate buttons on re-renders
-      if (titleEl.parentElement && titleEl.parentElement.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
+      if (titleEl.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + desc.id + '"]')) return;
+
+      desc.classList.add('darkstrap-help-managed');
 
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'darkstrap-help-btn';
-      btn.setAttribute('aria-label', 'Toggle help details');
+      btn.setAttribute('aria-label', 'Show help');
       btn.setAttribute('aria-expanded', 'false');
       btn.setAttribute('aria-controls', desc.id);
       btn.setAttribute('data-darkstrap-help-for', desc.id);
-      btn.innerHTML = '<svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6.8"/><path d="M6.2 6.1a2 2 0 0 1 3.5 1.2c0 .9-.9 1.4-1.7 1.8v.7"/><circle cx="8" cy="12.2" r="0.8" fill="currentColor" stroke="none"/></svg>';
+      btn.textContent = '?';
+
+      btn.addEventListener('pointerdown', function (ev) {
+        ev.stopPropagation();
+      });
+
+      btn.addEventListener('mousedown', function (ev) {
+        ev.stopPropagation();
+      });
 
       btn.addEventListener('touchstart', function (ev) {
         ev.stopPropagation();
@@ -99,18 +125,13 @@
       btn.addEventListener('click', function (ev) {
         ev.preventDefault();
         ev.stopPropagation();
-        var open = !container.classList.contains('darkstrap-help-open');
-        container.classList.toggle('darkstrap-help-open', open);
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        btn.setAttribute('aria-label', open ? 'Hide help details' : 'Show help details');
+        var isOpen = desc.classList.toggle('darkstrap-help-open');
+        btn.classList.toggle('darkstrap-help-active', isOpen);
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        btn.setAttribute('aria-label', isOpen ? 'Hide help' : 'Show help');
       });
 
-      // Insert immediately after <label> to prevent click activation of the associated input control
-      if (titleEl.tagName === 'LABEL') {
-        titleEl.insertAdjacentElement('afterend', btn);
-      } else {
-        titleEl.appendChild(btn);
-      }
+      titleEl.appendChild(btn);
     });
   }
 
@@ -756,25 +777,32 @@
       }
 
       // 2. Horizontal positioning & arrow alignment:
-      // Keep tooltip body clamped within both card container and viewport margins
-      var card = container.closest('.cbi-section, .cbi-tblsection, #maincontent') || document.body;
+      // Prefer card boundaries (.cbi-section, .cbi-tblsection) or fallback to #maincontent / viewport
+      var card = container.closest('.cbi-section, .cbi-tblsection') || container.closest('#maincontent') || document.body;
       var cardRect = card.getBoundingClientRect();
-      var minLeft = Math.max(pad, cardRect.left + 4);
-      var maxRight = Math.min(winW - pad, cardRect.right - 4);
+      var minLeft = Math.max(pad, cardRect.left + 8);
+      var maxRight = Math.min(winW - pad, cardRect.right - 8);
 
-      var targetCenterX = cRect.left + cRect.width / 2;
-      var ttWidth = ttRect.width || 220;
+      // Target center: if inside an ifacebox port card, center relative to the port card
+      var portBox = container.closest('.ifacebox');
+      var targetRect = portBox ? portBox.getBoundingClientRect() : cRect;
+      var targetCenterX = targetRect.left + targetRect.width / 2;
+
+      var ttWidth = ttRect.width || 240;
+      var maxCardWidth = Math.max(160, maxRight - minLeft);
+      if (ttWidth > maxCardWidth) {
+        ttWidth = maxCardWidth;
+        tt.style.maxWidth = maxCardWidth + 'px';
+      }
+
       var desiredTtLeft = targetCenterX - ttWidth / 2;
 
-      // Clamp within card boundaries
-      if (desiredTtLeft < minLeft) {
-        desiredTtLeft = minLeft;
-      }
+      // Rigid clamp: desiredTtLeft MUST stay within [minLeft, maxRight - ttWidth]
       if (desiredTtLeft + ttWidth > maxRight) {
         desiredTtLeft = maxRight - ttWidth;
       }
-      if (desiredTtLeft < pad) {
-        desiredTtLeft = pad;
+      if (desiredTtLeft < minLeft) {
+        desiredTtLeft = minLeft;
       }
 
       var relativeTtLeft = desiredTtLeft - cRect.left;
@@ -839,12 +867,13 @@
       if (ev.target.closest('.darkstrap-help-btn, .darkstrap-help-managed, .cbi-value, .cbi-section, .cbi-tabcontainer')) {
         return; // Don't dismiss help while interacting with form fields
       }
-      qsa('.darkstrap-help-open').forEach(function (el) {
-        el.classList.remove('darkstrap-help-open');
-        var b = el.querySelector('.darkstrap-help-btn');
+      qsa('.darkstrap-help-managed.darkstrap-help-open').forEach(function (descEl) {
+        descEl.classList.remove('darkstrap-help-open');
+        var b = document.querySelector('.darkstrap-help-btn[data-darkstrap-help-for="' + descEl.id + '"]');
         if (b) {
+          b.classList.remove('darkstrap-help-active');
           b.setAttribute('aria-expanded', 'false');
-          b.setAttribute('aria-label', 'Toggle help details');
+          b.setAttribute('aria-label', 'Show help');
         }
       });
     });

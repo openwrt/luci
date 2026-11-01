@@ -3217,20 +3217,12 @@ legend.cbi-section-legend {
 .cbi-map-descr.darkstrap-help-managed {
   display: none !important;
 }
-.darkstrap-help-open > .cbi-value-description.darkstrap-help-managed,
-.darkstrap-help-open > .cbi-section-descr.darkstrap-help-managed,
-.darkstrap-help-open > .cbi-section-table-descr.darkstrap-help-managed,
-.darkstrap-help-open > .cbi-tab-descr.darkstrap-help-managed,
-.darkstrap-help-open > .description.darkstrap-help-managed,
-.darkstrap-help-open > .help-block.darkstrap-help-managed,
-.darkstrap-help-open > .help-inline.darkstrap-help-managed,
-.darkstrap-help-open .cbi-value-description.darkstrap-help-managed,
-.darkstrap-help-open .cbi-section-descr.darkstrap-help-managed,
-.darkstrap-help-open .cbi-section-table-descr.darkstrap-help-managed,
-.darkstrap-help-open .cbi-tab-descr.darkstrap-help-managed,
-.darkstrap-help-open .description.darkstrap-help-managed,
-.darkstrap-help-open .help-block.darkstrap-help-managed,
-.darkstrap-help-open .help-inline.darkstrap-help-managed {
+/* Independent Help Text Disclosures */
+.darkstrap-help-managed:not(.darkstrap-help-open) {
+  display: none !important;
+}
+
+.darkstrap-help-managed.darkstrap-help-open {
   display: block !important;
   opacity: 1 !important;
   visibility: visible !important;
@@ -3258,41 +3250,42 @@ legend.cbi-section-legend {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 17px;
-  height: 17px;
-  min-width: 17px;
-  margin-left: 8px;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin-left: 7px;
   padding: 0;
-  border: 1px solid rgba(255, 176, 32, 0.35);
+  border: 1px solid rgba(255, 176, 32, 0.45);
   border-radius: 50%;
-  background: rgba(255, 176, 32, 0.08) !important;
+  background: rgba(255, 176, 32, 0.14) !important;
   color: #ffb020 !important;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
   cursor: pointer;
   vertical-align: middle;
   position: relative;
   top: -1px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 1px 3px rgba(0, 0, 0, 0.3);
   transition: all 0.15s ease;
+  user-select: none;
   flex-shrink: 0;
-}
-.darkstrap-help-btn svg {
-  display: block;
-  pointer-events: none;
 }
 .darkstrap-help-btn:hover,
 .darkstrap-help-btn:focus-visible {
-  background: rgba(255, 176, 32, 0.22) !important;
-  border-color: #ffb020;
+  background: rgba(255, 176, 32, 0.28) !important;
+  border-color: #ffb020 !important;
   color: #ffffff !important;
-  box-shadow: 0 0 0 2px rgba(255, 176, 32, 0.25);
+  box-shadow: 0 0 8px rgba(255, 176, 32, 0.4);
   outline: none;
 }
-.darkstrap-help-open .darkstrap-help-btn,
+.darkstrap-help-btn.darkstrap-help-active,
 .darkstrap-help-btn[aria-expanded="true"] {
   background: #ffb020 !important;
   border-color: #ffb020 !important;
-  color: #0b0f19 !important;
-  box-shadow: 0 0 0 2px rgba(255, 176, 32, 0.35);
+  color: #070d18 !important;
+  box-shadow: 0 0 10px rgba(255, 176, 32, 0.5);
 }
 
 .darkstrap-help-managed::before,
