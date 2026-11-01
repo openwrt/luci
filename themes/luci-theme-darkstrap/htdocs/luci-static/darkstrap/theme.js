@@ -307,142 +307,123 @@
     });
   }
 
-  function upgradeGraphs() {
-    if (window.darkstrapGraphLoopStarted) return;
+  var graphObserver = null;
 
-    // Check if graph elements exist
-    var initialPolys = document.querySelectorAll('svg polyline');
-    var initialArcs = document.querySelectorAll('#channel_graph svg polyline');
-    if (!initialPolys.length && !initialArcs.length) {
-      return;
-    }
+  function processGraphElements() {
+    var polys = document.querySelectorAll('svg polyline');
+    var arcs = document.querySelectorAll('#channel_graph svg polyline');
+    if (!polys.length && !arcs.length) return;
 
-    window.darkstrapGraphLoopStarted = true;
-    var lastGraphTick = 0;
-    
-    function tick(now) {
-      if (document.hidden) {
-        requestAnimationFrame(tick);
-        return;
-      }
-      if (now && lastGraphTick && (now - lastGraphTick < 100)) {
-        requestAnimationFrame(tick);
-        return;
-      }
-      lastGraphTick = now || performance.now();
-      var polys = document.querySelectorAll('svg polyline');
-      var arcs = document.querySelectorAll('#channel_graph svg polyline');
+    polys.forEach(function (poly) {
+      var id = poly.getAttribute('id');
+      if (!id) return;
 
-      if (!polys.length && !arcs.length) {
-        window.darkstrapGraphLoopStarted = false;
-        return;
+      var pathId = id + '-darkstrap-line';
+      var path = document.getElementById(pathId);
+      if (!path) {
+        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.id = pathId;
+        path.setAttribute('class', 'darkstrap-premium-line ' + id);
+        poly.parentNode.appendChild(path);
       }
 
-      polys.forEach(function(poly) {
-        var id = poly.getAttribute('id');
-        if (!id) return;
-        
-        var pathId = id + '-darkstrap-line';
-        var path = document.getElementById(pathId);
-        if (!path) {
-          path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path.id = pathId;
-          path.setAttribute('class', 'darkstrap-premium-line ' + id);
-          poly.parentNode.appendChild(path);
-        }
-        
-        var ptStr = poly.getAttribute('points') || '';
-        if (path.getAttribute('data-last-points') === ptStr) return;
-        path.setAttribute('data-last-points', ptStr);
-        
-        try {
-          var ptsRaw = ptStr.trim().split(/\s+/);
-          if (ptsRaw.length > 3) {
-            var dataPts = ptsRaw.slice(1, ptsRaw.length - 1).map(function(p) {
-              var coords = p.split(',');
-              return { x: parseFloat(coords[0]), y: parseFloat(coords[1]) };
-            });
-            
-            var validPts = dataPts.filter(function(p) { return !isNaN(p.x) && !isNaN(p.y); });
-            if (validPts.length > 1) {
-              var d = "M " + validPts[0].x + " " + validPts[0].y + " ";
-              for (var i = 0; i < validPts.length - 1; i++) {
-                var p1 = validPts[i];
-                var p2 = validPts[i + 1];
-                var midX = (p1.x + p2.x) / 2;
-                if (isNaN(midX)) {
-                  d += "L " + p2.x + " " + p2.y + " ";
-                } else {
-                  d += "C " + midX + " " + p1.y + ", " + midX + " " + p2.y + ", " + p2.x + " " + p2.y + " ";
-                }
-              }
-              path.setAttribute('d', d);
-              poly.style.opacity = '0';
-              poly.style.stroke = 'none';
-            }
-          }
-        } catch(e) {}
-      });
-      
-      // Channel analysis arcs
-      arcs.forEach(function(arc) {
-        var id = arc.getAttribute('id');
-        if (!id) {
-          id = 'arc-' + Math.random().toString(36).slice(2, 10);
-          arc.setAttribute('id', id);
-        }
-        
-        var pathId = id + '-path';
-        var path = document.getElementById(pathId);
-        if (!path) {
-          path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path.id = pathId;
-          path.classList.add('darkstrap-channel-arc-premium');
-          arc.parentNode.appendChild(path);
-        }
-        
-        var ptStr = arc.getAttribute('points') || '';
-        if (path.getAttribute('data-last-points') === ptStr) return;
-        path.setAttribute('data-last-points', ptStr);
+      var ptStr = poly.getAttribute('points') || '';
+      if (path.getAttribute('data-last-points') === ptStr) return;
+      path.setAttribute('data-last-points', ptStr);
+
+      try {
         var ptsRaw = ptStr.trim().split(/\s+/);
-        if (ptsRaw.length === 4) {
-          var p0 = ptsRaw[0].split(',');
-          var p1 = ptsRaw[1].split(',');
-          var p2 = ptsRaw[2].split(',');
-          var p3 = ptsRaw[3].split(',');
-          
-          p0 = {x: parseFloat(p0[0]), y: parseFloat(p0[1])};
-          p1 = {x: parseFloat(p1[0]), y: parseFloat(p1[1])};
-          p2 = {x: parseFloat(p2[0]), y: parseFloat(p2[1])};
-          p3 = {x: parseFloat(p3[0]), y: parseFloat(p3[1])};
-          
-          var midX = (p1.x + p2.x) / 2;
-          
-          // Draw smooth bezier curve
-          var d = "M " + p0.x + " " + p0.y + 
-                  " C " + p1.x + " " + p0.y + ", " + p1.x + " " + p1.y + ", " + midX + " " + p1.y +
-                  " C " + p2.x + " " + p1.y + ", " + p2.x + " " + p3.y + ", " + p3.x + " " + p3.y;
-          
-          path.setAttribute('d', d);
-          
-          // Hide polygon
-          arc.style.opacity = '0';
-          arc.style.stroke = 'none';
-          arc.style.fill = 'none';
-          
-          var color = '#f59e0b';
-          
-          path.style.fill = 'none';
-          path.style.stroke = color;
-          path.style.strokeWidth = '3.5px';
-          path.style.strokeLinecap = 'round';
-          path.style.filter = 'drop-shadow(0 4px 4px rgba(0,0,0,0.4)) drop-shadow(0 2px 4px rgba(0,0,0,0.4))';
+        if (ptsRaw.length > 3) {
+          var dataPts = ptsRaw.slice(1, ptsRaw.length - 1).map(function (p) {
+            var coords = p.split(',');
+            return { x: parseFloat(coords[0]), y: parseFloat(coords[1]) };
+          });
+
+          var validPts = dataPts.filter(function (p) { return !isNaN(p.x) && !isNaN(p.y); });
+          if (validPts.length > 1) {
+            var d = "M " + validPts[0].x + " " + validPts[0].y + " ";
+            for (var i = 0; i < validPts.length - 1; i++) {
+              var p1 = validPts[i];
+              var p2 = validPts[i + 1];
+              var midX = (p1.x + p2.x) / 2;
+              if (isNaN(midX)) {
+                d += "L " + p2.x + " " + p2.y + " ";
+              } else {
+                d += "C " + midX + " " + p1.y + ", " + midX + " " + p2.y + ", " + p2.x + " " + p2.y + " ";
+              }
+            }
+            path.setAttribute('d', d);
+            poly.style.opacity = '0';
+            poly.style.stroke = 'none';
+          }
         }
-      });
-      
-      requestAnimationFrame(tick);
+      } catch (e) {}
+    });
+
+    arcs.forEach(function (arc) {
+      var id = arc.getAttribute('id');
+      if (!id) {
+        id = 'arc-' + Math.random().toString(36).slice(2, 10);
+        arc.setAttribute('id', id);
+      }
+
+      var pathId = id + '-path';
+      var path = document.getElementById(pathId);
+      if (!path) {
+        path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.id = pathId;
+        path.classList.add('darkstrap-channel-arc-premium');
+        arc.parentNode.appendChild(path);
+      }
+
+      var ptStr = arc.getAttribute('points') || '';
+      if (path.getAttribute('data-last-points') === ptStr) return;
+      path.setAttribute('data-last-points', ptStr);
+      var ptsRaw = ptStr.trim().split(/\s+/);
+      if (ptsRaw.length === 4) {
+        var p0 = ptsRaw[0].split(',');
+        var p1 = ptsRaw[1].split(',');
+        var p2 = ptsRaw[2].split(',');
+        var p3 = ptsRaw[3].split(',');
+
+        p0 = { x: parseFloat(p0[0]), y: parseFloat(p0[1]) };
+        p1 = { x: parseFloat(p1[0]), y: parseFloat(p1[1]) };
+        p2 = { x: parseFloat(p2[0]), y: parseFloat(p2[1]) };
+        p3 = { x: parseFloat(p3[0]), y: parseFloat(p3[1]) };
+
+        var midX = (p1.x + p2.x) / 2;
+        var d = "M " + p0.x + " " + p0.y +
+          " C " + p1.x + " " + p0.y + ", " + p1.x + " " + p1.y + ", " + midX + " " + p1.y +
+          " C " + p2.x + " " + p1.y + ", " + p2.x + " " + p3.y + ", " + p3.x + " " + p3.y;
+
+        path.setAttribute('d', d);
+        arc.style.opacity = '0';
+        arc.style.stroke = 'none';
+        arc.style.fill = 'none';
+        path.style.fill = 'none';
+        path.style.stroke = '#f59e0b';
+        path.style.strokeWidth = '3.5px';
+        path.style.strokeLinecap = 'round';
+      }
+    });
+  }
+
+  function upgradeGraphs() {
+    processGraphElements();
+
+    if (!graphObserver && 'MutationObserver' in window) {
+      var view = document.getElementById('view') || document.getElementById('maincontent') || document.body;
+      if (view) {
+        graphObserver = new MutationObserver(function () {
+          processGraphElements();
+        });
+        graphObserver.observe(view, {
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['points']
+        });
+      }
     }
-    requestAnimationFrame(tick);
   }
 
   function injectGraphGradients() {
@@ -576,7 +557,7 @@
       } else {
         flushRun();
       }
-    }, 20);
+    }, 80);
   }
 
   function scheduleFromMutations(records) {

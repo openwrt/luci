@@ -9611,11 +9611,85 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
   .panel {
     transform: translateZ(0);
     contain: layout style;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Mobile GPU Compositor: Flatten 3D multi-pass filter tree into 2D hardware layer */
+  #darkstrap-abstract-bg {
+    perspective: none !important;
+    contain: strict !important;
+    isolation: isolate !important;
+    transform: translateZ(0) !important;
+  }
+
+  .darkstrap-abstract-positioner {
+    transform-style: flat !important;
+    contain: strict !important;
   }
 
   .darkstrap-abstract-spinner {
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    contain: strict;
+    transform-style: flat !important;
+    contain: strict !important;
+    will-change: transform !important;
+    animation: darkstrapMobileRotate 75s linear infinite !important;
+  }
+
+  .darkstrap-abstract-layer {
+    transform-style: flat !important;
+    will-change: auto !important;
+    filter: none !important;
+  }
+
+  .darkstrap-abstract-layer.darkstrap-layer-0 {
+    transform: scale(0.93) !important;
+    opacity: 0.18 !important;
+  }
+  .darkstrap-abstract-layer.darkstrap-layer-1 {
+    transform: scale(0.965) !important;
+    opacity: 0.28 !important;
+  }
+  .darkstrap-abstract-layer.darkstrap-layer-2 {
+    transform: scale(1.0) !important;
+    opacity: 0.40 !important;
+  }
+  .darkstrap-abstract-layer.darkstrap-layer-3 {
+    transform: scale(1.035) !important;
+    opacity: 0.32 !important;
+  }
+  .darkstrap-abstract-layer.darkstrap-layer-4 {
+    transform: scale(1.07) !important;
+    opacity: 0.20 !important;
+  }
+}
+
+@keyframes darkstrapMobileRotate {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(360deg);
+  }
+}
+
+/* Eliminate touch-drag synthetic hover repaint stutter on mobile */
+@media (hover: none), (pointer: coarse) {
+  fieldset.cbi-section,
+  .cbi-section,
+  .cbi-tblsection,
+  .card,
+  .panel,
+  .alert-message {
+    transition: none !important;
+  }
+
+  fieldset.cbi-section:hover,
+  .cbi-section:hover,
+  .cbi-tblsection:hover {
+    border-color: rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 
+      0 16px 36px -8px rgba(0, 0, 0, 0.65),
+      0 2px 6px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
   }
 }
