@@ -163,6 +163,9 @@ html {
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  contain: strict;
+  isolation: isolate;
+  transform: translate3d(0, 0, 0);
 }
 
 .darkstrap-abstract-spinner {
@@ -178,6 +181,9 @@ html {
   animation: darkstrapAbstractRotate 80s linear infinite;
   transform-origin: center center;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  contain: strict;
+  isolation: isolate;
 }header { position: relative; z-index: 20000; }
 
 #maincontent,
@@ -1417,12 +1423,14 @@ html {
   overflow-x: hidden;
   touch-action: auto;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: auto;
+  overscroll-behavior-y: auto;
 }
 
 body {
   min-height: 100vh;
   height: auto;
-  overflow-y: auto;
+  overflow-y: visible !important;
   overflow-x: hidden;
   overscroll-behavior: auto;
   touch-action: pan-y;
@@ -1431,6 +1439,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   animation: none;
   isolation: auto !important;
+  position: static;
 }
 
 body::before,
@@ -1479,11 +1488,30 @@ tbody tr,
 .darkstrap-terminal-modal {
   display: none;
   pointer-events: none;
-}@media (max-width: 768px) { html,
-  body,
+}
+
+@media (max-width: 768px) {
+  html {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: auto !important;
+    height: auto !important;
+  }
+  body {
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
+    height: auto !important;
+    position: static !important;
+    touch-action: pan-y !important;
+  }
   #maincontent,
-  .container {
-    overflow-y: auto; touch-action: pan-y; -webkit-overflow-scrolling: touch; overscroll-behavior: auto; }
+  .container,
+  #view {
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    height: auto !important;
+  }
 }
 
 
@@ -5014,10 +5042,65 @@ svg text {
   text-shadow: none;
 }
 
-/* Hide raw polylines */
-svg polyline {
-  fill: none;
-  /* Opacity is handled by JS dynamically to prevent blank graphs */
+/* Authentic Clean LuCI Realtime Chart Lines (Native Polylines & Smoothed Paths) */
+svg polyline,
+svg path.darkstrap-premium-line {
+  fill: none !important;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: none;
+}
+
+/* Inbound / TCP / Signal: Electric Sky Blue */
+svg polyline#rx,
+svg polyline#tcp,
+svg polyline#rssi,
+svg path.darkstrap-premium-line.rx,
+svg path.darkstrap-premium-line.tcp,
+svg path.darkstrap-premium-line.rssi {
+  stroke: #38bdf8 !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+/* Outbound / UDP / 1m Load / Wireless Phy Rate: Electric Amber */
+svg polyline#tx,
+svg polyline#udp,
+svg polyline#load01,
+svg polyline#rate,
+svg path.darkstrap-premium-line.tx,
+svg path.darkstrap-premium-line.udp,
+svg path.darkstrap-premium-line.load01,
+svg path.darkstrap-premium-line.rate {
+  stroke: #ffb020 !important;
+  stroke-width: 2px !important;
+  fill: none !important;
+}
+
+/* 5m Load: Sky Blue */
+svg polyline#load05,
+svg path.darkstrap-premium-line.load05 {
+  stroke: #38bdf8 !important;
+  stroke-width: 1.5px !important;
+  fill: none !important;
+}
+
+/* 15m Load & Other Protocols: Muted Slate */
+svg polyline#load15,
+svg polyline#other,
+svg path.darkstrap-premium-line.load15,
+svg path.darkstrap-premium-line.other {
+  stroke: #94a3b8 !important;
+  stroke-width: 1.5px !important;
+  fill: none !important;
+}
+
+/* Noise: Coral Red */
+svg polyline#noise,
+svg path.darkstrap-premium-line.noise {
+  stroke: #f43f5e !important;
+  stroke-width: 1.5px !important;
+  fill: none !important;
 }
 
 /* Channel analysis arcs */
@@ -5037,42 +5120,6 @@ svg polyline {
 svg line[stroke="#000000"] {
   stroke: rgba(255,255,255,0.2);
   stroke-dasharray: 3;
-}
-
-/* Smoothed curve lines */
-svg path.darkstrap-premium-line {
-  fill: none;
-  stroke-width: 3.5px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  will-change: d, transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  transition: d 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Applying distinct colors so RX/TX can be differentiated, but with the reference image's thick luminous bloom */
-svg path.darkstrap-premium-line.rx,
-svg path.darkstrap-premium-line.tcp,
-svg path.darkstrap-premium-line.load01,
-svg path.darkstrap-premium-line.rssi,
-svg path.darkstrap-premium-line.rate {
-  stroke: #f59e0b;
-  filter: none;
-}
-
-svg path.darkstrap-premium-line.tx,
-svg path.darkstrap-premium-line.udp,
-svg path.darkstrap-premium-line.load05,
-svg path.darkstrap-premium-line.noise {
-  stroke: #f59e0b;
-  filter: none;
-}
-
-svg path.darkstrap-premium-line.other,
-svg path.darkstrap-premium-line.load15 {
-  stroke: var(--darkstrap-accent);
-  filter: none;
 }
 
 /* SVG spinner styling */
@@ -5195,71 +5242,122 @@ footer, .luci-footer {
 }
 /* Darkstrap REALTIME GRAPHS & TAB NAVIGATION POLISH */
 
-/* Grid lines */
+/* Realtime SVG Chart Canvas - Seamless Inset */
+.cbi-section div[style*="height:300px"],
+.cbi-section div[style*="height: 300px"],
+#view div[style*="300px"],
+.cbi-section div:has(> svg[height="100%"]) {
+  background: rgba(6, 11, 20, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+  margin-bottom: 12px !important;
+}
+
+/* Eliminate opaque grey box from LuCI SVG */
+.cbi-section div[style*="300px"] > svg,
+#view div[style*="300px"] > svg,
+#view div[style] > svg {
+  background-color: transparent !important;
+}
+
+/* Grid lines - Crisp, understated hairline guides */
 .cbi-section svg line {
-  stroke: rgba(255, 255, 255, 0.07);
-  stroke-width: 1px;
-  stroke-dasharray: 4 4;
+  stroke: rgba(255, 255, 255, 0.07) !important;
+  stroke-width: 1px !important;
+  stroke-dasharray: 4 4 !important;
 }
 
-/* Hide vertical grid overflow lines */
 .cbi-section svg line[y1="0"][y2="100%"] {
-  stroke: rgba(255, 255, 255, 0.05);
+  stroke: rgba(255, 255, 255, 0.04) !important;
+  stroke-dasharray: 2 4 !important;
 }
 
-/* Axis labels */
+/* Axis & Time Labels - High legibility monospace, zero muddy text-shadow */
 .cbi-section svg text {
-  fill: #8a9cb0;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 10px;
-  font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+  fill: #94a3b8 !important;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  text-shadow: none !important;
+  letter-spacing: 0.02em !important;
 }
 
-/* Graph container styling */
-.cbi-map[id="map"] .cbi-section,
-.cbi-section:has(svg) {
-  padding: 24px 28px;
-  margin: 18px 0;
-  border-radius: 16px;
-  background: linear-gradient(160deg, rgba(10, 20, 38, 0.88) 0%, rgba(5, 10, 22, 0.96) 100%);
-  border: 1px solid rgba(59, 158, 255, 0.25);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 20px rgba(59, 158, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+/* Scale metadata pill */
+.cbi-section .right #scale,
+.cbi-section .right #scale2,
+#scale, #scale2 {
+  display: inline-block !important;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace) !important;
+  font-size: 10.5px !important;
+  color: #94a3b8 !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 6px !important;
+  padding: 3px 8px !important;
+  margin-top: 4px !important;
+  margin-bottom: 8px !important;
 }
 
-/* Stats table styling */
+/* Stats Table Semantic Labels */
 .cbi-map .table td strong {
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-family: system-ui, -apple-system, sans-serif !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
 }
 
-/* Inbound (RX) */
-td strong[style*="#f00"], 
-td strong[style*="red"],
+/* Inbound & Sky Blue Indicators */
+td strong[style*="blue"],
+#lb_udp_cur,
+[id*="rx_bw"],
+[id*="rssi_bw"] {
+  color: #38bdf8 !important;
+  border-bottom: 2px solid #38bdf8 !important;
+  text-shadow: none !important;
+}
+
+/* Outbound & Electric Amber Indicators */
+td strong[style*="green"]:not([style*="TCP"]),
+td strong[style*="#f00"],
 #lb_load01_cur,
-[id*="rx_cur"] {
-  color: #f59e0b;
-  border-bottom: 2px solid #f59e0b;
-  text-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+[id*="tx_bw"],
+[id*="rate_bw"] {
+  color: #ffb020 !important;
+  border-bottom: 2px solid #ffb020 !important;
+  text-shadow: none !important;
 }
 
-/* Outbound (TX) */
+/* TCP Inbound Connection */
+td strong[style*="green"] {
+  color: #38bdf8 !important;
+  border-bottom: 2px solid #38bdf8 !important;
+  text-shadow: none !important;
+}
+
+/* Noise & Warning */
+td strong[style*="red"],
+#lb_otr_cur {
+  color: #f43f5e !important;
+  border-bottom: 2px solid #f43f5e !important;
+  text-shadow: none !important;
+}
+
+/* 5 Min & 15 Min load */
 td strong[style*="#f60"],
-#lb_load05_cur,
-[id*="tx_cur"] {
-  color: #f59e0b;
-  border-bottom: 2px solid #f59e0b;
-  text-shadow: 0 0 8px rgba(255, 51, 102, 0.4);
+#lb_load05_cur {
+  color: #38bdf8 !important;
+  border-bottom: 2px solid #38bdf8 !important;
+  text-shadow: none !important;
 }
-
-/* 15 Min */
 td strong[style*="#fa0"],
 #lb_load15_cur {
-  color: var(--darkstrap-accent);
-  border-bottom: 2px solid var(--darkstrap-accent);
-  text-shadow: 0 0 8px rgba(255, 176, 32, 0.4);
+  color: #94a3b8 !important;
+  border-bottom: 2px solid #94a3b8 !important;
+  text-shadow: none !important;
 }
 
 /* Navigation tabs */
@@ -9489,33 +9587,35 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
 
 /* Mobile rendering optimizations */
 @media screen and (max-width: 854px) {
-  html, body {
+  html {
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
-    overscroll-behavior-y: contain;
+    scroll-behavior: auto !important;
+    overscroll-behavior-y: auto;
   }
 
-  /* Scroll performance optimizations */
+  body {
+    overflow-y: visible !important;
+    position: static;
+  }
+
+  #maincontent,
+  .container {
+    overflow-y: visible !important;
+    overflow-x: visible !important;
+  }
+
+  /* Hardware accelerate and isolate cards to prevent full-page repaint during scroll */
   #maincontent > .cbi-section,
   .cbi-section:not(.cbi-section-node),
   .card,
   .panel {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     transform: translateZ(0);
-    will-change: auto;
+    contain: layout style;
   }
 
-  /* Mobile background blur adjustments */
-  .darkstrap-abstract-layer.darkstrap-layer-0,
-  .darkstrap-abstract-layer.darkstrap-layer-1 {
-    filter: none;
-  }
-  .darkstrap-abstract-layer.darkstrap-layer-4 {
-    filter: none;
-  }
   .darkstrap-abstract-spinner {
     will-change: transform;
     transform: translate3d(0, 0, 0);
+    contain: strict;
   }
 }
