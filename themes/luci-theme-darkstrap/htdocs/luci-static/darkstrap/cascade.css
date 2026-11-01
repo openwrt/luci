@@ -151,7 +151,6 @@ body::after,
 html {
   background-color: #060913 !important;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
 }body { background: transparent; background-color: transparent; color: #e2e8f0; }
 
 #darkstrap-abstract-bg {
@@ -1419,20 +1418,17 @@ footer a:hover { color:var(--accent); }
 html {
   height: auto;
   min-height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  touch-action: auto;
+  overflow-x: clip;
+  touch-action: manipulation;
   -webkit-overflow-scrolling: touch;
   scroll-behavior: auto;
-  overscroll-behavior-y: auto;
 }
 
 body {
   min-height: 100vh;
   height: auto;
   overflow-y: visible !important;
-  overflow-x: hidden;
-  overscroll-behavior: auto;
+  overflow-x: clip;
   touch-action: pan-y;
   -webkit-overflow-scrolling: touch;
   -webkit-font-smoothing: antialiased;
@@ -1492,18 +1488,19 @@ tbody tr,
 
 @media (max-width: 768px) {
   html {
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    overflow-x: clip !important;
     -webkit-overflow-scrolling: touch !important;
     scroll-behavior: auto !important;
     height: auto !important;
   }
   body {
     overflow-y: visible !important;
-    overflow-x: hidden !important;
+    overflow-x: clip !important;
     height: auto !important;
     position: static !important;
     touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
   }
   #maincontent,
   .container,
@@ -9588,14 +9585,20 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
 /* Mobile rendering optimizations */
 @media screen and (max-width: 854px) {
   html {
-    -webkit-overflow-scrolling: touch;
+    overflow-y: visible !important;
+    overflow-x: clip !important;
+    -webkit-overflow-scrolling: touch !important;
     scroll-behavior: auto !important;
-    overscroll-behavior-y: auto;
+    height: auto !important;
   }
 
   body {
     overflow-y: visible !important;
-    position: static;
+    overflow-x: clip !important;
+    height: auto !important;
+    position: static !important;
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   #maincontent,
@@ -9604,15 +9607,20 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
     overflow-x: visible !important;
   }
 
-  /* Hardware accelerate and isolate cards to prevent full-page repaint during scroll */
+  /* Off-screen rendering containment: skips offscreen card layout/paint until scrolled */
   #maincontent > .cbi-section,
   .cbi-section:not(.cbi-section-node),
+  .cbi-tblsection,
   .card,
   .panel {
-    transform: translateZ(0);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 260px;
     contain: layout style;
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
+  }
+
+  /* Seamless momentum fling: pause ambient rotation during active touch/scroll */
+  body.darkstrap-scrolling .darkstrap-abstract-spinner {
+    animation-play-state: paused !important;
   }
 
   /* Mobile GPU Compositor: Flatten 3D multi-pass filter tree into 2D hardware layer */
@@ -9672,7 +9680,7 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
   }
 }
 
-/* Eliminate touch-drag synthetic hover repaint stutter on mobile */
+/* Eliminate touch-drag synthetic hover repaint stutter on mobile and optimize backdrop-filter */
 @media (hover: none), (pointer: coarse) {
   fieldset.cbi-section,
   .cbi-section,
@@ -9681,6 +9689,12 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
   .panel,
   .alert-message {
     transition: none !important;
+    backdrop-filter: blur(8px) saturate(130%) !important;
+    -webkit-backdrop-filter: blur(8px) saturate(130%) !important;
+    box-shadow: 
+      0 10px 24px -6px rgba(0, 0, 0, 0.65),
+      0 2px 4px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
   }
 
   fieldset.cbi-section:hover,
@@ -9688,8 +9702,8 @@ body[data-page="admin-network-wireless"] .cbi-button-remove:active,
   .cbi-tblsection:hover {
     border-color: rgba(255, 255, 255, 0.09) !important;
     box-shadow: 
-      0 16px 36px -8px rgba(0, 0, 0, 0.65),
-      0 2px 6px rgba(0, 0, 0, 0.35),
+      0 10px 24px -6px rgba(0, 0, 0, 0.65),
+      0 2px 4px rgba(0, 0, 0, 0.35),
       inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
   }
 }

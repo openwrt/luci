@@ -881,5 +881,20 @@
     document.addEventListener('click', function () {
       setTimeout(function () { setModalScrollLock(modalIsOpen()); }, 0);
     }, true);
+
+    // Native-feel scroll performance: pause compositor background rotation during active touch/scroll flings
+    var scrollDebounceTimer = null;
+    window.addEventListener('scroll', function () {
+      if (!document.body) return;
+      if (!document.body.classList.contains('darkstrap-scrolling')) {
+        document.body.classList.add('darkstrap-scrolling');
+      }
+      if (scrollDebounceTimer) clearTimeout(scrollDebounceTimer);
+      scrollDebounceTimer = setTimeout(function () {
+        if (document.body) {
+          document.body.classList.remove('darkstrap-scrolling');
+        }
+      }, 100);
+    }, { passive: true });
   });
 }());
