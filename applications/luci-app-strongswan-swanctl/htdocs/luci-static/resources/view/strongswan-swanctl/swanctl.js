@@ -613,6 +613,20 @@ function addRemoteOptions(s) {
 	o.depends('auth', 'pubkey');
 	o.depends('auth', 'eap-tls');
 
+	o = s.option(form.ListValue, 'revocation', _('Revocation Policy'),
+		swanctlDescr(_('Certificate revocation policy for CRL or OCSP revocation checking.') + '<br />' +
+		_('Strict: Fail if no revocation information is available.') + '<br />' +
+		_('If URI: Fail only if a CRL or OCSP URI is available, but revocation checking fails.') + '<br />' +
+		_('Relaxed: Fail only if the certificate has been revoked.'),
+			'connections.<conn>.remote<suffix>.revocation'));
+	o.value('relaxed', _('Relaxed'));
+	o.value('ifuri', _('If URI'));
+	o.value('strict', _('Strict'));
+	o.default = 'relaxed';
+	o.modalonly = true;
+	o.depends('auth', 'pubkey');
+	o.depends('auth', 'eap-tls');
+
 	o = s.option(form.FileUploadList, 'pubkeys', _('Remote Public Keys'),
 		swanctlDescr(_('Raw public keys accepted for authentication of the remote peer.') + '<br />' +
 		_('Select a file relative to /etc/swanctl/pubkey or upload a new one.'),
