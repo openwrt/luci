@@ -104,6 +104,11 @@ return view.extend({
 			'<code>strongswan.conf: charon.i_dont_care_about_security_and_use_aggressive_mode_psk</code>');
 		o.default = '0';
 
+		o = s.option(form.Flag, 'cache_crls', _('Cache CRLs'),
+			_('Store fetched CRLs in %s.').format('<code>/etc/swanctl/x509crl</code>') + '<br />' +
+			'<code>strongswan.conf: charon.cache_crls</code>');
+		o.default = '0';
+
 		// syslog plugin settings
 		s = m.section(form.NamedSection, 'syslog', 'syslog', _('Syslog Settings'),
 			_('Configure how strongswan logs events, errors, and debug information.'));
