@@ -22,6 +22,7 @@
 	--dashboard-series-7: #b0367c;
 	--dashboard-series-8: #9c9a1c;
 	--dashboard-gap: 16px;
+	--dashboard-extra-lightness: 42%;
 
 	display: grid;
 	/* minmax(0, …): a wide tab menu must scroll, not widen every row. */
@@ -31,6 +32,7 @@
 }
 
 [data-darkmode="true"] .Dashboard {
+	--dashboard-extra-lightness: 65%;
 	--dashboard-surface-alt: var(--background-color-medium, #262b34);
 	--dashboard-text: var(--text-color-high, #e6e8eb);
 	--dashboard-text-muted: var(--text-color-high, #9aa3ad);
@@ -44,6 +46,7 @@
 
 @media (prefers-color-scheme: dark) {
 	:root:not([data-darkmode="false"]) .Dashboard {
+		--dashboard-extra-lightness: 65%;
 		--dashboard-surface-alt: var(--background-color-medium, #262b34);
 		--dashboard-text: var(--text-color-high, #e6e8eb);
 		--dashboard-text-muted: var(--text-color-high, #9aa3ad);
@@ -165,6 +168,11 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+}
+
+/* Keep every component reading visible when a temperature card narrows. */
+.dashboard-temperature .dashboard-kpi-line {
+	white-space: normal;
 }
 
 /* ---- Donut ---- */

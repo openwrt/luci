@@ -299,7 +299,7 @@ return baseclass.extend({
 							'points': '%.2f,100 %s %.2f,100'.format(run[0][0], points, run[run.length - 1][0])
 						});
 
-					shape('polyline', { 'class': className, 'points': points });
+					shape('polyline', { 'class': className, 'points': points, 'style': series.color ? 'stroke:' + series.color : '' });
 				}
 
 				run = [];
@@ -343,6 +343,6 @@ return baseclass.extend({
 
 	legend(items) {
 		return E('div', { 'class': 'dashboard-legend-inline' }, items.map(item =>
-			E('span', { 'title': item.title || null }, [ E('i', { 'class': item.className }), item.label, (item.value != null) ? E('b', {}, [ item.value ]) : '' ])));
+			E('span', { 'title': item.title || null }, [ E('i', { 'class': item.className, 'style': item.color ? 'background-color:' + item.color : null }), item.label, (item.value != null) ? E('b', {}, [ item.value ]) : '' ])));
 	}
 });
