@@ -1,0 +1,138 @@
+'use strict';
+
+import * as uloop from 'uloop';
+import { readfile } from 'fs';
+import { discover, sample } from 'luci.dashboard.temperature';
+
+const STEP = 10000, SLOTS = 30, DISCOVERY = 60000, TIMEOUT = 1000;
+const instance = trim(readfile('/proc/sys/kernel/random/uuid'));
+let sources, discovered = 0, cached, sampled = 0, retry = 0, failures = 0;
+let worker, deadline, timer, generation = 0;
+let ring = [], columns = [], seq = 0, schema = 0;
+
+function now() {
+	const t = clock(true);
+	return t[0] * 1000 + int(t[1] / 1000000);
+}
+
+function prune(t) {
+	while (length(ring) && (length(ring) > SLOTS || ring[0][1] < t - STEP * SLOTS))
+		shift(ring);
+}
+
+// Store only timestamps and numeric columns, never repeated sensor names or
+// paths. Keep surviving channels' history when discovery reorders the sources.
+function record(t) {
+	const next = map(cached.sensors, sensor => sensor.id);
+	let changed = length(next) != length(columns);
+	for (let i = 0; !changed && i < length(next); i++)
+		changed = next[i] != columns[i];
+	if (changed) {
+		const previous = {};
+		for (let i = 0; i < length(columns); i++)
+			previous[columns[i]] = i;
+		const indices = map(next, id => previous[id]);
+		for (let entry in ring)
+			entry[2] = map(indices, i => i == null ? null : entry[2][i]);
+		columns = next;
+		schema++;
+	}
+
+	if (length(columns))
+		push(ring, [ ++seq, t, map(cached.sensors, sensor => sensor.celsius) ]);
+	else
+		ring = [];
+	prune(t);
+}
+
+function schedule() {
+	timer.set(max(cached?.status == 'unsupported' ? DISCOVERY : STEP, retry - now()));
+}
+
+function failed() {
+	failures = min(failures + 1, 5);
+	retry = now() + min(300000, 30000 * (2 ** (failures - 1)));
+	cached = { status: 'error', sensors: map(sources ?? [], s => ({ id: s.id, category: s.category, label: s.label, celsius: null })) };
+	sampled = 0;
+	discovered = 0;
+	record(now());
+	schedule();
+}
+
+// One bounded asynchronous read every ten seconds, independent of page visits.
+// Slow drivers cannot block rpcd or create overlapping collection workers.
+function collect() {
+	const t = now();
+	if (worker && worker.finished())
+		worker = null;
+	if (worker || t < retry) {
+		prune(t);
+		schedule();
+		return;
+	}
+
+	const token = ++generation;
+	const refresh = sources == null || !discovered || t - discovered >= DISCOVERY;
+	try {
+		worker = uloop.task(() => {
+			const list = refresh ? discover('/sys') : sources;
+			return list == null ? null : { sources: list, result: sample(list) };
+		}, data => {
+			if (token != generation)
+				return;
+			deadline.cancel();
+			if (data == null) {
+				failed();
+				return;
+			}
+			sources = data.sources;
+			cached = data.result;
+			sampled = now();
+			if (refresh)
+				discovered = sampled;
+			// Keep healthy channels current when just one sensor is unavailable.
+			if (cached.status == 'error') {
+				failures = min(failures + 1, 5);
+				retry = sampled + min(300000, 30000 * (2 ** (failures - 1)));
+				discovered = 0;
+			}
+			else {
+				failures = 0;
+				retry = 0;
+			}
+			record(sampled);
+			schedule();
+		});
+		if (!worker) {
+			failed();
+			return;
+		}
+		deadline = uloop.timer(TIMEOUT, () => {
+			generation++;
+			worker.kill();
+			failed();
+		});
+	}
+	catch (e) { failed(); }
+}
+
+timer = uloop.timer(0, collect);
+
+return {
+	'luci.dashboard.temperature': {
+		read: {
+			args: { since: 0, id: 'id' },
+			call: function(request) {
+				const t = now(), id = instance + '.' + schema;
+				const since = request.args?.id == id ? +(request.args?.since ?? 0) : 0;
+				prune(t);
+				return {
+					status: cached?.status ?? 'error', sensors: cached?.sensors ?? [],
+					id, age_ms: sampled ? t - sampled : null,
+					now: t, step: STEP, slots: SLOTS,
+					samples: filter(ring, entry => entry[0] > since)
+				};
+			}
+		}
+	}
+};
