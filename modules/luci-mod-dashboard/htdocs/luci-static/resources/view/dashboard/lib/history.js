@@ -15,26 +15,29 @@ return baseclass.extend({
 	step: 5000,
 	slots: 60,
 
+	// Both counter history and temperature readings use the same bounded,
+	// incremental protocol. State belongs to the caller, not to the chart DOM.
+	update(state, res) {
+		state.failed = (!L.isObject(res) || !Array.isArray(res.samples));
+		if (state.failed) {
+			state.samples = [];
+			return;
+		}
+		if (res.id != state.id)
+			state.samples = [];
+		state.id = res.id;
+		state.now = res.now;
+		state.step = res.step;
+		state.slots = res.slots;
+		state.samples = (state.samples || []).concat(res.samples).filter(sample => sample[TIME] > res.now - res.step * res.slots);
+	},
+
 	fetch() {
 		const last = this.samples[this.samples.length - 1];
 
 		return L.resolveDefault(callHistory(last ? last[SEQ] : 0, this.id || ''), null).then(res => {
-			this.failed = (!L.isObject(res) || !Array.isArray(res.samples));
-
-			if (this.failed) {
-				// Old samples must not appear as current CPU usage or live traffic.
-				this.samples = [];
-				return;
-			}
-
-			if (res.id != this.id)
-				this.samples = [];
-
-			this.id = res.id;
-			this.now = res.now;
-			this.step = res.step;
-			this.slots = res.slots;
-			this.samples = this.samples.concat(res.samples).filter(sample => sample[TIME] > res.now - res.step * res.slots);
+			// Failed requests must not turn old samples into live readings.
+			this.update(this, res);
 		});
 	},
 
@@ -53,12 +56,12 @@ return baseclass.extend({
 		return this.failed ? _('No data received') : _('Collecting data...');
 	},
 
-	span() {
-		return this.slots * this.step / 1000;
+	span(state = this) {
+		return state.slots * state.step / 1000;
 	},
 
-	near(prev, cur) {
-		return (prev != null && cur[TIME] > prev[TIME] && cur[TIME] - prev[TIME] <= 2.5 * this.step);
+	near(prev, cur, step = this.step) {
+		return (prev != null && cur[TIME] > prev[TIME] && cur[TIME] - prev[TIME] <= 2.5 * step);
 	},
 
 	pair() {
@@ -70,12 +73,12 @@ return baseclass.extend({
 
 	// Points `{ t, v }` for a chart. `fn(cur, prev, seconds)` gives a value or
 	// null; `prev` is null where sampling had paused, which leaves a gap.
-	series(fn) {
+	series(fn, samples = this.samples, step = this.step) {
 		const points = [];
 
-		this.samples.forEach((cur, i) => {
-			const prev = this.samples[i - 1];
-			const near = this.near(prev, cur);
+		samples.forEach((cur, i) => {
+			const prev = samples[i - 1];
+			const near = this.near(prev, cur, step);
 
 			if (prev != null && !near)
 				points.push({ t: cur[TIME] - 1, v: null });

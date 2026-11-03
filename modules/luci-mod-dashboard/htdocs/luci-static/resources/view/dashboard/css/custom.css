@@ -82,6 +82,28 @@
 	min-width: 250px;
 }
 
+/* All charts share one compact header; keep the plotting area aligned even
+   when a source has no metadata. Card surfaces and heading fonts stay themed. */
+.Dashboard .dashboard-chart > h3 {
+	margin: 0 0 4px;
+	padding: 0;
+	border: 0;
+	line-height: 1.4;
+}
+
+.Dashboard .dashboard-chart > .cbi-section-descr {
+	min-height: 1.4em;
+	margin: 0 0 16px;
+	padding: 0;
+	font-size: 12px;
+	line-height: 1.4;
+	color: var(--dashboard-text-muted);
+}
+
+.dashboard-chart > em:empty {
+	display: none;
+}
+
 /* ---- Icon (mask keeps the SVG files, colour follows the theme) ---- */
 .dashboard-icon {
 	display: inline-block;
@@ -252,6 +274,8 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
+	min-width: 0;
+	overflow-wrap: anywhere;
 }
 
 .dashboard-legend-inline i {
@@ -420,11 +444,7 @@
 
 .dashboard-legend-inline b {
 	color: var(--dashboard-text);
-}
-
-/* ---- WAN traffic: one counter source per plot ---- */
-.dashboard-traffic-source {
-	min-width: 0;
+	white-space: nowrap;
 }
 
 /* ---- Wireless network boxes (LuCI .ifacebox) ---- */
