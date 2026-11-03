@@ -60,6 +60,70 @@
 }
 
 /* ---- Layout ---- */
+.dashboard-settings .dashboard-widget-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: none;
+}
+
+.dashboard-settings .dashboard-widget-list > .item,
+.dashboard-settings .dashboard-widget-list > .add-item,
+.dashboard-settings .dashboard-widget-list > .add-item > .cbi-dropdown {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+}
+
+.dashboard-widget-list.dashboard-sorting > .item * {
+	pointer-events: none;
+}
+
+.dashboard-settings .dashboard-configurable::after {
+	bottom: auto;
+	height: 28px;
+}
+
+.dashboard-widget-settings > summary {
+	cursor: pointer;
+	padding: 2px 0;
+}
+
+.dashboard-widget-options {
+	margin: 12px 0 6px 12px;
+	padding-left: 12px;
+	cursor: default;
+	word-break: normal;
+	overflow-wrap: anywhere;
+}
+
+.dashboard-widget-options .cbi-value-title {
+	display: none;
+}
+
+.dashboard-widget-options .cbi-value-field {
+	margin-left: 0;
+	min-width: 0;
+}
+
+.dashboard-widget-options .cbi-value {
+	padding: 0;
+}
+
+.dashboard-sensor-choice {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 0 3px 6px;
+}
+
+.dashboard-sensor-choice > i {
+	display: inline-block;
+	width: 9px;
+	height: 9px;
+	border-radius: 2px;
+}
+
 /* Every row fills the width: an item's basis is its row's share, set from
    --dashboard-per-row, and flex-grow takes up the rest. On narrow screens
    the min-width wraps the items, which still fill their rows. */

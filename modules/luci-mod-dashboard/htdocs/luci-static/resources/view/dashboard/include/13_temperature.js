@@ -8,19 +8,15 @@
 const read = rpc.declare({ object: 'luci.dashboard.temperature', method: 'read', params: [ 'since', 'id' ], expect: { '': {} } });
 const temperature = value => Number.isFinite(value) ? '%.1f °C'.format(value) : '—';
 const STEP = 10000, DEFAULT_LINES = 8, MAX_LINES = 64;
-const components = {
-	cpu: _('CPU'), soc: _('SoC'), wifi: _('Wi-Fi'), nss: _('NSS'), modem: _('Modem'),
-	ethernet: _('Ethernet'), storage: _('Storage'), other: _('Sensor')
-};
 
-function sensorCategory(sensor) {
+function sensorCategory(sensor, components) {
 	return typeof components[sensor.category] == 'string' ? sensor.category : 'other';
 }
 
 // Rebuild only when sensor metadata changes. Number channels within their
 // component, keeping existing numbers when sources reorder or disappear.
 // These are sensor labels, not inferred radio bands or physical port numbers.
-function nameChannels(channels) {
+function nameChannels(channels, components) {
 	const groups = new Map();
 	for (const channel of channels.values()) {
 		const group = groups.get(channel.category) || { count: 0, last: 0, numbered: false };
@@ -56,21 +52,13 @@ function channelColor(channel) {
 		? 'hsl(%d, 60%%, var(--dashboard-extra-lightness))'.format((channel.color * 137.508) % 360) : null;
 }
 
-// Prefer package/die readings, then an explicitly named CPU channel.
-// Selection is independent of the current values, so a failed CPU read cannot
-// silently turn the processor card into a Wi-Fi or disk temperature card.
+// CPU selection priorities come from the same registry as component names.
+// Never switch channels merely because the preferred sensor failed a read.
 function processorSensor(sensors) {
-	const rank = sensor => {
-		const [name, channel = ''] = (sensor.label || '').toLowerCase().split(' / ');
-		if (/^(coretemp|k10temp|k8temp)$/.test(name))
-			return /^(package\sid\s[0-9]+|tdie)$/.test(channel) ? 0 : channel == 'tctl' ? 1 : 2;
-		if (sensor.category == 'cpu' || /^cpu[0-9]*[-_]thermal$/.test(name))
-			return 3;
-		return 99;
-	};
 	let selected, priority = 99;
 	for (const sensor of sensors) {
-		const value = rank(sensor);
+		const value = sensor.category == 'cpu'
+			? (Number.isFinite(sensor.priority) ? sensor.priority : 8) : 99;
 		if (value < priority || (selected && value == priority &&
 		    (sensor.id || sensor.label).localeCompare(selected.id || selected.label, undefined, { numeric: true }) < 0)) {
 			selected = sensor;
@@ -101,6 +89,54 @@ return baseclass.extend({
 		{ id: 'temperatures', slot: 'tabs', title: _('Temperatures'), order: 40 }
 	],
 
+	// All views share channel identities, even when the history chart is hidden
+	// or settings are opened first. Selection never changes sensor numbering.
+	syncChannels(data) {
+		let dirty = false;
+		if (data.components && typeof data.components == 'object' && !Array.isArray(data.components)) {
+			const components = { other: _('Sensor'), ...Object.fromEntries(Object.entries(data.components)
+				.filter(([, label]) => typeof label == 'string').map(([id, label]) => [id, _(label)])) };
+			dirty = JSON.stringify(components) !== JSON.stringify(this.components);
+			this.components = components;
+		}
+		const components = this.components ||= { other: _('Sensor') };
+		const sensors = Array.isArray(data.sensors) ? data.sensors : [];
+		const channels = this.channels ||= new Map();
+		const current = new Map(sensors.slice(0, MAX_LINES).map((sensor, index) => [ sensor.id, { sensor, index } ]));
+		for (const [id] of channels)
+			if (!current.has(id)) {
+				channels.delete(id);
+				dirty = true;
+			}
+		for (const [id, { sensor, index }] of current) {
+			let channel = channels.get(id);
+			if (!channel) {
+				channel = { color: 0 };
+				channels.set(id, channel);
+				dirty = true;
+			}
+			if (channel.label !== sensor.label || channel.index !== index)
+				dirty = true;
+			const category = sensorCategory(sensor, components);
+			if (channel.category !== category) {
+				channel.category = category;
+				channel.number = 0;
+				channel.numbered = false;
+				dirty = true;
+			}
+			channel.label = sensor.label;
+			channel.index = index;
+			channel.current = sensor.celsius;
+		}
+		if (dirty) {
+			nameChannels(channels, components);
+			colorChannels(channels);
+			if (this.trend)
+				this.trend.dirty = true;
+		}
+		return channels;
+	},
+
 	load() {
 		const now = performance.now();
 		const state = this.history ||= { samples: [], step: STEP, slots: 30, now: 0 };
@@ -128,8 +164,53 @@ return baseclass.extend({
 		return this.pending;
 	},
 
+	// The layout form calls this only when opened; normal charts do not load
+	// the form library or build any configuration controls.
+	addOptions(section, form, ui) {
+		return this.load().then(data => {
+			const channels = this.syncChannels(data);
+			const o = section.option(form.MultiValue, 'temperature_sensors', _('Temperature history'));
+			o.retain = true;
+			o.forcewrite = true;
+			o.depends({ charts: 'temperature_history', '!contains': true });
+			o.cfgvalue = () => {
+				const selected = L.toArray(uci.get('dashboard', 'layout', 'temperature_sensors'));
+				return selected.length ? selected : Array.from(channels.keys()).slice(0, DEFAULT_LINES);
+			};
+			for (const [id, channel] of channels)
+				o.value(id, E('span', { 'class': 'dashboard-sensor-choice', 'title': channel.label }, [
+					E('i', { 'class': 'dashboard-series-' + channel.color,
+						'style': channelColor(channel) ? 'background-color:' + channelColor(channel) : null,
+						'aria-hidden': 'true' }), channel.name
+				]));
+			// Keep saved IDs selectable even if a device is temporarily absent.
+			for (const id of L.toArray(uci.get('dashboard', 'layout', 'temperature_sensors')))
+				if (!channels.has(id))
+					o.value(id, '%s · %s'.format(_('Unavailable'), id));
+			o.validate = (section_id, value) => !L.toArray(value).length ? _('Select at least one sensor.')
+				: L.toArray(value).length <= MAX_LINES || _('Select no more than %d sensors.').format(MAX_LINES);
+			o.renderWidget = function(section_id, option_index, cfgvalue) {
+				const widget = new ui.Select(L.toArray(cfgvalue), this.transformChoices(), {
+					id: this.cbid(section_id), sort: this.keylist, multiple: true,
+					widget: 'checkbox', orientation: 'vertical',
+					validate: this.getValidator(section_id), disabled: this.map.readonly
+				});
+				// ui.Select renders checkboxes but its default accessors handle radios.
+				widget.getValue = function() {
+					return Array.from(this.node.querySelectorAll('input:checked'), input => input.value);
+				};
+				widget.setValue = function(value) {
+					const selected = new Set(L.toArray(value));
+					this.node.querySelectorAll('input').forEach(input => input.checked = selected.has(input.value));
+				};
+				return widget.render();
+			};
+			return { slot: 'charts', widget: 'temperature_history', title: _('Temperature history'), options: [ o ] };
+		});
+	},
 
 	renderChart(data, sensors) {
+		const channels = this.syncChannels(data);
 		const state = this.history;
 		const span = history.span(state);
 		const fresh = !state.failed && Number.isFinite(data.age_ms) && data.age_ms < 15000
@@ -137,7 +218,7 @@ return baseclass.extend({
 		let h = this.trend;
 		if (!h) {
 			h = this.trend = {
-				channels: new Map(), min: 0, max: 100,
+				channels, min: 0, max: 100,
 				selected: new Set(L.toArray(uci.get('dashboard', 'layout', 'temperature_sensors')).slice(0, MAX_LINES)),
 				plot: E('div'), legend: E('div'), message: charts.empty('')
 			};
@@ -150,41 +231,6 @@ return baseclass.extend({
 			h.max = 100;
 			h.dirty = true;
 		}
-		if (data !== h.data && Array.isArray(data.samples)) {
-			h.data = data;
-			const current = new Map(sensors.slice(0, 64).map((sensor, index) => [ sensor.id, { sensor, index } ]));
-			for (const [id] of h.channels)
-				if (!current.has(id)) {
-					h.channels.delete(id);
-					h.dirty = true;
-				}
-			for (const [id, { sensor, index }] of current) {
-				let channel = h.channels.get(id);
-				if (!channel) {
-					channel = { color: 0 };
-					h.channels.set(id, channel);
-					h.dirty = true;
-				}
-				if (channel.label !== sensor.label || channel.index !== index)
-					h.dirty = true;
-				const category = sensorCategory(sensor);
-				if (channel.category !== category) {
-					channel.category = category;
-					channel.number = 0;
-					channel.numbered = false;
-					h.dirty = true;
-				}
-				channel.label = sensor.label;
-				channel.index = index;
-				channel.current = sensor.celsius;
-			}
-		}
-
-		if (h.dirty) {
-			nameChannels(h.channels);
-			colorChannels(h.channels);
-		}
-
 		const tick = Math.floor(performance.now() / state.step);
 		const last = state.samples[state.samples.length - 1]?.[0] || 0;
 		if (!h.dirty && h.tick === tick && h.drawn === last && h.fresh === fresh)
@@ -230,14 +276,13 @@ return baseclass.extend({
 		this.renderedData = data;
 		this.renderedAge = age;
 		const sensors = Array.isArray(data.sensors) ? data.sensors : [];
-		const categories = {
-			...components, ethernet: _('Ethernet PHY'), other: _('Other sensors')
-		};
+		const channels = this.syncChannels(data);
+		const components = this.components;
 		const processor = processorSensor(sensors);
 		const value = processor?.celsius;
 		const message = data.status == 'unsupported' ? _('No supported temperature sensors found') : _('Temperature temporarily unavailable');
 		const stale = data.age_ms >= 15000;
-		const modules = ['nss', 'wifi', 'modem'].map(category => componentTemperature(sensors, category, categories[category])).filter(Boolean);
+		const modules = ['nss', 'wifi', 'modem'].map(category => componentTemperature(sensors, category, components[category] || components.other)).filter(Boolean);
 		const sub = [];
 		for (let i = 0; i < modules.length; i += 2)
 			sub.push(modules.slice(i, i + 2).join(' · '));
@@ -255,7 +300,7 @@ return baseclass.extend({
 			cards: data.status == 'unsupported' ? [] : [{
 				id: 'temperature', node: () => card ||= charts.kpi({
 					icon: 'temperature', title: _('Temperature'), className: 'dashboard-temperature',
-					value: [ '%s %s'.format(_('CPU'), temperature(value)) ], sub, stacked: true
+					value: [ '%s %s'.format(components.cpu || _('CPU'), temperature(value)) ], sub, stacked: true
 				})
 			}],
 			charts: data.status == 'unsupported' ? [] : [{
@@ -266,7 +311,7 @@ return baseclass.extend({
 				data.status == 'partial' ? E('p', {}, [ _('Some temperature sensors are unavailable') ]) : '',
 				sensors.length ? charts.table({
 					head: [ _('Component'), _('Sensor'), _('Temperature') ],
-					rows: sensors.map(s => [ categories[s.category] || categories.other, s.label, temperature(s.celsius) ])
+					rows: sensors.map(s => [ channels.get(s.id)?.name || components[sensorCategory(s, components)], s.label, temperature(s.celsius) ])
 				}) : charts.empty(message)
 			]) }]
 		};
