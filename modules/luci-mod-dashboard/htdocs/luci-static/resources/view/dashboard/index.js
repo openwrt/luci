@@ -146,12 +146,22 @@ function updateCharts(container, chartNodes) {
 			scrollPositions[el.dataset.chart] = el.scrollLeft;
 	});
 
-	L.dom.content(container, fillRows(chartNodes, 'charts'));
+	updateNodes(container, fillRows(chartNodes, 'charts'));
 
 	container.querySelectorAll('[data-chart]').forEach(el => {
 		if (el.dataset.chart && scrollPositions[el.dataset.chart] != null)
 			el.scrollLeft = scrollPositions[el.dataset.chart];
 	});
+}
+
+// Retained widgets need no detach/attach cycle on unchanged samples.
+function updateNodes(container, nodes) {
+	nodes.forEach((node, i) => {
+		if (container.children[i] !== node)
+			container.insertBefore(node, container.children[i] || null);
+	});
+	while (container.children.length > nodes.length)
+		container.removeChild(container.lastChild);
 }
 
 function updateTabs(tabMap, tabGroup, items, form) {
@@ -253,7 +263,7 @@ function startPolling(includes, layout, root, form) {
 			updateShell(root, sections, containers);
 
 			if (sections.cards.length)
-				L.dom.content(cardsContainer, fillRows(sections.cards, 'cards'));
+				updateNodes(cardsContainer, fillRows(sections.cards, 'cards'));
 
 			if (sections.charts.length)
 				updateCharts(chartsContainer, sections.charts);

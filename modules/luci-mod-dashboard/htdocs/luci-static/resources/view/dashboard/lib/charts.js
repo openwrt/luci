@@ -3,11 +3,12 @@
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-function svg(tag, attrs, children) {
-	const node = document.createElementNS(SVG_NS, tag);
+function svg(tag, attrs, children, existing) {
+	const node = existing || document.createElementNS(SVG_NS, tag);
 
 	for (const key in (attrs || {}))
-		node.setAttribute(key, attrs[key]);
+		if (node.getAttribute(key) !== String(attrs[key]))
+			node.setAttribute(key, attrs[key]);
 
 	(children || []).forEach(child => {
 		if (child != null)
@@ -82,11 +83,31 @@ return baseclass.extend({
 		return E('span', { 'class': 'label ' + (kind || '') }, [ text ]);
 	},
 
-	// A card is a plain .cbi-section, so the theme draws it.
+	// Keep the theme's card surface, with shared chart header spacing.
 	card(opts) {
-		return E('div', { 'class': 'cbi-section ' + (opts.className || '') }, [
+		// Reuse the shell as well as its plot: moving a live plot into a new
+		// card temporarily shrinks the page and clamps its scroll position.
+		if (opts.node) {
+			let previous = opts.node.querySelector('.cbi-section-descr');
+			if (previous.textContent !== (opts.desc || ''))
+				previous.textContent = opts.desc || '';
+			for (const child of [].concat(opts.body)) {
+				if (previous.nextSibling !== child) {
+					if (previous.nextSibling)
+						opts.node.replaceChild(child, previous.nextSibling);
+					else
+						opts.node.appendChild(child);
+				}
+				previous = child;
+			}
+			while (previous.nextSibling)
+				opts.node.removeChild(previous.nextSibling);
+			return opts.node;
+		}
+
+		return E('div', { 'class': 'cbi-section dashboard-chart ' + (opts.className || '') }, [
 			opts.title ? E('h3', {}, [ opts.title ]) : '',
-			opts.desc ? E('div', { 'class': 'cbi-section-descr' }, [ opts.desc ]) : ''
+			E('div', { 'class': 'cbi-section-descr' }, [ opts.desc || '' ])
 		].concat(opts.body));
 	},
 
@@ -241,20 +262,28 @@ return baseclass.extend({
 		]);
 	},
 
-	// A time series of points `{ t, v }`, placed by their time: the x axis
-	// spans `span` seconds up to the last point. A null `v` leaves a gap, and
-	// a point with gaps on both sides is drawn as a dot.
+	// Time-ordered points `{ t, v }`, with t in milliseconds. The x axis spans
+	// `span` seconds up to `end` or the last point. Non-finite values leave a
+	// gap; isolated points are dots. Pass `node` to update an existing chart.
 	lines(opts) {
-		const max = opts.max || 1;
+		const min = opts.min ?? 0;
+		const max = opts.max ?? 1;
 		const shapes = [];
-		const end = opts.series.reduce((t, series) => Math.max(t, ...series.values.map(p => p.t)), 0);
+		const end = opts.end ?? opts.series.reduce((t, series) => Math.max(t, series.values[series.values.length - 1]?.t || 0), 0);
+		const plot = opts.node?.querySelector('svg');
+		const previous = plot ? Array.from(plot.children) : [];
+		const shape = (tag, attrs) => {
+			const old = previous[shapes.length];
+			shapes.push(svg(tag, attrs, null, old?.localName == tag ? old : null));
+		};
 
 		opts.series.forEach((series, n) => {
 			let run = [];
+			const className = series.className || 'dashboard-series-' + (n + 1);
 
 			series.values.concat([ { v: null } ]).forEach(p => {
-				if (p.v != null) {
-					run.push([ 100 - (end - p.t) / (opts.span * 10), 100 - scale(p.v, 0, max) ]);
+				if (Number.isFinite(p.v)) {
+					run.push([ 100 - (end - p.t) / (opts.span * 10), 100 - scale(p.v, min, max) ]);
 					return;
 				}
 
@@ -265,28 +294,48 @@ return baseclass.extend({
 					const points = run.map(p => '%.2f,%.2f'.format(p[0], p[1])).join(' ');
 
 					if (series.area)
-						shapes.push(svg('polygon', {
-							'class': 'dashboard-series-' + (n + 1),
+						shape('polygon', {
+							'class': className,
 							'points': '%.2f,100 %s %.2f,100'.format(run[0][0], points, run[run.length - 1][0])
-						}));
+						});
 
-					shapes.push(svg('polyline', { 'class': 'dashboard-series-' + (n + 1), 'points': points }));
+					shape('polyline', { 'class': className, 'points': points });
 				}
 
 				run = [];
 			});
 		});
 
+		const axis = opts.node?.querySelector('.dashboard-bars-axis');
+		const ago = (opts.span >= 60) ? _('%d min ago').format(Math.round(opts.span / 60)) : _('%d s ago').format(opts.span);
+		if (axis && axis.children.length == opts.ticks.length) {
+			const grid = opts.node.querySelector('.dashboard-bars-grid');
+			opts.ticks.forEach((tick, i) => {
+				const top = '%.2f%%'.format(100 - scale(tick.value, min, max));
+				axis.children[i].style.top = grid.children[i].style.top = top;
+				if (axis.children[i].textContent !== String(tick.label))
+					axis.children[i].textContent = tick.label;
+			});
+			shapes.forEach((node, i) => {
+				if (plot.children[i] !== node)
+					plot.insertBefore(node, plot.children[i] || null);
+			});
+			while (plot.children.length > shapes.length)
+				plot.removeChild(plot.lastChild);
+			opts.node.querySelector('.dashboard-lines-time span').textContent = ago;
+			return opts.node;
+		}
+
 		return E('div', { 'class': 'dashboard-bars' }, [
 			E('div', { 'class': 'dashboard-bars-axis' }, opts.ticks.map(tick =>
-				E('span', { 'style': 'top:%.2f%%'.format(100 - scale(tick.value, 0, max)) }, [ tick.label ]))),
+				E('span', { 'style': 'top:%.2f%%'.format(100 - scale(tick.value, min, max)) }, [ tick.label ]))),
 			E('div', { 'class': 'dashboard-lines-plot' }, [
 				E('div', { 'class': 'dashboard-bars-grid' }, opts.ticks.map(tick =>
-					E('i', { 'style': 'top:%.2f%%'.format(100 - scale(tick.value, 0, max)) }))),
+					E('i', { 'style': 'top:%.2f%%'.format(100 - scale(tick.value, min, max)) }))),
 				svg('svg', { 'viewBox': '0 0 100 100', 'preserveAspectRatio': 'none', 'role': 'img', 'aria-label': opts.ariaLabel || '' }, shapes)
 			]),
 			E('div', { 'class': 'dashboard-lines-time' }, [
-				E('span', {}, [ (opts.span >= 60) ? _('%d min ago').format(Math.round(opts.span / 60)) : _('%d s ago').format(opts.span) ]),
+				E('span', {}, [ ago ]),
 				E('span', {}, [ _('now') ])
 			])
 		]);
@@ -294,6 +343,6 @@ return baseclass.extend({
 
 	legend(items) {
 		return E('div', { 'class': 'dashboard-legend-inline' }, items.map(item =>
-			E('span', {}, [ E('i', { 'class': item.className }), item.label, (item.value != null) ? E('b', {}, [ item.value ]) : '' ])));
+			E('span', { 'title': item.title || null }, [ E('i', { 'class': item.className }), item.label, (item.value != null) ? E('b', {}, [ item.value ]) : '' ])));
 	}
 });

@@ -126,11 +126,13 @@ return baseclass.extend({
 		if (mem)
 			desc.push('%1024.0mB'.format(mem.total));
 
-		return charts.card({
+		return this.chart = charts.card({
+			node: this.chart,
 			title: _('System load'),
 			desc: desc.join(' · '),
 			body: busy.length ? [
-				charts.lines({
+				this.plot = charts.lines({
+					node: this.plot,
 					span: history.span(),
 					max: 100,
 					ticks: [ 0, 25, 50, 75, 100 ].map(value => ({ value: value, label: '%d%%'.format(value) })),

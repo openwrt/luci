@@ -57,7 +57,8 @@ return baseclass.extend({
 		const body = [];
 
 		if (available) {
-			body.push(charts.lines({
+			body.push(this.plot = charts.lines({
+				node: this.plot,
 				span: history.span(),
 				max: scale.max,
 				ticks: scale.ticks,
@@ -73,10 +74,11 @@ return baseclass.extend({
 				: !sample ? history.status() : !device ? _('Not connected') : available ? _('Waiting for a new sample...') : history.status()));
 
 		// No null children: older LuCI DOM helpers render them as literal text.
-		return { charts: [ { id: 'wan', node: charts.card({
+		return { charts: [ { id: 'wan', node: this.chart = charts.card({
+			node: this.chart,
 			title: this.title,
 			desc: device ? device + ' · ' + scale.unit : scale.unit,
-			body: [ E('section', { 'class': 'dashboard-traffic-source' }, body) ]
+			body: body
 		}) } ] };
 	}
 });
