@@ -200,6 +200,38 @@ function renderSnoop(svc) {
 	]);
 }
 
+// The interface of a tracked policy carries the health of its device: the
+// probes are per device, and every policy on it falls back together.
+function renderIface(p, devices) {
+	const name = p.interface || (p.tproxy_port ? ':%d'.format(p.tproxy_port) : '-');
+	const h = (devices && p.interface) ? devices[p.interface] : null;
+
+	if (!h) {
+		return name;
+	}
+
+	return E('span', {
+		'class': 'shunt-state',
+		'title': h.alive
+			? _('answers the health probes')
+			: _('no answer to the health probes since %s - the fallback applies')
+				.format(new Date(h.since * 1000).toLocaleTimeString())
+	}, [dot(h.alive ? 'ok' : 'warn'), E('span', {}, name)]);
+}
+
+function renderTrack(svc) {
+	if (!svc || !svc.track || !svc.track.devices) {
+		return '-';
+	}
+
+	const all = Object.keys(svc.track.devices);
+	const alive = all.filter(function (d) {
+		return svc.track.devices[d].alive;
+	});
+
+	return '%d / %d'.format(alive.length, all.length);
+}
+
 function renderPolicies(st) {
 	if (!st || !st.policies || !st.policies.length) {
 		return E('div', { 'class': 'shunt-sub' }, _('No policy is active.'));
@@ -218,6 +250,8 @@ function renderPolicies(st) {
 		])
 	];
 
+	const devices = st.service && st.service.track ? st.service.track.devices : null;
+
 	st.policies.forEach(function (p) {
 		// A bypass policy has no mark, no table and no rule of its own, so
 		// those cells are empty rather than unknown.
@@ -226,8 +260,7 @@ function renderPolicies(st) {
 		rows.push(E('tr', { 'class': 'tr' }, [
 			E('td', { 'class': 'td' }, [p.name]),
 			E('td', { 'class': 'td' }, [p.action || 'route']),
-			E('td', { 'class': 'td' }, [p.interface ||
-				(p.tproxy_port ? ':%d'.format(p.tproxy_port) : '-')]),
+			E('td', { 'class': 'td' }, [renderIface(p, devices)]),
 			E('td', { 'class': 'td' }, [fmtMark(p.mark)]),
 			E('td', { 'class': 'td' }, [bypass ? '-' : fmtCount(p.rt_table)]),
 			E('td', { 'class': 'td' }, [bypass ? '-' : fmtCount(p.rules)]),
@@ -363,6 +396,7 @@ return view.extend({
 					? _('%d name(s) every %ds').format(svc.poll.names, svc.poll.interval)
 					: _('unavailable - ucode-mod-resolv missing'))
 				: '-']));
+			setNodes('shunt-track', E('span', {}, [renderTrack(svc)]));
 			setNodes('shunt-policies', renderPolicies(st));
 			setNodes('shunt-snoop', renderSnoop(svc));
 			setNodes('shunt-issues', renderIssues(st));
@@ -386,7 +420,9 @@ return view.extend({
 						E('span', { 'id': 'shunt-learned' }, '-'),
 						_('across all policies')),
 					card(_('Poll'), E('span', { 'id': 'shunt-poll' }, '-'),
-						_('wildcards are covered by the observer only'))
+						_('wildcards are covered by the observer only')),
+					card(_('Health Tracking'), E('span', { 'id': 'shunt-track' }, '-'),
+						_('policy interfaces answering the probes'))
 				]),
 				E('div', { 'id': 'shunt-policies' }, ''),
 				E('div', { 'id': 'shunt-snoop' }, ''),
@@ -410,6 +446,7 @@ return view.extend({
 		s.addremove = false;
 		s.tab('general', _('General Settings'));
 		s.tab('snoop', _('DNS Observer Settings'));
+		s.tab('track', _('Health Tracking'));
 
 		o = s.taboption('general', form.Flag, 'enabled', _('Enabled'),
 			_('Enable the shunt service.'));
@@ -453,6 +490,11 @@ return view.extend({
 		o.default = 'br-lan';
 		o.multiple = true;
 		o.noaliases = true;
+
+		o = s.taboption('track', form.DynamicList, 'track_ip', _('Probe Targets'),
+			_('Addresses that answer ICMP echo, reachable through every policy interface - public resolvers are the usual choice. Every interface a route policy uses is probed through itself every 5 seconds; one that answers no target for three rounds is treated as down and its policies fall back until it answers again. Empty means no tracking, see the README.'));
+		o.datatype = 'ipaddr("nomask")';
+		o.placeholder = '1.1.1.1';
 
 		s = m.section(form.TypedSection, 'global');
 		s.anonymous = true;

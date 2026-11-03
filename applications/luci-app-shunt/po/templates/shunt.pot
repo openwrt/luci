@@ -1,7 +1,7 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:359
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:396
 msgid "%d name(s) every %ds"
 msgstr ""
 
@@ -28,7 +28,7 @@ msgstr ""
 msgid "%ds"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:211
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:243
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:116
 msgid "Action"
 msgstr ""
@@ -39,6 +39,15 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:135
 msgid "Address"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:495
+msgid ""
+"Addresses that answer ICMP echo, reachable through every policy interface - "
+"public resolvers are the usual choice. Every interface a route policy uses "
+"is probed through itself every 5 seconds; one that answers no target for "
+"three rounds is treated as down and its policies fall back until it answers "
+"again. Empty means no tracking, see the README."
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:130
@@ -66,7 +75,7 @@ msgstr ""
 msgid "Bytes routed"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:428
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:469
 msgid ""
 "Ceiling in seconds for a learned address in its Set. An address learned from "
 "a DNS answer expires with the TTL of that answer, clamped to the range 60 to "
@@ -92,7 +101,7 @@ msgstr ""
 msgid "Compression pointer in the question"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:408
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:448
 msgid "DNS Observer Settings"
 msgstr ""
 
@@ -100,7 +109,7 @@ msgstr ""
 msgid "DNS responses observed on %s since the service started"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:414
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:455
 msgid "Debug Logging"
 msgstr ""
 
@@ -132,11 +141,11 @@ msgstr ""
 msgid "Domains"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:411
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:452
 msgid "Enable the shunt service."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:410
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:451
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:111
 msgid "Enabled"
 msgstr ""
@@ -176,7 +185,7 @@ msgstr ""
 msgid "Fall through to the normal uplink"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:217
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:249
 msgid "Fallback"
 msgstr ""
 
@@ -203,12 +212,17 @@ msgstr ""
 msgid "Frame ends mid-structure"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:407
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:447
 msgid "General Settings"
 msgstr ""
 
 #: applications/luci-app-shunt/root/usr/share/rpcd/acl.d/luci-app-shunt.json:3
 msgid "Grant access to LuCI app shunt"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:424
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:449
+msgid "Health Tracking"
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:149
@@ -231,7 +245,7 @@ msgstr ""
 msgid "Inconsistent UDP length"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:212
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:244
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:125
 msgid "Interface"
 msgstr ""
@@ -240,7 +254,7 @@ msgstr ""
 msgid "Keep Local Traffic"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:381
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:419
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:127
 msgid "Learned addresses"
 msgstr ""
@@ -249,22 +263,22 @@ msgstr ""
 msgid "Learned addresses (%d)"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:415
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:456
 msgid ""
 "Log every observed DNS answer and every set write. Useful for a bug report, "
 "noisy in normal operation - on a router running adblock roughly half of all "
 "answers are error replies, and each one gets a line."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:418
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:459
 msgid "Manage rp_filter"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:213
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:245
 msgid "Mark"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:427
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:468
 msgid "Maximum Entry Lifetime"
 msgstr ""
 
@@ -300,11 +314,11 @@ msgstr ""
 msgid "No output"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:205
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:237
 msgid "No policy is active."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:272
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:309
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:82
 msgid "No shunt config found!"
 msgstr ""
@@ -331,7 +345,7 @@ msgid ""
 "observed DNS answers."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:447
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:488
 msgid "Observed Devices"
 msgstr ""
 
@@ -349,7 +363,7 @@ msgstr ""
 msgid "Packets routed"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:442
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:483
 msgid "Passive DNS Observer"
 msgstr ""
 
@@ -358,23 +372,27 @@ msgstr ""
 msgid "Policies"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:210
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:242
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:134
 msgid "Policy"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:279
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:316
 msgid ""
 "Policy based routing by mac, source, destination and domain. For further "
 "information please check the %s."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:384
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:422
 msgid "Poll"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:422
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:463
 msgid "Poll Interval"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:494
+msgid "Probe Targets"
 msgstr ""
 
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:47
@@ -389,7 +407,7 @@ msgstr ""
 msgid "Proxy Port"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:443
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:484
 msgid ""
 "Read DNS answers as they pass the LAN device, whichever resolver produced "
 "them. Required for wildcard domains, which cannot be resolved ahead of time."
@@ -411,7 +429,7 @@ msgstr ""
 msgid "Refresh failed: %s"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:253
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:290
 msgid "Rejected settings"
 msgstr ""
 
@@ -423,7 +441,7 @@ msgstr ""
 msgid "Restrict to tcp, udp or both. A port without a protocol covers both."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:344
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:381
 msgid "Reverse path filtering is strict"
 msgstr ""
 
@@ -438,24 +456,24 @@ msgid ""
 "hand it to a transparent proxy on the router."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:216
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:248
 msgid "Routes"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:215
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:247
 msgid "Rules"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:471
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:517
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:234
 msgid "Save & Restart"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:423
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:464
 msgid "Seconds between poll cycles."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:376
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:414
 msgid "Service"
 msgstr ""
 
@@ -464,17 +482,17 @@ msgstr ""
 msgid "Set Reporting"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:419
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:460
 msgid ""
 "Set rp_filter to 2 on shunt's own policy interfaces, at start and when one "
 "comes up."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:404
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:444
 msgid "Settings"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:436
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:477
 msgid ""
 "Should be at least twice the poll interval (%d), otherwise entries expire "
 "between cycles."
@@ -502,22 +520,22 @@ msgstr ""
 msgid "Static Destinations"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:464
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:510
 msgid "Stop"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:346
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:383
 msgid ""
 "Strict rp_filter will drop shunt's marked traffic on %s. Set rp_filter to 2 "
 "on the policy interface, enable rp_filter_manage to have shunt do it, or "
 "loosen it box-wide; see the README."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:214
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:246
 msgid "Table"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:448
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:489
 msgid ""
 "The LAN device the DNS answers cross on their way to the clients, normally "
 "br-lan. One entry per network segment, see the README."
@@ -539,7 +557,7 @@ msgstr ""
 msgid "The syslog output, pre-filtered for messages related to: %s"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:255
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:292
 msgid ""
 "These entries were skipped. Everything else was applied - a rejected entry "
 "never takes the service down."
@@ -568,7 +586,7 @@ msgstr ""
 msgid "Truncated response"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:378
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:416
 msgid "Version"
 msgstr ""
 
@@ -584,12 +602,16 @@ msgid ""
 "is refreshed, so they show recent activity, not a lifetime total."
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:383
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:421
 msgid "across all policies"
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:193
 msgid "all policies"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:216
+msgid "answers the health probes"
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:202
@@ -602,7 +624,7 @@ msgstr ""
 msgid "interface"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:354
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:391
 msgid "n/a"
 msgstr ""
 
@@ -610,8 +632,16 @@ msgstr ""
 msgid "no answer from the backend"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:280
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:217
+msgid "no answer to the health probes since %s - the fallback applies"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:317
 msgid "online documentation"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:425
+msgid "policy interfaces answering the probes"
 msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:116
@@ -638,10 +668,10 @@ msgstr ""
 msgid "stopped"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:360
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:397
 msgid "unavailable - ucode-mod-resolv missing"
 msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:385
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:423
 msgid "wildcards are covered by the observer only"
 msgstr ""
