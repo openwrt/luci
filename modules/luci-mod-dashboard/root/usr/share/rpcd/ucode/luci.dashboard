@@ -3,6 +3,7 @@
 import { readfile } from 'fs';
 import * as uloop from 'uloop';
 import { connect } from 'ubus';
+import { start as start_temperature } from 'luci.dashboard.temperature';
 
 const STEP = 5000, SLOTS = 60;
 
@@ -135,4 +136,7 @@ const methods = {
 	}
 };
 
-return { 'luci.dashboard': methods };
+return {
+	'luci.dashboard': methods,
+	'luci.dashboard.temperature': start_temperature()
+};

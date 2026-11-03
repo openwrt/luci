@@ -258,7 +258,7 @@ function startPolling(includes, layout, root, form) {
 			const sections = collectSections(includes, results, layout);
 
 			if (form)
-				sections.tabs.push({ id: 'layout', title: _('Layout'), content: [] });
+				sections.tabs.push({ id: 'layout', title: _('Settings'), content: [] });
 
 			updateShell(root, sections, containers);
 
@@ -305,7 +305,7 @@ return view.extend({
 
 		document.addEventListener('uci-applied', () => window.location.reload());
 
-		const form = L.hasViewPermission() ? E('div', { 'class': 'cbi-section', 'data-tab': 'layout', 'data-tab-title': _('Layout') }, [ E('em', { 'class': 'spinning' }, [ _('Loading view…') ]) ]) : null;
+		const form = L.hasViewPermission() ? E('div', { 'class': 'cbi-section', 'data-tab': 'layout', 'data-tab-title': _('Settings') }, [ E('em', { 'class': 'spinning' }, [ _('Loading view…') ]) ]) : null;
 
 		return startPolling(includes, layout, root, form).then(() => root);
 	},
