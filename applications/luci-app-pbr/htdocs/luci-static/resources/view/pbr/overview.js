@@ -112,6 +112,7 @@ return view.extend({
 			_("Use resolver set support for domains"),
 			text
 		);
+		o.rmempty = false;
 		o.value("none", _("Disabled"));
 		if (reply.platform.adguardhome_ipset_support) {
 			o.value("adguardhome.ipset", _("AdGuardHome ipset"));
