@@ -1,0 +1,24 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+# remove the "_direct" UI state from existing Dropbear configs
+
+is_commit=0
+
+dropbear_update() {
+	local _direct
+
+	config_get _direct "$1" _direct
+	[ -n "$_direct" ] || return 0
+
+	if uci -q delete dropbear."$1"._direct; then
+		is_commit=1
+	fi
+}
+
+config_load "dropbear"
+config_foreach dropbear_update dropbear
+[ $is_commit -eq 0 ] || uci commit dropbear
+
+exit 0
