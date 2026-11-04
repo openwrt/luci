@@ -338,6 +338,143 @@
 	font-weight: 600;
 }
 
+/* The measure sits above the sections, at the right, as a plain select. */
+#qos-cn-measure {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	gap: .5em;
+}
+
+#qos-cn-measure select {
+	width: auto;
+}
+
+/* Traffic by CAKE Tin: a box per direction, side by side while they fit. The
+   banner holds the direction over the donut and the column titles over the
+   table; in a narrow box both wrap, so the titles stay above the table and the
+   donut drops below it. */
+#qos-cn .qos-tins {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 26em), 1fr));
+	gap: var(--qos-gap);
+}
+
+#qos-cn .qos-tins .qbox {
+	min-width: 0;
+}
+
+#qos-cn .qos-tins .qbox + .qbox {
+	margin-top: 0;
+}
+
+#qos-cn .qos-tin-head,
+#qos-cn .qos-tin-body {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+#qos-cn .qos-tin-head {
+	column-gap: var(--qos-gap);
+}
+
+/* As wide as the donut and its margin, so the titles sit over their columns. */
+#qos-cn .qos-tin-head > div {
+	flex: none;
+	box-sizing: border-box;
+	width: calc(9.5em + var(--qos-gap));
+	padding: var(--qos-pad);
+	padding-right: 0;
+}
+
+#qos-cn .qos-tin-body {
+	flex-wrap: wrap-reverse;
+	justify-content: center;
+}
+
+#qos-cn .qos-tin-head .table,
+#qos-cn .qos-tin-body .table {
+	flex: 1 1 18em;
+	margin: 0;
+}
+
+/* Arcs are stroked circles over a ring that shows where a tin has none. */
+#qos-cn .qos-donut {
+	position: relative;
+	flex: none;
+	width: 9.5em;
+	height: 9.5em;
+	margin: var(--qos-gap);
+}
+
+#qos-cn .qos-donut svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	fill: none;
+	stroke-width: 15;
+}
+
+#qos-cn .qos-donut .qos-ring {
+	stroke: var(--qos-ln);
+}
+
+#qos-cn .qos-donut div {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: .9em;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+/* Traffic by Class under one mode: tin rows are shaded as the header is. Class
+   rows sit under the tin name, by the cell padding plus a swatch and its margin,
+   with their codepoints muted. The bars' column takes what the names and figures
+   leave. */
+#qos-cn .qos-bar {
+	width: 100%;
+	min-width: 4em;
+}
+
+#qos-cn .qbox .qos-grp .td {
+	background: var(--qos-hd);
+}
+
+/* Footstrap pins a table's titles under its top bar while the page scrolls.
+   In this clipped box they would pin to the box and cover the first rows. */
+#qos-cn .qos-cls .th {
+	position: static;
+}
+
+#qos-cn .qos-cls .qos-in > .td:first-child {
+	padding-left: 1.85em;
+}
+
+#qos-cn .qos-mk {
+	opacity: .75;
+}
+
+#qos-cn .qos-sw {
+	display: inline-block;
+	width: .7em;
+	height: .7em;
+	margin-right: .4em;
+	border-radius: 2px;
+}
+
+#qos-cn .qos-cn-info {
+	margin: var(--qos-gap) 0 0;
+	font-size: 90%;
+}
+
 #qos-cn-map-box,
 #qos-dyn-box {
 	height: 24rem;
@@ -495,5 +632,19 @@
 
 	#qos-qs-sect .cbi-value-field > * {
 		grid-column: 1;
+	}
+
+	/* Traffic by Class leaves its bars out and lets a codepoint, or a class name
+	   too long for the line, wrap, so the figures keep their width. */
+	#qos-cn .qos-bar {
+		display: none;
+	}
+
+	#qos-cn .qos-cls .td:first-child {
+		white-space: normal;
+	}
+
+	#qos-cn .qos-cls code {
+		overflow-wrap: anywhere;
 	}
 }
