@@ -1,0 +1,21 @@
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=luci-app-notes
+PKG_VERSION:=0.1.0
+PKG_RELEASE:=1
+
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Viktors Zilinskis <viktors.zilinskis@gmail.com>
+
+LUCI_TITLE:=LuCI Notes
+LUCI_DESCRIPTION:=Simple Markdown notes application for LuCI.
+LUCI_DEPENDS:=+luci-base +rpcd +rpcd-mod-ucode
+LUCI_PKGARCH:=all
+
+define Package/luci-app-notes/conffiles
+/etc/notes.md
+endef
+
+include ../../luci.mk
+
+# call BuildPackage - OpenWrt buildroot signature
