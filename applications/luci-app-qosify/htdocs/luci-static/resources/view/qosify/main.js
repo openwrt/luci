@@ -53,6 +53,9 @@ var TIN_COLORS={besteffort:['blue'],
 	diffserv4:['red','blue','yellow','green'],
 	diffserv3:['red','blue','green']};
 for(var tk in TIN_COLORS)TIN_COLORS[tk]=TIN_COLORS[tk].map(qc);
+// q_cake.c names the tins of a three- and four-tin mode and numbers any other
+// count from Tin 0, lowest priority first, as qosify-status prints them.
+function tinName(n,i){return n===3?['Bulk','Best Effort','Voice'][i]:n===4?['Bulk','Best Effort','Video','Voice'][i]:'Tin '+i;}
 // qosify.init handles 'alias' with add_class and 'device' with add_interface,
 // so those section types share the option set of class / interface.
 var OPT_DESC={
@@ -92,8 +95,10 @@ var OPT_DESC={
 };
 // Quick Add grids hold at most this many options per table.
 var QA_COLS=7;
-// tc get_rate() units, plus CAKE's unlimited; a bare number is bytes per second.
-var RATE=/^(unlimited|\d+(\.\d+)?((k|m|g|t)?(bit|bps)|(ki|mi|gi|ti)(bit|bps))?)$/i;
+// tc get_rate64() units; a bare number is bytes per second. Not CAKE's unlimited:
+// qosify sends a set value as "bandwidth <value>", which get_rate64() refuses for
+// a word, so the qdisc is not created. An empty bandwidth is what runs unlimited.
+var RATE=/^\d+(\.\d+)?((k|m|g|t)?(bit|bps)|(ki|mi|gi|ti)(bit|bps))?$/i;
 // interface_create() drops a name of IFNAMSIZ (16) or more, or with a quote.
 var NAME_MAX=15;
 // class_map has QOSIFY_MAX_CLASS_ENTRIES slots for class and alias sections.
@@ -450,8 +455,9 @@ function dscpNum(v){
 	return null;
 }
 // NQB is in qosify from 298754f, the get_stats "classes" table from 0edbc51 two
-// commits on. OpenWrt went from 1501e09 (24.10, 25.12) to b3ee50e (master), so a
-// reply with "classes" means NQB is known, one without it means not; null is unknown.
+// commits on. OpenWrt went from 1501e09 (24.10, 25.12) to b3ee50e, now 143d71d
+// (master), so a reply with "classes" means NQB is known, one without it means not;
+// null is unknown.
 var NQB_OK=null;
 function nqbSeen(st){if(st)NQB_OK=!!st.classes;}
 function dscpList(){return NQB_OK===false?DSCP.filter(function(d){return d!=='NQB';}):DSCP;}
@@ -506,7 +512,11 @@ function ruleWarn(txt,names){
 // return before the interfaces are applied; the rest is dropped quietly.
 // cmd_add_qdisc() pastes bandwidth, mode and the options unquoted into a tc
 // command run with sh -c as root, and qosify.init folds overhead, overhead_encap
-// and overhead_mpu into options, so a shell metacharacter in any of them is refused.
+// and overhead_mpu into options. From qosify 143d71d (master) check_str() drops a
+// value with any byte outside TCV, a mode falling back to diffserv4; 1501e09
+// (24.10, 25.12) refuses only a quote. No tc rate or CAKE keyword needs more, so
+// TCV holds on every build, a list checked as config_get joins it, with spaces.
+var TCV=/^[A-Za-z0-9._ -]*$/;
 // The integer keys go through jshn's atoll(), which keeps only leading digits.
 var INTK=['timeout','prio_max_avg_pkt_len','bulk_trigger_pps','bulk_trigger_timeout'];
 function cfgLint(secs){
@@ -527,7 +537,7 @@ function cfgLint(secs){
 		});
 		if(t==='interface'||t==='device'){
 			['bandwidth_up','bandwidth_down','bandwidth','mode','ingress_options','egress_options','options','overhead','overhead_encap','overhead_mpu'].forEach(function(k){
-				if(s[k]&&/['"`$;&|<>(){}\\\n#*?[\]~]/.test(String(s[k])))w.push({hard:true,t:_('%s: %s contains shell metacharacters — qosify runs the tc command with sh -c as root, so they would break it or be executed').format(n,k)});
+				if(s[k]&&!TCV.test([].concat(s[k]).join(' ')))w.push({hard:true,t:_('%s: %s may only contain letters, digits, spaces, dots, underscores and hyphens — qosify 143d71d (snapshots) drops it otherwise, and 24.10 and 25.12 paste it into a tc command run with sh -c as root').format(n,k)});
 			});
 		}
 		else if(t==='defaults'){
@@ -619,6 +629,12 @@ function colTable(cols,kids){
 function colHead(cols,id){
 	return E('div',{'class':'qhead','id':id||null},colTable(cols,E('tr',{'class':'tr table-titles'},
 		cols.map(function(c){return E('th',{'class':c[2]?'th qn':'th left'},c[0]);}))));
+}
+// E() builds HTML elements; the tin donuts are SVG, which needs its namespace.
+function svgE(tag,attr){
+	var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+	for(var k in attr)e.setAttribute(k,attr[k]);
+	return e;
 }
 function valRow(lbl,el){
 	var n=Array.isArray(el)?el[0]:el;
@@ -1460,14 +1476,14 @@ return view.extend({
 	// Only what the reply contains is rendered.
 	isCounter:function(v){return !!v&&typeof v==='object'&&(v.packets!=null||v.bytes!=null);},
 	// qosify_map_get_ebpf_entry_count() sums the IPv4 and IPv6 address maps only.
-	// 1501e09 sends none of these, so there the section stays hidden.
+	// One line under the class bars; 1501e09 sends none of these, so there is none.
 	infoNodes:function(st){
-		var rows=[];
-		if(st.ebpf_map_entries!=null)rows.push(['ebpf_map_entries',String(st.ebpf_map_entries)]);
-		if(st.last_reload_time)rows.push(['last_reload_time',fmtMtime(st.last_reload_time)]);
-		if(st.dns_cache)rows.push(['dns_cache','size %d, hits %d, misses %d'.format(st.dns_cache.size||0,st.dns_cache.hits||0,st.dns_cache.misses||0)]);
-		if(!rows.length)return null;
-		return E('div',{'class':'qbox'},E('table',{'class':'table'},rows.map(function(r){return kvRow(E('code',{},r[0]),r[1]);})));
+		var out=[];
+		function add(k,v){out.push(out.length?' · ':'',E('code',{},k),' '+v);}
+		if(st.ebpf_map_entries!=null)add('ebpf_map_entries',String(st.ebpf_map_entries));
+		if(st.last_reload_time)add('last_reload_time',fmtMtime(st.last_reload_time));
+		if(st.dns_cache)add('dns_cache','size %d, hits %d, misses %d'.format(st.dns_cache.size||0,st.dns_cache.hits||0,st.dns_cache.misses||0));
+		return out.length?E('p',{'class':'qos-cn-info'},out):null;
 	},
 
 	// dump lists port, address and DNS entries, but pattern_stats is the only
@@ -1493,21 +1509,32 @@ return view.extend({
 		this.getClasses().forEach(function(c){m[c.name]=dscpRank(self.dscpVal(c.egress||c.ingress));});
 		return m;
 	},
-	// DNS rows ordered by dscpRank(). Entries added over ubus (user, no file) carry
-	// a timeout and follow the file entries, so the MAP_ROWS cut falls on them.
-	mapRows:function(entries){
-		var rows=[],dyn=[],cls=this.dscpRanks(),self=this,i,e,a,rk;
+	// DNS rows, the most traffic first by the measure, then by dscpRank(). Entries
+	// added over ubus (user, no file) carry a timeout and follow the file entries,
+	// so the MAP_ROWS cut falls on them. With one CAKE mode a row's bar takes the
+	// colour of the tin its dscp lands in.
+	mapRows:function(entries,dns){
+		var rows=[],dyn=[],cls=this.dscpRanks(),self=this,f=this.cnPk?'packets':'bytes',
+			m=this.cakeModes(),mode=m.length===1&&MODES.indexOf(m[0])>=0?m[0]:null,i,e,a,rk,t;
 		for(i=0;i<entries.length;i++){
 			e=entries[i]||{};
 			if(e.type!=='dns')continue;
 			a=(e.user&&!e.file)?dyn:rows;
 			rk=String(e.dscp==null?'':e.dscp).replace(/^\+/,'');
+			t=mode?this.tinOf(mode,rk):-1;
 			a.push({type:e.type,addr:e.addr,dscp:e.dscp,file:!!e.file,user:!!e.user,
-				timeout:e.timeout,ix:a.length,
+				timeout:e.timeout,ix:a.length,n:dns&&dns[e.addr]?Number(dns[e.addr][f])||0:0,
+				color:mode?(t<0?CN_NONE:TIN_COLORS[mode][t]):'',
 				rk:cls[rk]!=null?cls[rk]:dscpRank(self.dscpVal(rk))});
 		}
-		function byDscp(x,y){return y.rk-x.rk||x.ix-y.ix;}
-		return rows.sort(byDscp).concat(dyn.sort(byDscp));
+		function byTraffic(x,y){return y.n-x.n||y.rk-x.rk||x.ix-y.ix;}
+		return rows.sort(byTraffic).concat(dyn.sort(byTraffic));
+	},
+	// The tin a class or codepoint lands in under mode, a class by its egress
+	// codepoint as the class bars place it; -1 for a value qosify would reject.
+	tinOf:function(mode,d){
+		var c=this.getClasses().filter(function(x){return x.name===d;})[0],v=this.dscpVal(c?c.egress||c.ingress:d);
+		return v<0?-1:+TIN_MAP[mode].charAt(v);
 	},
 	// dns is the get_stats dns table keyed by pattern; a pattern with no traffic is
 	// omitted from it, so it is zero once the table exists.
@@ -1532,27 +1559,32 @@ return view.extend({
 	// padded by the scrollbar width so the columns line up.
 	mapNodes:function(rows){
 		var cells=this._mapCells=[],wcol=rows.some(function(r){return r.timeout!=null;}),
-			cols=[['dns',34],['dscp',14],['file / user',12],['hits / packets / bytes',28,1]];
+			cols=[['dns',30],['dscp',12],['file / user',10],['',15],['hits / packets / bytes',28,1]];
 		if(wcol)cols.push(['timeout',12,1]);
 		var trs=rows.slice(0,MAP_ROWS).map(function(r){
-			var src=[],a=String(r.addr!=null?r.addr:'-'),c={t:E('td',{'class':'td qn'}),w:wcol?E('td',{'class':'td qn'}):null};
+			var src=[],a=String(r.addr!=null?r.addr:'-'),c={f:E('div'),t:E('td',{'class':'td qn'}),w:wcol?E('td',{'class':'td qn'}):null};
 			if(r.file)src.push('file');
 			if(r.user)src.push('user');
 			cells.push(c);
 			return E('tr',{'class':'tr'},[E('td',{'class':'td','title':a},E('code',{},[a])),
-				E('td',{'class':'td'},[r.dscp||'-']),E('td',{'class':'td'},src.join(', ')||'-'),c.t,c.w||'']);
+				E('td',{'class':'td'},[r.dscp||'-']),E('td',{'class':'td'},src.join(', ')||'-'),
+				E('td',{'class':'td'},E('div',{'class':'cbi-progressbar'},c.f)),c.t,c.w||'']);
 		});
 		return E('div',{'class':'qbox'},[colHead(cols,'qos-cn-map-head'),E('div',{'id':'qos-cn-map-box'},colTable(cols,trs))]);
 	},
 
+	// Bars are linear against the busiest row shown, a non-zero row kept at 1%.
 	mapValues:function(rows,dns){
-		var lg=$('qos-cn-map-sect-title'),t;
+		var lg=$('qos-cn-map-sect-title'),t,max=0;
+		rows.slice(0,MAP_ROWS).forEach(function(r){if(r.n>max)max=r.n;});
 		(this._mapCells||[]).forEach(function(c,i){
 			var r=rows[i],e=(dns&&dns[r.addr])||{},t,w;
 			t=!dns?'-':[Number(e.hits||0).toLocaleString(),Number(e.packets||0).toLocaleString(),'%1024.2mB'.format(e.bytes||0)].join(' / ');
 			w=r.timeout!=null?'%t'.format(r.timeout):'-';
 			if(c.t.textContent!==t)c.t.textContent=t;
 			if(c.w&&c.w.textContent!==w)c.w.textContent=w;
+			c.f.style.width=(max&&r.n?Math.max(r.n/max*100,1):0).toFixed(2)+'%';
+			c.f.style.background=r.color;
 		});
 		t=rows.length>MAP_ROWS?_('DNS Entries (%d of %d)').format(MAP_ROWS,rows.length):_('DNS Entries (%d)').format(rows.length);
 		if(lg&&lg.textContent!==t)lg.textContent=t;
@@ -1589,17 +1621,30 @@ return view.extend({
 		}).finally(function(){self._cn=false;});
 	},
 
+	// The measure picks bytes or packets for the donuts, bars and shares; the
+	// tables keep both figures.
 	tabCounters:function(){
 		var self=this;
 		return E('div',{'id':'qos-cn'},[
-			sect(_('Traffic by Class'),[E('div',{'id':'qos-cn-msg'}),E('div',{'id':'qos-cn-bars'})]),
-			sect(_('Traffic by DSCP'),E('div',{'id':'qos-cn-dscp'}),{'id':'qos-cn-dscp-sect','style':'display:none'}),
+			E('div',{'id':'qos-cn-measure'},[E('label',{'for':'qos-cn-unit'},_('Measure')),
+				E('select',{'id':'qos-cn-unit','class':'cbi-input-select','change':function(ev){self.cnPk=ev.target.value==='packets';self.redrawCounters();}},
+					[E('option',{'value':'bytes'},_('Bytes')),E('option',{'value':'packets'},_('Packets'))])]),
 			sect(_('Traffic by CAKE Tin'),E('div',{'id':'qos-cn-tins'},emP(_('Loading...'))),{'id':'qos-cn-tin-sect','style':'display:none'}),
-			sect('get_stats',E('div',{'id':'qos-cn-info'}),{'id':'qos-cn-info-sect','style':'display:none'}),
+			sect(_('Traffic by Class'),[E('div',{'id':'qos-cn-msg'}),E('div',{'id':'qos-cn-bars'}),
+				E('p',{'id':'qos-cn-note','class':'qos-cn-info','style':'display:none'},[_('qosify reports packets only per class.')]),
+				E('div',{'id':'qos-cn-info'})]),
 			sect(_('DNS Entries'),E('div',{'id':'qos-cn-map'},emP(_('Loading...'))),{'id':'qos-cn-map-sect','style':'display:none'}),
+			sect(_('Traffic by DSCP'),E('div',{'id':'qos-cn-dscp'}),{'id':'qos-cn-dscp-sect','style':'display:none'}),
 			E('div',{'class':'cbi-page-actions'},E('button',{'class':'cbi-button cbi-button-negative','id':'qos-btn-cnreset','disabled':'',
 				'click':function(){return self.resetCounters();}},_('Reset counters')))
 		]);
+	},
+
+	// A new measure draws again from the last replies, with no new calls.
+	redrawCounters:function(){
+		this.drawBars();
+		this.drawTins();
+		if(this._cnDns)this.fillMap(this._mapDump,this._cnStats&&this._cnStats.dns);
 	},
 
 	// get_stats with reset zeroes the counters it reports: the classes, and on
@@ -1617,22 +1662,22 @@ return view.extend({
 	},
 
 	// get_stats dscp: every packet by the DSCP read back from it after the
-	// classifier, with the tin colours and order of the class chart. Codepoints
-	// only: a value none has (qosify's 0x%02x) is left out of rows and total.
+	// classifier, with the tin colours and order of the class chart. A value no
+	// codepoint names is keyed 0x%02x (qosify_dscp_name()) and kept under that key.
 	dscpTotals:function(t,mode){
-		var rows=[],total=0,bytes=null,self=this,byTin=MODES.indexOf(mode)>=0;
+		var rows=[],pk=0,bytes=null,self=this,byTin=MODES.indexOf(mode)>=0;
 		Object.keys(t).sort().forEach(function(k,ix){
-			if(!t[k]||t[k].packets==null||DSCP_VAL[k]==null)return;
+			if(!t[k]||t[k].packets==null||self.dscpVal(k)<0)return;
 			var v=self.dscpVal(k),tn=byTin&&v>=0?+TIN_MAP[mode].charAt(v):-1;
-			total+=t[k].packets;
+			pk+=t[k].packets;
 			if(t[k].bytes!=null)bytes=(bytes||0)+t[k].bytes;
-			rows.push({name:k,v:t[k].packets,bytes:t[k].bytes,tin:tn,rk:dscpRank(v),
+			rows.push({name:k,pk:t[k].packets,bytes:t[k].bytes,tin:tn,rk:dscpRank(v),
 				color:!byTin?CN_COLORS[ix%CN_COLORS.length]:tn<0?CN_NONE:TIN_COLORS[mode][tn]});
 		});
 		rows.sort(function(a,b){return b.tin-a.tin||b.rk-a.rk||(a.name<b.name?-1:1);});
-		rows.total=total;
+		rows.pk=pk;
 		rows.bytes=bytes;
-		return rows;
+		return this.measure(rows);
 	},
 
 	// tcp_default/udp_default count what no rule matched while dscp_default_tcp/udp
@@ -1648,10 +1693,10 @@ return view.extend({
 	},
 	// Cumulative totals since the last reload, EF first and bulk last.
 	// Grouped and coloured by the tin the class's egress codepoint lands in under
-	// mode, highest priority tin first as the tin bars are, then by codepoint within
+	// mode, highest priority tin first as the donut tables are, then by codepoint within
 	// a tin. With no single mode to fold by, codepoint order and a colour per name.
 	classTotals:function(st,mode){
-		var cls=st&&st.classes,k,rows=[],names=[],total=0,bytes=null,self=this,
+		var cls=st&&st.classes,k,rows=[],names=[],pk=0,bytes=null,self=this,
 			fold=MODES.indexOf(mode)>=0,rank=this.dscpRanks(),mark=this.dscpMarks(),tin={},def=this.defMarks();
 		if(fold)this.getClasses().forEach(function(c){
 			var v=self.dscpVal(c.egress||c.ingress);
@@ -1671,16 +1716,26 @@ return view.extend({
 		names.sort();
 		names.forEach(function(n,ix){
 			var v=cls[n].packets||0;
-			total+=v;
+			pk+=v;
 			if(cls[n].bytes!=null)bytes=(bytes||0)+cls[n].bytes;
 			var t=tin[n]!=null?tin[n]:-1;
-			rows.push({name:n,v:v,bytes:cls[n].bytes,tin:t,
+			rows.push({name:n,pk:v,bytes:cls[n].bytes,tin:t,
 				color:!fold?CN_COLORS[ix%CN_COLORS.length]:t<0?CN_NONE:TIN_COLORS[mode][t],
 				mark:mark[n]||'',rk:rank[n]!=null?rank[n]:-1000});
 		});
 		rows.sort(function(a,b){return b.tin-a.tin||b.rk-a.rk||(a.name<b.name?-1:1);});
-		rows.total=total;
+		rows.pk=pk;
 		rows.bytes=bytes;
+		return this.measure(rows);
+	},
+	// The figure for bars, shares and donuts: bytes where the reply has them,
+	// unless Packets is picked. rows.total sums it; rows.pk and rows.bytes stay
+	// for the table columns.
+	measure:function(rows){
+		var b=!this.cnPk&&rows.bytes!=null;
+		rows.unit=b?'bytes':'packets';
+		rows.total=0;
+		rows.forEach(function(r){r.v=b?r.bytes||0:r.pk;rows.total+=r.v;});
 		return rows;
 	},
 
@@ -1706,19 +1761,20 @@ return view.extend({
 	},
 
 	// qosify-status, as the Status tab prints it: tc -s qdisc for each shaped
-	// direction, root cake or cake_mq. q_cake.c prints a column per tin in
-	// tin_order, lowest priority first, so a column is a TIN_COLORS index; rows are reversed to put the
-	// highest priority tin first, as the class bars are. Qdiscs running the same
-	// mode are summed tin by tin into one chart, egress and ingress together; a
-	// mode only one direction runs gets a chart of its own.
+	// direction, root cake or cake_mq, under an egress or ingress status: line.
+	// q_cake.c prints a column per tin in tin_order, lowest priority first, so a
+	// column is a TIN_COLORS index; rows are reversed to put the highest priority
+	// tin first, as the class bars are. Qdiscs of one direction running the same
+	// mode are summed tin by tin, so a direction gets a group per mode it runs.
 	cakeTins:function(txt){
-		var blk=[],grp=[],key={},b=null;
+		var blk=[],grp=[],key={},b=null,dir=null;
 		String(txt||'').split('\n').forEach(function(l){
 			var m,w;
-			if(/^===== (?:interface|device) \S+: /.test(l)||/^(egress|ingress) status:$/.test(l))b=null;
+			if(/^===== (?:interface|device) \S+: /.test(l))b=dir=null;
+			else if((m=l.match(/^(egress|ingress) status:$/))){b=null;dir=m[1];}
 			else if(/^qdisc /.test(l)){
 				w=l.split(/\s+/).filter(function(x){return MODES.indexOf(x)>=0;});
-				b=/^qdisc cake(_mq)? /.test(l)?{mode:w.pop()}:null;
+				b=dir&&/^qdisc cake(_mq)? /.test(l)?{dir:dir,mode:w.pop()}:null;
 				if(b)blk.push(b);
 			}
 			else if(b&&!b.names&&/^\s+(Bulk|Tin 0)\b/.test(l))b.names=l.trim().split(/\s{2,}/);
@@ -1727,8 +1783,8 @@ return view.extend({
 		});
 		blk.forEach(function(b){
 			if(!b.names||!b.pkts)return;
-			var k=b.mode+'|'+b.names.join('|'),g=key[k];
-			if(!g)grp.push(g=key[k]={mode:b.mode,names:b.names,pkts:[],bytes:[],drops:[],marks:[]});
+			var k=b.dir+'|'+b.mode+'|'+b.names.join('|'),g=key[k];
+			if(!g)grp.push(g=key[k]={dir:b.dir,mode:b.mode,names:b.names,pkts:[],bytes:[],drops:[],marks:[]});
 			['pkts','bytes','drops','marks'].forEach(function(f){
 				if(!b[f])g[f]=null;
 				else if(g[f])b[f].forEach(function(v,i){g[f][i]=(g[f][i]||0)+v;});
@@ -1736,109 +1792,230 @@ return view.extend({
 		});
 		return grp.map(function(g){
 			var c=TIN_COLORS[g.mode],n=g.names.length,rows=g.names.map(function(t,i){
-				var r={name:t,v:g.pkts[i]||0,bytes:g.bytes?g.bytes[i]||0:null,
+				return {name:t,pk:g.pkts[i]||0,bytes:g.bytes?g.bytes[i]||0:null,
 					drops:g.drops?g.drops[i]||0:null,marks:g.marks?g.marks[i]||0:null,
 					color:c&&c.length===n?c[i]:CN_COLORS[i%CN_COLORS.length]};
-				return r;
 			}).reverse();
-			rows.total=rows.reduce(function(t,r){return t+r.v;},0);
+			rows.dir=g.dir;
+			rows.mode=g.mode;
+			rows.pk=rows.reduce(function(t,r){return t+r.pk;},0);
 			rows.bytes=g.bytes?rows.reduce(function(t,r){return t+r.bytes;},0):null;
 			return rows;
 		});
 	},
 
-	// A compact box, header table above the rows as on DNS Entries: name, codepoint where a row has one, a
-	// .cbi-progressbar, then the counters under the names their source uses
-	// (get_stats packets/bytes, tc pkts/bytes/drops) and share, with a total row.
-	// Built again only when the rows or columns change; otherwise cells and bar
-	// widths are set in place. Length is (row/largest row)^BAR_EXP, a non-zero
-	// row kept at 1%.
+	// A compact box, header table above the rows as on DNS Entries: name, codepoint
+	// where a row has one, a .cbi-progressbar, then packets and bytes under the
+	// names get_stats uses and the share, with a total row. Bars and shares follow
+	// the measure. Built again only when the rows or columns change; otherwise
+	// cells and bar widths are set in place. Length is (row/largest row)^BAR_EXP,
+	// a non-zero row kept at 1%.
 	drawChart:function(box,rows,empty,head){
 		var total=rows.total||0,max=0,c=box.qosChart,sig,
 			dcol=rows.some(function(r){return r.mark;}),
-			bcol=rows.bytes!=null,
-			xcol=rows.some(function(r){return r.drops!=null;}),
-			pk=xcol?'pkts':'packets';
+			bcol=rows.bytes!=null;
 		if(!rows.length){box.qosChart=null;dom.content(box,emP(empty));return;}
 		rows.forEach(function(r){if(r.v>max)max=r.v;});
-		sig=[dcol,bcol,xcol].concat(rows.map(function(r){return r.name;})).join('\n');
+		sig=[dcol,bcol].concat(rows.map(function(r){return r.name;})).join('\n');
 		function td(n,t){return E('td',{'class':n?'td qn':'td left','data-title':t});}
 		function set(el,v){if(el&&el.textContent!==v)el.textContent=v;}
 		function num(n){return Number(n||0).toLocaleString();}
 		if(!c||c.sig!==sig){
 			var cols=[[head,20]];
 			if(dcol)cols.push(['dscp',10]);
-			cols.push(['',34],[pk,13,1]);
+			cols.push(['',34],['packets',13,1]);
 			if(bcol)cols.push(['bytes',13,1]);
-			if(xcol)cols.push(['drops',9,1]);
 			cols.push([_('share'),9,1]);
 			c=box.qosChart={sig:sig,rows:[]};
 			var trs=rows.map(function(){
-				var o={name:td(0,head),dscp:dcol?td(0,'dscp'):null,fill:E('div'),pkt:td(1,pk),
-					bytes:bcol?td(1,'bytes'):null,drops:xcol?td(1,'drops'):null,share:td(1,_('share'))};
+				var o={name:td(0,head),dscp:dcol?td(0,'dscp'):null,fill:E('div'),pkt:td(1,'packets'),
+					bytes:bcol?td(1,'bytes'):null,share:td(1,_('share'))};
 				o.tr=E('tr',{'class':'tr'},[o.name,o.dscp||'',
 					E('td',{'class':'td'},E('div',{'class':'cbi-progressbar'},o.fill)),
-					o.pkt,o.bytes||'',o.drops||'',o.share]);
+					o.pkt,o.bytes||'',o.share]);
 				c.rows.push(o);
 				return o.tr;
 			});
-			c.tot={pkt:td(1,pk),bytes:bcol?td(1,'bytes'):null,drops:xcol?td(1,'drops'):null};
+			c.tot={pkt:td(1,'packets'),bytes:bcol?td(1,'bytes'):null};
 			trs.push(E('tr',{'class':'tr qt'},[E('td',{'class':'td left'},_('total')),dcol?E('td',{'class':'td'}):'',E('td',{'class':'td'}),
-				c.tot.pkt,c.tot.bytes||'',c.tot.drops||'',E('td',{'class':'td qn'},'100%')]));
+				c.tot.pkt,c.tot.bytes||'',E('td',{'class':'td qn'},'100%')]));
 			dom.content(box,E('div',{'class':'qbox'},[colHead(cols),colTable(cols,trs)]));
 		}
 		rows.forEach(function(r,i){
 			var o=c.rows[i],share=total?(r.v/total)*100:0,
-				len=max&&r.v?Math.max(Math.pow(r.v/max,BAR_EXP)*100,1):0,
-				tip=r.marks!=null?'marks %d'.format(r.marks):'';
+				len=max&&r.v?Math.max(Math.pow(r.v/max,BAR_EXP)*100,1):0;
 			set(o.name,r.name);
 			if(o.name.title!==r.name)o.name.title=r.name;
 			set(o.dscp,r.mark||'');
-			set(o.pkt,num(r.v));
+			set(o.pkt,num(r.pk));
 			if(o.bytes)set(o.bytes,'%1024.2mB'.format(r.bytes||0));
-			if(o.drops)set(o.drops,r.drops!=null?num(r.drops):'-');
 			set(o.share,fmtShare(share));
-			if(o.tr.title!==tip)o.tr.title=tip;
 			o.fill.style.width=len.toFixed(2)+'%';
 			o.fill.style.background=r.color;
 		});
-		set(c.tot.pkt,num(total));
+		set(c.tot.pkt,num(rows.pk));
 		if(c.tot.bytes)set(c.tot.bytes,'%1024.2mB'.format(rows.bytes));
-		if(c.tot.drops)set(c.tot.drops,num(rows.reduce(function(t,r){return t+(r.drops||0);},0)));
 	},
 
+	// Traffic by Class under one CAKE mode: a row per tin with its total, highest
+	// priority first, and under it a row per class, busiest first, its bar against
+	// the busiest class's. Tins and classes without traffic are left out. One
+	// auto-layout table, so the names and figures keep their width and the bars
+	// take the rest. Rebuilt only when the tins, the classes, their order or the
+	// unit change; otherwise figures and widths are set in place.
+	drawGroups:function(box,rows,mode){
+		var grp=[],by={},max=0,c=box.qosChart,sig,n=TIN_COLORS[mode].length,b=rows.unit==='bytes';
+		function set(el,v){if(el.textContent!==v)el.textContent=v;}
+		function fig(v){return b?'%1024.2mB'.format(v):Number(v).toLocaleString();}
+		function pct(v){return fmtShare(rows.total?v/rows.total*100:0);}
+		function names(l){return l.map(function(r){return r.name;}).join();}
+		if(!rows.length){box.qosChart=null;dom.content(box,emP(_('No per-class counters.')));return;}
+		rows.forEach(function(r){
+			var g=by[r.tin];
+			if(!r.v)return;
+			if(!g)grp.push(g=by[r.tin]={tin:r.tin,rows:[],v:0});
+			g.rows.push(r);
+			g.v+=r.v;
+			if(r.v>max)max=r.v;
+		});
+		if(!grp.length){box.qosChart=null;dom.content(box,emP(_('No class traffic yet.')));return;}
+		grp.forEach(function(g){
+			g.rows.sort(function(x,y){return y.v-x.v||y.rk-x.rk||(x.name<y.name?-1:1);});
+		});
+		sig=['tin',rows.unit].concat(grp.map(function(g){return g.tin+':'+names(g.rows);})).join('\n');
+		if(!c||c.sig!==sig){
+			var trs=[E('tr',{'class':'tr table-titles'},[E('th',{'class':'th left'},'tin / class'),E('th',{'class':'th qos-bar'}),
+				E('th',{'class':'th qn'},rows.unit),E('th',{'class':'th qn'},_('share'))])];
+			c=box.qosChart={sig:sig,grp:[]};
+			grp.forEach(function(g){
+				var o={val:E('td',{'class':'td qn'}),share:E('td',{'class':'td qn'}),cls:[]};
+				c.grp.push(o);
+				trs.push(E('tr',{'class':'tr qos-grp'},[E('td',{'class':'td left'},[E('span',{'class':'qos-sw','style':'background:'+g.rows[0].color}),g.tin<0?'-':tinName(n,g.tin)]),
+					E('td',{'class':'td qos-bar'}),o.val,o.share]));
+				g.rows.forEach(function(r){
+					var k={bar:E('div',{'style':'background:'+r.color}),val:E('td',{'class':'td qn'}),share:E('td',{'class':'td qn'})};
+					o.cls.push(k);
+					trs.push(E('tr',{'class':'tr qos-in'},[E('td',{'class':'td left'},[E('code',{},[r.name]),E('span',{'class':'qos-mk'},[' '+(r.mark||'')])]),
+						E('td',{'class':'td qos-bar'},E('div',{'class':'cbi-progressbar'},k.bar)),k.val,k.share]));
+				});
+			});
+			c.tot=E('td',{'class':'td qn'});
+			trs.push(E('tr',{'class':'tr qt'},[E('td',{'class':'td left'},_('total')),E('td',{'class':'td qos-bar'}),c.tot,E('td',{'class':'td qn'},'100%')]));
+			dom.content(box,E('div',{'class':'qbox'},E('table',{'class':'table qos-cls'},trs)));
+		}
+		grp.forEach(function(g,i){
+			var o=c.grp[i];
+			set(o.val,fig(g.v));
+			set(o.share,pct(g.v));
+			g.rows.forEach(function(r,j){
+				o.cls[j].bar.style.width=Math.max(r.v/max*100,1).toFixed(2)+'%';
+				set(o.cls[j].val,fig(r.v));
+				set(o.cls[j].share,pct(r.v));
+			});
+		});
+		set(c.tot,fig(rows.total));
+	},
+
+	// One CAKE mode groups the classes by tin; with none or several, a bar per class.
 	drawBars:function(){
-		var st=this._cnStats,box=$('qos-cn-bars'),m=this.cakeModes();
+		var st=this._cnStats,box=$('qos-cn-bars'),m=this.cakeModes(),mode=m.length===1?m[0]:null,rows;
 		if(!box)return;
-		var ds=$('qos-cn-dscp'),dss=$('qos-cn-dscp-sect'),dt=st&&st.dscp;
-		if(st)this.drawChart(box,this.classTotals(st,m.length===1?m[0]:null),_('No per-class counters.'),'class');
+		var ds=$('qos-cn-dscp'),dss=$('qos-cn-dscp-sect'),dt=st&&st.dscp,note=$('qos-cn-note');
+		if(st){
+			rows=this.classTotals(st,mode);
+			if(MODES.indexOf(mode)>=0)this.drawGroups(box,rows,mode);
+			else this.drawChart(box,rows,_('No per-class counters.'),'class');
+		}
 		else{box.qosChart=null;dom.content(box,'');}
+		// 1501e09 (24.10, 25.12) counts packets only per class, so with Bytes picked
+		// the bars stay in packets and the note says why.
+		if(note)note.style.display=rows&&rows.length&&rows.unit!=='bytes'&&!this.cnPk?'':'none';
 		// 1501e09 (24.10, 25.12) has no dscp table, so the section stays hidden there.
 		if(dss)dss.style.display=dt?'':'none';
-		if(ds){if(dt)this.drawChart(ds,this.dscpTotals(dt,m.length===1?m[0]:null),_('No DSCP traffic yet.'),'dscp');else{ds.qosChart=null;dom.content(ds,'');}}
+		if(ds){if(dt)this.drawChart(ds,this.dscpTotals(dt,mode),_('No DSCP traffic yet.'),'dscp');else{ds.qosChart=null;dom.content(ds,'');}}
 	},
 
 	// CAKE's own per-tin counters, per qdisc since it was created, so they need
-	// not add up to the class totals, which count what the classifier matched.
-	// A fork that fails keeps the last charts rather than collapsing the section.
+	// not add up to the class totals, which count what the classifier matched in
+	// both directions. A fork that fails keeps the last donuts rather than
+	// collapsing the section.
 	fillTins:function(running,r){
-		var sect=$('qos-cn-tin-sect'),box=$('qos-cn-tins'),self=this,t;
+		var sect=$('qos-cn-tin-sect'),box=$('qos-cn-tins');
 		if(!sect||!box)return;
 		sect.style.display=running?'':'none';
 		if(!running)return;
 		if(!this.readonly&&!r&&this._tinOk)return;
-		t=this.readonly?[]:this.cakeTins(r&&r.stdout);
-		this._tinOk=t.length>0;
-		if(!t.length){
-			box.qosGroups=0;
+		this._tins=this.readonly?[]:this.cakeTins(r&&r.stdout);
+		this._tinOk=this._tins.length>0;
+		if(!this._tinOk){
+			box.qosGroups=null;
 			dom.content(box,emP(this.readonly?_('Requires write access.'):r&&r.stdout?_('No CAKE tin statistics.'):_('No output.')));
 			return;
 		}
-		if(box.qosGroups!==t.length){
-			box.qosGroups=t.length;
-			dom.content(box,t.map(function(){return E('div');}));
+		this.drawTins();
+	},
+
+	// A box per direction and mode: a donut of the measure by tin with the total
+	// inside, beside a table of the measure, share and drops under tc's names, and
+	// marks as the row tooltip. A direction running two modes names each one.
+	// Rebuilt only when the boxes or tins change; otherwise arcs, cells and the
+	// unit heading are set in place.
+	drawTins:function(){
+		var box=$('qos-cn-tins'),t=this._tins,self=this,sig;
+		if(!box||!t||!t.length)return;
+		sig=t.map(function(rows){self.measure(rows);return rows.dir+' '+rows.mode+' '+rows.map(function(r){return r.name;}).join();}).join('\n');
+		if(box.qosGroups!==sig){
+			box.qosGroups=sig;
+			dom.content(box,E('div',{'class':'qos-tins'},t.map(function(rows){
+				return self.tinBox(rows,t.filter(function(x){return x.dir===rows.dir;}).length>1);})));
 		}
-		t.forEach(function(rows,i){self.drawChart(box.childNodes[i],rows,'','tin');});
+		t.forEach(function(rows,i){self.tinValues(box.firstChild.childNodes[i].qosTin,rows);});
+	},
+	tinBox:function(rows,named){
+		var svg=svgE('svg',{'viewBox':'0 0 120 120','aria-hidden':'true'}),
+			o={arcs:[],cells:[],tot:E('strong'),unit:E('small'),th:E('th',{'class':'th qn'}),tv:E('td',{'class':'td qn'}),td:E('td',{'class':'td qn'})},
+			cols=[['tin',34],['',24],[_('share'),16],['drops',20]],trs=[],el;
+		svg.appendChild(svgE('circle',{'class':'qos-ring','cx':60,'cy':60,'r':44}));
+		rows.forEach(function(r){
+			var a=svgE('circle',{'cx':60,'cy':60,'r':44,'transform':'rotate(-90 60 60)'}),
+				c={v:E('td',{'class':'td qn'}),s:E('td',{'class':'td qn'}),d:E('td',{'class':'td qn'})};
+			a.style.stroke=r.color;
+			svg.appendChild(a);
+			o.arcs.push(a);
+			c.tr=E('tr',{'class':'tr'},[E('td',{'class':'td left'},[E('span',{'class':'qos-sw','style':'background:'+r.color}),r.name]),c.v,c.s,c.d]);
+			o.cells.push(c);
+			trs.push(c.tr);
+		});
+		trs.push(E('tr',{'class':'tr qt'},[E('td',{'class':'td left'},_('total')),o.tv,E('td',{'class':'td qn'},'100%'),o.td]));
+		el=E('div',{'class':'qbox'},[
+			E('div',{'class':'qhead qos-tin-head'},[E('div',{},[rows.dir==='egress'?_('Upload (egress)'):_('Download (ingress)'),named?' · '+rows.mode:'']),
+				colTable(cols,E('tr',{'class':'tr table-titles'},[E('th',{'class':'th left'},'tin'),o.th,E('th',{'class':'th qn'},_('share')),E('th',{'class':'th qn'},'drops')]))]),
+			E('div',{'class':'qos-tin-body'},[E('div',{'class':'qos-donut'},[svg,E('div',{},[o.tot,o.unit])]),colTable(cols,trs)])]);
+		el.qosTin=o;
+		return el;
+	},
+	// Arcs run clockwise from the top in row order, 2 units apart when more than
+	// one tin has traffic; a tin with any keeps a visible sliver.
+	tinValues:function(o,rows){
+		var C=2*Math.PI*44,tot=rows.total,acc=0,gap=rows.filter(function(r){return r.v>0;}).length>1?2:0;
+		function set(el,v){if(el.textContent!==v)el.textContent=v;}
+		function num(n){return Number(n||0).toLocaleString();}
+		function fig(v){return rows.unit==='bytes'?'%1024.2mB'.format(v):num(v);}
+		rows.forEach(function(r,i){
+			var f=tot?r.v/tot:0,len=f?Math.max(f*C-gap,1.5):0,c=o.cells[i],tip=r.marks!=null?'marks %d'.format(r.marks):'';
+			o.arcs[i].setAttribute('stroke-dasharray',len.toFixed(2)+' '+(C-len).toFixed(2));
+			o.arcs[i].setAttribute('stroke-dashoffset',(-acc).toFixed(2));
+			acc+=f*C;
+			set(c.v,fig(r.v));
+			set(c.s,fmtShare(f*100));
+			set(c.d,r.drops!=null?num(r.drops):'-');
+			if(c.tr.title!==tip)c.tr.title=tip;
+		});
+		set(o.tot,fig(tot));
+		set(o.unit,rows.unit);
+		set(o.th,rows.unit);
+		set(o.tv,fig(tot));
+		set(o.td,rows.some(function(r){return r.drops!=null;})?num(rows.reduce(function(t,r){return t+(r.drops||0);},0)):'-');
 	},
 
 	// Nothing here survives the daemon: get_stats counts since the last reload and
@@ -1847,9 +2024,8 @@ return view.extend({
 	// than leaving the last poll's numbers on screen looking live. _cnDns is reset
 	// with it, or DNS Entries would keep a stale listing until stats return.
 	fillCounters:function(ctx){
-		var msg=$('qos-cn-msg'),info=$('qos-cn-info'),is=$('qos-cn-info-sect'),
+		var msg=$('qos-cn-msg'),info=$('qos-cn-info'),
 			nodes=ctx.running&&ctx.stats?this.infoNodes(ctx.stats):null;
-		if(is)is.style.display=nodes?'':'none';
 		if($('qos-btn-cnreset'))$('qos-btn-cnreset').disabled=this.readonly||!ctx.running||!ctx.stats;
 		if(!ctx.running){
 			this._cnDns=false;
@@ -1865,13 +2041,14 @@ return view.extend({
 		if(info)dom.content(info,nodes||'');
 	},
 
-	// Rebuilt only when the listing's shape changes; otherwise only the figures
-	// and footer are rewritten.
+	// Rebuilt only when the listing's shape or order changes; otherwise only the
+	// figures, bars and footer are rewritten. The dump is kept for a new measure.
 	fillMap:function(r,dns){
 		var box=$('qos-cn-map'),lg=$('qos-cn-map-sect-title'),sc=$('qos-cn-map-sect');
+		this._mapDump=r;
 		if(sc)sc.style.display=this._cnDns?'':'none';
 		if(!box||!this._cnDns)return;
-		var e=(r&&r.entries)||[],rows=this.mapRows(e),sig,t;
+		var e=(r&&r.entries)||[],rows=this.mapRows(e,dns),sig,t;
 		if(!rows.length){
 			this._mapSig=this._mapCells=null;
 			if(lg)lg.textContent=_('DNS Entries');
@@ -2009,13 +2186,12 @@ return view.extend({
 		var bwUp=bw(get('bw_up')),bwDn=bw(get('bw_down'));
 		var ovh=get('overhead'),mode=get('mode'),mpu=trim(get('overhead_mpu')),vlan=get('overhead_vlan'),ob=trim(get('ovh_bytes'));
 		var iopts=trim(get('ing_opts')),eopts=trim(get('egr_opts')),gopts=trim(get('opts'));
-		var safe=/^[\w\s.:-]*$/;
-		if(!safe.test(iopts)||!safe.test(eopts)||!safe.test(gopts)||!safe.test(bwUp)||!safe.test(bwDn)){
-			notify(_('Error: invalid characters in bandwidth or options fields. Use alphanumeric, spaces, hyphens, dots, colons only.'),'danger');
+		if(!TCV.test(iopts)||!TCV.test(eopts)||!TCV.test(gopts)||!TCV.test(bwUp)||!TCV.test(bwDn)){
+			notify(_('Error: invalid characters in bandwidth or options fields. Use letters, digits, spaces, dots, underscores and hyphens only.'),'danger');
 			return;
 		}
-		if(bwUp&&!RATE.test(bwUp))notify(_('bandwidth_up does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway'),'warning');
-		if(bwDn&&!RATE.test(bwDn))notify(_('bandwidth_down does not look like a tc rate (100mbit, 12MBps, unlimited) — passing it through anyway'),'warning');
+		if(bwUp&&!RATE.test(bwUp))notify(_('bandwidth_up does not look like a tc rate (100mbit, 12MBps; leave empty for unlimited) — passing it through anyway'),'warning');
+		if(bwDn&&!RATE.test(bwDn))notify(_('bandwidth_down does not look like a tc rate (100mbit, 12MBps; leave empty for unlimited) — passing it through anyway'),'warning');
 		if(mpu&&!/^\d+$/.test(mpu)){notify(_('Error: overhead_mpu must be a whole number of bytes'),'danger');return;}
 		if(ovh==='manual'&&ob&&!/^-?\d+$/.test(ob)){notify(_('Error: overhead must be a whole number of bytes'),'danger');return;}
 		var en=chk('enabled'),s0=ifSect(),bwAll=((s0&&uci.get('qosify',s0.id))||{}).bandwidth;
@@ -2082,6 +2258,11 @@ return view.extend({
 
 	confirmFresh:function(el,path){
 		return L.resolveDefault(fs.stat(path),null).then(function(st){
+			// A failed read leaves the editor empty although the file is not; saving would replace it.
+			if(st&&st.size>0&&!(el.dataset.orig||'').length){
+				notify(_('%s came back empty although it is %d bytes on disk — refusing to overwrite it').format(path,st.size),'danger');
+				return false;
+			}
 			if(!fileMoved(el,st))return true;
 			return confirmDialog(_('File changed on disk'),
 				_('%s has changed since this editor was loaded. Saving now discards those changes.').format(path),
@@ -2501,6 +2682,7 @@ return view.extend({
 				self._rulesN=countRules(ctx.rulesText);
 				self._cfgOk=(ctx.cfgRaw||'').length>10&&/(^|\n)config /.test(ctx.cfgRaw||'');
 				if(ctx.cfgRaw===null)notify(_('%s could not be read — the editor is left empty and will not be saved over it.').format(UCI_PATH),'danger');
+				if(ctx.rulesText===null&&ctx.rulesStat&&ctx.rulesStat.size>0)notify(_('%s could not be read — the editor is left empty and will not be saved over it.').format(RULES_PATH),'danger');
 			}
 			ctx.rulesN=self._rulesN;
 			ctx.cfgOk=self._cfgOk;
@@ -2533,7 +2715,8 @@ return view.extend({
 		var self=this;
 		self.lock();
 		uci.unload('qosify');
-		return uci.load('qosify').then(function(){
+		// uci.load() rejects when the config is missing; the service table must still refresh.
+		return uci.load('qosify').catch(function(){}).then(function(){
 			return self.gatherCtx(false);
 		}).then(function(ctx){
 			self.updateSvcTable(ctx);
