@@ -2,7 +2,38 @@
 
 ## Translations
 
-Use [Weblate](https://hosted.weblate.org/engage/openwrt/?utm_source=widget) instead of direct editing of the `*.po` files.
+Use [Weblate](https://hosted.weblate.org/engage/openwrt/?utm_source=widget) instead of direct editing of the `*.po` files. This also applies to translations written with an LLM.
+
+A pull request should not change existing `*.po` files, not even their line references. Weblate breaks easily when such a change is merged while the same files have unmerged changes in Weblate or in an open pull request from Weblate, and the conflicts then have to be fixed by hand. The `.po` files are synced with the templates separately.
+
+A pull request may add or update the translation template, `po/templates/<name>.pot`. Update it with `./build/i18n-scan.pl <app folder> > <app folder>/po/templates/<name>.pot`, because `./build/i18n-sync.sh` also rewrites the `.po` files. A new application should also add one untranslated `.po` file, so that Weblate notices it.
+
+LuCI can render translated strings as HTML, so a wrong or malicious translation can break a page or inject script into the admin interface. Translations therefore belong on Weblate, where the translators of each language can see and correct them, not in your pull request or in another repository.
+
+## Application sources
+
+The sources of an application, including its JavaScript, its menu and ACL files and its translation template, live in this repository next to its Makefile. Do not fetch them from another repository or a release archive at build time. A version bump would then show only a new hash here, while the code and the translations inside the archive could change without any review. If you develop the application elsewhere, send each change here as a pull request.
+
+## AI policy
+
+This is the short version. [AI_POLICY.md](AI_POLICY.md) explains how to disclose, what your `Signed-off-by` covers, how to test and how the review bot fits in.
+
+> [!WARNING]
+> You **must** disclose any LLM usage in your pull request, description or commit messages.
+
+We support the use of LLMs for coding, but we hold a high bar for all contributions, and we expect a human in the loop who genuinely understands the work an LLM produces on their behalf. You add your `Signed-off-by` yourself, never a tool, and it covers the parts an LLM wrote.
+
+> [!IMPORTANT]
+> Don't rely on LLMs to write the whole thing for you when communicating with the maintainers, and don't post wall-of-text comments.
+
+We expect comments on our projects to be written by humans. The readers are humans, and we'd like to hear from you, not from a model. We may hide or remove any comments that we believe are LLM-generated. Commit messages and pull request and issue descriptions are different: an LLM may draft them, and you disclose that as described above.
+
+If you're using an LLM to edit your comments, or to translate them as a non-native English speaker, keep them short, review before posting, and make sure they say what you mean.
+
+> [!CAUTION]
+> Do not use autonomous agents for contributing to our projects.
+
+We will close any pull requests that we believe were created autonomously. The same goes for untested pull requests opened in bulk.
 
 ## Patches and pull requests
 
@@ -13,6 +44,7 @@ Regardless of whether you send a patch or open a pull request, please try to fol
 * Have a useful commit subject prefixed with the component name, with your commit subject having a reasonable number of characters. Your title after the component name must start with a lowercase letter.
     (E.g.: "luci-mod-admin-full: wifi channel selection on STA networks")
 * In your commit message, shortly explain the changes made and - if applicable - the reasoning behind them, with your message having a reasonable number of characters per line. You cannot have an empty commit message.
+* Keep the explanation in proportion to the change. A one-line fix needs a few sentences in the commit message and pull request description, not a page.
 * Commit message of each commit **must** include a Signed-off-by line. Your first and last name should be used. Using a GitHub noreply email address will not be accepted.
     (See <https://openwrt.org/submitting-patches#sign_your_work>)
 
