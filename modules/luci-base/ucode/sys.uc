@@ -127,7 +127,12 @@ export function init_index(name) {
 	const src = readfile(`/etc/init.d/${basename(name)}`, 2048);
 	const idx = [];
 
-	for (let m in match(src, /^[[:space:]]*(START|STOP)=('[0-9][0-9]'|"[0-9][0-9]"|[0-9][0-9])[[:space:]]*$/gs)) {
+	for (let line in split(src, '\n')) {
+		let m = match(line, /^[[:blank:]]*(START|STOP)=('[0-9][0-9]'|"[0-9][0-9]"|[0-9][0-9])[[:blank:]]*$/);
+
+		if (!m)
+			continue;
+
 		switch (m[1]) {
 		case 'START': idx[0] = +trim(m[2], '"\''); break;
 		case 'STOP':  idx[1] = +trim(m[2], '"\''); break;
