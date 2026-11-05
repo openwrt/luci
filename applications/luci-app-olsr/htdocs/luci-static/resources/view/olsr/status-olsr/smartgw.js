@@ -78,102 +78,18 @@ return olsr.olsrview.extend({
 					}
 				});
 
-				const rv = [];
-				for (let gw of gws_res.ipv4) {
-					gw.cost = parseFloat(gw.cost) / 1024 || 0;
-					if (gw.cost >= 100) {
-						gw.cost = 0;
-					}
-
-					rv.push({
-						proto: gw.IPv4 ? '4' : '6',
-						originator: gw.originator,
-						selected: gw.selected ? _('yes') : _('no'),
-						cost: gw.cost > 0 ? gw.cost.toFixed(3) : _('infinite'),
-						hops: gw.hops,
-						uplink: gw.uplink,
-						downlink: gw.downlink,
-						v4: gw.IPv4 ? _('yes') : _('no'),
-						v6: gw.IPv6 ? _('yes') : _('no'),
-						prefix: gw.prefix,
-					});
-				}
-
-				const smartgwdiv = document.getElementById('olsrd_smartgw');
-				if (smartgwdiv) {
-					let s =
-						'<div class="tr cbi-section-table-titles">' +
-						'<div class="th cbi-section-table-cell">Gateway</div>' +
-						'<div class="th cbi-section-table-cell">Selected</div>' +
-						'<div class="th cbi-section-table-cell">ETX></div>' +
-						'<div class="th cbi-section-table-cell">Hops></div>' +
-						'<div class="th cbi-section-table-cell">Uplink</div>' +
-						'<div class="th cbi-section-table-cell">Downlink</div>' +
-						'<div class="th cbi-section-table-cell">IPv4</div>' +
-						'<div class="th cbi-section-table-cell">IPv6</div>' +
-						'<div class="th cbi-section-table-cell">Prefix</div>' +
-						'</div>';
-
-					for (let idx = 0; idx < rv.length; idx++) {
-						const smartgw = rv[idx];
-						let linkgw;
-						s += '<div class="tr cbi-section-table-row cbi-rowstyle-' + (1 + (idx % 2)) + ' proto-' + smartgw.proto + '">';
-
-						if (smartgw.proto == '6') {
-							linkgw = '<a href="http://[' + smartgw.originator + ']/cgi-bin-status.html">' + smartgw.originator + '</a>';
-						} else {
-							linkgw = '<a href="http://' + smartgw.originator + '/cgi-bin-status.html">' + smartgw.originator + '</a>';
-						}
-
-						s +=
-							'<div class="td cbi-section-table-cell left">' +
-							linkgw +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.selected +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.cost +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.hops +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.uplink +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.downlink +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.v4 +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.v6 +
-							'</div>' +
-							'<div class="td cbi-section-table-cell left">' +
-							smartgw.prefix +
-							'</div>';
-
-						s += '</div>';
-					}
-					smartgwdiv.innerHTML = s;
-				}
-
-				let i = 1;
-
 				if (has_smartgw) {
-					for (let gw of gws_res.ipv4) {
-						gw.cost = parseInt(gw.cost) / 1024 || 0;
-						if (gw.cost >= 100) {
-							gw.cost = 0;
-						}
+					const table = fieldset.querySelector('#olsrd_smartgw');
+					let i = 1;
 
-						const tr = E('div', { 'class': 'tr cbi-section-table-row cbi-rowstyle-' + i + ' proto-' + gw.proto }, [
-							gw.proto === '6'
-								? E('div', { 'class': 'td cbi-section-table-cell left' }, [E('a', { 'href': 'http://[' + gw.originator + ']/cgi-bin-status.html' }, gw.originator)])
-								: E('div', { 'class': 'td cbi-section-table-cell left' }, [E('a', { 'href': 'http://' + gw.originator + '/cgi-bin-status.html' }, gw.originator)]),
-							E('div', { 'class': 'td cbi-section-table-cell left' }, [gw.selected ? _('yes') : _('no')]),
-							E('div', { 'class': 'td cbi-section-table-cell left' }, [gw.cost > 0 ? String.format('%.3f', gw.cost) : _('infinite')]),
+					for (let gw of gws_res.ipv4) {
+						const cost = parseFloat(gw.cost) / 1024 || 0;
+						const proto = gw.IPv4 ? '4' : '6';
+						const host = proto == '6' ? '[' + gw.originator + ']' : gw.originator;
+						const tr = E('div', { 'class': 'tr cbi-section-table-row cbi-rowstyle-' + i + ' proto-' + proto }, [
+							E('div', { 'class': 'td cbi-section-table-cell left' }, [E('a', { 'href': 'http://' + host + '/cgi-bin-status.html' }, gw.originator)]),
+							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.selected ? _('yes') : _('no')),
+							E('div', { 'class': 'td cbi-section-table-cell left' }, cost > 0 && cost < 100 ? cost.toFixed(3) : _('infinite')),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.hops),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.uplink),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.downlink),
@@ -182,9 +98,13 @@ return olsr.olsrview.extend({
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.prefix),
 						]);
 
-						fieldset.appendChild(tr);
+						table.appendChild(tr);
 						i = (i % 2) + 1;
 					}
+
+					const current = document.getElementById('olsrd_smartgw');
+					if (current)
+						current.replaceWith(table);
 
 					const h2 = E('h2', { 'name': 'content' }, _('SmartGW announcements'));
 					const divToggleButtons = E('div', { 'id': 'togglebuttons' });
