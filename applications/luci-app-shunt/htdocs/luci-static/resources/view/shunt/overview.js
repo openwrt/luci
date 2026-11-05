@@ -200,23 +200,26 @@ function renderSnoop(svc) {
 	]);
 }
 
-// The interface of a tracked policy carries the health of its device: the
-// probes are per device, and every policy on it falls back together.
-function renderIface(p, devices) {
+// The interface of a tracked policy carries the health of its interface: the
+// probes are per interface, and every policy on it falls back together. Of a
+// policy with several interfaces, the one its new connections use is marked.
+function renderIface(p, devices, active) {
 	const name = p.interface || (p.tproxy_port ? ':%d'.format(p.tproxy_port) : '-');
-	const h = (devices && p.interface) ? devices[p.interface] : null;
+	const h = (devices && p.iface) ? devices[p.iface] : null;
+	const inuse = (p.members > 1 && active && active[p.name] === p.member)
+		? E('span', { 'class': 'shunt-key' }, _('in use')) : '';
 
 	if (!h) {
-		return name;
+		return inuse ? E('span', {}, [name, inuse]) : name;
 	}
 
 	return E('span', {
 		'class': 'shunt-state',
 		'title': h.alive
 			? _('answers the health probes')
-			: _('no answer to the health probes since %s - the fallback applies')
+			: _('no answer to the health probes since %s')
 				.format(new Date(h.since * 1000).toLocaleTimeString())
-	}, [dot(h.alive ? 'ok' : 'warn'), E('span', {}, name)]);
+	}, [dot(h.alive ? 'ok' : 'warn'), E('span', {}, name), inuse]);
 }
 
 function renderTrack(svc) {
@@ -251,6 +254,7 @@ function renderPolicies(st) {
 	];
 
 	const devices = st.service && st.service.track ? st.service.track.devices : null;
+	const active = st.service ? st.service.active : null;
 
 	st.policies.forEach(function (p) {
 		// A bypass policy has no mark, no table and no rule of its own, so
@@ -258,9 +262,10 @@ function renderPolicies(st) {
 		const bypass = (p.action === 'bypass');
 
 		rows.push(E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td' }, [p.name]),
+			// The further interfaces of a policy go under its first one.
+			E('td', { 'class': 'td' }, [p.member > 0 ? '↳ %d'.format(p.member + 1) : p.name]),
 			E('td', { 'class': 'td' }, [p.action || 'route']),
-			E('td', { 'class': 'td' }, [renderIface(p, devices)]),
+			E('td', { 'class': 'td' }, [renderIface(p, devices, active)]),
 			E('td', { 'class': 'td' }, [fmtMark(p.mark)]),
 			E('td', { 'class': 'td' }, [bypass ? '-' : fmtCount(p.rt_table)]),
 			E('td', { 'class': 'td' }, [bypass ? '-' : fmtCount(p.rules)]),

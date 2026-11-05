@@ -122,11 +122,16 @@ return view.extend({
 		o.default = 'route';
 		o.editable = true;
 
-		o = s.option(form.Value, 'interface', _('Interface'),
+		o = s.option(form.DynamicList, 'interface', _('Interface'),
 			_('The device or logical interface this policy routes into. A \
-				netifd name is resolved to its device; any other device name is used as entered.'));
+				netifd name is resolved to its device; any other device name is used as entered. \
+				Several interfaces are used in order: new connections go to the first one that works and move to the next one when it goes down or, with probe targets set, stops answering; running connections stay where they started.'));
 		o.rmempty = false;
 		o.depends('action', 'route');
+		o.textvalue = function (section_id) {
+			const v = L.toArray(this.cfgvalue(section_id));
+			return v.length ? v.join(' › ') : '-';
+		};
 
 		uci.sections('network', 'interface').forEach(function (n) {
 			if (n['.name'] !== 'loopback') {
@@ -211,7 +216,7 @@ return view.extend({
 		o.validate = validateFile;
 
 		o = s.option(form.Value, 'gw4', _('IPv4 Gateway Override'),
-			_('Only needed when the gateway discovered from netifd is wrong. \
+			_('Only needed when the gateway discovered from netifd is wrong, and only for a policy with a single interface. \
 				Point to point interfaces need no gateway at all.'));
 		o.datatype = 'ip4addr';
 		o.modalonly = true;
