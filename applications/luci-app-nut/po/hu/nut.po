@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-05-08 13:01+0000\n"
-"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
+"PO-Revision-Date: 2026-11-05 07:53+0000\n"
+"Last-Translator: Kövecses József <kovecses@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnut/hu/>\n"
 "Language: hu\n"
@@ -10,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:67
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:65
@@ -19,6 +20,9 @@ msgid ""
 "double-quotes (\") if the value has a space in it. An empty password must be "
 "entered as an empty pair of double-quotes (\"\")"
 msgstr ""
+"A \"Tanúsítvány neve\" és a \"tanúsítvány jelszava\" értéket idézőjelek (\") "
+"közé kell tenni, ha szóközt tartalmaz. Az üres jelszót üres idézőjelpárként "
+"(\"\") kell megadni"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:233
 msgid "Additional Shutdown Time(s)"
@@ -38,6 +42,9 @@ msgid ""
 "An empty database was created in /etc/nut/cert_db at package install. To use "
 "it, SSH in, fill it using certutil, and put /etc/nut/cert_db in this field."
 msgstr ""
+"A csomag telepítésekor üres adatbázis jött létre a /etc/nut/cert_db helyen. "
+"A használatához lépjen be SSH-n, töltse fel a certutil segítségével, majd "
+"adja meg ebben a mezőben a /etc/nut/cert_db értéket."
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:21
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:22
@@ -50,7 +57,7 @@ msgstr "Szolga"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:63
 msgid "Auxiliary (Deprecated)"
-msgstr ""
+msgstr "Szolga (elavult)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:172
 msgid "Bytes to read from interrupt pipe"
@@ -59,20 +66,20 @@ msgstr "Megszakított csőből olvasandó bájtok"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:53
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:51
 msgid "CA certificate(s)"
-msgstr ""
+msgstr "CA-tanúsítvány(ok)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:67
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:65
 msgid "Certificate name and password"
-msgstr ""
+msgstr "Tanúsítvány neve és jelszava"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:69
 msgid "Certificate request level"
-msgstr ""
+msgstr "Tanúsítványkérési szint"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:46
 msgid "Client certificate chain and private key"
-msgstr ""
+msgstr "Klienstanúsítvány-lánc és titkos kulcs"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi_admin.js:17
 msgid "Control UPS via CGI"
@@ -80,7 +87,7 @@ msgstr "UPS vezérlése CGI-n keresztül"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:89
 msgid "Custom notification message for message type"
-msgstr ""
+msgstr "Egyéni értesítő üzenet az üzenettípushoz"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:79
 msgid "Deadtime"
@@ -106,7 +113,7 @@ msgstr "Leírás (megjelenítés)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:74
 msgid "Disable weak SSL"
-msgstr ""
+msgstr "Gyenge SSL letiltása"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:33
 msgid "Display name"
@@ -165,12 +172,18 @@ msgid ""
 "For USB HID based UPSes, USB Product Id is required for NUT to set "
 "permissions so the driver can access the UPS"
 msgstr ""
+"USB HID alapú szünetmentes tápegységeknél a NUT-nak szüksége van az USB-"
+"termékazonosítóra (Product Id) az engedélyek beállításához, hogy az "
+"illesztőprogram hozzáférjen az UPS-hez"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:142
 msgid ""
 "For USB HID based UPSes, USB Vendor Id is required for NUT to set "
 "permissions so the driver can access the UPS"
 msgstr ""
+"USB HID alapú szünetmentes tápegységeknél a NUT-nak szüksége van az USB-"
+"gyártóazonosítóra (Vendor Id) az engedélyek beállításához, hogy az "
+"illesztőprogram hozzáférjen az UPS-hez"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:145
 msgid ""
@@ -178,6 +191,9 @@ msgid ""
 "(USB product and USB vendor are identical). Other UPSes may also use this "
 "value."
 msgstr ""
+"USB HID alapú szünetmentes tápegységeknél lehetővé teszi több azonos típusú "
+"USB-eszköz használatát (az USB-termék- és -gyártóazonosító megegyezik). Más "
+"UPS-ek is használhatják ezt az értéket."
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:54
 msgid "Forced Shutdown"
@@ -195,19 +211,20 @@ msgstr "Ugrás a NUT CGI-hez"
 
 #: applications/luci-app-nut/root/usr/share/rpcd/acl.d/luci-app-nut.json:13
 msgid "Grant admin UCI access for luci-app-nut"
-msgstr ""
+msgstr "Adminisztrátori UCI-hozzáférés engedélyezése a luci-app-nut számára"
 
 #: applications/luci-app-nut/root/usr/share/rpcd/acl.d/luci-app-nut.json:3
 msgid "Grant limited UCI read access for luci-app-nut"
 msgstr ""
+"Korlátozott UCI-olvasási hozzáférés engedélyezése a luci-app-nut számára"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:17
 msgid "Host"
-msgstr "Gép"
+msgstr "Gép (host)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:75
 msgid "Host Sync"
-msgstr ""
+msgstr "Gépszinkronizálás"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:24
 msgid "Hostname or IP address"
@@ -223,11 +240,11 @@ msgstr "IP-cím"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:133
 msgid "If this list is empty you need to %s"
-msgstr ""
+msgstr "Ha ez a lista üres, a következő szükséges: %s"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:9
 msgid "Ignore"
-msgstr "Mellőzés"
+msgstr "Figyelmen kívül hagyás"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:164
 msgid "Ignore Low Battery"
@@ -288,50 +305,50 @@ msgstr "Modell (megjelenítés)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:70
 msgid "NO (do not request or verify a client certificate)"
-msgstr ""
+msgstr "NO (nem kér és nem ellenőriz klienstanúsítványt)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:13
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi_admin.js:13
 msgid "NUT CGI"
-msgstr "Hálózati UPS eszközök (CGI)"
+msgstr "Hálózati UPS-eszközök (CGI)"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:100
 msgid "NUT CGI - admin"
-msgstr ""
+msgstr "NUT CGI - adminisztráció"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:85
 msgid "NUT CGI - main"
-msgstr ""
+msgstr "NUT CGI - fő"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:53
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:28
 msgid "NUT Monitor"
-msgstr "Hálózati UPS eszközök (megfigyelő)"
+msgstr "Hálózati UPS-eszközök (megfigyelő)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:36
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:28
 msgid "NUT Server"
-msgstr "Hálózati UPS eszközök (kiszolgáló)"
+msgstr "Hálózati UPS-eszközök (szerver)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:40
 msgid "NUT Users"
-msgstr "NUT felhasználók"
+msgstr "NUT-felhasználók"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:69
 msgid "NUT monitor - admin"
-msgstr ""
+msgstr "NUT-figyelő - adminisztráció"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:54
 msgid "NUT monitor - main"
-msgstr ""
+msgstr "NUT-figyelő - fő"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:38
 msgid "NUT server - admin"
-msgstr ""
+msgstr "NUT-szerver - adminisztráció"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:23
 msgid "NUT server - main"
-msgstr ""
+msgstr "NUT-szerver - fő"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:22
 msgid "Name of UPS"
@@ -339,22 +356,22 @@ msgstr "Az UPS neve"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:3
 msgid "Network UPS Tools"
-msgstr "Hálózati UPS eszközök"
+msgstr "Hálózati UPS-eszközök"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:14
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi_admin.js:14
 msgid "Network UPS Tools CGI Configuration"
-msgstr "Hálózati UPS eszközök CGI beállítások"
+msgstr "Hálózati UPS-eszközök CGI-beállítások"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:54
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:29
 msgid "Network UPS Tools Monitoring Configuration"
-msgstr "Hálózati UPS eszközök megfigyelési beállítások"
+msgstr "Hálózati UPS-eszközök megfigyelési beállítások"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:37
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:29
 msgid "Network UPS Tools Server Configuration"
-msgstr "Hálózati UPS eszközök kiszolgáló beállítások"
+msgstr "Hálózati UPS-eszközök szerver beállítások"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:191
 msgid "No Lock"
@@ -366,11 +383,11 @@ msgstr "Nincsenek alacsony/magas feszültség átviteli OID-k"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:92
 msgid "Notification flags"
-msgstr ""
+msgstr "Értesítési jelzők"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:84
 msgid "Notifications settings"
-msgstr ""
+msgstr "Értesítési beállítások"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:38
 msgid "Notify command"
@@ -387,15 +404,17 @@ msgstr "Be késleltetések"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:46
 msgid "PEM file containing client certificate chain and private key (OpenSSL)"
 msgstr ""
+"A klienstanúsítvány-láncot és a titkos kulcsot tartalmazó PEM-fájl (OpenSSL)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:44
 msgid "PEM file containing server certificate chain and private key (OpenSSL)"
 msgstr ""
+"A szervertanúsítvány-láncot és a titkos kulcsot tartalmazó PEM-fájl (OpenSSL)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:53
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:51
 msgid "PEM file containing the CA certificate(s) (OpenSSL)"
-msgstr ""
+msgstr "A CA-tanúsítvány(oka)t tartalmazó PEM-fájl (OpenSSL)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:42
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:47
@@ -405,7 +424,7 @@ msgstr "Jelszó"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:62
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:60
 msgid "Path to NSS certificate and key databases"
-msgstr ""
+msgstr "Az NSS-tanúsítvány- és -kulcsadatbázisok elérési útja"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:39
 msgid "Path to state file"
@@ -414,6 +433,7 @@ msgstr "Útvonal az állapotfájlhoz"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:85
 msgid "Per-host override for certident, certverify, and forcessl"
 msgstr ""
+"Gépenkénti felülbírálás a certident, certverify és forcessl beállításhoz"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:86
 msgid "Period after which data is considered stale"
@@ -452,7 +472,7 @@ msgstr "Mester"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:64
 msgid "Primary (Deprecated)"
-msgstr ""
+msgstr "Mester (elavult)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:226
 msgid "Product (regex)"
@@ -460,31 +480,32 @@ msgstr "Termék (reguláris kifejezés)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:71
 msgid "REQUEST (any client certificate)"
-msgstr ""
+msgstr "REQUEST (bármilyen klienstanúsítvány)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:72
 msgid "REQUIRE (and verify)"
-msgstr ""
+msgstr "REQUIRE (és ellenőrzés)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:73
 msgid "Require SSL and verify host certificate"
-msgstr ""
+msgstr "SSL megkövetelése és a gép tanúsítványának ellenőrzése"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:78
 msgid "Require SSL even if not verifying host certificates"
 msgstr ""
+"SSL megkövetelése akkor is, ha a gép tanúsítványai nincsenek ellenőrizve"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:78
 msgid "Require SSL to connect"
-msgstr ""
+msgstr "SSL megkövetelése a kapcsolódáshoz"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:74
 msgid "Require at least TLSv1.2 for SSL communications"
-msgstr ""
+msgstr "Legalább TLSv1.2 megkövetelése az SSL-kommunikációhoz"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:112
 msgid "Retry Delay"
-msgstr "Újrapróbálás késleltetése"
+msgstr "Újrapróbálkozási késleltetés"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:60
 msgid "Role"
@@ -513,7 +534,7 @@ msgstr "SNMP időkorlátok"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:244
 msgid "SNMP version"
-msgstr "SNMP verzió"
+msgstr "SNMP-verzió"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:246
 msgid "SNMPv1"
@@ -533,7 +554,7 @@ msgstr "Sorozatszám"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:44
 msgid "Server certificate chain and private key"
-msgstr ""
+msgstr "Szervertanúsítvány-lánc és titkos kulcs"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:148
 msgid "Set USB serial port permissions"
@@ -554,7 +575,7 @@ msgstr "Egyidejű kommunikáció"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:128
 msgid "The name of this section will be used as UPS name elsewhere"
-msgstr "A munkamenet neve lesz használva UPS névként máshol"
+msgstr "A munkamenet neve lesz használva UPS-névként máshol"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:161
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:185
@@ -563,6 +584,8 @@ msgid ""
 "This is passed through to the driver, so make sure your driver supports this "
 "option"
 msgstr ""
+"Ez az érték közvetlenül az illesztőprogramhoz kerül, ezért győződjön meg "
+"arról, hogy az illesztőprogram támogatja ezt a beállítást"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:112
 msgid "Time in seconds between driver start retry attempts."
@@ -577,20 +600,20 @@ msgstr ""
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:107
 msgid "UPS Auxiliary (Deprecated)"
-msgstr ""
+msgstr "UPS Szolga (elavult)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:95
 msgid "UPS Monitor User Settings"
-msgstr ""
+msgstr "UPS-figyelő felhasználói beállításai"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:104
 msgid "UPS Primary (Deprecated)"
-msgstr ""
+msgstr "UPS Mester (elavult)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:83
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:32
 msgid "UPS Server Global Settings"
-msgstr "UPS kiszolgáló globális beállításai"
+msgstr "UPS-szerver globális beállításai"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_cgi.js:21
 msgid "UPS name"
@@ -617,7 +640,7 @@ msgstr ""
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:98
 msgid "User type (Primary/Auxiliary)"
-msgstr ""
+msgstr "Felhasználótípus (Mester/Szolga)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:39
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:44
@@ -630,13 +653,13 @@ msgstr "Gyártó (reguláris kifejezés)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:73
 msgid "Verify all connections with SSL"
-msgstr ""
+msgstr "Minden kapcsolat ellenőrzése SSL-lel"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server_admin.js:69
 msgid ""
 "Whether to request a client certificate and whether to validate a requested "
 "client certificate"
-msgstr ""
+msgstr "Kérjen-e klienstanúsítványt, és ellenőrizze-e a kért klienstanúsítványt"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:176
 msgid "Workaround for buggy firmware"
@@ -648,7 +671,7 @@ msgstr "Írás a rendszernaplóba"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor.js:8
 msgid "Write to syslog and execute notify command"
-msgstr ""
+msgstr "Írás a rendszernaplóba és az értesítési parancs végrehajtása"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:100
 msgid "chroot"
@@ -657,11 +680,11 @@ msgstr "chroot"
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:85
 msgid ""
 "hostname \"certificate name\" certverify (as 0 or 1) forcessl (as 0 or 1)"
-msgstr ""
+msgstr "gépnév \"tanúsítvány neve\" certverify (0 vagy 1) forcessl (0 vagy 1)"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_server.js:133
 msgid "install drivers"
-msgstr ""
+msgstr "illesztőprogramok telepítése"
 
 #: applications/luci-app-nut/htdocs/luci-static/resources/view/nut/nut_monitor_admin.js:35
 msgid "upsmon drops privileges to this user"

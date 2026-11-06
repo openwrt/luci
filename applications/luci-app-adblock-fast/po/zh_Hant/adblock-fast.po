@@ -3,15 +3,16 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-10-20 09:40+0000\n"
-"Last-Translator: TCP <tcp@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-05 09:04+0000\n"
+"Last-Translator: CHU KING FUNG <ulygraphics@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsadblock-fast/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:134
 msgid "%s is currently disabled"
@@ -33,6 +34,8 @@ msgid ""
 "seconds, even if it is still progressing. Leave empty to disable. Currently "
 "implemented for curl only."
 msgstr ""
+"若整個傳輸過程耗時超過此秒數，即使傳輸仍在進行中，也請中止下載。若要停用此功"
+"能，請留空。目前僅針對 curl 實作此功能。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1027
 msgid "Action"
@@ -167,7 +170,7 @@ msgstr "配置 (%s) 認證失敗！"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:704
 msgid "Connect time-out (in seconds)"
-msgstr ""
+msgstr "連線超時（以秒為單位）"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:477
 msgid "Controls system log and console output verbosity."
@@ -178,10 +181,12 @@ msgid ""
 "Cron daemon is not available. If BusyBox crond is present, enable it with: "
 "%s; otherwise install another cron daemon."
 msgstr ""
+"Cron 常駐程式無法使用。若系統已安裝 BusyBox crond，請使用以下指令啟用它：%s；"
+"否則請安裝另一個 cron 常駐程式。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:117
 msgid "Cron service is not enabled or running. Enable it with: %s."
-msgstr ""
+msgstr "Cron 服務尚未啟用或未在執行中。請使用 %s 啟用它。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:765
 msgid "Curl download retry"
@@ -268,6 +273,8 @@ msgid ""
 "Download of '%s' timed out; the server may be too slow — consider increasing "
 "download_timeout, download_connect_timeout or download_max_time"
 msgstr ""
+"下載 '%s' 超時；伺服器可能太慢 — 請考慮增加 download_timeout、"
+"download_connect_timeout 或 download_max_time 的值"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:694
 msgid "Download time-out (in seconds)"
@@ -317,7 +324,7 @@ msgstr "啟用 dnsmasq 封鎖清單健全性檢查以偵測並報告問題。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:506
 msgid "Enable scheduled list redownloads via /etc/init.d/adblock-fast dl."
-msgstr ""
+msgstr "透過 /etc/init.d/adblock-fast dl 啟用清單的排程重新下載功能。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:900
 msgid "Enabled"
@@ -371,7 +378,7 @@ msgstr "無法建立 output/cache/gzip 檔案目錄"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:176
 msgid "Failed to detect format for %s"
-msgstr ""
+msgstr "無法偵測 %s 的格式"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:169
 msgid "Failed to download %s"
@@ -439,7 +446,7 @@ msgstr "無法解開壓縮的快取"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1161
 msgid "Failed to update cron schedule."
-msgstr ""
+msgstr "無法更新 cron 排程。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/status/include/70_adblock-fast.js:44
 msgid "Force DNS Ports"
@@ -479,7 +486,7 @@ msgstr "星期五"
 
 #: applications/luci-app-adblock-fast/root/usr/share/rpcd/acl.d/adblock-fast-api.json:3
 msgid "Grant API access for adblock-fast remote control"
-msgstr ""
+msgstr "授予 adblock-fast 遠端控制的 API 存取權限"
 
 #: applications/luci-app-adblock-fast/root/usr/share/rpcd/acl.d/luci-app-adblock-fast.json:3
 msgid "Grant UCI and file access for luci-app-adblock-fast"
@@ -487,11 +494,11 @@ msgstr "授予 luci-app-adblock-fast 存取 UCI 和檔案的權限"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:186
 msgid "Heartbeat domain is not accessible after resolver restart"
-msgstr ""
+msgstr "解析器重新啟動後無法存取 Heartbeat 網域"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:624
 msgid "Hour of day to run the update (0-23)."
-msgstr ""
+msgstr "執行更新的時段（0-23）。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:679
 msgid "IPv6 Support"
@@ -523,6 +530,8 @@ msgid ""
 "may need to update packages or reboot the device, please check the "
 "%sREADME%s."
 msgstr ""
+"內部版本不匹配（套件：%s、luci 應用程式：%s、luci rpcd：%s），您可能需要更新"
+"套件或重新啟動裝置，請參閱 %sREADME%s。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:106
 msgid "Invalid compressed cache directory '%s'"
@@ -542,19 +551,23 @@ msgstr "清單更新排程"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:716
 msgid "Maximum download time (in seconds)"
-msgstr ""
+msgstr "最大下載時間（以秒為單位）"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:779
 msgid ""
 "Maximum number of block lists to download and process at the same time (0 "
 "disables). Automatically reduced when free memory is low."
 msgstr ""
+"同時可下載及處理的封鎖清單最大數量（設定為 0 即停用）。當可用記憶體不足時，系"
+"統會自動減少此數量。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:648
 msgid ""
 "Minute of hour to run the update (0-59). In 'Every N hours' mode, updates "
 "run at the selected minute within each interval."
 msgstr ""
+"執行更新的小時內特定分鐘（0-59）。在「每 N 小時」模式下，更新將於每個間隔內的"
+"選定分鐘執行。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:98
 msgid "Missing recommended package: '%s'"
@@ -578,15 +591,15 @@ msgstr "名稱/URL"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:1075
 msgid "No %s query log entries found."
-msgstr ""
+msgstr "未找到任何 %s 查詢日誌條目。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:410
 msgid "No Ad-blocking on SmartDNS"
-msgstr ""
+msgstr "SmartDNS 不支援廣告攔截"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:344
 msgid "No Ad-blocking on dnsmasq"
-msgstr ""
+msgstr "dnsmasq 不支援廣告攔截"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:172
 msgid "No HTTPS/SSL support on device"
@@ -606,7 +619,7 @@ msgstr "輸出詳細程度設定"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:123
 msgid "Parallel downloads reduced to %s due to low free memory"
-msgstr ""
+msgstr "由於可用記憶體不足，並行下載數量已減少至 %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:672
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:694
@@ -619,7 +632,7 @@ msgstr "暫停"
 msgid ""
 "Pause ad-blocking for the specified number of seconds when the Pause button "
 "is pressed."
-msgstr ""
+msgstr "按下「暫停」按鈕時，將暫停廣告攔截功能，持續時間為指定的秒數。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:740
 msgid "Pause time-out (in seconds)"
@@ -664,7 +677,7 @@ msgstr "處理清單"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:951
 msgid "Query logging for %s:"
-msgstr ""
+msgstr "%s 的查詢記錄："
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:667
 msgid "Redownload"
@@ -679,6 +692,8 @@ msgid ""
 "Removed %s invalid domain entries from block-list (domains starting with -/./"
 "numbers or containing invalid patterns)"
 msgstr ""
+"已從封鎖清單中移除 %s 個無效網域條目（網域名稱以 -/./數字 開頭，或包含無效模"
+"式）"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:82
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:710
@@ -687,11 +702,11 @@ msgstr "重新啟動中"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:605
 msgid "Run on the selected day of month."
-msgstr ""
+msgstr "於當月所選日期執行。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:582
 msgid "Run on the selected weekday."
-msgstr ""
+msgstr "於選定的平日執行。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:544
 msgid "Run once every N days."
@@ -703,11 +718,11 @@ msgstr "每 N 小時執行一次。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:109
 msgid "Sanity check discovered TLDs in %s"
-msgstr ""
+msgstr "合理性檢查在 %s 中發現了頂級域名"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:111
 msgid "Sanity check discovered leading dots in %s"
-msgstr ""
+msgstr "合理性檢查發現 %s 開頭有＂.＂點號"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:590
 msgid "Saturday"
@@ -719,7 +734,7 @@ msgstr "排程類型"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:524
 msgid "Select how often the update should run."
-msgstr ""
+msgstr "請選擇應執行的更新頻率。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:815
 msgid "Service Control"
@@ -745,11 +760,11 @@ msgstr "服務警告"
 msgid ""
 "Service is disabled. Please enable the service using the Service Control "
 "button above to configure service options."
-msgstr ""
+msgstr "此服務已停用。請使用上方的「服務控制」按鈕啟用此服務，以設定服務選項。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:967
 msgid "Showing syslog entries for %s. Log refreshes automatically."
-msgstr ""
+msgstr "顯示 %s 的 syslog 記錄。日誌會自動更新。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:777
 msgid "Simultaneous processing"
@@ -769,6 +784,8 @@ msgid ""
 "default for compatibility with self-signed or otherwise untrusted "
 "certificates."
 msgstr ""
+"下載封鎖清單時跳過 SSL 憑證驗證。此功能預設為啟用狀態，以確保與自簽名憑證或其"
+"他未受信任的憑證相容。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:480
 msgid "Some output"
@@ -878,6 +895,8 @@ msgid ""
 "Tip: install the %sAdBlock-Fast Controller Chrome extension%s to control "
 "this router from your browser toolbar."
 msgstr ""
+"提示：安裝 %sAdBlock-Fast Controller Chrome extension%s，即可透過瀏覽器工具列"
+"來控制此路由器。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:857
 msgid ""
@@ -885,6 +904,8 @@ msgid ""
 "value into the extension settings as the password. Changing it here will "
 "update the API user password on save."
 msgstr ""
+"用於 %sGoogle Chrome extension%s 或其他遠端 API 存取的憑證。請將此值複製到擴"
+"充功能設定中作為密碼。在此處變更此值後，儲存時將更新 API 使用者密碼。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:586
 msgid "Tuesday"
@@ -927,19 +948,19 @@ msgstr "未知警告"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:623
 msgid "Update Hour"
-msgstr ""
+msgstr "更新－時"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:646
 msgid "Update Minute"
-msgstr ""
+msgstr "更新－分"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:400
 msgid "Use ad-blocking on the SmartDNS instance(s)"
-msgstr ""
+msgstr "在 SmartDNS 實例上啟用廣告攔截功能"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:334
 msgid "Use ad-blocking on the dnsmasq instance(s)"
-msgstr ""
+msgstr "在 dnsmasq 實例上啟用廣告攔截功能"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:96
 msgid ""
@@ -978,13 +999,13 @@ msgstr "每週"
 msgid ""
 "You can limit the ad-blocking to the specific SmartDNS instance(s) (%smore "
 "information%s)."
-msgstr ""
+msgstr "您可以將廣告攔截功能限制在特定的 SmartDNS 實例上（%smore information%s）。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:336
 msgid ""
 "You can limit the ad-blocking to the specific dnsmasq instance(s) (%smore "
 "information%s)."
-msgstr ""
+msgstr "您可以將廣告攔截功能限制在特定的 dnsmasq 執行個體上（%smore information%s）。"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:291
 msgid "dnsmasq additional hosts"

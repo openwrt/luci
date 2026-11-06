@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-10-17 20:51+0000\n"
-"Last-Translator: raepo7214 <raepo7214@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-11-02 21:34+0000\n"
+"Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/ko/>\n"
 "Language: ko\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -20,6 +20,11 @@ msgid ""
 "to fail. Enter the number of seconds to wait for the soft reboot to fail or "
 "use 0 to disable the forced reboot delay."
 msgstr ""
+"<i>Ping 재부팅 및 주기적 재부팅 모드에 적용됩니다</i> <br /> 라우터를 "
+"재부팅할 때 서비스는 소프트 재부팅을 시도합니다. 강제 재부팅 지연 기능을 "
+"활성화하면 설정한 시간 동안 소프트 재부팅에 실패할 경우 하드 재부팅을 "
+"실행합니다. 소프트 재부팅 실패 판정까지 대기할 시간(초)을 입력하거나, 0을 "
+"입력하여 강제 재부팅 지연 기능을 비활성화하세요."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
@@ -27,16 +32,22 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManager interface by "
 "specifying its name."
 msgstr ""
+"<i>Ping 재부팅 및 인터페이스 재시작 모드에 적용됩니다</i> <br /> "
+"ModemManager를 사용하는 경우, ModemManager 인터페이스 이름을 지정하여 "
+"Watchcat이 해당 인터페이스를 재시작하도록 할 수 있습니다."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
+"<i>Ping 재부팅, 인터페이스 재시작, 스크립트 실행 모드에 적용됩니다</i> "
+"<br /> 모니터링할 인터페이스를 지정하고 이를 통한 ping이 실패할 경우 "
+"대응합니다."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "호스트에 ping 보낼 주소 체계"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
 msgid "Any"
@@ -52,7 +63,7 @@ msgstr "확인 간격"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:93
 msgid "Force Reboot Delay"
-msgstr ""
+msgstr "강제 재부팅 지연 시간"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:19
 msgid "General Settings"
@@ -68,6 +79,9 @@ msgid ""
 "host becomes unreachable. Click the <b>Add</b> button at the bottom to set "
 "up more than one action."
 msgstr ""
+"호스트와 연결이 끊어지는 상황에 대비하여 여러 가지 확인 및 대응 작업을 "
+"설정할 수 있습니다. 작업을 2개 이상 설정하려면 하단의 <b>추가</b> 버튼을 "
+"클릭하세요."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Hosts To Check"
@@ -82,6 +96,11 @@ msgid ""
 "b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"지정한 호스트를 ping으로 확인할 주기입니다. <br /><br />기본 단위는 초이며, "
+"초는 단위를 생략할 수 있습니다. 분 단위에는 <b>m</b>, 시간 단위에는 <b>h</b>"
+", 일 단위에는 <b>d</b>를 사용할 수 있습니다. <br /><br /> 예시:<ul><li>10초: "
+"<b>10</b> 또는 <b>10s</b></li><li>5분: <b>5m</b></li><li>1시간: <b>1h</b></"
+"li><li>1주일: <b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:85
 msgid "Huge: 1492 bytes"
@@ -89,13 +108,15 @@ msgstr "초대형: 1492 바이트"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP addresses or hostnames to ping."
-msgstr ""
+msgstr "ping을 보낼 IP 주소나 호스트 이름입니다."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
 "If using ModemManager, then before restarting the interface, set the modem "
 "to be allowed to use any band."
 msgstr ""
+"ModemManager를 사용하는 경우, 인터페이스를 재시작하기 전에 모뎀이 모든 "
+"대역을 사용할 수 있도록 설정합니다."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:41
 msgid ""
@@ -110,6 +131,16 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"주기적 재부팅 모드에서는 재부팅 주기를 정의합니다. <br /> Ping 재부팅 "
+"모드에서는 확인할 호스트로부터 응답이 없는 상태가 유지되는 최대 허용 시간을 "
+"정의하며, 이 시간이 지나면 재부팅을 실행합니다. <br /> 네트워크 재시작 또는 "
+"스크립트 실행 모드에서는 확인할 호스트로부터 응답이 없는 상태가 유지되는 "
+"최대 허용 시간을 정의하며, 이 시간이 지나면 인터페이스를 재시작하거나 "
+"스크립트를 실행합니다. <br /><br />기본 단위는 초이며, 초는 단위를 생략할 수 "
+"있습니다. 분 단위에는 <b>m</b>, 시간 단위에는 <b>h</b>, 일 단위에는 <b>d</b>"
+"를 사용할 수 있습니다. <br /><br />예시:<ul><li>10초: <b>10</b> 또는 <b>10s</"
+"b></li><li>5분: <b>5m</b></li><li> 1시간: <b>1h</b></li><li>1주일: <b>7d</b>"
+"</li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -117,7 +148,7 @@ msgstr "인터페이스"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:103
 msgid "Interface to monitor and/or restart"
-msgstr ""
+msgstr "모니터링하거나 재시작할 인터페이스입니다"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:86
 msgid "Jumbo: 9000 bytes"
@@ -137,7 +168,7 @@ msgstr "주기"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Periodic Reboot"
-msgstr ""
+msgstr "주기적 재부팅"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Ping Packet Size"
@@ -145,7 +176,7 @@ msgstr "Ping 패킷 크기"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
 msgid "Ping Reboot"
-msgstr ""
+msgstr "Ping 재부팅"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:23
 msgid ""
@@ -156,6 +187,12 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Ping 재부팅: 지정한 호스트에 대한 ping 응답이 일정 시간 동안 실패하면 이 "
+"장치를 재부팅합니다. <br /> 주기적 재부팅: 지정한 시간 간격이 지난 후 이 "
+"장치를 재부팅합니다. <br /> 인터페이스 재시작: 지정한 호스트에 대한 ping "
+"응답이 일정 시간 동안 실패하면 네트워크 인터페이스를 재시작합니다. <br /> "
+"스크립트 실행: 지정한 호스트에 대한 ping 응답이 일정 시간 동안 실패하면 "
+"스크립트를 실행합니다. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -163,17 +200,19 @@ msgstr "인터페이스 재시작"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "스크립트 실행"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "실행할 스크립트"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"지정한 시간 동안 호스트가 응답하지 않을 때 실행할 스크립트입니다. "
+"스크립트에는 인터페이스 이름이 $1로 전달됩니다"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
@@ -185,11 +224,11 @@ msgstr "표준: 56 바이트"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 msgid "These rules will govern how this device reacts to network events."
-msgstr ""
+msgstr "이 규칙에 따라 이 장치가 네트워크 이벤트에 대응하는 방식이 결정됩니다."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:117
 msgid "Unlock Modem Bands"
-msgstr ""
+msgstr "모뎀 대역 잠금 해제"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:11
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15

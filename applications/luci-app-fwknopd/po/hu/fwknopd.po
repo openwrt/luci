@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-05-08 13:01+0000\n"
-"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
+"PO-Revision-Date: 2026-11-05 07:53+0000\n"
+"Last-Translator: Kövecses József <kovecses@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/hu/>\n"
 "Language: hu\n"
@@ -10,20 +11,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
 msgstr ""
-"Annak lehetővé tétele az SPA ügyfeleknek, hogy hozzáférést kérjenek a "
+"Annak lehetővé tétele az SPA-klienseknek, hogy hozzáférést kérjenek a "
 "szolgáltatásokhoz egy iptables tűzfalon keresztül, ahelyett hogy csak ahhoz."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
 msgid "Allow SPA clients to request forwarding destination by DNS name."
 msgstr ""
-"Annak lehetővé tétele az SPA ügyfeleknek, hogy továbbítási célt kérjenek DNS-"
+"Annak lehetővé tétele az SPA-klienseknek, hogy továbbítási célt kérjenek DNS-"
 "név alapján."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:437
@@ -36,7 +37,7 @@ msgstr "Base64 kulcs"
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:308
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:319
 msgid "Close"
-msgstr "Bezár"
+msgstr "Bezárás"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:480
 msgid "Custom configuration"
@@ -44,7 +45,7 @@ msgstr "Egyedi beállítás"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "Egyéni beállítások beolvasva az /etc/fwknop/access.conf fájlból."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -52,6 +53,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Azon portok és protokollok (tcp vagy udp) halmazának megadása, amelyek a "
+"bejövő SPA-csomag érvényességétől függetlenül kifejezetten nem "
+"engedélyezettek. Több bejegyzést vesszővel kell elválasztani."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
 msgid ""
@@ -72,12 +76,16 @@ msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Az SPA-csomag hitelességének a visszafejtés előtti ellenőrzéséhez használt "
+"HMAC-hitelesítési kulcs (Base64 kódolásban) megadása."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"Az SPA-csomag hitelességének a visszafejtés előtti ellenőrzéséhez használt "
+"HMAC-hitelesítési kulcs megadása."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:580
 msgid ""
@@ -96,14 +104,16 @@ msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Az fwknop kliens által Rijndael titkosítással titkosított bejövő SPA-csomag "
+"visszafejtéséhez használt szimmetrikus kulcs (Base64 kódolásban) megadása."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
-"Egy bejövő SPA csomag visszafejtéséhez használt szimmetrikus kulcs "
-"meghatározása, amely csomagot az fwknop ügyfél a Rijndael használatával "
+"Egy bejövő SPA-csomag visszafejtéséhez használt szimmetrikus kulcs "
+"meghatározása, amely csomagot az fwknop kliens a Rijndael használatával "
 "titkosított."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:475
@@ -122,7 +132,7 @@ msgstr "Tűzfalkopogó démon"
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:473
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Tűzfalkopogó-kezelő démon"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:585
 msgid ""
@@ -132,20 +142,20 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
-"Az összes SPA csomag arra kényszerítése, hogy valós IP-címet tartalmazzon a "
+"Az összes SPA-csomag arra kényszerítése, hogy valós IP-címet tartalmazzon a "
 "titkosított adatokon belül. Ez lehetővé teszi a -s parancssori argumentum "
-"használatát az fwknop ügyfél parancssorában, így vagy a -R kapcsolót kell "
-"használni a külső cím automatikus feloldásához (ha az ügyfél NAT mögött "
-"van), vagy az ügyfélnek tudnia kell a külső IP-t, és be kell állítania a -a "
+"használatát az fwknop kliens parancssorában, így vagy a -R kapcsolót kell "
+"használni a külső cím automatikus feloldásához (ha a kliens NAT mögött van), "
+"vagy a kliensnek tudnia kell a külső IP-t, és be kell állítania a -a "
 "argumentumon keresztül."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:522
 msgid "Generate Keys"
-msgstr ""
+msgstr "Kulcsok előállítása"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:518
 msgid "Generate keys"
-msgstr ""
+msgstr "Kulcsok előállítása"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:518
 msgid ""
@@ -154,6 +164,10 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Előállítja a bejövő, az fwknop kliens által Rijndael blokktitkosítóval "
+"titkosított SPA-csomag visszafejtéséhez használt szimmetrikus kulcsot, "
+"valamint a bejövő SPA-csomag hitelességének a visszafejtés előtti "
+"ellenőrzésére szolgáló HMAC-hitelesítési kulcsot."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
@@ -161,7 +175,7 @@ msgstr "UCI hozzáférés engedélyezése a <em>luci-app-fwknopd</em> alkalmazá
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:566
 msgid "HMAC key type"
-msgstr ""
+msgstr "HMAC-kulcs típusa"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:544
 msgid "Key type"
@@ -169,14 +183,14 @@ msgstr "Kulcstípus"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:178
 msgid "Loading…"
-msgstr ""
+msgstr "Betöltés…"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:595
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
 msgstr ""
-"Legnagyobb életkor másodpercben, amíg egy SPA csomag elfogadásra kerül. "
+"Legnagyobb életkor másodpercben, amíg egy SPA-csomag elfogadásra kerül. "
 "Alapértelmezetten 120 másodperc."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
@@ -189,7 +203,7 @@ msgstr "Hálózati beállítás"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
 msgid "No stanza found."
-msgstr ""
+msgstr "Nem található stanza."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:453
@@ -204,20 +218,24 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"Feldolgozza az /etc/fwknop/access.conf fájlt (és a beemelt fájlokat/mappákat/"
+"kulcsokat), és QR-kódokat állít elő az összes talált stanzához. A "
+"hozzáférési jogosultságok korlátozásai miatt csak az /etc/fwknop mappában "
+"lévő fájlokat kezeli."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:418
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:501
 msgid "QR code"
-msgstr ""
+msgstr "QR-kód"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:484
 msgid "Show access.conf QR codes"
-msgstr ""
+msgstr "Az access.conf QR-kódjainak megjelenítése"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:596
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
 msgstr ""
-"Az ethernet csatoló megadása, amelyen az fwknopd szimatolni fogja a "
+"Az ethernet interfész megadása, amelyen az fwknopd szimatolni fogja a "
 "csomagokat."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:443
@@ -225,7 +243,7 @@ msgstr ""
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:563
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "Meg kell adni a HMAC-hitelesítési kulcsot."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:512
 msgid ""
@@ -235,6 +253,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Az a célcím, amelyre vonatkozóan az SPA-csomag elfogadásra kerül. Az “ANY” "
+"karakterlánc is elfogadott, ha bármely cél IP-címre szóló érvényes SPA-"
+"csomagot el kell fogadni. A hálózatokat CIDR-jelöléssel kell megadni (pl. “"
+"192.168.10.0/24”), de egyedi IP-címek is megadhatók. Több bejegyzést "
+"vesszővel kell elválasztani."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
 msgid ""
@@ -242,6 +265,9 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"Az a hálózat, amelyen a démon figyel. A démon automatikusan elindul, amikor "
+"a hálózat működésbe lép. Ez a beállítás elsőbbséget élvez a “PCAP_INTF” "
+"beállítással szemben."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:503
 msgid ""
@@ -251,17 +277,22 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Az a forráscím, amelyről az SPA-csomag elfogadásra kerül. Az “ANY” "
+"karakterlánc is elfogadott, ha bármely forrás IP-címről érkező érvényes SPA-"
+"csomagot el kell fogadni. A hálózatokat CIDR-jelöléssel kell megadni (pl. “"
+"192.168.10.0/24”), de egyedi IP-címek is megadhatók. Több bejegyzést "
+"vesszővel kell elválasztani."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:509
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "Meg kell adni a forráscímet."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:426
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:432
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:541
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "Meg kell adni a szimmetrikus kulcsot."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:589
 msgid ""
@@ -270,6 +301,10 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Ez arra utasítja az fwknopd-t, hogy fogadja el az engedélyezési csomagban "
+"lévő teljes parancsokat. Minden ilyen parancs az fwknopd-szerveren fut le a “"
+"CMD_EXEC_USER” által megadott felhasználóként, vagy ha ez nincs beállítva, "
+"akkor az fwknopd-t elindító felhasználóként."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:477
 msgid ""
