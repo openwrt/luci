@@ -1,8 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-03-08 17:31+0000\n"
-"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
+"PO-Revision-Date: 2026-11-05 07:53+0000\n"
+"Last-Translator: Kövecses József <kovecses@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/hu/>\n"
 "Language: hu\n"
@@ -10,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.11.1.dev0\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -162,7 +163,7 @@ msgid ""
 "traffic."
 msgstr ""
 "További nyers <em>iptables</em> argumentumok a zóna célforgalmának "
-"besorolásához, például <code>-p tcp --dport 443</code> csak a kimenő HTTPS "
+"besorolásához, például <code>-p tcp --dport 443</code> csak a kimenő HTTPS-"
 "forgalom illesztéséhez."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:325
@@ -171,7 +172,7 @@ msgid ""
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
 "További nyers <em>iptables</em> argumentumok a zóna forrásforgalmának "
-"besorolásához, például <code>-p tcp --sport 443</code> csak a bejövő HTTPS "
+"besorolásához, például <code>-p tcp --sport 443</code> csak a bejövő HTTPS-"
 "forgalom illesztéséhez."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
@@ -207,7 +208,7 @@ msgstr "Továbbítás engedélyezése ezekbe a <em>célzónák</em>ba:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:551
 msgid "Any"
-msgstr "Bármelyik"
+msgstr "Bármely"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:483
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:499
@@ -263,7 +264,7 @@ msgstr "Kapcsolatkövetés-segítők"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:16
 msgid "Contents have been saved."
-msgstr "A tartalom mentésre került."
+msgstr "A tartalom mentve."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:699
 msgid "Continue"
@@ -391,7 +392,7 @@ msgstr "Engedélyezi a csomag- és bájtszám nyomon követését a készlet sz�
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "Expecting: %s"
-msgstr "Elvárás: %s"
+msgstr "Várt érték: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:291
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
@@ -443,11 +444,11 @@ msgstr "Tűzfal - IP-készletek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:170
 msgid "Firewall - NAT Rules"
-msgstr "Tűzfal – NAT szabályok"
+msgstr "Tűzfal – NAT-szabályok"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:149
 msgid "Firewall - Port Forwards"
-msgstr "Tűzfal – porttovábbítások"
+msgstr "Tűzfal – portátirányítások"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:171
 msgid "Firewall - Traffic Rules"
@@ -468,7 +469,7 @@ msgstr "Tehermentesítő folyamat típusa"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
 msgctxt "firewall forward"
 msgid "Forward"
-msgstr ""
+msgstr "Továbbítás"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -500,7 +501,7 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%"
 "{item.ival}</var>}}"
 msgstr ""
-"Innen: %{src}%{src_device?, csatoló\\: <var>%{src_device}</var>}%{src_ip?, "
+"Innen: %{src}%{src_device?, interfész\\: <var>%{src_device}</var>}%{src_ip?, "
 "IP\\: %{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre illeszkedő "
 "IP-cím, kivéve\\: %{item.val}\"}>%{item.ival}</var>}}%{src_port?, port\\: %"
 "{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre illeszkedő "
@@ -517,7 +518,7 @@ msgid ""
 "{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%"
 "{item.ival}</var>}}"
 msgstr ""
-"Innen: %{src}%{src_device?, csatoló\\: <var>%{src_device}</var>}%{src_ip?, "
+"Innen: %{src}%{src_device?, interfész\\: <var>%{src_device}</var>}%{src_ip?, "
 "IP\\: %{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre illeszkedő "
 "IP-cím, kivéve\\: %{item.val}\"}>%{item.ival}</var>}}%{src_port?, port\\: %"
 "{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre illeszkedő "
@@ -663,7 +664,7 @@ msgstr "Kezdeti hash méret"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:150
 msgctxt "firewall input"
 msgid "Input"
-msgstr ""
+msgstr "Bemenet"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:290
 msgid "Internal IP address"
@@ -742,7 +743,7 @@ msgstr "Visszacsatolt forrás IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:290
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
-msgstr "ÁLCÁZÁS – automatikus átírás a kimenő csatoló IP-jére"
+msgstr "ÁLCÁZÁS – automatikus átírás a kimenő interfész IP-jére"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:182
 msgid "MSS clamping"
@@ -858,14 +859,14 @@ msgstr "Hónap napjai"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:173
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:44
 msgid "NAT Rules"
-msgstr "NAT szabályok"
+msgstr "NAT-szabályok"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:171
 msgid ""
 "NAT rules allow fine grained control over the source IP to use for outbound "
 "or forwarded traffic."
 msgstr ""
-"A NAT szabályok lehetővé teszik a részletes szabályozást a kimenő vagy "
+"A NAT-szabályok lehetővé teszik a részletes szabályozást a kimenő vagy "
 "továbbított forgalomnál használandó forrás IP fölött."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:181
@@ -910,7 +911,7 @@ msgid ""
 "Only match incoming traffic originating from the given source port or port "
 "range on the client host"
 msgstr ""
-"Csak az ügyfélgépen lévő megadott forrásportról vagy porttartományból eredő "
+"Csak a kliensgépen lévő megadott forrásportról vagy porttartományból eredő "
 "bejövő forgalom illesztése"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:248
@@ -926,7 +927,7 @@ msgstr "Kimenő zóna"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
 msgctxt "firewall output"
 msgid "Output"
-msgstr ""
+msgstr "Kimenet"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
@@ -962,7 +963,7 @@ msgid ""
 "all services."
 msgstr ""
 "A forrás- és célforgalom osztályozási szabályainak való nyers iptables "
-"argumentumok átadása lehetővé teszi a csomagoknak a csatolóktól vagy "
+"argumentumok átadása lehetővé teszi a csomagoknak az interfészektől vagy "
 "alhálózatoktól eltérő feltételek alapján történő illesztését. Ezeket a "
 "kapcsolókat rendkívül óvatosan kell használni, mivel az érvénytelen értékek "
 "tönkre tehetik a tűzfalszabálykészleteket, ezáltal teljesen feltárva az "
@@ -978,14 +979,14 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:152
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:26
 msgid "Port Forwards"
-msgstr "Porttovábbítások"
+msgstr "Portátirányítások"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:150
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr ""
-"A porttovábbítás lehetővé teszi az interneten lévő távoli számítógépeknek a "
+"A portátirányítás lehetővé teszi az interneten lévő távoli számítógépeknek a "
 "személyes helyi hálózat bizonyos számítógépéhez vagy szolgáltatásához "
 "történő csatlakozását."
 
@@ -1170,7 +1171,7 @@ msgid ""
 "The firewall creates zones over your network interfaces to control network "
 "traffic flow."
 msgstr ""
-"A tűzfalzónákat hoz létre a hálózati csatolók fölött a hálózati forgalom "
+"A tűzfalzónákat hoz létre a hálózati interfészek fölött a hálózati forgalom "
 "áramlásának szabályozásához."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:228
@@ -1227,7 +1228,7 @@ msgstr "Időkorlátozások engedélyezettek ennél a szabálynál"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:197
 msgid "Timeout"
-msgstr "Időtúllépés"
+msgstr "Időkorlát"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:77
 msgid ""
@@ -1237,11 +1238,12 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%"
 "{item.ival}</var>}}"
 msgstr ""
-"Ide: %{dest}%{dest_device?, csatoló\\: <var>%{dest_device}</var>}%{dest_ip?, "
-"IP\\: %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre illeszkedő "
-"IP-cím, kivéve\\: %{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port\\: %"
-"{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre illeszkedő "
-"portszám, kivéve\\: %{item.val}.\"}>%{item.ival}</var>}}"
+"Ide: %{dest}%{dest_device?, interfész\\: <var>%{dest_device}</var>}%"
+"{dest_ip?, IP\\: %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre "
+"illeszkedő IP-cím, kivéve\\: %{item.val}.\"}>%{item.ival}</var>}}%"
+"{dest_port?, port\\: %{dest_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Mindenre illeszkedő portszám, kivéve\\: %{item.val}.\"}>%"
+"{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:55
 msgid ""
@@ -1251,7 +1253,7 @@ msgid ""
 "{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except %"
 "{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"Ide: %{dest}%{dest_device?, csatolón át\\: <var>%{dest_device}</var>}%"
+"Ide: %{dest}%{dest_device?, interfészen át\\: <var>%{dest_device}</var>}%"
 "{dest_ip?, IP\\: %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Mindenre "
 "illeszkedő IP-cím, kivéve\\: %{item.val}\"}>%{item.ival}</var>}}%"
 "{dest_port?, port\\: %{dest_port#%{next?, }<var%{item.inv? data-"
@@ -1288,7 +1290,7 @@ msgid ""
 msgstr ""
 "A forgalmi szabályok a különböző zónák között utazó csomagokra vonatkozó "
 "szabályokat határozzák meg, például bizonyos gépek közötti forgalom "
-"visszautasításához vagy WAN portok megnyitásához az útválasztón."
+"visszautasításához vagy WAN-portok megnyitásához az útválasztón."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:486
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:356
@@ -1404,11 +1406,11 @@ msgstr "XOR jelölő"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:28
 msgid "Your device does not run firewall4."
-msgstr "Az eszközön nem firewall4 fut."
+msgstr "A készüléken nem firewall4 fut."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:26
 msgid "Your device runs firewall4."
-msgstr "Az eszközön firewall4 fut."
+msgstr "A készüléken firewall4 fut."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:142
 msgid "Zone ⇒ Forwards"
@@ -1588,7 +1590,7 @@ msgstr "port: Port"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:66
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:156
 msgid "reject"
-msgstr "visszautasítás"
+msgstr "elutasítás"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
@@ -1627,7 +1629,7 @@ msgstr "src_port: Forrásport"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:78
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:56
 msgid "this device"
-msgstr "ez az eszköz"
+msgstr "ez a készülék"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:123
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
@@ -1641,7 +1643,7 @@ msgstr "korlátlan"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:246
 msgid "unspecified"
-msgstr "nincs meghatározva"
+msgstr "nincs megadva"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:115
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:174

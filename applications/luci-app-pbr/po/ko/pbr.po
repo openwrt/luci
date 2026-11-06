@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-09-27 19:33+0000\n"
-"Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
+"PO-Revision-Date: 2026-11-05 18:32+0000\n"
+"Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspbr/ko/>\n"
 "Language: ko\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:320
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:453
@@ -25,6 +25,8 @@ msgid ""
 "anything in this section! Change any of the settings below with extreme "
 "caution!%s"
 msgstr ""
+"%s경고:%s 이 섹션의 설정을 변경하기 전에 반드시 %sREADME%s를 확인해 주시기 "
+"바랍니다! 아래 설정을 변경할 때는 각별히 유의해 주세요!%s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:27
 msgid "Active"
@@ -47,6 +49,8 @@ msgid ""
 "Adds 'ignore' to the list of interfaces for policies. See the %sREADME%s for "
 "details."
 msgstr ""
+"정책의 인터페이스 목록에 '제외(ignore)'를 추가합니다. 자세한 내용은 "
+"%sREADME%s를 참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:47
 msgid "Advanced Configuration"
@@ -59,6 +63,10 @@ msgid ""
 "than tun* or tap* or specific use cases of WireGuard servers. See the "
 "%sREADME%s for details."
 msgstr ""
+"서비스에서 명시적으로 지원할 인터페이스 이름 목록을 지정할 수 있습니다. "
+"OpenVPN 터널의 dev 옵션이 TUN* 또는 TAP*이 아니거나, WireGuard 서버의 특수한 "
+"사용 사례가 있는 경우에 유용할 수 있습니다. 자세한 내용은 %sREADME%s를 "
+"참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:160
 msgid ""
@@ -67,6 +75,10 @@ msgid ""
 "servers, which have a listen_port defined, are handled automatically, do not "
 "add those here.See the %sREADME%s for details."
 msgstr ""
+"서비스에서 제외할 인터페이스 이름 목록을 지정할 수 있습니다. OpenWrt "
+"장치에서 실행하는 OpenVPN 서버에 유용할 수 있습니다. listen_port(수신 대기 "
+"포트)가 정의된 WireGuard 서버는 자동으로 처리되므로 여기에 추가하지 마세요. "
+"자세한 내용은 %sREADME%s를 참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:44
 msgid "Basic Configuration"
@@ -94,7 +106,7 @@ msgstr "시스템 로그와 콘솔 출력의 상세 수준을 제어합니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:422
 msgid "Custom User File Includes"
-msgstr ""
+msgstr "사용자 정의 파일 포함"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:456
 msgid "Custom user file '%s' not found or empty"
@@ -140,13 +152,13 @@ msgstr "%s 서비스 비활성화 중"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:268
 msgid "Display these protocols in protocol column in Web UI."
-msgstr ""
+msgstr "웹 UI의 프로토콜 열에 이 프로토콜을 표시합니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:349
 msgid ""
 "Dnsmasq instance (%s) targeted in settings, but it doesn't have its own "
 "confdir"
-msgstr ""
+msgstr "Dnsmasq 인스턴스 (%s)를 설정에서 지정했지만, 자체 confdir이 없습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:121
 msgid "Dnsmasq ipset"
@@ -186,7 +198,7 @@ msgstr "사용자 정의 파일 '%s' 실행 오류"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:517
 msgid "Errors encountered, please check %s"
-msgstr ""
+msgstr "오류가 발생했습니다. %s를 확인하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:550
 msgid "Errors encountered, please check the %sREADME%s"
@@ -197,10 +209,12 @@ msgid ""
 "FW Mask used by the service. High mask is used to avoid conflict with SQM/"
 "QoS. Change with caution together with"
 msgstr ""
+"서비스에서 사용하는 방화벽 마스크입니다. SQM/QoS와의 충돌을 방지하기 위해 "
+"높은 마스크 값이 사용됩니다. 다음 항목과 함께 각별히 유의하여 변경하세요:"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:515
 msgid "Failed to create temporary file with mktemp mask: '%s'"
-msgstr ""
+msgstr "mktemp 마스크로 임시 파일 생성 실패: '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:500
 msgid "Failed to download '%s'"
@@ -228,7 +242,7 @@ msgstr "'%s' 설정 실패"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:462
 msgid "Failed to set up any gateway"
-msgstr ""
+msgstr "게이트웨이 설정 실패"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:187
 msgid "Force the ICMP protocol interface."
@@ -260,13 +274,15 @@ msgstr "인터페이스 %s의 DHCP 옵션 6이 호환되지 않습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:506
 msgid "Incompatible custom user file detected '%s'"
-msgstr ""
+msgstr "호환되지 않는 사용자 정의 파일 감지: '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:346
 msgid ""
 "Incompatible nft calls detected in user include file, disabling fw4 nft file "
 "support"
 msgstr ""
+"사용자 포함 파일에서 호환되지 않는 nft 호출이 감지되어, fw4 nft 파일 지원을 "
+"비활성화했습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:179
 msgid "Insert"
@@ -294,7 +310,7 @@ msgstr "인터페이스 '%s'에 할당된 DNS가 없습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:487
 msgid "Interface mark for '%s' exceeds the fwmask value"
-msgstr ""
+msgstr "'%s'의 인터페이스 마크가 방화벽 마스크 값을 초과합니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:312
 msgid ""
@@ -343,6 +359,10 @@ msgid ""
 "Placeholders below represent just the format/syntax and will not be used if "
 "fields are left blank. For more information on options, check the %sREADME%s."
 msgstr ""
+"이름, 인터페이스, 최소 하나 이상의 다른 필드는 필수 입력 항목입니다. 여러 "
+"로컬 및 원격 주소/장치/도메인 및 포트는 공백으로 구분하여 입력할 수 "
+"있습니다. 아래의 자리 표시자는 형식/문법만을 나타내며 필드를 비워둘 경우 "
+"사용되지 않습니다. 옵션에 대한 자세한 내용은 %sREADME%s를 참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:356
 msgid ""
@@ -399,16 +419,18 @@ msgstr "경로"
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:287
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:716
 msgid "Please %sdonate%s to support development of this project."
-msgstr "이 프로젝트의 지속적인 개발을 위해 %s후원%s해 주세요."
+msgstr "이 프로젝트의 지속적인 개발을 위해 %s후원해 주세요%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:102
 msgid "Please check the %sREADME%s before changing this option."
-msgstr ""
+msgstr "이 옵션을 변경하기 전에 %sREADME%s를 확인해 주시기 바랍니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:353
 msgid ""
 "Please set 'dhcp.%%s.force=1' to speed up service start-up %s(more info)%s"
 msgstr ""
+"서비스 시작 속도를 높이려면 'dhcp.%%s.force=1'을 설정해 주세요. %s(자세한 "
+"정보)%s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:328
 msgid "Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"
@@ -452,6 +474,8 @@ msgstr "정책 '%s'에 출발지/목적지 매개변수가 없습니다"
 msgid ""
 "Policy '%s' refers to URL which can't be downloaded in 'secure_reload' mode"
 msgstr ""
+"정책 '%s'에서 'secure_reload' 모드에서는 다운로드할 수 없는 URL을 참조하고 "
+"있습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:11
 msgid "Policy Based Routing"
@@ -475,11 +499,11 @@ msgstr "프로토콜"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:484
 msgid "Received empty tid/mark or interface name when setting up routing"
-msgstr ""
+msgstr "라우팅 설정 중 빈 tid/마크 또는 인터페이스 이름을 수신했습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:428
 msgid "Refer to %sREADME%s for details"
-msgstr ""
+msgstr "자세한 내용은 %sREADME%s를 참고하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:382
 msgid "Remote DNS"
@@ -544,6 +568,8 @@ msgid ""
 "Run the following user files after setting up but before restarting DNSMASQ. "
 "See the %sREADME%s for details."
 msgstr ""
+"설정이 완료된 후 DNSMASQ를 재시작하기 전에 다음 사용자 파일을 실행합니다. "
+"자세한 내용은 %sREADME%s를 참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:241
 msgid "Running"
@@ -551,11 +577,11 @@ msgstr "실행 중"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:81
 msgid "See the %sREADME%s for details."
-msgstr "자세한 내용은 %sREADME%s를 참조하세요."
+msgstr "자세한 내용은 %sREADME%s를 참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:176
 msgid "Select Add for -A/add and Insert for -I/Insert."
-msgstr ""
+msgstr "-A/add는 추가를, -I/Insert는 삽입을 선택하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:687
 msgid "Service Control"
@@ -587,6 +613,8 @@ msgid ""
 "Set DSCP tags (in range between 1 and 63) for specific interfaces. See the "
 "%sREADME%s for details."
 msgstr ""
+"특정 인터페이스에 DSCP 태그 (1~63 범위)를 설정합니다. 자세한 내용은 "
+"%sREADME%s를 참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:465
 msgid "Skipping IPv6 policy '%s' as IPv6 support is disabled"
@@ -606,6 +634,9 @@ msgid ""
 "starting mark is used to avoid conflict with SQM/QoS. Change with caution "
 "together with"
 msgstr ""
+"서비스에서 사용하는 (상위 인터페이스) 방화벽 마크의 시작 값입니다. SQM/"
+"QoS와의 충돌을 방지하기 위해 높은 시작 마크 값이 사용됩니다. 다음 항목과 "
+"함께 각별히 유의하여 변경하세요:"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:237
 msgid ""
@@ -613,6 +644,9 @@ msgid ""
 "starting priority is used to avoid conflict with other services, this can be "
 "changed by user."
 msgstr ""
+"pbr 서비스에서 사용하는 (상위/WAN) IP 규칙 우선순위의 시작 값입니다. 다른 "
+"서비스와의 충돌을 방지하기 위해 높은 시작 우선순위가 사용되며, 우선순위는 "
+"사용자가 변경할 수 있습니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:50
 msgid "Status"
@@ -661,6 +695,8 @@ msgstr "사용자 정의 파일 '%s'의 구문 오류"
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:277
 msgid "The %s indicates default gateway. See the %sREADME%s for details."
 msgstr ""
+"%s 표시는 기본 게이트웨이를 나타냅니다. 자세한 내용은 %sREADME%s를 "
+"참고하세요."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:425
 msgid ""
@@ -672,7 +708,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:97
 msgid "The %s is not supported on this system."
-msgstr "이 시스템에서 %s를 지원하지 않습니다."
+msgstr "이 시스템에서는 %s를 지원하지 않습니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:422
 msgid "The %s service failed to discover uplink gateway"
@@ -684,11 +720,11 @@ msgstr "%s 서비스가 현재 비활성화되어 있습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:93
 msgid "The %s support is unknown."
-msgstr "%s 지원 여부를 확인할 수 없습니다."
+msgstr "%s 지원 여부를 알 수 없습니다."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:502
 msgid "The '%s' schema requires curl, but it's not detected on this system"
-msgstr ""
+msgstr "'%s' 스키마에는 curl이 필요하지만, 이 시스템에서 감지되지 않습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:340
 msgid "The WebUI application (luci-app-pbr) is outdated, please update it"
@@ -749,11 +785,11 @@ msgstr "알 수 없는 경고"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:235
 msgid "Uplink IP Rules Priority"
-msgstr "업링크 IP 규칙 우선순위"
+msgstr "상위 IP 규칙 우선순위"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:201
 msgid "Uplink Interface Table FW Mark"
-msgstr "업링크 인터페이스 테이블 방화벽 마크"
+msgstr "상위 인터페이스 테이블 방화벽 마크"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:370
 msgid "Uplink/WAN interface is still down, going back to boot mode"
@@ -773,10 +809,12 @@ msgid ""
 "Use of 'curl' is detected in custom user file '%s', but 'curl' isn't "
 "installed"
 msgstr ""
+"사용자 정의 파일 '%s'에서 'curl' 사용이 감지되었으나, 'curl'이 설치되어 있지 "
+"않습니다"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:112
 msgid "Use resolver set support for domains"
-msgstr ""
+msgstr "도메인 리졸버 세트 지원 사용"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:73
 msgid "Verbose output"
@@ -796,11 +834,11 @@ msgstr "WAN 테이블 방화벽 마크"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:362
 msgid "Warnings encountered, please check %s"
-msgstr ""
+msgstr "경고가 발생했습니다. %s를 확인하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:386
 msgid "Warnings encountered, please check the %sREADME%s"
-msgstr ""
+msgstr "경고가 발생했습니다. %sREADME%s를 확인하세요"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:62
 msgid "Web UI Configuration"
