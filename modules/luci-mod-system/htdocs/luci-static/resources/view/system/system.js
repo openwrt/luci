@@ -246,7 +246,8 @@ return view.extend({
 			if (t.charAt(0) != '.')
 				o.value(uci.get('luci', 'themes', t), t);
 
-		o = s.taboption('language', form.Flag, '_tablefilters', _('Table Filters'));
+		o = s.taboption('language', form.Flag, '_tablefilters', _('Table Filters'),
+			_('Show a filter row above tables. A filter written as /pattern/flags is matched as regular expression, anything else as plain text.'));
 		o.default = o.disabled;
 		o.uciconfig = 'luci';
 		o.ucisection = 'main';
