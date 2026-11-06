@@ -1,0 +1,15 @@
+#!/bin/sh
+# Ensure the optional config sections that uapi reads exist, so the LuCI
+# settings form has something to render. Token sections are left untouched.
+
+[ -f /etc/config/uapi ] || touch /etc/config/uapi
+
+if ! uci -q get uapi.@logging[0] >/dev/null; then
+	uci -q add uapi logging >/dev/null
+fi
+if ! uci -q get uapi.@ratelimit[0] >/dev/null; then
+	uci -q add uapi ratelimit >/dev/null
+fi
+uci -q commit uapi
+
+exit 0

@@ -1,0 +1,39 @@
+{
+	"admin/services/uapi": {
+		"title": "uAPI",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-uapi" ]
+		}
+	},
+
+	"admin/services/uapi/status": {
+		"title": "Status",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "uapi/status"
+		}
+	},
+
+	"admin/services/uapi/tokens": {
+		"title": "Tokens",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "uapi/tokens"
+		}
+	},
+
+	"admin/services/uapi/settings": {
+		"title": "Settings",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "uapi/settings"
+		}
+	}
+}
