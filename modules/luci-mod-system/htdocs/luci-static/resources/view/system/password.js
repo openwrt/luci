@@ -23,7 +23,6 @@ var callSetPassword = rpc.declare({
 	object: 'luci',
 	method: 'setPassword',
 	params: [ 'username', 'password', 'oldpassword', 'rpcd' ],
-	expect: { result: 1 }
 });
 
 return view.extend({
@@ -159,9 +158,6 @@ return view.extend({
 			let rpcd = formData.data.rpcd;
 			let oldpw = formData.data.oldpw;
 
-			if (rpc_user && (oldpw == null || oldpw.length == 0))
-				return;
-
 			if (formData.data.pw1 == null || formData.data.pw1.length == 0)
 				return;
 
@@ -175,11 +171,23 @@ return view.extend({
 				formData.data.pw1,
 				oldpw ? oldpw : '',
 				rpcd ? true : false,
-			).then(function(success) {
-				if (success)
+			).then(function(result) {
+				if (result && result.result) {
+					if (rpcd && result.hash) {
+						let sections = uci.sections('rpcd', 'login');
+
+						for (let s of sections) {
+							if (s.username == rpc_user) {
+								uci.set('rpcd', s['.name'], 'password', result.hash);
+								uci.save('rpcd');
+							}
+						}
+					}
 					ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
-				else
+				}
+				else {
 					ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
+				}
 
 				formData.data.rpc_user = null;
 				formData.data.user = null;
