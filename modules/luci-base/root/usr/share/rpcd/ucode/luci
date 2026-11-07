@@ -746,7 +746,7 @@ const methods = {
 	},
 
 	getEthtoolStatus: {
-		args: { devices: [] },
+		args: { devices: [], temperature: false },
 		call: function(request) {
 			const query = (opts, dev) => {
 				const fd = popen(`ethtool --json ${opts} ${shellquote(dev)} 2>/dev/null`);
@@ -768,6 +768,31 @@ const methods = {
 				}
 			};
 
+			/* PHY sensor of a copper port, else the diagnostics of an SFP module */
+			const temperature = (dev) => {
+				let phy = `/sys/class/net/${dev}/phydev`;
+
+				/* DSA ports have no phydev link; find the PHY by its device tree handle */
+				if (!access(phy)) {
+					const handle = readfile(`/sys/class/net/${dev}/of_node/phy-handle`);
+
+					phy = null;
+
+					for (let p in (handle ? glob('/sys/bus/mdio_bus/devices/*/of_node/phandle') : []))
+						if (readfile(p) == handle)
+							phy = dirname(dirname(p));
+				}
+
+				for (let f in (phy ? glob(`${phy}/hwmon/hwmon*/temp1_input`) : [])) {
+					const t = trim(readfile(f) ?? '');
+
+					if (length(t))
+						return +t / 1000.0;
+				}
+
+				return query('-m', dev)?.module_temperature_measurement;
+			};
+
 			const result = {};
 
 			for (let dev in request.args.devices) {
@@ -777,7 +802,9 @@ const methods = {
 				result[dev] = {
 					link: query('', dev),
 					pause: query('-a', dev),
-					eee: query('--show-eee', dev)
+					eee: query('--show-eee', dev),
+					/* opt-in: the module fallback reads the SFP EEPROM */
+					temperature: request.args.temperature ? temperature(dev) : null
 				};
 			}
 
