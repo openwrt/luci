@@ -1,0 +1,109 @@
+#!/usr/bin/ucode
+// hh4xmodem-pack - Pack protocol client for HH40V/HH41V MDM9207 modem
+// Usage: hh4xmodem-pack <method> [params]
+// Example: hh4xmodem-pack GetNetworkInfo "{}"
+// Example: hh4xmodem-pack SetNetworkSettings '{"NetworkMode":6}'
+
+import * as socket from 'socket';
+
+let modem_ip = getenv("MODEM_IP") || "192.168.225.1";
+let modem_port = int(getenv("MODEM_PORT")) || 2016;
+
+if (length(ARGV) < 1) {
+    printf("Usage: %s <method> [params]\n", ARGV[0] || "hh4xmodem-pack");
+    exit(1);
+}
+
+let method = ARGV[0];
+let params = length(ARGV) >= 2 ? ARGV[1] : "{}";
+
+// Pack protocol header layout:
+//   "pack" magic (4 bytes) + total_length (4 bytes big-endian) +
+//   reserved (4 bytes) + padding (32 bytes) = 44-byte pack header
+//   + 28-byte legacy ack prefix = 72 bytes before the JSON payload.
+const ACK_PREFIX_LEN  = 28;  // legacy ack prefix sent by the modem
+const PACK_HEADER_LEN = 44;  // "pack" magic + length + reserved + padding
+const PAYLOAD_START   = ACK_PREFIX_LEN + PACK_HEADER_LEN;
+
+let json = sprintf('{"jsonrpc":"2.0","method":"%s","params":%s,"id":"1.1"}', method, params);
+let json_len = length(json);
+let total_len = PACK_HEADER_LEN + json_len;
+
+// Build pack header (44 bytes) + JSON payload
+let request = "pack";
+request += sprintf("%c%c%c%c",
+    total_len >> 24 & 0xFF, total_len >> 16 & 0xFF,
+    total_len >> 8 & 0xFF, total_len & 0xFF);
+request += sprintf("%c%c%c%c", 0, 0, 0, 1);
+for (let i = 0; i < 32; i++) request += "\x00";
+request += json;
+
+// Connect to modem via TCP
+let addr = socket.sockaddr({
+    family: socket.AF_INET,
+    address: modem_ip,
+    port: modem_port
+});
+
+let sock = socket.create(socket.AF_INET, socket.SOCK_STREAM);
+if (!sock) {
+    printf('{"error":"Failed to create socket"}');
+    exit(2);
+}
+
+if (!sock.connect(addr)) {
+    printf('{"error":"Failed to connect to %s:%d"}', modem_ip, modem_port);
+    exit(2);
+}
+
+sock.send(request);
+
+// Read response. The modem first sends a 28-byte prefix ("ack"), then the
+// actual JSON payload may arrive a moment later (or the modem is briefly busy
+// processing a SET). Bound each recv with a timeout so we never block rpcd
+// indefinitely, and loop until we have a complete JSON object (balanced
+// braces) or the budget runs out.
+sock.setopt(socket.SOL_SOCKET, socket.SO_RCVTIMEO, [1, 0]);
+let response = '';
+let complete = false;
+let payload_start = PAYLOAD_START;
+for (let i = 0; i < 8 && !complete; i++) {
+    let chunk = "";
+    try { chunk = sock.recv(65536) || ""; } catch (e) { chunk = ""; }
+    response += chunk;
+    if (length(response) >= payload_start) {
+        // Scan the JSON payload (past the known binary header) for a
+        // balanced object. Track string context so braces inside string
+        // values (e.g. an SMS body "hi {") are ignored, and start after
+        // the header so a stray 0x7b byte in the ack prefix can't shift
+        // the match offset.
+        let start = index(substr(response, payload_start), '{');
+        if (start >= 0) {
+            start += payload_start;
+            let depth = 0, in_str = false, esc = false, end = -1;
+            for (let j = start; j < length(response); j++) {
+                let c = substr(response, j, 1);
+                if (in_str) {
+                    if (esc) esc = false;
+                    else if (c == '\\') esc = true;
+                    else if (c == '"') in_str = false;
+                    continue;
+                }
+                if (c == '"') in_str = true;
+                else if (c == '{') depth++;
+                else if (c == '}') { depth--; if (depth == 0) { end = j; break; } }
+            }
+            if (end >= 0) complete = true;
+        }
+    }
+    if (!complete && length(chunk) == 0) sleep(200);
+}
+sock.close();
+
+if (!complete || length(response) <= payload_start) {
+    printf('{"error":"No response or too short (%d bytes)"}', length(response));
+    exit(2);
+}
+
+// Skip ACK_PREFIX_LEN + PACK_HEADER_LEN bytes to reach the JSON payload
+printf("%s", substr(response, payload_start));
