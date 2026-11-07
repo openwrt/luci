@@ -59,7 +59,6 @@ return view.extend({
 
 		o = s.option(form.Flag, 'leds_off', _('Turn off all LEDs'),
 			_('Overrides the individual LED settings without removing them.'));
-		o.rmempty = false;
 
 		s = m.section(form.GridSection, 'led', '');
 		s.anonymous = true;
