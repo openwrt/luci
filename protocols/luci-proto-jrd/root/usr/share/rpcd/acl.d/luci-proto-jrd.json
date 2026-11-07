@@ -1,0 +1,11 @@
+{
+	"luci-proto-jrd": {
+		"description": "Grant access to JRD cellular modem status and profiles",
+		"read": {
+			"ubus": {
+				"luci.jrd": [ "getProfiles", "getStatus" ]
+			},
+			"uci": [ "jrd", "network" ]
+		}
+	}
+}
