@@ -34,7 +34,18 @@ return baseclass.extend({
 			L.resolveDefault(callSystemInfo(), {}),
 			L.resolveDefault(callLuciVersion(), { revision: _('unknown version'), branch: 'LuCI' }),
 			L.resolveDefault(callGetUnixtime(), 0),
-			uci.load('system')
+			uci.load('system'),
+			L.resolveDefault(fs.list('/sys/devices/virtual/thermal'), []).then(function(entries) {
+				var zones = entries.filter(function(e) { return /^thermal_zone\d+$/.test(e.name) })
+					.map(function(e) { return '/sys/devices/virtual/thermal/' + e.name }).sort(L.naturalCompare);
+
+				return Promise.all(zones.map(function(zone) {
+					return Promise.all([
+						L.resolveDefault(fs.trimmed(zone + '/type'), ''),
+						L.resolveDefault(fs.trimmed(zone + '/temp'), '')
+					]);
+				}));
+			})
 		]);
 	},
 
@@ -42,7 +53,9 @@ return baseclass.extend({
 		var boardinfo   = data[0],
 		    systeminfo  = data[1],
 		    luciversion = data[2],
-		    unixtime    = data[3];
+		    unixtime    = data[3],
+		    zones       = data[5].filter(function(z) { return z[1] !== '' && !isNaN(z[1]) }),
+		    cpuzone     = zones.filter(function(z) { return /cpu|soc|pkg/i.test(z[0]) })[0] || zones[0];
 
 		luciversion = luciversion.branch + ' ' + luciversion.revision;
 
@@ -77,6 +90,8 @@ return baseclass.extend({
 				systeminfo.load[2] / 65535.0
 			) : null
 		];
+
+		fields.push(_('CPU Temperature'), cpuzone ? '%.1f\u202f°C (%s)'.format(+cpuzone[1] / 1000, cpuzone[0]) : '-');
 
 		var table = E('table', { 'class': 'table' });
 

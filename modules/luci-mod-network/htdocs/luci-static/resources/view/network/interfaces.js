@@ -19,6 +19,13 @@ const callNetworkDeviceStatus = rpc.declare({
 	expect: { '': {} }
 });
 
+const callEthtoolStatus = rpc.declare({
+	object: 'luci',
+	method: 'getEthtoolStatus',
+	params: [ 'devices' ],
+	expect: { result: {} }
+});
+
 const speedBaseParse = /^(\d+)base(\w+)-(H|F)$/;
 const phyLinkSpeeds = [
 	"10baseT-F", "10baseT-H",
@@ -380,7 +387,8 @@ return view.extend({
 			network.getDevices(),
 			fs.lines('/etc/iproute2/rt_tables'),
 			L.resolveDefault(callNetworkDeviceStatus(), {}),
-			uci.changes()
+			uci.changes(),
+			network.getDevices().then((devs) => L.resolveDefault(callEthtoolStatus(devs.map((d) => d.getName())), {}))
 		]);
 	},
 
@@ -478,7 +486,7 @@ return view.extend({
 		]);
 	},
 
-	render([dslModemType, netDevs, rtTables, devStatus]) {
+	render([dslModemType, netDevs, rtTables, devStatus, , ethStatus]) {
 
 		if (this.interfaceBridgeWithIfnameSections().length)
 			return this.renderBridgeMigration();
@@ -1821,6 +1829,53 @@ return view.extend({
 				}, [ fmt(cur) ]);
 
 			return fmt(cur);
+		};
+
+		/* "10000baseT/Full" -> "10G", ascending */
+		const fmtModes = (modes) => {
+			const speeds = [ ...new Set(L.toArray(modes).map((m) => parseInt(m)).filter((n) => n > 0)) ].sort((a, b) => a - b);
+
+			return speeds.length ? speeds.map((n) => (n >= 1000) ? (n / 1000) + 'G' : n + 'M').join(', ') : _('none');
+		};
+
+		o = s.option(form.DummyValue, '_flowctl', _('Flow Control'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const dev = getDevice(section_id);
+			const st = dev ? ethStatus[dev.getName()] : null;
+			const p = st?.pause;
+
+			if (!p || !dev.getCarrier())
+				return '-';
+
+			/* without pause autonegotiation the configured RX/TX values apply as they are */
+			const res = p.autonegotiate ? p.negotiated : p;
+
+			if (!res)
+				return '-';
+
+			const text = (res.rx && res.tx) ? _('RX/TX') : res.rx ? _('RX') : res.tx ? _('TX') : _('Off');
+			const tip = p.autonegotiate
+				? _('Advertised: %s, link partner: %s').format(st.link?.['advertised-pause-frame-use'] ?? '-', st.link?.['link-partner-advertised-pause-frame-use'] ?? '-')
+				: _('Forced, not negotiated');
+
+			return E('span', { 'data-tooltip': tip }, [ text ]);
+		};
+
+		o = s.option(form.DummyValue, '_eee', _('EEE'));
+		o.modalonly = false;
+		o.textvalue = function(section_id) {
+			const dev = getDevice(section_id);
+			const eee = dev ? ethStatus[dev.getName()]?.eee : null;
+
+			if (!eee)
+				return '-';
+
+			const text = { active: _('Active'), inactive: _('Inactive'), disabled: _('Disabled') }[eee.status] ?? eee.status ?? '-';
+
+			return E('span', {
+				'data-tooltip': _('Advertised: %s, link partner: %s').format(fmtModes(eee['advertised-eee-link-modes']), fmtModes(eee['link-partner-advertised-eee-link-modes']))
+			}, [ text ]);
 		};
 
 		o = s.option(form.DummyValue, 'macaddr', _('MAC Address'));
