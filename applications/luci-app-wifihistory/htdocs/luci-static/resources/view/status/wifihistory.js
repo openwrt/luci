@@ -145,7 +145,7 @@ return view.extend({
 				E('div', { 'class': 'right', 'style': 'margin-bottom:1em' }, [
 					E('button', {
 						'class': 'btn cbi-button-negative',
-						'disabled': isReadonlyView,
+						'disabled': isReadonlyView || null,
 						'click': ui.createHandlerFn(this, 'handleClearHistory')
 					}, _('Clear History'))
 				]),
