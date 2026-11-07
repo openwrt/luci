@@ -59,9 +59,11 @@ const callDeleteSMSBulk = rpc.declare({
 // unreachable and SendSMS fails with the misleading "Fail with store space
 // full" (060603) rather than "no SIM". Check up front and say the real thing.
 // SIM state 7 = Ready. Returns a reason string, or null when the SIM is usable.
+// An unknown state (null — SIM read failed) is also usable: the backend
+// re-checks before sending, so a transport hiccup must not block compose.
 function simBlockReason(sim) {
 	var state = (sim && sim.SIMState != null) ? parseInt(sim.SIMState) : null;
-	if (state == 7) return null;
+	if (state == null || state == 7) return null;
 	if (state == 0) return _('No SIM is inserted. Insert a SIM to send messages.');
 	if (state == 1) return _('The SIM is not ready yet. Wait a moment and try again.');
 	if (state == 2) return _('The SIM is locked. Enter your PIN first, then send messages.');

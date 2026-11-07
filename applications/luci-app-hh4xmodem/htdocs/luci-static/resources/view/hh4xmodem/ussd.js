@@ -45,9 +45,11 @@ const callSimStatus = rpc.declare({
 // SendUSSD, so the request just hangs until the XHR times out. Check up front
 // so the page can say why instead of showing a timeout.
 // SIM state 7 = Ready. Returns a reason string, or null when the SIM is usable.
+// An unknown state (null — SIM read failed) is also usable: the backend
+// re-checks before sending, so a transport hiccup must not block the page.
 function simBlockReason(sim) {
 	var state = (sim && sim.SIMState != null) ? parseInt(sim.SIMState) : null;
-	if (state == 7) return null;
+	if (state == null || state == 7) return null;
 	if (state == 0) return _('No SIM is inserted. Insert a SIM to use USSD codes.');
 	if (state == 1) return _('The SIM is not ready yet. Wait a moment and try again.');
 	if (state == 2) return _('The SIM is locked. Enter your PIN first, then use USSD codes.');
