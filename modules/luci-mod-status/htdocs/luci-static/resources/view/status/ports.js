@@ -13,12 +13,12 @@ const callGetBuiltinEthernetPorts = rpc.declare({
 const callEthtoolStatus = rpc.declare({
 	object: 'luci',
 	method: 'getEthtoolStatus',
-	params: [ 'devices' ],
+	params: [ 'devices', 'temperature' ],
 	expect: { result: {} }
 });
 
 function loadPortStatus(portNames) {
-	return L.resolveDefault(callEthtoolStatus(portNames), {});
+	return L.resolveDefault(callEthtoolStatus(portNames, true), {});
 }
 
 function formatSpeed(mbit) {
@@ -93,6 +93,13 @@ function formatEEEStatus(status) {
 	}
 }
 
+function formatTemperature(celsius) {
+	if (celsius == null)
+		return '-';
+
+	return '%.1f\u202f°C'.format(celsius);
+}
+
 /* a titled list of label/value rows, laid out by the grid of the port box body */
 function renderGroup(title, rows) {
 	const cells = [
@@ -119,7 +126,8 @@ function renderLinkGroup(port) {
 		[ _('Port type'), link.port ?? '-' ],
 		[ _('Auto negotiation'), formatOnOff(link['auto-negotiation']) ],
 		[ _('Supported'), formatLinkModes(link['supported-link-modes']) ],
-		[ _('Link partner'), port.linkUp ? formatLinkModes(link['link-partner-advertised-link-modes']) : '-' ]
+		[ _('Link partner'), port.linkUp ? formatLinkModes(link['link-partner-advertised-link-modes']) : '-' ],
+		[ _('Temperature'), formatTemperature(port.temperature) ]
 	]);
 }
 
@@ -169,7 +177,8 @@ function renderPort(name, status) {
 		link: status?.link ?? {},
 		linkUp: !!status?.link?.['link-detected'],
 		pause: status?.pause,
-		eee: status?.eee
+		eee: status?.eee,
+		temperature: status?.temperature
 	};
 
 	const body = [
