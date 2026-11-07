@@ -477,6 +477,7 @@ lease_next(void)
 {
 	static struct lease_entry e;
 	struct ether_addr *ea;
+	long long ts;
 	char *p;
 	int n;
 
@@ -522,10 +523,10 @@ lease_next(void)
 				if (!p)
 					continue;
 
-				n = strtol(p, NULL, 10);
-				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
-				else if (n >= 0)
+				ts = strtoll(p, NULL, 10);
+				if (ts > lease_state.now)
+					e.expire = ts - lease_state.now;
+				else if (ts >= 0)
 					e.expire = 0;
 				else
 					e.expire = -1;
@@ -564,11 +565,11 @@ lease_next(void)
 				if (!p)
 					continue;
 
-				n = strtol(p, NULL, 10);
+				ts = strtoll(p, NULL, 10);
 
-				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
-				else if (n > 0)
+				if (ts > lease_state.now)
+					e.expire = ts - lease_state.now;
+				else if (ts > 0)
 					e.expire = 0;
 				else
 					e.expire = -1;
