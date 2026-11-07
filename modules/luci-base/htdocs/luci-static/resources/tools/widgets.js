@@ -119,6 +119,8 @@ var CBIZoneSelect = form.ListValue.extend({
 		for (let zone of this.zones) {
 			const name = zone.getName();
 			const networks = zone.getNetworks();
+			const zoneDevices = zone.getDevices();
+			const subnets = zone.getSubnets();
 			const ifaces = [];
 
 			if (!this.filter(section_id, name))
@@ -127,8 +129,10 @@ var CBIZoneSelect = form.ListValue.extend({
 			for (let n of networks) {
 				const network = this.lookupNetwork(n);
 
-				if (!network)
+				if (!network) {
+					ifaces.push(E('span', { 'class': 'ifacebadge' }, [ n ]));
 					continue;
+				}
 
 				const span = E('span', {
 					'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
@@ -148,6 +152,12 @@ var CBIZoneSelect = form.ListValue.extend({
 
 				ifaces.push(span);
 			}
+
+			if (zoneDevices.length)
+				ifaces.push(E('span', { 'class': 'ifacebadge' }, [ _('Devices'), ': ', zoneDevices.join(', ') ]));
+
+			if (subnets.length)
+				ifaces.push(E('span', { 'class': 'ifacebadge' }, [ _('Subnets'), ': ', subnets.join(', ') ]));
 
 			if (!ifaces.length)
 				ifaces.push(E('em', _('(empty)')));
@@ -691,13 +701,15 @@ var CBIDeviceSelect = form.ListValue.extend({
 				if (choices.hasOwnProperty(k))
 					continue;
 
+				const isPattern = this.firewallPatterns && /^!?[^!+]+\+$/.test(k);
+
 				choices[k] = E([
 					E('img', {
-						'title': _('Absent Interface'),
+						'title': isPattern ? _('Interface pattern') : _('Absent Interface'),
 						'src': L.resource('icons/ethernet_disabled.svg')
 					}),
 					E('span', { 'class': 'hide-open' }, [ k ]),
-					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), k) ])
+					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(isPattern ? _('Interface pattern') : _('Absent Interface'), k) ])
 				]);
 
 				values.push(k);
