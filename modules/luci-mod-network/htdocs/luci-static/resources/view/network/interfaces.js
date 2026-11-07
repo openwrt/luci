@@ -1117,6 +1117,8 @@ return view.extend({
 
 					so = ss.taboption('dhcpv6', form.Flag, 'dhcpv6_pd', _('DHCPv6-<abbr title="Prefix Delegation">PD</abbr>'),
 						_('Toggle IPv6 PD via DHCPv6.'));
+					so.default = so.enabled;
+					so.retain = true;
 					so.depends({ dhcpv6: 'server' });
 
 					so = ss.taboption('dhcpv6', form.Value, 'dhcpv6_pd_min_len', _('<abbr title="Prefix Delegation">PD</abbr> minimum length'),
