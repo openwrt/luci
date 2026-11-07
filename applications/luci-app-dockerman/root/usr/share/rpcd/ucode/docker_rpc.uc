@@ -32,12 +32,22 @@ function merge(a, b) {
 	return c;
 };
 
+/*
+ * socket.poll() also returns [ [ sock, 0 ] ] when the timeout expires, so
+ * checking the array length is not enough: revents must be non-zero.
+ * rpcd is single-threaded, so a recv() blocking on a dockerd request which
+ * never completes stalls every ubus object rpcd serves (session, luci, ...)
+ */
+function wait_readable(sock) {
+	const ready = socket.poll(POLL_TIMEOUT, [sock, socket.POLLIN]);
+	return !!(ready && length(ready) && ready[0][1]);
+};
+
 function chunked_body_reader(sock, initial_buffer) {
 	let state = 0, chunklen = 0, buffer = initial_buffer || '';
 
 	function poll_and_recv() {
-		let ready = socket.poll(POLL_TIMEOUT, [sock, socket.POLLIN]);
-		if (!ready || !length(ready)) return null;
+		if (!wait_readable(sock)) return null;
 		let data = sock.recv(BLOCKSIZE);
 		if (!data) return null;
 		buffer += data;
@@ -186,6 +196,15 @@ function call_docker(method, path, options) {
 	sock.send(join('\r\n', req_headers));
 	if (payload) sock.send(payload);
 
+	if (!wait_readable(sock)) {
+		sock.close();
+		return {
+			code: 504,
+			headers: {},
+			body: { message: "Timeout waiting for response from Docker socket" }
+		};
+	}
+
 	const response_buff = sock.recv(BLOCKSIZE);
 	if (!response_buff || response_buff === '') {
 		sock.close();
@@ -220,6 +239,8 @@ function call_docker(method, path, options) {
 				return chunk;
 			}
 
+			if (!wait_readable(sock)) return null; // Timeout or error
+
 			let data = sock.recv(min(BLOCKSIZE, content_length));
 			if (!data || data === '') return null;
 
@@ -230,9 +251,7 @@ function call_docker(method, path, options) {
 	else {
 		// Fallback for HTTP/1.0 or no content-length: read until close or timeout
 		reader = () => {
-			// Poll with 2 second timeout
-			let ready = socket.poll(POLL_TIMEOUT, [sock, socket.POLLIN]);
-			if (!ready || !length(ready)) return null; // Timeout or error
+			if (!wait_readable(sock)) return null; // Timeout or error
 
 			let data = sock.recv(BLOCKSIZE);
 			if (!data || data === '') return null;
