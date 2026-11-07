@@ -1,0 +1,34 @@
+{
+	"luci-app-veracrypt": {
+		"description": "Grant access to VeraCrypt console operations and volume configuration",
+		"read": {
+			"ubus": {
+				"luci.veracrypt": [ "status", "listdir", "listdev", "job", "job_log", "tools" ]
+			},
+			"file": {
+				"/mnt": [ "list" ],
+				"/mnt/*": [ "list" ],
+				"/usr/lib": [ "list" ],
+				"/usr/lib/*": [ "list" ]
+			},
+			"uci": [ "veracrypt" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.veracrypt": [
+					"status", "listdir", "listdev", "mkdir", "rm", "job", "job_log",
+					"job_abort", "job_dismount", "tools", "run"
+				]
+			},
+			"uci": [ "veracrypt" ]
+		}
+	},
+	"luci-app-veracrypt-pkg": {
+		"description": "Allow the VeraCrypt page to install missing filesystem and fsck tools with apk",
+		"write": {
+			"ubus": {
+				"luci.veracrypt": [ "pkg_install" ]
+			}
+		}
+	}
+}
