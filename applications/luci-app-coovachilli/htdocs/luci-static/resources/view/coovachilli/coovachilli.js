@@ -56,7 +56,7 @@ return L.view.extend({
 		var m, s, o, to, so, ss;
 		var net_devices = returned_promises[0];
 
-		m = new form.Map('coovachilli', _('Coova Chilli'), 
+		m = new form.Map('chilli', _('Coova Chilli'),
 			_('Coova Chilli') + ' ' + _('access controller for WLAN.'));
 
 		s = m.section(form.TypedSection, 'chilli', _('Settings'));
