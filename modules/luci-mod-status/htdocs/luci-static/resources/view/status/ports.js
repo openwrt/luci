@@ -13,7 +13,7 @@ const callGetBuiltinEthernetPorts = rpc.declare({
 const callEthtoolStatus = rpc.declare({
 	object: 'luci',
 	method: 'getEthtoolStatus',
-	params: [ 'devices' ],
+	params: [ 'devices', 'temperature' ],
 	expect: { result: {} }
 });
 
@@ -73,7 +73,8 @@ function renderPort(name, st) {
 		[ _('Port type'), link.port ?? '-' ],
 		[ _('Auto negotiation'), (link['auto-negotiation'] == null) ? '-' : link['auto-negotiation'] ? _('On') : _('Off') ],
 		[ _('Supported'), formatModes(link['supported-link-modes']) ],
-		[ _('Link partner'), up ? formatModes(link['link-partner-advertised-link-modes']) : '-' ]
+		[ _('Link partner'), up ? formatModes(link['link-partner-advertised-link-modes']) : '-' ],
+		[ _('Temperature'), (st?.temperature != null) ? '%.1f\u202f°C'.format(st.temperature) : '-' ]
 	]));
 
 	groups.push(...renderGroup(_('Flow control'), [
@@ -106,7 +107,7 @@ return view.extend({
 		return L.resolveDefault(callGetBuiltinEthernetPorts(), []).then((ports) => {
 			const names = ports.map((p) => p.device).sort(L.naturalCompare);
 
-			return L.resolveDefault(callEthtoolStatus(names), {}).then((status) => [ names, status ]);
+			return L.resolveDefault(callEthtoolStatus(names, true), {}).then((status) => [ names, status ]);
 		});
 	},
 
@@ -121,7 +122,7 @@ return view.extend({
 		const grid = E('div', { 'style': 'display:grid;grid-template-columns:repeat(auto-fill, minmax(18em, 1fr));gap:1em' },
 			this.renderPorts(names, status));
 
-		poll.add(() => L.resolveDefault(callEthtoolStatus(names), {}).then((st) => dom.content(grid, this.renderPorts(names, st))), 5);
+		poll.add(() => L.resolveDefault(callEthtoolStatus(names, true), {}).then((st) => dom.content(grid, this.renderPorts(names, st))), 5);
 
 		return E([], [
 			E('h2', {}, [ _('Ports') ]),
