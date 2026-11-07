@@ -16,7 +16,9 @@
 				]
 			},
 			"file": {
-				"/sys/firmware/efi": [ "list" ]
+				"/sys/firmware/efi": [ "list" ],
+				"/etc/apk/repositories.d/*": [ "read" ],
+				"/etc/apk/keys/*": [ "read" ]
 			},
 			"uci": [
 				"attendedsysupgrade"

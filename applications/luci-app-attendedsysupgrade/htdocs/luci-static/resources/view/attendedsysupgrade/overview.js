@@ -84,6 +84,129 @@ function get_revision_count(revision) {
 	return parseInt(revision.substring(1).split('-')[0]);
 }
 
+const apk_repositories_dir = '/etc/apk/repositories.d';
+const apk_keys_dir = '/etc/apk/keys';
+
+/**
+ * Reads the contents of all regular files in a directory, sorted by name.
+ *
+ * @param {string} dir
+ * Directory to read
+ * @param {function} [filter]
+ * Optional predicate on the file name
+ * @returns {Promise<string[]>}
+ * The file contents, empty if the directory does not exist
+ */
+function read_dir_files(dir, filter) {
+	return L.resolveDefault(fs.list(dir), []).then((entries) => {
+		const files = entries
+			.filter((e) => e.type == 'file' || e.target?.type == 'file')
+			.map((e) => e.name)
+			.filter((name) => !filter || filter(name))
+			.sort();
+		return Promise.all(files.map((name) =>
+			L.resolveDefault(fs.read(`${dir}/${name}`), '')));
+	});
+}
+
+/**
+ * Collects custom apk repositories and their keys, so packages installed
+ * from them can be included in the build request. The distribution feeds in
+ * `distfeeds.list` are skipped, as the ImageBuilder already provides them.
+ *
+ * Uses the same files as owut, see
+ * https://github.com/efahl/owut/commit/2fab581877f3c17542b1836e2df8933554063ace
+ *
+ * @returns {Promise<{repositories: string[], repository_keys: string[]}>}
+ */
+async function get_custom_repositories() {
+	const lists = await read_dir_files(apk_repositories_dir,
+		(name) => name != 'distfeeds.list');
+	const repositories = lists
+		.flatMap((content) => content.split('\n'))
+		.map((line) => line.trim())
+		.filter((line) => /^https?:\/\//.test(line));
+
+	if (!repositories.length)
+		return { repositories: [], repository_keys: [] };
+
+	const repository_keys = (await read_dir_files(apk_keys_dir))
+		.filter((key) => key.trim());
+
+	return { repositories, repository_keys };
+}
+
+/**
+ * Adjusts a custom repository url to the target version. A reference to the
+ * installed version is replaced by the target version, otherwise a reference
+ * to the installed branch is replaced by the target branch. Finally the
+ * `repository_aliases` shared with owut are applied, each being a
+ * space-separated regular expression and replacement.
+ *
+ * @param {string} repository
+ * Repository url
+ * @param {string} from_version
+ * Installed version
+ * @param {string} to_version
+ * Target version
+ * @param {string[]} aliases
+ * List of "pattern replacement" strings
+ * @returns {string}
+ * The adjusted repository url
+ */
+function rewrite_repository(repository, from_version, to_version, aliases) {
+	const from_branch = get_branch(from_version);
+	const to_branch = get_branch(to_version);
+
+	if (from_version != to_version && repository.includes(from_version))
+		repository = repository.replaceAll(from_version, to_version);
+	else if (from_branch != to_branch && repository.includes(from_branch))
+		repository = repository.replaceAll(from_branch, to_branch);
+
+	for (const alias of aliases) {
+		const [pattern, replacement] = alias.split(' ');
+		if (!pattern)
+			continue;
+		try {
+			repository = repository.replace(new RegExp(pattern), replacement ?? '');
+		} catch (e) {}
+	}
+
+	return repository;
+}
+
+/**
+ * Checks a repository url against the server's `repository_allow_list`,
+ * the same way the ASU server does: the scheme and host must match and the
+ * path must be below the allowed one.
+ *
+ * @param {string} repository
+ * Repository url
+ * @param {string[]} allow_list
+ * Allowed url prefixes from the server overview
+ * @returns {boolean}
+ * True if the server accepts the repository
+ */
+function is_repository_allowed(repository, allow_list) {
+	let url;
+	try {
+		url = new URL(repository);
+	} catch (e) {
+		return false;
+	}
+
+	return allow_list.some((allowed) => {
+		try {
+			allowed = new URL(allowed);
+		} catch (e) {
+			return false;
+		}
+		return url.protocol == allowed.protocol &&
+			url.hostname == allowed.hostname &&
+			url.pathname.startsWith(allowed.pathname.replace(/\/+$/, '') + '/');
+	});
+}
+
 return view.extend({
 	steps: {
 		init:                    [  0, _('Received build request')],
@@ -103,6 +226,9 @@ return view.extend({
 
 	request_hash: new Map(),
 	sha256_unsigned: '',
+	custom_repositories: { repositories: [], repository_keys: [] },
+	repository_allow_list: [],
+	skipped_repositories: [],
 
 	applyPackageChanges: async function(package_info) {
 		let { url, target, version, packages } = package_info;
@@ -141,6 +267,71 @@ return view.extend({
 			}
 		}
 		return packages;
+	},
+
+	/**
+	 * Splits the custom repositories, adjusted to the target version, into
+	 * those allowed by the server and those it would reject. The server
+	 * refuses the whole request if any repository is not allowed.
+	 *
+	 * @param {string} from_version
+	 * Installed version
+	 * @param {string} to_version
+	 * Target version
+	 * @returns {{allowed: string[], skipped: string[]}}
+	 */
+	splitCustomRepositories: function (from_version, to_version) {
+		const aliases = L.toArray(
+			uci.get('attendedsysupgrade', 'owut', 'repository_aliases'));
+		const allowed = [], skipped = [];
+
+		for (const repository of this.custom_repositories.repositories) {
+			const url = rewrite_repository(repository, from_version, to_version, aliases);
+			if (is_repository_allowed(url, this.repository_allow_list))
+				allowed.push(url);
+			else
+				skipped.push(url);
+		}
+
+		return { allowed, skipped };
+	},
+
+	/**
+	 * Renders the notice about custom repositories left out of the request.
+	 *
+	 * @param {string[]} skipped
+	 * Repository urls not allowed by the server
+	 * @returns {Node|string}
+	 */
+	renderSkippedRepositories: function (skipped) {
+		if (!skipped.length)
+			return '';
+
+		return E('div', { class: 'alert-message warning' }, [
+			E('p', _('These custom repositories are not allowed by the server and won\'t be used. Packages also available from the official repositories are installed from those, possibly in a different version; packages only available from these can\'t be installed:')),
+			E('ul', skipped.map((url) => E('li', url))),
+		]);
+	},
+
+	/**
+	 * Adds the custom repositories allowed by the server to the build
+	 * request, and remembers the skipped ones for the error report.
+	 *
+	 * @param {Object} content
+	 * The build request, its `version` being the target version
+	 * @param {string} from_version
+	 * Installed version
+	 */
+	addCustomRepositories: function (content, from_version) {
+		const { allowed, skipped } = this.splitCustomRepositories(from_version, content.version);
+		this.skipped_repositories = skipped;
+
+		if (!allowed.length)
+			return;
+
+		content.repositories_mode = 'append';
+		content.repositories = Object.fromEntries(allowed.map((url, i) => [i, url]));
+		content.repository_keys = this.custom_repositories.repository_keys;
 	},
 
 	selectImage: function (images, data, firmware) {
@@ -327,6 +518,9 @@ return view.extend({
 						var text = ''.concat(
 							// No translations in here as it's intended for the forum.
 							'Server response: %s\n\n'.format(response.detail),
+							this.skipped_repositories.length
+								? 'Custom repositories not allowed by the server: %d\n\n'.format(this.skipped_repositories.length)
+								: '',
 							detailsBlock('Request Data', request_str, true),
 							detailsBlock('STDOUT', response.stdout, true),
 							detailsBlock('STDERR', response.stderr, true),
@@ -350,6 +544,7 @@ return view.extend({
 			),
 
 			E('p', _('Server response: %s').format(response.detail)),
+			this.renderSkippedRepositories(this.skipped_repositories),
 			E('p', _('Request Data:')),
 			E('pre', {}, request_str),
 		];
@@ -607,6 +802,18 @@ return view.extend({
 			if (candidates.length) {
 				let s, o;
 
+				// The allow list is part of the overview, which snapshots don't fetch.
+				const overview = version.endsWith('SNAPSHOT')
+					? (this.custom_repositories.repositories.length
+						? L.resolveDefault(request.get(`${url}/api/v1/overview`).then((r) => r.json()), {})
+						: {})
+					: response.json();
+				const repositories_notice = E('div');
+				const updateRepositoriesNotice = (to_version) => {
+					dom.content(repositories_notice, this.renderSkippedRepositories(
+						this.splitCustomRepositories(version, to_version).skipped));
+				};
+
 				let mapdata = {
 					request: {
 						profile,
@@ -642,13 +849,20 @@ return view.extend({
 						);
 					}
 				}
+				o.onchange = (ev, section_id, value) => updateRepositoriesNotice(value);
 
 				if (advanced_mode == 1) {
 					o = s.option(form.Value, 'profile', _('Board Name / Profile'));
 					o = s.option(form.DynamicList, 'packages', _('Packages'));
 				}
 
-				L.resolveDefault(map.render()).then((form_rendered) => {
+				Promise.all([
+					L.resolveDefault(map.render()),
+					overview,
+				]).then(([form_rendered, overview]) => {
+					this.repository_allow_list = L.toArray(overview?.server?.repository_allow_list);
+					updateRepositoriesNotice(mapdata.request.version);
+
 					ui.showModal(_('New firmware upgrade available'), [
 						E(
 							'p',
@@ -658,6 +872,7 @@ return view.extend({
 							)
 						),
 						form_rendered,
+						repositories_notice,
 						E('div', { class: 'right' }, [
 							E('div', { class: 'btn', click: ui.hideModal }, _('Cancel')),
 							' ',
@@ -679,6 +894,7 @@ return view.extend({
 													version: mapdata.request.version,
 													profile: mapdata.request.profile
 												};
+												this.addCustomRepositories(content, version);
 												this.pollFn = L.bind(function () {
 													this.handleRequest(url, true, content, data, firmware);
 												}, this);
@@ -720,7 +936,9 @@ return view.extend({
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(fs.stat('/sys/firmware/efi'), null),
 			uci.load('attendedsysupgrade'),
+			get_custom_repositories(),
 		]);
+		this.custom_repositories = promises[4];
 		const data = {
 			system_board: promises[1],
 			advanced_mode: uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0,
