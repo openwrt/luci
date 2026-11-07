@@ -119,7 +119,7 @@ var CBIZoneSelect = form.ListValue.extend({
 		for (let zone of this.zones) {
 			const name = zone.getName();
 			const networks = zone.getNetworks();
-			const devices = zone.getDevices();
+			const zoneDevices = zone.getDevices();
 			const subnets = zone.getSubnets();
 			const ifaces = [];
 
@@ -153,13 +153,13 @@ var CBIZoneSelect = form.ListValue.extend({
 				ifaces.push(span);
 			}
 
-			if (devices.length)
-				ifaces.push(E('span', { 'class': 'ifacebadge' }, [ _('Devices'), ': ', devices.join(', ') ]));
+			if (zoneDevices.length)
+				ifaces.push(E('span', { 'class': 'ifacebadge' }, [ _('Devices'), ': ', zoneDevices.join(', ') ]));
 
 			if (subnets.length)
 				ifaces.push(E('span', { 'class': 'ifacebadge' }, [ _('Subnets'), ': ', subnets.join(', ') ]));
 
-			if (!ifaces.length && !networks.length && !devices.length && !subnets.length)
+			if (!ifaces.length)
 				ifaces.push(E('em', _('(empty)')));
 
 			choices[name] = E('span', {
