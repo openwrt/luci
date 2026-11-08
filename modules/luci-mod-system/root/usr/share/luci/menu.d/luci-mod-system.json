@@ -68,7 +68,10 @@
 		},
 		"depends": {
 			"acl": [ "luci-mod-system-ssh" ],
-			"fs": {	"/usr/sbin/dropbear": "executable" }
+			"fs": [
+				{ "/usr/sbin/dropbear": "executable" },
+				{ "/usr/sbin/sshd": "executable" }
+			]
 		}
 	},
 

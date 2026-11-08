@@ -28,19 +28,23 @@
 		"description": "Grant access to SSH configuration",
 		"read": {
 			"file": {
-				"/etc/dropbear/authorized_keys": [ "read" ]
+				"/etc/dropbear/authorized_keys": [ "read" ],
+				"/root/.ssh/authorized_keys": [ "read" ]
 			},
 			"ubus": {
-				"file": [ "read" ]
+				"file": [ "read" ],
+				"luci": [ "getInitList" ]
 			},
 			"uci": [ "dropbear" ]
 		},
 		"write": {
 			"file": {
-				"/etc/dropbear/authorized_keys": [ "write" ]
+				"/bin/mkdir -p -m 700 /root/.ssh": [ "exec" ],
+				"/etc/dropbear/authorized_keys": [ "write" ],
+				"/root/.ssh/authorized_keys": [ "write" ]
 			},
 			"ubus": {
-				"file": [ "write" ],
+				"file": [ "exec", "write" ],
 				"luci": [ "setLocaltime" ]
 			},
 			"uci": [ "dropbear" ]
