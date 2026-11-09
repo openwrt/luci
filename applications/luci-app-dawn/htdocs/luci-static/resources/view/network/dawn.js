@@ -388,6 +388,7 @@ return view.extend({
 		const bands = {
 			'802_11g': _('2.4G Band Metric'),
 			'802_11a': _('5G Band Metric'),
+			'802_11ax': _('6G Band Metric'),
 		};
 
 		for (const k in bands) {
@@ -423,7 +424,12 @@ return view.extend({
 				_('Initial Score'),
 				_('Base score for AP based on operating band'),
 			);
-			o.placeholder = _('Default Value') + ': ' + k == '802_11g' ? '80' : '100';
+			let initialScore = '100';
+			if (k == '802_11g')
+				initialScore = '80';
+			else if (k == '802_11ax')
+				initialScore = '110';
+			o.placeholder = _('Default Value') + ': ' + initialScore;
 
 			o = s.option(form.Value, 'low_rssi',
 				_('Low RSSI'),
