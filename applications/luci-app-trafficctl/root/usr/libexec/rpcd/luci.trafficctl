@@ -1,0 +1,755 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+# shellcheck shell=dash
+# rpcd/ubus backend for luci-app-trafficctl.
+# Provides ubus object "luci.trafficctl" with methods for traffic control.
+
+. /usr/libexec/trafficctl/trafficctl-fw.sh
+
+SCRIPTS="/usr/libexec/trafficctl"
+
+# Strip unsafe chars from label (allow alphanumeric, dash, underscore, dot)
+sanitize_label() { echo "$1" | tr -cd 'a-zA-Z0-9_.-'; }
+
+# The config holds the Telegram bot token and the metrics token. uci rewrites the
+# file at the default mode on every commit, so the restriction is re-applied here
+# rather than at the one call site that first set it.
+tctl_commit() {
+	uci commit trafficctl
+	chmod 0600 /etc/config/trafficctl 2>/dev/null
+}
+
+# Detect LuCI session peer IP
+get_peer_ip() {
+	local sid
+	sid=$(echo "$HTTP_SID" | tr -cd 'a-f0-9')
+	if [ -n "$sid" ]; then
+		ubus call session info "{\"ubus_rpc_session\":\"$sid\"}" 2>/dev/null | \
+			jsonfilter -e '@.data.peer' 2>/dev/null
+	fi
+}
+
+export TCTL_VIA="luci"
+export TCTL_SRC="${REMOTE_ADDR:-$(get_peer_ip)}"
+export TCTL_USER="${USERNAME:-root}"
+
+case "$1" in
+list)
+	printf '{'
+	printf '"summary":{},'
+	printf '"device":{"ip":"str","proto":"str"},'
+	printf '"bytes":{},'
+	printf '"ifaces":{},'
+	printf '"block":{"ip":"str","label":"str"},'
+	printf '"unblock":{"ip":"str","label":"str"},'
+	printf '"macfilter_add":{"ip":"str"},'
+	printf '"macfilter_remove":{"ip":"str","mac":"str"},'
+	printf '"ratelimit":{"ip":"str","rate_kbit":"int","label":"str","mode":"str","rate_kbit_up":"int"},'
+	printf '"ratelimit_stats":{},'
+	printf '"subnets":{},'
+	printf '"shape_add":{"ip":"str","rate_kbit":"int","label":"str","rate_kbit_up":"int"},'
+	printf '"shape_remove":{"ip":"str","label":"str"},'
+	printf '"shape_status":{"ip":"str"},'
+	printf '"shape_stats":{},'
+	printf '"rules_list":{},'
+	printf '"rdns":{"ip":"str"},'
+	printf '"netify_status":{},'
+	printf '"netify_list":{},'
+	printf '"netify_collect":{"secs":"int"},'
+	printf '"names_list":{},'
+	printf '"name_set":{"ip":"str","name":"str"},'
+	printf '"name_clear":{"ip":"str"},'
+	printf '"portfw_list":{},'
+	printf '"portfw_ctl":{"action":"str","scope":"str","proto":"str","ip":"str","port":"str","rate_kbit":"int"},'
+	printf '"config_get":{},'
+	printf '"config_set":{"enabled":"bool","default_mode":"str","sw":"bool","hw":"bool","poll_interval":"int","avg_window":"int"},'
+	printf '"telegram_config_get":{},'
+	printf '"telegram_config_set":{"enabled":"bool","bot_token":"str","chat_id":"str","poll_interval":"int","notify_new_device":"bool","notify_known_device":"bool","control_enabled":"bool","notify_template":"str","btn_block_inet":"bool","btn_block_wifi":"bool","btn_limiter":"bool","btn_shaper":"bool"},'
+	printf '"telegram_test":{"bot_token":"str","chat_id":"str","message":"str"},'
+	printf '"newdevice_config_get":{},'
+	printf '"newdevice_config_set":{"enabled":"bool","limit_kbit":"int","limit_mode":"str"},'
+	printf '"logging_config_get":{},'
+	printf '"logging_config_set":{"enabled":"bool","log_file":"str","max_lines":"int","syslog":"bool","log_blocks":"bool","log_ratelimits":"bool","log_shapes":"bool","log_telegram":"bool","log_config":"bool"},'
+	printf '"cut_status":{},'
+	printf '"cut_set":{"active":"bool","duration":"int","persist":"bool"},'
+	printf '"activity_log":{"lines":"int"},'
+	printf '"history_status":{},'
+	printf '"history_read":{"period":"str","to":"str"},'
+	printf '"history_read_ifaces":{"period":"str","to":"str"},'
+	printf '"history_periods":{},'
+	printf '"history_config_get":{},'
+	printf '"history_config_set":{"enabled":"bool","dir":"str","period":"str","interval":"int","sample_interval":"int","keep":"int","interfaces":"bool"},'
+	printf '"history_flush":{},'
+	printf '"version":{}'
+	printf '}'
+	;;
+call)
+	case "$2" in
+	summary)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-summary.sh"
+		printf '}'
+		;;
+	device)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		proto=$(echo "$input" | jsonfilter -e '@.proto' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			case "$proto" in
+				tcp|udp) "$SCRIPTS/trafficctl-device.sh" "$ip" --proto "$proto" ;;
+				*) "$SCRIPTS/trafficctl-device.sh" "$ip" ;;
+			esac
+		fi
+		;;
+	bytes)
+		# trafficctl-totals.sh wraps trafficctl-bytes.sh: same array, same
+		# bytes_in/bytes_out the speed graph differentiates, plus the lifetime
+		# *_total fields the Bytes/TCP/UDP columns show. Folded into this one
+		# call rather than given a method of its own so the accumulator sees
+		# exactly one sample per poll — a second method would mean a second
+		# /proc/net/nf_conntrack read every two seconds.
+		#
+		# Note this makes a read-ACL method write the tmpfs accumulator as a
+		# side effect. That is what keeps the counter advancing while somebody
+		# is watching the page; a metrics scrape has always done the same.
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-totals.sh"
+		printf '}'
+		;;
+	ifaces)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-ifaces.sh"
+		printf '}'
+		;;
+	block)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		label=$(sanitize_label "$(echo "$input" | jsonfilter -e '@.label' 2>/dev/null)")
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-block.sh" "$ip" "$label"
+		fi
+		;;
+	unblock)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		label=$(sanitize_label "$(echo "$input" | jsonfilter -e '@.label' 2>/dev/null)")
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-unblock.sh" "$ip" "$label"
+		fi
+		;;
+	macfilter_add)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-macfilter-add.sh" "$ip"
+		fi
+		;;
+	macfilter_remove)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		# The deny list is keyed on the MAC, and a device that has been offline
+		# long enough has no lease left to find it by IP. The Rules tab sends
+		# the MAC it read from the list; the script validates either form.
+		mac=$(echo "$input" | jsonfilter -e '@.mac' 2>/dev/null)
+		if [ -z "$ip" ] && [ -z "$mac" ]; then
+			echo '{"ok":false,"msg":"ip or mac required"}'
+		else
+			"$SCRIPTS/trafficctl-macfilter-remove.sh" "${mac:-$ip}"
+		fi
+		;;
+	ratelimit)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		rate=$(echo "$input" | jsonfilter -e '@.rate_kbit' 2>/dev/null)
+		label=$(sanitize_label "$(echo "$input" | jsonfilter -e '@.label' 2>/dev/null)")
+		mode=$(echo "$input" | jsonfilter -e '@.mode' 2>/dev/null)
+		case "$mode" in each|shared) ;; *) mode="" ;; esac
+		rate_up=$(echo "$input" | jsonfilter -e '@.rate_kbit_up' 2>/dev/null)
+		# A caller that does not send the field — any UI older than this
+		# method signature — means "symmetric", NOT "no upload allowed". Zero
+		# is normalised away for the same reason: a zero ceiling polices every
+		# packet, which is a total upload block reporting itself as a limit.
+		[ "$rate_up" = "0" ] && rate_up=""
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-ratelimit.sh" "$ip" "${rate:-0}" "$label" "$mode" "$rate_up"
+		fi
+		;;
+	ratelimit_stats)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-ratelimit-stats.sh"
+		printf '}'
+		;;
+	subnets)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-subnets.sh"
+		printf '}'
+		;;
+	shape_add)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		rate=$(echo "$input" | jsonfilter -e '@.rate_kbit' 2>/dev/null)
+		label=$(sanitize_label "$(echo "$input" | jsonfilter -e '@.label' 2>/dev/null)")
+		rate_up=$(echo "$input" | jsonfilter -e '@.rate_kbit_up' 2>/dev/null)
+		# Same reading as the limiter: absent or zero means "same as download".
+		[ "$rate_up" = "0" ] && rate_up=""
+		if [ -z "$ip" ] || [ -z "$rate" ]; then
+			echo '{"ok":false,"msg":"ip and rate_kbit required"}'
+		else
+			"$SCRIPTS/trafficctl-shape.sh" add "$ip" "$rate" "$label" "$rate_up"
+		fi
+		;;
+	shape_remove)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		label=$(echo "$input" | jsonfilter -e '@.label' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-shape.sh" remove "$ip"
+		fi
+		;;
+	shape_status)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-shape.sh" status "$ip"
+		fi
+		;;
+	shape_stats)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-shape-stats.sh"
+		printf '}'
+		;;
+	rules_list)
+		# Every block, limit, shape and WiFi deny, online or not (#128). Read
+		# only: the Rules tab edits and removes through the methods above.
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-rules.sh" list
+		printf '}'
+		;;
+	rdns)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-rdns.sh" "$ip"
+		fi
+		;;
+	netify_status)
+		"$SCRIPTS/trafficctl-netify.sh" status
+		;;
+	netify_list)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-netify.sh" list
+		printf '}'
+		;;
+	netify_collect)
+		read -r input
+		secs=$(echo "$input" | jsonfilter -e '@.secs' 2>/dev/null)
+		"$SCRIPTS/trafficctl-netify.sh" collect "${secs:-3}"
+		;;
+	names_list)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-names.sh" list
+		printf '}'
+		;;
+	name_set)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		name=$(echo "$input" | jsonfilter -e '@.name' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		elif [ -z "$name" ]; then
+			# Empty name means "forget the alias" so the UI can clear a name
+			# by submitting a blank field.
+			"$SCRIPTS/trafficctl-names.sh" remove "$ip"
+		else
+			"$SCRIPTS/trafficctl-names.sh" set "$ip" "$name"
+		fi
+		;;
+	name_clear)
+		read -r input
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		if [ -z "$ip" ]; then
+			echo '{"ok":false,"msg":"ip required"}'
+		else
+			"$SCRIPTS/trafficctl-names.sh" remove "$ip"
+		fi
+		;;
+	portfw_list)
+		printf '{"result":'
+		"$SCRIPTS/trafficctl-portfw.sh" list
+		printf '}'
+		;;
+	portfw_ctl)
+		read -r input
+		action=$(echo "$input" | jsonfilter -e '@.action' 2>/dev/null)
+		scope=$(echo "$input" | jsonfilter -e '@.scope' 2>/dev/null)
+		proto=$(echo "$input" | jsonfilter -e '@.proto' 2>/dev/null)
+		ip=$(echo "$input" | jsonfilter -e '@.ip' 2>/dev/null)
+		port=$(echo "$input" | jsonfilter -e '@.port' 2>/dev/null)
+		rate=$(echo "$input" | jsonfilter -e '@.rate_kbit' 2>/dev/null)
+		case "$action" in
+			pause|resume)
+				"$SCRIPTS/trafficctl-portfw.sh" "$action" "$scope" "$proto" "${ip:--}" "$port"
+				;;
+			limit)
+				"$SCRIPTS/trafficctl-portfw.sh" limit "$scope" "$proto" "${ip:--}" "$port" "${rate:-0}"
+				;;
+			*)
+				echo '{"ok":false,"msg":"action must be pause, resume or limit"}'
+				;;
+		esac
+		;;
+	config_get)
+		enabled=$(uci -q get trafficctl.main.enabled)
+		mode=$(uci -q get trafficctl.main.default_mode)
+		offload=$(tctl_get_offload_mode)
+		sw=$(uci -q get firewall.@defaults[0].flow_offloading)
+		hw=$(uci -q get firewall.@defaults[0].flow_offloading_hw)
+		poll=$(uci -q get trafficctl.main.poll_interval)
+		window=$(uci -q get trafficctl.main.avg_window)
+		printf '{"enabled":%s,"default_mode":"%s","offload_mode":"%s","nss":"%s","sw":%s,"hw":%s,"poll_interval":%d,"avg_window":%d}' \
+			"$([ "$enabled" = "1" ] && echo true || echo false)" \
+			"${mode:-limiter}" \
+			"$offload" \
+			"$(tctl_nss_status)" \
+			"$([ "$sw" = "1" ] && echo true || echo false)" \
+			"$([ "$hw" = "1" ] && echo true || echo false)" \
+			"${poll:-2}" \
+			"${window:-15}"
+		;;
+	config_set)
+		read -r input
+		enabled=$(echo "$input" | jsonfilter -e '@.enabled' 2>/dev/null)
+		mode=$(echo "$input" | jsonfilter -e '@.default_mode' 2>/dev/null)
+		sw=$(echo "$input" | jsonfilter -e '@.sw' 2>/dev/null)
+		hw=$(echo "$input" | jsonfilter -e '@.hw' 2>/dev/null)
+		poll=$(echo "$input" | jsonfilter -e '@.poll_interval' 2>/dev/null)
+		window=$(echo "$input" | jsonfilter -e '@.avg_window' 2>/dev/null)
+		[ -n "$enabled" ] && uci set trafficctl.main.enabled="$([ "$enabled" = "true" ] && echo 1 || echo 0)"
+		[ -n "$mode" ] && uci set trafficctl.main.default_mode="$mode"
+		# Bounded rather than free-form. 0 means "do not poll"; below a second
+		# the browser cannot keep up and the router pays a conntrack read per
+		# tick for frames nobody sees. The upper bound keeps a "live" dashboard
+		# recognisably live.
+		if [ -n "$poll" ]; then
+			case "$poll" in
+				''|*[!0-9]*) echo '{"ok":false,"msg":"poll_interval must be a number"}'; exit 0 ;;
+			esac
+			if [ "$poll" != "0" ] && { [ "$poll" -lt 1 ] || [ "$poll" -gt 300 ]; }; then
+				echo '{"ok":false,"msg":"poll_interval must be 0 (off) or between 1 and 300 seconds"}'
+				exit 0
+			fi
+			uci set trafficctl.main.poll_interval="$poll"
+		fi
+		# The window is what the speed is averaged over, and the per-device
+		# sample history is sized from it — so an unbounded value is an
+		# unbounded array in every open browser, one per device.
+		if [ -n "$window" ]; then
+			case "$window" in
+				''|*[!0-9]*) echo '{"ok":false,"msg":"avg_window must be a number"}'; exit 0 ;;
+			esac
+			if [ "$window" -lt 2 ] || [ "$window" -gt 3600 ]; then
+				echo '{"ok":false,"msg":"avg_window must be between 2 and 3600 seconds"}'
+				exit 0
+			fi
+			uci set trafficctl.main.avg_window="$window"
+		fi
+		tctl_commit
+		if [ -n "$sw" ] || [ -n "$hw" ]; then
+			[ -n "$sw" ] && uci set "firewall.@defaults[0].flow_offloading=$([ "$sw" = "true" ] && echo 1 || echo 0)"
+			[ -n "$hw" ] && uci set "firewall.@defaults[0].flow_offloading_hw=$([ "$hw" = "true" ] && echo 1 || echo 0)"
+			uci commit firewall
+			/etc/init.d/firewall reload >/dev/null 2>&1 &
+		fi
+		echo '{"ok":true}'
+		;;
+	telegram_config_get)
+		uci -q get trafficctl.telegram >/dev/null 2>&1 || {
+			echo '{"enabled":false,"bot_token":"","bot_token_set":false,"chat_id":"","poll_interval":3,"notify_new_device":true,"notify_known_device":false,"control_enabled":true,"notify_template":"","btn_block_inet":true,"btn_block_wifi":true,"btn_limiter":true,"btn_shaper":true,"bot_running":false}'
+			exit 0
+		}
+		tg_enabled=$(uci -q get trafficctl.telegram.enabled)
+		tg_token=$(uci -q get trafficctl.telegram.bot_token)
+		tg_chat_id=$(uci -q get trafficctl.telegram.chat_id)
+		tg_poll=$(uci -q get trafficctl.telegram.poll_interval)
+		tg_nn=$(uci -q get trafficctl.telegram.notify_new_device)
+		tg_nk=$(uci -q get trafficctl.telegram.notify_known_device)
+		tg_ctrl=$(uci -q get trafficctl.telegram.control_enabled)
+		tg_tmpl=$(uci -q get trafficctl.telegram.notify_template)
+		tg_bi=$(uci -q get trafficctl.telegram.btn_block_inet)
+		tg_bw=$(uci -q get trafficctl.telegram.btn_block_wifi)
+		tg_bl=$(uci -q get trafficctl.telegram.btn_limiter)
+		tg_bs=$(uci -q get trafficctl.telegram.btn_shaper)
+		tg_token_set=false
+		tg_token_display=""
+		if [ -n "$tg_token" ]; then
+			tg_token_set=true
+			tg_token_display="***"
+		fi
+		tg_running=false
+		pgrep -f "trafficctl-telegram.sh" >/dev/null 2>&1 && tg_running=true
+		tg_tmpl_esc=$(printf '%s' "${tg_tmpl:-}" | sed 's/\\/\\\\/g;s/"/\\"/g;s/	/\\t/g')
+		printf '{"enabled":%s,"bot_token":"%s","bot_token_set":%s,"chat_id":"%s","poll_interval":%d,"notify_new_device":%s,"notify_known_device":%s,"control_enabled":%s,"notify_template":"%s","btn_block_inet":%s,"btn_block_wifi":%s,"btn_limiter":%s,"btn_shaper":%s,"bot_running":%s}' \
+			"$([ "$tg_enabled" = "1" ] && echo true || echo false)" \
+			"$tg_token_display" "$tg_token_set" "${tg_chat_id:-}" \
+			"${tg_poll:-3}" \
+			"$([ "${tg_nn:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "$tg_nk" = "1" ] && echo true || echo false)" \
+			"$([ "${tg_ctrl:-1}" != "0" ] && echo true || echo false)" \
+			"$tg_tmpl_esc" \
+			"$([ "${tg_bi:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${tg_bw:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${tg_bl:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${tg_bs:-1}" != "0" ] && echo true || echo false)" \
+			"$tg_running"
+		;;
+	telegram_config_set)
+		read -r input
+		uci -q get trafficctl.telegram >/dev/null 2>&1 || uci set trafficctl.telegram=telegram
+		val=$(echo "$input" | jsonfilter -e '@.enabled' 2>/dev/null)
+		[ -n "$val" ] && uci set trafficctl.telegram.enabled="$([ "$val" = "true" ] && echo 1 || echo 0)"
+		val=$(echo "$input" | jsonfilter -e '@.bot_token' 2>/dev/null)
+		if [ -n "$val" ] && [ "$val" != "***" ]; then
+			uci set trafficctl.telegram.bot_token="$val"
+		elif [ -z "$val" ]; then
+			uci -q delete trafficctl.telegram.bot_token
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.chat_id' 2>/dev/null)
+		[ -n "$val" ] && uci set trafficctl.telegram.chat_id="$val"
+		val=$(echo "$input" | jsonfilter -e '@.poll_interval' 2>/dev/null)
+		[ -n "$val" ] && uci set trafficctl.telegram.poll_interval="$val"
+		val=$(echo "$input" | jsonfilter -e '@.notify_template' 2>/dev/null)
+		uci set trafficctl.telegram.notify_template="$val"
+		for opt in notify_new_device notify_known_device control_enabled btn_block_inet btn_block_wifi btn_limiter btn_shaper; do
+			val=$(echo "$input" | jsonfilter -e "@.$opt" 2>/dev/null)
+			[ -n "$val" ] && uci set "trafficctl.telegram.$opt=$([ "$val" = "true" ] && echo 1 || echo 0)"
+		done
+		tctl_commit
+		tctl_log "telegram_config_change" "" "" "luci" "${TCTL_SRC:-local}"
+		# The init script starts the bot only while the flag is set, but boot
+		# runs only what rc.d enables. A reload alone left a bot switched on
+		# here running until the next reboot and then gone; rc.d follows the
+		# flag so both agree.
+		if [ "$(uci -q get trafficctl.telegram.enabled)" = "1" ]; then
+			/etc/init.d/trafficctl-telegram enable 2>/dev/null
+		else
+			/etc/init.d/trafficctl-telegram disable 2>/dev/null
+		fi
+		/etc/init.d/trafficctl-telegram reload 2>/dev/null &
+		echo '{"ok":true}'
+		;;
+	telegram_test)
+		read -r input
+		token=$(echo "$input" | jsonfilter -e '@.bot_token' 2>/dev/null)
+		chat_id=$(echo "$input" | jsonfilter -e '@.chat_id' 2>/dev/null)
+		msg=$(echo "$input" | jsonfilter -e '@.message' 2>/dev/null)
+		if [ "$token" = "***" ] || [ -z "$token" ]; then
+			token=$(uci -q get trafficctl.telegram.bot_token)
+		fi
+		if [ -z "$token" ] || [ -z "$chat_id" ]; then
+			echo '{"ok":false,"msg":"token and chat_id required"}'
+		else
+			TCTL_TG_TOKEN="$token" "$SCRIPTS/trafficctl-telegram-test.sh" - "$chat_id" "$msg"
+		fi
+		;;
+	logging_config_get)
+		log_enabled=$(uci -q get trafficctl.logging.enabled)
+		log_file=$(uci -q get trafficctl.logging.log_file)
+		max_lines=$(uci -q get trafficctl.logging.max_lines)
+		log_syslog=$(uci -q get trafficctl.logging.syslog)
+		log_blocks=$(uci -q get trafficctl.logging.log_blocks)
+		log_ratelimits=$(uci -q get trafficctl.logging.log_ratelimits)
+		log_shapes=$(uci -q get trafficctl.logging.log_shapes)
+		log_telegram=$(uci -q get trafficctl.logging.log_telegram)
+		log_config=$(uci -q get trafficctl.logging.log_config)
+		persist=$(uci -q get trafficctl.main.persist_rules)
+		printf '{"enabled":%s,"log_file":"%s","max_lines":%d,"syslog":%s,"log_blocks":%s,"log_ratelimits":%s,"log_shapes":%s,"log_telegram":%s,"log_config":%s,"persist_rules":%s}' \
+			"$([ "${log_enabled:-1}" = "1" ] && echo true || echo false)" \
+			"${log_file:-/tmp/trafficctl/activity.log}" \
+			"${max_lines:-500}" \
+			"$([ "${log_syslog:-1}" = "1" ] && echo true || echo false)" \
+			"$([ "${log_blocks:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${log_ratelimits:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${log_shapes:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${log_telegram:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "${log_config:-1}" != "0" ] && echo true || echo false)" \
+			"$([ "$persist" = "1" ] && echo true || echo false)"
+		;;
+	logging_config_set)
+		read -r input
+		uci -q get trafficctl.logging >/dev/null 2>&1 || uci set trafficctl.logging=logging
+		for opt in enabled syslog log_blocks log_ratelimits log_shapes log_telegram log_config; do
+			val=$(echo "$input" | jsonfilter -e "@.$opt" 2>/dev/null)
+			[ -n "$val" ] && uci set "trafficctl.logging.$opt=$([ "$val" = "true" ] && echo 1 || echo 0)"
+		done
+		val=$(echo "$input" | jsonfilter -e '@.log_file' 2>/dev/null)
+		if [ -n "$val" ]; then
+			if ! tctl_validate_log_file "$val"; then
+				echo '{"ok":false,"msg":"log_file must be under /tmp/trafficctl/ or /var/log/"}'
+				exit 0
+			fi
+			uci set trafficctl.logging.log_file="$val"
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.max_lines' 2>/dev/null)
+		if [ -n "$val" ]; then
+			case "$val" in
+				''|*[!0-9]*) echo '{"ok":false,"msg":"max_lines must be a number"}'; exit 0 ;;
+			esac
+			if [ "$val" -lt 20 ] || [ "$val" -gt 100000 ]; then
+				echo '{"ok":false,"msg":"max_lines must be between 20 and 100000"}'
+				exit 0
+			fi
+			uci set trafficctl.logging.max_lines="$val"
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.persist_rules' 2>/dev/null)
+		[ -n "$val" ] && uci set "trafficctl.main.persist_rules=$([ "$val" = "true" ] && echo 1 || echo 0)"
+		tctl_commit
+		tctl_log "config_change" "logging" "" "luci" "${TCTL_SRC:-local}"
+		echo '{"ok":true}'
+		;;
+	newdevice_config_get)
+		nd_enabled=$(uci -q get trafficctl.newdevice.enabled)
+		nd_kbit=$(uci -q get trafficctl.newdevice.limit_kbit)
+		nd_mode=$(uci -q get trafficctl.newdevice.limit_mode)
+		# seen_count lets the UI say how large the baseline is, so an operator
+		# can tell "the ledger knows my 23 devices" from "the ledger is empty
+		# and everything is about to look new".
+		printf '{"enabled":%s,"limit_kbit":%d,"limit_mode":"%s","seen_count":%d,"seeded":%s}' \
+			"$([ "$nd_enabled" = "1" ] && echo true || echo false)" \
+			"${nd_kbit:-0}" \
+			"${nd_mode:-limiter}" \
+			"$(tctl_seen_count)" \
+			"$(tctl_seen_ready && echo true || echo false)"
+		;;
+	newdevice_config_set)
+		read -r input
+		uci -q get trafficctl.newdevice >/dev/null 2>&1 || uci set trafficctl.newdevice=newdevice
+		val=$(echo "$input" | jsonfilter -e '@.limit_kbit' 2>/dev/null)
+		if [ -n "$val" ]; then
+			case "$val" in
+				''|*[!0-9]*) echo '{"ok":false,"msg":"limit_kbit must be a number"}'; exit 0 ;;
+			esac
+			uci set trafficctl.newdevice.limit_kbit="$val"
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.limit_mode' 2>/dev/null)
+		if [ -n "$val" ]; then
+			case "$val" in
+				limiter|shaper) uci set trafficctl.newdevice.limit_mode="$val" ;;
+				*) echo '{"ok":false,"msg":"limit_mode must be limiter or shaper"}'; exit 0 ;;
+			esac
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.enabled' 2>/dev/null)
+		if [ -n "$val" ]; then
+			# Seed the ledger BEFORE the feature can fire. Done here rather
+			# than in the hotplug because this runs on an operator action,
+			# when the leases and the neighbour table are populated; seeding
+			# early in boot would record an empty LAN and then treat every
+			# device as new.
+			[ "$val" = "true" ] && tctl_seen_seed
+			uci set "trafficctl.newdevice.enabled=$([ "$val" = "true" ] && echo 1 || echo 0)"
+		fi
+		tctl_commit
+		tctl_log "config_change" "newdevice" "" "luci" "${TCTL_SRC:-local}"
+		echo '{"ok":true}'
+		;;
+	cut_status)
+		# A write method, like activity_log, because it is not purely
+		# observational: it enforces the auto-revert deadline and starts a
+		# replacement keeper if one died. That reconciliation is what stops
+		# the UI reporting a cut as ON after it has lapsed or run out, which
+		# is the one direction in which a wrong answer is dangerous.
+		"$SCRIPTS/trafficctl-cut.sh" status
+		;;
+	cut_set)
+		read -r input
+		active=$(echo "$input" | jsonfilter -e '@.active' 2>/dev/null)
+		duration=$(echo "$input" | jsonfilter -e '@.duration' 2>/dev/null)
+		persist=$(echo "$input" | jsonfilter -e '@.persist' 2>/dev/null)
+		if [ "$active" = "true" ]; then
+			case "$duration" in
+				''|*[!0-9]*) echo '{"ok":false,"msg":"duration must be a number of seconds (0 = indefinite)"}'; exit 0 ;;
+			esac
+			pflag=0
+			[ "$persist" = "true" ] && pflag=1
+			# Remember what the operator picked so the control comes back the
+			# way they left it. PREFERENCES only: the engaged state never
+			# touches uci, because /etc/config survives a reboot and this
+			# control must not.
+			uci -q get trafficctl.cut >/dev/null 2>&1 || uci set trafficctl.cut=cut
+			uci set trafficctl.cut.default_duration="$duration"
+			uci set trafficctl.cut.persist="$pflag"
+			tctl_commit
+			"$SCRIPTS/trafficctl-cut.sh" engage "$duration" "$pflag"
+		elif [ "$active" = "false" ]; then
+			"$SCRIPTS/trafficctl-cut.sh" release
+		else
+			echo '{"ok":false,"msg":"active must be true or false"}'
+		fi
+		;;
+	activity_log)
+		read -r input
+		lines=$(echo "$input" | jsonfilter -e '@.lines' 2>/dev/null)
+		lines="${lines:-50}"
+		case "$lines" in
+			''|*[!0-9]*) lines=50 ;;
+		esac
+		[ "$lines" -gt 1000 ] && lines=1000
+		log_file=$(tctl_log_file)
+		if [ -f "$log_file" ]; then
+			printf '{"ok":true,"lines":['
+			tail -n "$lines" "$log_file" | awk '
+			BEGIN { first=1 }
+			{
+				gsub(/\\/, "\\\\"); gsub(/"/, "\\\"")
+				if (!first) printf ","
+				printf "\"%s\"", $0
+				first=0
+			}'
+			printf ']}'
+		else
+			echo '{"ok":true,"lines":[]}'
+		fi
+		;;
+	history_status)
+		printf '{"result":'
+		$SCRIPTS/trafficctl-history.sh status
+		printf '}'
+		;;
+	history_periods)
+		printf '{"result":'
+		$SCRIPTS/trafficctl-history.sh periods
+		printf '}'
+		;;
+	history_read)
+		read -r input
+		# Period ids are compared as strings inside the script and never
+		# interpolated into a path, but they still come from the network, so
+		# the shape is pinned here: a value that is not a period id is
+		# rejected rather than passed through and silently matching nothing.
+		hp=$(echo "$input" | jsonfilter -e '@.period' 2>/dev/null)
+		ht=$(echo "$input" | jsonfilter -e '@.to' 2>/dev/null)
+		for v in "$hp" "$ht"; do
+			[ -z "$v" ] && continue
+			case "$v" in
+				[0-9][0-9][0-9][0-9]-[0-9][0-9]) ;;
+				[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+				[0-9][0-9][0-9][0-9]-W[0-9][0-9]) ;;
+				*) echo '{"result":[]}'; exit 0 ;;
+			esac
+		done
+		printf '{"result":'
+		$SCRIPTS/trafficctl-history.sh read "$hp" "$ht"
+		printf '}'
+		;;
+	history_read_ifaces)
+		read -r input
+		# Same shape check as history_read: these ids never reach a path, but
+		# they come from the network, so a malformed one is rejected rather
+		# than passed through to match nothing.
+		hp=$(echo "$input" | jsonfilter -e '@.period' 2>/dev/null)
+		ht=$(echo "$input" | jsonfilter -e '@.to' 2>/dev/null)
+		for v in "$hp" "$ht"; do
+			[ -z "$v" ] && continue
+			case "$v" in
+				[0-9][0-9][0-9][0-9]-[0-9][0-9]) ;;
+				[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+				[0-9][0-9][0-9][0-9]-W[0-9][0-9]) ;;
+				*) echo '{"result":[]}'; exit 0 ;;
+			esac
+		done
+		printf '{"result":'
+		$SCRIPTS/trafficctl-history.sh read-ifaces "$hp" "$ht"
+		printf '}'
+		;;
+	history_config_get)
+		printf '{"result":'
+		$SCRIPTS/trafficctl-history.sh status
+		printf '}'
+		;;
+	history_config_set)
+		read -r input
+		uci -q get trafficctl.history >/dev/null 2>&1 || uci set trafficctl.history=history
+		val=$(echo "$input" | jsonfilter -e '@.dir' 2>/dev/null)
+		if [ -n "$val" ]; then
+			# Validated by the script that owns the rule, not by a second copy
+			# of it here. The directory is both a mkdir -p and a delete target
+			# (prune removes *.tsv inside it), so an unconstrained value would
+			# hand this write method arbitrary directory creation and the
+			# removal of any .tsv on the filesystem.
+			if ! $SCRIPTS/trafficctl-history.sh validate-dir "$val" 2>/dev/null; then
+				echo '{"ok":false,"msg":"dir must be under /etc/trafficctl, /mnt, /media, /srv or /tmp"}'
+				exit 0
+			fi
+			uci set trafficctl.history.dir="$val"
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.period' 2>/dev/null)
+		if [ -n "$val" ]; then
+			case "$val" in
+				day|week|month) uci set trafficctl.history.period="$val" ;;
+				*) echo '{"ok":false,"msg":"period must be day, week or month"}'; exit 0 ;;
+			esac
+		fi
+		for k in interval sample_interval keep; do
+			val=$(echo "$input" | jsonfilter -e "@.$k" 2>/dev/null)
+			[ -z "$val" ] && continue
+			case "$val" in
+				''|*[!0-9]*) echo "{\"ok\":false,\"msg\":\"$k must be a number\"}"; exit 0 ;;
+			esac
+			uci set "trafficctl.history.$k=$val"
+		done
+		val=$(echo "$input" | jsonfilter -e '@.enabled' 2>/dev/null)
+		if [ -n "$val" ]; then
+			uci set "trafficctl.history.enabled=$([ "$val" = "true" ] && echo 1 || echo 0)"
+		fi
+		val=$(echo "$input" | jsonfilter -e '@.interfaces' 2>/dev/null)
+		if [ -n "$val" ]; then
+			uci set "trafficctl.history.interfaces=$([ "$val" = "true" ] && echo 1 || echo 0)"
+		fi
+		tctl_commit
+		# The keeper re-reads the intervals and the directory on every tick,
+		# but it has to be RUNNING to do that — switching history on for the
+		# first time must not wait for a reboot.
+		if [ -x /etc/init.d/trafficctl-history ]; then
+			if [ "$(uci -q get trafficctl.history.enabled)" = "1" ]; then
+				/etc/init.d/trafficctl-history enable 2>/dev/null
+				/etc/init.d/trafficctl-history start 2>/dev/null
+			else
+				/etc/init.d/trafficctl-history stop 2>/dev/null
+			fi
+		fi
+		tctl_log "config_change" "history" "" "luci" "${TCTL_SRC:-local}"
+		echo '{"ok":true}'
+		;;
+	history_flush)
+		# A "flush now" button. Writes to durable storage, so it is a write
+		# method even though it only persists numbers that already exist.
+		printf '{"result":'
+		$SCRIPTS/trafficctl-history.sh flush
+		printf '}'
+		;;
+	version)
+		ver=$(opkg info luci-app-trafficctl 2>/dev/null | awk '/^Version:/{print $2}')
+		[ -z "$ver" ] && ver="dev"
+		printf '{"version":"%s"}' "$ver"
+		;;
+	*)
+		echo '{"error":"unknown method"}'
+		;;
+	esac
+	;;
+esac

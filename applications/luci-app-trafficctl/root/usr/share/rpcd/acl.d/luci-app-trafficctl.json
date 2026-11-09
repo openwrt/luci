@@ -1,0 +1,42 @@
+{
+	"luci-app-trafficctl": {
+		"description": "Grant access to LuCI Traffic Control",
+		"read": {
+			"ubus": {
+				"luci.trafficctl": [
+					"version",
+					"summary", "device", "bytes", "ifaces",
+					"ratelimit_stats", "shape_stats", "rdns", "subnets",
+					"portfw_list", "names_list", "netify_status", "netify_list",
+					"shape_status", "rules_list",
+					"config_get", "telegram_config_get",
+					"logging_config_get", "newdevice_config_get",
+					"history_status", "history_read", "history_read_ifaces", "history_periods",
+					"history_config_get"
+				],
+				"file": [ "read" ]
+			},
+			"uci": [ "trafficctl", "wireless", "network" ],
+			"file": {
+				"/tmp/dhcp.leases": [ "read" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.trafficctl": [
+					"block", "unblock",
+					"macfilter_add", "macfilter_remove",
+					"ratelimit", "shape_add", "shape_remove",
+					"portfw_ctl", "name_set", "name_clear", "netify_collect",
+					"config_set",
+					"telegram_config_set", "telegram_test",
+					"logging_config_set", "activity_log",
+					"newdevice_config_set",
+					"cut_status", "cut_set",
+					"history_config_set", "history_flush"
+				]
+			},
+			"uci": [ "trafficctl" ]
+		}
+	}
+}
