@@ -169,6 +169,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'home', _('Document root'), _('Base directory for files to be served'));
 		o.default = '/www';
 		o.datatype = 'directory';
+		o.rmempty = false;
 
 		o = s.taboption('advanced', form.Value, 'cgi_prefix', _('Path prefix for CGI scripts'), _('CGI is disabled if not present.'));
 		o.optional = true;
