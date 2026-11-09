@@ -49,8 +49,11 @@ function getChannelFromFrequency(freq) {
 	else if (freq >= 4910 && freq <= 4980) {
 		return (freq - 4000) / 5;
 	}
-	else if (freq <= 5935) {
+	else if (freq < 5935) {
 		return (freq - 5000) / 5;
+	}
+	else if (freq == 5935) {
+		return 2;
 	}
 	else if (freq <= 45000) {
 		return (freq - 5950) / 5;
