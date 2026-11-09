@@ -1,6 +1,7 @@
 {
 	"admin/services/v2raya": {
 		"title": "v2rayA",
+		"order": 60,
 		"action": {
 			"type": "firstchild"
 		},
@@ -9,9 +10,17 @@
 			"uci": { "v2raya": true }
 		}
 	},
-	"admin/services/v2raya/config": {
-		"title": "Configuration",
+	"admin/services/v2raya/overview": {
+		"title": "Overview",
 		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "v2raya/overview"
+		}
+	},
+	"admin/services/v2raya/config": {
+		"title": "Settings",
+		"order": 20,
 		"action": {
 			"type": "view",
 			"path": "v2raya/config"
@@ -19,7 +28,7 @@
 	},
 	"admin/services/v2raya/log": {
 		"title": "Log",
-		"order": 20,
+		"order": 30,
 		"action": {
 			"type": "view",
 			"path": "v2raya/log"
