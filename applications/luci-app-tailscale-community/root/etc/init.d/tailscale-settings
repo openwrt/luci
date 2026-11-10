@@ -6,6 +6,15 @@ STOP=10
 
 NAME=tailscale-settings
 
+# State files live on tmpfs so they are rebuilt after every boot.
+STATE_DIR=/var/run/tailscale-settings
+DAEMON_SIG_FILE="$STATE_DIR/daemon"
+ENABLED_FILE="$STATE_DIR/enabled"
+DISABLE_REQUEST_FILE="$STATE_DIR/disable-requested"
+DNS_MODE_FILE="$STATE_DIR/dns_mode"
+
+TAILSCALE_INIT=/etc/init.d/tailscale
+
 # Compare version strings: return 0 (true) if $1 >= $2
 version_gte() {
 	awk -v a="${1%%-*}" -v b="${2%%-*}" 'BEGIN {
@@ -19,6 +28,31 @@ version_gte() {
 		exit 0
 	}'
 	return $?
+}
+
+# Path of the tailscale daemon state file, as configured for the daemon init.
+tailscale_state_file() {
+	local state_file
+	config_get state_file settings state_file '/etc/tailscale/tailscaled.state'
+	echo "$state_file"
+}
+
+# Fingerprint of the UCI options that are only read by the daemon init script
+# (they end up as procd env/command arguments, so changing them needs a restart).
+daemon_signature() {
+	local fw_mode port state_file log_stdout log_stderr
+	config_get      fw_mode    settings fw_mode     'nftables'
+	config_get      port       settings port        '41641'
+	config_get      state_file settings state_file  '/etc/tailscale/tailscaled.state'
+	config_get_bool log_stdout settings log_stdout   1
+	config_get_bool log_stderr settings log_stderr   1
+	echo "$fw_mode|$port|$state_file|$log_stdout|$log_stderr"
+}
+
+# Returns 0 when the tailscale daemon is managed and currently running.
+tailscale_running() {
+	[ -x "$TAILSCALE_INIT" ] || return 1
+	"$TAILSCALE_INIT" running >/dev/null 2>&1
 }
 
 # Add/remove DNS forward entry in dnsmasq for MagicDNS via OpenWrt
@@ -49,25 +83,80 @@ remove_tailscale_dns_forward() {
 	fi
 
 	local entry="/.ts.net/100.100.100.100"
-	local idx=0
-	local removed=0
-	while true; do
-		local val
-		val=$(uci -q get dhcp.@dnsmasq[0].server."${idx}" 2>/dev/null)
-		[ -z "$val" ] && break
-		if [ "$val" = "$entry" ]; then
-			uci -q del_list dhcp.@dnsmasq[0].server="$entry"
-			removed=1
-			break
-		fi
-		idx=$((idx + 1))
+	local found=0 s
+	for s in $(uci -q get dhcp.@dnsmasq[0].server); do
+		[ "$s" = "$entry" ] && found=1
 	done
 
-	if [ "$removed" = "1" ]; then
+	if [ "$found" = "1" ]; then
+		uci -q del_list dhcp.@dnsmasq[0].server="$entry"
 		uci commit dhcp
 		/etc/init.d/dnsmasq reload 2>/dev/null || /etc/init.d/dnsmasq restart 2>/dev/null
 		logger -t "$NAME" "Removed Tailscale DNS forward entry: $entry"
 	fi
+}
+
+# Keep the dnsmasq forward record in sync with dns_mode.
+#
+# Only magicdns takes resolution away from dnsmasq; both openwrt_forward and
+# disabled leave dnsmasq authoritative, so the forward entry stays in place
+# unless the user actually switches to magicdns. This mirrors what the old
+# code did for openwrt_forward but stops deleting the entry when the mode goes
+# back to disabled, which used to silently break *.ts.net resolution.
+apply_dns_forward() {
+	local dns_mode prev=''
+	config_get dns_mode settings dns_mode 'disabled'
+
+	[ -f "$DNS_MODE_FILE" ] && prev=$(cat "$DNS_MODE_FILE")
+
+	if [ "$dns_mode" = "$prev" ]; then
+		return 0
+	fi
+
+	case "$dns_mode" in
+		magicdns)
+			remove_tailscale_dns_forward
+			;;
+		openwrt_forward)
+			setup_tailscale_dns_forward
+			;;
+		*)
+			# disabled: leave whatever the previous mode put in place,
+			# dnsmasq is authoritative either way
+			;;
+	esac
+
+	echo "$dns_mode" > "$DNS_MODE_FILE"
+}
+
+# Run 'tailscale set' and recover from one known failure: a daemon built
+# without auto-update support (ts_omit_clientupdate) rejects every edit whose
+# result still has AutoUpdate.Apply=true, so while that flag is saved none of
+# the settings below can be applied. Reset it once and retry. Any other
+# failure, and the result of the retry, is reported unchanged.
+run_tailscale_set() {
+	local ts_bin="$1" err ret
+	shift
+
+	err=$("$ts_bin" "$@" 2>&1)
+	ret=$?
+
+	if [ $ret -ne 0 ]; then
+		case "$err" in
+			*'Auto-update support is disabled in this build'*)
+				logger -t "$NAME" "AutoUpdate.Apply=true is unsupported in this build, resetting it"
+				if "$ts_bin" set --auto-update=false; then
+					err=$("$ts_bin" "$@" 2>&1)
+					ret=$?
+				else
+					logger -t "$NAME" "Failed to reset auto-update"
+				fi
+				;;
+		esac
+	fi
+
+	[ -z "$err" ] || printf '%s\n' "$err" >&2
+	return $ret
 }
 
 apply_settings() {
@@ -83,9 +172,14 @@ apply_settings() {
 
 	config_load tailscale
 
+	if [ -x "$TAILSCALE_INIT" ] && ! tailscale_running; then
+		logger -t "$NAME" "tailscale is not running, skip applying settings"
+		return 0
+	fi
+
 	local accept_routes advertise_exit_node exit_node exit_node_allow_lan_access
 	local ssh shields_up runwebclient nosnat hostname
-	local enable_relay relay_server_port
+	local enable_relay relay_server_port disable_fw_config
 
 	config_get accept_routes              settings accept_routes              '0'
 	config_get advertise_exit_node        settings advertise_exit_node        '0'
@@ -99,6 +193,7 @@ apply_settings() {
 	config_get hostname                   settings hostname                   ''
 	config_get enable_relay               settings enable_relay               '0'
 	config_get relay_server_port          settings relay_server_port          '40000'
+	config_get disable_fw_config          settings disable_fw_config          '0'
 
 	# Collect advertise_routes UCI list into comma-separated string
 	local routes=""
@@ -142,16 +237,10 @@ apply_settings() {
 	case "$dns_mode" in
 		magicdns)
 			set -- "$@" --accept-dns=true
-			remove_tailscale_dns_forward
-			;;
-		openwrt_forward)
-			set -- "$@" --accept-dns=false
-			setup_tailscale_dns_forward
 			;;
 		*)
-			# disabled (default)
+			# openwrt_forward and disabled both let dnsmasq own resolution
 			set -- "$@" --accept-dns=false
-			remove_tailscale_dns_forward
 			;;
 	esac
 
@@ -165,10 +254,18 @@ apply_settings() {
 		&& set -- "$@" --webclient=true \
 		|| set -- "$@" --webclient=false
 
-	# --snat-subnet-routes (inverse of nosnat)
-	[ "$nosnat" = "1" ] \
-		&& set -- "$@" --snat-subnet-routes=false \
-		|| set -- "$@" --snat-subnet-routes=true
+	# Everything below is handed to 'tailscale set' in one call, and 'set'
+	# aborts on an unknown flag. Gate the newer options on the first release
+	# that accepts them, so an older CLI still applies the rest.
+	local ts_ver
+	ts_ver=$("$ts_bin" version 2>/dev/null | head -n1)
+
+	# --snat-subnet-routes (requires tailscale >= 1.66.1)
+	if [ -n "$ts_ver" ] && version_gte "$ts_ver" "1.66.1"; then
+		[ "$nosnat" = "1" ] \
+			&& set -- "$@" --snat-subnet-routes=false \
+			|| set -- "$@" --snat-subnet-routes=true
+	fi
 
 	# --advertise-routes (comma-separated, empty clears routes)
 	set -- "$@" "--advertise-routes=$routes"
@@ -179,13 +276,11 @@ apply_settings() {
 	# when an exit node is configured, always allow LAN access
 	[ -n "$exit_node" ] && set -- "$@" --exit-node-allow-lan-access=true
 
-	# --hostname (only set if non-empty)
-	[ -n "$hostname" ] && set -- "$@" "--hostname=$hostname"
+	# --hostname (empty resets it to the OS hostname)
+	set -- "$@" "--hostname=$hostname"
 
-	# --relay-server-port (requires tailscale >= 1.90.5)
-	local ts_ver
-	ts_ver=$("$ts_bin" version 2>/dev/null | head -n1)
-	if version_gte "$ts_ver" "1.90.5"; then
+	# --relay-server-port (requires tailscale >= 1.84.0)
+	if [ -n "$ts_ver" ] && version_gte "$ts_ver" "1.84.0"; then
 		if [ "$enable_relay" = "1" ]; then
 			set -- "$@" "--relay-server-port=${relay_server_port:-40000}"
 		else
@@ -193,8 +288,20 @@ apply_settings() {
 		fi
 	fi
 
+	# --netfilter-mode (off when disable_fw_config is enabled, back to on
+	# otherwise; requires tailscale >= 1.66.1)
+	if [ -n "$ts_ver" ] && version_gte "$ts_ver" "1.66.1"; then
+		if [ "$disable_fw_config" = "1" ]; then
+			set -- "$@" --netfilter-mode=off
+		else
+			set -- "$@" --netfilter-mode=on
+		fi
+	elif [ "$disable_fw_config" = "1" ]; then
+		logger -t "$NAME" "tailscale ${ts_ver:-before 1.66.1} has no --netfilter-mode in 'set', ignoring disable_fw_config"
+	fi
+
 	logger -t "$NAME" "Applying settings"
-	"$ts_bin" "$@"
+	run_tailscale_set "$ts_bin" "$@"
 	local ret=$?
 	[ $ret -eq 0 ] \
 		&& logger -t "$NAME" "Settings applied successfully" \
@@ -202,26 +309,154 @@ apply_settings() {
 	return $ret
 }
 
-handle_service_state() {
-	config_load tailscale
-	local service_enabled
+# Enable or disable autostart and the running daemon.
+#
+# The enable direction is applied here because starting a stopped daemon is
+# harmless. The disable direction is only *armed* from the RPC (before the
+# commit), because stopping is not reversible and the UCI rollback timer can
+# still fire afterwards: rpcd commits first and arms the timer last, and a
+# rollback only restores files. Keeping the actual stop in the reload handler
+# means a rolled back config lands on service_enabled=1 while the daemon is
+# still up, and the next apply simply drops the request.
+sync_service_enabled() {
+	local service_enabled=1 prev=''
+	local requested=0
 	config_get service_enabled settings service_enabled '1'
-	
-	if [ "$service_enabled" = "0" ]; then
-		logger -t "$NAME" "Service is disabled, stopping tailscale"
-		/etc/init.d/tailscale stop 2>/dev/null
-		/etc/init.d/tailscale disable 2>/dev/null
-		killall tailscaled 2>/dev/null
-	else
-		logger -t "$NAME" "Service is enabled, ensuring tailscale is running"
-		/etc/init.d/tailscale enable 2>/dev/null
-		/etc/init.d/tailscale start 2>/dev/null
-		apply_settings
+
+	prev=$(cat "$ENABLED_FILE" 2>/dev/null)
+	case "$prev" in
+		0|1) ;;
+		*)
+			# No usable record of the last applied value (first apply after
+			# an upgrade, or a truncated file). Adopt the configuration as
+			# the baseline instead of treating it as a transition: starting
+			# a daemon here would run start_service, which arms another UCI
+			# rollback window right after the one this apply is inside.
+			#
+			# An armed disable request is the exception: the user just asked
+			# for the stop, so the baseline has to be "was running", not "was
+			# stopped", or the request would be dropped without stopping.
+			if [ -f "$DISABLE_REQUEST_FILE" ]; then
+				prev=1
+			else
+				echo "$service_enabled" > "$ENABLED_FILE"
+				prev="$service_enabled"
+			fi
+			;;
+	esac
+
+	if [ -f "$DISABLE_REQUEST_FILE" ]; then
+		requested=1
 	fi
+
+	if [ "$service_enabled" = "0" ]; then
+		if [ "$prev" = "0" ]; then
+			return 0
+		fi
+
+		# Only stop when the UI asked for it, a hand edited config is
+		# respected for autostart but never kills a running tunnel.
+		if [ "$requested" -eq 0 ]; then
+			logger -t "$NAME" "service_enabled=0 for the first time, disabling autostart only"
+			"$TAILSCALE_INIT" disable 2>/dev/null
+			echo "0" > "$ENABLED_FILE"
+			return 0
+		fi
+
+		logger -t "$NAME" "Service disabled, stopping tailscale"
+		"$TAILSCALE_INIT" stop 2>/dev/null
+		"$TAILSCALE_INIT" disable 2>/dev/null
+		rm -f "$DISABLE_REQUEST_FILE"
+		echo "0" > "$ENABLED_FILE"
+		return 0
+	fi
+
+	rm -f "$DISABLE_REQUEST_FILE"
+
+	# The service should run. A daemon that is already up must not be touched:
+	# that is the whole point of this handler. A daemon that is down is only
+	# brought back when the user explicitly turned the service on in this
+	# apply, not because some unrelated option happened to be saved, and not
+	# because it crashed or was stopped by hand.
+	if tailscale_running; then
+		[ "$prev" = "1" ] || echo "1" > "$ENABLED_FILE"
+		return 0
+	fi
+
+	if [ "$prev" = "1" ]; then
+		return 0
+	fi
+
+	logger -t "$NAME" "Service enabled, starting tailscale"
+	"$TAILSCALE_INIT" enable 2>/dev/null
+	tailscale_running || "$TAILSCALE_INIT" start 2>/dev/null
+	echo "1" > "$ENABLED_FILE"
+}
+
+# Wait briefly for procd to bring the daemon back after a restart. Called from
+# reload_service, which rc.common runs outside of any function, so the loop
+# counter has to live in a function of its own to stay out of the global scope.
+wait_for_daemon() {
+	local waited=0
+	while [ "$waited" -lt 2 ]; do
+		tailscale_running && return 0
+		sleep 1
+		waited=$((waited + 1))
+	done
+	return 1
+}
+
+handle_service_state() {
+	if [ ! -x "$TAILSCALE_INIT" ]; then
+		logger -t "$NAME" "tailscale init script not found, keeping settings only"
+		apply_settings
+		apply_dns_forward
+		return 0
+	fi
+
+	sync_service_enabled
+
+	# Nothing may touch a running daemon here. The upstream init runs
+	# 'tailscaled --cleanup' before handing the instance to procd, which tears
+	# down tailscale0 addresses, table 52 routes and the netfilter rules while
+	# the old process is still alive. Running 'start' on a live service (or
+	# 'restart' without reason) therefore leaves a node that still answers
+	# 'tailscale status' and 'tailscale ping' but has no working kernel state.
+	if ! tailscale_running; then
+		return 0
+	fi
+
+	local desired
+	desired=$(daemon_signature)
+
+	if [ -f "$DAEMON_SIG_FILE" ] && [ "$(cat "$DAEMON_SIG_FILE")" != "$desired" ]; then
+		logger -t "$NAME" "Daemon options changed, restarting tailscale"
+		"$TAILSCALE_INIT" restart 2>/dev/null
+		wait_for_daemon || logger -t "$NAME" "tailscale did not come back within 2s"
+	fi
+
+	echo "$desired" > "$DAEMON_SIG_FILE"
+
+	apply_settings
+	apply_dns_forward
 }
 
 start_service() {
+	mkdir -p "$STATE_DIR"
+	config_load tailscale
+	daemon_signature > "$DAEMON_SIG_FILE"
+	# Record the desired flag without acting on it: at boot the service state
+	# is already correct and acting here would start or stop a daemon we do
+	# not own. Only seed the file when there is nothing to inherit, so a
+	# manual `disable` in the shell survives until the reload handler sees a
+	# real transition.
+	if [ ! -f "$ENABLED_FILE" ]; then
+		local service_enabled=1
+		config_get service_enabled settings service_enabled '1'
+		echo "$service_enabled" > "$ENABLED_FILE"
+	fi
 	apply_settings
+	apply_dns_forward
 }
 
 service_triggers() {
@@ -229,5 +464,7 @@ service_triggers() {
 }
 
 reload_service() {
+	mkdir -p "$STATE_DIR"
+	config_load tailscale
 	handle_service_state
 }

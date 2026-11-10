@@ -1,0 +1,122 @@
+#!/bin/sh
+# Background worker for the "Auto Configure Firewall" action.
+#
+# Kept outside the rpcd plugin on purpose: the RPC must return before the
+# network is reloaded, otherwise a request coming through the network being
+# reloaded (reverse proxy, or LuCI over Tailscale itself) dies with an XHR
+# abort and the user cannot tell whether anything happened.
+#
+# The status file is line based rather than JSON so that a message containing
+# a backslash, a quote or a tab cannot corrupt it: whoever reads it builds the
+# JSON itself. Line 4 is the run id handed over by the RPC, so a result from a
+# previous run can never be mistaken for this one.
+#
+# Usage: tailscale-setup-firewall <run-id>
+
+STATE_FILE=/var/run/tailscale-fwsetup.status
+LOCK_FILE=/var/run/tailscale-fwsetup.lock
+
+RUN_ID="$1"
+
+write_state() {
+	{
+		printf '%s\n' "$1"
+		printf '%s\n' "$2"
+		# one line only: the reader takes fixed line numbers, so a message that
+		# wrapped would shift the run id off the last line. tr cannot strip a
+		# real newline, sed can.
+		if [ -n "$3" ]; then
+			printf '%s' "$3" | sed -e 's/\r//g' -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g'
+		fi
+		printf '\n'
+		printf '%s\n' "$RUN_ID"
+	} > "$STATE_FILE.tmp" && mv "$STATE_FILE.tmp" "$STATE_FILE"
+}
+
+# Only one worker at a time: a second click while a reload is running would
+# queue another network reload on top of an unfinished one. mkdir is atomic and
+# is the only portable primitive available here; a test-then-write pair lets
+# two workers through at the same moment. Stale locks are recognised by age and
+# by a dead pid so a killed worker cannot block forever, but a lock that is
+# merely young is never taken over.
+LOCK_DIR="$LOCK_FILE.d"
+lock_age() {
+	local ts now
+	ts=$(cat "$LOCK_DIR/ts" 2>/dev/null)
+	# A missing or unreadable timestamp means mkdir just won the race and the
+	# holder has not written pid/ts yet. Reporting that window as ancient let a
+	# late worker rip the lock away mid start up, so two reloads ran at once:
+	# the very thing this lock exists to prevent. It is a fresh lock instead.
+	#
+	# The directory mtime covers the other side of the same window: a worker
+	# killed between mkdir and the ts write would otherwise leave an ageless
+	# lock that nobody ever takes over.
+	case "$ts" in
+		''|*[!0-9]*)
+			ts=$(date -r "$LOCK_DIR" +%s 2>/dev/null)
+			case "$ts" in ''|*[!0-9]*) echo 0; return ;; esac
+			;;
+	esac
+	now=$(date +%s)
+	echo $((now - ts))
+}
+
+# kill -0 is the portable liveness probe available in busybox ash. No readable
+# pid means the holder never got to write one, which is what a lock left behind
+# by a crash looks like, so it counts as gone.
+lock_holder_alive() {
+	local pid
+	pid=$(cat "$LOCK_DIR/pid" 2>/dev/null)
+	case "$pid" in ''|*[!0-9]*) return 1 ;; esac
+	kill -0 "$pid" 2>/dev/null
+}
+
+# Returns 0 when this process owns a freshly created lock directory. Deletes are
+# not in place: rm -rf then mkdir leaves a window where two workers both think
+# they won. Renaming the old directory is a single step that only one worker can
+# win; the loser reports busy. mkdir can still lose to a third worker.
+take_over_stale_lock() {
+	local aside
+	[ "$(lock_age)" -gt 300 ] || return 1
+	lock_holder_alive && return 1
+	aside="$LOCK_DIR.stale.$$"
+	mv "$LOCK_DIR" "$aside" 2>/dev/null || return 1
+	rm -rf "$aside"
+	mkdir "$LOCK_DIR" 2>/dev/null
+}
+
+if ! mkdir "$LOCK_DIR" 2>/dev/null; then
+	if ! take_over_stale_lock; then
+		# someone else is already reloading, or another worker won the takeover:
+		# say so instead of leaving the status file at "queued" and letting the
+		# UI time out
+		write_state busy locked "Another firewall reload is already running"
+		exit 0
+	fi
+fi
+echo "$$" > "$LOCK_DIR/pid"
+date +%s > "$LOCK_DIR/ts"
+
+trap 'write_state failed aborted "Worker terminated unexpectedly"; rm -rf "$LOCK_DIR"' EXIT HUP INT TERM
+
+write_state running network "Reloading network"
+
+if ! /etc/init.d/network reload >/dev/null 2>&1; then
+	write_state failed network "Network reload failed"
+	trap - EXIT HUP INT TERM
+	rm -rf "$LOCK_DIR"
+	exit 1
+fi
+
+write_state running firewall "Reloading firewall"
+
+if ! /etc/init.d/firewall reload >/dev/null 2>&1; then
+	write_state failed firewall "Firewall reload failed"
+	trap - EXIT HUP INT TERM
+	rm -rf "$LOCK_DIR"
+	exit 1
+fi
+
+write_state done done "Firewall configuration applied"
+trap - EXIT HUP INT TERM
+rm -rf "$LOCK_DIR"
