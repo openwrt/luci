@@ -8,7 +8,7 @@
 const getSets = rpc.declare({
 	object: 'luci.shunt',
 	method: 'sets',
-	params: ['policy']
+	params: ['policy', 'search']
 });
 
 function setKind(name) {
@@ -41,8 +41,16 @@ function fmtNum(n) {
 	return '%d'.format(n);
 }
 
-function renderCards(sets, kinds, title, empty_hint) {
+// The backend sends at most a fixed number of entries per Set, the ones
+// with the most traffic, and says how many the Set holds and how many of
+// them match the search. What is counted here is what was left out.
+function fmtShown(shown, matched) {
+	return (shown < matched) ? _('%d of %d shown').format(shown, matched) : null;
+}
+
+function renderCards(sets, info, kinds, title, empty_hint) {
 	const byPolicy = {};
+	const matched = {};
 
 	Object.keys(sets).forEach(function (name) {
 		if (kinds.indexOf(setKind(name)) < 0) {
@@ -53,7 +61,11 @@ function renderCards(sets, kinds, title, empty_hint) {
 
 		if (!byPolicy[policy]) {
 			byPolicy[policy] = [];
+			matched[policy] = 0;
 		}
+
+		matched[policy] += (info[name] && info[name].matched != null)
+			? info[name].matched : sets[name].length;
 
 		sets[name].forEach(function (e) {
 			byPolicy[policy].push(e);
@@ -74,8 +86,11 @@ function renderCards(sets, kinds, title, empty_hint) {
 	}
 
 	const cards = policies.map(function (policy) {
+		const shown = fmtShown(byPolicy[policy].length, matched[policy]);
+
 		return E('div', { 'class': 'shunt-card' }, [
 			E('div', { 'class': 'shunt-card-title' }, [policy]),
+			shown ? E('div', { 'class': 'shunt-sub' }, shown) : '',
 			E('div', { 'class': 'shunt-addrs' },
 				byPolicy[policy].sort(function (a, b) {
 					return String(a.addr).localeCompare(String(b.addr));
@@ -95,8 +110,34 @@ function renderCards(sets, kinds, title, empty_hint) {
 	]);
 }
 
-function renderLearned(sets) {
+// One line with what each learned Set holds, per policy and address
+// family. The table above it mixes all of them, and its count is their sum:
+// learn_limit applies to each Set on its own, and only this line shows
+// which one reached it.
+function renderLearnedSets(sets, info, limit) {
+	const names = Object.keys(sets).filter(function (name) {
+		return setKind(name) === 'd';
+	}).sort(function (a, b) {
+		return setPolicy(a).localeCompare(setPolicy(b)) || a.localeCompare(b);
+	});
+
+	if (!names.length) {
+		return '';
+	}
+
+	return E('div', { 'class': 'shunt-sub' }, names.map(function (name) {
+		const total = (info[name] && info[name].total != null)
+			? info[name].total : sets[name].length;
+		const fam = (name.substring(1, 2) === '6') ? 'IPv6' : 'IPv4';
+		const full = (limit && total >= limit) ? ' ' + _('(limit)') : '';
+
+		return '%s %s %d%s'.format(setPolicy(name), fam, total, full);
+	}).join(' · '));
+}
+
+function renderLearned(sets, info, limit) {
 	const rows = [];
+	let matched = 0;
 
 	Object.keys(sets).forEach(function (name) {
 		if (setKind(name) !== 'd') {
@@ -104,6 +145,9 @@ function renderLearned(sets) {
 		}
 
 		const policy = setPolicy(name);
+
+		matched += (info[name] && info[name].matched != null)
+			? info[name].matched : sets[name].length;
 
 		sets[name].forEach(function (e) {
 			rows.push({
@@ -150,8 +194,10 @@ function renderLearned(sets) {
 	}));
 
 	return E('div', { 'class': 'shunt-block' }, [
-		E('div', { 'class': 'shunt-label' },
-			_('Learned addresses (%d)').format(rows.length)),
+		E('div', { 'class': 'shunt-label' }, (rows.length < matched)
+			? _('Learned addresses (%d of %d shown)').format(rows.length, matched)
+			: _('Learned addresses (%d)').format(rows.length)),
+		renderLearnedSets(sets, info, limit),
 		tbl
 	]);
 }
@@ -160,7 +206,7 @@ return view.extend({
 	load: function () {
 		return Promise.all([
 			uci.load('shunt').catch(() => 0),
-			L.resolveDefault(getSets(''), {})
+			L.resolveDefault(getSets('', ''), {})
 		]);
 	},
 
@@ -169,6 +215,7 @@ return view.extend({
 
 		const render_sets = function (data) {
 			const sets = (data && data.sets) || {};
+			const info = (data && data.info) || {};
 			const target = document.getElementById('shunt-sets');
 
 			if (!target) {
@@ -176,17 +223,19 @@ return view.extend({
 			}
 
 			dom.content(target, [
-				renderCards(sets, ['c', 'm', 'i'], _('Client Selectors'),
+				renderCards(sets, info, ['c', 'm', 'i'], _('Client Selectors'),
 					_('No client is selected, so every client is covered.')),
-				renderCards(sets, ['s'], _('Static Destinations'), null),
-				renderLearned(sets)
+				renderCards(sets, info, ['s'], _('Static Destinations'), null),
+				renderLearned(sets, info, data && data.learn_limit)
 			]);
 		};
 
 		const reload = function () {
 			const sel = document.getElementById('shunt-policy');
+			const search = document.getElementById('shunt-search');
 
-			return L.resolveDefault(getSets(sel ? sel.value : ''), {})
+			return L.resolveDefault(getSets(sel ? sel.value : '',
+				search ? search.value.trim() : ''), {})
 				.then(render_sets);
 		};
 
@@ -233,7 +282,7 @@ return view.extend({
 			E('h2', {}, _('Set Reporting')),
 			E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'class': 'cbi-section-descr' },
-					_('What the nftables Sets currently hold. Counters are reset whenever an entry is refreshed, so they show recent activity, not a lifetime total.'))
+					_('What the nftables Sets currently hold. Counters are reset whenever an entry is refreshed, so they show recent activity, not a lifetime total. A large Set is shown in part, the entries with the most traffic first - to find one address in it, enter how it begins.'))
 			]),
 			E('div', { 'id': 'shunt-sets' }, ''),
 			E('div', { 'class': 'cbi-page-actions' }, [
@@ -243,6 +292,20 @@ return view.extend({
 					'style': 'float:none;margin-right:.4em;width:auto;',
 					'change': ui.createHandlerFn(self, reload)
 				}, options),
+				E('input', {
+					'id': 'shunt-search',
+					'class': 'cbi-input-text',
+					'type': 'text',
+					'maxlength': 64,
+					'placeholder': _('Address begins with …'),
+					'style': 'float:none;margin-right:.4em;width:14em;',
+					'keydown': function (ev) {
+						if (ev.key === 'Enter') {
+							ev.preventDefault();
+							return reload();
+						}
+					}
+				}),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-action important',
 					'style': 'float:none',

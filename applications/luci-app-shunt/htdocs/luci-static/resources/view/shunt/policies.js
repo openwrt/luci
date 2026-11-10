@@ -42,7 +42,18 @@ function handleAction(ev) {
 					E('p', {}, [_('Apply failed: %s').format(e)]), 'error');
 			});
 	}
-	return fs.exec_direct('/etc/init.d/shunt', [ev]);
+	return fs.exec_direct('/etc/init.d/shunt', [ev])
+		.catch(function (e) {
+			ui.addNotification(null,
+				E('p', {}, [_('Action failed: %s').format(e)]), 'error');
+		});
+}
+
+// What the session may not do, it is not offered: the buttons below save
+// the form and run the init script, both of which need the write half of
+// the ACL. LuCI's own Save & Apply goes by the same check.
+function readOnly(m) {
+	return !!m.readonly || L.hasViewPermission() === false;
 }
 
 // `shunt refresh` re-reads the domain and address files in the running
@@ -229,10 +240,13 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 		s.render = L.bind(function () {
+			const ro = readOnly(m) || null;
+
 			return E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none',
+					'disabled': ro,
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restart');
 					})
@@ -241,6 +255,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-action',
 					'style': 'float:none',
+					'disabled': ro,
 					'click': ui.createHandlerFn(this, function () {
 						return handleRefresh();
 					})

@@ -56,7 +56,18 @@ function handleAction(ev) {
 					E('p', {}, [_('Apply failed: %s').format(e)]), 'error');
 			});
 	}
-	return fs.exec_direct('/etc/init.d/shunt', [ev]);
+	return fs.exec_direct('/etc/init.d/shunt', [ev])
+		.catch(function (e) {
+			ui.addNotification(null,
+				E('p', {}, [_('Action failed: %s').format(e)]), 'error');
+		});
+}
+
+// What the session may not do, it is not offered: the buttons below save
+// the form and run the init script, both of which need the write half of
+// the ACL. LuCI's own Save & Apply goes by the same check.
+function readOnly(m) {
+	return !!m.readonly || L.hasViewPermission() === false;
 }
 
 function fmtMark(mark) {
@@ -394,8 +405,16 @@ return view.extend({
 			setNodes('shunt-state', renderState(st));
 			setNodes('shunt-version', E('span', {}, ['%s / %s'.format(
 				pkgs['luci-app-shunt'] || _('n/a'), pkgs['shunt'] || _('n/a'))]));
+			// A learned Set is bounded by learn_limit, see the README. A
+			// policy listed here was brought more addresses than fit.
+			const capped = (svc && svc.capped) ? Object.keys(svc.capped).sort() : [];
+
 			setNodes('shunt-learned', E('span', {}, [
-				svc ? fmtCount(svc.dedupe) : '-']));
+				svc ? fmtCount(svc.dedupe) : '-',
+				capped.length ? E('div', { 'class': 'shunt-sub' },
+					_('limit reached: %s').format(capped.map(function (n) {
+						return '%s (%d)'.format(n, svc.capped[n]);
+					}).join(', '))) : '']));
 			setNodes('shunt-poll', E('span', {}, [svc?.poll
 				? (svc.poll.resolv
 					? _('%d name(s) every %ds').format(svc.poll.names, svc.poll.interval)
@@ -437,7 +456,7 @@ return view.extend({
 
 		poll.add(function () {
 			return L.resolveDefault(getStatus(), null).then(update);
-		}, 2);
+		}, 5);
 
 		// The status subtree only exists once m.render() has resolved and
 		// View.__init__ has attached the nodes; a direct call here would find
@@ -485,6 +504,11 @@ return view.extend({
 			return true;
 		};
 
+		o = s.taboption('general', form.Value, 'learn_limit', _('Learned Address Limit'),
+			_('Most addresses one learned Set holds, per policy and address family. An address beyond it is not learned until older ones expire and takes the normal uplink meanwhile. It bounds what a host on an observed segment can do with forged DNS answers; raise it only if a policy with a very large list reaches it.'));
+		o.datatype = 'and(uinteger,range(64,65536))';
+		o.placeholder = '4096';
+
 		o = s.taboption('snoop', form.Flag, 'snoop', _('Passive DNS Observer'),
 			_('Read DNS answers as they pass the LAN device, whichever resolver produced them. Required for wildcard domains, which cannot be resolved ahead of time.'));
 		o.rmempty = false;
@@ -505,10 +529,13 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 		s.render = L.bind(function () {
+			const ro = readOnly(m) || null;
+
 			return E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
+					'disabled': ro,
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('stop');
 					})
@@ -516,6 +543,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none',
+					'disabled': ro,
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('restart');
 					})
