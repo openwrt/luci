@@ -94,6 +94,24 @@ function render_iface(dev, alias) {
 	]);
 }
 
+/* Device representing an interface: its L3 device while the interface is
+ * up, else its configured device. The L3 device comes first, as it can
+ * determine the device type of tunnel configs. PPPoE creates its own L3
+ * device on top of the configured one but, unlike the other PPP protocols,
+ * is not virtual, so getDevice() returns the configured device. Represent
+ * it by its PPP device instead, even while the session is down. */
+function iface_device(ifc) {
+	const l3dev = ifc.getL3Device();
+
+	if (l3dev)
+		return l3dev;
+
+	if (ifc.getProtocol() == 'pppoe')
+		return network.instantiateDevice(ifc.getIfname(), ifc);
+
+	return ifc.getDevice();
+}
+
 function render_status(node, ifc, with_device) {
 	let desc = null;
 
@@ -109,7 +127,7 @@ function render_status(node, ifc, with_device) {
 	desc = desc ? '%s (%s)'.format(desc, ifc.getI18n()) : ifc.getI18n();
 
 	const changecount = with_device ? 0 : count_changes(ifc.getName());
-	const maindev = ifc.getL3Device() ?? ifc.getDevice();
+	const maindev = iface_device(ifc);
 	const macaddr = maindev ? maindev.getMAC() : null;
 	const carrier = maindev ? maindev.getCarrier(): null;
 	const cond00 = !changecount && !ifc.isDynamic() && !ifc.isAlias();
@@ -142,8 +160,7 @@ function render_status(node, ifc, with_device) {
 }
 
 function render_modal_status(node, ifc) {
-	// order is important: ifc.getL3Device() can determine dev.getType for tunnel configs
-	const dev = ifc ? (ifc.getL3Device() ?? ifc.getDevice()) : null;
+	const dev = ifc ? iface_device(ifc) : null;
 
 	dom.content(node, [
 		E('img', {
@@ -157,8 +174,9 @@ function render_modal_status(node, ifc) {
 }
 
 function render_ifacebox_status(node, ifc) {
-	const dev = ifc.getL3Device() || ifc.getDevice();
-	const subdevs = dev ? dev.getPorts() : null;
+	const dev = iface_device(ifc);
+	/* list the configured device of PPPoE like a bridge port, e.g. for the DSL sync */
+	const subdevs = (ifc.getProtocol() == 'pppoe') ? L.toArray(ifc.getDevice()) : (dev ? dev.getPorts() : null);
 	const c = [ render_iface(dev, ifc.isAlias()) ];
 
 	if (subdevs && subdevs.length) {
@@ -338,7 +356,7 @@ return view.extend({
 			}
 
 			if (stat) {
-				const dev = ifc.getL3Device() ?? ifc.getDevice();
+				const dev = iface_device(ifc);
 				dom.content(stat, [
 					E('img', {
 						'src': L.resource('icons/%s%s.svg').format(dev ? dev.getType() : 'ethernet', ifc.isUp() ? '' : '_disabled'),
