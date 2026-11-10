@@ -60,9 +60,20 @@ function count_changes(section_id) {
 	return n;
 }
 
+/* isUp() only reflects IFF_UP, which netifd sets on ifup regardless of the
+ * link state, so a carrier is required as well. Alias devices (@network)
+ * have no kernel state of their own; netifd binds them to the L3 device of
+ * the referenced network while that network is up, so check that device. */
+function has_link(dev) {
+	if (dev && dev.getType() == 'alias')
+		dev = network.instantiateNetwork(dev.getName().substring(1)).getL3Device();
+
+	return dev ? (dev.isUp() && dev.getCarrier()) : false;
+}
+
 function render_iface(dev, alias) {
 	var type = dev ? dev.getType() : 'ethernet',
-	    up   = dev ? dev.isUp() : false;
+	    up   = has_link(dev);
 
 	return E('span', { class: 'cbi-tooltip-container' }, [
 		E('img', { 'class' : 'middle', 'src': L.resource('icons/%s%s.svg').format(
