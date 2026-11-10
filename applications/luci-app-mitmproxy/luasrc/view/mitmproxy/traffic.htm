@@ -1,0 +1,533 @@
+<%+header%>
+
+<style>
+.mitmproxy-traffic {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1a1a2e;
+    max-width: 1200px;
+}
+.mitmproxy-traffic h2 { font-size: 22px; font-weight: 600; margin: 0 0 20px 0; }
+
+.traffic-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+}
+.traffic-tab {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #64748b;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.15s;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+.traffic-tab:hover { color: #334155; }
+.traffic-tab.active { color: #2563eb; border-bottom-color: #2563eb; font-weight: 600; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.panel {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+}
+.panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    font-size: 15px;
+}
+.panel-body { padding: 20px; }
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+.stat-box {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.stat-box .stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+.stat-box .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a2e;
+}
+.stat-box .stat-sub {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+
+/* ── Protocol breakdown bars ── */
+.proto-bar {
+    display: flex;
+    height: 32px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 12px 0 8px;
+}
+.proto-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    transition: width 0.5s;
+}
+.proto-http   { background: #3b82f6; }
+.proto-https  { background: #22c55e; }
+.proto-ws     { background: #8b5cf6; }
+.proto-other  { background: #94a3b8; }
+
+.proto-legend {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: #64748b;
+    flex-wrap: wrap;
+}
+.proto-legend span::before {
+    content: '';
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+.legend-http::before   { background: #3b82f6; }
+.legend-https::before  { background: #22c55e; }
+.legend-ws::before     { background: #8b5cf6; }
+.legend-other::before  { background: #94a3b8; }
+
+/* ── Host table ── */
+.host-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.host-table th {
+    background: #f8fafc;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.host-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+.host-table tr:hover td { background: #f8fafc; }
+
+.mini-bar {
+    display: inline-block;
+    height: 6px;
+    border-radius: 3px;
+    background: #3b82f6;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+/* ── Behavior patterns ── */
+.behavior-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: #fff;
+}
+.behavior-card .bc-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+.behavior-card .bc-desc {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+.behavior-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+.tag-normal   { background: #dcfce7; color: #16a34a; }
+.tag-warning  { background: #fef3c7; color: #d97706; }
+.tag-critical { background: #fee2e2; color: #dc2626; }
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.refresh-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+</style>
+
+<style>
+.notice { border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; line-height: 1.5; }
+.notice-info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
+.notice-warn { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; }
+.notice b { font-weight: 600; }
+.status-line { font-size: 12px; color: #94a3b8; margin: -12px 0 16px; }
+.tag-nodata { background: #f1f5f9; color: #64748b; }
+.findings { margin: 8px 0 0; padding-left: 18px; font-size: 12px; color: #334155; }
+.findings li { margin: 3px 0; font-family: monospace; word-break: break-all; }
+.sev { display: inline-block; padding: 1px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.sev-critical { background: #fee2e2; color: #dc2626; }
+.sev-warning  { background: #fef3c7; color: #b45309; }
+.mono { font-family: monospace; font-size: 12px; word-break: break-all; }
+.small-note { font-size: 12px; color: #64748b; margin-top: 10px; }
+</style>
+
+<div class="mitmproxy-traffic">
+    <h2>Traffic Analysis</h2>
+    <div class="status-line"><span class="refresh-dot"></span>Refreshes every 10 s &mdash; <span id="ta-updated">loading&hellip;</span></div>
+
+    <div id="ta-notice"></div>
+
+    <div class="traffic-tabs">
+        <button class="traffic-tab active" onclick="switchTab('overview', this)">Overview</button>
+        <button class="traffic-tab" onclick="switchTab('hosts', this)">Hosts &amp; Clients</button>
+        <button class="traffic-tab" onclick="switchTab('behavior', this)">Behavior Analysis</button>
+        <button class="traffic-tab" onclick="switchTab('indicators', this)">Security Indicators</button>
+    </div>
+
+    <!-- ═══════ Overview ═══════ -->
+    <div class="tab-panel active" id="tab-overview">
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-label">Total Flows</div>
+                <div class="stat-value" id="ta-total">0</div>
+                <div class="stat-sub" id="ta-span">Held in mitmweb memory</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">HTTP Requests</div>
+                <div class="stat-value" id="ta-http">0</div>
+                <div class="stat-sub" id="ta-http-pct">0% of flows</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">HTTPS Requests</div>
+                <div class="stat-value" id="ta-https">0</div>
+                <div class="stat-sub" id="ta-https-pct">0% of flows</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Unique Hosts</div>
+                <div class="stat-value" id="ta-hosts">0</div>
+                <div class="stat-sub" id="ta-clients">0 clients</div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">Protocol Breakdown</div>
+            <div class="panel-body">
+                <div class="proto-bar" id="proto-bar"></div>
+                <div class="proto-legend">
+                    <span class="legend-https">HTTPS</span>
+                    <span class="legend-http">HTTP</span>
+                    <span class="legend-ws">WebSocket</span>
+                    <span class="legend-other">Other (TCP/UDP/DNS)</span>
+                </div>
+                <div class="small-note" id="ta-bytes"></div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">Response Status Distribution</div>
+            <div class="panel-body">
+                <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                    <div class="stat-box"><div class="stat-label" style="color:#16a34a;">2xx Success</div><div class="stat-value" id="ta-2xx">0</div></div>
+                    <div class="stat-box"><div class="stat-label" style="color:#2563eb;">3xx Redirect</div><div class="stat-value" id="ta-3xx">0</div></div>
+                    <div class="stat-box"><div class="stat-label" style="color:#d97706;">4xx Client Error</div><div class="stat-value" id="ta-4xx">0</div></div>
+                    <div class="stat-box"><div class="stat-label" style="color:#dc2626;">5xx Server Error</div><div class="stat-value" id="ta-5xx">0</div></div>
+                    <div class="stat-box"><div class="stat-label" style="color:#64748b;">No Response</div><div class="stat-value" id="ta-failed">0</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">HTTP Method Distribution</div>
+            <div class="panel-body"><div class="stat-grid" id="method-grid"></div></div>
+        </div>
+    </div>
+
+    <!-- ═══════ Hosts & Clients ═══════ -->
+    <div class="tab-panel" id="tab-hosts">
+        <div class="panel">
+            <div class="panel-header">Top 20 Hosts by Request Count</div>
+            <table class="host-table">
+                <thead><tr><th>#</th><th>Host</th><th>Requests</th><th>% of Total</th><th>Downloaded</th><th>Uploaded</th><th>Failed / 4xx / 5xx</th><th>Clients</th></tr></thead>
+                <tbody id="hosts-tbody"></tbody>
+            </table>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Clients</div>
+            <table class="host-table">
+                <thead><tr><th>Client</th><th>Requests</th><th>Traffic</th><th>Hosts Contacted</th></tr></thead>
+                <tbody id="clients-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ═══════ Behavior Analysis ═══════ -->
+    <div class="tab-panel" id="tab-behavior">
+        <div class="panel">
+            <div class="panel-header">Traffic Behavior Checks</div>
+            <div class="panel-body">
+                <div id="behavior-list"></div>
+                <div class="small-note">
+                    These are fixed heuristics computed in your browser from the flows mitmweb holds; a finding
+                    means &ldquo;worth a look&rdquo;, not a confirmed threat. DNS lookups are not visible to an HTTP
+                    proxy, so DNS patterns are not analyzed.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════ Security Indicators ═══════ -->
+    <div class="tab-panel" id="tab-indicators">
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-label">Requests Checked</div>
+                <div class="stat-value" id="ind-checked">0</div>
+                <div class="stat-sub">Request line and headers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Critical Matches</div>
+                <div class="stat-value" id="ind-critical" style="color:#dc2626;">0</div>
+                <div class="stat-sub">SQL/command injection, Log4Shell</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Warnings</div>
+                <div class="stat-value" id="ind-warning" style="color:#d97706;">0</div>
+                <div class="stat-sub">XSS, path traversal, cleartext credentials</div>
+            </div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Matches by Rule</div>
+            <div class="panel-body"><div class="stat-grid" id="rule-grid"></div></div>
+        </div>
+        <div class="panel">
+            <div class="panel-header">Matching Requests (newest first, up to 200)</div>
+            <table class="host-table">
+                <thead><tr><th>Time</th><th>Severity</th><th>Rule</th><th>Client</th><th>Request</th><th>Matched Text</th></tr></thead>
+                <tbody id="ind-tbody"></tbody>
+            </table>
+            <div class="panel-body small-note" style="padding-top:8px;">
+                Signature rules (regular expressions) run on decoded URLs and request header values, not on
+                request bodies. They are pattern matches, not AI, and can produce false positives.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="<%=resource%>/mitmproxy/analysis.js?v=2"></script>
+<script>
+(function() {
+    var baseUrl = '<%=luci.dispatcher.build_url("admin", "services", "mitmproxy", "api")%>';
+    var settingsUrl = '<%=luci.dispatcher.build_url("admin", "services", "mitmproxy", "settings")%>';
+    var A = window.MitmAnalysis;
+    var fmt = A.formatBytes;
+
+    function esc(t) {
+        return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+    function setText(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; }
+    function setHTML(id, v) { var el = document.getElementById(id); if (el) el.innerHTML = v; }
+    function pct(n, t) { return t ? Math.round(n / t * 100) : 0; }
+    function timeOf(ts) { return ts ? new Date(ts * 1000).toLocaleTimeString() : '--'; }
+
+    window.switchTab = function(tabId, btn) {
+        var panels = document.querySelectorAll('.tab-panel'), tabs = document.querySelectorAll('.traffic-tab');
+        for (var i = 0; i < panels.length; i++) panels[i].className = 'tab-panel';
+        for (var j = 0; j < tabs.length; j++) tabs[j].className = 'traffic-tab';
+        document.getElementById('tab-' + tabId).className = 'tab-panel active';
+        btn.className = 'traffic-tab active';
+    };
+
+    function getJSON(path, cb) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', baseUrl + path + (path.indexOf('?') < 0 ? '?' : '&') + '_=' + Date.now(), true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== 4) return;
+            var data = null;
+            try { data = JSON.parse(xhr.responseText); } catch (e) {}
+            cb(xhr.status === 200 ? data : null);
+        };
+        xhr.send();
+    }
+
+    function notice(status, flowsOk, total) {
+        var html = '';
+        if (!status) {
+            html = '<div class="notice notice-warn">Could not read the service status from LuCI.</div>';
+        } else if (!status.running) {
+            html = '<div class="notice notice-warn"><b>mitmproxy is not running.</b> Start it on the Status tab; ' +
+                   'nothing can be analyzed until it captures traffic.</div>';
+        } else if (!flowsOk) {
+            html = '<div class="notice notice-warn"><b>mitmweb is running but did not answer.</b> It can take up to a ' +
+                   'minute after a start. If this persists, check that the Web UI port and token in Settings match the running service.</div>';
+        } else if (total === 0) {
+            var mode = status.mode || 'regular';
+            html = '<div class="notice notice-info"><b>No traffic has gone through mitmproxy yet.</b> ';
+            if (mode === 'transparent')
+                html += 'Transparent mode only redirects IPv4 web traffic (ports 80/443) arriving on the interface set in ' +
+                        '<a href="' + settingsUrl + '">Settings</a>. Check that clients are on that interface.';
+            else
+                html += 'The proxy is in <b>' + esc(mode) + '</b> mode, so it only sees devices that are configured to use ' +
+                        esc(location.hostname) + ':' + esc(status.listen_port || '8080') + ' as their HTTP/HTTPS proxy. ' +
+                        'To capture LAN web traffic without configuring each device, switch to Transparent mode in ' +
+                        '<a href="' + settingsUrl + '">Settings</a>.';
+            html += ' For HTTPS, each device must trust the mitmproxy CA: browse to <span class="mono">http://mitm.it</span> through the proxy to install it.</div>';
+        }
+        setHTML('ta-notice', html);
+    }
+
+    function renderOverview(o) {
+        var t = o.total;
+        setText('ta-total', t);
+        setText('ta-span', o.first ? 'Captured ' + timeOf(o.first) + ' – ' + timeOf(o.last) : 'Held in mitmweb memory');
+        setText('ta-http', o.http);
+        setText('ta-http-pct', pct(o.http, t) + '% of flows');
+        setText('ta-https', o.https);
+        setText('ta-https-pct', pct(o.https, t) + '% of flows');
+        setText('ta-hosts', Object.keys(o.hosts).length);
+        setText('ta-clients', Object.keys(o.clients).length + ' clients');
+        setText('ta-2xx', o.s2xx); setText('ta-3xx', o.s3xx); setText('ta-4xx', o.s4xx);
+        setText('ta-5xx', o.s5xx); setText('ta-failed', o.failed);
+        setText('ta-bytes', t ? 'Downloaded ' + fmt(o.bytesDown) + ', uploaded ' + fmt(o.bytesUp) + ' (body sizes of intercepted requests)' : '');
+
+        var segs = [['https', o.https, 'HTTPS'], ['http', o.http, 'HTTP'], ['ws', o.ws, 'WS'], ['other', o.other, 'Other']];
+        var bar = '';
+        segs.forEach(function(s) {
+            var p = pct(s[1], t);
+            if (s[1] > 0) bar += '<div class="proto-seg proto-' + s[0] + '" style="width:' + Math.max(p, 3) + '%">' +
+                                 (p >= 8 ? s[2] + ' ' + p + '%' : '') + '</div>';
+        });
+        setHTML('proto-bar', bar || '<div class="proto-seg proto-other" style="width:100%; background:#e2e8f0; color:#64748b;">No flows</div>');
+
+        var methods = Object.keys(o.methods).sort(function(a, b) { return o.methods[b] - o.methods[a]; });
+        setHTML('method-grid', methods.map(function(m) {
+            return '<div class="stat-box"><div class="stat-label">' + esc(m) + '</div><div class="stat-value">' + o.methods[m] + '</div></div>';
+        }).join('') || '<div class="empty-state">No data</div>');
+    }
+
+    function renderHosts(o) {
+        var hosts = Object.keys(o.hosts).map(function(h) { return { host: h, d: o.hosts[h] }; })
+            .sort(function(a, b) { return b.d.count - a.d.count; }).slice(0, 20);
+        var max = hosts.length ? hosts[0].d.count : 1;
+        setHTML('hosts-tbody', hosts.map(function(h, i) {
+            return '<tr><td>' + (i + 1) + '</td><td class="mono">' + esc(h.host) + '</td><td>' + h.d.count + '</td>' +
+                   '<td>' + pct(h.d.count, o.total) + '%<span class="mini-bar" style="width:' + Math.round(h.d.count / max * 80) + 'px;"></span></td>' +
+                   '<td>' + fmt(h.d.bytes) + '</td><td>' + fmt(h.d.up) + '</td><td>' + h.d.errors + '</td>' +
+                   '<td>' + Object.keys(h.d.clients).length + '</td></tr>';
+        }).join('') || '<tr><td colspan="8" class="empty-state">No host data yet</td></tr>');
+
+        var clients = Object.keys(o.clients).map(function(c) { return { ip: c, d: o.clients[c] }; })
+            .sort(function(a, b) { return b.d.count - a.d.count; });
+        setHTML('clients-tbody', clients.map(function(c) {
+            return '<tr><td class="mono">' + esc(c.ip) + '</td><td>' + c.d.count + '</td><td>' + fmt(c.d.bytes) + '</td>' +
+                   '<td>' + Object.keys(c.d.hosts).length + '</td></tr>';
+        }).join('') || '<tr><td colspan="4" class="empty-state">No clients yet</td></tr>');
+    }
+
+    function renderBehavior(checks) {
+        var label = { ok: ['tag-normal', 'No findings'], warning: ['tag-warning', 'Findings'],
+                      critical: ['tag-critical', 'Findings'], nodata: ['tag-nodata', 'Not enough data'] };
+        setHTML('behavior-list', checks.map(function(c) {
+            var l = label[c.status];
+            var text = c.status === 'nodata' ? c.noDataText :
+                       c.status === 'ok' ? 'No findings' : c.findings.length + (c.findings.length >= A.thresholds.maxFindings ? '+' : '') + ' finding(s)';
+            return '<div class="behavior-card"><div class="bc-title">' + esc(c.title) + '</div>' +
+                   '<div class="bc-desc">' + esc(c.desc) + '</div>' +
+                   '<span class="behavior-tag ' + l[0] + '">' + esc(text) + '</span>' +
+                   (c.findings.length ? '<ul class="findings">' + c.findings.map(function(f) {
+                       return '<li>' + esc(f.text) + '</li>'; }).join('') + '</ul>' : '') +
+                   '</div>';
+        }).join(''));
+    }
+
+    function renderIndicators(r) {
+        var o = r.overview, crit = 0, warn = 0;
+        r.matches.forEach(function(m) { if (m.severity === 'critical') crit++; else warn++; });
+        setText('ind-checked', o.http + o.https + o.ws);
+        setText('ind-critical', crit);
+        setText('ind-warning', warn);
+        setHTML('rule-grid', r.rules.map(function(rule) {
+            return '<div class="stat-box"><div class="stat-label">' + esc(rule.name) + '</div>' +
+                   '<div class="stat-value">' + (r.ruleCounts[rule.id] || 0) + '</div>' +
+                   '<div class="stat-sub"><span class="sev sev-' + rule.severity + '">' + rule.severity + '</span></div></div>';
+        }).join(''));
+        var rows = r.matches.slice().sort(function(a, b) { return b.time - a.time; });
+        setHTML('ind-tbody', rows.map(function(m) {
+            return '<tr><td>' + timeOf(m.time) + '</td><td><span class="sev sev-' + m.severity + '">' + m.severity + '</span></td>' +
+                   '<td>' + esc(m.rule) + '</td><td class="mono">' + esc(m.client) + '</td>' +
+                   '<td class="mono">' + esc(m.method) + ' ' + esc(m.url.slice(0, 160)) + '</td>' +
+                   '<td class="mono">' + esc(m.evidence) + '</td></tr>';
+        }).join('') || '<tr><td colspan="6" class="empty-state">No matches</td></tr>');
+    }
+
+    function refresh() {
+        getJSON('/status', function(status) {
+            getJSON('/flows', function(data) {
+                var flowsOk = Array.isArray(data);
+                var flows = flowsOk ? data : [];
+                var r = A.analyze(flows);
+                notice(status, flowsOk, flows.length);
+                renderOverview(r.overview);
+                renderHosts(r.overview);
+                renderBehavior(r.checks);
+                renderIndicators(r);
+                setText('ta-updated', 'updated ' + new Date().toLocaleTimeString());
+            });
+        });
+    }
+
+    refresh();
+    setInterval(refresh, 10000);
+})();
+</script>
+
+<%+footer%>

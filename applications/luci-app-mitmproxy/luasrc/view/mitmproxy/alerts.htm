@@ -1,0 +1,248 @@
+<%+header%>
+
+<style>
+.mitmproxy-alerts {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1a1a2e;
+    max-width: 1200px;
+}
+.mitmproxy-alerts h2 { font-size: 22px; font-weight: 600; margin: 0 0 20px 0; }
+
+.alert-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.alert-stat {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.alert-stat .num { font-size: 32px; font-weight: 700; }
+.alert-stat .lbl { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+.num-error   { color: #dc2626; }
+.num-warning { color: #d97706; }
+.num-info    { color: #2563eb; }
+.num-total   { color: #1a1a2e; }
+
+.panel {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    margin-bottom: 20px;
+}
+.panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.panel-body { padding: 0; }
+
+.refresh-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.last-update { font-size: 11px; color: #94a3b8; font-weight: 400; }
+
+.alert-list { list-style: none; margin: 0; padding: 0; }
+.alert-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    align-items: flex-start;
+    font-size: 13px;
+    transition: background 0.15s;
+}
+.alert-item:hover { background: #f8fafc; }
+.alert-item:last-child { border-bottom: none; }
+
+.alert-severity {
+    flex-shrink: 0;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-top: 5px;
+}
+.severity-error   { background: #dc2626; }
+.severity-warning { background: #f59e0b; }
+.severity-alert   { background: #f59e0b; }
+.severity-info    { background: #3b82f6; }
+
+.alert-ts {
+    flex-shrink: 0;
+    width: 140px;
+    color: #94a3b8;
+    font-family: monospace;
+    font-size: 12px;
+}
+.alert-msg { flex: 1; color: #334155; word-break: break-word; }
+
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.filter-btn {
+    padding: 6px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #fff;
+    color: #64748b;
+    transition: all 0.15s;
+}
+.filter-btn:hover { background: #f8fafc; }
+.filter-btn.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+</style>
+
+<div class="mitmproxy-alerts">
+    <h2>mitmproxy Alerts &amp; System Log</h2>
+
+    <!-- ── Statistics ── -->
+    <div class="alert-stats">
+        <div class="alert-stat">
+            <div class="num num-total" id="stat-total">0</div>
+            <div class="lbl">Total Entries</div>
+        </div>
+        <div class="alert-stat">
+            <div class="num num-error" id="stat-error">0</div>
+            <div class="lbl">Errors</div>
+        </div>
+        <div class="alert-stat">
+            <div class="num num-warning" id="stat-warning">0</div>
+            <div class="lbl">Warnings</div>
+        </div>
+        <div class="alert-stat">
+            <div class="num num-info" id="stat-info">0</div>
+            <div class="lbl">Info</div>
+        </div>
+    </div>
+
+    <!-- ── Filters ── -->
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all" onclick="filterAlerts('all', this)">All</button>
+        <button class="filter-btn" data-filter="error" onclick="filterAlerts('error', this)">Errors</button>
+        <button class="filter-btn" data-filter="warning" onclick="filterAlerts('warning', this)">Warnings</button>
+        <button class="filter-btn" data-filter="info" onclick="filterAlerts('info', this)">Info</button>
+    </div>
+
+    <!-- ── Alert List ── -->
+    <div class="panel">
+        <div class="panel-header">
+            Recent Alerts (Last 50)
+            <span class="last-update"><span class="refresh-dot"></span>Auto-refresh 5s &mdash; <span id="alert-update-ts">--</span></span>
+        </div>
+        <div class="panel-body">
+            <ul class="alert-list" id="alert-list">
+                <li class="empty-state">Loading alerts...</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var baseUrl = '<%=luci.dispatcher.build_url("admin", "services", "mitmproxy", "api")%>';
+    var allAlerts = [];
+    var currentFilter = 'all';
+
+    function fetchAlerts() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', baseUrl + '/alerts?_=' + Date.now(), true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    allAlerts = data.alerts || [];
+                    updateStats();
+                    renderAlerts();
+                    document.getElementById('alert-update-ts').textContent = new Date().toLocaleTimeString();
+                } catch(e) {}
+            }
+        };
+        xhr.send();
+    }
+
+    function updateStats() {
+        var counts = { total: allAlerts.length, error: 0, warning: 0, info: 0 };
+        for (var i = 0; i < allAlerts.length; i++) {
+            var s = allAlerts[i].severity;
+            if (s === 'error') counts.error++;
+            else if (s === 'warning' || s === 'alert') counts.warning++;
+            else counts.info++;
+        }
+        document.getElementById('stat-total').textContent = counts.total;
+        document.getElementById('stat-error').textContent = counts.error;
+        document.getElementById('stat-warning').textContent = counts.warning;
+        document.getElementById('stat-info').textContent = counts.info;
+    }
+
+    function renderAlerts() {
+        var list = document.getElementById('alert-list');
+        var filtered = currentFilter === 'all' ? allAlerts :
+            allAlerts.filter(function(a) {
+                if (currentFilter === 'warning') return a.severity === 'warning' || a.severity === 'alert';
+                return a.severity === currentFilter;
+            });
+
+        if (filtered.length === 0) {
+            list.innerHTML = '<li class="empty-state">No alerts matching filter</li>';
+            return;
+        }
+
+        var html = '';
+        for (var i = 0; i < filtered.length; i++) {
+            var a = filtered[i];
+            html += '<li class="alert-item">'
+                + '<div class="alert-severity severity-' + escapeHtml(a.severity || 'info') + '"></div>'
+                + '<div class="alert-ts">' + escapeHtml(a.timestamp || '--') + '</div>'
+                + '<div class="alert-msg">' + escapeHtml(a.message || '') + '</div>'
+                + '</li>';
+        }
+        list.innerHTML = html;
+    }
+
+    function escapeHtml(t) {
+        var d = document.createElement('div');
+        d.appendChild(document.createTextNode(t));
+        return d.innerHTML;
+    }
+
+    window.filterAlerts = function(filter, btn) {
+        currentFilter = filter;
+        var btns = document.querySelectorAll('.filter-btn');
+        for (var i = 0; i < btns.length; i++) btns[i].className = 'filter-btn';
+        btn.className = 'filter-btn active';
+        renderAlerts();
+    };
+
+    fetchAlerts();
+    setInterval(fetchAlerts, 5000);
+})();
+</script>
+
+<%+footer%>

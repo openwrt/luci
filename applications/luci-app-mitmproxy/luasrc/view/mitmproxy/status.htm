@@ -1,0 +1,548 @@
+<%+header%>
+
+<style>
+/* ── mitmproxy LuCI Dashboard ── Light Theme ── */
+.mitmproxy-dashboard {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1a1a2e;
+    max-width: 1200px;
+}
+.mitmproxy-dashboard h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+    color: #1a1a2e;
+}
+
+/* ── Status Cards Row ── */
+.status-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.status-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    transition: box-shadow 0.2s;
+}
+.status-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.status-card .card-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748b;
+    margin-bottom: 8px;
+}
+.status-card .card-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.2;
+}
+.status-card .card-sub {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+}
+.status-card .card-icon {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+.card-icon.green  { background: #dcfce7; color: #16a34a; }
+.card-icon.blue   { background: #dbeafe; color: #2563eb; }
+.card-icon.amber  { background: #fef3c7; color: #d97706; }
+.card-icon.red    { background: #fee2e2; color: #dc2626; }
+.card-icon.purple { background: #f3e8ff; color: #7c3aed; }
+
+/* ── Status Badge ── */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge-running  { background: #dcfce7; color: #16a34a; }
+.badge-stopped  { background: #fee2e2; color: #dc2626; }
+.badge-disabled { background: #f1f5f9; color: #64748b; }
+
+/* ── Control Buttons ── */
+.control-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #ffffff;
+    color: #334155;
+    transition: all 0.15s;
+}
+.btn:hover { background: #f8fafc; border-color: #cbd5e1; }
+.btn-primary { background: #2563eb; color: #fff; border-color: #2563eb; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-danger  { background: #dc2626; color: #fff; border-color: #dc2626; }
+.btn-danger:hover  { background: #b91c1c; }
+.btn-success { background: #16a34a; color: #fff; border-color: #16a34a; }
+.btn-success:hover { background: #15803d; }
+
+/* ── Panels ── */
+.panel {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.panel-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+    font-size: 15px;
+    color: #1a1a2e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.panel-body { padding: 20px; }
+
+/* ── Memory Bar ── */
+.mem-bar-wrap {
+    background: #f1f5f9;
+    border-radius: 6px;
+    height: 24px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+.mem-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+}
+.mem-bar-fill.ok      { background: linear-gradient(90deg, #22c55e, #16a34a); }
+.mem-bar-fill.warn    { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.mem-bar-fill.danger  { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+/* ── Info Grid ── */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 6px;
+    font-size: 13px;
+}
+.info-row .label { color: #64748b; }
+.info-row .value { font-weight: 600; color: #1a1a2e; }
+
+/* ── Recent Flows Table ── */
+.flow-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.flow-table th {
+    background: #f8fafc;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #64748b;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e2e8f0;
+}
+.flow-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+.flow-table tr:hover td { background: #f8fafc; }
+.method-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: monospace;
+}
+.method-GET    { background: #dbeafe; color: #2563eb; }
+.method-POST   { background: #dcfce7; color: #16a34a; }
+.method-PUT    { background: #fef3c7; color: #d97706; }
+.method-DELETE { background: #fee2e2; color: #dc2626; }
+.method-PATCH  { background: #f3e8ff; color: #7c3aed; }
+.status-2xx { color: #16a34a; font-weight: 600; }
+.status-3xx { color: #2563eb; font-weight: 600; }
+.status-4xx { color: #d97706; font-weight: 600; }
+.status-5xx { color: #dc2626; font-weight: 600; }
+
+/* ── Refresh indicator ── */
+.refresh-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+.last-update { font-size: 11px; color: #94a3b8; font-weight: 400; }
+</style>
+
+<div class="mitmproxy-dashboard">
+    <h2>mitmproxy Dashboard</h2>
+
+    <!-- ── Status Cards ── -->
+    <div class="status-cards">
+        <div class="status-card">
+            <div class="card-label">Service Status</div>
+            <div class="card-value" id="svc-status">
+                <span class="badge badge-stopped">Checking...</span>
+            </div>
+            <div class="card-sub" id="svc-uptime">Uptime: --</div>
+            <div class="card-icon green">&#9654;</div>
+        </div>
+
+        <div class="status-card">
+            <div class="card-label">Process Info</div>
+            <div class="card-value" id="svc-pid">--</div>
+            <div class="card-sub" id="svc-mem">Memory: -- MB</div>
+            <div class="card-icon blue">&#9881;</div>
+        </div>
+
+        <div class="status-card">
+            <div class="card-label">Captured Flows</div>
+            <div class="card-value" id="flow-count">0</div>
+            <div class="card-sub" id="flow-mode">Mode: --</div>
+            <div class="card-icon purple">&#8644;</div>
+        </div>
+
+        <div class="status-card">
+            <div class="card-label">Alerts</div>
+            <div class="card-value" id="alert-count">0</div>
+            <div class="card-sub">Last 24 hours</div>
+            <div class="card-icon amber">&#9888;</div>
+        </div>
+
+        <div class="status-card">
+            <div class="card-label">System Memory</div>
+            <div class="card-value" id="sys-mem-pct">--%</div>
+            <div class="card-sub" id="sys-mem-detail">-- / -- MB</div>
+            <div class="card-icon red">&#128190;</div>
+        </div>
+    </div>
+
+    <!-- ── Controls ── -->
+    <div class="control-bar">
+        <button class="btn btn-success" onclick="svcAction('start')">&#9654; Start</button>
+        <button class="btn btn-danger"  onclick="svcAction('stop')">&#9632; Stop</button>
+        <button class="btn btn-primary" onclick="svcAction('restart')">&#8635; Restart</button>
+        <button class="btn" onclick="svcAction('enable')">&#10003; Enable at Boot</button>
+        <button class="btn" onclick="svcAction('disable')">&#10005; Disable at Boot</button>
+        <button class="btn" onclick="refreshAll()">&#8635; Refresh Now</button>
+        <button class="btn btn-primary" id="btn-webui" disabled onclick="openWebUi()">&#8599; Open mitmweb</button>
+    </div>
+
+    <!-- ── System Details ── -->
+    <div class="panel">
+        <div class="panel-header">
+            System Details
+            <span class="last-update"><span class="refresh-dot"></span>Auto-refresh 5s &mdash; <span id="last-update-ts">--</span></span>
+        </div>
+        <div class="panel-body">
+            <div class="info-grid">
+                <div class="info-row">
+                    <span class="label">Proxy Port</span>
+                    <span class="value" id="det-port">--</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Web UI Port</span>
+                    <span class="value" id="det-webport">--</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Proxy Mode</span>
+                    <span class="value" id="det-mode">--</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">CPU Load</span>
+                    <span class="value" id="det-cpu">--</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">Active Connections</span>
+                    <span class="value" id="det-conns">--</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">CPU Temperature</span>
+                    <span class="value" id="det-temp">--</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <div class="card-label">System Memory Usage</div>
+                <div class="mem-bar-wrap">
+                    <div class="mem-bar-fill ok" id="mem-bar" style="width:0%">0%</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-top:4px; font-size:11px; color:#94a3b8;">
+                    <span id="mem-used-label">Used: -- MB</span>
+                    <span id="mem-total-label">Total: -- MB</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <div class="card-label">Network I/O (br-lan)</div>
+                <div class="info-grid" style="margin-top:8px;">
+                    <div class="info-row">
+                        <span class="label">RX (Received)</span>
+                        <span class="value" id="net-rx">-- MB</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">TX (Sent)</span>
+                        <span class="value" id="net-tx">-- MB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Recent Flows ── -->
+    <div class="panel">
+        <div class="panel-header">
+            Recent Captured Flows
+            <span class="last-update" id="flow-refresh-info">Last 20 flows</span>
+        </div>
+        <div class="panel-body" style="padding:0; overflow-x:auto;">
+            <table class="flow-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Host</th>
+                        <th>Path</th>
+                        <th>Status</th>
+                        <th>Size</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="flow-tbody">
+                    <tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:30px;">Loading flows...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var baseUrl = '<%=luci.dispatcher.build_url("admin", "services", "mitmproxy", "api")%>';
+    var csrfToken = '<%=token%>';
+    var webUiUrl = null;
+
+    function esc(t) {
+        return String(t == null ? '' : t).replace(/[&<>"']/g, function(c) {
+            return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+        });
+    }
+
+    function fetchJSON(endpoint, cb) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', baseUrl + '/' + endpoint + '?_=' + Date.now(), true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try { cb(JSON.parse(xhr.responseText)); } catch(e) {}
+            }
+        };
+        xhr.send();
+    }
+
+    function setText(id, txt) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = txt;
+    }
+
+    function setHTML(id, html) {
+        var el = document.getElementById(id);
+        if (el) el.innerHTML = html;
+    }
+
+    function formatBytes(b) {
+        if (b < 1024) return b + ' B';
+        if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+        return (b/1048576).toFixed(1) + ' MB';
+    }
+
+    function methodClass(m) { return 'method-badge method-' + (m || 'GET'); }
+    function statusClass(s) {
+        s = parseInt(s);
+        if (s < 300) return 'status-2xx';
+        if (s < 400) return 'status-3xx';
+        if (s < 500) return 'status-4xx';
+        return 'status-5xx';
+    }
+
+    function updateStatus() {
+        fetchJSON('status', function(d) {
+            // Service status badge
+            if (d.running) {
+                setHTML('svc-status', '<span class="badge badge-running">Running</span>');
+            } else if (d.enabled) {
+                setHTML('svc-status', '<span class="badge badge-stopped">Stopped</span>');
+            } else {
+                setHTML('svc-status', '<span class="badge badge-disabled">Disabled</span>');
+            }
+
+            setText('svc-uptime', 'Uptime: ' + (d.uptime || 'N/A'));
+            setText('svc-pid', d.running ? 'PID ' + d.pid : 'Not running');
+            setText('svc-mem', 'Memory: ' + (d.memory_mb || '0') + ' MB');
+            setText('flow-count', d.flow_count || 0);
+            setText('flow-mode', 'Mode: ' + (d.mode || '--'));
+            setText('alert-count', d.alert_count || 0);
+
+            // System memory
+            var mem = d.sys_mem || {};
+            var pct = mem.percent || 0;
+            setText('sys-mem-pct', pct + '%');
+            setText('sys-mem-detail', (mem.used||0) + ' / ' + (mem.total||0) + ' MB');
+
+            var bar = document.getElementById('mem-bar');
+            if (bar) {
+                bar.style.width = pct + '%';
+                bar.textContent = pct + '%';
+                bar.className = 'mem-bar-fill ' + (pct < 60 ? 'ok' : pct < 85 ? 'warn' : 'danger');
+            }
+            setText('mem-used-label', 'Used: ' + (mem.used||0) + ' MB');
+            setText('mem-total-label', 'Total: ' + (mem.total||0) + ' MB');
+
+            // Details
+            setText('det-port', d.listen_port || '--');
+            setText('det-webport', d.web_port || '--');
+            setText('det-mode', d.mode || '--');
+            setText('det-cpu', d.loadavg || '--');
+
+            webUiUrl = d.web_token ? (location.protocol === 'https:' ? 'http:' : location.protocol)
+                + '//' + location.hostname + ':' + (d.web_port || '8081')
+                + '/?token=' + encodeURIComponent(d.web_token) : null;
+            var wb = document.getElementById('btn-webui');
+            if (wb) wb.disabled = !(d.running && webUiUrl);
+
+            setText('last-update-ts', new Date().toLocaleTimeString());
+        });
+
+        fetchJSON('stats', function(d) {
+            setText('net-rx', (d.rx_mb || '0') + ' MB');
+            setText('net-tx', (d.tx_mb || '0') + ' MB');
+            setText('det-conns', (d.connections || 0) + ' / ' + (d.connections_max || '--'));
+            setText('det-temp', d.cpu_temp !== 'N/A' ? d.cpu_temp + ' °C' : 'N/A');
+        });
+    }
+
+    function updateFlows() {
+        fetchJSON('flows', function(data) {
+            var flows = Array.isArray(data) ? data : (data.flows || []);
+            var tbody = document.getElementById('flow-tbody');
+            if (!tbody) return;
+
+            if (flows.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding:30px;">No flows captured yet</td></tr>';
+                return;
+            }
+
+            // Show last 20 flows
+            var recent = flows.slice(-20).reverse();
+            var html = '';
+            for (var i = 0; i < recent.length; i++) {
+                var f = recent[i];
+                var req = f.request || {};
+                var resp = f.response || {};
+                var method = String(req.method || 'GET');
+                var host = req.pretty_host || req.host || '--';
+                var path = req.path || '/';
+                if (path.length > 50) path = path.substring(0, 47) + '...';
+                var status = resp.status_code || '--';
+                var size = resp.contentLength || 0;
+                var ts = req.timestamp_start ? new Date(req.timestamp_start * 1000).toLocaleTimeString() : '--';
+
+                html += '<tr>'
+                    + '<td><span class="' + esc(methodClass(method.replace(/[^A-Za-z]/g, ''))) + '">' + esc(method) + '</span></td>'
+                    + '<td>' + esc(host) + '</td>'
+                    + '<td style="font-family:monospace; font-size:12px;">' + esc(path) + '</td>'
+                    + '<td><span class="' + statusClass(status) + '">' + esc(status) + '</span></td>'
+                    + '<td>' + formatBytes(size) + '</td>'
+                    + '<td>' + ts + '</td>'
+                    + '</tr>';
+            }
+            tbody.innerHTML = html;
+        });
+    }
+
+    function refreshAll() {
+        updateStatus();
+        updateFlows();
+    }
+
+    // Service action (start/stop/restart/enable/disable)
+    window.svcAction = function(action) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', baseUrl + '/action', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState !== 4) return;
+            var res = null;
+            try { res = JSON.parse(xhr.responseText); } catch (e) {}
+            if (!res || !res.success)
+                alert((res && res.message) || ('Request failed (HTTP ' + xhr.status + ')'));
+            setTimeout(refreshAll, 1500);
+        };
+        xhr.send('action=' + encodeURIComponent(action) + '&token=' + encodeURIComponent(csrfToken));
+    };
+
+    window.refreshAll = refreshAll;
+    window.openWebUi = function() { if (webUiUrl) window.open(webUiUrl, '_blank', 'noopener'); };
+
+    // Initial load
+    refreshAll();
+
+    // Auto-refresh every 5 seconds
+    setInterval(refreshAll, 5000);
+})();
+</script>
+
+<%+footer%>
