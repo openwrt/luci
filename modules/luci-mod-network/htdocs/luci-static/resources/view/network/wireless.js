@@ -2076,7 +2076,10 @@ return view.extend({
 						const eo = this.section.children.filter(function(o) { return o.option == 'eap_type'; })[0];
 						const ev = eo.formvalue(section_id);
 
-						if (ev != 'ttls' && (value == 'PAP' || value == 'CHAP' || value == 'MSCHAP' || value == 'MSCHAPV2'))
+						if (ev != 'ttls' && (value == 'PAP' || value == 'CHAP' || value == 'MSCHAP'))
+							return _('This authentication type is not applicable to the selected EAP method.');
+
+						if (ev != 'ttls' && ev != 'peap' && value == 'MSCHAPV2')
 							return _('This authentication type is not applicable to the selected EAP method.');
 
 						return true;
