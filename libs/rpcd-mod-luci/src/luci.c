@@ -189,9 +189,6 @@ invoke_ubus(struct ubus_context *ctx, const char *object, const char *method,
 		uloop_timeout_set(&ictx->timeout, 2000);
 	}
 	else {
-		if (cb != NULL)
-			cb(&ictx->request, -1, NULL);
-
 		free(ictx);
 	}
 
