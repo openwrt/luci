@@ -1104,8 +1104,15 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.depends({ type: 'bridge', multicast_querier: '1' });
 
+		const min_mtu = dev ? dev.getMinMTU() : null;
+		const max_mtu = dev ? dev.getMaxMTU() : null;
+		const effective_max_mtu = max_mtu || 9200;
+		const effective_min_mtu = effective_max_mtu < 576
+			? Math.min(min_mtu || effective_max_mtu, effective_max_mtu)
+			: Math.min(Math.max(min_mtu || 576, 576), effective_max_mtu);
+
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu', _('MTU'));
-		o.datatype = 'range(576, 9200)';
+		o.datatype = 'range(%d, %d)'.format(effective_min_mtu, effective_max_mtu);
 		o.validate = function(section_id, value) {
 			const parent_mtu = (dev && dev.getType() == 'vlan') ? (parent_dev ? parent_dev.getMTU() : null) : null;
 
@@ -1275,9 +1282,11 @@ return baseclass.extend({
 		o.sysfs = '/proc/sys/net/ipv6/conf/%s/drop_unsolicited_na'.format(devname || 'default');
 		o.depends('ipv6', /1/);
 
-		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu6', _('IPv6 MTU'));
-		o.datatype = 'max(9200)';
-		o.depends('ipv6', /1/);
+		if (effective_max_mtu >= 1280) {
+			o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu6', _('IPv6 MTU'));
+			o.datatype = 'range(1280, %d)'.format(effective_max_mtu);
+			o.depends('ipv6', /1/);
+		}
 
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'dadtransmits', _('DAD transmits'), _('Amount of Duplicate Address Detection probes to send'));
 		o.placeholder = '1';
