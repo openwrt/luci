@@ -1,0 +1,25 @@
+{
+	"admin/network/poe": {
+		"title": "PoE",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "poe/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-poe" ]
+		}
+	},
+
+	"admin/status/poe": {
+		"title": "PoE",
+		"order": 80,
+		"action": {
+			"type": "view",
+			"path": "poe/status"
+		},
+		"depends": {
+			"acl": [ "luci-app-poe-status" ]
+		}
+	}
+}
