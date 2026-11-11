@@ -6,18 +6,36 @@ import { basename, readlink, readfile, open, popen, stat, glob } from 'fs';
 export function process_list() {
 	const top = popen('/bin/busybox top -bn1');
 	let line, list = [];
+	let meminfo = readfile('/proc/meminfo');
+	let mt = meminfo ? match(meminfo, /MemTotal:\s+([0-9]+)\s+kB/) : null;
+	let memtotal = mt ? +mt[1] : 0;
 
 	for (let line = top.read('line'); length(line); line = top.read('line')) {
 		let m = match(trim(line), /^([0-9]+) +([0-9]+) +(.+) +([RSDZTWI][<NW ][<N ]) +([0-9]+m?) +([0-9]+%) +([0-9]+%) +(.+)$/);
 
 		if (m && m[8] != '/bin/busybox top -bn1') {
+			let vsz = m[5];
+			let mem = m[6];
+			/* busybox 1.37 top prints %VSZ; 1.38 prints %RSS. Prefer /proc. */
+			let st = readfile(sprintf('/proc/%s/status', m[1]));
+
+			if (st) {
+				let vs = match(st, /VmSize:\s+([0-9]+)\s+kB/);
+				let rs = match(st, /VmRSS:\s+([0-9]+)\s+kB/);
+
+				if (vs)
+					vsz = vs[1];
+				if (rs && memtotal)
+					mem = sprintf('%d%%', (+rs[1] * 100) / memtotal);
+			}
+
 			push(list, {
 				PID: m[1],
 				PPID: m[2],
 				USER: trim(m[3]),
 				STAT: m[4],
-				VSZ: m[5],
-				'%MEM': m[6],
+				VSZ: vsz,
+				'%MEM': mem,
 				'%CPU': m[7],
 				COMMAND: m[8]
 			});
