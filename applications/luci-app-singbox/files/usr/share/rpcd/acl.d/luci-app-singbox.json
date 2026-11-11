@@ -1,0 +1,29 @@
+{
+	"luci-app-singbox": {
+		"description": "sing-box VPN management",
+		"read": {
+			"ubus": {
+				"file": ["list", "read", "exec"],
+				"uci": ["get"]
+			},
+			"uci": ["singbox"],
+			"file": {
+				"/usr/share/singbox/status.sh": ["read", "exec"],
+				"/usr/share/singbox/tail-log.sh": ["read", "exec"]
+			}
+		},
+		"write": {
+			"ubus": {
+				"file": ["exec", "write"],
+				"uci": ["set", "add", "delete", "commit"]
+			},
+			"uci": ["singbox"],
+			"file": {
+				"/usr/share/singbox/*": ["exec"],
+				"/etc/init.d/sing-box": ["exec"],
+				"/etc/sing-box/config.json": ["write"],
+				"/tmp/singbox-config-preview.json": ["write"]
+			}
+		}
+	}
+}
