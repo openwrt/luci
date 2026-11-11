@@ -1,0 +1,17 @@
+{
+	"luci-app-radsecproxy": {
+		"description": "Grant UCI access for luci-app-radsecproxy",
+		"read": {
+			"file": {
+				"/etc/radsecproxy.conf": [ "read" ]
+			},
+			"uci": [ "radsecproxy" ]
+		},
+		"write": {
+			"file": {
+				"/etc/radsecproxy.conf": [ "write" ]
+			},
+			"uci": [ "radsecproxy" ]
+		}
+	}
+}
