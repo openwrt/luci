@@ -369,7 +369,76 @@ struct lease_entry {
 		struct in6_addr in6;
 	} addr[10];
 	uint8_t mask;
+	char name[1024];
 };
+
+/* Returns the length of the valid UTF-8 sequence at s, or 0 if invalid */
+static size_t
+utf8_seq_len(const unsigned char *s)
+{
+	uint32_t cp;
+	size_t i, n;
+
+	if (s[0] < 0x80)
+		return 1;
+	else if ((s[0] & 0xe0) == 0xc0)
+		n = 2, cp = s[0] & 0x1f;
+	else if ((s[0] & 0xf0) == 0xe0)
+		n = 3, cp = s[0] & 0x0f;
+	else if ((s[0] & 0xf8) == 0xf0)
+		n = 4, cp = s[0] & 0x07;
+	else
+		return 0;
+
+	for (i = 1; i < n; i++) {
+		if ((s[i] & 0xc0) != 0x80)
+			return 0;
+
+		cp = (cp << 6) | (s[i] & 0x3f);
+	}
+
+	if ((n == 2 && cp < 0x80) || (n == 3 && cp < 0x800) ||
+	    (n == 4 && cp < 0x10000) || cp > 0x10ffff ||
+	    (cp >= 0xd800 && cp <= 0xdfff))
+		return 0;
+
+	return n;
+}
+
+/*
+ * Lease hostnames are whatever the DHCP clients sent, i.e. arbitrary bytes.
+ * Escape control characters, backslashes and anything that isn't valid
+ * UTF-8 as \xNN, so the reply is always valid (and printable) JSON.
+ */
+static char *
+escape_hostname(const char *name, char *buf, size_t len)
+{
+	const unsigned char *s = (const unsigned char *)name;
+	size_t n, pos = 0;
+
+	while (*s) {
+		n = utf8_seq_len(s);
+
+		if (n > 0 && *s >= 0x20 && *s != 0x7f && *s != '\\') {
+			if (pos + n >= len)
+				break;
+
+			memcpy(&buf[pos], s, n);
+			pos += n;
+			s += n;
+		}
+		else {
+			if (pos + 4 >= len)
+				break;
+
+			pos += snprintf(&buf[pos], len - pos, "\\x%02x", *s++);
+		}
+	}
+
+	buf[pos] = '\0';
+
+	return buf;
+}
 
 static bool
 add_leasefile(const char *path)
@@ -757,6 +826,9 @@ lease_next(void)
 			if (ea)
 				e.mac = *ea;
 
+			if (e.hostname)
+				e.hostname = escape_hostname(e.hostname, e.name, sizeof(e.name));
+
 			return &e;
 		}
 
@@ -768,6 +840,9 @@ lease_next(void)
 
 		if (!parse_odhcpd_lease(&e, &lease_state.odhcpd[lease_state.off_odhcpd++]))
 			continue;
+
+		if (e.hostname)
+			e.hostname = escape_hostname(e.hostname, e.name, sizeof(e.name));
 
 		return &e;
 	}
