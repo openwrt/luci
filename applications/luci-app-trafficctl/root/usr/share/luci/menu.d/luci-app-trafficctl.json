@@ -1,0 +1,72 @@
+{
+	"admin/status/trafficctl": {
+		"title": "Traffic Control",
+		"order": 80,
+		"action": {
+			"type": "alias",
+			"path": "admin/status/trafficctl/status"
+		},
+		"depends": {
+			"acl": [ "luci-app-trafficctl" ]
+		}
+	},
+
+	"admin/status/trafficctl/status": {
+		"title": "Devices",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "trafficctl/status"
+		},
+		"depends": {
+			"acl": [ "luci-app-trafficctl" ]
+		}
+	},
+
+	"admin/status/trafficctl/rules": {
+		"title": "Rules",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "trafficctl/rules"
+		},
+		"depends": {
+			"acl": [ "luci-app-trafficctl" ]
+		}
+	},
+
+	"admin/status/trafficctl/history": {
+		"title": "History",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "trafficctl/history"
+		},
+		"depends": {
+			"acl": [ "luci-app-trafficctl" ]
+		}
+	},
+
+	"admin/status/trafficctl/portfw": {
+		"title": "Port Forwards",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "trafficctl/portfw"
+		},
+		"depends": {
+			"acl": [ "luci-app-trafficctl" ]
+		}
+	},
+	"admin/status/trafficctl/settings": {
+		"title": "Settings",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "trafficctl/settings"
+		},
+		"depends": {
+			"acl": [ "luci-app-trafficctl" ]
+		}
+	}
+}
