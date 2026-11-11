@@ -1,0 +1,180 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+umask 077
+
+LOCK_DIR=/var/lock/haproxy-manager.apply
+LOCK_BUSY_EXIT=75
+TMP_CFG="/tmp/haproxy-manager-apply.$$"
+BACKUP_ID=""
+APPLIED=0
+UHTTPD_CHANGED=0
+
+if [ "${1:-}" = --backup ]; then
+	BACKUP_ID="${2:-}"
+	[ "$#" -eq 2 ] || { echo "Usage: apply [--backup YYYYMMDD-HHMMSS]" >&2; exit 1; }
+	is_valid_backup_id "$BACKUP_ID" || { echo "Invalid backup identifier" >&2; exit 1; }
+elif [ "$#" -ne 0 ]; then
+	echo "Usage: apply [--backup YYYYMMDD-HHMMSS]" >&2
+	exit 1
+fi
+
+operation_lock_acquire "$LOCK_DIR" || {
+	echo "Another HAProxy Manager operation is already running." >&2
+	exit "$LOCK_BUSY_EXIT"
+}
+
+cleanup_temp() {
+	rm -f "$TMP_CFG"
+}
+
+release_lock() {
+	operation_lock_release "$LOCK_DIR"
+}
+
+cleanup() {
+	cleanup_temp
+	release_lock
+}
+
+restore_on_error() {
+	status=$?
+	trap - EXIT
+	if [ "$APPLIED" != 1 ] && [ -n "$BACKUP_ID" ]; then
+		if [ "$UHTTPD_CHANGED" = 1 ]; then
+			cleanup_temp
+			(
+				sleep 2
+				if /usr/libexec/haproxy-manager/rollback --sync "$BACKUP_ID" >/dev/null 2>&1; then
+					logger -t haproxy-manager "Apply failed; restored $BACKUP_ID"
+				else
+					logger -t haproxy-manager "Apply failed; could not restore $BACKUP_ID"
+				fi
+				release_lock
+			) >/dev/null 2>&1 &
+			operation_lock_set_pid "$LOCK_DIR" "$!"
+			exit "$status"
+		fi
+
+		if /usr/libexec/haproxy-manager/rollback --sync "$BACKUP_ID" >/dev/null 2>&1; then
+			logger -t haproxy-manager "Apply failed; restored $BACKUP_ID"
+		else
+			logger -t haproxy-manager "Apply failed; could not restore $BACKUP_ID"
+		fi
+	fi
+	cleanup
+	exit "$status"
+}
+trap restore_on_error EXIT
+
+if [ -n "$BACKUP_ID" ]; then
+	[ -d "$(backup_dir)/$BACKUP_ID" ] || { echo "Backup not found: $BACKUP_ID" >&2; exit 1; }
+else
+	BACKUP_ID="$(basename "$(/usr/libexec/haproxy-manager/backup)")"
+fi
+
+/usr/libexec/haproxy-manager/migrate >/dev/null
+
+defer_disabled_reload() {
+	APPLIED=1
+	trap - EXIT
+	cleanup_temp
+	(
+		sleep 2
+		if /etc/init.d/uhttpd reload >/dev/null 2>&1; then
+			logger -t haproxy-manager "LuCI listener bindings restored"
+		else
+			if /usr/libexec/haproxy-manager/rollback --sync "$BACKUP_ID" >/dev/null 2>&1; then
+				logger -t haproxy-manager "LuCI reload failed; restored $BACKUP_ID"
+			else
+				logger -t haproxy-manager "LuCI reload failed; could not restore $BACKUP_ID"
+			fi
+		fi
+		release_lock
+	) >/dev/null 2>&1 &
+	operation_lock_set_pid "$LOCK_DIR" "$!"
+}
+
+if [ "$(uci_get main enabled 0)" != 1 ]; then
+	MODE="$(active_mode)"
+	restore_uhttpd_bindings
+	[ "$UHTTPD_CHANGED" != 1 ] || uci commit uhttpd
+	/usr/libexec/haproxy-manager/firewall-sync --disable >/dev/null
+	case "$MODE" in
+	generated|raw)
+		/etc/init.d/haproxy stop >/dev/null 2>&1 || true
+		/etc/init.d/haproxy disable >/dev/null 2>&1 || true
+		uci set "$CONFIG.main.active_mode=none"
+		uci commit "$CONFIG"
+	;;
+	esac
+
+	if [ "$UHTTPD_CHANGED" = 1 ]; then
+		defer_disabled_reload
+		echo "Managed HAProxy service disabled. LuCI bindings will be restored shortly. Backup: $BACKUP_ID"
+		exit 0
+	fi
+
+	APPLIED=1
+	trap - EXIT
+	cleanup
+	echo "Managed HAProxy service disabled. Backup: $BACKUP_ID"
+	exit 0
+fi
+
+/usr/libexec/haproxy-manager/generate "$TMP_CFG" >/dev/null
+/usr/libexec/haproxy-manager/validate "$TMP_CFG"
+
+if [ "$(uci_get main manage_firewall 0)" = 1 ]; then
+	/usr/libexec/haproxy-manager/firewall-sync --check >/dev/null
+fi
+
+MANAGE_UHTTPD="$(uci_get main manage_uhttpd_bind 0)"
+LAN_BIND_IP="$(lan_ip || true)"
+
+if [ "$MANAGE_UHTTPD" = 1 ]; then
+	[ -n "$LAN_BIND_IP" ] || { echo "Cannot detect LAN IPv4 address. Set the LuCI LAN address manually." >&2; exit 1; }
+	is_valid_ip_or_host "$LAN_BIND_IP" || { echo "Invalid LuCI LAN address: $LAN_BIND_IP" >&2; exit 1; }
+	capture_uhttpd_bindings
+	set_uhttpd_list listen_http "$LAN_BIND_IP:80"
+	set_uhttpd_list listen_https "$LAN_BIND_IP:443"
+else
+	restore_uhttpd_bindings
+fi
+
+[ "$UHTTPD_CHANGED" != 1 ] || uci commit uhttpd
+
+/usr/libexec/haproxy-manager/firewall-sync >/dev/null
+atomic_install_file "$TMP_CFG" "$HAPROXY_CFG"
+uci set "$CONFIG.main.active_mode=generated"
+uci commit "$CONFIG"
+/etc/init.d/haproxy enable >/dev/null 2>&1 || true
+
+if [ "$UHTTPD_CHANGED" = 1 ]; then
+	APPLIED=1
+	trap - EXIT
+	cleanup_temp
+	(
+		sleep 2
+		if /etc/init.d/uhttpd reload >/dev/null 2>&1 && /etc/init.d/haproxy restart >/dev/null 2>&1; then
+			logger -t haproxy-manager "LuCI and HAProxy reloaded successfully"
+		else
+			if /usr/libexec/haproxy-manager/rollback --sync "$BACKUP_ID" >/dev/null 2>&1; then
+				logger -t haproxy-manager "Service reload failed; restored $BACKUP_ID"
+			else
+				logger -t haproxy-manager "Service reload failed; could not restore $BACKUP_ID"
+			fi
+		fi
+		release_lock
+	) >/dev/null 2>&1 &
+	operation_lock_set_pid "$LOCK_DIR" "$!"
+	echo "Applied successfully. LuCI and HAProxy will reload shortly. Backup: $BACKUP_ID"
+	exit 0
+fi
+
+/etc/init.d/haproxy restart
+
+APPLIED=1
+trap - EXIT
+cleanup
+echo "Applied successfully. Backup: $BACKUP_ID"

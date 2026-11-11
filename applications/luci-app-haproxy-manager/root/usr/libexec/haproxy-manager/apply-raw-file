@@ -1,0 +1,45 @@
+#!/bin/sh
+set -eu
+. /usr/libexec/haproxy-manager/common.sh
+umask 077
+
+SRC="${1:-}"
+is_safe_temp_path "$SRC" || { echo "Refusing unsafe raw config path: $SRC" >&2; exit 1; }
+
+[ -f "$SRC" ] || { echo "Raw config file not found: $SRC" >&2; exit 1; }
+
+LOCK_DIR=/var/lock/haproxy-manager.apply
+operation_lock_acquire "$LOCK_DIR" || { echo "Another HAProxy Manager operation is already running." >&2; exit 1; }
+TMP_RAW="/tmp/haproxy-manager-raw-apply.$$"
+BACKUP_ID=""
+APPLIED=0
+
+restore_on_error() {
+	status=$?
+	trap - EXIT
+	if [ "$APPLIED" != 1 ] && [ -n "$BACKUP_ID" ]; then
+		/usr/libexec/haproxy-manager/rollback --sync "$BACKUP_ID" >/dev/null 2>&1 || true
+		logger -t haproxy-manager "Raw apply failed; restored $BACKUP_ID"
+	fi
+	rm -f "$TMP_RAW" "$SRC"
+	operation_lock_release "$LOCK_DIR"
+	exit "$status"
+}
+trap restore_on_error EXIT
+
+cp "$SRC" "$TMP_RAW"
+rm -f "$SRC"
+/usr/libexec/haproxy-manager/validate "$TMP_RAW"
+BACKUP_ID="$(basename "$(/usr/libexec/haproxy-manager/backup)")"
+
+atomic_install_file "$TMP_RAW" "$HAPROXY_CFG"
+uci set "$CONFIG.main.active_mode=raw"
+uci commit "$CONFIG"
+/etc/init.d/haproxy enable >/dev/null 2>&1 || true
+/etc/init.d/haproxy restart
+
+APPLIED=1
+trap - EXIT
+rm -f "$TMP_RAW" "$SRC"
+operation_lock_release "$LOCK_DIR"
+echo "Raw HAProxy config applied. Backup: $BACKUP_ID"
