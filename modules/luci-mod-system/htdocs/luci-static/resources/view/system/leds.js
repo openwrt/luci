@@ -67,6 +67,11 @@ return view.extend({
 			o.value(name)
 		});
 
+		o = s.option(form.Value, 'brightness', _('Brightness'),
+		_('The brightness is based on a virtual scale of 0 to 1000.<br />The result depends on your hardware specifications.'));
+		o.default = 1000;
+		o.datatype = 'range(0,1000)';
+
 		o = s.option(form.ListValue, 'trigger', _('Trigger'));
 		for (let plugin of plugins) {
 			if ( plugin.form.kernel == false ) {
