@@ -1,0 +1,193 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-uci-git-backup 1.2.1\n"
+"PO-Revision-Date: 2026-04-12 12:20+0200\n"
+"Last-Translator: OpenCode\n"
+"Language-Team: German\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "No output."
+msgstr "Keine Ausgabe."
+
+msgid "Command completed successfully."
+msgstr "Befehl erfolgreich abgeschlossen."
+
+#, javascript-format
+msgid "Command failed with exit code %d."
+msgstr "Befehl mit Exit-Code %d fehlgeschlagen."
+
+msgid "Dismiss"
+msgstr "Schließen"
+
+msgid "Running backup..."
+msgstr "Backup wird ausgeführt..."
+
+msgid "The backup script is running now."
+msgstr "Das Backup-Skript wird jetzt ausgeführt."
+
+msgid "Backup Output"
+msgstr "Backup-Ausgabe"
+
+msgid "Testing connection..."
+msgstr "Verbindung wird getestet..."
+
+msgid "Saving settings..."
+msgstr "Einstellungen werden gespeichert..."
+
+msgid "Saving the current form values before running the backup."
+msgstr "Die aktuellen Formularwerte werden vor dem Start des Backups gespeichert."
+
+msgid "Saving the current form values before testing the connection."
+msgstr "Die aktuellen Formularwerte werden vor dem Verbindungstest gespeichert."
+
+msgid "Checking remote reachability and authentication with the current form values."
+msgstr "Erreichbarkeit und Authentifizierung des Remotes werden mit den aktuellen Formularwerten geprüft."
+
+msgid "Connection Test Output"
+msgstr "Ausgabe des Verbindungstests"
+
+msgid "UCI Git Backup"
+msgstr "UCI Git Backup"
+
+msgid "Automatically commits and pushes watched UCI configuration to a remote Git repository whenever a watched config is committed."
+msgstr "Überwachte UCI-Konfigurationen werden automatisch in ein entferntes Git-Repository committet und gepusht, sobald eine überwachte Konfiguration übernommen wird."
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Enable automatic backup"
+msgstr "Automatisches Backup aktivieren"
+
+msgid "Remote Repository URL"
+msgstr "URL des entfernten Repositorys"
+
+msgid "HTTPS or SSH URL, e.g. <code>https://github.com/user/repo.git</code> or <code>git@github.com:user/repo.git</code>"
+msgstr "HTTPS- oder SSH-URL, z. B. <code>https://github.com/user/repo.git</code> oder <code>git@github.com:user/repo.git</code>"
+
+msgid "Branch"
+msgstr "Branch"
+
+msgid "Remote branch to push to. It will be created if it does not exist yet."
+msgstr "Entfernter Branch, auf den gepusht wird. Er wird erstellt, falls er noch nicht existiert."
+
+msgid "Authentication"
+msgstr "Authentifizierung"
+
+msgid "Username / Password or Token (HTTPS)"
+msgstr "Benutzername / Passwort oder Token (HTTPS)"
+
+msgid "SSH Private Key"
+msgstr "Privater SSH-Schlüssel"
+
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "Required for HTTPS auth. For personal access tokens, use your normal Git username here and paste the token below."
+msgstr "Für HTTPS-Authentifizierung erforderlich. Verwenden Sie bei Personal Access Tokens hier Ihren normalen Git-Benutzernamen und fügen Sie das Token unten ein."
+
+msgid "Password / Token"
+msgstr "Passwort / Token"
+
+msgid "For hosted Git services, use a personal access token instead of your account password."
+msgstr "Verwenden Sie bei gehosteten Git-Diensten statt Ihres Kontopassworts ein Personal Access Token."
+
+msgid "Stored in <code>/etc/uci-git-backup/id_rsa</code>, not in UCI. Paste an unencrypted key. Leaving this field empty keeps the existing key file."
+msgstr "Wird in <code>/etc/uci-git-backup/id_rsa</code> gespeichert, nicht in UCI. Fügen Sie einen unverschlüsselten Schlüssel ein. Wenn dieses Feld leer bleibt, wird die vorhandene Schlüsseldatei beibehalten."
+
+msgid "Local Repository Path"
+msgstr "Lokaler Repository-Pfad"
+
+msgid "Use <code>/etc/...</code> for persistent storage or <code>/tmp/...</code> for temporary RAM-only storage."
+msgstr "Verwenden Sie <code>/etc/...</code> für persistenten Speicher oder <code>/tmp/...</code> für temporäre reine RAM-Speicherung."
+
+msgid "Commit Author Name"
+msgstr "Name des Commit-Autors"
+
+msgid "Commit Author Email"
+msgstr "E-Mail des Commit-Autors"
+
+msgid "Additional UCI Configs to Watch"
+msgstr "Zusätzliche zu überwachende UCI-Konfigurationen"
+
+msgid "Extra config names beyond the built-in set. Restart the service after saving to apply trigger changes."
+msgstr "Zusätzliche Konfigurationsnamen außerhalb der eingebauten Liste. Starten Sie den Dienst nach dem Speichern neu, damit Trigger-Änderungen übernommen werden."
+
+msgid "Actions"
+msgstr "Aktionen"
+
+msgid "Run Backup Now"
+msgstr "Backup jetzt ausführen"
+
+msgid "Saves the current form values, then runs the backup script and shows its output."
+msgstr "Speichert die aktuellen Formularwerte, führt dann das Backup-Skript aus und zeigt dessen Ausgabe an."
+
+msgid "Test Connection"
+msgstr "Verbindung testen"
+
+msgid "Saves the current form values, then tests the remote settings without creating a commit or push."
+msgstr "Speichert die aktuellen Formularwerte und testet dann die Remote-Einstellungen, ohne einen Commit oder Push auszuführen."
+
+msgid "Recent Log"
+msgstr "Letztes Log"
+
+msgid "Recent Log Output"
+msgstr "Letzte Log-Ausgabe"
+
+msgid "No recent log output."
+msgstr "Keine aktuelle Log-Ausgabe."
+
+msgid "Restoring backup..."
+msgstr "Backup wird wiederhergestellt..."
+
+msgid "The selected commit is being restored now."
+msgstr "Der ausgewählte Commit wird jetzt wiederhergestellt."
+
+msgid "Restore Output"
+msgstr "Ausgabe der Wiederherstellung"
+
+msgid "Restore this backup?"
+msgstr "Dieses Backup wiederherstellen?"
+
+msgid "This will copy the selected backup into <code>/etc/config/</code> and trigger a configuration reload."
+msgstr "Dadurch wird das ausgewählte Backup nach <code>/etc/config/</code> kopiert und ein Neuladen der Konfiguration ausgelöst."
+
+#, javascript-format
+msgid "Selected commit: %s"
+msgstr "Ausgewählter Commit: %s"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+msgid "Unable to read backup history."
+msgstr "Backup-Verlauf kann nicht gelesen werden."
+
+msgid "No error output."
+msgstr "Keine Fehlerausgabe."
+
+msgid "No backup commits found yet."
+msgstr "Noch keine Backup-Commits gefunden."
+
+msgid "Date"
+msgstr "Datum"
+
+msgid "Commit"
+msgstr "Commit"
+
+msgid "SHA"
+msgstr "SHA"
+
+msgid "Action"
+msgstr "Aktion"
+
+msgid "Restore UCI Backup"
+msgstr "UCI-Backup wiederherstellen"
+
+msgid "Select one of the last 30 backup commits and restore it. A new commit recording the restore will be created afterwards."
+msgstr "Wählen Sie einen der letzten 30 Backup-Commits aus und stellen Sie ihn wieder her. Anschließend wird ein neuer Commit erstellt, der die Wiederherstellung festhält."
