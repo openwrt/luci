@@ -116,6 +116,28 @@ function processLines(buffer, onChunk) {
 	return buffer;
 }
 
+// Parse the docker multiplexed stream format, https://docs.docker.com/reference/api/engine/version/v1.43/#stream-format
+function parse_multiplexed_stream(buffer) {
+	const output = [];
+	// Only three stream types are defined: 0=stdin, 1=stdout, 2=stderr.
+	const decoders = [new TextDecoder(), new TextDecoder(), new TextDecoder()];
+
+	while (buffer.length > 0) {
+		if (buffer.length < 8) break; // Not enough data for header
+		let stream_type = buffer[0];
+		let payload_length = ((buffer[4] << 24) | (buffer[5] << 16) | (buffer[6] << 8) | buffer[7]) >>> 0; // Convert to unsigned
+		if (buffer.length < 8 + payload_length) break; // Not enough data for payload
+		if (stream_type <= 2) {
+			let payload = buffer.subarray(8, 8 + payload_length);
+			output.push({ type: stream_type, payload: decoders[stream_type].decode(payload, { stream: true }) });
+		} else {
+			console.warn(`Unknown stream type ${stream_type} in multiplexed stream, ignoring`);
+		}
+		buffer = buffer.subarray(8 + payload_length);
+	}
+
+	return output;
+}
 
 function call_docker(method, path, options = {}) {
 	return loadPromise.then(() => {
@@ -221,6 +243,17 @@ function call_docker(method, path, options = {}) {
 				const headersObj = {};
 				for (const [key, value] of response.headers.entries()) {
 					headersObj[key] = value;
+				}
+
+				if ("application/vnd.docker.multiplexed-stream" === headersObj['content-type']) {
+					return response.arrayBuffer().then(buffer => {
+						const parsed = parse_multiplexed_stream(new Uint8Array(buffer));
+						return {
+							code: response.status,
+							body: parsed,
+							headers: headersObj,
+						};
+					});
 				}
 
 				return response.text().then(text => {
