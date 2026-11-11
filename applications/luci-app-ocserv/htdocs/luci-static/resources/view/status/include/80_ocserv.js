@@ -62,14 +62,15 @@ return baseclass.extend({
 	},
 
 	handleDisconnect: function(id) {
-		return L.resolveDefault(
-			fs.exec('/usr/bin/occtl', ['disconnect', 'id', id]),
-			null
-		).then(() => {
+		return fs.exec('/usr/bin/occtl', ['disconnect', 'id', id]).then(L.bind(function(res) {
+			if (!res || res.code !== 0) {
+				const msg = (res && String(res.stderr || res.stdout || '').trim())
+					|| _('command failed');
+				throw new Error(msg);
+			}
 			L.ui.addNotification(null, E('p', _('User %s has been disconnected.').format(id)), 'info');
-			// Trigger refresh
 			this.load();
-		}).catch(function(e) {
+		}, this)).catch(function(e) {
 			L.ui.addNotification(null, E('p', _('Failed to disconnect user: %s').format(e.message)), 'error');
 		});
 	},
