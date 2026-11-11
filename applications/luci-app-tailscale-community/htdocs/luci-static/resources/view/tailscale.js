@@ -239,13 +239,23 @@ function renderStatus(status) {
 	return statusTable;
 }
 
-function renderDevices(status) {
+let cachedStatus = null;
+
+function renderPeerRows(tbody, status, filterQuery) {
+	if (!tbody) return;
+
 	if (!status || !status.hasOwnProperty('status')) {
-		return E('em', {}, _('Collecting data ...'));
+		tbody.replaceChildren(E('tr', { 'class': 'cbi-rowstyle-1' }, [
+			E('td', { 'class': 'cbi-value-field', 'colspan': 8 }, E('em', {}, _('Collecting data ...')))
+		]));
+		return;
 	}
 
 	if (status.status != 'running') {
-		return E('em', {}, _('Tailscale status error'));
+		tbody.replaceChildren(E('tr', { 'class': 'cbi-rowstyle-1' }, [
+			E('td', { 'class': 'cbi-value-field', 'colspan': 8 }, E('em', {}, _('Tailscale status error')))
+		]));
+		return;
 	}
 
 	if (Object.keys(regionCodeMap).length === 0) {
@@ -254,8 +264,61 @@ function renderDevices(status) {
 
 	const peers = status.peers;
 	if (!peers || Object.keys(peers).length === 0) {
-		return E('p', {}, _('No peer devices found.'));
+		tbody.replaceChildren(E('tr', { 'class': 'cbi-rowstyle-1' }, [
+			E('td', { 'class': 'cbi-value-field', 'colspan': 8 }, E('p', {}, _('No peer devices found.')))
+		]));
+		return;
 	}
+
+	const query = (filterQuery || '').trim().toLowerCase();
+	const peerEntries = Object.values(peers).filter(peer => {
+		if (!query) return true;
+		const hostname = (peer.hostname || '').toLowerCase();
+		const ip = (peer.ip || '').toLowerCase();
+		const ostype = (peer.ostype || '').toLowerCase();
+		return hostname.includes(query) || ip.includes(query) || ostype.includes(query);
+	});
+
+	if (peerEntries.length === 0) {
+		tbody.replaceChildren(E('tr', { 'class': 'cbi-rowstyle-1' }, [
+			E('td', { 'class': 'cbi-value-field', 'colspan': 8 }, E('em', {}, _('No matching peer devices found.')))
+		]));
+		return;
+	}
+
+	const td_style = 'padding-right: 20px;';
+	const rows = peerEntries.map(peer => {
+		return E('tr', { 'class': 'cbi-rowstyle-1' }, [
+			E('td', { 'class': 'cbi-value-field', 'style': td_style },
+				E('span', {
+					'style': `color:${peer.exit_node ? 'blue' : (peer.online ? 'green' : 'gray')};`,
+					'title': (peer.exit_node ? _('Exit Node') + ' ' : '') + (peer.online ? _('Online') : _('Offline'))
+				}, peer.online ? '●' : '○')
+			),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, E('strong', {}, peer.hostname + (peer.exit_node_option ? ' (ExNode)' : ''))),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.ip || 'N/A'),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.ostype || 'N/A'),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatConnectionInfo(peer.linkadress || '-')),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatBytes(peer.rx)),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatBytes(peer.tx)),
+			E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatLastSeen(peer.lastseen))
+		]);
+	});
+
+	tbody.replaceChildren(...rows);
+}
+
+function updateDevicesView(status) {
+	cachedStatus = status;
+	const tbody = document.getElementById('tailscale_devices_tbody');
+	const searchInput = document.getElementById('tailscale_devices_filter');
+	if (tbody) {
+		renderPeerRows(tbody, status, searchInput ? searchInput.value : '');
+	}
+}
+
+function renderDevices(status) {
+	cachedStatus = status;
 
 	const peerTableHeaders = [
 		{ text: _('Status'), style: 'width: 80px;' },
@@ -268,34 +331,53 @@ function renderDevices(status) {
 		{ text: _('Last Seen') }
 	];
 
-	return E('table', { 'class': 'cbi-table' }, [
-		E('tr', { 'class': 'cbi-table-header' }, peerTableHeaders.map(header => {
-			let th_style = 'padding-right: 20px; text-align: left;';
+	const searchInput = E('input', {
+		'type': 'text',
+		'id': 'tailscale_devices_filter',
+		'class': 'cbi-input-text',
+		'placeholder': _('Filter peers by name, IP, or OS...'),
+		'style': 'width: 100%; max-width: 320px;',
+		'input': function(ev) {
+			const tbody = document.getElementById('tailscale_devices_tbody');
+			if (tbody) {
+				renderPeerRows(tbody, cachedStatus, ev.target.value);
+			}
+		}
+	});
+
+	const searchBar = E('div', {
+		'style': 'margin-bottom: 12px; display: flex; align-items: center; justify-content: flex-end;'
+	}, [
+		E('label', { 'for': 'tailscale_devices_filter', 'style': 'margin-right: 8px;' }, _('Filter:')),
+		searchInput
+	]);
+
+	const tbody = E('tbody', { 'id': 'tailscale_devices_tbody' });
+	renderPeerRows(tbody, status, '');
+
+	const thead = E('thead', {}, [
+		E('tr', { 'class': 'cbi-table-header cbi-section-table-titles', 'style': 'position: sticky; top: 0; z-index: 1;' }, peerTableHeaders.map(header => {
+			let th_style = 'padding-right: 20px; text-align: left; background-color: var(--background-color, #fff);';
 			if (header.style) {
 				th_style += header.style;
 			}
 			return E('th', { 'class': 'cbi-table-cell', 'style': th_style }, header.text);
-		})),
+		}))
+	]);
 
-		...Object.entries(peers).map(([peerid, peer]) => {
-			const td_style = 'padding-right: 20px;';
+	const table = E('table', { 'class': 'cbi-table' }, [
+		thead,
+		tbody
+	]);
 
-			return E('tr', { 'class': 'cbi-rowstyle-1' }, [
-				E('td', { 'class': 'cbi-value-field', 'style': td_style },
-					E('span', {
-						'style': `color:${peer.exit_node ? 'blue' : (peer.online ? 'green' : 'gray')};`,
-						'title': (peer.exit_node ? _('Exit Node') + ' ' : '') + (peer.online ? _('Online') : _('Offline'))
-					}, peer.online ? '●' : '○')
-				),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, E('strong', {}, peer.hostname + (peer.exit_node_option ? ' (ExNode)' : ''))),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.ip || 'N/A'),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.ostype || 'N/A'),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatConnectionInfo(peer.linkadress || '-')),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatBytes(peer.rx)),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatBytes(peer.tx)),
-				E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatLastSeen(peer.lastseen))
-			]);
-		})
+	const scrollContainer = E('div', {
+		'id': 'tailscale_devices_scroll_container',
+		'style': 'max-height: 480px; overflow-y: auto; width: 100%;'
+	}, [table]);
+
+	return E('div', { 'style': 'width: 100%;' }, [
+		searchBar,
+		scrollContainer
 	]);
 }
 
@@ -360,10 +442,7 @@ return view.extend({
 							view.replaceChildren(content);
 						}
 
-						const devicesView = document.getElementById("tailscale_devices_display");
-						if (devicesView) {
-							devicesView.replaceChildren(renderDevices(res));
-						}
+						updateDevicesView(res);
 
 						// login button only available when logged out
 						const login_btn=document.getElementsByClassName('cbi-button cbi-button-apply')[0];
