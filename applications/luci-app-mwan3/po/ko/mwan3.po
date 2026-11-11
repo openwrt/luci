@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-07-15 06:01+0000\n"
-"Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
+"PO-Revision-Date: 2026-11-12 15:26+0000\n"
+"Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/ko/>\n"
 "Language: ko\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:211
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:227
@@ -67,29 +67,31 @@ msgstr "%d초"
 msgid ""
 "%s: Name of Physical device which interface went up or down (e.g. \"eth0\" "
 "or \"wwan0\")"
-msgstr ""
+msgstr "%s: 인터페이스가 속한 물리 장치의 이름입니다 (예: \"eth0\" or \"wwan0\")"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:39
 msgid "%s: Name of the action that triggered this event"
-msgstr ""
+msgstr "%s: 이 이벤트를 발생시킨 작업의 이름입니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:44
 msgid ""
 "%s: Name of the interface which went up or down (e.g. \"wan\" or \"wwan\")"
 msgstr ""
+"%s: 활성(Up) 또는 비활성(Down) 인터페이스의 이름입니다 (예: \"wan\" or "
+"\"wwan\")"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:41
 msgid "* %s: Is called by netifd and mwan3track"
-msgstr ""
+msgstr "* %s: netifd 및 mwan3track에 의해 호출됩니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:43
 msgid "* %s: Is only called by mwan3track if tracking has failed"
-msgstr ""
+msgstr "* %s (연결 해제): 추적이 실패한 경우에만 mwan3track에 의해 호출됩니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:42
 msgid "* %s: Is only called by mwan3track if tracking was successful"
-msgstr ""
+msgstr "* %s (연결): 추적이 성공한 경우에만 mwan3track에 의해 호출됩니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:71
 msgid "-- Interface Selection --"
@@ -104,14 +106,16 @@ msgid ""
 "Acceptable values: 1-100. This many Tracking IP addresses must respond for "
 "the link to be deemed up"
 msgstr ""
+"허용되는 값: 1~100. 링크가 활성(Up) 상태로 간주되려면 추적 IP 주소가 이 "
+"수만큼 응답해야 합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:62
 msgid "Acceptable values: 1-1000. Defaults to 1 if not set"
-msgstr ""
+msgstr "허용되는 값: 1~1000. 설정하지 않을 경우 기본값은 1입니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:58
 msgid "Acceptable values: 1-256. Defaults to 1 if not set"
-msgstr ""
+msgstr "허용되는 값: 1~256. 설정하지 않을 경우 기본값은 1입니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:26
 msgid "Alert"
@@ -123,7 +127,7 @@ msgstr "연결된 네트워크 확인 시 선택한 라우팅 테이블도 함�
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:65
 msgid "Check IP rules"
-msgstr ""
+msgstr "IP 규칙 확인"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:140
 msgid "Check link quality"
@@ -131,7 +135,7 @@ msgstr "연결 품질 확인"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:66
 msgid "Check routing table"
-msgstr ""
+msgstr "라우팅 테이블 확인"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:95
 msgid "Collecting data ..."
@@ -170,8 +174,8 @@ msgstr "비활성화"
 msgid ""
 "Downed interface will be deemed up after this many successful ping tests"
 msgstr ""
-"Ping 테스트가 해당 횟수만큼 연속 성공하면 장애 상태 인터페이스를 정상(Up) 상"
-"태로 간주합니다"
+"Ping 테스트가 해당 횟수만큼 연속 성공하면 비활성 인터페이스를 활성(Up) "
+"상태로 간주합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:49
@@ -184,7 +188,7 @@ msgstr "비상(Emergency)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:92
 msgid "Enable ssl tracking"
-msgstr ""
+msgstr "SSL 추적 활성화"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:55
 msgid "Enabled"
@@ -194,6 +198,8 @@ msgstr "활성화"
 msgid ""
 "Enables firewall rule logging (global mwan3 logging must also be enabled)"
 msgstr ""
+"방화벽 규칙 로그 기록을 활성화합니다 (전역 mwan3 로그 기록도 활성화되어 "
+"있어야 합니다)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:20
 msgid "Enables global firewall logging"
@@ -201,7 +207,7 @@ msgstr "전역 방화벽 로그 기록을 사용합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:93
 msgid "Enables https tracking on ssl port 443"
-msgstr ""
+msgstr "SSL 포트 443에서 HTTPS 추적을 활성화합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:15
 msgid "Enter value in hex, starting with <code>0x</code>"
@@ -217,7 +223,7 @@ msgstr "실행"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:59
 msgid "Expect interface state on up event"
-msgstr ""
+msgstr "활성(Up) 이벤트 발생 시 예상되는 인터페이스 상태를 설정합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:213
 msgid "Failure interval"
@@ -255,23 +261,23 @@ msgstr "전역"
 
 #: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:53
 msgid "Grant access for luci-app-mwan3 configuration"
-msgstr "luci-app-mwan3 설정의 접근 권한 부여"
+msgstr "luci-app-mwan3 설정에 접근 권한 부여"
 
 #: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
 msgid "Grant access for luci-app-mwan3 status information"
-msgstr "luci-app-mwan3 상태 정보의 접근 권한 부여"
+msgstr "luci-app-mwan3 상태 정보에 접근 권한 부여"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:68
 msgid "Hotplug ifdown"
-msgstr ""
+msgstr "핫플러그 ifdown"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:67
 msgid "Hotplug ifup"
-msgstr ""
+msgstr "핫플러그 ifup"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:107
 msgid "IPset"
-msgstr ""
+msgstr "IPset"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:67
 msgid "IPv4"
@@ -312,24 +318,24 @@ msgstr "인터페이스"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:252
 msgid "Interface down"
-msgstr "인터페이스 장애 판정"
+msgstr "인터페이스 비활성(Down)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:266
 msgid "Interface up"
-msgstr "인터페이스 정상 판정"
+msgstr "인터페이스 활성(Up)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:253
 msgid "Interface will be deemed down after this many failed ping tests"
 msgstr ""
-"Ping 테스트가 해당 횟수만큼 연속 실패하면 인터페이스를 장애(Down) 상태로 간주"
-"합니다"
+"Ping 테스트가 해당 횟수만큼 연속 실패하면 인터페이스를 비활성(Down) 상태로 "
+"간주합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:25
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:46
 msgid ""
 "Interfaces may not share the same name as configured members, policies or "
 "rules."
-msgstr "인터페이스 이름은 설정된 멤버, 정책, 규칙의 이름과 중복될 수 없습니다."
+msgstr "인터페이스는 설정된 멤버, 정책, 규칙과 동일한 이름을 사용할 수 없습니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:65
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:59
@@ -347,7 +353,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:61
 msgid "Last resort"
-msgstr ""
+msgstr "최후의 수단"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:34
 msgid "Lines beginning with # are comments and are not executed."
@@ -358,6 +364,8 @@ msgid ""
 "Load-balanced member interfaces distribute more traffic out those with "
 "higher weights."
 msgstr ""
+"트래픽이 분산되는 멤버 인터페이스는 가중치가 높을수록 더 많은 트래픽을 "
+"처리합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:117
@@ -378,6 +386,8 @@ msgid ""
 "May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or "
 "as a portrange (eg \"1024:2048\") without quotes"
 msgstr ""
+"단일 포트나 여러 포트 (예: \"22\" 또는 \"80,443\") 또는 포트 범위 (예: "
+"\"1024:2048\") 형태로 입력할 수 있습니다. (따옴표 제외)"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:75
 msgid "Member"
@@ -385,11 +395,11 @@ msgstr "멤버"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:19
 msgid "Member interfaces with lower metrics are used first."
-msgstr ""
+msgstr "메트릭이 낮은 멤버 인터페이스가 우선적으로 사용됩니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:20
 msgid "Member interfaces with the same metric will be load-balanced."
-msgstr ""
+msgstr "메트릭이 동일한 멤버 인터페이스 간에는 트래픽이 분산됩니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:54
 msgid "Member used"
@@ -398,14 +408,14 @@ msgstr "사용 멤버"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:18
 msgid ""
 "Members are profiles attaching a metric and weight to an MWAN interface."
-msgstr ""
+msgstr "멤버는 MWAN 인터페이스에 메트릭 및 가중치를 부여하는 프로필입니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:20
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:41
 msgid ""
 "Members may not share the same name as configured interfaces, policies or "
 "rules."
-msgstr ""
+msgstr "멤버는 설정된 인터페이스, 정책, 규칙과 동일한 이름을 사용할 수 없습니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:288
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:57
@@ -463,6 +473,8 @@ msgid ""
 "Mwan3 requires that all interfaces have a unique metric configured in /etc/"
 "config/network."
 msgstr ""
+"Mwan3를 사용하려면 모든 인터페이스가 /etc/config/network에 고유한 메트릭이 "
+"설정되어 있어야 합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:49
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:44
@@ -476,6 +488,8 @@ msgid ""
 "Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/"
 "youtube.com/youtube\")"
 msgstr ""
+"IPset 규칙의 이름입니다. /etc/dnsmasq.conf에 IPset 규칙을 설정해야 합니다 "
+"(예: \"ipset=/youtube.com/youtube\")"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:24
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces-"
@@ -493,7 +507,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:23
 msgid "Names must be 15 characters or less."
-msgstr ""
+msgstr "이름은 15자 이내여야 합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:23
 msgid "Names must match the interface name found in /etc/config/network."
@@ -510,7 +524,7 @@ msgstr "MWAN 인터페이스를 찾을 수 없음"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:43
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:52
 msgid "No Tracking"
-msgstr ""
+msgstr "추적 안 함"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:296
 msgid "No interface metric set!"
@@ -550,7 +564,7 @@ msgstr "Ping 횟수"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:63
 msgid "Ping default gateway"
-msgstr ""
+msgstr "기본 게이트웨이 Ping 테스트"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:198
 msgid "Ping interval"
@@ -574,20 +588,22 @@ msgstr "Ping 응답 대기 시간"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:64
 msgid "Ping tracking IP"
-msgstr ""
+msgstr "추적 IP Ping 테스트"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:18
 msgid ""
 "Policies are profiles grouping one or more members controlling how Mwan3 "
 "distributes traffic."
 msgstr ""
+"정책은 하나 이상의 멤버를 그룹화하여 Mwan3가 트래픽을 분산하는 방식을 "
+"제어하는 프로필입니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:24
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:45
 msgid ""
 "Policies may not share the same name as configured interfaces, members or "
 "rules"
-msgstr ""
+msgstr "정책은 설정된 인터페이스, 멤버, 규칙과 동일한 이름을 사용할 수 없습니다"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:83
 msgid "Policy"
@@ -606,6 +622,8 @@ msgid ""
 "Put your custom mwan3 action here, they will be executed with each netifd "
 "hotplug interface event on interfaces for which mwan3 is enabled."
 msgstr ""
+"여기에 사용자 정의 mwan3 작업을 작성하세요. mwan3가 활성화된 인터페이스에서 "
+"netifd 핫플러그 인터페이스 이벤트가 발생할 때마다 실행됩니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:235
 msgid "Recovery interval"
@@ -633,30 +651,30 @@ msgstr "규칙"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:21
 msgid "Rules are based on IP address, port or protocol."
-msgstr ""
+msgstr "규칙은 IP 주소, 포트, 프로토콜을 기반으로 동작합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:22
 msgid "Rules are matched from top to bottom."
-msgstr ""
+msgstr "규칙은 위에서 아래로 일치 여부를 확인합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:23
 msgid "Rules below a matching rule are ignored."
-msgstr ""
+msgstr "일치하는 규칙 아래에 있는 다른 규칙은 무시됩니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:28
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:50
 msgid ""
 "Rules may not share the same name as configured interfaces, members or "
 "policies."
-msgstr ""
+msgstr "규칙은 설정된 인터페이스, 멤버, 정책과 동일한 이름을 사용할 수 없습니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:20
 msgid "Rules specify which traffic will use a particular MWAN policy."
-msgstr ""
+msgstr "규칙을 통해 트래픽이 특정 MWAN 정책을 사용하도록 지정합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:102
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
-msgstr ""
+msgstr "초 단위. 허용되는 값: 1~1000000. 설정하지 않을 경우 기본값은 600입니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:76
 msgid "Source address"
@@ -675,16 +693,16 @@ msgstr "상태"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:94
 msgid "Sticky"
-msgstr "세션 유지(Sticky)"
+msgstr "고정 세션(Sticky)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:101
 msgid "Sticky timeout"
-msgstr ""
+msgstr "세션 고정 시간"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:77
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:86
 msgid "Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"
-msgstr ""
+msgstr "CIDR 형식 (예: \"192.168.100.0/24\")을 지원합니다. (따옴표 제외)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:91
 msgid "Task"
@@ -697,12 +715,12 @@ msgstr "해당 파일은 시스템 업그레이드(sysupgrade) 시에도 보존�
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:33
 msgid ""
 "The first line of the script must be &#34;#!/bin/sh&#34; without quotes."
-msgstr "스크립트 첫 줄은 따옴표 없이 &#34;#!/bin/sh&#34;로 시작해야 합니다."
+msgstr "스크립트 첫 줄은 따옴표 없이 &#34;#!/bin/sh&#34;여야 합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:37
 msgid ""
 "There are three main environment variables that are passed to this script."
-msgstr ""
+msgstr "이 스크립트에 전달되는 세 가지 주요 환경 변수가 있습니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:289
 msgid ""
@@ -711,7 +729,7 @@ msgstr "/etc/config/network에서 인터페이스에 할당한 메트릭 값을 
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:32
 msgid "This file is interpreted as a shell script."
-msgstr "파일은 셸 스크립트(Shell Script)로 해석됩니다."
+msgstr "이 파일은 셸 스크립트로 해석(실행)됩니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:72
 msgid ""
@@ -735,29 +753,35 @@ msgstr "연결 확인 방식"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:98
 msgid "Tracking reliability"
-msgstr ""
+msgstr "추적 신뢰성"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:25
 msgid ""
 "Traffic destined for known (other than default) networks is handled by the "
 "main routing table."
 msgstr ""
+"(기본값 외의) 알려진 네트워크로 향하는 트래픽은 기본 라우팅 테이블에서 "
+"처리합니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:95
 msgid ""
 "Traffic from the same source IP address that previously matched this rule "
 "within the sticky timeout period will use the same WAN interface"
 msgstr ""
+"세션 고정 시간 내에 이전에 이 규칙과 일치했던 동일한 출발지 IP 주소의 "
+"트래픽은 계속해서 동일한 WAN 인터페이스를 사용합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:26
 msgid ""
 "Traffic matching a rule, but all WAN interfaces for that policy are down "
 "will be blackholed."
 msgstr ""
+"규칙에는 일치하지만 해당 정책의 모든 WAN 인터페이스가 비활성(Down) 상태인 "
+"경우, 해당 트래픽은 블랙홀 처리됩니다."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:24
 msgid "Traffic not matching any rule is routed using the main routing table."
-msgstr ""
+msgstr "어떤 규칙과도 일치하지 않는 트래픽은 기본 라우팅 테이블을 통해 라우팅됩니다."
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:39
 msgid "Troubleshooting"
@@ -776,7 +800,7 @@ msgstr "가동 시간"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:67
 msgid "View the content of /etc/protocols for protocol description"
-msgstr ""
+msgstr "프로토콜 설명은 /etc/protocols 파일 내용을 참고하세요"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:29
 msgid "Warning"
@@ -784,12 +808,14 @@ msgstr "경고(Warning)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:61
 msgid "Weight"
-msgstr ""
+msgstr "가중치"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:62
 msgid ""
 "When all policy members are offline use this behavior for matched traffic"
 msgstr ""
+"모든 정책 멤버가 오프라인 상태일 때, 일치하는 트래픽을 해당 동작으로 "
+"처리합니다"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:97
 msgid "Yes"
@@ -815,11 +841,11 @@ msgstr "연결 해제 (mwan3)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:283
 msgid "ifdown (netifd)"
-msgstr "인터페이스 비활성 (netifd ifdown)"
+msgstr "ifdown (netifd)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:282
 msgid "ifup (netifd)"
-msgstr "인터페이스 활성 (netifd ifup)"
+msgstr "ifup (netifd)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:64
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:126
