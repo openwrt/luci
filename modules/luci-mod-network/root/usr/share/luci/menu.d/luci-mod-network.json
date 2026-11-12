@@ -26,6 +26,19 @@
 		}
 	},
 
+	"admin/network/ppsk": {
+		"title": "Dynamic VLANs",
+		"order": 17,
+		"action": {
+			"type": "view",
+			"path": "network/ppsk"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-config" ],
+			"uci": { "wireless": { "@wifi-device": true } }
+		}
+	},
+
 	"admin/network/remote_addr/*": {
 		"action": {
 			"type": "call",
