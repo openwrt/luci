@@ -1,0 +1,58 @@
+{
+	"admin/services/apmond/settings": {
+		"title": "Settings",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "apmond/settings"
+		}
+	},
+	"admin/services/apmond/status": {
+		"title": "Status",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "apmond/status"
+		}
+	},
+	"admin/services/apmond/accesspoints": {
+		"title": "Access points",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "apmond/accesspoints"
+		}
+	},
+	"admin/services/apmond/clients": {
+		"title": "Clients",
+		"order": 35,
+		"action": {
+			"type": "view",
+			"path": "apmond/clients"
+		}
+	},
+	"admin/services/apmond/log": {
+		"title": "Log",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "apmond/log"
+		}
+	},
+	"admin/services/apmond": {
+		"title": "ApmonD",
+		"order": 60,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/apmond/status"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-apmond"
+			],
+			"uci": {
+				"apmond": true
+			}
+		}
+	}
+}
