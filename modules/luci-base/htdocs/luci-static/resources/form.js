@@ -2454,13 +2454,18 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 			if (this.map.readonly !== true) {
 				ui.addValidator(nameEl, 'uciname', true, (v) => {
 					const button = createEl.querySelector('.cbi-section-create > .cbi-button-add');
-					if (v !== '') {
-						button.disabled = null;
-						return true;
-					}
-					else {
+					if (v === '') {
 						button.disabled = true;
 						return _('Expecting: %s').format(_('non-empty value'));
+					}
+					else if (this.map.data.get(config_name, v) != null) {
+						/* uci add with an existing name would change the type of that section */
+						button.disabled = true;
+						return _('A section named "%s" already exists').format(v);
+					}
+					else {
+						button.disabled = null;
+						return true;
 					}
 				}, 'blur', 'keyup');
 			}
