@@ -3,7 +3,6 @@
 'require form';
 'require rpc';
 'require uci';
-'require ui';
 'require view';
 'require tools.widgets as widgets';
 
@@ -21,11 +20,10 @@ return view.extend({
 	load() {
 		return Promise.all([
 			uci.load('unbound'),
-			uci.load('dhcp'),
 		]);
 	},
 
-	render([unboundCfg, dhcpCfg]) {
+	render([unboundCfg]) {
 		const m = new form.Map('unbound', _('Recursive DNS'),
 			_("Unbound <a href=\"%s\" target=\"_blank\">(NLnet Labs)</a> is a validating, recursive, and caching DNS resolver <a href=\"%s\" target=\"_blank\">(help)</a>.".format(UBNET, README)));
 
@@ -34,15 +32,6 @@ return view.extend({
 		s.addremove = false;
 
 		const manual = uci.get('unbound', 'ub_main', 'manual_conf');
-		const dhcpLink = uci.get('unbound', 'ub_main', 'dhcp_link');
-		const leasetrig = uci.get('dhcp', 'odhcpd', 'leasetrigger') || 'undefined';
-
-		if (manual === '0' && dhcpLink === 'odhcpd' && leasetrig !== '/usr/lib/unbound/odhcpd.sh') {
-			ui.addTimeLimitedNotification(null, E('p', [
-				_('Note: local DNS is configured to look at odhcpd, but odhcpd UCI lease trigger is incorrectly set:'),
-				" dhcp.odhcpd.leasetrigger='" + leasetrig + "'"
-			]), 15000, 'note');
-		}
 
 		// Tabs
 		s.tab('basic', _('Basic'));
