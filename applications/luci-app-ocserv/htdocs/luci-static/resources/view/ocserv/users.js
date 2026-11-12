@@ -75,7 +75,7 @@ return L.view.extend({
 	},
 
 	handleDisconnect(id, ev) {
-		return fs.exec('/usr/bin/occtl', ['disconnect', 'id', id]).then((res) => {
+		return fs.exec('/usr/bin/occtl', ['disconnect', 'id', String(id)]).then((res) => {
 			if (!res || res.code !== 0) {
 				const msg = (res && String(res.stderr || res.stdout || '').trim())
 					|| _('command failed');

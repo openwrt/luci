@@ -62,7 +62,7 @@ return baseclass.extend({
 	},
 
 	handleDisconnect: function(id) {
-		return fs.exec('/usr/bin/occtl', ['disconnect', 'id', id]).then(L.bind(function(res) {
+		return fs.exec('/usr/bin/occtl', ['disconnect', 'id', String(id)]).then(L.bind(function(res) {
 			if (!res || res.code !== 0) {
 				const msg = (res && String(res.stderr || res.stdout || '').trim())
 					|| _('command failed');
