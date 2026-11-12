@@ -737,18 +737,24 @@ return view.extend({
 							E('button', {
 								'class': 'cbi-button cbi-button-add',
 								'title': _('Set up DHCP Server'),
-								'click': ui.createHandlerFn(this, function(section_id, ev) {
+								'click': ui.createHandlerFn(this, function(ifname, ev) {
 									this.map.save(function() {
-										uci.add('dhcp', 'dhcp', section_id);
-										uci.set('dhcp', section_id, 'interface', section_id);
+										/*
+										 * Name the section after the interface, unless that name is
+										 * already taken (e.g. by a dnsmasq instance), as uci add would
+										 * then change the type of that section.
+										 */
+										const sid = uci.add('dhcp', 'dhcp', uci.get('dhcp', ifname) ? null : ifname);
+
+										uci.set('dhcp', sid, 'interface', ifname);
 
 										if (protoval == 'static') {
-											uci.set('dhcp', section_id, 'start', 100);
-											uci.set('dhcp', section_id, 'limit', 150);
-											uci.set('dhcp', section_id, 'leasetime', '12h');
-											uci.set('dhcp', section_id, 'dhcpv4', 'server');
+											uci.set('dhcp', sid, 'start', 100);
+											uci.set('dhcp', sid, 'limit', 150);
+											uci.set('dhcp', sid, 'leasetime', '12h');
+											uci.set('dhcp', sid, 'dhcpv4', 'server');
 										} else {
-											uci.set('dhcp', section_id, 'ignore', 1);
+											uci.set('dhcp', sid, 'ignore', 1);
 										}
 									});
 								}, ifc.getName())
