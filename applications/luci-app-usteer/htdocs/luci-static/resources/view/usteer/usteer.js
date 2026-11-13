@@ -378,14 +378,18 @@ function parseAllSta(text) {
 }
 
 function getCipherAKM() {
-	for (const wlan in Localinfo) {		
-		fs.stat('/usr/sbin/hostapd_cli').then(stat => {
-			if (!stat || stat.type !== 'file') { return; }
-			fs.exec_direct('/usr/sbin/hostapd_cli', ['-i', wlan.split('.')[1], 'all_sta'])
-				.then(res => { parseAllSta(res); })
-				.catch(err => {});
-		}).catch (function (){return null;});
-	}
+	fs.stat('/usr/sbin/hostapd_cli').then(stat => {
+		if (!stat || stat.type !== 'file') { return; }
+		fs.exec_direct('/usr/sbin/hostapd_cli', ['interface']).then(res => {
+			const ifaces = (res.split('Available interfaces:')[1] ?? '')
+				.split('\n').filter(s => s && s !== 'global');
+			for (const iface of ifaces) {
+				fs.exec_direct('/usr/sbin/hostapd_cli', ['-i', iface, 'all_sta'])
+					.then(staRes => { parseAllSta(staRes); })
+					.catch(err => {});
+			}
+		}).catch(err => {});
+	}).catch (function (){return null;});
 }
 
 return view.extend({
