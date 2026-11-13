@@ -812,6 +812,31 @@ const methods = {
 		}
 	},
 
+	/* first thermal zone with a CPU, SoC or package type, else the first one with a reading */
+	getCPUTemperature: {
+		call: function() {
+			const zoneNumber = (path) => +match(path, /[0-9]+$/)[0];
+			const zones = sort(glob('/sys/devices/virtual/thermal/thermal_zone*') ?? [], (a, b) => zoneNumber(a) - zoneNumber(b));
+			let fallback = null;
+
+			for (let zone in zones) {
+				const temp = trim(readfile(`${zone}/temp`) ?? '');
+
+				if (!match(temp, /^-?[0-9]+$/))
+					continue;
+
+				const reading = { zone: trim(readfile(`${zone}/type`) ?? ''), temperature: +temp / 1000.0 };
+
+				if (match(reading.zone, /cpu|soc|pkg/i))
+					return reading;
+
+				fallback ??= reading;
+			}
+
+			return fallback ?? {};
+		}
+	},
+
 	getOdhcp6cStats: {
 		call: function() {
 			const ubus = connect();
