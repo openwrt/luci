@@ -4,7 +4,6 @@
 'require dom';
 'require fs-fit as fit';
 'require fs-chrome as chrome';
-'require fs-widgets as widgets';
 
 /* Three jobs; 2, 3 and the value resync register with fs-fit (measuring and scheduling stay there):
  * 1. <select> enhancement: a styled cbi-dropdown beside each plain LuCI <select>, values mirrored
@@ -44,8 +43,7 @@ function resync(sel) {
 		enhance(sel);
 		return;
 	}
-	if (dd.getValue() !== sel.value)
-		dd.setValue(sel.value);
+	showValue(dd, sel);
 }
 
 /* A value written through the IDL (`sel.value = x`, what ui.Select.setValue() does on every
@@ -57,13 +55,16 @@ function resyncValues() {
 	for (const sel of document.querySelectorAll('select[data-fs-select]')) {
 		const dd = sel._fsDd;
 		if (!dd || !sel._fsNode || sel.disabled) continue;
-		if (dd.getValue() !== sel.value)
-			dd.setValue(sel.value);
+		showValue(dd, sel);
 	}
 }
 
+function showValue(dd, sel) {
+	if (dd.getValue() !== sel.value) dd.setValue(sel.value);
+}
+
 function enhance(sel) {
-	if (sel.dataset.fsSelect || sel.disabled) return;	/* disabled: not marked — it may be enabled later */
+	if (sel.disabled) return;	/* disabled: not marked — it may be enabled later */
 	if (sel.multiple || !sel.closest('.cbi-value-field, .cbi-value')) {
 		sel.dataset.fsSelect = 'skip';
 		return;
@@ -106,7 +107,7 @@ function enhance(sel) {
 	sel.after(node);
 
 	/* The dropdown re-dispatches its own bubbling `widget-change` on every pick, open/close and
-	 * setValue(), reaching form.js while `sel.value` still holds the old value (fs-appearance's
+	 * setValue(), reaching form.js while `sel.value` still holds the old value (the Appearance view's
 	 * selectCtl applied 3x per pick). The form is to hear only ui.Select's own `widget-change`, which
 	 * the `change` we dispatch on `sel` below produces. */
 	node.addEventListener('widget-change', (ev) => ev.stopPropagation(), { signal: ac.signal });
@@ -126,8 +127,7 @@ function enhance(sel) {
 
 	sel.addEventListener('change', () => {
 		if (syncing) return;
-		if (dd.getValue() !== sel.value)
-			dd.setValue(sel.value);
+		showValue(dd, sel);
 	}, { signal: ac.signal });
 
 	/* A failing validator lands on the hidden <select> (class, data-tooltip, data-tooltip-style), and
@@ -135,7 +135,7 @@ function enhance(sel) {
 	 * shows it: mirror the two attributes onto the widget. The class is not copied: ui.updateTabs
 	 * counts every '.cbi-input-invalid', and a copy counts the field twice. */
 	const mirrorError = () => [ 'data-tooltip', 'data-tooltip-style' ]
-		.forEach((a) => widgets.syncAttr(node, a, sel.getAttribute(a)));
+		.forEach((a) => chrome.syncAttr(node, a, sel.getAttribute(a)));
 	mirrorError();
 	sel.addEventListener('validation-failure', mirrorError, { signal: ac.signal });
 	sel.addEventListener('validation-success', mirrorError, { signal: ac.signal });
@@ -240,7 +240,7 @@ const TABLE_ROLE_TAGS = [
 
 function roleTables() {
 	[ ...TABLE_ROLE_CLASSES, ...TABLE_ROLE_TAGS ].forEach(([ sel, role ]) => {
-		document.querySelectorAll(inRoots(sel)).forEach((el) => widgets.syncAttr(el, 'role', role));
+		document.querySelectorAll(inRoots(sel)).forEach((el) => chrome.syncAttr(el, 'role', role));
 	});
 }
 
@@ -322,6 +322,8 @@ function markTokenCells(t) {
 	});
 }
 
+const OPEN_LIST = '.cbi-dropdown[open]';
+
 function fitTables() {
 	let cw;
 	document.querySelectorAll(stackables()).forEach((t) => {
@@ -353,6 +355,13 @@ function fitTables() {
 		const shape = shapeOf(t);
 
 		if (known) applyDecision(t, known);
+
+		/* an open list is out of flow yet widens `scrollWidth` (75-245px past the room on Wireless'
+		 * Disconnect): the table carded under the pointer. It holds its answer until the list closes. */
+		if (t.querySelector(OPEN_LIST)) {
+			t.classList.add('fs-fitted');
+			return;
+		}
 
 		const room = Math.round(fit.roomFor(t));
 		if (!(room > 0)) {
@@ -442,6 +451,7 @@ function unreach(t) {
 function fitScrollables() {
 	if (fit.scrolling()) { fit.deferMeasurement(); return; }
 	document.querySelectorAll(scrollables()).forEach((t) => {
+		if (t.querySelector(OPEN_LIST)) return;	/* see fitTables() */
 		const was = t.classList.contains('fs-xscroll');
 		const wasStack = t.classList.contains('fs-rowstack');
 		t.classList.remove('fs-xscroll', 'fs-rowstack');

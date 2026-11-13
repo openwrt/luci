@@ -59,7 +59,6 @@ function walk(node, segs, trail, out, depth) {
 function buildIndex() {
 	const root = tree.tree();
 	const out = [];
-	if (!root) return out;
 	/* the mode (admin) is a container, not a destination: start one level in */
 	childrenOf(root).forEach((mode) => {
 		walk(mode.node, [ mode.name ], [], out, 1);
@@ -111,7 +110,7 @@ function search(q, limit) {
 /* What the palette shows before anything is typed: an admin lives in three or four pages, so the
  * empty state is its most-used view. Only the path is stored. */
 
-/* The list is written by menu-footstrap-common.js, which is on every page; this module is loaded
+/* The list is written by menu-footstrap.js, which is on every page; this module is loaded
  * only on open. */
 function recentEntries() {
 	const byPath = new Map(index().map((e) => [ e.path, e ]));
@@ -129,7 +128,6 @@ let _built = null;
 function build() {
 	const SEARCH_PAGES = _('Search pages', 'footstrap');
 	const btn = document.getElementById('fs-search-btn');
-	if (!btn) return null;
 
 	const ID_SEARCH_LIST = 'fs-search-list';
 	const ATTR_EXPANDED = 'aria-expanded';
@@ -271,7 +269,6 @@ function build() {
 			 * dialog's only tabbable element. */
 			ev.preventDefault();
 			input.focus();
-			return;
 		}
 	});
 
@@ -285,13 +282,13 @@ function build() {
 	return { open, toggle: () => (ov.hidden ? open() : close()) };
 }
 
-/* the one entry point: built on the first gesture, null when the page has no #fs-search-btn */
+/* the one entry point: built on the first gesture */
 function palette() {
 	if (!_built) _built = build();
 	return _built;
 }
 
 return baseclass.extend({
-	open: () => palette()?.open(),
-	toggle: () => palette()?.toggle()
+	open: () => palette().open(),
+	toggle: () => palette().toggle()
 });

@@ -369,7 +369,7 @@ function seed() {
 	_titleHost = (document.title.split('|')[0] || '').trim();	/* before any view can rename the tab — see there */
 	adoptEntry();
 
-	const curPage = document.body ? (document.body.getAttribute('data-page') || '') : '';
+	const curPage = document.body.getAttribute('data-page') || '';
 
 	/* The document's own first render is the first link in the chain: a LuCI view chain resolves
 	 * `#view` at paint time and would paint into the newer stage (at 350 ms latency a click 150 ms
@@ -435,11 +435,9 @@ function commitStage(stage, contentHost) {
 	sheets.scopeToCurrentPage();
 	sweepAround(contentHost, stage);
 	const live = liveView(contentHost, stage);
-	const page = stage.view.getAttribute('data-page');
-	if (page != null) {
-		live.setAttribute('data-page', page);
-		contentHost.setAttribute('data-page', page);
-	}
+	const page = stage.view.getAttribute('data-page');	/* navigate() stamps it on every stage */
+	live.setAttribute('data-page', page);
+	contentHost.setAttribute('data-page', page);
 	const nodes = Array.from(stage.view.childNodes);
 	window.L.dom.content(live, nodes);
 	dropStage(stage);

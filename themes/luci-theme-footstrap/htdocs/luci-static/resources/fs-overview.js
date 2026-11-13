@@ -3,7 +3,7 @@
 'require dom';
 'require network';
 'require fs-fit as fit';
-'require fs-widgets as widgets';
+'require fs-chrome as chrome';
 
 /* Overview layout and meters: re-arranges the stock System / Memory / Storage sections into a grid,
  * marks the meters up (aria, and data-fs-level warn/danger at the FS_METER_* thresholds), turns
@@ -43,7 +43,6 @@ function findProgressbarLabel(pg) {
 /* The percentage inside a meter's `title`: `'X / Y (Z%)'` or a bare `'97%'`, both end-anchored so
  * a stray "%" earlier in a localised reading is ignored. */
 function parseMeterPercent(title) {
-	if (title == null) return null;
 	const m = (/\((-?\d+)%\)\s*$/).exec(title) || (/(-?\d+)%\s*$/).exec(title);
 	return m ? parseInt(m[1], 10) : null;
 }
@@ -56,14 +55,14 @@ function annotateMeter(pg) {
 	const pc = parseMeterPercent(title);
 	if (pc == null) return;
 	const level = pc < 0 ? 0 : (pc > 100 ? 100 : pc);
-	widgets.syncAttr(pg, 'role', 'progressbar');
-	widgets.syncAttr(pg, 'aria-valuemin', '0');
-	widgets.syncAttr(pg, 'aria-valuemax', '100');
-	widgets.syncAttr(pg, 'aria-valuenow', String(level));
-	widgets.syncAttr(pg, 'aria-valuetext', title);
+	chrome.syncAttr(pg, 'role', 'progressbar');
+	chrome.syncAttr(pg, 'aria-valuemin', '0');
+	chrome.syncAttr(pg, 'aria-valuemax', '100');
+	chrome.syncAttr(pg, 'aria-valuenow', String(level));
+	chrome.syncAttr(pg, 'aria-valuetext', title);
 	const label = findProgressbarLabel(pg);
 	const name = label ? label.textContent.trim() : '';
-	widgets.syncAttr(pg, 'aria-label', label ? name : null);
+	chrome.syncAttr(pg, 'aria-label', label ? name : null);
 	/* Polarity: an unrecognised bar keeps the plain fill-based rule, on purpose: a wrong red is worse
 	 * than a missing colour. */
 	let dataLevel = null;
@@ -71,7 +70,7 @@ function annotateMeter(pg) {
 		const v = FS_METER_INVERTED.has(name) ? 100 - level : level;
 		dataLevel = v >= FS_METER_DANGER ? 'danger' : (v >= FS_METER_WARN ? 'warn' : null);
 	}
-	widgets.syncAttr(pg, 'data-fs-level', dataLevel);
+	chrome.syncAttr(pg, 'data-fs-level', dataLevel);
 }
 
 function annotateMeters(root) {
@@ -118,20 +117,20 @@ function wireDisclosure(sec) {
 	const panel = panelFor(h);
 	if (panel && !panel.id) panel.id = 'fs-ovl-panel-' + (_panelSeq++);
 
-	widgets.syncAttr(h, 'role', 'button');
-	widgets.syncAttr(h, 'tabindex', '0');
-	widgets.syncAttr(h, 'aria-controls', panel ? panel.id : null);
-	widgets.syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
-	widgets.syncAttr(label, 'aria-hidden', 'true');
+	chrome.syncAttr(h, 'role', 'button');
+	chrome.syncAttr(h, 'tabindex', '0');
+	chrome.syncAttr(h, 'aria-controls', panel ? panel.id : null);
+	chrome.syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
+	chrome.syncAttr(label, 'aria-hidden', 'true');
 
 	if (h.dataset.fsWired) return;
 	h.dataset.fsWired = '1';
 
 	h.addEventListener('click', (ev) => {
 		if (ev.target.closest?.('[data-indicator="poll-status"]') !== label) label.click();
-		widgets.syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
+		chrome.syncAttr(h, 'aria-expanded', pillExpanded(label) ? 'true' : 'false');
 	});
-	widgets.wireActivate(h, () => label.click());
+	chrome.wireActivate(h, () => label.click());
 }
 
 /* A `.cbi-section` LuCI still renders when a stock include has nothing to show this tick: title
@@ -188,11 +187,6 @@ function arrange() {
 	});
 	/* wait until all three stock sections exist */
 	if (!(found.sys && found.mem && found.sto)) return;
-	/* already wrapped? (first tick after a rebuild re-finds the existing grid) */
-	if (found.sys.parentElement && found.sys.parentElement.classList.contains('fs-ovl')) {
-		_wrapEl = found.sys.parentElement;
-		return;
-	}
 	const wrap = document.createElement('div');
 	wrap.className = 'fs-ovl';
 	found.sys.parentNode.insertBefore(wrap, found.sys);
@@ -311,10 +305,10 @@ function patchOverview() {
 	}).catch((e) => console.error('footstrap: overview progressive paint not applied', e));
 }
 
-/* `progressbar`, `renderBox` and `renderBadge` are defined in menu-footstrap-common.js: a stock
+/* `progressbar`, `renderBox` and `renderBadge` are defined in menu-footstrap.js: a stock
  * include calls them bare from its own render(), so they must exist before the view class does. */
 
 return baseclass.extend({
-	/* called by menu-footstrap-common's loader on every data-page stamp that maps here */
+	/* called by menu-footstrap's loader on every data-page stamp that maps here */
 	wire,
 });

@@ -133,6 +133,9 @@ case "$$1" in *upgrade*) exit 0 ;; esac
 	# The admin-uploaded login background and pattern, kept out of the package on purpose so they
 	# survive an upgrade. A real removal is the one time they should go.
 	rm -rf /etc/footstrap >/dev/null 2>&1 || true
+	# The two links uci-defaults points at it are not the package manager's to remove.
+	rm -f /www/luci-static/footstrap/bg /www/luci-static/footstrap/fonts
+	rmdir /www/luci-static/footstrap >/dev/null 2>&1 || true
 	rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/* >/dev/null 2>&1 || true
 }
 endef

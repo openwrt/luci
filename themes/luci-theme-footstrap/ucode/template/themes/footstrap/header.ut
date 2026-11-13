@@ -111,7 +111,7 @@
 					</a>
 					{#
 						The three chrome icons below are the same 24x24 outline differing only in path data;
-						the stroke is `.fs-ico` in theme/20-shell.css, not attributes, and fs-widgets.js's
+						the stroke is `.fs-ico` in theme/20-shell.css, not attributes, and fs-chrome.js's
 						svgIcon() emits the same markup client-side. aria-hidden: each sits beside its own label.
 					#}
 					<button type="button" class="fs-railtoggle" id="fs-rail-toggle" aria-label="{{ _('Collapse menu') }}" title="{{ _('Collapse menu') }}">
@@ -134,7 +134,7 @@
 					menu.d entry; nothing of them mounts in this header.
 				#}
 				{#
-					Search trigger (#fs-search-btn), wired by fs-search.js. A `.fs-themerow`, the chrome's
+					Search trigger (#fs-search-btn), wired by menu-footstrap.js. A `.fs-themerow`, the chrome's
 					shared row/button class: a square icon button in the bar and the rail, a full-width
 					labelled row in the vertical sidebar. It shares `order: 2` with the poll pill and Log
 					out, so DOM order is visual order. 'Search' carries no msgctxt (see the i18n note).
