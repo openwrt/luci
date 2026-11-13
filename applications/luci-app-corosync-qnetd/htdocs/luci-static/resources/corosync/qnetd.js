@@ -23,7 +23,8 @@ function fingerprint(status) {
 }
 
 function clients(status) {
-	return Number(status?.health?.connected_clients || 0);
+	const count = status?.health?.connected_clients;
+	return Number.isSafeInteger(count) && count >= 0 ? count : null;
 }
 
 function badge(ok, yes, no) {

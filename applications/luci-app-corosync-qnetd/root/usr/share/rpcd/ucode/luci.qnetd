@@ -41,8 +41,10 @@ function parse_health(output) {
 		if (pos > 0)
 			result[substr(line, 0, pos)] = substr(line, pos + 1);
 	}
-	for (let key in [ 'initialized', 'ca_valid', 'server_valid', 'connected_clients', 'rollback_available' ])
+	for (let key in [ 'initialized', 'ca_valid', 'server_valid', 'rollback_available' ])
 		result[key] = int(result[key] || 0);
+	let count = result.connected_clients;
+	result.connected_clients = count && match(count, /^[0-9]+$/) ? int(count) : null;
 	return result;
 }
 
@@ -88,7 +90,7 @@ function current_health() {
 
 function guard(req) {
 	let health = current_health();
-	return req.args.fingerprint == health.fingerprint &&
+	return health.connected_clients != null && req.args.fingerprint == health.fingerprint &&
 		int(req.args.clients) == health.connected_clients;
 }
 

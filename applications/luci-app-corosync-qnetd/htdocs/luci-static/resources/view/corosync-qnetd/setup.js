@@ -55,7 +55,9 @@ function enrollment(address) {
 	update();
 	poll.add(() => qnetd.status().then(s => {
 		const connected = qnetd.clients(s);
-		dom.content(progress, connected
+		dom.content(progress, connected == null
+			? E('div', { 'class': 'alert-message notice' }, _('Connected client count: Unknown'))
+			: connected
 			? E('div', { 'class': 'alert-message success' }, _('%d QNetd client(s) connected. Enrollment is visible and TLS status is available on the Overview page.').format(connected))
 			: E('div', { 'class': 'alert-message notice' }, _('Waiting for a Proxmox cluster to connect…')));
 	}), 5);

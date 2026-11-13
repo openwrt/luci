@@ -44,7 +44,7 @@ function content(s, logs) {
 			E('div', { 'class': 'table' }, [
 				E('div', { 'class': 'tr' }, [ E('div', { 'class': 'td left' }, _('Service')), E('div', { 'class': 'td left' }, qnetd.badge(s.running, _('Running'), _('Stopped'))) ]),
 				E('div', { 'class': 'tr' }, [ E('div', { 'class': 'td left' }, _('Start on boot')), E('div', { 'class': 'td left' }, qnetd.badge(s.boot_enabled, _('Enabled'), _('Disabled'))) ]),
-				E('div', { 'class': 'tr' }, [ E('div', { 'class': 'td left' }, _('Connected clients / clusters')), E('div', { 'class': 'td left' }, '%d / %d'.format(s.server?.connected_clients || 0, s.server?.connected_clusters || 0)) ]),
+				E('div', { 'class': 'tr' }, [ E('div', { 'class': 'td left' }, _('Connected clients / clusters')), E('div', { 'class': 'td left' }, '%s / %s'.format(qnetd.clients(s) ?? _('Unknown'), s.server?.connected_clusters ?? _('Unknown'))) ]),
 				E('div', { 'class': 'tr' }, [ E('div', { 'class': 'td left' }, _('Listen address')), E('div', { 'class': 'td left' }, s.server?.address || s.config?.listen_address || '-') ]),
 				E('div', { 'class': 'tr' }, [ E('div', { 'class': 'td left' }, _('TLS')), E('div', { 'class': 'td left' }, s.server?.tls || s.config?.tls || '-') ])
 			]),
