@@ -4308,6 +4308,13 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		switch (hint ?? 'auto') {
 		case true:
 		case 'auto':
+			m = /^((?:[0-9a-fA-F]{2}[:-]){5}[0-9a-fA-F]{2})(?:\s+.*)?$/.exec(value);
+
+			if (m)
+				return m[1].split(/[:-]/)
+					.map(byte => parseInt(byte, 16).toString().padStart(3, '0'))
+					.join('');
+
 			m = /^([0-9a-fA-F:.]+)(?:\/([0-9a-fA-F:.]+))?$/.exec(value);
 
 			if (m) {
