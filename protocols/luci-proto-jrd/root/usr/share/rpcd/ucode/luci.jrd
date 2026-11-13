@@ -1,0 +1,141 @@
+// SPDX-License-Identifier: Apache-2.0
+'use strict';
+
+import { cursor } from 'uci';
+import { access, popen } from 'fs';
+
+const JRDCTL = '/usr/bin/jrdctl';
+
+function resolve_profile(config, uci) {
+	let profile_name = config.profile ?? uci.get('jrd', 'globals', 'default_profile');
+	let profile = profile_name != null ? uci.get_all('jrd', profile_name) : null;
+
+	if (profile_name == null || profile == null || profile['.type'] != 'profile') {
+		return {
+			...config,
+			profile: profile_name,
+			profile_error: 'unknown or unavailable modem profile'
+		};
+	}
+
+	/* Profile values are defaults; explicit UCI options take precedence. */
+	return {
+		...profile,
+		...config,
+		profile: profile_name,
+		rpc_timeout: config.rpc_timeout ?? profile.rpc_timeout ?? '3'
+	};
+}
+
+function profile_list() {
+	let uci = cursor();
+	let profiles = [];
+
+	try {
+		uci.load('jrd');
+	}
+	catch (e) {
+		return { default: null, profiles };
+	}
+
+	uci.foreach('jrd', 'profile', function(profile) {
+		push(profiles, {
+			name: profile['.name'],
+			label: profile.label ?? profile['.name']
+		});
+	});
+
+	return {
+		default: uci.get('jrd', 'globals', 'default_profile'),
+		profiles
+	};
+}
+
+function run_rpc(config, command) {
+	if (!access(JRDCTL, 'x') || config.modem_ip == null || config.port == null)
+		return null;
+
+	let host = config.modem_ip;
+	let port = int(config.port);
+	let timeout = int(config.rpc_timeout ?? 3);
+	let proc = popen([
+		JRDCTL,
+		'-H', host,
+		'-p', '' + port,
+		'-T', '' + timeout,
+		command
+	], 'r');
+
+	if (!proc)
+		return null;
+
+	let output = trim(proc.read('all'));
+	let status = proc.close();
+
+	if (status != 0 || !length(output))
+		return null;
+
+	try {
+		return json(output)?.result;
+	}
+	catch (e) {
+		return null;
+	}
+}
+
+function collect_status(name, uci_config, uci) {
+	let config = resolve_profile(uci_config, uci);
+	let result = {
+		name,
+		device: config.device ?? '',
+		profile: config.profile,
+		profile_error: config.profile_error,
+		modem_ip: config.modem_ip,
+		port: config.port != null ? int(config.port) : null,
+		ethernet_interface: config.ethernet_interface,
+		reachable: false
+	};
+
+	if (config.profile_error != null)
+		return result;
+
+	let system = run_rpc(config, 'system');
+	result.reachable = system != null;
+	result.system = system;
+
+	/* Avoid four timeout delays when the management endpoint is down. */
+	if (!system)
+		return result;
+
+	result.connection = run_rpc(config, 'status');
+	result.network = run_rpc(config, 'network');
+	result.sim = run_rpc(config, 'sim');
+
+	return result;
+}
+
+const methods = {
+	getProfiles: {
+		call: function() {
+			return profile_list();
+		}
+	},
+
+	getStatus: {
+		call: function() {
+			let uci = cursor();
+			let interfaces = [];
+
+			uci.load('network');
+			uci.load('jrd');
+			uci.foreach('network', 'interface', function(config) {
+				if (config.proto == 'jrd')
+					push(interfaces, collect_status(config['.name'], config, uci));
+			});
+
+			return { interfaces };
+		}
+	}
+};
+
+return { 'luci.jrd': methods };
