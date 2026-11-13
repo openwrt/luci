@@ -13,9 +13,10 @@ set_opt() {
 
 set_opt themes.Footstrap /luci-static/footstrap
 
-# A fresh install may pick the theme; an upgrade must never move a router off its theme. `changed`
-# tells the two apart (on an upgrade the entry exists) and carries the decision alone: apk exports
-# no PKG_UPGRADE.
+# set_opt never overwrites, and luci-base ships main.mediaurlbase, so on a stock router this line
+# sets nothing on install or upgrade: the admin picks Footstrap in Language and Style. An upgrade
+# must never move a router off its theme; on an upgrade the themes entry exists, so `changed` is 0
+# (apk exports no PKG_UPGRADE).
 if [ "${PKG_UPGRADE:-}" != 1 ] && [ "$changed" = 1 ]; then
 	set_opt main.mediaurlbase /luci-static/footstrap
 fi

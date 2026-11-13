@@ -178,6 +178,11 @@ function watchColours(refresh) {
  * there is nothing to save: every axis is this browser's, in localStorage. Only "Save to router"
  * writes anything, pushing the current look to the router for other browsers. */
 function build() {
+	/* 24.10.0-24.10.2 have no ui.RangeSlider and a package from the feed still installs there (opkg does
+	 * not version luci-base); one readable line beats the raw "not a constructor" TypeError. */
+	if (!ui.RangeSlider)
+		return E('p', { 'class': 'alert-message warning' }, [ _('Footstrap needs OpenWrt 24.10.3 or newer.', 'footstrap') ]);
+
 	/* every saved axis re-checks the Save button after applying, so it greys the moment this
 	 * browser matches the saved default and un-greys when it diverges. Wrapped around the appliers
 	 * because the controls call them directly and have no other seam back here. */
@@ -207,7 +212,7 @@ function build() {
 	const CARD_BG = 'var(--fs-panel)', INK = 'var(--fs-text)', ON_CARD = _('on a card', 'footstrap');
 
 	/* Every enum axis is a `ui.Select` and every number a `ui.RangeSlider`, already dressed by
-	 * base/30-forms.css and theme/60-inputs.css (`ui.RangeSlider` exists from openwrt-24.10). Listen
+	 * base/30-forms.css and theme/60-inputs.css (`ui.RangeSlider` reached openwrt-24.10 in 24.10.3). Listen
 	 * for `widget-change`, the seam UIElement publishes, not an event on the inner element.
 	 * RangeSlider also emits `widget-update` while the handle moves, which resizes the page under the
 	 * drag; the appliers are idempotent, so wiring both costs nothing. */
@@ -627,5 +632,4 @@ function build() {
 return baseclass.extend({
 	/* the dispatched page's whole render(), called by view/footstrap/appearance.js */
 	renderStandalone: () => Promise.resolve().then(build),
-
 });

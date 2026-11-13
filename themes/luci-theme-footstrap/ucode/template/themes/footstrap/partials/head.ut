@@ -127,8 +127,7 @@
 				/* One IIFE pre-paints every Appearance axis before the first frame, duplicating the live
 				   applier in fs-prefs.js (no shared code: this runs before the module loader exists).
 				   It carries no interpolation, unlike the data blob above: an interpolated body is not
-				   JS until rendered, so it is exempt from the inline-script lint and anything merged
-				   into it would go unchecked.
+				   JS until rendered.
 				   Precedence for every axis: localStorage ?? router default (window.__fsSD) ?? built-in.
 				   Dark mode: a saved preference, else the router default, else the OS. */
 			(() => {

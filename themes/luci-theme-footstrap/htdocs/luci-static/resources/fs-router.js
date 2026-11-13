@@ -110,7 +110,6 @@ function markAlive() {
 	_expired = false;
 	console.warn('footstrap: the LuCI session answers again — client navigation is back on.');
 }
-function sessionExpired() { return _expired; }
 function watchSession() {
 	const req = window.L.Request;
 	if (req && typeof req.addInterceptor === 'function')
@@ -515,6 +514,9 @@ function navigate(pathname, push, kbd) {
 	if (bodyLittered()) return false;
 
 	if (_menuFlushed) return false;
+
+	/* an extension's lodash/underscore replaced window._: LuCI's own `_('x').format()` then throws on every view; a full load restores it */
+	if (typeof _ !== 'function' || typeof _('') !== 'string') return false;
 
 	if (_expired) return false;
 

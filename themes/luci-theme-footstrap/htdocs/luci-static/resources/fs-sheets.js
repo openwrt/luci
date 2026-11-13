@@ -411,7 +411,10 @@ function reassertLayerOrder() {
 	if (_layerStmt) _layerStmt.remove();
 	_layerStmt = document.createElement('style');
 	_layerStmt.textContent = LAYER_ORDER;
-	head.insertBefore(_layerStmt, head.firstChild);
+	/* before the first sheet, not into <head>: a document_start script (an extension) appends its
+	 * <style> to <html> ahead of <head>, and Firefox then laid Overview out 2125px short at 390px */
+	const first = document.querySelector('style, link[rel~="stylesheet"]');
+	first.parentNode.insertBefore(_layerStmt, first);
 }
 
 function sweepViewSheets() {

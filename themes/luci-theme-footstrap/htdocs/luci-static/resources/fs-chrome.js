@@ -657,5 +657,4 @@ return baseclass.extend({
 			rail: prefs.currentRail()
 		});
 	},
-
 });

@@ -317,5 +317,4 @@ function patchOverview() {
 return baseclass.extend({
 	/* called by menu-footstrap-common's loader on every data-page stamp that maps here */
 	wire,
-
 });
