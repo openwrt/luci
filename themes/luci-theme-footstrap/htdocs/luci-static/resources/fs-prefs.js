@@ -92,7 +92,7 @@ function guardDarkStamp() {
  * head.ut ships the default palette's page colour and this tracks the live one. */
 function paintThemeColor() {
 	const meta = document.querySelector('meta[name="theme-color"]');
-	if (!meta || !document.body) return;
+	if (!meta) return;
 	const bg = getComputedStyle(document.body).backgroundColor;
 	/* a transparent body means the sheet has not applied yet; keep the server's value */
 	if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') meta.setAttribute('content', bg);
@@ -115,7 +115,10 @@ function applyLayout(val) {
 	/* always an explicit value, never a removed attribute: every layout rule matches data-layout
 	 * positively */
 	lsSet('fs-layout', layout);
-	document.documentElement.setAttribute('data-layout', layout);
+	const root = document.documentElement;
+	root.setAttribute('data-layout', layout);
+	/* data-sb now, not at the next fit: the frame between would draw neither layout's chrome */
+	root.toggleAttribute('data-sb', layout === 'sidebar' && !root.hasAttribute('data-narrow'));
 	/* the bar and the column leave the menu different room: re-take the fits-on-one-row
 	 * measurement */
 	fit.schedule();

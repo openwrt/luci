@@ -4,11 +4,37 @@
 'require fs-fit as fit';
 'require fs-prefs as prefs';
 'require fs-menutree as tree';
-'require fs-widgets as widgets';
 
 /* The chrome around the content: the main menu, the mode menu, the section tabs, the rail toggle
- * and the measurements deciding how much room each gets. menu-footstrap-common.js calls wireMenu()
+ * and the measurements deciding how much room each gets. menu-footstrap.js calls wireMenu()
  * and start(); nothing else here needs wiring from outside. Spec: docs/chrome.md */
+
+/* ---- UI primitives, shared with fs-select.js and fs-overview.js ---- */
+
+/* aria-hidden: each icon sits beside its own label. Only `.fs-ico` and `.fs-chevron` are stroked,
+ * by theme/20-shell.css. */
+function svgIcon(body, cls) {
+	return '<svg class="' + (cls || 'fs-ico') + '" aria-hidden="true" viewBox="0 0 24 24">' + body + '</svg>';
+}
+
+/* Idempotent: a poll tick that changes nothing fires no mutation record. null removes the attribute. */
+function syncAttr(el, name, value) {
+	if (value === null) {
+		el.removeAttribute(name);
+	} else if (el.getAttribute(name) !== value) {
+		el.setAttribute(name, value);
+	}
+}
+
+/* Enter/Space activation for an element with no native key handling; once per press, not per key
+ * repeat (~30/s). */
+function wireActivate(el, activate) {
+	el.addEventListener('keydown', (ev) => {
+		if (ev.key !== 'Enter' && ev.key !== ' ') return;
+		ev.preventDefault();
+		if (!ev.repeat) activate();
+	});
+}
 
 /* section tabs -> #tabmenu (horizontal) */
 function renderTabMenu(node, url, level) {
@@ -89,18 +115,20 @@ function resolveLen(token, dflt) {
 }
 
 /* Memoised because fitShell runs on every resize and mutation and resolving forces a style recalc;
- * keyed on the density, the one thing that changes these widths at runtime. */
+ * keyed on the density and the Text size (the widths are rem), the two things that change them at
+ * runtime. */
 const GEOM_DFLT = { contentMin: 500, sidebarW: 224, railW: 68, contentPad: 56 };
 const CLASS_IND_COMPACT = 'fs-ind-compact';
 
 let _geom = null, _geomKey = null, _geomWarned = false;
 function shellGeometry() {
-	const density = document.documentElement.getAttribute('data-density') || '';
-	if (_geom && _geomKey === density) {
+	const root = document.documentElement;
+	const key = (root.getAttribute('data-density') || '') + '|' + root.style.getPropertyValue('--fs-text-size');
+	if (_geom && _geomKey === key) {
 		_geom.contentPad = _shellPad ?? GEOM_DFLT.contentPad;
 		return _geom;
 	}
-	_geomKey = density;
+	_geomKey = key;
 	const g = {
 		contentMin: resolveLen('--fs-content-min', GEOM_DFLT.contentMin),
 		sidebarW:   resolveLen('--fs-sidebar-w', GEOM_DFLT.sidebarW),
@@ -130,7 +158,7 @@ function measureShell() {
 	/* memoised on what moves the gutter: the width (a media query re-pads the column below 767px) and
 	 * the density */
 	const key = (document.documentElement.getAttribute('data-density') || '') + '|' + _shellOuter +
-		'|' + (document.body ? document.body.getAttribute('data-page') || '' : '');
+		'|' + (document.body.getAttribute('data-page') || '');
 	if (_padAt === key) return;
 	const host = document.querySelector('.fs-content');
 	const cs = host ? getComputedStyle(host) : null;
@@ -151,8 +179,9 @@ function columnWidth(g, state) {
 function fitShell() {
 	const root = document.documentElement;
 	measureShell();
-	if (prefs.currentLayout() === 'top') {		/* no sidebar, no cut, nothing to decide */
+	if (prefs.isTopLayout()) {		/* no sidebar, no cut, nothing to decide */
 		root.removeAttribute('data-narrow');
+		root.removeAttribute('data-sb');
 		return;
 	}
 	const g = shellGeometry();
@@ -160,7 +189,10 @@ function fitShell() {
 	const content = columnWidth(g, { outerW: _shellOuter, rail: prefs.currentRail() });
 	/* toggleAttribute, not setAttribute: a same-value setAttribute still queues a mutation record,
 	 * toggleAttribute on a present attribute queues none, and fitShell runs on every mutation batch */
-	root.toggleAttribute('data-narrow', content < g.contentMin);
+	const narrow = content < g.contentMin;
+	root.toggleAttribute('data-narrow', narrow);
+	/* the stylesheet's guard for the drawn vertical sidebar (head.ut stamps it from the layout) */
+	root.toggleAttribute('data-sb', !narrow);
 }
 
 function fitChrome() {
@@ -270,7 +302,7 @@ function iconSvg(name) {
 		|| ((/serv|dnsmasq|cron/).test(key) ? ICONS.services : null)
 		|| ((/stat|overview|dash/).test(key) ? ICONS.status : null)
 		|| ICONS._default;
-	return widgets.svgIcon(body);
+	return svgIcon(body);
 }
 
 /* Is a section's panel a popup (flyout / bar dropdown) rather than an unfolded accordion? `.open`
@@ -278,8 +310,7 @@ function iconSvg(name) {
  * the rail or the bar a popup panel (exactly one open). Reads the stylesheet's own input,
  * `data-narrow`, stamped by fitShell() before the menu renders; never a viewport query. */
 function flyoutMode() {
-	return prefs.currentRail() || prefs.isTopLayout() ||
-	       document.documentElement.hasAttribute('data-narrow');
+	return prefs.currentRail() || barDropdown();
 }
 
 /* The trigger — a bare <a>. setOpen() below keeps `.open` and aria-expanded in step. */
@@ -385,7 +416,7 @@ function renderMainMenu(node, url, level, parentActive = true) {
 			saveOpenSections();
 		}
 		const chevron = hasSub
-			? widgets.svgIcon('<path d="M9 6l6 6-6 6"/>', 'fs-chevron')
+			? svgIcon('<path d="M9 6l6 6-6 6"/>', 'fs-chevron')
 			: '';
 
 		/* `active` only paints the item; aria-current is what a screen reader reads, and belongs on the
@@ -442,7 +473,7 @@ function renderMainMenu(node, url, level, parentActive = true) {
 				saveOpenSections();
 			});
 
-			widgets.wireActivate(link, () => link.click());
+			wireActivate(link, () => link.click());
 
 			/* hybrid devices: once a real mouse enters, drop the tap-opened panel so hover is authoritative;
 			 * guarded on pointerType, since a touch tap fires pointerenter ('touch') first */
@@ -478,10 +509,9 @@ function renderModeMenu(node) {
 			renderMainMenu(child, child.name);
 	});
 
+	/* 20-shell.css hides it while :empty or .single */
 	if (children.length <= 1)
 		ul.classList.add('single');
-	if (ul.children.length > 1)
-		ul.style.display = '';
 }
 
 function renderChrome() {
@@ -490,7 +520,7 @@ function renderChrome() {
 	const topmenu  = document.querySelector('#topmenu');
 	const tabmenu  = document.querySelector('#tabmenu');
 
-	modemenu.innerHTML = ''; modemenu.style.display = 'none'; modemenu.classList.remove('single');
+	modemenu.innerHTML = ''; modemenu.classList.remove('single');
 	topmenu.innerHTML = '';
 	tabmenu.innerHTML = ''; tabmenu.style.display = 'none';
 
@@ -537,7 +567,7 @@ const IND_DOT = '•';
 function wireIndicatorKeyboard(el) {
 	if (el.dataset.fsWired) return;
 	el.dataset.fsWired = '1';
-	widgets.wireActivate(el, () => el.click());
+	wireActivate(el, () => el.click());
 }
 
 function wireIndicatorCounts() {
@@ -548,15 +578,15 @@ function wireIndicatorCounts() {
 		box.querySelectorAll('[data-indicator]').forEach((el) => {
 			const txt = el.textContent || '';
 			const m = txt.match(/(\d+)\s*$/);
-			widgets.syncAttr(el, 'data-fs-badge', m ? m[1] : IND_DOT);
+			syncAttr(el, 'data-fs-badge', m ? m[1] : IND_DOT);
 			/* the rail hides the prose; the tooltip is where it stays reachable by pointer */
-			widgets.syncAttr(el, 'title', txt);
+			syncAttr(el, 'title', txt);
 			/* Only a clickable indicator becomes a control: `ui.showIndicator` sets `data-clickable` only when
 			 * it was handed a handler (luci-base ui.js). */
 			if (el.hasAttribute('data-clickable')) {
-				widgets.syncAttr(el, 'role', 'button');
-				widgets.syncAttr(el, 'tabindex', '0');
-				widgets.syncAttr(el, 'aria-label', txt.trim() || null);
+				syncAttr(el, 'role', 'button');
+				syncAttr(el, 'tabindex', '0');
+				syncAttr(el, 'aria-label', txt.trim() || null);
 				wireIndicatorKeyboard(el);
 			}
 		});
@@ -638,6 +668,8 @@ function start() {
 
 return baseclass.extend({
 	renderChrome,
+	syncAttr,
+	wireActivate,
 	wireMenu,
 	start,
 

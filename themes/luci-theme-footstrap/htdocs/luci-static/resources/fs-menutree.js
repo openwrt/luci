@@ -4,7 +4,7 @@
 /* The menu tree as a routing table: path <-> node, with LuCI's alias/firstchild resolution. Pure
  * lookup, no DOM. */
 
-/* the ACL-filtered tree from /admin/menu, handed over once by the chrome's init() */
+/* the ACL-filtered tree from /admin/menu, handed over once by menu-footstrap.js's __init__() */
 let _tree = null;
 
 function setTree(tree) {
@@ -83,7 +83,7 @@ function resolveSegs(segs) {
 }
 
 /* ---- readonly is a property of the path, not of the leaf ----
- * See apply_tree_acls() (dispatcher.uc:442). */
+ * See apply_tree_acls() in dispatcher.uc. */
 function readonlyForSegs(segs) {
 	let node = _tree;
 	let gated = 0, locked = 0;

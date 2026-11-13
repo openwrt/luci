@@ -300,8 +300,6 @@ function claimOwner(el) {
  * chrome. Measured: unlayered = chrome broken, app OK; `@layer theme` = both OK; a layer before
  * theme = app broken. Never delete the sheet: an app's "already imported?" check must find it. */
 function rehostIntoThemeLayer(el, universe) {
-	if (el.dataset.fsLayered) return;
-
 	if (el.tagName === 'LINK') {
 		/* A link the app marked alternate or disabled paints nothing and is left unmarked and watched:
 		 * enabling it adds no node, so only an attribute observer sees it. */
@@ -334,7 +332,7 @@ function rehostIntoThemeLayer(el, universe) {
 		origText.set(el, el.textContent);	/* dedupeViewSheets keys on this — see there */
 		el.textContent = '@layer theme {\n' + el.textContent + '\n}';
 	}
-	try { if (el.sheet) fenceRules(el.sheet.cssRules, universe.names); } catch (e) { /* unfenced, not broken */ }
+	if (el.sheet) fenceRules(el.sheet.cssRules, universe.names);
 	claimOwner(el);	/* a <style> is re-hosted in place, so it paints itself */
 }
 
@@ -397,8 +395,6 @@ const LAYER_ORDER = '@layer tokens, base, theme, page;';
 let _layerStmt = null;
 
 function reassertLayerOrder() {
-	const head = document.head;
-	if (!head) return;
 	const own = [...document.querySelectorAll('link[rel~="stylesheet"]')]
 		.find((l) => (/\/cascade\.css/).test(l.href || ''));
 	if (!own) return;

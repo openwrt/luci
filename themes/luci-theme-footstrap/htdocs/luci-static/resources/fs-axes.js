@@ -6,7 +6,7 @@
 
 /* fs-axes — the Appearance axes and the Save-as-default machinery.
  *
- * Split out of fs-prefs.js because only `fs-appearance` (the form) and `fs-assets` (the uploads)
+ * Split out of fs-prefs.js because only `view/footstrap/appearance.js` (the form) and `fs-assets` (the uploads)
  * need it, so the router fetches it on the Appearance page and nowhere else: 5.9 KB off what every
  * page downloads. fs-prefs keeps what the chrome applies live: the localStorage wrappers and sd(),
  * dark mode (guardDarkStamp defends it on every page), layout, rail and auto-collapse.
@@ -49,8 +49,7 @@ function listAxis(key, attr, values, dflt, after) {
 }
 
 /* A two-value axis: `on` is stamped as the attribute's value, `off` is a bare :root. The list shape
- * with a list of one — kept as its own name because "two-valued" is what most of these
- * axes are. */
+ * with a list of one. */
 function enumAxis(key, attr, on, off) {
 	return listAxis(key, attr, [ on ], off);
 }
@@ -199,6 +198,10 @@ const FS_CWIDTH_DEFAULT = 1280;
 const CWIDTH = propAxis('fs-content-width', 'content_width', '--fs-content-max', 1280, 3840,
 	FS_CWIDTH_DEFAULT, (v) => (v + 'px'), () => fit.schedule());
 
+/* Text size: <html>'s font-size as a share of the browser's own, so the type, the controls that
+ * hold text and the chrome's widths grow together (all rem). It re-runs the fit. */
+const TSIZE = propAxis('fs-text-size', 'text_size', '--fs-text-size', 80, 150, 100, (v) => (v + '%'), () => fit.schedule());
+
 /* Tint strength: a multiplier on the tint chroma, 100% the designed strength and 200% the cap. 0
  * is not "no tint". */
 const FS_TSTR_DEFAULT = 100;
@@ -218,13 +221,16 @@ const PINK = enumAxis('fs-pattern-ink', 'data-pattern-ink', 'original', 'theme')
 
 /* Transparency: the cards and the menu as glass over a wallpaper, 100% = solid. The
  * attribute that switches the glass on is derived, not stored: set below 100% unless the OS asks
- * for less transparency or more contrast, which a glass card cannot honour. 17-glass.css adds the
- * wallpaper gate. head.ut's pre-paint repeats both rules. */
-const GLASS_BLOCKERS = [ '(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(forced-colors: active)' ];
-const glassBlocked = () => GLASS_BLOCKERS.some((q) => window.matchMedia(q).matches);
+ * for more contrast or forces colours, which a glass card cannot honour. Less transparency holds
+ * back only an opacity that came from the router: Windows' "Transparency effects" switch reaches
+ * Chromium as that query, and an opacity set in this browser is its user asking for glass here.
+ * 17-glass.css adds the wallpaper gate. head.ut's pre-paint repeats these rules. */
+const mq = (q) => window.matchMedia(q).matches;
+const glassForcedSolid = () => mq('(prefers-contrast: more)') || mq('(forced-colors: active)');
+const glassBlocked = (key) => glassForcedSolid() || (mq('(prefers-reduced-transparency: reduce)') && prefs.lsGet(key) === null);
 function glassAxis(key, sdKey, prop, attr) {
 	const ax = propAxis(key, sdKey, prop, 0, 100, 100, (v) => (v + '%'),
-		() => document.documentElement.toggleAttribute(attr, ax.current() < 100 && !glassBlocked()));
+		() => document.documentElement.toggleAttribute(attr, ax.current() < 100 && !glassBlocked(key)));
 	return ax;
 }
 const CARD_OP = glassAxis('fs-card-opacity', 'card_opacity', '--fs-card-opacity', 'data-glass');
@@ -269,6 +275,7 @@ const AXES = {
 	pattern_strength: { key: 'fs-pattern-strength', ax: PSTR, builtin: FS_PSTR_DEFAULT },
 	pattern_ink: { key: 'fs-pattern-ink', ax: PINK, builtin: 'theme' },
 	content_width: { key: 'fs-content-width', ax: CWIDTH, builtin: FS_CWIDTH_DEFAULT },
+	text_size: { key: 'fs-text-size', ax: TSIZE, builtin: 100 },
 	card_opacity: { key: 'fs-card-opacity', ax: CARD_OP, builtin: 100 },
 	bar_opacity: { key: 'fs-bar-opacity', ax: BAR_OP, builtin: 100 },
 	material: { key: 'fs-material', ax: MATERIAL, builtin: 'frosted' },
@@ -355,6 +362,7 @@ return baseclass.extend({
 	patternStrength: PSTR,
 	patternInk: PINK,
 	contentWidth: CWIDTH,
+	textSize: TSIZE,
 	cardOpacity: CARD_OP,
 	barOpacity: BAR_OP,
 	material: MATERIAL,
@@ -362,7 +370,7 @@ return baseclass.extend({
 	pattern: PATTERN,
 	loginBg: LOGIN_BG,
 
-	tokenOk, glassBlocked,
+	tokenOk, glassBlocked, glassForcedSolid,
 
 	matchesSavedDefault, saveSettings, saveAsDefault, resetToSaved, resetToBuiltin
 });

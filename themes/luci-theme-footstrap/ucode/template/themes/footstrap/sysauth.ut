@@ -42,7 +42,7 @@
 	{#
 	 Two independent alerts: neither variable alone says which dispatcher branch rendered this.
 	 `fuser` is set in both branches, including the OTP step after a correct password; and
-	 `auth_message` (copied from get_challenges() BEFORE the check, dispatcher.uc:956) is set on
+	 `auth_message` (copied from get_challenges() BEFORE the check, in dispatcher.uc) is set on
 	 every pending result. `auth_plugin` is set only once session_setup() accepted the
 	 credentials: gate the credentials alert on `!auth_plugin`, print the message beside it.
 	 entityencode, where upstream prints raw: plugin markup travels in `auth_html`, so this is
@@ -74,7 +74,7 @@
 					<input class="cbi-input-text" type="text" name="luci_username" id="luci_username" autocomplete="username" value="{{ entityencode(duser, true) }}" />
 				</div>
 			</div>
-			<div class="cbi-value cbi-value-last">
+			<div class="cbi-value">
 				<label class="cbi-value-title" for="luci_password">{{ _('Password') }}</label>
 				<div class="cbi-value-field">
 					<input class="cbi-input-text" type="password" name="luci_password" id="luci_password" autocomplete="current-password" autofocus />
