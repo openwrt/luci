@@ -7,11 +7,10 @@
 				</div>{# /.fs-content #}
 
 				{#
-					role="contentinfo" is explicit because a <footer> gets it implicitly only when
-					its nearest ancestor is <body>, and this one must stay inside <main>: both
-					layouts lay .fs-main out as a flex column and order the footer within it.
-					The version strings are entityencode()d — /etc/openwrt_release is root-owned,
-					but an unescaped `&` in a distname would still break the markup.
+					role="contentinfo" is explicit because a <footer> gets it implicitly only under <body>,
+					and this one stays inside <main> so both layouts order it within the flex column.
+					The version strings are entityencode()d: an unescaped `&` in a distname would break
+					the markup.
 				#}
 				<footer class="fs-footer" role="contentinfo">
 					<span>
@@ -28,8 +27,7 @@
 				</footer>
 			</main>{# /.fs-main #}
 		</div>{# /.fs-shell #}
-		<script>L.require('menu-footstrap')</script>
-		<script>L.require('fs-select')</script>
+		<script>L.require('menu-footstrap');L.require('fs-select')</script>
 		{% endif %}
 	</body>
 </html>
