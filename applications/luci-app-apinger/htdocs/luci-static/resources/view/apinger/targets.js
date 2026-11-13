@@ -38,7 +38,7 @@ return view.extend({
 		}
 
 		o = s.option(form.Value, 'address', _('Address'));
-		o.datatype = 'ip4addr';
+		o.datatype = 'ipaddr';
 
 		o = s.option(form.Value, 'probe_interval', _('Ping Interval'));
 		o.datatype = 'integer';
