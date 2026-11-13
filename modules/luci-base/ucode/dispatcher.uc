@@ -11,7 +11,7 @@ import { hash, load_catalog, change_catalog, translate, ntranslate, getuid } fro
 import { revision as luciversion, branch as luciname } from 'luci.version';
 import { default as LuCIRuntime } from 'luci.runtime';
 import { urldecode, urlencode } from 'luci.http';
-import { get_challenges, verify } from 'luci.authplugins';
+import { get_challenges, verify, get_primary, identify, issue_primary_ticket, redeem_primary_ticket } from 'luci.authplugins';
 
 let ubus = connect();
 let uci = cursor();
@@ -521,6 +521,37 @@ function session_setup(user, pass, path) {
 	closelog();
 }
 
+function session_setup_primary(user, plugin, plugin_data, path) {
+	let timeout = uci.get('luci', 'sauth', 'sessiontime');
+	let login = ubus.call("session", "setup", {
+		username: user,
+		timeout:  timeout ? +timeout : null
+	});
+
+	openlog('dispatcher.uc');
+	if (type(login?.ubus_rpc_session) == 'string') {
+		ubus.call("session", "set", {
+			ubus_rpc_session: login.ubus_rpc_session,
+			values: {
+				token: randomid(16),
+				// Kept apart from the session's own fields so a plugin
+				// can't overwrite them; read back by authplugins.logout().
+				auth_plugin: { uuid: plugin.uuid, data: plugin_data }
+			}
+		});
+		syslog(LOG_INFO|LOG_AUTHPRIV, "luci: accepted passwordless login on /%s for %s from %s via auth plugin '%s'",
+			join('/', map(path, p => urlencode(p))), urlencode(user), http.getenv("REMOTE_ADDR") || "?", plugin.name);
+		closelog();
+
+		return session_retrieve(login.ubus_rpc_session);
+	}
+
+	syslog(LOG_WARNING|LOG_AUTHPRIV, "luci: rejected passwordless login on /%s for %s from %s via auth plugin '%s': no rpcd login entry or session.setup unavailable",
+		join('/', map(path, p => urlencode(p))), urlencode(user), http.getenv("REMOTE_ADDR") || "?", plugin.name);
+
+	closelog();
+}
+
 function set_auth_required_plugins(session, plugin_ids) {
 	ubus.call("session", "set", {
 		ubus_rpc_session: session.sid,
@@ -946,37 +977,12 @@ dispatch = function(_http, path) {
 					pass = http.formvalue('luci_password');
 				}
 
-				let auth_check = get_challenges(http, user ?? 'root');
-				let auth_fields = null;
-				let auth_message = null;
-				let auth_html = null;
-				let auth_assets = null;
-
-				if (auth_check.pending) {
-					auth_fields = auth_check.fields;
-					auth_message = auth_check.message;
-					auth_html = auth_check.html;
-					auth_assets = auth_check.assets;
-				}
-
-				if (user != null && pass != null)
-					session = session_setup(user, pass, resolved.ctx.request_path);
-
-				if (!session) {
+				let render_login = (scope) => {
 					resolved.ctx.path = [];
 
 					http.status(403, 'Forbidden');
 					http.header('X-LuCI-Login-Required', 'yes');
 
-					// Show login form with 2FA fields if required
-					let scope = {
-						duser: 'root',
-						fuser: user,
-						auth_fields: auth_fields,
-						auth_message: auth_message,
-						auth_html: auth_html,
-						auth_assets: auth_assets
-					};
 					let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
 
 					if (runtime.is_ucode_template(theme_sysauth) || runtime.is_lua_template(theme_sysauth)) {
@@ -989,6 +995,34 @@ dispatch = function(_http, path) {
 					}
 
 					return runtime.render('sysauth', scope);
+				};
+
+				// A primary auth plugin may identify the user without a
+				// password; a ticket carries that identity across a
+				// second-factor round trip.
+				let primary = identify(http) ?? redeem_primary_ticket(http.formvalue('luci_primary_ticket'));
+
+				if (primary?.success)
+					session = session_setup_primary(primary.username, primary.plugin, primary.data, resolved.ctx.request_path);
+				else if (!primary && user != null && pass != null)
+					session = session_setup(user, pass, resolved.ctx.request_path);
+
+				if (!session) {
+					let auth_check = get_challenges(http, user ?? 'root');
+					let primary_ui = get_primary(http);
+					let failed_primary = (primary != null);
+
+					return render_login({
+						duser: 'root',
+						fuser: failed_primary ? null : user,
+						auth_plugin: failed_primary ? primary.plugin?.name : null,
+						auth_fields: auth_check.pending ? auth_check.fields : null,
+						auth_message: failed_primary
+							? (primary.message ?? 'Authentication failed')
+							: (auth_check.pending ? auth_check.message : primary_ui.message),
+						auth_html: join('\n', filter([ auth_check.pending ? auth_check.html : null, primary_ui.html ], length)) || null,
+						auth_assets: [ ...(auth_check.pending ? auth_check.assets : []), ...primary_ui.assets ]
+					});
 				}
 
 				let auth_user = session.data?.username;
@@ -996,7 +1030,8 @@ dispatch = function(_http, path) {
 					auth_user = user;
 
 				// Compute required plugin list once for authenticated user and bind it to the temporary session.
-				auth_check = get_challenges(http, auth_user);
+				// The plugin that identified the user does not run again as a second factor.
+				let auth_check = get_challenges(http, auth_user, primary?.success ? [ primary.plugin.uuid ] : null);
 				if (auth_check.pending) {
 					let required_plugin_ids = map(auth_check.challenges, c => c.uuid);
 					set_auth_required_plugins(session, required_plugin_ids);
@@ -1009,32 +1044,24 @@ dispatch = function(_http, path) {
 						// Destroy the temporary session to prevent bypass
 						ubus.call("session", "destroy", { ubus_rpc_session: session.sid });
 
-						resolved.ctx.path = [];
-						http.status(403, 'Forbidden');
-						http.header('X-LuCI-Login-Required', 'yes');
+						let ticket_html = null;
 
-						let scope = {
+						if (primary?.success) {
+							let ticket = issue_primary_ticket(auth_user, primary.plugin, primary.data);
+
+							if (ticket)
+								ticket_html = `<input type="hidden" name="luci_primary_ticket" value="${ticket}">`;
+						}
+
+						return render_login({
 							duser: 'root',
-							fuser: user,
+							fuser: primary?.success ? null : user,
 							auth_plugin: length(auth_check.challenges) ? auth_check.challenges[0].name : null,
 							auth_fields: auth_check.fields,
 							auth_message: auth_verify.message ?? auth_check.message,
-							auth_html: auth_check.html,
+							auth_html: join('\n', filter([ ticket_html, auth_check.html ], length)) || null,
 							auth_assets: auth_check.assets
-						};
-
-						let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
-
-						if (runtime.is_ucode_template(theme_sysauth) || runtime.is_lua_template(theme_sysauth)) {
-							try {
-								return runtime.render(theme_sysauth, scope);
-							}
-							catch (e) {
-								runtime.env.media_error = `${e}`;
-							}
-						}
-
-						return runtime.render('sysauth', scope);
+						});
 					}
 
 					set_auth_required_plugins(session, null);
@@ -1043,8 +1070,25 @@ dispatch = function(_http, path) {
 				let cookie_name = (http.getenv('HTTPS') == 'on') ? 'sysauth_https' : 'sysauth_http',
 				    cookie_secure = (http.getenv('HTTPS') == 'on') ? '; secure' : '';
 
+				let target = build_url(...(length(resolved.ctx.request_path) ? resolved.ctx.request_path : resolved.ctx.path));
+
 				http.header('Set-Cookie', `${cookie_name}=${session.sid}; path=${build_url()}; SameSite=strict; HttpOnly${cookie_secure}`);
-				http.redirect(build_url(...(length(resolved.ctx.request_path) ? resolved.ctx.request_path : resolved.ctx.path)));
+
+				// A primary plugin's login may arrive from another site, such
+				// as an identity provider's redirect. Browsers withhold a
+				// SameSite=strict cookie for the rest of a redirect chain that
+				// began cross-site, so a 302 would land back on the login
+				// form. A page that navigates itself starts a same-site chain.
+				if (primary?.success) {
+					http.status(200, 'OK');
+					http.header('Cache-Control', 'no-store');
+					http.prepare_content('text/html; charset=UTF-8');
+					http.write(`<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0; url=${entityencode(target, true)}"></head>` +
+						`<body><a href="${entityencode(target, true)}">Continue</a></body></html>`);
+				}
+				else {
+					http.redirect(target);
+				}
 
 				return;
 			}
