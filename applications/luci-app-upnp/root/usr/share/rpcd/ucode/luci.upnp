@@ -13,6 +13,76 @@ import { cursor } from 'uci';
 // is merged.
 const ubus = connect();
 
+function get_ipt_rules() {
+	const rules = [];
+	const ipt = popen('iptables --line-numbers -t nat -xnvL MINIUPNPD 2>/dev/null');
+	if (ipt) {
+		for (let line = ipt.read('line'); length(line); line = ipt.read('line')) {
+			let m = match(line, /^([0-9]+)\s+([a-z]+).+dpt:([0-9]+) to:(\S+):([0-9]+)/);
+			if (m) {
+				push(rules, {
+					num: m[1],
+					proto: uc(m[2]),
+					extport: +m[3],
+					intaddr: arrtoip(iptoarr(m[4])),
+					intport: +m[5],
+					descr: ''
+				});
+			}
+		}
+		ipt.close();
+	}
+	return rules;
+}
+
+function get_nft_rules() {
+	const rules = [];
+	const nft = popen('nft -j list chain inet fw4 upnp_prerouting 2>/dev/null');
+	if (!nft) return rules;
+
+	const raw = nft.read('all');
+	nft.close();
+
+	let data;
+	try { data = json(raw); } catch (e) { return rules; }
+	if (!data || !data.nftables) return rules;
+
+	let num = 1;
+	for (let item in data.nftables) {
+		if (item.rule && item.rule.expr) {
+			let extport = 0, proto = '', intaddr = '', intport = 0;
+
+			for (let expr in item.rule.expr) {
+				if (expr.match && expr.match.left && expr.match.left.payload) {
+					let payload = expr.match.left.payload;
+					if (payload.field == 'dport') {
+						extport = expr.match.right;
+					} else if ((payload.base == 'nh' || payload.protocol == 'nh') && payload.offset == 72 && payload.len == 8) {
+						if (expr.match.right == 6 || expr.match.right == '0x6') proto = 'TCP';
+						else if (expr.match.right == 17 || expr.match.right == '0x11') proto = 'UDP';
+					}
+				} else if (expr.dnat) {
+					intaddr = expr.dnat.addr;
+					intport = expr.dnat.port;
+				}
+			}
+
+			if (extport > 0 && intaddr != '') {
+				push(rules, {
+					num: `${num}`,
+					proto: uc(proto),
+					extport: extport,
+					intaddr: arrtoip(iptoarr(intaddr)),
+					intport: intport,
+					descr: ''
+				});
+				num++;
+			}
+		}
+	}
+	return rules;
+}
+
 const methods = {
 	get_status: {
 		call: function(req) {
@@ -33,7 +103,7 @@ const methods = {
 							extport: +record[1],
 							intaddr: arrtoip(iptoarr(record[2])),
 							intport: +record[3],
-							expires: record[4] - timelocal(localtime()),
+							expires: (+record[4] > 0) ? (+record[4] - timelocal(localtime())) : 0,
 							description: trim(record[5])
 						});
 					}
@@ -42,48 +112,14 @@ const methods = {
 				leasefile.close();
 			}
 
-			const ipt = popen('iptables --line-numbers -t nat -xnvL MINIUPNPD 2>/dev/null');
-
-			if (ipt) {
-				for (let line = ipt.read('line'); length(line); line = ipt.read('line')) {
-					let m = match(line, /^([0-9]+)\s+([a-z]+).+dpt:([0-9]+) to:(\S+):([0-9]+)/);
-
-					if (m) {
-						push(rules, {
-							num: m[1],
-							proto: uc(m[2]),
-							extport: +m[3],
-							intaddr: arrtoip(iptoarr(m[4])),
-							intport: +m[5],
-							descr: ''
-						});
-					}
-				}
-
-				ipt.close();
+			const ipt_rules = get_ipt_rules();
+			for (let r in ipt_rules) {
+				push(rules, r);
 			}
 
-			const nft = popen('nft --handle list chain inet fw4 upnp_prerouting 2>/dev/null');
-
-			if (nft) {
-				for (let line = nft.read('line'), num = 1; length(line); line = nft.read('line')) {
-					let m = match(line, /^\t\tiif ".+" @nh,72,8 (0x6|0x11) th dport ([0-9]+) dnat ip to ([0-9.]+):([0-9]+)/);
-
-					if (m) {
-						push(rules, {
-							num: `${num}`,
-							proto: (m[1] == '0x6') ? 'TCP' : 'UDP',
-							extport: +m[2],
-							intaddr: arrtoip(iptoarr(m[3])),
-							intport: +m[4],
-							descr: ''
-						});
-
-						num++;
-					}
-				}
-
-				nft.close();
+			const nft_rules = get_nft_rules();
+			for (let r in nft_rules) {
+				push(rules, r);
 			}
 
 			return ubus.defer('luci-rpc', 'getHostHints', {}, function(rc, host_hints) {
@@ -118,19 +154,66 @@ const methods = {
 		call: function(req) {
 			const idx = +req.args?.token;
 
-			if (idx > 0) {
-				const uci = cursor();
-				const leasefile = uci.get('upnpd', 'config', 'upnp_lease_file');
-
-				if (access(leasefile)) {
-					system(['sed', '-i', '-e', `${idx}d`, leasefile]);
-					system(['/etc/init.d/miniupnpd', 'restart']);
-				}
-
-				return { result: 'OK' };
+			if (idx <= 0) {
+				return { result: 'Bad request' };
 			}
 
-			return { result: 'Bad request' };
+			const uci = cursor();
+			const leasefile = uci.get('upnpd', 'config', 'upnp_lease_file');
+			if (!access(leasefile)) {
+				return { result: 'Bad request' };
+			}
+
+			const all_rules = get_nft_rules();
+			let target = null;
+			for (let r in all_rules) {
+				if (r.num == `${idx}`) {
+					target = { proto: r.proto, extport: r.extport, intaddr: r.intaddr, intport: r.intport };
+					break;
+				}
+			}
+
+			if (!target) {
+				const ipt_rules = get_ipt_rules();
+				for (let r in ipt_rules) {
+					if (r.num == `${idx}`) {
+						target = { proto: r.proto, extport: r.extport, intaddr: r.intaddr, intport: r.intport };
+						break;
+					}
+				}
+			}
+
+			if (!target) {
+				return { result: 'Bad request' };
+			}
+
+			/* Find the matching line in leasefile by content */
+			const leasefd = open(leasefile, 'r');
+			if (!leasefd) {
+				return { result: 'Bad request' };
+			}
+
+			let target_line = 0;
+			let lineno = 0;
+			for (let line = leasefd.read('line'); length(line); line = leasefd.read('line')) {
+				lineno++;
+				const record = split(line, ':', 6);
+				if (length(record) == 6) {
+					if (uc(record[0]) == target.proto && +record[1] == target.extport &&
+					    record[2] == target.intaddr && +record[3] == target.intport) {
+						target_line = lineno;
+						break;
+					}
+				}
+			}
+			leasefd.close();
+
+			if (target_line > 0) {
+				system(['sed', '-i', '-e', `${target_line}d`, leasefile]);
+				system(['/etc/init.d/miniupnpd', 'restart']);
+			}
+
+			return { result: 'OK' };
 		}
 	}
 };
