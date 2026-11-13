@@ -98,6 +98,30 @@ return view.extend({
 				plugin.form.addFormOptions(s);
 			}
 
+			/* conditions under which the LED init script applies brightness */
+			const brightness_depends = [
+				{ trigger: 'none', default: '1' }
+			];
+
+			const led_names = Object.keys(leds).sort();
+			for (let i = 0; i < led_names.length; i++) {
+				const max = leds[led_names[i]].max_brightness;
+
+				/* only offer brightness for LEDs supporting more than on/off */
+				if (!(max > 1))
+					continue;
+
+				const o = s.option(form.Value, '_brightness_%d'.format(i), _('Brightness'),
+					_('Leave empty to use the maximum brightness supported by the LED.'));
+				o.ucioption = 'brightness';
+				o.rmempty = true;
+				o.modalonly = true;
+				o.datatype = 'range(1,%d)'.format(max);
+				o.placeholder = max;
+				for (let dep of brightness_depends)
+					o.depends(Object.assign({ sysfs: led_names[i] }, dep));
+			}
+
 			const opts = s.getOption();
 
 			const removeIfNoneActive = function(original_remove_fn, section_id) {
