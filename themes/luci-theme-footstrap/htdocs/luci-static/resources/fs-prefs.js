@@ -50,8 +50,6 @@ function currentMode() {
 /* Dark mode is announced in three dialects because apps sniff for it: `data-theme="dark"`
  * (luci-app-justclash keys 21 rules off it), Bootstrap's `data-bs-theme` and `data-darkmode`. */
 function stampDark(root, dark) {
-	/* the names stay literal: a gate reads this function's source, and a hoisted const would
-	 * look like no attribute at all */
 	root.setAttribute('data-darkmode', dark ? 'true' : 'false');
 	root.setAttribute('data-theme', dark ? 'dark' : 'light');
 	root.setAttribute('data-bs-theme', dark ? 'dark' : 'light');

@@ -34,8 +34,9 @@
 	 The router's name, above everything else in the card: an admin with three of these open has no
 	 other way to tell the tabs apart once the form is focused. The `?? 'OpenWrt'` fallback and the
 	 striptags/entityencode pair match head.ut and are load-bearing: the hostname is admin-controlled
-	 text printed to an unauthenticated page. A <p>, not a heading: the card's h1 is `Authorization
-	 Required` and stays the one heading, or a screen reader hears the hostname as a section title.
+	 text printed to an unauthenticated page. It is the card's visual title but a <p>, not a heading: the h1
+	 `Authorization Required` below stays the one heading (clipped by .fs-sr), or a screen reader
+	 hears the hostname as a section title.
 	-#}
 	<p class="fs-login-host">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</p>
 	{#
@@ -62,13 +63,10 @@
 		{#
 		 An h1, where every other LuCI theme leaves this an h2: the login page has no chrome, so
 		 header.ut's `.fs-title-main` h1 never renders here and the document would have no top-level
-		 heading for a screen reader. The stylesheet sets it back to the h2's 20px: the level was
-		 wrong, not the size.
+		 heading for a screen reader. Clipped with .fs-sr, not shown: the hostname above is the
+		 card's visible title and the words repeat what the fields say.
 		-#}
-		<h1>{{ _('Authorization Required') }}</h1>
-		<div class="cbi-map-descr">
-			{{ _('Please enter your username and password.') }}
-		</div>
+		<h1 class="fs-sr">{{ _('Authorization Required') }}</h1>
 		<div class="cbi-section"><div class="cbi-section-node">
 			<div class="cbi-value">
 				<label class="cbi-value-title" for="luci_username">{{ _('Username') }}</label>
@@ -146,8 +144,7 @@
 
 {#
 	The two server values the script below needs, handed over as DATA: a `{{ … }}` block is not JS
-	until the server renders it, so this line carries no logic at all and eslint's .ut processor
-	enforces that. The script itself is plain JS and is linted.
+	until the server renders it, so this line carries no logic at all. The script itself is plain JS.
 #}
 <script>window.__fsHttps={ports:{{ https_ports }},resource:"{{ resource }}"};</script>
 <script>

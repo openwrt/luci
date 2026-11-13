@@ -312,9 +312,22 @@ function applyDecision(t, d) {
 	if (d.breakCol !== -1) markBreakColumn(t, t.querySelectorAll('.tr'), d.breakCol);
 }
 
+/* A first cell with no break opportunity (no space, no hyphen: "/dev/mtdblock6") is marked so a carded half-cell can
+ * widen to it: CSS cannot tell a token from a phrase, and `anywhere` cut it mid-word at 94-106px.
+ * textContent reads no layout; the class is a function of the text, so a poll's identical copy gets
+ * the same answer, and an unchanged mark is not rewritten (no mutation for the observers). */
+function markTokenCells(t) {
+	t.querySelectorAll('.tr > .td:first-child').forEach((c) => {
+		const txt = c.textContent.trim();
+		const on = !!txt && !(/[\s\u002d\u00ad\u2010-\u2014]/).test(txt);
+		if (c.classList.contains('fs-td-token') !== on) c.classList.toggle('fs-td-token', on);
+	});
+}
+
 function fitTables() {
 	let cw;
 	document.querySelectorAll(stackables()).forEach((t) => {
+		markTokenCells(t);
 		if (fit.scrolling() && t.classList.contains('fs-fitted')) {
 			if (t._fsBreakCol >= 0) markBreakColumn(t, t.querySelectorAll('.tr'), t._fsBreakCol);
 			return;
@@ -558,7 +571,6 @@ function wireTypeahead() {
 }
 
 return baseclass.extend({
-
 	__init__() {
 		wireTypeahead();
 

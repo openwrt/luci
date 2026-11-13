@@ -7,13 +7,12 @@
 /* fs-axes — the Appearance axes and the Save-as-default machinery.
  *
  * Split out of fs-prefs.js because only `fs-appearance` (the form) and `fs-assets` (the uploads)
- * need it, so the router fetches it on the Appearance page and nowhere else: 6.6 KB off what every
+ * need it, so the router fetches it on the Appearance page and nowhere else: 5.9 KB off what every
  * page downloads. fs-prefs keeps what the chrome applies live: the localStorage wrappers and sd(),
  * dark mode (guardDarkStamp defends it on every page), layout, rail and auto-collapse.
  *
  * head.ut's pre-paint has already stamped every axis before the first frame, so nothing here is
- * needed to paint a page correctly, only to change one from the form. The axis list is read from the
- * whole resources directory, so an axis may live in a second file. */
+ * needed to paint a page correctly, only to change one from the form. */
 
 /* An axis whose values are a list, with one of them stamped as nothing.
  *
@@ -50,8 +49,8 @@ function listAxis(key, attr, values, dflt, after) {
 }
 
 /* A two-value axis: `on` is stamped as the attribute's value, `off` is a bare :root. The list shape
- * with a list of one — kept as its own name because the call is matched by name, and because
- * "two-valued" is what most of these axes are. */
+ * with a list of one — kept as its own name because "two-valued" is what most of these
+ * axes are. */
 function enumAxis(key, attr, on, off) {
 	return listAxis(key, attr, [ on ], off);
 }

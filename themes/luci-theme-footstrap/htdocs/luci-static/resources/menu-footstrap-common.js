@@ -93,9 +93,9 @@ function wireSearch() {
 /* The three template globals Status -> Overview needs (progressbar, renderBox, renderBadge), which
  * stock includes call bare and an SPA arrival never defines. */
 function ensureOverviewHelpers() {
-	/* eslint-disable no-var -- these three bodies are copies of LuCI's admin_status/index.ut so
-	   they can be diffed against upstream when it changes. Modernising the `var`s would break
-	   that property, which is what makes carrying the copies safe. */
+	/* Adapted copies of LuCI's admin_status/index.ut (window.L, an array child for E(), the title
+	   string hoisted into `reading`); keep the shape, `var`s included, so a diff against upstream
+	   stays readable when it changes. */
 	if (typeof window.progressbar !== 'function')
 		window.progressbar = function(query, value, max, byte) {
 			var pg = document.querySelector(query),
@@ -127,7 +127,6 @@ function ensureOverviewHelpers() {
 				window.L.itemlist(E('span'), [].slice.call(arguments, 2))
 			]);
 		};
-	/* eslint-enable no-var */
 }
 
 ensureOverviewHelpers();
