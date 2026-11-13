@@ -240,7 +240,10 @@ return view.extend({
 					])
 				),
 				E('div', { class: 'right' }, [
-					E('div', { class: 'btn', click: ui.hideModal }, _('Cancel')),
+					E('div', { class: 'btn', click: ui.createHandlerFn(this, function () {
+						this.stopSessionKeepAlive();
+						ui.hideModal();
+					}) }, _('Cancel')),
 					' ',
 					E(
 						'button',
@@ -260,6 +263,7 @@ return view.extend({
 				this.handleRebuilder(content, data, firmware);
 			}
 		} else {
+			this.stopSessionKeepAlive();
 			ui.showModal(_('No sysupgrade image found'), [
 				E('p', _('The image builder did not return a usable sysupgrade image for this device (image types: %s).').format(
 					response.images.map((i) => i.type).join(', '))),
@@ -300,6 +304,7 @@ return view.extend({
 	},
 
 	handleError: function (response, data, firmware, request_hash) {
+		this.stopSessionKeepAlive();
 		response = response.json();
 		const request_data = {
 			...data,
@@ -443,6 +448,21 @@ return view.extend({
 						}
 						break;
 				}
+			})
+			.catch(() => {
+				if (main) {
+					poll.remove(this.pollFn);
+					this.stopSessionKeepAlive();
+					ui.showModal(_('Error building the firmware image'), [
+						E('p', _('Could not read the image server response. Please try again.')),
+						E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+					]);
+				} else {
+					poll.remove(this.rebuilder_polls[server]);
+					let view = document.getElementById(server);
+					if (view)
+						view.innerText = '🚫 %s'.format(server);
+				}
 			});
 	},
 
@@ -466,7 +486,30 @@ return view.extend({
 		poll.start();
 	},
 
+	startSessionKeepAlive: function () {
+		if (this.keepAliveFn)
+			return;
+		this.keepAliveFn = () => L.resolveDefault(callSystemBoard(), null);
+		poll.add(this.keepAliveFn, 5);
+	},
+
+	stopSessionKeepAlive: function () {
+		if (!this.keepAliveFn)
+			return;
+		poll.remove(this.keepAliveFn);
+		this.keepAliveFn = null;
+	},
+
+	showUploadFailure: function (detail) {
+		ui.showModal(_('Firmware upload failed'), [
+			E('p', _('The firmware could not be uploaded to the device.')),
+			E('p', detail),
+			E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+		]);
+	},
+
 	handleInstall: function (url, keep, sha256) {
+		this.stopSessionKeepAlive();
 		ui.showModal(_('Downloading...'), [
 			E(
 				'p',
@@ -497,14 +540,28 @@ return view.extend({
 					),
 				]);
 
-				request
+				return request
 					.get(`${L.env.cgi_base}/cgi-upload`, {
 						method: 'PUT',
 						content: form_data,
 					})
-					.then((response) => response.json())
 					.then((response) => {
-						if (response.sha256sum != sha256) {
+						let reply;
+						try {
+							reply = response.json();
+						} catch (e) {
+							reply = null;
+						}
+
+						if (!L.isObject(reply) || reply.failure || typeof reply.sha256sum != 'string') {
+							this.showUploadFailure(
+								(reply && reply.message) ||
+								_('The LuCI session may have expired; log in and try again.')
+							);
+							return;
+						}
+
+						if (reply.sha256sum != sha256) {
 							ui.showModal(_('Wrong checksum'), [
 								E('p', _('Error during download of firmware. Please try again')),
 								E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
@@ -529,6 +586,10 @@ return view.extend({
 							});
 						}
 					});
+			})
+			.catch((error) => {
+				this.showUploadFailure(error.message ||
+					_('Error during download of firmware. Please try again'));
 			});
 	},
 
@@ -682,6 +743,7 @@ return view.extend({
 												this.pollFn = L.bind(function () {
 													this.handleRequest(url, true, content, data, firmware);
 												}, this);
+												this.startSessionKeepAlive();
 												poll.add(this.pollFn, 5);
 												poll.start();
 											})
