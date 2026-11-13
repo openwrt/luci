@@ -19,8 +19,9 @@
 	let _sd_pink = index([ 'theme', 'original' ], fs_defaults.pattern_ink) >= 0 ? fs_defaults.pattern_ink : '';
 	let _sd_ac   = index([ 'on', 'off' ], fs_defaults.autocollapse) >= 0 ? fs_defaults.autocollapse : '';
 	let _sd_dens = index([ 'compact', 'normal', 'large' ], fs_defaults.density) >= 0 ? fs_defaults.density : '';
-	/* Absent (null) or '' maps to -1, never 0: 0 is a real value for the four axes whose range
-	   starts at 0 (rounding, tint_strength, photo_dim, pattern_strength) and int(null) is 0. */
+	let _sd_mat  = index([ 'flat', 'frosted', 'acrylic' ], fs_defaults.material) >= 0 ? fs_defaults.material : '';
+	/* Absent (null) or '' maps to -1, never 0: 0 is a real value for the axes whose range starts at
+	   0 (rounding, tint_strength, photo_dim, pattern_strength, the two opacities) and int(null) is 0. */
 	function _sd_range(raw, min, max) {
 		let n = int(raw);
 		return (type(raw) == 'string' && n >= min && n <= max) ? n : -1;
@@ -65,6 +66,10 @@
 	/* the pattern's tile edge in px and the layer's opacity 0-100 */
 	let _sd_psize = _sd_range(fs_defaults.pattern_size, 40, 1600);
 	let _sd_pstr = _sd_range(fs_defaults.pattern_strength, 0, 100);
+	/* glass over a wallpaper: the cards' and the menu's opacity, 100 = solid */
+	let _sd_cop = _sd_range(fs_defaults.card_opacity, 0, 100);
+	let _sd_bop = _sd_range(fs_defaults.bar_opacity, 0, 100);
+	let _sd_blur = _sd_range(fs_defaults.blur, 0, 200);
 	/* ---- the fonts ----
 	   The theme carries no faces: font_sans / font_mono name a stack, and `fonts` is the cache-bust
 	   md5 of an @font-face sheet at /etc/footstrap/fonts/fonts.css. The package only serves that
@@ -122,7 +127,7 @@
 			current*(), so the Appearance controls show the effective default when this browser has no
 			localStorage. See the sanitiser above for the unset encodings.
 		#}
-		<script>window.__fsSD={layout:"{{ _sd_lay }}",darkmode:"{{ _sd_dark }}",palette:"{{ _sd_pal }}",wallpaper:"{{ _sd_wall }}",tint:"{{ _sd_tint }}",accent:"{{ _sd_acc }}",good:"{{ _sd_good }}",warn:"{{ _sd_warn }}",danger:"{{ _sd_dang }}",card:"{{ _sd_card }}",control:"{{ _sd_ctrl }}",bar:"{{ _sd_bar }}",line:"{{ _sd_line }}",rounding:{{ _sd_round }},autocollapse:"{{ _sd_ac }}",login_bg:"{{ _sd_lbg }}",tint_strength:{{ _sd_tstr }},photo_dim:{{ _sd_pdim }},density:"{{ _sd_dens }}",pattern:"{{ _sd_pat }}",pattern_size:{{ _sd_psize }},pattern_strength:{{ _sd_pstr }},pattern_ink:"{{ _sd_pink }}",content_width:{{ _sd_cwidth }}};</script>
+		<script>window.__fsSD={layout:"{{ _sd_lay }}",darkmode:"{{ _sd_dark }}",palette:"{{ _sd_pal }}",wallpaper:"{{ _sd_wall }}",tint:"{{ _sd_tint }}",accent:"{{ _sd_acc }}",good:"{{ _sd_good }}",warn:"{{ _sd_warn }}",danger:"{{ _sd_dang }}",card:"{{ _sd_card }}",control:"{{ _sd_ctrl }}",bar:"{{ _sd_bar }}",line:"{{ _sd_line }}",rounding:{{ _sd_round }},autocollapse:"{{ _sd_ac }}",login_bg:"{{ _sd_lbg }}",tint_strength:{{ _sd_tstr }},photo_dim:{{ _sd_pdim }},density:"{{ _sd_dens }}",pattern:"{{ _sd_pat }}",pattern_size:{{ _sd_psize }},pattern_strength:{{ _sd_pstr }},pattern_ink:"{{ _sd_pink }}",content_width:{{ _sd_cwidth }},card_opacity:{{ _sd_cop }},bar_opacity:{{ _sd_bop }},material:"{{ _sd_mat }}",blur:{{ _sd_blur }}};</script>
 		<script>
 				/* One IIFE pre-paints every Appearance axis before the first frame, duplicating the live
 				   applier in fs-prefs.js (no shared code: this runs before the module loader exists).
@@ -277,6 +282,31 @@
 					if (pdRaw === null) pd = sd.photo_dim;
 					if (pd >= 0 && pd <= 100 && pd !== 74)
 						root.style.setProperty('--fs-photo-dim', pd + '%');
+					/* Glass: the cards' and the menu's opacity, 100 = solid. The attribute that switches
+					   it on waits for an OS asking for less transparency or more contrast, as glassAxis()
+					   in fs-axes.js does; 17-glass.css adds the wallpaper gate. */
+					const solid = [ '(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(forced-colors: active)' ]
+						.some((q) => window.matchMedia(q).matches);
+					const glass = (key, sdVal, prop, attr) => {
+						const raw = lsGet(key);
+						let v = parseInt(raw, 10);
+						if (raw === null) v = sdVal;
+						if (v >= 0 && v < 100) {
+							root.style.setProperty(prop, v + '%');
+							if (!solid) root.setAttribute(attr, '');
+						}
+					};
+					glass('fs-card-opacity', sd.card_opacity, '--fs-card-opacity', 'data-glass');
+					glass('fs-bar-opacity', sd.bar_opacity, '--fs-bar-opacity', 'data-glass-bar');
+					let mt = lsGet('fs-material');
+					if (mt === null) mt = sd.material || null;
+					if (mt === 'flat' || mt === 'acrylic') root.setAttribute('data-material', mt);
+					/* Frosted's and Acrylic's blur, same shape as the tint strength */
+					const blRaw = lsGet('fs-blur');
+					let bl = parseInt(blRaw, 10);
+					if (blRaw === null) bl = sd.blur;
+					if (bl >= 0 && bl <= 200 && bl !== 100)
+						root.style.setProperty('--fs-blur', String(bl / 100));
 				} catch (e) {}
 
 				const saved = lsGet('fs-darkmode');

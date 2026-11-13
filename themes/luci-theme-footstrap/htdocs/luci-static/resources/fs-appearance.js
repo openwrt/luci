@@ -110,7 +110,7 @@ function colorControl(onPick, label, o) {
 		clear.disabled = !v;
 		if (!ratio) return;
 		const r = contrastRatio(o.contrast.fg, o.contrast.bg);
-		if (r === null) { ratio.textContent = ''; ratio.removeAttribute('title'); return; }
+		if (r === null) { ratio.hidden = true; ratio.removeAttribute('title'); return; }
 		/* The readout states what the ratio means; the number itself stays in the title. Thresholds are
 		 * WCAG AA: 4.5:1 for body text, 3:1 for large text and for a UI shape. */
 		const where = o.contrast.label;
@@ -125,6 +125,8 @@ function colorControl(onPick, label, o) {
 					: { cls: 'fs-contrast-low', text: _('Too faint to read %s', 'footstrap').format(where) };
 		ratio.className = 'fs-color-contrast ' + grade.cls;
 		ratio.textContent = grade.text;
+		/* a pass says nothing: nine "easy to read" lines buried the one that was not */
+		ratio.hidden = (grade.cls === 'fs-contrast-aa');
 		ratio.title = _('Contrast %s:1 (WCAG AA wants %s:1 here)', 'footstrap')
 			.format(r.toFixed(1), (o.contrast.kind === 'shape') ? '3' : '4.5');
 	}
@@ -141,7 +143,7 @@ function colorControl(onPick, label, o) {
 		const v = field.value.trim().toLowerCase();
 		if ((/^#[0-9a-f]{6}$/).test(v)) pick(v);
 		/* re-read rather than a cached copy: the page can change what the axis holds behind this
-		 * control (a preset, Reset to default), which a snapshot taken at build time would miss */
+		 * control (a preset, Reset to built-in), which a snapshot taken at build time would miss */
 		else reflect(o.read());
 	};
 	field.addEventListener('input', () => { typed = true; });
@@ -174,9 +176,10 @@ function watchColours(refresh) {
 	});
 }
 
-/* Build the whole form; renderStandalone() hands it to the page. Everything applies immediately and
- * there is nothing to save: every axis is this browser's, in localStorage. Only "Save to router"
- * writes anything, pushing the current look to the router for other browsers. */
+/* Build the page; renderStandalone() hands it over. Four tabs, most-used first: the colour scheme,
+ * the interface, the background with its glass and the colours nobody touches twice; Saving sits
+ * under them. Everything applies at once and is this browser's, in localStorage; only "Save to
+ * router" writes anything, pushing the current look to the router for other browsers. */
 function build() {
 	/* 24.10.0-24.10.2 have no ui.RangeSlider and a package from the feed still installs there (opkg does
 	 * not version luci-base); one readable line beats the raw "not a constructor" TypeError. */
@@ -198,24 +201,25 @@ function build() {
 	/* One captioned row in LuCI's own shape: `.cbi-value` > `label.cbi-value-title` +
 	 * `.cbi-value-field`, which base/30-forms.css and theme/60-inputs.css already lay out. `make` is
 	 * handed the caption because each control needs it again as the aria-label of its inner
-	 * input/select (a stock widget's wrapper div cannot carry a name). `extra` carries rows with more
-	 * than a control, `opts.cls` marks the rows CSS singles out. */
+	 * input/select (a stock widget's wrapper div cannot carry a name). `o.desc` is a help line under
+	 * the control, `o.extra` the rows with more than a control, `o.cls` marks the rows CSS singles out. */
 	const group = (label, make, opts) => {
 		const o = opts || {};
+		const desc = o.desc ? [ E('div', { 'class': 'cbi-value-description' }, [ o.desc ]) ] : [];
 		return E('div', { 'class': 'cbi-value' + (o.cls ? ' ' + o.cls : '') }, [
 			E('label', { 'class': 'cbi-value-title' }, [ label ]),
-			E('div', { 'class': 'cbi-value-field' }, [ make(label) ].concat(o.extra || []))
+			E('div', { 'class': 'cbi-value-field' }, [ make(label) ].concat(desc, o.extra || []))
 		]);
 	};
 
 	/* the three literals every colour row repeats; a string literal survives minification intact */
 	const CARD_BG = 'var(--fs-panel)', INK = 'var(--fs-text)', ON_CARD = _('on a card', 'footstrap');
 
-	/* Every enum axis is a `ui.Select` and every number a `ui.RangeSlider`, already dressed by
-	 * base/30-forms.css and theme/60-inputs.css (`ui.RangeSlider` reached openwrt-24.10 in 24.10.3). Listen
-	 * for `widget-change`, the seam UIElement publishes, not an event on the inner element.
-	 * RangeSlider also emits `widget-update` while the handle moves, which resizes the page under the
-	 * drag; the appliers are idempotent, so wiring both costs nothing. */
+	/* A list of more than five, the palette, is a `ui.Select`; every number a `ui.RangeSlider`, already
+	 * dressed by base/30-forms.css and theme/60-inputs.css (`ui.RangeSlider` reached openwrt-24.10 in
+	 * 24.10.3). Listen for `widget-change`, the seam UIElement publishes, not an event on the inner
+	 * element. RangeSlider also emits `widget-update` while the handle moves, which resizes the page
+	 * under the drag; the appliers are idempotent, so wiring both costs nothing. */
 	const selectCtl = (current, choices, apply, label) => {
 		/* an array of [value, label] pairs when a key is integer-like: Object.keys hoists it ahead of
 		 * the authored order ('2020' rendered above Footstrap, the default); `sort` pins the order */
@@ -225,6 +229,21 @@ function build() {
 		node.querySelector('select, input').setAttribute('aria-label', label);
 		node.addEventListener('widget-change', () => apply(w.getValue()));
 		return node;
+	};
+
+	/* Two to three short choices are one row of pills, every choice in sight: native radios under one
+	 * name, so the arrow keys move between them and a screen reader counts them; 80-appearance.css
+	 * draws the pills. */
+	let segSeq = 0;
+	const segCtl = (current, choices, apply, label) => {
+		const name = 'fs-ap-seg-' + (++segSeq);
+		const pairs = Array.isArray(choices) ? choices : Object.entries(choices);
+		return E('div', { 'class': 'fs-seg', 'role': 'radiogroup', 'aria-label': label }, pairs.map(([ v, text ]) => {
+			const input = E('input', { 'type': 'radio', 'name': name, 'value': v });
+			input.checked = (String(current) === v);
+			input.addEventListener('change', () => { if (input.checked) apply(v); });
+			return E('label', {}, [ input, E('span', {}, [ text ]) ]);
+		}));
 	};
 
 	const sliderCtl = (axis, apply, label, opts) => {
@@ -253,21 +272,22 @@ function build() {
 		return ctl;
 	}, opts);
 
+	/* a card is a stock `.cbi-section` under its own title; a tab pane is one whose title is its tab
+	 * (ui.tabs reads data-tab-title); a subheading splits either in two */
+	const card = (title, rows) => E('div', { 'class': 'cbi-section fs-ap-card' }, [ E('h3', {}, [ title ]) ].concat(rows));
+	const pane = (name, title, rows) => E('div', { 'class': 'cbi-section fs-ap-card', 'data-tab': name, 'data-tab-title': title }, rows);
+	const sub = (title, cls) => E('div', { 'class': 'fs-ap-sub' + (cls ? ' ' + cls : '') }, [ E('h4', {}, [ title ]) ]);
+
 	/* Every label here carries the 'footstrap' context: LuCI serves one merged catalogue and the first
 	 * archive holding the hash wins, so a bare msgid is a global name any luci-app can win. */
 
-	/* ---- section 1: the shell ---- */
-	const shell = [
-		group(_('Layout', 'footstrap'), (label) => selectCtl(prefs.currentLayout(), {
-			sidebar: _('Sidebar', 'footstrap'),
-			top:     _('Top', 'footstrap')
-		}, bump(prefs.applyLayout), label)),
-
-		group(_('Theme', 'footstrap'), (label) => selectCtl(prefs.currentMode(), {
-			auto:  _('Auto', 'footstrap'),
-			light: _('Light', 'footstrap'),
-			dark:  _('Dark', 'footstrap')
-		}, bump(prefs.applyMode), label)),
+	/* ---- the colour scheme: what most visits come to change ---- */
+	const scheme = pane('scheme', _('Colour scheme', 'footstrap'), [
+		group(_('Mode', 'footstrap'), (label) => segCtl(prefs.currentMode(), [
+			[ 'auto',  _('Auto', 'footstrap') ],
+			[ 'light', _('Light', 'footstrap') ],
+			[ 'dark',  _('Dark', 'footstrap') ]
+		], bump(prefs.applyMode), label)),
 
 		group(_('Palette', 'footstrap'), (label) => selectCtl(axes.palette.current(), [
 			[ 'footstrap', 'Footstrap' ],
@@ -278,11 +298,33 @@ function build() {
 			[ 'forum', 'Forum' ]
 		], bump(axes.palette.apply), label)),
 
-		group(_('Density', 'footstrap'), (label) => selectCtl(axes.density.current(), {
-			compact: _('Compact', 'footstrap'),
-			normal:  _('Normal', 'footstrap'),
-			large:   _('Large', 'footstrap')
-		}, bump(axes.density.apply), label)),
+		/* Accent recolours the accented controls (buttons, toggles, sliders, focus rings), not the
+		 * canvas; any #rrggbb is taken. Read as text on a card, the use that fails first (as a fill it
+		 * carries derived ink). */
+		colourGroup(_('Accent', 'footstrap'), axes.accent, 'var(--fs-accent)',
+			{ fg: 'var(--fs-accent)', bg: CARD_BG, label: ON_CARD })
+	]);
+
+	/* ---- the interface ---- */
+	const iface = pane('interface', _('Interface', 'footstrap'), [
+		group(_('Layout', 'footstrap'), (label) => segCtl(prefs.currentLayout(), [
+			[ 'sidebar', _('Sidebar', 'footstrap') ],
+			[ 'top',     _('Top', 'footstrap') ]
+		], bump(prefs.applyLayout), label)),
+
+		/* always built and hidden by CSS in the top layout (:root[data-layout="top"] .fs-ap-submenus):
+		 * the page is built once, so a currentLayout() branch would freeze it to the layout the page
+		 * loaded in while CSS morphs the chrome live */
+		group(_('Submenus', 'footstrap'), (label) => segCtl(prefs.currentAutoCollapse() ? 'on' : 'off', [
+			[ 'off', _('Keep open', 'footstrap') ],
+			[ 'on',  _('Auto-collapse', 'footstrap') ]
+		], bump(prefs.applyAutoCollapse), label), { cls: 'fs-ap-submenus' }),
+
+		group(_('Density', 'footstrap'), (label) => segCtl(axes.density.current(), [
+			[ 'compact', _('Compact', 'footstrap') ],
+			[ 'normal',  _('Normal', 'footstrap') ],
+			[ 'large',   _('Large', 'footstrap') ]
+		], bump(axes.density.apply), label)),
 
 		/* the content column's own cap, separate from Density. The slider starts at the 1280px every
 		 * page was designed against and only widens, which also keeps --fs-content-min (500px, what
@@ -291,67 +333,16 @@ function build() {
 			(label) => sliderCtl(axes.contentWidth, bump(axes.contentWidth.apply), label, { step: 40, live: false })),
 
 		group(_('Rounding', 'footstrap'),
-			(label) => sliderCtl(axes.radius, bump(axes.radius.apply), label)),
+			(label) => sliderCtl(axes.radius, bump(axes.radius.apply), label))
+	]);
 
-		/* always built and hidden by CSS in the top layout (:root[data-layout="top"] .fs-ap-submenus):
-		 * the page is built once, so a currentLayout() branch would freeze it to the layout the page
-		 * loaded in while CSS morphs the chrome live */
-		group(_('Submenus', 'footstrap'), (label) => selectCtl(
-			prefs.currentAutoCollapse() ? 'on' : 'off', {
-				off: _('Keep open', 'footstrap'),
-				on:  _('Auto-collapse', 'footstrap')
-			}, bump(prefs.applyAutoCollapse), label),
-		{ cls: 'fs-ap-submenus' })
-	];
-
-	/* ---- section 2: colours ---- */
-	const colours = [
-		colourGroup(_('Tint (router identification)', 'footstrap'), axes.tint, 'var(--fs-bg)', {
-			fg: 'var(--fs-text)', bg: 'var(--fs-bg)', label: _('on the canvas', 'footstrap')
-		}, { cls: 'fs-ap-tint' }),
-
-		/* the strength half of the Tint, meaningful only in hue mode (a hex canvas has no chroma of
-		 * ours to scale); CSS hides it otherwise. Not named "Density": the string is also the
-		 * aria-label, so a screen reader would announce two rows under one name. */
-		group(_('Tint strength', 'footstrap'),
-			(label) => sliderCtl(axes.tintStrength, bump(repaint(axes.tintStrength.apply)), label, {
-				step: 5
-			}), { cls: 'fs-ap-tint fs-ap-tintstr' }),
-
-		/* Accent recolours the accented controls (buttons, toggles, sliders, focus rings), not the
-		 * canvas; any #rrggbb is taken. Four roles, one shape: the role's colour read as text on a
-		 * card, the use that fails first (as a fill it carries derived ink). The rows are data
-		 * because a string literal repeated eight times is not mangled by the minifier. */
-		...[
-			[ _('Accent', 'footstrap'),  axes.accent, 'var(--fs-accent)' ],
-			[ _('Good', 'footstrap'),    axes.good,   'var(--fs-good)' ],
-			[ _('Warning', 'footstrap'), axes.warn,   'var(--fs-warn)' ],
-			[ _('Danger', 'footstrap'),  axes.danger, 'var(--fs-danger)' ]
-		].map(([ label, axis, ink ]) =>
-			colourGroup(label, axis, ink, { fg: ink, bg: CARD_BG, label: ON_CARD }))
-	];
-
-	/* The surfaces: the sheet the UI is drawn on. Body text is read on each, so each reports
-	 * --fs-text against itself; no ink is derived, since moving --fs-text would recolour what is
-	 * measured against. The hairline takes the 3:1 UI-component threshold (a border is a shape) and
-	 * the readout states the number and leaves the call to the admin. */
-	const surfaces = [
-		...[
-			[ _('Cards', 'footstrap'),           axes.card,    CARD_BG,             INK,                  CARD_BG,             ON_CARD ],
-			[ _('Controls', 'footstrap'),        axes.control, 'var(--fs-panel2)',  INK,                  'var(--fs-panel2)',  _('on a control', 'footstrap') ],
-			[ _('Sidebar and bar', 'footstrap'), axes.bar,     'var(--fs-bar-bg)',  INK,                  'var(--fs-bar-bg)',  _('in the sidebar', 'footstrap') ],
-			[ _('Borders', 'footstrap'),         axes.line,    'var(--fs-border)',  'var(--fs-border)',   CARD_BG,             ON_CARD, 'shape' ]
-		].map(([ label, axis, probe, fg, bg, where, kind ]) =>
-			colourGroup(label, axis, probe, { fg, bg, label: where, kind }))
-	];
-
-	/* ---- section 3: the wallpaper and the rows each value brings ----
+	/* ---- the background: the canvas, the wallpaper and the glass over it ----
 	 * The rows a value brings are siblings of the Wallpaper row: nested in its `.cbi-value-field`
 	 * they started 216px right of every other control (measured on the router). They are hidden as
-	 * a group, as stock pages do with a dependent field. The select is the per-browser switch that
+	 * a group, as stock pages do with a dependent field. The pills are the per-browser switch that
 	 * keeps the Save button honest; Choose/Remove only swap the picture and never touch the axis. */
 	const REMOVE = _('Remove', 'footstrap');
-	const wallpaper = (() => {
+	const background = (() => {
 		const err = E('div', { 'class': 'fs-ap-err', 'role': 'alert', 'hidden': '' });
 		const preview = E('img', { 'class': 'fs-ap-bgprev', 'alt': '', 'hidden': '' });
 		const fileInput = E('input', { 'type': 'file', 'accept': 'image/*', 'style': 'display:none' });
@@ -366,30 +357,25 @@ function build() {
 		const patChoose = E('button', { 'class': 'btn cbi-button', 'type': 'button' }, [ patChooseLabel ]);
 		const patRemove = E('button', { 'class': 'btn cbi-button-remove', 'type': 'button', 'hidden': '' }, [ REMOVE ]);
 
-		/* Dim is an ordinary saved axis, so it is bump()-ed or the Save button misreports its status */
-		const dimLabel = _('Dim', 'footstrap');
-		const scaleLabel = _('Scale', 'footstrap');
-		const strengthLabel = _('Strength', 'footstrap');
-		const inkLabel = _('Colours', 'footstrap');
-
 		/* Colours decides whether the file's own palette is kept or replaced by the theme's: a mask
 		 * uses the alpha only, right for line art and wrong for artwork with its own colours. */
 		const patRows = [
 			group(_('Pattern', 'footstrap'),
 				() => E('div', { 'class': 'fs-ap-bgrow' }, [ patChoose, patRemove ]),
 				{ extra: [ patInput, patPreview, patErr ] }),
-			group(scaleLabel, (lbl) => sliderCtl(axes.patternSize, bump(axes.patternSize.apply), lbl, { step: 20 })),
-			group(strengthLabel, (lbl) => sliderCtl(axes.patternStrength, bump(axes.patternStrength.apply), lbl, { step: 5 })),
-			group(inkLabel, (lbl) => selectCtl(axes.patternInk.current(), {
-				theme:    _('Theme', 'footstrap'),
-				original: _('As in file', 'footstrap')
-			}, bump(axes.patternInk.apply), lbl))
+			group(_('Scale', 'footstrap'), (lbl) => sliderCtl(axes.patternSize, bump(axes.patternSize.apply), lbl, { step: 20 })),
+			group(_('Strength', 'footstrap'), (lbl) => sliderCtl(axes.patternStrength, bump(axes.patternStrength.apply), lbl, { step: 5 })),
+			group(_('Colours', 'footstrap'), (lbl) => segCtl(axes.patternInk.current(), [
+				[ 'theme',    _('Theme', 'footstrap') ],
+				[ 'original', _('As in file', 'footstrap') ]
+			], bump(axes.patternInk.apply), lbl))
 		];
+		/* Dim is an ordinary saved axis, so it is bump()-ed or the Save button misreports its status */
 		const fileRows = [
 			group(_('File', 'footstrap'),
 				() => E('div', { 'class': 'fs-ap-bgrow' }, [ chooseBtn, removeBtn ]),
 				{ extra: [ fileInput, preview, err ] }),
-			group(dimLabel, (lbl) => sliderCtl(axes.photoDim, bump(axes.photoDim.apply), lbl, { step: 5 }))
+			group(_('Dim', 'footstrap'), (lbl) => sliderCtl(axes.photoDim, bump(axes.photoDim.apply), lbl, { step: 5 }))
 		];
 
 		function reflect(tok) {
@@ -414,7 +400,7 @@ function build() {
 		const setWallpaper = (v) => { axes.wallpaper.apply(v); refreshSave(); togglePanel(v); };
 
 		/* Both uploads share one wiring (pick, upload, report, remove) and never move the Wallpaper
-		 * dropdown, which the user may change mid-upload. The input is cleared on every change so
+		 * pills, which the user may change mid-upload. The input is cleared on every change so
 		 * re-picking the same file fires `change`; the label is restored in `finally`, or a failed
 		 * upload leaves "Uploading…" standing. */
 		const wireUploader = (u) => {
@@ -450,16 +436,74 @@ function build() {
 			upload: assets.uploadLoginBg, drop: assets.removeLoginBg
 		});
 
-		const wallRow = group(_('Wallpaper', 'footstrap'), (label) => selectCtl(axes.wallpaper.current(), {
-			off:     _('Off', 'footstrap'),
-			pattern: _('Pattern', 'footstrap'),
-			file:    _('File', 'footstrap')
-		}, setWallpaper, label));
+		/* The glass rows show only over a wallpaper (CSS: .fs-ap-glass), Material only while a
+		 * surface is glass at all, Blur only for a material that blurs. An OS asking for less
+		 * transparency or more contrast keeps the surfaces solid whatever the sliders say, and the
+		 * page says so. */
+		const glassRows = [
+			sub(_('Transparency', 'footstrap'), 'fs-ap-glass'),
+			group(_('Card opacity', 'footstrap'),
+				(lbl) => sliderCtl(axes.cardOpacity, bump(axes.cardOpacity.apply), lbl, { step: 5 }), {
+					cls: 'fs-ap-glass',
+					desc: axes.glassBlocked() ? _('The system asks for less transparency or more contrast, so surfaces stay solid.', 'footstrap') : null
+				}),
+			group(_('Menu opacity', 'footstrap'),
+				(lbl) => sliderCtl(axes.barOpacity, bump(axes.barOpacity.apply), lbl, { step: 5 }), { cls: 'fs-ap-glass' }),
+			group(_('Material', 'footstrap'), (lbl) => segCtl(axes.material.current(), [
+				[ 'flat',    _('Flat', 'footstrap') ],
+				[ 'frosted', _('Frosted', 'footstrap') ],
+				[ 'acrylic', _('Acrylic', 'footstrap') ]
+			], bump(axes.material.apply), lbl), { cls: 'fs-ap-glass fs-ap-material' }),
+			group(_('Blur', 'footstrap'),
+				(lbl) => sliderCtl(axes.blur, bump(axes.blur.apply), lbl, { step: 10 }), { cls: 'fs-ap-glass fs-ap-material fs-ap-blur' })
+		];
 
-		return [ wallRow ].concat(patRows, fileRows);
+		return pane('background', _('Background', 'footstrap'), [
+			/* the canvas colour that tells routers apart; CSS hides it under a photo, which covers it */
+			colourGroup(_('Tint', 'footstrap'), axes.tint, 'var(--fs-bg)', {
+				fg: 'var(--fs-text)', bg: 'var(--fs-bg)', label: _('on the canvas', 'footstrap')
+			}, { cls: 'fs-ap-tint', desc: _('Colours the page so you can tell routers apart.', 'footstrap') }),
+
+			/* the strength half of the Tint, meaningful only in hue mode (a hex canvas has no chroma of
+			 * ours to scale); CSS hides it otherwise. Not named "Density": the string is also the
+			 * aria-label, so a screen reader would announce two rows under one name. */
+			group(_('Tint strength', 'footstrap'),
+				(label) => sliderCtl(axes.tintStrength, bump(repaint(axes.tintStrength.apply)), label, {
+					step: 5
+				}), { cls: 'fs-ap-tint fs-ap-tintstr' }),
+
+			group(_('Wallpaper', 'footstrap'), (label) => segCtl(axes.wallpaper.current(), [
+				[ 'off',     _('Off', 'footstrap') ],
+				[ 'pattern', _('Pattern', 'footstrap') ],
+				[ 'file',    _('File', 'footstrap') ]
+			], setWallpaper, label))
+		].concat(patRows, fileRows, glassRows));
 	})();
 
-	/* ---- section 4: the router default and the version ----
+	/* ---- the colours nobody touches twice: the last tab ----
+	 * The three status colours, then the surfaces: the sheet the UI is drawn on. Body text is read on
+	 * each surface, so each reports --fs-text against itself; no ink is derived, since moving
+	 * --fs-text would recolour what is measured against. The hairline takes the 3:1 UI-component
+	 * threshold (a border is a shape). The rows are data because a string literal repeated eight
+	 * times is not mangled by the minifier. */
+	const colourRows = [
+		...[
+			[ _('Good', 'footstrap'),    axes.good,   'var(--fs-good)' ],
+			[ _('Warning', 'footstrap'), axes.warn,   'var(--fs-warn)' ],
+			[ _('Danger', 'footstrap'),  axes.danger, 'var(--fs-danger)' ]
+		].map(([ label, axis, ink ]) =>
+			colourGroup(label, axis, ink, { fg: ink, bg: CARD_BG, label: ON_CARD })),
+		sub(_('Surfaces', 'footstrap')),
+		...[
+			[ _('Cards', 'footstrap'),           axes.card,    CARD_BG,             INK,                  CARD_BG,             ON_CARD ],
+			[ _('Controls', 'footstrap'),        axes.control, 'var(--fs-panel2)',  INK,                  'var(--fs-panel2)',  _('on a control', 'footstrap') ],
+			[ _('Sidebar and bar', 'footstrap'), axes.bar,     'var(--fs-bar-bg)',  INK,                  'var(--fs-bar-bg)',  _('in the sidebar', 'footstrap') ],
+			[ _('Borders', 'footstrap'),         axes.line,    'var(--fs-border)',  'var(--fs-border)',   CARD_BG,             ON_CARD, 'shape' ]
+		].map(([ label, axis, probe, fg, bg, where, kind ]) =>
+			colourGroup(label, axis, probe, { fg, bg, label: where, kind }))
+	];
+
+	/* ---- saving: the router default and the version ----
 	 * Save writes the current look to /etc/config/footstrap over the scoped uci ACL. It does not
 	 * change this browser (localStorage keeps overriding), so it only shows on a fresh browser. */
 	/* each label is said twice in build(); hoisted, a msgid is paid once (24 B x2 -> 30 B) */
@@ -543,23 +587,6 @@ function build() {
 		'rel': 'noreferrer'
 	}, [ ver.label() ]);
 
-	const buttonHelp = E('div', { 'class': 'cbi-value-description' }, [
-		_('Save to router — store this look on the router. Browsers with a look of their own keep it.', 'footstrap'),
-		E('br'),
-		_('Reset to router — drop this browser\'s changes and follow the router.', 'footstrap'),
-		E('br'),
-		_('Reset to built-in — go back to the look the theme ships with.', 'footstrap')
-	]);
-
-	const defaults = [
-		/* the one row whose control is a pair of buttons, each named by its own text, so `make`
-		 * ignores the caption rather than re-using it as an aria-label */
-		group(_('Saved look', 'footstrap'),
-			() => E('div', { 'class': 'fs-ap-actrow' }, [ saveBtn, E('span', { 'class': 'fs-ap-actgap', 'aria-hidden': 'true' }), resetSavedBtn, resetBtn ]),
-			{ extra: [ buttonHelp, saveErr ] })
-	];
-
-
 	/* The theme's translations are their own packages, and nothing in a package manager can read `uci
 	 * luci.main.lang` to fetch the right one. */
 	const lang = (document.documentElement.getAttribute('lang') || '').trim();
@@ -570,58 +597,33 @@ function build() {
 		E('code', {}, [ 'luci-i18n-footstrap-' + lang ])
 	]) : '';
 
-	defaults.push(E('div', { 'class': 'fs-ap-footer' }, [
-		E('div', { 'class': 'fs-ap-verrow' }, [ versionLink ]),
-		missing
-	]));
-
-	const section = (title, rows) => E('div', { 'class': 'fs-ap-section' }, [
-		E('div', { 'class': 'fs-ap-head' }, [ E('h2', {}, [ title ]) ])
-	].concat(rows));
-
-	/* Folded groups: nine colour fields and an uploader are the widest rows and rarely touched, so
-	 * each group is a closed-by-default disclosure that applies and disables nothing. */
-	let foldSeq = 0;
-	function foldable(title, rows, key) {
-		const id = 'fs-ap-fold-' + (++foldSeq);
-		let open = (prefs.lsGet(key) === 'on');
-		/* id only: `aria-controls` needs one, and no rule has ever styled the panel itself */
-		const body = E('div', { 'id': id }, rows);
-		const btn = E('button', {
-			'type': 'button', 'class': 'fs-ap-fold', 'aria-expanded': String(open), 'aria-controls': id
-		}, [
-			title,
-			E('span', { 'class': 'fs-ap-chev', 'aria-hidden': 'true' })
-		]);
-		const paint = () => {
-			body.hidden = !open;
-			btn.setAttribute('aria-expanded', String(open));
-		};
-		btn.addEventListener('click', () => {
-			open = !open;
-			prefs.lsSet(key, open ? 'on' : 'off');
-			paint();
-			if (open) refreshColours();
-		});
-		paint();
-		return E('div', { 'class': 'fs-ap-section' }, [
-			E('div', { 'class': 'fs-ap-head' }, [ E('h2', {}, [ btn ]) ]), body
-		]);
-	}
-
-	const note = E('div', { 'class': 'alert-message fs-ap-note' }, [
-		E('p', {}, [ _('Footstrap theme settings apply at once and are stored permanently in this browser.', 'footstrap') ])
+	const saving = card(_('Saving', 'footstrap'), [
+		E('p', { 'class': 'fs-ap-lead' }, [ _('Footstrap theme settings apply at once and are stored permanently in this browser.', 'footstrap') ]),
+		E('div', { 'class': 'fs-ap-actrow' }, [ saveBtn, E('span', { 'class': 'fs-ap-actgap', 'aria-hidden': 'true' }), resetSavedBtn, resetBtn ]),
+		saveErr,
+		E('ul', { 'class': 'fs-ap-help' }, [
+			E('li', {}, [ _('Save to router — store this look on the router. Browsers with a look of their own keep it.', 'footstrap') ]),
+			E('li', {}, [ _('Reset to router — drop this browser\'s changes and follow the router.', 'footstrap') ]),
+			E('li', {}, [ _('Reset to built-in — go back to the look the theme ships with.', 'footstrap') ])
+		]),
+		E('div', { 'class': 'fs-ap-footer' }, [
+			E('div', { 'class': 'fs-ap-verrow' }, [ versionLink ]),
+			missing
+		])
 	]);
 
-	const page = E('div', { 'class': 'fs-ap' }, [
-		note,
-		section(_('Interface', 'footstrap'), shell),
-		foldable(_('Colours', 'footstrap'),
-			colours.concat([ E('div', { 'class': 'fs-ap-head fs-ap-sub' }, [ E('h3', {}, [ _('Surfaces', 'footstrap') ]) ]) ], surfaces),
-			'fs-ui-colours'),
-		foldable(_('Background', 'footstrap'), wallpaper, 'fs-ui-background'),
-		section(_('Saving', 'footstrap'), defaults)
+	/* LuCI's own tab group, as on every tabbed form: it puts the strip before the panes and keeps
+	 * the open tab for the session. A pane shown again re-reads its colours, which a palette or
+	 * dark-mode change may have moved while it was hidden. */
+	const panes = E('div', { 'class': 'fs-ap-panes' }, [
+		scheme,
+		iface,
+		background,
+		pane('colours', _('Colours', 'footstrap'), colourRows)
 	]);
+	const page = E('div', { 'class': 'fs-ap' }, [ panes, saving ]);
+	ui.tabs.initTabGroup(panes.childNodes);
+	panes.addEventListener('cbi-tab-active', refreshColours);
 
 	Promise.resolve().then(refreshColours);
 
