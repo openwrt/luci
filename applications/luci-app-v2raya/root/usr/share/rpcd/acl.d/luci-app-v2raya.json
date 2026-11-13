@@ -1,8 +1,11 @@
 {
 	"luci-app-v2raya": {
-		"description": "Grant access to v2rayA configuration",
+		"description": "Grant access to the v2rayA service and configuration",
 		"read": {
 			"file": {
+				"/usr/bin/v2raya --version": [ "exec" ],
+				"/usr/bin/v2raya_core version": [ "exec" ],
+				"/usr/libexec/v2raya-detect": [ "exec" ],
 				"/var/log/v2raya/v2raya.log": [ "read" ]
 			},
 			"ubus": {
@@ -11,6 +14,13 @@
 			"uci": [ "v2raya" ]
 		},
 		"write": {
+			"file": {
+				"/etc/init.d/v2raya start": [ "exec" ],
+				"/etc/init.d/v2raya stop": [ "exec" ],
+				"/etc/init.d/v2raya restart": [ "exec" ],
+				"/usr/libexec/luci-app-v2raya/enable": [ "exec" ],
+				"/var/log/v2raya/v2raya.log": [ "write" ]
+			},
 			"uci": [ "v2raya" ]
 		}
 	}

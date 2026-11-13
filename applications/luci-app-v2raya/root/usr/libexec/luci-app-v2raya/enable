@@ -1,0 +1,13 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+#
+# Copyright (C) 2026 Amr Fateem <amr.fateem@yahoo.com>
+#
+# Commit only the enabled option for the v2rayA service. The LuCI overview
+# calls this before starting the service; uci.apply() would commit every
+# staged change in the session.
+
+set -eu
+
+uci -q set v2raya.config.enabled='1'
+uci -q commit v2raya
