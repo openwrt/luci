@@ -223,8 +223,6 @@ function labelCells(t, head) {
  * HTML-AAM derives (measured on Overview's key/value cards at 1440 and 390px). So the role is
  * written unconditionally, the whole chain every pass: a `cell` with no `row` above it reads worse
  * than no roles. */
-/* A `display` rule on any of these classes/tags is checked against its role by a regex over these
- * two names: keep both, and each entry a `'.class'` or `'tag'` string literal. */
 const TABLE_ROLE_CLASSES = [
 	[ '.table', 'table' ],
 	[ '.thead', 'rowgroup' ],

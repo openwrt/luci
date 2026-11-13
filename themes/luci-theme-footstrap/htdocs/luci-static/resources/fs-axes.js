@@ -215,6 +215,25 @@ const PSIZE = propAxis('fs-pattern-size', 'pattern_size', '--fs-pattern-size', 4
 const FS_PSTR_DEFAULT = 20;
 const PSTR = propAxis('fs-pattern-strength', 'pattern_strength', '--fs-pattern-strength', 0, 100, FS_PSTR_DEFAULT, (v) => String(v / 100));
 const PINK = enumAxis('fs-pattern-ink', 'data-pattern-ink', 'original', 'theme');
+
+/* Transparency: the cards and the menu as glass over a wallpaper, 100% = solid. The
+ * attribute that switches the glass on is derived, not stored: set below 100% unless the OS asks
+ * for less transparency or more contrast, which a glass card cannot honour. 17-glass.css adds the
+ * wallpaper gate. head.ut's pre-paint repeats both rules. */
+const GLASS_BLOCKERS = [ '(prefers-reduced-transparency: reduce)', '(prefers-contrast: more)', '(forced-colors: active)' ];
+const glassBlocked = () => GLASS_BLOCKERS.some((q) => window.matchMedia(q).matches);
+function glassAxis(key, sdKey, prop, attr) {
+	const ax = propAxis(key, sdKey, prop, 0, 100, 100, (v) => (v + '%'),
+		() => document.documentElement.toggleAttribute(attr, ax.current() < 100 && !glassBlocked()));
+	return ax;
+}
+const CARD_OP = glassAxis('fs-card-opacity', 'card_opacity', '--fs-card-opacity', 'data-glass');
+const BAR_OP = glassAxis('fs-bar-opacity', 'bar_opacity', '--fs-bar-opacity', 'data-glass-bar');
+/* how the glass is made: Flat (own colours, no blur), Frosted (a veil of ink, blurred) or Acrylic */
+const MATERIALS = [ 'flat', 'acrylic' ];	/* the non-default values; 'frosted' = bare :root */
+const MATERIAL = listAxis('fs-material', 'data-material', MATERIALS, 'frosted');
+/* Frosted's and Acrylic's blur as a share of the material's own radius, 100 = as designed */
+const BLUR = propAxis('fs-blur', 'blur', '--fs-blur', 0, 200, 100, (v) => String(v / 100));
 /* `reject: true` is load-bearing: without it rpc.js hands the ubus status back as the resolved
  * value, so a per-config ACL refusal (6, permission denied) runs every `.then()` as a success. */
 
@@ -249,7 +268,11 @@ const AXES = {
 	pattern_size: { key: 'fs-pattern-size', ax: PSIZE, builtin: FS_PSIZE_DEFAULT },
 	pattern_strength: { key: 'fs-pattern-strength', ax: PSTR, builtin: FS_PSTR_DEFAULT },
 	pattern_ink: { key: 'fs-pattern-ink', ax: PINK, builtin: 'theme' },
-	content_width: { key: 'fs-content-width', ax: CWIDTH, builtin: FS_CWIDTH_DEFAULT }
+	content_width: { key: 'fs-content-width', ax: CWIDTH, builtin: FS_CWIDTH_DEFAULT },
+	card_opacity: { key: 'fs-card-opacity', ax: CARD_OP, builtin: 100 },
+	bar_opacity: { key: 'fs-bar-opacity', ax: BAR_OP, builtin: 100 },
+	material: { key: 'fs-material', ax: MATERIAL, builtin: 'frosted' },
+	blur: { key: 'fs-blur', ax: BLUR, builtin: 100 }
 };
 const AXIS_KEYS = Object.values(AXES).map((a) => a.key);
 const snapshotAxes = () => Object.fromEntries(Object.entries(AXES).map(([ k, a ]) => [ k, String(a.ax.current()) ]));
@@ -332,10 +355,14 @@ return baseclass.extend({
 	patternStrength: PSTR,
 	patternInk: PINK,
 	contentWidth: CWIDTH,
+	cardOpacity: CARD_OP,
+	barOpacity: BAR_OP,
+	material: MATERIAL,
+	blur: BLUR,
 	pattern: PATTERN,
 	loginBg: LOGIN_BG,
 
-	tokenOk,
+	tokenOk, glassBlocked,
 
 	matchesSavedDefault, saveSettings, saveAsDefault, resetToSaved, resetToBuiltin
 });
