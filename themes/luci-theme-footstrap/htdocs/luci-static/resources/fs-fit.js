@@ -7,24 +7,21 @@
  * rule 1, measure uncollapsed, since a collapsed thing always fits; rule 2, re-fit synchronously on
  * a mutation, since deferring a poll tick to rAF paints one frame of a stacked table at full width
  * (19-109px of overflow); rule 3, coalesce on resize, since every fit forces a layout. The reader's
- * place is docs/anchoring.md, "The corrections"; the measurement behind each rule is
- * docs/anchoring-log.md. */
+ * place is docs/anchoring.md, "The corrections". */
 
 /* Exported, not armed at module eval: only fs-select.js clears the rule this raises, and arming
  * without it left every data table invisible. docs/anchoring-log.md, "The arm belongs to the disarm". */
 function armGate() {
 	if (!fittersEnabled()) return;
-	/* WRITTEN AS THE LITERAL `dataset.fsFit`, never through a helper: the theme's own
+	/* Written as the literal `dataset.fsFit`, never through a helper: the theme's own
 	 * repository checks this file for exactly that spelling to prove the gate rule is still armed,
 	 * and an indirection hides the write from it. The behaviour survives being factored out; the
 	 * contract does not. */
-	try { document.documentElement.dataset.fsFit = '1'; }
-	catch (e) { /* no document, no flag to write */ }
+	document.documentElement.dataset.fsFit = '1';
 }
 
 const _fitters = [];
-let _rafPending = false;
-let _ro = null, _mo = null, _moFlag = null, _moTabs = null;
+let _ro = null, _mo = null;
 
 function runAll(list, what) {
 	for (const fit of list) {
@@ -61,48 +58,38 @@ const FLOORED = '[data-fs-floor]';
  * scrolls, and not on a table box — `min-height` is undefined there (CSS 2.1 §10.7) and a 313px
  * floor still collapsed to 30px on WebKit. The clear is what keeps the answer honest. */
 function holdFloor(records) {
-	if (scrolling()) return;
+	if (scrolling() || !fittersEnabled()) return;
 	const host = document.getElementById('view');
 	if (!host) return;			/* the login page has no view */
-	/* boxes stays an array — order feeds the parallel `hs` below and dirty's own .filter() — with a
-	 * Set alongside it for the O(1) "already have this one" check. */
-	const boxes = [], boxSeen = new Set(), hs = [];
+	const boxes = new Set();
 	host.querySelectorAll(SHRINKS).forEach((el) => {
 		let box = el, cs = window.getComputedStyle(el);
-		while (box && box !== host && cs.display.startsWith('table')) {
+		while (box !== host && cs.display.startsWith('table')) {
 			box = box.parentElement;
-			if (box) cs = window.getComputedStyle(box);
+			cs = window.getComputedStyle(box);
 		}
-		if (!box || box === host || boxSeen.has(box)) return;
-		boxSeen.add(box);
-		boxes.push(box);
+		if (box !== host) boxes.add(box);
 	});
-	host.querySelectorAll(FLOORED).forEach((box) => {
-		if (boxSeen.has(box)) return;
-		boxSeen.add(box);
-		boxes.push(box);
-	});
+	host.querySelectorAll(FLOORED).forEach((box) => boxes.add(box));
 
-	let dirty = boxes;
+	let dirty = [...boxes];
 	if (records && records.length) {
 		const targets = new Set();
 		for (const r of records) if (r.target) targets.add(r.target);
-		dirty = boxes.filter((box) => {
+		dirty = dirty.filter((box) => {
 			for (const t of targets) if (box.contains(t) || t.contains(box)) return true;
 			return false;
 		});
 	}
 	if (!dirty.length) return;
 
-	/* The sweep puts back the offset its own clear pass took: 8 of 38 sweeps took the document down a
-	 * pixel and the offset with it, losing a 60px correction. docs/anchoring-log.md, "The sweep's own clamp". */
-	const sc = scroller(), page = sc || document.documentElement;
+	const page = scroller() || document.documentElement;
 	const at = scrollTop(), tall = page.scrollHeight;
 	dirty.forEach((box) => { box.style.minHeight = ''; });
 	/* The box's own rect height, not `offsetHeight`'s rounding: 22 floors half a pixel too tall made
 	 * the document 2px taller, and the next clear handed that back as a clamp — 6 of 12 refills
 	 * corrected against 12 of 12. docs/anchoring-log.md, "The floor is written half a pixel too tall". */
-	dirty.forEach((box) => hs.push(box.getBoundingClientRect().height));
+	const hs = dirty.map((box) => box.getBoundingClientRect().height);
 	dirty.forEach((box, i) => {
 		if (hs[i] > 0) { box.style.minHeight = hs[i] + 'px'; box.setAttribute('data-fs-floor', ''); }
 		else box.removeAttribute('data-fs-floor');
@@ -111,7 +98,7 @@ function holdFloor(records) {
 	 * document lost at its bottom. docs/anchoring-log.md, "A clamp is not the reader". */
 	const landed = scrollTop();
 	if (landed >= at) return;
-	if (page.scrollHeight >= tall) writeOffset(sc, at); else _clampedTo = landed;
+	if (page.scrollHeight >= tall) writeOffset(at); else _clampedTo = landed;
 }
 
 /* Is the page moving? asked of the position, never of the events: on iOS momentum carries the page
@@ -125,9 +112,6 @@ function deferMeasurement() { _deferred = true; }
 let _movingUntil = 0;
 let _lastOffset = null;
 let _sampling = false;
-/* This file's own write is a scroll event too, and counting it as motion blocked the floor, the
- * reference and the correction for 400ms — 59px uncorrected, and two of them distrusted a correct
- * engine. docs/anchoring-log.md, "A correction's own write reads as the reader moving". */
 let _ownWrite = null;
 function sawOwnWrite(y) {
 	if (_ownWrite === null) return true;
@@ -143,9 +127,10 @@ function sawClamp() {
 	_clampedTo = null;
 	return false;
 }
-function writeOffset(sc, value) {
+function writeOffset(value) {
+	const sc = scroller();
 	if (sc) sc.scrollTop = value; else window.scrollTo(0, value);
-	_ownWrite = sc ? sc.scrollTop : window.scrollY;
+	_ownWrite = scrollTop();
 }
 
 /* Which element scrolls, cached per width: a probe per frame is a forced layout mid-flick, and the
@@ -175,7 +160,7 @@ function scrollTop() {
 function scrolling() { return Date.now() < _movingUntil; }
 function sampleMotion() {
 	const y = scrollTop();
-	if (_lastOffset === null || y !== _lastOffset) {
+	if (y !== _lastOffset) {
 		const own = !sawOwnWrite(y);
 		_lastOffset = y;
 		if (!own) _movingUntil = Date.now() + SCROLL_IDLE;
@@ -226,11 +211,15 @@ function noteUser() {
 		window.addEventListener(name, noteIntent, opts);
 })();
 
-function schedule() {
-	if (_rafPending) return;
-	_rafPending = true;
-	requestAnimationFrame(() => { _rafPending = false; run(); });
+function frame(fn) {
+	let pending = false;
+	return () => {
+		if (pending) return;
+		pending = true;
+		requestAnimationFrame(() => { pending = false; fn(); });
+	};
 }
+const schedule = frame(run);
 
 /* Width only: iOS resizes the viewport height as the URL bar slides away, and twenty height-only
  * steps rewrote 1054 class attributes. docs/anchoring-log.md, "Width only: the URL bar is a resize". */
@@ -249,7 +238,6 @@ function onResize(entries) {
 }
 
 function watch(el) {
-	if (!el) return;
 	if (!_ro) _ro = new ResizeObserver(onResize);
 	_ro.observe(el);
 }
@@ -265,8 +253,7 @@ const ENGINE_ANCHORS = (() => {
 	/* dev switch — docs/anchoring.md, "The dev switches" */
 	try { if (localStorage.getItem('fsEngineAnchor') === 'off') return false; }
 	catch (e) { /* no storage, no switch */ }
-	try { return typeof CSS !== 'undefined' && typeof CSS.supports === 'function'
-		? CSS.supports('overflow-anchor', 'auto') : true; }
+	try { return CSS.supports('overflow-anchor', 'auto'); }
 	catch (e) { return true; }
 })();
 
@@ -287,9 +274,6 @@ let _lateHits = 0;
 
 let _rest = null;
 let _restAt = null, _restPage = null;
-/* The floored box `holdFloor()` refused for: wired to nothing, a growth-then-shrink refill inside
- * one motion window left `_restAt` 59px high.
- * docs/anchoring-log.md, "A floor that shrinks with nobody watching". */
 let _deferredFloor = null;
 function pageStamp() {
 	return (document.body && document.body.getAttribute('data-page')) || '';
@@ -339,18 +323,14 @@ function anchorRef() {
 	const x = Math.round(box.left + (Math.min(box.width, window.innerWidth || box.width) / 2));
 	let y = 1;
 	let el = document.elementFromPoint(x, y);
-	const chrome = el && el.closest ? el.closest('[data-fs-chrome]') : null;
+	const chrome = el && el.closest('[data-fs-chrome]');
 	if (chrome) y = Math.max(1, Math.round(chrome.getBoundingClientRect().bottom) + 1);
 
 	const floor = Math.max(1, Math.round(window.innerHeight || 800));
 	const pick = (yy) => {
-		if (typeof document.elementsFromPoint === 'function') {
-			for (const cand of document.elementsFromPoint(x, yy))
-				if (cand !== host && host.contains(cand)) return cand;
-			return null;
-		}
-		const one = document.elementFromPoint(x, yy);
-		return (one && one !== host && host.contains(one)) ? one : null;
+		for (const cand of document.elementsFromPoint(x, yy))
+			if (cand !== host && host.contains(cand)) return cand;
+		return null;
 	};
 	el = null;
 	for (let step = 0; step < 5 && !el; step++)
@@ -361,13 +341,12 @@ function anchorRef() {
 		const up = table.parentElement;
 		el = (up && up !== host && host.contains(up)) ? up : table;
 	}
-	if (!el || el === host || !host.contains(el)) return null;
 	if (!el.getClientRects().length) return null;
 	let keep = el.parentElement;
 	while (keep && keep !== host && !keep.classList.contains('cbi-section')
 			&& !keep.classList.contains('cbi-map') && !keep.classList.contains('fs-ovl'))
 		keep = keep.parentElement;
-	if (!keep || keep === host || !host.contains(keep)) keep = null;
+	if (keep === host) keep = null;
 	return { el, top: el.getBoundingClientRect().top,
 		sec: keep, secTop: keep ? keep.getBoundingClientRect().top : 0 };
 }
@@ -395,7 +374,6 @@ function makeTrail() {
 let _anchorPending = null;
 const _anchor = makeTrail();
 function awhy(w) { _anchor.record(w); }
-let _anchorFrame = 0;
 function anchorEnabled() {
 	try { return localStorage.getItem('fsAnchor') !== 'off'; }
 	catch (e) { return true; }
@@ -426,7 +404,7 @@ function lateDrift(ref, grow, floorShrink) {
 			if (scrollTop() !== seen) return why('offset-moved');
 			let el = ref.el, was = ref.top;
 			if (!el || !el.isConnected) {
-				if (!ref.sec || !ref.sec.isConnected || ref.secTop == null) return why('reference-gone');
+				if (!ref.sec || !ref.sec.isConnected) return why('reference-gone');
 				el = ref.sec; was = ref.secTop;
 			}
 			let drift = el.getBoundingClientRect().top - was;
@@ -447,20 +425,10 @@ function lateDrift(ref, grow, floorShrink) {
 				return why('no-drift-grow-' + Math.round(grow));	/* the engine put it back */
 			}
 			if (Math.abs(drift) > (window.innerHeight || 800)) return why('drift-too-big');
-			const sc = scroller();
-			const at = sc ? sc.scrollTop : window.scrollY;
-			writeOffset(sc, at + drift);
+			writeOffset(scrollTop() + drift);
 			why('wrote-' + Math.round(drift));
-			/* A fresh, forced rememberRest(): `_rest` was taken mid-transition, and left standing it is what
-			 * the next refill measures against. docs/anchoring-log.md, "The reference after this file's
-			 * own write must be re-taken forced". */
 			rememberRest(true);
-			/* A drop in this box's own floor says nothing about the engine: every run() rewrites `min-height`,
-			 * an invalidation in itself. docs/anchoring-log.md, "A floor shrink is not evidence about the engine". */
 			if (floorShrink > 1) return;
-			/* A direct drift inside the blind branch's tolerance is that same table rounding: 1px against a
-			 * 132px growth counted as a miss, twice over.
-			 * docs/anchoring-log.md, "One pixel of direct drift is the same table rounding". */
 			if (Math.abs(drift) <= LATE_ROUND_TOLERANCE) return;
 			if (++_lateMisses >= LATE_MISS_LIMIT) { _engineTrusted = false; _lateHits = 0; }
 		};
@@ -490,9 +458,7 @@ function settleDeferredFloor(offsetBefore, shrink) {
 			const gap = wanted - seen;
 			if (Math.abs(gap) <= LATE_ROUND_TOLERANCE) return;		/* the engine already gave it back */
 			if (Math.abs(gap) > (window.innerHeight || 800)) return;
-			const sc = scroller();
-			const at = sc ? sc.scrollTop : window.scrollY;
-			writeOffset(sc, at + gap);
+			writeOffset(scrollTop() + gap);
 			if (_rest) { _rest.top -= gap; if (_rest.sec) _rest.secTop -= gap; _rest.at = scrollTop(); }
 			_restAt = scrollTop();
 		});
@@ -504,9 +470,7 @@ function scheduleAnchor(ref) {
 	if (!anchorEnabled()) return awhy('anchoring-off');
 	if (_anchorPending) return awhy('pending-kept-first');
 	_anchorPending = ref;
-	if (_anchorFrame) return;
-	_anchorFrame = requestAnimationFrame(() => {
-		_anchorFrame = 0;
+	requestAnimationFrame(() => {
 		const pending = _anchorPending;
 		_anchorPending = null;
 		const wrote = applyAnchor(pending);
@@ -514,15 +478,13 @@ function scheduleAnchor(ref) {
 	});
 }
 function applyAnchor(ref) {
-	if (!ref) return;
-	/* Not into a moving page — unless the motion IS the clamp this correction is for, which held a
+	/* Not into a moving page — unless the motion is the clamp this correction is for, which held a
 	 * correct -60px correction unwritten. docs/anchoring-log.md, "A clamp is not the reader". */
 	if (scrolling() && !sawClamp()) return awhy('refused-moving');
-	const sc = scroller();
-	const at = sc ? sc.scrollTop : window.scrollY;
+	const at = scrollTop();
 	if (ref.by != null) {
 		if (ref.by < 1) return awhy('by-under-1');
-		writeOffset(sc, at + ref.by);
+		writeOffset(at + ref.by);
 		awhy('wrote-by-' + Math.round(ref.by));
 		return true;
 	}
@@ -532,7 +494,7 @@ function applyAnchor(ref) {
 	if (Math.abs(drift) < 1) return awhy('no-drift');			/* nothing needed correcting here */
 	_lateHits = 0;
 	if (Math.abs(drift) > (window.innerHeight || 0) + 200 + (ref.slack || 0)) return awhy('drift-too-big');
-	writeOffset(sc, at + drift);
+	writeOffset(at + drift);
 	awhy('wrote-' + Math.round(drift));
 	return true;
 }
@@ -548,20 +510,20 @@ function observeContent() {
 		const ref = trustEngine ? null : anchorFor();
 		/* The record's own target, read before run() rewrites its floor: the growth in pixels, rather than
 		 * whichever element the fold happened to hit, and read on every tick so recovery can tell a tick
-		 * that tested the engine from one that did not. The floored box the record sits IN, since
+		 * that tested the engine from one that did not. The floored box the record sits in, since
 		 * `dom.content()` refills a node inside the pinned box on 1 of 12 nodes (docs/anchoring-log.md,
 		 * "A witness that cannot see the box it is measuring"). */
-		let r = null, box = null;
+		let box = null;
 		for (const m of records) {
-			if (m.type !== 'childList' || !m.target.closest) continue;
+			if (m.type !== 'childList') continue;
 			const b = m.target.closest(FLOORED);
-			if (b) { r = m; box = b; break; }
+			if (b) { box = b; break; }
 		}
 		const before = box && (parseFloat(box.style.minHeight) || 0);
 		let grew = before ? box.offsetHeight - before : 0;
 		/* only growth above the reader's reference: counting a box below it wrote the whole growth back,
 		 * offset +120 and reader -120 (docs/anchoring-log.md, "Growth below the reader") */
-		if (grew > 1 && settled && settled.el && settled.el.isConnected
+		if (grew > 1 && settled && settled.el.isConnected
 				&& box.getBoundingClientRect().top >= settled.el.getBoundingClientRect().top) grew = 0;
 		if (!trustEngine && grew > 1 && _rest && _rest.el.isConnected && Date.now() >= _userUntil
 				&& !scrolling() && _restPage === pageStamp()
@@ -571,10 +533,10 @@ function observeContent() {
 			_lateMisses = _lateHits = 0;
 		}
 		const wasScrolling = scrolling();
-		if (r && before && wasScrolling) _deferredFloor = box;
+		if (before && wasScrolling) _deferredFloor = box;
 		run(records);
 		if (!wasScrolling) _deferredFloor = null;
-		const floorShrink = (r && before) ? Math.max(0, before - (parseFloat(box.style.minHeight) || 0)) : 0;
+		const floorShrink = before ? Math.max(0, before - (parseFloat(box.style.minHeight) || 0)) : 0;
 		/* `#view` itself emptied and refilled is a page swap: a reference measured mid-swap is read 431px
 		 * out and written over a correct restoreScroll(). docs/anchoring.md, "The commit is not a refill". */
 		let gone = 0, came = 0, took = 0, gave = 0;
@@ -598,15 +560,14 @@ function observeContent() {
 		_mo.observe(host, { childList: true, subtree: true });
 		watch(host);
 	}
-	_moFlag = new MutationObserver(() => run());
+	const _moFlag = new MutationObserver(() => run());
 	_moFlag.observe(document.body, { attributes: true, attributeFilter: [ 'class' ] });
 
 	/* A tab switch, a closing fold and a `depends()` row mutate no node, and `min-height` beats the
 	 * `height: 0` they collapse with: 1299px of blank left standing (docs/anchoring-log.md, "A tab
 	 * switch moves no node"). A same-value write is not a change, though: the fitters re-apply classes
-	 * every pass, and an unguarded `class` watch froze the tab, 391 callbacks in 432ms
-	 * (docs/anchoring-log.md, "A same-value class write is a feedback loop"). */
-	_moTabs = new MutationObserver((records) =>
+	 * every pass, and an unguarded `class` watch froze the tab, 391 callbacks in 432ms. */
+	const _moTabs = new MutationObserver((records) =>
 		records.some((r) => r.oldValue !== r.target.getAttribute(r.attributeName)
 			&& (r.attributeName !== 'class' || r.target.dataset.field)) && run());
 	for (const host of hosts)
@@ -617,7 +578,6 @@ function observeContent() {
 
 return baseclass.extend({
 	add(fit) {
-		if (typeof fit !== 'function') return;
 		_fitters.push(fit);
 		observeContent();
 		try { fit(); }
@@ -640,14 +600,7 @@ return baseclass.extend({
 
 	schedule,
 
-	frame(fn) {
-		let pending = false;
-		return () => {
-			if (pending) return;
-			pending = true;
-			requestAnimationFrame(() => { pending = false; fn(); });
-		};
-	},
+	frame,
 
 	touches(mutations, sel) {
 		for (const m of mutations)
