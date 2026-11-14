@@ -195,7 +195,7 @@ function check_fs_depends(spec) {
 	return true;
 }
 
-function check_uci_depends_options(conf, s, opts) {
+function check_uci_depends_options(s, opts) {
 	if (type(opts) == 'string') {
 		return (s['.type'] == opts);
 	}
@@ -226,28 +226,27 @@ function check_uci_depends_options(conf, s, opts) {
 	return true;
 }
 
-function check_uci_depends_section(conf, sect) {
+function check_uci_depends_section(values, sect) {
 	for (let section, options in sect) {
 		let stype = match(section, /^@([A-Za-z0-9_-]+)$/);
 
 		if (stype) {
 			let found = false;
 
-			uci.load(conf);
-			uci.foreach(conf, stype[1], (s) => {
-				if (check_uci_depends_options(conf, s, options)) {
+			for (let name, s in values) {
+				if (s['.type'] == stype[1] && check_uci_depends_options(s, options)) {
 					found = true;
-					return false;
+					break;
 				}
-			});
+			}
 
 			if (!found)
 				return false;
 		}
 		else {
-			let s = uci.get_all(conf, section);
+			let s = values?.[section];
 
-			if (!s || !check_uci_depends_options(conf, s, options))
+			if (!s || !check_uci_depends_options(s, options))
 				return false;
 		}
 	}
@@ -255,19 +254,36 @@ function check_uci_depends_section(conf, sect) {
 	return true;
 }
 
-function check_uci_depends(conf) {
+/* Configuration files may be readable by root only while the dispatcher runs
+ * as the web server's user, so they are read through rpcd under the session
+ * of the request, once per config and request. Without a session the call
+ * carries no session id and rpcd applies its default session to callers
+ * other than root. */
+let uci_depends_cache = {};
+
+function uci_depends_values(config, session) {
+	let key = `${session?.sid ?? ''}/${config}`;
+
+	if (!exists(uci_depends_cache, key)) {
+		let args = { config };
+
+		if (session?.sid)
+			args.ubus_rpc_session = session.sid;
+
+		uci_depends_cache[key] = ubus.call('uci', 'get', args)?.values;
+	}
+
+	return uci_depends_cache[key];
+}
+
+function check_uci_depends(conf, session) {
 	for (let config, values in conf) {
 		if (values == true) {
-			let found = false;
-
-			uci.load(config);
-			uci.foreach(config, null, () => { found = true });
-
-			if (!found)
+			if (!length(uci_depends_values(config, session)))
 				return false;
 		}
 		else if (type(values) == 'object') {
-			if (!check_uci_depends_section(config, values))
+			if (!check_uci_depends_section(uci_depends_values(config, session), values))
 				return false;
 		}
 	}
@@ -291,19 +307,18 @@ function check_depends(spec) {
 			return false;
 	}
 
-	if (type(spec?.depends?.uci) in ['array', 'object']) {
-		let satisfied = false;
-		let alternatives = (type(spec.depends.uci) == 'array') ? spec.depends.uci : [ spec.depends.uci ];
+	return true;
+}
 
-		for (let alternative in alternatives) {
-			if (check_uci_depends(alternative)) {
-				satisfied = true;
-				break;
-			}
-		}
+function check_node_uci_depends(node, session) {
+	if (type(node?.depends?.uci) in ['array', 'object']) {
+		let alternatives = (type(node.depends.uci) == 'array') ? node.depends.uci : [ node.depends.uci ];
 
-		if (!satisfied)
-			return false;
+		for (let alternative in alternatives)
+			if (check_uci_depends(alternative, session))
+				return true;
+
+		return false;
 	}
 
 	return true;
@@ -433,9 +448,9 @@ function build_pagetree() {
 	return tree;
 }
 
-function apply_tree_acls(node, acl) {
+function apply_tree_acls(node, acl, session) {
 	for (let name, spec in node?.children)
-		apply_tree_acls(spec, acl);
+		apply_tree_acls(spec, acl, session);
 
 	if (node?.depends?.acl) {
 		switch (check_acl_depends(node.depends.acl, acl["access-group"])) {
@@ -443,13 +458,16 @@ function apply_tree_acls(node, acl) {
 		case false: node.readonly = true;   break;
 		}
 	}
+
+	if (node?.satisfied && !check_node_uci_depends(node, session))
+		node.satisfied = false;
 }
 
-function menu_json(acl) {
+function menu_json(acl, session) {
 	tree ??= build_pagetree();
 
 	if (acl)
-		apply_tree_acls(tree, acl);
+		apply_tree_acls(tree, acl, session);
 
 	return tree;
 }
@@ -599,6 +617,9 @@ function resolve_firstchild(node, session, login_allowed, ctx) {
 		if (!session)
 			session = is_authenticated(node.auth);
 
+		if (!check_node_uci_depends(child, session))
+			continue;
+
 		let cacl = child.depends?.acl;
 		let login = !session && (login_allowed || child.auth?.login);
 
@@ -645,10 +666,14 @@ function resolve_page(tree, request_path) {
 		if (!node?.satisfied)
 			break;
 
+		let node_session = session ?? is_authenticated(node.auth);
+
+		if (!check_node_uci_depends(node, node_session))
+			break;
+
 		ctx_append(ctx, s, node);
 
-		if (!session)
-			session = is_authenticated(node.auth);
+		session = node_session;
 
 		if (!login && node.auth?.login)
 			login = true;
@@ -661,7 +686,9 @@ function resolve_page(tree, request_path) {
 		 */
 		if (node.wildcard) {
 			let next_segment = request_path[i + 1];
-			let has_matching_child = next_segment && node.children?.[next_segment]?.satisfied;
+			let next_node = next_segment ? node.children?.[next_segment] : null;
+			let has_matching_child = next_node?.satisfied &&
+				check_node_uci_depends(next_node, session ?? is_authenticated(next_node.auth));
 
 			if (!has_matching_child) {
 				ctx.request_args = [];
@@ -891,6 +918,7 @@ function run_action(request_path, lang, tree, resolved, action) {
 
 dispatch = function(_http, path) {
 	http = _http;
+	uci_depends_cache = {};
 
 	let version = determine_version();
 	let lang = determine_request_language();

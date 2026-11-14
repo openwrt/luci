@@ -152,7 +152,7 @@ return {
 
 	action_menu: function() {
 		const session = dispatcher.is_authenticated({ methods: [ 'cookie:sysauth_https', 'cookie:sysauth_http' ] });
-		const menu = dispatcher.menu_json(session?.acls ?? {}) ?? {};
+		const menu = dispatcher.menu_json(session?.acls ?? {}, session) ?? {};
 
 		http.prepare_content('application/json; charset=UTF-8');
 		http.write_json(menu);
