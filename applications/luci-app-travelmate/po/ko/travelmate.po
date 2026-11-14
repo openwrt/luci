@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-11-12 15:27+0000\n"
+"PO-Revision-Date: 2026-11-14 07:39+0000\n"
 "Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstravelmate/ko/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:135
 msgid "-- AP Selection --"
@@ -38,6 +38,8 @@ msgid ""
 "<b><em>Please note:</em></b> On first start please call the 'Interface "
 "Wizard' once, to make the necessary network- and firewall settings."
 msgstr ""
+"<b><em>참고:</em></b> 처음 시작할 때는 '인터페이스 마법사'를 한 번 실행하여 "
+"필요한 네트워크 및 방화벽 설정을 진행해 주세요."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:828
 msgid "AP QR-Codes..."
@@ -129,12 +131,16 @@ msgid ""
 "Check the internet availability, handle captive portal redirections and keep "
 "the uplink connection 'alive'."
 msgstr ""
+"인터넷 연결 상태를 확인하고, 종속 포털 리다이렉트를 처리하며, 업링크 연결을 "
+"유지(Keepalive)합니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:352
 msgid ""
 "Configuration of the travelmate package to enable travel router "
 "functionality. For further information %s."
 msgstr ""
+"여행용 라우터 기능을 활성화하는 travelmate 패키지 설정입니다. 자세한 정보는 "
+"%s."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1026
 msgid "Configured"
@@ -178,7 +184,7 @@ msgstr "드래그하여 순서 변경"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1255
 msgid "Duplicate wireless entry, the uplink station could not be saved."
-msgstr ""
+msgstr "중복된 무선 항목이 있어 업링크 스테이션을 저장할 수 없습니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:769
 msgid "E-Mail Notification"
@@ -239,11 +245,11 @@ msgstr "이 네트워크 편집"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1248
 msgid "Empty Password, the uplink station could not be saved."
-msgstr ""
+msgstr "비밀번호가 비어 있어 업링크 스테이션을 저장할 수 없습니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1246
 msgid "Empty SSID, the uplink station could not be saved."
-msgstr ""
+msgstr "SSID가 비어 있어 업링크 스테이션을 저장할 수 없습니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1035
 msgid "Empty resultset"
@@ -279,7 +285,7 @@ msgstr "이블 트윈 보호"
 msgid ""
 "External script reference which will be called for automated captive portal "
 "logins."
-msgstr ""
+msgstr "자동 종속 포털 로그인을 위해 호출되는 외부 스크립트 참조입니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:597
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1130
@@ -378,7 +384,7 @@ msgstr "VPN 처리 제한"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:645
 msgid "Limit VPN processing to certain interfaces."
-msgstr ""
+msgstr "특정 인터페이스로 VPN 처리를 제한합니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:682
 msgid ""
@@ -481,12 +487,12 @@ msgstr "아직 %s 관련 로그 없음!"
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:341
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:401
 msgid "No travelmate config found!"
-msgstr ""
+msgstr "travelmate 설정을 찾을 수 없습니다!"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:344
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:398
 msgid "No wireless config / radio found!"
-msgstr ""
+msgstr "무선 설정 또는 라디오를 찾을 수 없습니다!"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:709
 msgid "Normal Priority"
@@ -529,6 +535,12 @@ msgid ""
 "VPN uplink connection is emphasized in <span style=\"color:rgb(68, 170, "
 "68);font-weight:bold\">green</span>."
 msgstr ""
+"travelmate에 설정된 모든 업링크 개요입니다. 드래그 앤 드롭으로 기존 업링크를 "
+"편집, 삭제, 우선순위를 지정할 수 있으며 새로운 업링크를 검색할 수 "
+"있습니다.<br /> 현재 사용 중인 업링크 연결은 <span style=\"color:rgb(51, "
+"119, 204);font-weight:bold\">파란색</span>으로 강조 표시되며, 암호화된 VPN "
+"업링크 연결은 <span style=\"color:rgb(68, 170, 68);font-weight:bold\">"
+"초록색</span>으로 강조 표시됩니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:602
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1135
@@ -576,7 +588,7 @@ msgid ""
 "Proactively scan and switch to a higher prioritized uplink, despite of an "
 "already existing connection."
 msgstr ""
-"이미 기존 연결이 있더라도 선제적으로 스캔하여 더 우선순위가 높은 업링크로 "
+"이미 기존 연결이 있더라도 선제적으로 검색하여 더 우선순위가 높은 업링크로 "
 "전환합니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:787
@@ -605,6 +617,9 @@ msgid ""
 "disabled by the retry limit. The number of revivals is limited by the global "
 "retry limit."
 msgstr ""
+"재시도 횟수 제한으로 비활성화된 경우, 지정한 실행 주기 횟수가 지나면 이 "
+"업링크를 다시 활성화합니다. 복구 횟수는 전역 재시도 횟수 제한에 따라 "
+"제한됩니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:772
 msgid "Receiver address for travelmate notification E-Mails."
@@ -623,10 +638,12 @@ msgid ""
 "Render the QR-Code of the selected Access Point to transfer the WLAN "
 "credentials to your mobile devices comfortably."
 msgstr ""
+"선택한 액세스 포인트(AP)의 QR코드를 생성하여 모바일 장치로 WLAN 자격 증명을 "
+"편리하게 전송할 수 있습니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:914
 msgid "Repeat Scan"
-msgstr ""
+msgstr "다시 검색"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:631
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1160
@@ -687,7 +704,7 @@ msgstr "새 업링크 저장 실패: %s"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:883
 msgid "Scan on %s..."
-msgstr "%s 스캔..."
+msgstr "%s 검색..."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:799
 msgid "Script Arguments"
@@ -735,11 +752,11 @@ msgstr ""
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:651
 msgid "Standard VPN Service"
-msgstr "표준 VPN 서비스"
+msgstr "기본 VPN 서비스"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:657
 msgid "Standard VPN interface"
-msgstr "표준 VPN 인터페이스"
+msgstr "기본 VPN 인터페이스"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:657
 msgid ""
@@ -749,11 +766,11 @@ msgstr "새로운 STA 프로필에 자동으로 추가될 기본 VPN 인터페�
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:651
 msgid ""
 "Standard VPN service which will be automatically added to new STA profiles."
-msgstr ""
+msgstr "새로운 STA 프로필에 자동으로 추가될 기본 VPN 서비스입니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:898
 msgid "Starting wireless scan on '%s'..."
-msgstr "'%s'에서 무선 스캔 시작 중..."
+msgstr "'%s'에서 무선 검색 시작 중..."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:575
 msgid "Station"
@@ -791,7 +808,7 @@ msgstr "방화벽 영역 이름"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:111
 msgid "The interface already exists!"
-msgstr ""
+msgstr "이미 존재하는 인터페이스입니다!"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:90
 msgid "The interface metric"
@@ -799,7 +816,7 @@ msgstr "인터페이스 메트릭"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:852
 msgid "The logical vpn network interface like 'wg0'."
-msgstr ""
+msgstr "'wg0'과 같은 논리적 VPN 네트워크 인터페이스입니다."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:741
 msgid ""
@@ -869,7 +886,7 @@ msgstr "시작 지연 시간"
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:443
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:332
 msgid "Unable to parse the travelmate runtime information!"
-msgstr ""
+msgstr "travelmate 런타임 정보를 구문 분석할 수 없습니다!"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:64
 msgid "Unable to stop the travelmate service: %s"
@@ -997,7 +1014,7 @@ msgstr "WWAN 인터페이스"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:901
 msgid "Wireless Scan"
-msgstr "무선 스캔"
+msgstr "무선 검색"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:422
 msgid "Wireless Settings"
@@ -1024,7 +1041,7 @@ msgstr "auth=PAP"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:353
 msgid "check the online documentation"
-msgstr ""
+msgstr "온라인 문서를 확인하세요"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:317
 msgid "connected"
@@ -1044,7 +1061,7 @@ msgstr "연결 안 됨"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:307
 msgid "processing"
-msgstr ""
+msgstr "처리 중"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:313
 msgid "program error"
