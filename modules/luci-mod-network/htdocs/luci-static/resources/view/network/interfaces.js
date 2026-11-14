@@ -757,6 +757,14 @@ return view.extend({
 					};
 
 					if (L.hasSystemFeature('dnsmasq')) {
+						so = ss.taboption('general', form.Value, 'instance', _('Instance'),
+							_('Dnsmasq instance to which this DHCP server is bound. If unspecified, the section is valid for all dnsmasq instances.'));
+						so.value('', _('All instances'));
+						for (const instance of uci.sections('dhcp', 'dnsmasq')) {
+							const [name, display_str] = nettools.generateDnsmasqInstanceEntry(instance);
+							so.value(name, display_str);
+						}
+
 						ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'),
 							     _('Disable <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> for this interface (dnsmasq only).'));
 					}
