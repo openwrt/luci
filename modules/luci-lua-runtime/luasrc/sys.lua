@@ -12,8 +12,8 @@ local luci  = {}
 luci.util   = require "luci.util"
 luci.ip     = require "luci.ip"
 
-local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select, unpack =
-	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select, unpack
+local tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select, unpack, floor =
+	tonumber, ipairs, pairs, pcall, type, next, setmetatable, require, select, unpack, math.floor
 
 
 module "luci.sys"
@@ -387,6 +387,9 @@ function process.list()
 		return
 	end
 
+	local meminfo = fs.readfile("/proc/meminfo") or ""
+	local memtotal = tonumber(meminfo:match("MemTotal:%s+(%d+)%s+kB")) or 0
+
 	for line in ps do
 		local pid, ppid, user, stat, vsz, mem, cpu, cmd = line:match(
 			"^ *(%d+) +(%d+) +(%S.-%S) +([RSDZTW][<NW ][<N ]) +(%d+m?) +(%d+%%) +(%d+%%) +(.+)"
@@ -394,6 +397,19 @@ function process.list()
 
 		local idx = tonumber(pid)
 		if idx and not cmd:match("top %-bn1") then
+			-- busybox 1.37 top prints %VSZ; 1.38 prints %RSS. Prefer /proc.
+			local st = fs.readfile("/proc/%s/status" % pid)
+			if st then
+				local vs = st:match("VmSize:%s+(%d+)%s+kB")
+				local rs = st:match("VmRSS:%s+(%d+)%s+kB")
+				if vs then
+					vsz = vs
+				end
+				if rs and memtotal > 0 then
+					mem = "%d%%" %{ floor((tonumber(rs) * 100) / memtotal) }
+				end
+			end
+
 			data[idx] = {
 				['PID']     = pid,
 				['PPID']    = ppid,
