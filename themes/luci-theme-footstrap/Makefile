@@ -69,17 +69,15 @@ endef
 define Package/luci-theme-footstrap/postinst
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {
-	# uci-defaults registers the theme; drop the LuCI caches so it is seen without a reboot.
-	# Calling it ourselves is belt-and-braces: OpenWrt's default_postinst also runs (then
-	# deletes) every /etc/uci-defaults/* we ship, so it executes twice per install. It is
-	# idempotent: the second pass finds the theme already registered and changes nothing.
-	[ -f /etc/uci-defaults/30_luci-theme-footstrap ] && \
-		sh /etc/uci-defaults/30_luci-theme-footstrap >/dev/null 2>&1 || true
+	# default_postinst runs uci-defaults, which registers the theme; drop the LuCI caches so it is
+	# seen without a reboot.
 	rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/* >/dev/null 2>&1 || true
 	# A blanket ('*') login is granted everything and answers true below, so it is never touched;
 	# neither is the unauthenticated all-zero session, nor a denied session whose own login does
 	# not list this theme's group - re-authenticating would deny it just the same. Guarded on
 	# rpcd having ubus session support at all.
+	# The unquoted `uci -q get` lists below must split, not glob a `*`.
+	set -f
 	ubus list 2>/dev/null | grep -qx session && {
 		for s in $$(ubus call session list 2>/dev/null | grep -o '"ubus_rpc_session": "[a-f0-9]*"' | cut -d'"' -f4); do
 			case "$$s" in *[!0]*) ;; *) continue ;; esac
@@ -89,17 +87,22 @@ define Package/luci-theme-footstrap/postinst
 			# Every login section from `uci show`, not a `uci -q get` index walk: the latter stops
 			# at the first section with no username option. `while read` keeps a username with a
 			# space in one piece; the loop is a subshell, so its answer is echoed out, not stored.
-			grant=$$(uci show rpcd 2>/dev/null | grep -F .username= | while read -r kv; do
+			perm=$$(uci show rpcd 2>/dev/null | grep -F .username= | while read -r kv; do
 				sect=$${kv%%.username=*}
 				un=$${kv#*.username=}
 				un=$${un#\'}
 				un=$${un%\'}
 				[ "$$un" = "$$u" ] || continue
-				for grp in $$(uci -q get "$$sect.read") $$(uci -q get "$$sect.write"); do
-					[ "$$grp" = luci-theme-footstrap ] && { echo 1; break 2; }
+				for grp in $$(uci -q get "$$sect.write"); do
+					[ "$$grp" = luci-theme-footstrap ] && { echo write; break 2; }
+				done
+				for grp in $$(uci -q get "$$sect.read"); do
+					[ "$$grp" = luci-theme-footstrap ] && { echo read; break 2; }
 				done
 			done)
-			[ -n "$$grant" ] || continue
+			[ -n "$$perm" ] || continue
+			# A login that lists the group for read only gains nothing once it can already read.
+			[ "$$perm" = read ] && ubus call session access "{\"ubus_rpc_session\":\"$$s\",\"scope\":\"uci\",\"object\":\"footstrap\",\"function\":\"read\"}" 2>/dev/null | grep -q true && continue
 			ubus call session destroy "{\"ubus_rpc_session\":\"$$s\"}" >/dev/null 2>&1 || true
 		done
 	}
@@ -130,6 +133,9 @@ case "$$1" in *upgrade*) exit 0 ;; esac
 	# The admin-uploaded login background and pattern, kept out of the package on purpose so they
 	# survive an upgrade. A real removal is the one time they should go.
 	rm -rf /etc/footstrap >/dev/null 2>&1 || true
+	# The two links uci-defaults points at it are not the package manager's to remove.
+	rm -f /www/luci-static/footstrap/bg /www/luci-static/footstrap/fonts
+	rmdir /www/luci-static/footstrap >/dev/null 2>&1 || true
 	rm -f /tmp/luci-indexcache* /tmp/luci-modulecache/* >/dev/null 2>&1 || true
 }
 endef
