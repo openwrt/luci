@@ -1,0 +1,17 @@
+{
+	"luci-app-bird-babel": {
+		"description": "Grant access to BIRD Babel neighbour status and history",
+		"read": {
+			"ubus": {
+				"bird-babel": [
+					"status",
+					"history",
+					"events"
+				]
+			},
+			"uci": [
+				"system"
+			]
+		}
+	}
+}
