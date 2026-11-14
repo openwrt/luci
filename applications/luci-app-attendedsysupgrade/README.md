@@ -29,6 +29,27 @@ closes the prompt and the install proceeds with a system reboot.
 ASU servers typically take between 30 seconds and 5 minutes
 to process each build request and prepare a custom image.
 
+## Custom package repositories
+
+On apk based releases, repositories listed in
+`/etc/apk/repositories.d/*` (except `distfeeds.list`) are added to the
+build request together with the keys in `/etc/apk/keys`, so packages
+installed from those feeds are kept during the upgrade:
+
+```sh
+echo "https://my.repo/packages.adb" >> /etc/apk/repositories.d/customfeeds.list
+wget https://my.repo/my-key.pem -O /etc/apk/keys/my-key.pem
+```
+
+Only repositories allowed by the ASU server are sent, see
+`repository_allow_list` in its `/api/v1/overview`; others are listed as not
+used in the upgrade dialog and in the error report. A reference to the
+installed version or branch in a repository url is
+replaced with the target one, further adjustments can be made with the
+`repository_aliases` list in the `owut` section of
+`/etc/config/attendedsysupgrade`. Unlike owut, `repositories_mode 'replace'` is
+not supported, the repositories are always appended to the default ones.
+
 > [!NOTE]
 > Following the announcement of a major OpenWrt upgrade, availability of
 > ASU servers may become limited for a few days as target builds are rolled out
