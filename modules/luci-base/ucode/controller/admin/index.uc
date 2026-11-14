@@ -69,8 +69,27 @@ function ubus_request(req) {
 		ubus.error();
 
 		const res = ubus.call(obj, fun, arg);
+		const code = ubus.error(true) ?? 0;
 
-		return ubus_reply(req.id, res, ubus.error(true) ?? 0);
+		// ubusd hides an object from a web server running as a user it
+		// grants no method of; rpcd relays the call under the session ACL
+		if (code == 4 && !ubus.list(obj)) {
+			delete arg.ubus_rpc_session;
+
+			const rv = ubus.call('session', 'call', {
+				ubus_rpc_session: sid,
+				object: obj,
+				method: fun,
+				data: arg
+			});
+
+			if (type(rv?.status) != 'int')
+				return ubus_reply(req.id, null, ubus.error(true) ?? 4);
+
+			return ubus_reply(req.id, length(rv.data) ? rv.data : null, rv.status);
+		}
+
+		return ubus_reply(req.id, res, code);
 	}
 
 	if (req.method == 'list') {
