@@ -1,0 +1,53 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<!-- wwand — live signal graph canvas.
+
+     Only the three QUALITY THRESHOLDS live here. The series lines are built by
+     wwand/graph.js, because a fixed set of <path> elements in this file capped
+     how many RATs a canvas could show: adding 3G and 2G to the strength graph
+     would have meant editing an asset to add more paths with hard-coded
+     colours, and the colour of an LTE line is not a property of the canvas.
+
+     The rules are drawn, not decorated: the idea is borrowed from the old
+     luci-proto-marcant-qmi page, which coloured them and spelled out "good
+     quality" / "bad quality" beside each. That is worth keeping — it tells
+     someone aiming an antenna what they are looking at without their having to
+     know what a dBm is. Their y positions come from the view, because they
+     belong to the scale, not to the canvas, and each canvas carries ONE
+     quantity with its own ladder.
+
+     THE COLOURS ARE MARKED `!important`, which is not decoration. LuCI's themes
+     restyle graph SVGs so the bandwidth page's grid lines follow the theme:
+
+       #view div[style] > svg line[style]   { stroke: <theme text> !important }
+       #view div[style] > svg > text[style] { fill:   <theme text> !important }
+
+     (the real declarations use the theme's own CSS variable; it cannot be
+     quoted here, because its name contains a double hyphen and XML comments
+     may not.)
+
+     (luci-theme-footstrap cascade.css:298-299; luci-theme-bootstrap has the
+     same rule at :2626.) Those selectors match any svg that is a direct child
+     of a styled div under #view — this canvas — and the rules below are not
+     grid lines: green means "excellent" and red means "fair", so a theme
+     repainting them all in the text colour deletes the information. Reported
+     from footstrap, where every rule and label came out black
+     (ddimension/wwand#14, 2026-09-11). An important declaration in a style
+     attribute outranks an important one from a stylesheet, so this holds
+     without the theme having to know about us.
+
+     What is NOT borrowed is that page's orientation. It drew the magnitude of a
+     negative dBm upwards, so -100 dBm sat near the TOP and -20 near the bottom:
+     a worse signal made a taller line. Here stronger is always higher. -->
+
+<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+	<line id="t_good" x1="0" y1="0" x2="100%" y2="0" style="stroke:#2c8a2c !important;stroke-width:0.6;stroke-dasharray:4,3" />
+	<text id="t_good_l" x="6" y="0" style="fill:#2c8a2c !important; font-size:9pt; font-family:sans-serif"> </text>
+
+	<line id="t_fair" x1="0" y1="0" x2="100%" y2="0" style="stroke:#c8a415 !important;stroke-width:0.6;stroke-dasharray:4,3" />
+	<text id="t_fair_l" x="6" y="0" style="fill:#c8a415 !important; font-size:9pt; font-family:sans-serif"> </text>
+
+	<line id="t_poor" x1="0" y1="0" x2="100%" y2="0" style="stroke:#c0392b !important;stroke-width:0.6;stroke-dasharray:4,3" />
+	<text id="t_poor_l" x="6" y="0" style="fill:#c0392b !important; font-size:9pt; font-family:sans-serif"> </text>
+</svg>
