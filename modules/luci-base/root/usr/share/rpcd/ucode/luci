@@ -745,6 +745,98 @@ const methods = {
 		}
 	},
 
+	getEthtoolStatus: {
+		args: { devices: [], temperature: false },
+		call: function(request) {
+			const query = (opts, dev) => {
+				const fd = popen(`ethtool --json ${opts} ${shellquote(dev)} 2>/dev/null`);
+
+				if (!fd)
+					return null;
+
+				const out = fd.read('all');
+
+				/* ethtool prints [ {} ] for an unsupported query; only its exit status tells */
+				if (fd.close() != 0)
+					return null;
+
+				try {
+					return json(out)?.[0];
+				}
+				catch (e) {
+					return null;
+				}
+			};
+
+			/* PHY sensor of a copper port, else the diagnostics of an SFP module */
+			const temperature = (dev) => {
+				let phy = `/sys/class/net/${dev}/phydev`;
+
+				/* DSA ports have no phydev link; find the PHY by its device tree handle */
+				if (!access(phy)) {
+					const handle = readfile(`/sys/class/net/${dev}/of_node/phy-handle`);
+
+					phy = null;
+
+					for (let p in (handle ? glob('/sys/bus/mdio_bus/devices/*/of_node/phandle') : []))
+						if (readfile(p) == handle)
+							phy = dirname(dirname(p));
+				}
+
+				for (let f in (phy ? glob(`${phy}/hwmon/hwmon*/temp1_input`) : [])) {
+					const t = trim(readfile(f) ?? '');
+
+					if (length(t))
+						return +t / 1000.0;
+				}
+
+				return query('-m', dev)?.module_temperature_measurement;
+			};
+
+			const result = {};
+
+			for (let dev in request.args.devices) {
+				if (type(dev) != 'string' || !match(dev, /^[^-.\/][^\/]*$/) || !access(`/sys/class/net/${dev}`))
+					continue;
+
+				result[dev] = {
+					link: query('', dev),
+					pause: query('-a', dev),
+					eee: query('--show-eee', dev),
+					/* opt-in: the module fallback reads the SFP EEPROM */
+					temperature: request.args.temperature ? temperature(dev) : null
+				};
+			}
+
+			return { result };
+		}
+	},
+
+	/* first thermal zone with a CPU, SoC or package type, else the first one with a reading */
+	getCPUTemperature: {
+		call: function() {
+			const zoneNumber = (path) => +match(path, /[0-9]+$/)[0];
+			const zones = sort(glob('/sys/devices/virtual/thermal/thermal_zone*') ?? [], (a, b) => zoneNumber(a) - zoneNumber(b));
+			let fallback = null;
+
+			for (let zone in zones) {
+				const temp = trim(readfile(`${zone}/temp`) ?? '');
+
+				if (!match(temp, /^-?[0-9]+$/))
+					continue;
+
+				const reading = { zone: trim(readfile(`${zone}/type`) ?? ''), temperature: +temp / 1000.0 };
+
+				if (match(reading.zone, /cpu|soc|pkg/i))
+					return reading;
+
+				fallback ??= reading;
+			}
+
+			return fallback ?? {};
+		}
+	},
+
 	getOdhcp6cStats: {
 		call: function() {
 			const ubus = connect();
