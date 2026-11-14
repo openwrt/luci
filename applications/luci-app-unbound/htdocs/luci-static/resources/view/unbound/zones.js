@@ -23,7 +23,7 @@ return view.extend({
 	load() {
 		return Promise.all([
 			fs.read(RESOLV_FILE).catch(() => ''),
-			fs.exec('/sbin/logread', ['-e', 'unbound.*error.*ssl library']).catch(() => ''),
+			fs.exec('/sbin/logread', ['-e', 'unbound.*error.*ssl library']).then(res => res.stdout || '').catch(() => ''),
 			uci.load('unbound'),
 		]).then(([resolv, logerr]) => ({
 			resolvContent: resolv || '',
