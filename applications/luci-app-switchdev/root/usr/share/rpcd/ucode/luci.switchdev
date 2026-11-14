@@ -1,0 +1,58 @@
+// Copyright 2026 Andre Brait <andrebrait@gmail.com>
+// Licensed to the public under the Apache License 2.0.
+
+'use strict';
+
+import { popen } from 'fs';
+
+function run_json(cmd) {
+	const fd = popen(`${cmd} 2>/dev/null`);
+
+	if (!fd)
+		return null;
+
+	const out = fd.read('all');
+	fd.close();
+
+	try {
+		return json(out);
+	}
+	catch (e) {
+		return null;
+	}
+}
+
+/* plain interface names only; anything else never reaches the shell */
+function valid_dev(dev) {
+	return type(dev) == 'string' && match(dev, /^[A-Za-z0-9_][A-Za-z0-9_.@-]*$/) != null;
+}
+
+return {
+	'luci.switchdev': {
+		getFdb: {
+			call: function() {
+				return { result: run_json('bridge -j fdb show') ?? [] };
+			}
+		},
+
+		getTc: {
+			args: { devices: [] },
+			call: function(request) {
+				const result = {};
+
+				for (let dev in request.args.devices) {
+					if (!valid_dev(dev))
+						continue;
+
+					result[dev] = {
+						qdisc: run_json(`tc -j qdisc show dev ${dev}`) ?? [],
+						ingress: run_json(`tc -j filter show dev ${dev} ingress`) ?? [],
+						egress: run_json(`tc -j filter show dev ${dev} egress`) ?? []
+					};
+				}
+
+				return { result };
+			}
+		}
+	}
+};

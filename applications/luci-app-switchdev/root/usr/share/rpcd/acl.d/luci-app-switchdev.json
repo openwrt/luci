@@ -1,0 +1,15 @@
+{
+	"luci-app-switchdev": {
+		"description": "Grant access to switch FDB, mirroring and rate limiting",
+		"read": {
+			"ubus": {
+				"luci": [ "getBuiltinEthernetPorts" ],
+				"luci.switchdev": [ "getFdb", "getTc" ]
+			},
+			"uci": [ "switchdev" ]
+		},
+		"write": {
+			"uci": [ "switchdev" ]
+		}
+	}
+}

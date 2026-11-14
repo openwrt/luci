@@ -1,0 +1,39 @@
+{
+	"admin/network/switchdev": {
+		"title": "Switch features",
+		"order": 25,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-switchdev" ]
+		}
+	},
+
+	"admin/network/switchdev/fdb": {
+		"title": "MAC address table",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "switchdev/fdb"
+		}
+	},
+
+	"admin/network/switchdev/mirror": {
+		"title": "Port mirroring",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "switchdev/mirror"
+		}
+	},
+
+	"admin/network/switchdev/ratelimit": {
+		"title": "Rate limiting",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "switchdev/ratelimit"
+		}
+	}
+}
