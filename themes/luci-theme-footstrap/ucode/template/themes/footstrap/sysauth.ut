@@ -164,15 +164,7 @@
 </form>
 
 {%
-	let https_ports = uci.get('uhttpd', 'main', 'listen_https') ?? [];
-
-	https_ports = uniq(filter(
-		map(
-			(type(https_ports) == 'string') ? split(https_ports, /\s+/) : https_ports,
-			e => +match(e, /\d+$/)?.[0]
-		),
-		p => (p >= 0 && p <= 65535)
-	));
+	const https_ports = ubus.call('luci', 'getHTTPSPorts')?.ports ?? [];
 %}
 
 {# The two server values the script below needs, handed over as DATA: a `{{ … }}` block is not JS
