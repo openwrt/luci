@@ -23,12 +23,16 @@ return view.extend({
 	load() {
 		return Promise.all([
 			fs.read(RESOLV_FILE).catch(() => ''),
-			fs.exec('/sbin/logread', ['-e', 'unbound.*error.*ssl library']).catch(() => ''),
+			L.resolveDefault(fs.exec_direct('/sbin/logread', ['-e', 'unbound:']), ''),
 			uci.load('unbound'),
-		]).then(([resolv, logerr]) => ({
-			resolvContent: resolv || '',
-			logerr: logerr ? logerr.trim().slice(-250) : null,
-		}));
+		]).then(([resolv, log]) => {
+			const logerr = log.split('\n').filter(l => /error.*ssl library/.test(l)).join('\n').trim();
+
+			return {
+				resolvContent: resolv || '',
+				logerr: logerr ? logerr.slice(-250) : null,
+			};
+		});
 	},
 
 	render({resolvContent, logerr}) {
