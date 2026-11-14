@@ -380,6 +380,22 @@ const methods = {
 		}
 	},
 
+	getHTTPSPorts: {
+		call: function() {
+			let ports = cursor()?.get?.('uhttpd', 'main', 'listen_https') ?? [];
+
+			if (type(ports) == 'string')
+				ports = split(ports, /\s+/);
+
+			return {
+				ports: uniq(filter(
+					map(ports, e => +match(e, /\d+$/)?.[0]),
+					p => (p > 0 && p <= 65535)
+				))
+			};
+		}
+	},
+
 	getSwconfigFeatures: {
 		args: { switch: 'switch0' },
 		call: function(request) {
