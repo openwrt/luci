@@ -30,7 +30,7 @@ export function run_plugins(plugin_class_path, plugin_class_enable) {
 				continue;
 			}
 
-			if (uci.get('luci_plugins', plugin_id, 'enabled')) {
+			if (uci.get('luci_plugins', plugin_id, 'enabled') == '1') {
 				const mod = require(require_path + `.${plugin_id}`);
 				if (type(mod) === 'function') {
 					try {
