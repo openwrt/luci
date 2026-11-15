@@ -11,39 +11,40 @@ import {
 import { cursor } from 'uci';
 
 
-/* generic plugin handler */
-export function run_plugins(plugin_class_path, plugin_class_enable) {
+/* generic plugin handler: runs every plugin under plugin_class_path whose
+ * luci_plugins.<uuid>.enabled is '1', unless luci_plugins.global.enabled
+ * is '0' */
+export function run_plugins(plugin_class_path) {
 	let uci = cursor();
 	const require_path = replace(plugin_class_path, '/', '.');
+	const PLUGINS_PATH = '/usr/share/ucode' + plugin_class_path;
+	const results = {};
 
-	if (uci.get('luci_plugins', 'global', 'enabled') == 1 &&
-		uci.get('luci_plugins', 'global', plugin_class_enable) == 1) {
-		const PLUGINS_PATH = '/usr/share/ucode' + plugin_class_path;
-		const results = {};
+	if (uci.get('luci_plugins', 'global', 'enabled') == '0')
+		return results;
 
-		for (let fn in lsdir(PLUGINS_PATH)) {
-			const plugin_id = replace(fn, /.uc$/, '');
-			/* plugins shall have a <32_char_UUID_no_hyphens>.uc filename */
-			if (!match(plugin_id, /^[a-f0-9]+$/) || length(plugin_id) !== 32) {
-				syslog(LOG_NOTICE|LOG_LOCAL0,
-					sprintf("Invalid plugin name: %s", plugin_id));
-				continue;
-			}
-
-			if (uci.get('luci_plugins', plugin_id, 'enabled') == '1') {
-				const mod = require(require_path + `.${plugin_id}`);
-				if (type(mod) === 'function') {
-					try {
-						results[plugin_id] = mod(plugin_id);
-					} catch (e) {
-						syslog(LOG_NOTICE|LOG_LOCAL0,
-							sprintf("Could not execute plugin %s: %s",
-							join('/', [PLUGINS_PATH, plugin_id]), e));
-					};
-				}
-			}
+	for (let fn in lsdir(PLUGINS_PATH)) {
+		const plugin_id = replace(fn, /.uc$/, '');
+		/* plugins shall have a <32_char_UUID_no_hyphens>.uc filename */
+		if (!match(plugin_id, /^[a-f0-9]+$/) || length(plugin_id) !== 32) {
+			syslog(LOG_NOTICE|LOG_LOCAL0,
+				sprintf("Invalid plugin name: %s", plugin_id));
+			continue;
 		}
 
-		return results;
+		if (uci.get('luci_plugins', plugin_id, 'enabled') == '1') {
+			const mod = require(require_path + `.${plugin_id}`);
+			if (type(mod) === 'function') {
+				try {
+					results[plugin_id] = mod(plugin_id);
+				} catch (e) {
+					syslog(LOG_NOTICE|LOG_LOCAL0,
+						sprintf("Could not execute plugin %s: %s",
+						join('/', [PLUGINS_PATH, plugin_id]), e));
+				};
+			}
+		}
 	}
+
+	return results;
 };
