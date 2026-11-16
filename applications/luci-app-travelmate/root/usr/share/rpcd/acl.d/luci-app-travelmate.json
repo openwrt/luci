@@ -2,9 +2,6 @@
 	"luci-app-travelmate": {
 		"description": "Grant access to LuCI app travelmate",
 		"write": {
-			"cgi-io": [
-				"exec"
-			],
 			"file": {
 				"/var/run/travelmate/travelmate.refresh": [
 					"write"
@@ -33,7 +30,8 @@
 			},
 			"ubus": {
 				"file": [
-					"exec"
+					"exec",
+					"remove"
 				]
 			},
 			"uci": [
@@ -42,9 +40,6 @@
 			]
 		},
 		"read": {
-			"cgi-io": [
-				"download"
-			],
 			"file": {
 				"/etc/travelmate": [
 					"list"
@@ -77,15 +72,17 @@
 			},
 			"ubus": {
 				"file": [
+					"list",
+					"read",
 					"stat"
+				],
+				"log": [
+					"read"
 				]
 			},
 			"uci": [
 				"travelmate",
 				"wireless"
-			],
-			"log": [
-				"read"
 			]
 		}
 	}

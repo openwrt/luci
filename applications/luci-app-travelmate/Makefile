@@ -6,7 +6,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI support for Travelmate
 LUCI_DEPENDS:=+luci-base +luci-lib-uqr +travelmate
 
-PKG_VERSION:=3.0.0
+PKG_VERSION:=3.1.0
 PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Dirk Brenken <dev@brenken.org>

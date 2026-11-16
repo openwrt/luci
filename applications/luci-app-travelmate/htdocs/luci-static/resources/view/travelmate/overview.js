@@ -61,7 +61,7 @@ function handleAction(ev) {
 					poll.start();
 			})
 			.catch(function (err) {
-				ui.addNotification(null, E('p', _('Unable to stop the travelmate service: %s').format(err)), 'error');
+				ui.addNotification(null, E('p', [_('Unable to stop the travelmate service: %s').format(err)]), 'error');
 			});
 	}
 	if (ev === 'restartTravelmate') {
@@ -69,7 +69,7 @@ function handleAction(ev) {
 		return dom.callClassMethod(map, 'save')
 			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
-				return fs.exec_direct('/etc/init.d/travelmate', ['restart']);
+				return fs.exec('/etc/init.d/travelmate', ['restart']);
 			});
 	}
 	if (ev === 'setup') {
@@ -108,7 +108,7 @@ function handleAction(ev) {
 								ui.hideModal();
 								switch (rc.code) {
 									case 1:
-										ui.addNotification(null, E('p', _('The interface already exists!')), 'info');
+										ui.addNotification(null, E('p', _('The uplink interface could not be set up, please check the system log for details!')), 'error');
 										break;
 									default:
 										location.reload();
@@ -117,7 +117,7 @@ function handleAction(ev) {
 							})
 							.catch(function (err) {
 								ui.hideModal();
-								ui.addNotification(null, E('p', _('Interface setup failed: %s').format(err)), 'error');
+								ui.addNotification(null, E('p', [_('Interface setup failed: %s').format(err)]), 'error');
 							})
 					})
 				}, _('Save'))
@@ -138,7 +138,7 @@ function handleAction(ev) {
 						w_sid = i;
 						w_device = w_sections[i].device;
 						w_ssid = w_sections[i].ssid;
-						optionsAP.push(E('option', { value: w_sid }, w_device + ', ' + w_ssid));
+						optionsAP.push(E('option', { value: w_sid }, [w_device + ', ' + w_ssid]));
 					}
 				}
 				let selectAP = E('select', {
@@ -408,9 +408,9 @@ return view.extend({
 		*/
 		let parseErrCount = 0;
 		poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.runtime.json'), null).then(function (stat) {
+			return L.resolveDefault(fs.read('/var/run/travelmate/travelmate.runtime.json'), '').then(function (res) {
 				const status = document.getElementById('status');
-				if (!stat || !stat.size) {
+				if (!res || !res.trim()) {
 					parseErrCount = 0;
 					setStop(false);
 					setButtons(false);
@@ -422,63 +422,60 @@ return view.extend({
 					}
 					return;
 				}
-				return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.runtime.json'), null).then(function (res) {
-					let info = null;
-					try {
-						info = JSON.parse(res);
-						parseErrCount = 0;
-						if (!poll.active()) {
-							poll.start();
-						}
-					} catch (e) {
-						info = null;
-						parseErrCount++;
-						setStop(true);
-						setButtons(false);
-						if (status) {
-							status.setAttribute('data-state', '');
-							setText('state', '-');
-							status.classList.remove('spinning');
-							if (parseErrCount >= 5) {
-								ui.addNotification(null, E('p', _('Unable to parse the travelmate runtime information!')), 'error');
-								poll.stop();
-							}
-						}
-						return;
+				let info = null;
+				try {
+					info = JSON.parse(res);
+					parseErrCount = 0;
+					if (!poll.active()) {
+						poll.start();
 					}
+				} catch (e) {
+					info = null;
+					parseErrCount++;
 					setStop(true);
-					if (status && info) {
-						const state = splitStatus(info.data.travelmate_status);
-						status.setAttribute('data-state', state.state);
-						setText('state', state.label);
-						setText('connection', state.detail);
-						setText('versions', `${info.data.frontend_ver || '-'} / ${info.data.backend_ver || '-'}`);
-						setButtons(state.state === 'processing');
-						status.classList.toggle('spinning', state.state === 'processing');
-					} else if (status) {
+					setButtons(false);
+					if (status) {
 						status.setAttribute('data-state', '');
 						setText('state', '-');
 						status.classList.remove('spinning');
-						setButtons(false);
+						if (parseErrCount >= 5) {
+							ui.addNotification(null, E('p', _('Unable to parse the travelmate runtime information!')), 'error');
+							poll.stop();
+						}
 					}
-					if (info) {
-						const station = splitStationId(info.data.station_id);
-						const ifaces = splitInterfaces(info.data.station_interfaces);
-						setText('essid', station.essid);
-						setText('radio', station.radio);
-						setText('station_bssid', station.bssid);
-						setText('station_mac', info.data.station_mac);
-						setText('iface_uplink', ifaces.uplink);
-						setText('iface_vpn', ifaces.vpn);
-						setText('station_subnet', info.data.station_subnet);
-						const runPairs = parsePairs(info.data.last_run);
-						setNodes('run_flags', flagChips(info.data.run_flags));
-						setText('run', pickValue(runPairs, 'date / time'));
-						setText('run_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'duration'),
-						pickValue(runPairs, 'memory')].filter(v => v !== '-').join(', '));
-						setNodes('sys', stackNodes(sysPairs(info.data.system_info)));
-					}
-				});
+					return;
+				}
+				setStop(true);
+				if (status && info) {
+					const state = splitStatus(info.data.travelmate_status);
+					status.setAttribute('data-state', state.state);
+					setText('state', state.label);
+					setText('connection', state.detail);
+					setText('versions', `${info.data.frontend_ver || '-'} / ${info.data.backend_ver || '-'}`);
+					setButtons(state.state === 'processing');
+					status.classList.toggle('spinning', state.state === 'processing');
+				} else if (status) {
+					status.setAttribute('data-state', '');
+					setText('state', '-');
+					status.classList.remove('spinning');
+					setButtons(false);
+				}
+				if (info) {
+					const station = splitStationId(info.data.station_id);
+					const ifaces = splitInterfaces(info.data.station_interfaces);
+					setText('essid', station.essid);
+					setText('radio', station.radio);
+					setText('station_bssid', station.bssid);
+					setText('station_mac', info.data.station_mac);
+					setText('iface_uplink', ifaces.uplink);
+					setText('iface_vpn', ifaces.vpn);
+					setText('station_subnet', info.data.station_subnet);
+					const runPairs = parsePairs(info.data.last_run);
+					setNodes('run_flags', flagChips(info.data.run_flags));
+					setText('run', pickValue(runPairs, 'date / time'));
+					setText('run_sub', [pickValue(runPairs, 'mode'), pickValue(runPairs, 'memory')].filter(v => v !== '-').join(', '));
+					setNodes('sys', stackNodes(sysPairs(info.data.system_info)));
+				}
 			});
 		}, 2);
 

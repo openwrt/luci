@@ -306,7 +306,7 @@ function handleStatus() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.refresh'), null).then(function (stat) {
 				if (!stat) return;
-				return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.refresh'), null).then(async function (content) {
+				return L.resolveDefault(fs.read('/var/run/travelmate/travelmate.refresh'), null).then(async function (content) {
 					await fs.remove('/var/run/travelmate/travelmate.refresh');
 					if (content === 'ui_reload') {
 						location.reload();
@@ -321,7 +321,7 @@ function handleStatus() {
 						]);
 						const rows = document.querySelectorAll('.cbi-section-table-row[data-sid]');
 						for (let i = 0; i < rows.length; i++) {
-							const item = rows[i].querySelector('.cbi-value-field[data-title="Enabled"]');
+							const item = rows[i].querySelector('.cbi-value-field[data-name="_enabled"]');
 							const value = handleSectionsVal('get', rows[i].getAttribute('data-sid'), 'enabled');
 							if (item) {
 								item.textContent = (value === '1' ? _('Yes') : _('No'));
@@ -330,65 +330,62 @@ function handleStatus() {
 					}
 				});
 			}),
-			L.resolveDefault(fs.stat('/var/run/travelmate/travelmate.runtime.json'), null).then(function (stat) {
-				if (!stat) return;
-				return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.runtime.json'), null).then(function (content) {
-					if (!content) return;
-					let info = null;
-					try {
-						info = JSON.parse(content);
-						parseErrCount = 0;
-					} catch (e) {
-						parseErrCount++;
-						if (parseErrCount >= 5) {
-							ui.addNotification(null, E('p', _('Unable to parse the travelmate runtime information!')), 'error');
-							poll.stop();
-						}
-						return;
+			L.resolveDefault(fs.read('/var/run/travelmate/travelmate.runtime.json'), null).then(function (content) {
+				if (!content || !content.trim()) return;
+				let info = null;
+				try {
+					info = JSON.parse(content);
+					parseErrCount = 0;
+				} catch (e) {
+					parseErrCount++;
+					if (parseErrCount >= 5) {
+						ui.addNotification(null, E('p', _('Unable to parse the travelmate runtime information!')), 'error');
+						poll.stop();
 					}
-					if (!info || !info.data) return;
+					return;
+				}
+				if (!info || !info.data) return;
 
-					const vpnMatch = (info.data.run_flags || '').match(/vpn:\s*(.)/);
-					const uplinkId = (info.data.station_id || '').trim().split('/');
-					const oldUplinkView = document.getElementsByName('uplinkStation');
-					const w_sections = uci.sections('wireless', 'wifi-iface');
-					const vpnStatus = vpnMatch ? vpnMatch[1] : '✘';
+				const vpnMatch = (info.data.run_flags || '').match(/vpn:\s*(.)/);
+				const uplinkId = (info.data.station_id || '').trim().split('/');
+				const oldUplinkView = document.getElementsByName('uplinkStation');
+				const w_sections = uci.sections('wireless', 'wifi-iface');
+				const vpnStatus = vpnMatch ? vpnMatch[1] : '✘';
 
-					let t_device, t_ssid, t_bssid, newUplinkView, uplinkColor;
-					t_device = uplinkId[0];
-					t_bssid = uplinkId[uplinkId.length - 1];
-					for (let i = 1; i < uplinkId.length - 1; i++) {
-						if (!t_ssid) {
-							t_ssid = uplinkId[i];
-						} else {
-							t_ssid = t_ssid + '/' + uplinkId[i];
-						}
-					}
-					if (t_ssid === '-') {
-						if (oldUplinkView.length > 0) {
-							oldUplinkView[0].removeAttribute('style');
-							oldUplinkView[0].removeAttribute('name');
-						}
+				let t_device, t_ssid, t_bssid, newUplinkView, uplinkColor;
+				t_device = uplinkId[0];
+				t_bssid = uplinkId[uplinkId.length - 1];
+				for (let i = 1; i < uplinkId.length - 1; i++) {
+					if (!t_ssid) {
+						t_ssid = uplinkId[i];
 					} else {
-						uplinkColor = (vpnStatus === '✔' ? 'rgb(68, 170, 68)' : 'rgb(51, 119, 204)');
-						for (let i = 0; i < w_sections.length; i++) {
-							newUplinkView = document.getElementById('cbi-wireless-' + w_sections[i]['.name']);
-							if (t_device === w_sections[i].device && t_ssid === w_sections[i].ssid && normBssid(t_bssid) === normBssid(w_sections[i].bssid || '-')) {
-								if (oldUplinkView.length === 0 && newUplinkView) {
-									newUplinkView.setAttribute('name', 'uplinkStation');
-									newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
-								} else if (oldUplinkView.length > 0 && newUplinkView && oldUplinkView[0].getAttribute('id') !== newUplinkView.getAttribute('id')) {
-									oldUplinkView[0].removeAttribute('style');
-									oldUplinkView[0].removeAttribute('name');
-									newUplinkView.setAttribute('name', 'uplinkStation');
-									newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
-								} else if (newUplinkView && newUplinkView.style.color !== uplinkColor) {
-									newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
-								}
+						t_ssid = t_ssid + '/' + uplinkId[i];
+					}
+				}
+				if (t_ssid === '-') {
+					if (oldUplinkView.length > 0) {
+						oldUplinkView[0].removeAttribute('style');
+						oldUplinkView[0].removeAttribute('name');
+					}
+				} else {
+					uplinkColor = (vpnStatus === '✔' ? 'rgb(68, 170, 68)' : 'rgb(51, 119, 204)');
+					for (let i = 0; i < w_sections.length; i++) {
+						newUplinkView = document.getElementById('cbi-wireless-' + w_sections[i]['.name']);
+						if (t_device === w_sections[i].device && t_ssid === w_sections[i].ssid && normBssid(t_bssid) === normBssid(w_sections[i].bssid || '-')) {
+							if (oldUplinkView.length === 0 && newUplinkView) {
+								newUplinkView.setAttribute('name', 'uplinkStation');
+								newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
+							} else if (oldUplinkView.length > 0 && newUplinkView && oldUplinkView[0].getAttribute('id') !== newUplinkView.getAttribute('id')) {
+								oldUplinkView[0].removeAttribute('style');
+								oldUplinkView[0].removeAttribute('name');
+								newUplinkView.setAttribute('name', 'uplinkStation');
+								newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
+							} else if (newUplinkView && newUplinkView.style.color !== uplinkColor) {
+								newUplinkView.setAttribute('style', 'text-align: left !important; color: ' + uplinkColor + ' !important;font-weight: bold !important;');
 							}
 						}
 					}
-				});
+				}
 			})
 		]);
 	}, 2);
@@ -500,7 +497,7 @@ return view.extend({
 		o.readonly = true;
 		o.textvalue = function (section_id) {
 			const bssid = uci.get('wireless', section_id, 'bssid');
-			return bssid ? normBssid(bssid) : null;
+			return bssid ? '%h'.format(normBssid(bssid)) : null;
 		};
 
 		o = s.taboption('wireless', form.ListValue, 'encryption', _('Encryption'));
@@ -580,6 +577,8 @@ return view.extend({
 				case 'none':
 					cfgvalue = _('Open');
 					break;
+				default:
+					cfgvalue = (cfgvalue != null) ? '%h'.format(cfgvalue) : null;
 			}
 			return cfgvalue;
 		};
@@ -596,7 +595,6 @@ return view.extend({
 		o.password = true;
 
 		o = s.taboption('wireless', form.Value, 'password', _('Password'));
-		o.datatype = 'wpakey';
 		o.depends({ encryption: 'wpa', '!contains': true });
 		o.modalonly = true;
 		o.password = true;
@@ -915,9 +913,9 @@ return view.extend({
 			md.style.maxWidth = '90%';
 			md.style.maxHeight = 'none';
 
-			return L.resolveDefault(fs.exec_direct('/etc/init.d/travelmate', ['scan', radio]))
+			return L.resolveDefault(fs.exec('/etc/init.d/travelmate', ['scan', radio]))
 				.then(L.bind(function () {
-					return L.resolveDefault(fs.read_direct('/var/run/travelmate/travelmate.scan'), '')
+					return L.resolveDefault(fs.read('/var/run/travelmate/travelmate.scan'), '')
 						.then(L.bind(function (res) {
 							let scan = [], rows = [];
 
@@ -1104,11 +1102,11 @@ return view.extend({
 			o2.depends({ encryption: 'sae', '!contains': true });
 			o2.depends({ encryption: 'psk', '!contains': true });
 			o2.datatype = 'wpakey';
+			o2.rmempty = false;
 			o2.password = true;
 
 			o2 = s2.option(form.Value, 'password', _('Password'));
 			o2.depends({ encryption: 'wpa', '!contains': true });
-			o2.datatype = 'wpakey';
 			o2.password = true;
 
 			o2 = s2.option(form.ListValue, 'eap_type', _('EAP-Method'));
@@ -1200,37 +1198,58 @@ return view.extend({
 		*/
 		s.handleCommit = function (map, ev) {
 			const w_sections = uci.sections('wireless', 'wifi-iface');
-			const device = L.toArray(map.lookupOption('device', '_add_trm'))[0].formvalue('_add_trm');
-			const network = L.toArray(map.lookupOption('network', '_add_trm'))[0].formvalue('_add_trm');
-			const ssid = L.toArray(map.lookupOption('ssid', '_add_trm'))[0].formvalue('_add_trm');
-			const ignore_bssid = L.toArray(map.lookupOption('ignore_bssid', '_add_trm'))[0].formvalue('_add_trm');
-			const bssid = L.toArray(map.lookupOption('bssid', '_add_trm'))[0].formvalue('_add_trm');
-			const encryption = L.toArray(map.lookupOption('encryption', '_add_trm'))[0].formvalue('_add_trm');
+			const option = (name) => L.toArray(map.lookupOption(name, '_add_trm'))[0];
+			const value = (name) => option(name).formvalue('_add_trm');
+
+			/*
+				the dialog is not saved through the map, so check the visible
+				fields here, an invalid one is marked and the dialog stays open
+			*/
+			let valid = true;
+			map.children[0].children.forEach(function (opt) {
+				if (opt.isActive('_add_trm')) {
+					opt.triggerValidation('_add_trm');
+					if (!opt.isValid('_add_trm')) {
+						valid = false;
+					}
+				}
+			});
+			if (!valid) {
+				return;
+			}
+
+			const device = value('device');
+			const network = value('network');
+			const ssid = value('ssid');
+			const ignore_bssid = value('ignore_bssid');
+			const bssid = value('bssid');
+			const encryption = value('encryption');
+			const ieee80211w = (encryption !== 'none') ? value('ieee80211w') : null;
 
 			let password = null;
-			let eap_type, auth, identity, anonymous_identity, ca_cert_usesystem, ca_cert, ieee80211w;
+			let eap_type, auth, identity, anonymous_identity, ca_cert_usesystem, ca_cert;
 			let client_cert, priv_key, priv_key_pwd;
 
 			if (encryption.includes('wpa')) {
-				eap_type = L.toArray(map.lookupOption('eap_type', '_add_trm'))[0].formvalue('_add_trm');
-				auth = L.toArray(map.lookupOption('auth', '_add_trm'))[0].formvalue('_add_trm');
-				identity = L.toArray(map.lookupOption('identity', '_add_trm'))[0].formvalue('_add_trm');
-				anonymous_identity = L.toArray(map.lookupOption('anonymous_identity', '_add_trm'))[0].formvalue('_add_trm');
-				password = L.toArray(map.lookupOption('password', '_add_trm'))[0].formvalue('_add_trm');
-				ca_cert_usesystem = L.toArray(map.lookupOption('ca_cert_usesystem', '_add_trm'))[0].formvalue('_add_trm');
-				ca_cert = L.toArray(map.lookupOption('ca_cert', '_add_trm'))[0].formvalue('_add_trm');
-				ieee80211w = L.toArray(map.lookupOption('ieee80211w', '_add_trm'))[0].formvalue('_add_trm');
+				eap_type = value('eap_type');
+				auth = value('auth');
+				identity = value('identity');
+				anonymous_identity = value('anonymous_identity');
+				password = value('password');
+				ca_cert_usesystem = value('ca_cert_usesystem');
+				ca_cert = value('ca_cert');
 
-				if (eap_type.includes('tls')) {
-					client_cert = L.toArray(map.lookupOption('client_cert', '_add_trm'))[0].formvalue('_add_trm');
-					priv_key = L.toArray(map.lookupOption('priv_key', '_add_trm'))[0].formvalue('_add_trm');
-					priv_key_pwd = L.toArray(map.lookupOption('priv_key_pwd', '_add_trm'))[0].formvalue('_add_trm');
+				if (eap_type === 'tls') {
+					client_cert = value('client_cert');
+					priv_key = value('priv_key');
+					priv_key_pwd = value('priv_key_pwd');
 				}
 			}
 			else {
-				password = L.toArray(map.lookupOption('key', '_add_trm'))[0].formvalue('_add_trm');
+				password = value('key');
 			}
-			if (!ssid || ((encryption.includes('psk') || encryption.includes('wpa') || encryption.includes('sae')) && !password)) {
+			/* EAP-TLS authenticates with the client certificate, no password needed */
+			if (!ssid || ((encryption.includes('psk') || encryption.includes('sae') || (encryption.includes('wpa') && eap_type !== 'tls')) && !password)) {
 				if (!ssid) {
 					ui.addNotification(null, E('p', _('Empty SSID, the uplink station could not be saved.')), 'error');
 				} else {
@@ -1269,8 +1288,7 @@ return view.extend({
 				uci.set('wireless', new_sid, 'password', password);
 				uci.set('wireless', new_sid, 'ca_cert_usesystem', ca_cert_usesystem);
 				uci.set('wireless', new_sid, 'ca_cert', ca_cert);
-				uci.set('wireless', new_sid, 'ieee80211w', ieee80211w);
-				if (eap_type.includes('tls')) {
+				if (eap_type === 'tls') {
 					uci.set('wireless', new_sid, 'client_cert', client_cert);
 					uci.set('wireless', new_sid, 'priv_key', priv_key);
 					uci.set('wireless', new_sid, 'priv_key_pwd', priv_key_pwd);
@@ -1278,6 +1296,7 @@ return view.extend({
 			} else {
 				uci.set('wireless', new_sid, 'key', password);
 			}
+			uci.set('wireless', new_sid, 'ieee80211w', ieee80211w);
 			uci.set('wireless', new_sid, 'disabled', '1');
 			handleSectionsAdd(network);
 			uci.save()
@@ -1292,7 +1311,7 @@ return view.extend({
 				.then(ui.hideModal)
 				.catch(function (err) {
 					ui.hideModal();
-					ui.addNotification(null, E('p', _('Saving the new uplink failed: %s').format(err)), 'error');
+					ui.addNotification(null, E('p', [_('Saving the new uplink failed: %s').format(err)]), 'error');
 				});
 		};
 		return m.render();
