@@ -39,7 +39,9 @@ return baseclass.extend({
 
 	// The "wifi" system feature only says /sbin/wifi exists.
 	available() {
-		return uci.load('wireless').then(() => uci.sections('wireless', 'wifi-device').length > 0);
+		return L.resolveDefault(uci.load('wireless').then(() => {
+			return uci.sections('wireless', 'wifi-device').length > 0;
+		}), false);
 	},
 
 	load() {
