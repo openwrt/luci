@@ -216,6 +216,16 @@ local function _wifi_iwinfo_by_ifname(ifname, force_phy_only)
 	end
 end
 
+local function _wifi_primary_device(device)
+	if type(device) == "table" then
+		device = device[1]
+	end
+
+	if type(device) == "string" and #device > 0 then
+		return device
+	end
+end
+
 local function _wifi_sid_by_netid(netid)
 	if type(netid) == "string" then
 		local radioname, netidx = netid:match("^(%w+)%.network(%d+)$")
@@ -225,7 +235,7 @@ local function _wifi_sid_by_netid(netid)
 			netidx = tonumber(netidx)
 			_uci:foreach("wireless", "wifi-iface",
 				function(s)
-					if s.device == radioname then
+					if _wifi_primary_device(s.device) == radioname then
 						i = i + 1
 						if i == netidx then
 							n = s[".name"]
@@ -254,13 +264,13 @@ end
 local function _wifi_netid_by_sid(sid)
 	local t, n = _uci:get("wireless", sid)
 	if t == "wifi-iface" and n ~= nil then
-		local radioname = _uci:get("wireless", n, "device")
-		if type(radioname) == "string" then
+		local radioname = _wifi_primary_device(_uci:get("wireless", n, "device"))
+		if radioname then
 			local i, netid = 0, nil
 
 			_uci:foreach("wireless", "wifi-iface",
 				function(s)
-					if s.device == radioname then
+					if _wifi_primary_device(s.device) == radioname then
 						i = i + 1
 						if s[".name"] == n then
 							netid = "%s.network%d" %{ radioname, i }
@@ -755,9 +765,11 @@ function get_interfaces(self)
 	local wfs = { }
 	_uci:foreach("wireless", "wifi-iface",
 		function(s)
-			if s.device then
-				num[s.device] = num[s.device] and num[s.device] + 1 or 1
-				local i = "%s.network%d" %{ s.device, num[s.device] }
+			-- MLO wifi-iface stores device as a list; format() needs a string.
+			local dev = _wifi_primary_device(s.device)
+			if dev then
+				num[dev] = num[dev] and num[dev] + 1 or 1
+				local i = "%s.network%d" %{ dev, num[dev] }
 				wfs[i] = interface(i)
 			end
 		end)
