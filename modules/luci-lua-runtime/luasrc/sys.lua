@@ -72,8 +72,57 @@ end
 
 net = {}
 
+-- DHCP lease hostnames are whatever the clients sent, i.e. arbitrary bytes:
+-- escape control characters, backslashes and invalid UTF-8 as \xNN
+local function _lease_hostname(name)
+	if type(name) ~= "string" or name == "" then
+		return nil
+	end
+
+	local out, i = { }, 1
+
+	while i <= #name do
+		local c, n, cp = name:byte(i), 0, 0
+
+		if c < 0x80 then
+			n, cp = 1, c
+		elseif c >= 0xc0 and c < 0xe0 then
+			n, cp = 2, c - 0xc0
+		elseif c >= 0xe0 and c < 0xf0 then
+			n, cp = 3, c - 0xe0
+		elseif c >= 0xf0 and c < 0xf8 then
+			n, cp = 4, c - 0xf0
+		end
+
+		for j = i + 1, i + n - 1 do
+			local b = name:byte(j)
+			if not b or b < 0x80 or b >= 0xc0 then
+				n = 0
+				break
+			end
+			cp = cp * 64 + b - 0x80
+		end
+
+		if (n == 2 and cp < 0x80) or (n == 3 and cp < 0x800) or
+		   (n == 4 and cp < 0x10000) or cp > 0x10ffff or
+		   (cp >= 0xd800 and cp <= 0xdfff) then
+			n = 0
+		end
+
+		if n > 0 and c >= 0x20 and c ~= 0x7f and c ~= 0x5c then
+			out[#out+1] = name:sub(i, i + n - 1)
+			i = i + n
+		else
+			out[#out+1] = ("\\x%02x"):format(c)
+			i = i + 1
+		end
+	end
+
+	return table.concat(out)
+end
+
 local function _nethints(what, callback)
-	local _, k, e, mac, ip, name, duid, iaid
+	local _, k, e, mac, ip, name
 	local cur = uci.cursor()
 	local ifn = { }
 	local hosts = { }
@@ -126,23 +175,27 @@ local function _nethints(what, callback)
 		end
 	)
 
-	cur:foreach("dhcp", "odhcpd",
-		function(s)
-			if type(s.leasefile) == "string" and fs.access(s.leasefile) then
-				for e in io.lines(s.leasefile) do
-					duid, iaid, name, _, ip = e:match("^# %S+ (%S+) (%S+) (%S+) (-?%d+) %S+ %S+ ([0-9a-f:.]+)/[0-9]+")
-					mac = net.duid_to_mac(duid)
-					if mac then
-						if ip and iaid == "ipv4" then
-							_add(what, mac, ip, nil, name ~= "*" and name)
-						elseif ip then
-							_add(what, mac, nil, ip, name ~= "*" and name)
-						end
-					end
+	local v4leases = luci.util.ubus("dhcp", "ipv4leases") or { }
+	for _, dev in pairs(v4leases.device or { }) do
+		for _, lease in ipairs(dev.leases or { }) do
+			mac = net.duid_to_mac(lease.mac)
+			if mac and lease.address then
+				_add(what, mac, lease.address, nil, _lease_hostname(lease.hostname))
+			end
+		end
+	end
+
+	local v6leases = luci.util.ubus("dhcp", "ipv6leases") or { }
+	for _, dev in pairs(v6leases.device or { }) do
+		for _, lease in ipairs(dev.leases or { }) do
+			mac = net.duid_to_mac(lease.duid)
+			if mac then
+				for _, addr in ipairs(lease["ipv6-addr"] or { }) do
+					_add(what, mac, nil, addr.address, _lease_hostname(lease.hostname))
 				end
 			end
 		end
-	)
+	end
 
 	cur:foreach("dhcp", "host",
 		function(s)
