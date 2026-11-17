@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-crowdsec-monitor 0.1.0\n"
+"Report-Msgid-Bugs-To: hellresistor@protonmail.com\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ar\n"
+"Plural-Forms: nplurals=6; plural=(n==0?0:n==1?1:n==2?2:n%100>=3&&n%100<=10?3:n%100>=11&&n%100<=99?4:5);\n"
+
+msgid "Expiring"
+msgstr "جارٍ الانتهاء"
+
+#, c-format
+msgid "%dd %dh"
+msgstr "%dd %dh"
+
+#, c-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
+
+#, c-format
+msgid "%dmin"
+msgstr "%dmin"
+
+msgid "Loading…"
+msgstr "جارٍ التحميل…"
+
+#, c-format
+msgid "Page %d of %d"
+msgstr "الصفحة %d من %d"
+
+msgid "CrowdSec Monitor"
+msgstr "CrowdSec Monitor"
+
+msgid "Local monitoring of the CrowdSec Firewall Bouncer. Shows the blocks currently applied in the OpenWrt nftables sets. The Bouncer synchronises decisions with the LAPI automatically; this dashboard is read-only."
+msgstr "مراقبة محلية لـ CrowdSec Firewall Bouncer. تعرض عمليات الحظر المطبقة حاليًا في مجموعات nftables على OpenWrt. يزامن Bouncer القرارات مع LAPI تلقائيًا؛ لوحة المعلومات للقراءة فقط."
+
+#, c-format
+msgid "Bouncer: %s"
+msgstr "Bouncer: %s"
+
+msgid "running"
+msgstr "قيد التشغيل"
+
+msgid "not detected"
+msgstr "لم يتم اكتشافه"
+
+msgid "nftables table accessible"
+msgstr "جدول nftables متاح"
+
+msgid "Could not query the ip crowdsec table"
+msgstr "تعذّر الاستعلام عن جدول ip crowdsec"
+
+msgid "Traffic processed"
+msgstr "حركة المرور المعالجة"
+
+msgid "Counter unavailable"
+msgstr "العداد غير متاح"
+
+msgid "Packets blocked"
+msgstr "الحزم المحظورة"
+
+msgid "set counters"
+msgstr "عدادات المجموعات"
+
+msgid "IPs in active sets"
+msgstr "عناوين IP في المجموعات النشطة"
+
+msgid "No active sets"
+msgstr "لا توجد مجموعات نشطة"
+
+msgid "Bouncer rules"
+msgstr "قواعد Bouncer"
+
+msgid "Check rules"
+msgstr "فحص القواعد"
+
+msgid "yes"
+msgstr "نعم"
+
+msgid "no"
+msgstr "لا"
+
+msgid "Collecting samples. History is temporary and resets when the router restarts."
+msgstr "جمع العينات. السجل مؤقت ويُعاد ضبطه عند إعادة تشغيل جهاز التوجيه."
+
+#, c-format
+msgid "processed/s: %s · blocked/s: %s"
+msgstr "تمت معالجة %s/ث · تم الحظر %s/ث"
+
+#, c-format
+msgid "Samples: %d · window: %d s · blue bars: processed packets/s · red: blocked packets/s. Volatile history (/tmp), resets with the router."
+msgstr "العينات: %d · النافذة: %d ث · الأشرطة الزرقاء: الحزم المعالجة/ث · الأحمر: الحزم المحظورة/ث. السجل مؤقت (/tmp) ويُعاد ضبطه عند إعادة تشغيل جهاز التوجيه."
+
+msgid "Activity history"
+msgstr "سجل النشاط"
+
+msgid "IPs currently blocked in nftables"
+msgstr "عناوين IP المحظورة حاليًا في nftables"
+
+msgid "All origins"
+msgstr "كل المصادر"
+
+msgid "Search IP"
+msgstr "البحث عن IP"
+
+msgid "Search IP address"
+msgstr "البحث عن عنوان IP"
+
+msgid "Refresh list"
+msgstr "تحديث القائمة"
+
+msgid "Previous"
+msgstr "السابق"
+
+msgid "Next"
+msgstr "التالي"
+
+msgid "Could not retrieve the IP list."
+msgstr "تعذّر استرداد قائمة IP."
+
+msgid "List unavailable"
+msgstr "القائمة غير متاحة"
+
+msgid "IP address"
+msgstr "عنوان IP"
+
+msgid "Origin"
+msgstr "المصدر"
+
+msgid "Time remaining"
+msgstr "الوقت المتبقي"
+
+msgid "Initial duration"
+msgstr "المدة الأولية"
+
+msgid "No IP found."
+msgstr "لم يتم العثور على IP."
+
+#, c-format
+msgid "%s addresses found"
+msgstr "%s عنوانًا موجودة"
+
+msgid "Querying…"
+msgstr "جارٍ الاستعلام…"
+
+msgid "The list shows the IPs currently present in the nftables sets managed by the Bouncer, not a direct query of the LAPI decisions. The Bouncer synchronises additions and removals automatically. Time remaining and initial duration come from the nftables expires and timeout fields. The exact time of the last LAPI query must be confirmed on the central server with cscli bouncers list."
+msgstr "تعرض القائمة عناوين IP الموجودة حاليًا في مجموعات nftables التي يديرها Bouncer، وليس استعلامًا مباشرًا لقرارات LAPI. يزامن Bouncer الإضافات والإزالات تلقائيًا. يأتي الوقت المتبقي والمدة الأولية من حقلي expires وtimeout في nftables. يجب التحقق من وقت آخر استعلام LAPI على الخادم المركزي باستخدام cscli bouncers list."
+
+msgid "Indicators refresh every 15 seconds. History keeps up to 240 samples in /tmp and is lost when the router restarts. The list refreshes when you search, filter or change page."
+msgstr "يتم تحديث المؤشرات كل 15 ثانية. يحتفظ السجل بما يصل إلى 240 عينة في /tmp ويُفقد عند إعادة تشغيل جهاز التوجيه. يتم تحديث القائمة عند البحث أو التصفية أو تغيير الصفحة."
+
