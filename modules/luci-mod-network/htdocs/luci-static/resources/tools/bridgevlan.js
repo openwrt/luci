@@ -107,10 +107,14 @@ function isVlanFilteringEnabled(deviceSection) {
 	return has_vlans;
 }
 
-/* A bridge qualifies only when every member resolves to a physical
- * ethernet/DSA port. Bridges spanning wifi APs, tunnels, wireguard, VLAN
- * sub-interfaces or nested bridges are excluded on purpose — they're legal
- * vlan-aware bridges but the T/U-on-physical-ports UI doesn't apply. */
+/* A bridge qualifies when it has at least one member and every member
+ * resolves to a physical ethernet/DSA port. Bridges spanning tunnels,
+ * wireguard, VLAN sub-interfaces or nested bridges are excluded on purpose —
+ * they're legal vlan-aware bridges but the T/U-on-physical-ports UI doesn't
+ * apply. Wireless members are not a disqualifier: netifd joins every AP of a
+ * wireless network attached to the bridge, which would otherwise hide this
+ * view on any device with Wi-Fi on the LAN bridge. collectBridgePorts() drops
+ * them from the list, so only genuine virtual members veto the bridge. */
 function findActiveBridge() {
 	let match = null;
 
@@ -173,7 +177,12 @@ function collectBridgePorts(deviceSection) {
 		});
 	}
 
-	return Object.keys(seen).sort(L.naturalCompare);
+	/* AP pseudo-interfaces are ordinary bridge members but their VLAN role is
+	 * derived from the wireless configuration, not from this view, so they are
+	 * not offered as editable port tiles. */
+	return Object.keys(seen).filter(function(name) {
+		return network.instantiateDevice(name).getType() !== 'wifi';
+	}).sort(L.naturalCompare);
 }
 
 function collectBridgeVlans(deviceSection) {
