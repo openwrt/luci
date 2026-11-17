@@ -1042,6 +1042,12 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.depends('type', 'bridge');
 
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'vlan_protocol', _('Bridge VLAN protocol'), _('Sets the VLAN protocol used on this bridge'));
+		o.default = '0x8100';
+		o.value('0x8100', _('802.1Q'));
+		o.value('0x88A8', _('802.1AD'));
+		o.depends('type', 'bridge');
+
 		o = this.replaceOption(s, 'devadvanced', form.Flag, 'stp', _('Enable <abbr title="Spanning Tree Protocol">STP</abbr>'), _('Enables the Spanning Tree Protocol on this bridge'));
 		o.default = o.disabled;
 		o.depends('type', 'bridge');
