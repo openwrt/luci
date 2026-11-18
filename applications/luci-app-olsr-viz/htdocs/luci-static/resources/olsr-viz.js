@@ -267,8 +267,8 @@ function place_new_nodes() {
 	for (let i = 0; i < newnodes.length; i++) {
 		let n = newnodes[i];
 		if (n.placed) { continue; }
-		let sp;
-		if (sp == getCookie("node_" + n.ip)) {
+		const sp = getCookie("node_" + n.ip);
+		if (sp) {
 			let xy = sp.split("x");
 			debug_writeln(("sp: " + sp + " xy[0]: " + xy[0] + " xy[1]: " + xy[1]));
 			n.x = parseFloat(xy[0]);
