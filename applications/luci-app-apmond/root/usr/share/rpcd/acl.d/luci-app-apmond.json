@@ -1,0 +1,21 @@
+{
+	"luci-app-apmond": {
+		"description": "Grant access to ApmonD settings, status, access points, clients and log",
+		"read": {
+			"ubus": {
+				"apmond": [ "status", "nodes", "node", "clients" ]
+			},
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/sbin/apmond read_log": [ "exec" ]
+			},
+			"uci": [ "apmond" ]
+		},
+		"write": {
+			"ubus": {
+				"apmond": [ "forget" ]
+			},
+			"uci": [ "apmond" ]
+		}
+	}
+}
