@@ -483,7 +483,7 @@ function refresh() {
 	refresh_running = false;
 }
 
-function set_showdesc(doit) {
+function set_showdesc(doit, noupdate) {
 	showdesc = doit;
 	if (!noupdate) refresh();
 }
