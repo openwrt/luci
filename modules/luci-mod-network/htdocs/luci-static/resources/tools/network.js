@@ -442,10 +442,10 @@ return baseclass.extend({
  * @param {any} dev
  * @param {boolean} isNew
  * @param {any} rtTables
- * @param {boolean} hasPSE
+ * @param {?Object} pse - netifd's PSE status of the device, null without PSE
  * @param {{speed: number, duplex: "full"|"half", base: string}[]} phyLinkSpeeds
  */
-	addDeviceOptions(s, dev, isNew, rtTables, hasPSE, phyLinkSpeeds) {
+	addDeviceOptions(s, dev, isNew, rtTables, pse, phyLinkSpeeds) {
 		const parent_dev = dev ? dev.getParent() : null;
 		const devname = dev ? dev.getName() : null;
 		let o, ss;
@@ -454,7 +454,7 @@ return baseclass.extend({
 		s.tab('devadvanced', _('Advanced device options'));
 		s.tab('brport', _('Bridge port specific options'));
 		s.tab('bridgevlan', _('Bridge VLAN filtering'));
-		if (hasPSE)
+		if (pse)
 			s.tab('devpse', _('PoE / PSE options'));
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'),
@@ -1188,7 +1188,7 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 
 		/* PSE / PoE options */
-		if (hasPSE) {
+		if (pse) {
 			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse', _('PoE (C33)'),
 				_('Power over Ethernet (IEEE 802.3af/at/bt) control for this port. Requires PSE hardware support.'));
 			o.value('', _('Default'));
@@ -1207,12 +1207,22 @@ return baseclass.extend({
 			o.placeholder = _('auto');
 			o.rmempty = true;
 
-			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse_priority', _('Port priority'),
-				_('Priority level for power allocation when total power budget is exceeded.'));
-			o.value('', _('Default'));
-			o.value('1', _('Critical'));
-			o.value('2', _('High'));
-			o.value('3', _('Low'));
+			/* 0 is the highest priority, as in ethtool; netifd reports the
+			 * largest value only for PSEs that support priorities */
+			const prioMax = pse['priority-max'];
+			if (prioMax > 0) {
+				o = this.replaceOption(s, 'devpse', form.ListValue, 'pse_priority', _('Port priority'),
+					_('Priority for power allocation when the total power budget is exceeded: 0 is the highest priority, and ports with a higher number lose power first.'));
+				o.value('', _('Default'));
+				for (let i = 0; i <= prioMax; i++) {
+					if (i == 0)
+						o.value(String(i), _('%d (highest)').format(i));
+					else if (i == prioMax)
+						o.value(String(i), _('%d (lowest)').format(i));
+					else
+						o.value(String(i), String(i));
+				}
+			}
 		}
 
 		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'promisc', _('Enable promiscuous mode'));
