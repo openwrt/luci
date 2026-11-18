@@ -4,6 +4,8 @@
 'require	uci';
 'require ui';
 'require fs';
+'require network';
+'require validation';
 
 return view.extend({
 	load: function () {
