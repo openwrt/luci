@@ -334,6 +334,44 @@ function addChildNetworkOptions(s, extra) {
 }
 
 /**
+ * Add the ESP proposal option of a child to the general tab of `s`.
+ *
+ * The name of the `option` may differ, so it can be added to other
+ * sections. If `extra` is set, the option is only shown in the dialog and
+ * only if these dependencies are met as well.
+ */
+function addChildProposalOption(s, option, extra) {
+	const o = s.taboption('general', form.MultiValue, option,
+		_('Crypto Proposal (Phase 2)'),
+		swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable') + '<br />' +
+		_('If none is selected, the default proposals of strongSwan are used.'),
+			'connections.<conn>.children.<child>.esp_proposals'));
+	o.load = function (section_id) {
+		this.keylist = [];
+		this.vallist = [];
+
+		uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
+			return section.is_esp == '1';
+		}).forEach(L.bind(function (section) {
+			this.value(section['.name']);
+		}, this));
+
+		return this.super('load', [section_id]);
+	};
+	o.tooltip = multiValueSectionTooltip([
+		_('Configured proposals are not available as ESP proposal: %s'),
+		_('Check the ESP Proposal option of the proposals or create the missing ones.')
+	], null);
+	o.tooltipicon = '⚠️';
+	o.rmempty = true;
+
+	if (extra) {
+		o.modalonly = true;
+		o.depends(Object.assign({}, extra));
+	}
+}
+
+/**
  * Add the tabs and options of a child section (ESP, phase 2) to `s`.
  */
 function addChildOptions(s) {
@@ -361,29 +399,7 @@ function addChildOptions(s) {
 	o.rmempty = true;
 	o.modalonly = true;
 
-	o = s.taboption('general', form.MultiValue, 'crypto_proposal',
-		_('Crypto Proposal (Phase 2)'),
-		swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable') + '<br />' +
-		_('If none is selected, the default proposals of strongSwan are used.'),
-			'connections.<conn>.children.<child>.esp_proposals'));
-	o.load = function (section_id) {
-		this.keylist = [];
-		this.vallist = [];
-
-		uci.sections('ipsec', 'crypto_proposal').filter(function (section) {
-			return section.is_esp == '1';
-		}).forEach(L.bind(function (section) {
-			this.value(section['.name']);
-		}, this));
-
-		return this.super('load', [section_id]);
-	};
-	o.tooltip = multiValueSectionTooltip([
-		_('Configured proposals are not available as ESP proposal: %s'),
-		_('Check the ESP Proposal option of the proposals or create the missing ones.')
-	], null);
-	o.tooltipicon = '⚠️';
-	o.rmempty = true;
+	addChildProposalOption(s, 'crypto_proposal', null);
 
 	o = s.taboption('advanced', form.Value, 'updown', _('Up/Down Script Path'),
 		swanctlDescr(_('Path to script to run on CHILD_SA up/down events'), 'connections.<conn>.children.<child>.updown'));
