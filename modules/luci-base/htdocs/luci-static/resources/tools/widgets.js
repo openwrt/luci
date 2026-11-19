@@ -701,6 +701,8 @@ var CBIDeviceSelect = form.ListValue.extend({
 				if (choices.hasOwnProperty(k))
 					continue;
 
+				/* Named fw4 device prefix ("zt+" or inverted "!wlan+"): optional
+				   leading "!", a name, then trailing "+". Not "+", "!+", or extra +/! in the name. */
 				const isPattern = this.firewallPatterns && /^!?[^!+]+\+$/.test(k);
 
 				choices[k] = E([
