@@ -775,7 +775,8 @@ function formatLocalRemote(local, remote) {
 /**
  * Return the names of the connections referencing a section in a list option,
  * except the connection `exclude`. Other section types are searched as well
- * if they are passed in `types`.
+ * if they are passed in `types`. The `option` may also be an array of list
+ * options.
  */
 function getReferencingConnections(option, section_id, exclude, types) {
 	return uci.sections('ipsec').filter(function (connection) {
@@ -785,7 +786,9 @@ function getReferencingConnections(option, section_id, exclude, types) {
 		if (connection['.name'] == exclude)
 			return false;
 
-		return L.toArray(connection[option]).includes(section_id);
+		return L.toArray(option).some(function (name) {
+			return L.toArray(connection[name]).includes(section_id);
+		});
 	}).map(connection => connection['.name']);
 }
 
@@ -808,7 +811,8 @@ function getListWidget(map, connection, option) {
  *
  * Only shown in the table, since it is not configurable. If the section `s`
  * belongs to a connection, the form value of its list option is used, since
- * it may not be saved yet. See updateConnectionsOption().
+ * it may not be saved yet. See updateConnectionsOption(). Otherwise the
+ * `option` may also be an array of list options.
  */
 function addConnectionsOption(s, option, title, types) {
 	const o = s.option(form.DummyValue, '_connections', title);
@@ -821,9 +825,12 @@ function addConnectionsOption(s, option, title, types) {
 			if (!types.includes(section['.type']))
 				return false;
 
-			const list = (widget && section['.name'] == connection) ? widget.getValue() : section[option];
+			if (widget && section['.name'] == connection)
+				return L.toArray(widget.getValue()).includes(section_id);
 
-			return L.toArray(list).includes(section_id);
+			return L.toArray(option).some(function (name) {
+				return L.toArray(section[name]).includes(section_id);
+			});
 		}).map(section => section['.name']);
 
 		return names.length > 0 ? names.join(', ') : null;
