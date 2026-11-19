@@ -1101,8 +1101,10 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('general', form.ListValue, 'config_mode', _('Configuration Mode'),
-			_('Simple: Both sides authenticate with a pre-shared key, which is configured on the Authentication tab.') + '<br />' +
-			_('Advanced: The authentication rounds are configured with local and remote sections, e.g. for certificates or EAP.'));
+			_('Simple: Both sides authenticate with a pre-shared key, which is configured on the Authentication tab.') + ' ' +
+			_('The local and remote networks are set on this tab.') + '<br />' +
+			_('Advanced: The authentication rounds are configured with local and remote sections, e.g. for certificates or EAP.') + ' ' +
+			_('The networks are configured with child sections.'));
 		o.value('simple', _('Simple'));
 		o.value('advanced', _('Advanced'));
 		o.rmempty = false;
@@ -1173,6 +1175,8 @@ return view.extend({
 		]);
 		o.tooltipicon = '⚠️';
 		o.rmempty = false;
+		o.modalonly = true;
+		o.depends('config_mode', 'advanced');
 		o.parse = parseReferenceList;
 		o.onchange = function (ev, section_id) {
 			updateConnectionsOption(this.map, section_id, 'child');
@@ -1188,6 +1192,18 @@ return view.extend({
 			return formatLocalRemote(getReferences(section_id, 'local'),
 				getReferences(section_id, 'remote'));
 		};
+
+		o = s.option(form.DummyValue, '_networks', _('Networks'));
+		o.modalonly = false;
+		o.cfgvalue = function (section_id) {
+			if (getConfigMode(section_id) == 'simple')
+				return formatLocalRemote(L.toArray(uci.get('ipsec', section_id, 'local_ts')),
+					L.toArray(uci.get('ipsec', section_id, 'remote_ts')));
+
+			return getReferences(section_id, 'child').join(', ') || null;
+		};
+
+		addChildNetworkOptions(s, { 'config_mode': 'simple' });
 
 		o = s.taboption('authentication', form.Value, 'psk', _('Pre-shared Key'),
 			swanctlDescr(_('Key that both sides use for authentication.') + ' ' +
@@ -1494,10 +1510,11 @@ return view.extend({
 		o.rmempty = true;
 		o.modalonly = true;
 
-		addEmbeddedSection(s, 'children', 'child', _('Children'),
+		o = addEmbeddedSection(s, 'children', 'child', _('Children'),
 			_('The children of this connection are selected on the General tab.') + ' ' +
 			_('Children used by other connections cannot be deleted here.'),
 			addChildOptions);
+		o.depends('config_mode', 'advanced');
 
 		o = addEmbeddedSection(s, 'locals', 'local', _('Local'),
 			_('The locals of this connection and their order are selected on the Authentication tab.') + ' ' +
