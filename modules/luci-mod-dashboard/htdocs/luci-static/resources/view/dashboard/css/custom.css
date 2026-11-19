@@ -57,42 +57,48 @@
 }
 
 /* ---- Layout ---- */
-.dashboard-client-heading {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	gap: 8px;
-	margin-bottom: 12px;
+/* Detail panes use the theme's tables, including their narrow-screen labels. */
+.dashboard-detail-groups {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--dashboard-gap);
 }
 
-.Dashboard .dashboard-client-heading > h3 {
-	display: flex;
-	align-items: center;
-	gap: 10px;
+.Dashboard .dashboard-detail-heading {
 	margin: 0;
-	padding: 0;
+	padding: 0 0 .6em;
 	border: 0;
+	font-size: 1em;
+	font-weight: 600;
+	line-height: 1.5;
 }
 
-.dashboard-client-count {
-	font-size: 12px;
-	font-weight: normal;
+.dashboard-detail .table { margin-bottom: 0; font-variant-numeric: tabular-nums; }
+.dashboard-detail .table :is(.th, .td) {
+	text-align: start;
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
+/* Use the row's surface for labels, not a separate header background. */
+.dashboard-detail .table th {
+	background-color: transparent;
 	color: var(--dashboard-text-muted);
+	font-size: inherit;
+	letter-spacing: normal;
+	text-transform: none;
 }
+.dashboard-detail .dashboard-key-values th { width: 33%; font-weight: normal; }
+.dashboard-detail .table .table-titles .th { font-weight: 600; }
 
-.dashboard-network-details { margin-top: 16px; border-top: 1px solid var(--dashboard-border); }
-.dashboard-network-details > summary { padding: 12px 0; cursor: pointer; font-weight: bold; color: var(--dashboard-text); }
+/* Keep the theme's compact, labelled cells on small screens. */
+@media (min-width: 769px) {
+	.dashboard-detail .table .tr > :is(.th, .td) { padding: .55rem .75rem; }
+}
 
 .Dashboard [data-dashboard-section]:focus,
 .Dashboard [data-tab]:focus {
 	outline: none;
-}
-
-.Dashboard .dashboard-detail:focus-visible,
-.Dashboard .dashboard-detail [data-dashboard-section]:focus-visible {
-	outline: 2px solid var(--dashboard-primary);
-	outline-offset: 1px;
 }
 
 .dashboard-settings .dashboard-widget-list {
@@ -562,120 +568,8 @@
 	white-space: nowrap;
 }
 
-/* ---- Wireless network boxes (LuCI .ifacebox) ---- */
-.dashboard-net-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
-	gap: 12px;
-	padding: 1px;
-	margin-bottom: 18px;
-}
-
-.Dashboard .ifacebox {
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	min-width: 0;
-	margin: 0;
-	border-color: var(--dashboard-border);
-	overflow: hidden;
-}
-
-.Dashboard .ifacebox[data-dashboard-network-card][aria-current="true"] {
-	border-color: var(--dashboard-primary);
-	box-shadow: 0 0 0 1px var(--dashboard-primary);
-}
-
-.Dashboard .ifacebox[data-dashboard-network-card]:focus-visible {
-	outline: 2px solid var(--dashboard-primary);
-	outline-offset: 2px;
-}
-
-.Dashboard .ifacebox > .ifacebox-head {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	gap: 10px;
-	width: auto;
-	padding: 10px 14px;
-	background: var(--dashboard-surface-alt);
-	border-bottom: 1px solid var(--dashboard-border);
-	color: var(--dashboard-text);
-	text-align: left;
-	white-space: normal;
-}
-
-.dashboard-net-title {
-	min-width: 0;
-	overflow-wrap: anywhere;
-}
-
-.dashboard-net-title > strong {
-	display: block;
-	color: var(--dashboard-text);
-}
-
-.dashboard-net-band {
-	display: block;
-	margin-top: 2px;
-	font-size: 12px;
-	font-weight: normal;
-	color: var(--dashboard-text-muted);
-}
-
-.Dashboard .ifacebox-body {
-	display: grid;
-	gap: 10px;
-	padding: 12px 14px;
-	text-align: left;
-	white-space: normal;
-}
-
-.dashboard-net-count b {
-	display: block;
-	font-size: 24px;
-	font-weight: 700;
-	line-height: 1;
-	letter-spacing: -0.02em;
-	color: var(--dashboard-text);
-}
-
-.dashboard-net-count small {
-	display: block;
-	margin-top: 2px;
-	font-size: 11.5px;
-	color: var(--dashboard-text-muted);
-}
-
-.dashboard-net-fields {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 8px 14px;
-	overflow-wrap: anywhere;
-	font-size: 12.5px;
-}
-
-.dashboard-net-fields b {
-	color: var(--dashboard-text);
-}
-
-.dashboard-net-fields span {
-	display: block;
-	font-size: 11.5px;
-	color: var(--dashboard-text-muted);
-}
-
-.dashboard-net-note {
-	font-size: 12.5px;
-	color: var(--dashboard-text-muted);
-}
-
-#dashboard-wifi-table .td {
-	white-space: normal;
-	overflow-wrap: anywhere;
-}
-
-.dashboard-client-stack {
+/* ---- Wireless detail tables ---- */
+.dashboard-detail-stack {
 	display: flex;
 	flex-direction: column;
 	gap: 4px;
@@ -685,25 +579,39 @@
 	line-height: 1.4;
 }
 
-.dashboard-client-primary {
+.dashboard-detail-primary {
 	font-weight: 600;
 	color: var(--dashboard-text);
 }
 
-.dashboard-client-secondary {
+.dashboard-detail-note,
+.dashboard-detail-secondary {
 	font-size: 0.875em;
 	color: var(--dashboard-text-muted);
 }
 
-.dashboard-client-transfer {
-	font-variant-numeric: tabular-nums;
+.dashboard-net-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+	gap: 12px;
+}
+.dashboard-net-grid .ifacebox { min-width: 0; margin: 0; white-space: normal; overflow-wrap: anywhere; }
+.dashboard-net-grid .ifacebox-body { display: grid; gap: 10px; padding: 12px 14px; text-align: start; }
+.dashboard-net-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+.dashboard-net-fields small { display: block; }
+.Dashboard .dashboard-detail:focus-visible,
+.Dashboard .dashboard-detail [data-dashboard-section]:focus-visible,
+.dashboard-net-grid > [aria-current="true"],
+.dashboard-net-grid > :focus-visible {
+	outline: 2px solid var(--dashboard-primary);
+	outline-offset: 1px;
 }
 
-.Dashboard tr.dashboard-client-located > td {
+.dashboard-detail tr[aria-current="true"] > td {
 	background: var(--dashboard-surface-alt);
 }
 
-.Dashboard tr.dashboard-client-located > td:first-child {
+.dashboard-detail tr[aria-current="true"] > td:first-child {
 	box-shadow: inset 3px 0 var(--dashboard-primary);
 }
 

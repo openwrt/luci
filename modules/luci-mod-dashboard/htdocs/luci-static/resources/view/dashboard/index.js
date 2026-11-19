@@ -81,10 +81,8 @@ function collectSections(includes, results, layout) {
 					else if (includes[i].widgets == null)
 						sections[slot].push((slot == 'tabs') ? item : item.node);
 					else if (layout[slot].includes(item.id)) {
-						const value = (slot == 'tabs') ? item.content : item.node;
-						const node = (typeof(value) == 'function') ? value() : value;
-
-						found[slot][item.id] = (slot == 'tabs') ? Object.assign({}, item, { content: node }) : node;
+						found[slot][item.id] = slot === 'tabs' ? item
+							: typeof(item.node) === 'function' ? item.node() : item.node;
 					}
 				});
 		}
@@ -163,6 +161,25 @@ function updateCharts(container, chartNodes) {
 	});
 }
 
+// A hidden tab retains only its newest pending render, not a DOM per sample.
+const pendingTabs = new WeakMap();
+
+function renderPendingTab(pane) {
+	const tab = pendingTabs.get(pane);
+	if (!tab || pane.dataset.tabActive !== 'true')
+		return;
+	pendingTabs.delete(pane);
+	try {
+		const content = tab.content();
+		if (pane.childNodes.length !== 1 || pane.firstChild !== content)
+			L.dom.content(pane, content);
+	}
+	catch (e) {
+		console.error(e);
+		L.dom.content(pane, E('em', {}, _('Details unavailable.')));
+	}
+}
+
 function updateTabs(tabMap, tabGroup, items, form) {
 	const menu = tabMap.querySelector('.cbi-tabmenu');
 	const existingPanes = Array.from(tabGroup.children);
@@ -185,12 +202,18 @@ function updateTabs(tabMap, tabGroup, items, form) {
 			tabGroup.removeChild(tabGroup.firstChild);
 
 		items.forEach(tab => {
+			// LuCI hides empty panes; keep a placeholder until first activation.
 			const pane = (tab.id === 'layout' && form) ? form : E('div', {
 				'class': 'cbi-section dashboard-detail',
 				'id': 'dashboard-detail-' + tab.id,
 				'data-tab': tab.id,
 				'data-tab-title': (tab.count != null) ? '%s (%d)'.format(tab.title, tab.count) : tab.title
-			}, (typeof(tab.content) == 'function') ? tab.content() : tab.content);
+			}, typeof(tab.content) === 'function' ? E('em', {}, _('Loading view…')) : tab.content);
+
+			if (typeof(tab.content) === 'function')
+				pendingTabs.set(pane, tab);
+			if (tab.id !== 'layout')
+				pane.addEventListener('cbi-tab-active', () => renderPendingTab(pane));
 
 			if (tab.id === activeId)
 				pane.setAttribute('data-tab-active', 'true');
@@ -217,10 +240,13 @@ function updateTabs(tabMap, tabGroup, items, form) {
 			if (tab.id === 'layout')
 				return;
 
-			const contentNode = (typeof(tab.content) == 'function') ? tab.content() : tab.content;
-			if (contentNode) {
-				if (pane.childNodes.length !== 1 || pane.firstChild !== contentNode)
-					L.dom.content(pane, contentNode);
+			if (typeof(tab.content) === 'function') {
+				pendingTabs.set(pane, tab);
+				renderPendingTab(pane);
+			}
+			else if (tab.content && (pane.childNodes.length !== 1 || pane.firstChild !== tab.content)) {
+				pendingTabs.delete(pane);
+				L.dom.content(pane, tab.content);
 			}
 		});
 	}
