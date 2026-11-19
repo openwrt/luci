@@ -704,6 +704,31 @@ function setReferences(connection, option, list) {
 }
 
 /**
+ * Return the configuration mode of a connection.
+ *
+ * Connections without the option were configured with local and remote
+ * sections, as the remote sections were mandatory.
+ */
+function getConfigMode(connection) {
+	const mode = uci.get('ipsec', connection, 'config_mode');
+
+	if (mode)
+		return mode;
+
+	if (getReferences(connection, 'remote').length > 0)
+		return 'advanced';
+
+	return 'simple';
+}
+
+/**
+ * Show the local and remote part of a connection in one table column.
+ */
+function formatLocalRemote(local, remote) {
+	return '%s ⇄ %s'.format(local.join(', ') || '-', remote.join(', ') || '-');
+}
+
+/**
  * Return the names of the connections referencing a section in a list option,
  * except the connection `exclude`. Other section types are searched as well
  * if they are passed in `types`.
@@ -924,6 +949,8 @@ function addEmbeddedSection(s, tab, option, title, description, addOptions) {
 
 	addOptions(ss);
 	addConnectionsOption(ss, option, _('Referenced by'), [ 'connection' ]);
+
+	return o;
 }
 
 let migrationOverlay = null;
@@ -1044,6 +1071,19 @@ return view.extend({
 			_('Configuration is enabled or not'));
 		o.rmempty = false;
 
+		o = s.taboption('general', form.ListValue, 'config_mode', _('Configuration Mode'),
+			_('Simple: Both sides authenticate with a pre-shared key, which is configured on the Authentication tab.') + '<br />' +
+			_('Advanced: The authentication rounds are configured with local and remote sections, e.g. for certificates or EAP.'));
+		o.value('simple', _('Simple'));
+		o.value('advanced', _('Advanced'));
+		o.rmempty = false;
+		// The derived mode must be written, as the init script treats a
+		// missing option as advanced.
+		o.forcewrite = true;
+		o.load = function (section_id) {
+			return getConfigMode(section_id);
+		};
+
 		o = s.taboption('general', form.DynamicList, 'remote_addrs', _('Remote Endpoints'),
 			swanctlDescr(_('IP address or FQDN name of the tunnel remote endpoints.') + ' ' +
 			_('If no value is specified, "%any" is assumed.'),
@@ -1109,11 +1149,54 @@ return view.extend({
 			updateConnectionsOption(this.map, section_id, 'child');
 		};
 
+		// Only shown in the table, as a summary for both configuration modes.
+		o = s.option(form.DummyValue, '_authentication', _('Authentication'));
+		o.modalonly = false;
+		o.cfgvalue = function (section_id) {
+			if (getConfigMode(section_id) == 'simple')
+				return _('Pre-shared Key');
+
+			return formatLocalRemote(getReferences(section_id, 'local'),
+				getReferences(section_id, 'remote'));
+		};
+
+		o = s.taboption('authentication', form.Value, 'psk', _('Pre-shared Key'),
+			swanctlDescr(_('Key that both sides use for authentication.') + ' ' +
+			_('The key is bound to the local and remote identifier.') + ' ' +
+			_('Without identifiers, the key applies to all connections.') + ' ' +
+			_('If no key is entered, the global secrets configured on the Secrets page are used.'),
+				'secrets.ike-<conn>.secret'));
+		o.password = true;
+		o.modalonly = true;
+		o.depends('config_mode', 'simple');
+		o.validate = function (section_id, value) {
+			if (value && value.includes('"'))
+				return _('The key must not contain double quotes.');
+
+			return true;
+		};
+
+		o = s.taboption('authentication', form.Value, 'local_id', _('Local Identifier'),
+			swanctlDescr(_('Local identifier for IKE (phase 1)'), 'connections.<conn>.local.id'));
+		o.datatype = 'string';
+		o.placeholder = 'C=US, O=Acme Corporation, CN=headquarters';
+		o.modalonly = true;
+		o.depends('config_mode', 'simple');
+
+		o = s.taboption('authentication', form.Value, 'remote_id', _('Remote Identifier'),
+			swanctlDescr(_('Remote identifier for IKE (phase 1)'), 'connections.<conn>.remote.id'));
+		o.datatype = 'string';
+		o.placeholder = 'C=US, O=Acme Corporation, CN=soho';
+		o.modalonly = true;
+		o.depends('config_mode', 'simple');
+
 		o = s.taboption('authentication', form.DynamicList, 'local', _('Local Authentication'),
 			swanctlDescr(_('Local authentication sections used for this connection.') + ' ' +
 			_('Each section corresponds to one authentication round.') + ' ' +
 			_('The order matters: the sections are used in the order they are listed.'),
 				'connections.<conn>.local<suffix>'));
+		o.depends('config_mode', 'advanced');
+		o.modalonly = true;
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -1148,6 +1231,8 @@ return view.extend({
 			_('Each section corresponds to one authentication round.') + ' ' +
 			_('The order matters: the sections are used in the order they are listed.'),
 				'connections.<conn>.remote<suffix>'));
+		o.depends('config_mode', 'advanced');
+		o.modalonly = true;
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -1187,11 +1272,13 @@ return view.extend({
 		o.default = 'ifasked';
 		o.optional = true;
 		o.modalonly = true;
+		o.depends('config_mode', 'advanced');
 
 		o = s.taboption('authentication', form.Flag, 'send_certreq', _('Send Certificate Request'),
 			swanctlDescr(_('Send certificate request payloads to offer trusted root CA certificates to the peer'), 'connections.<conn>.send_certreq'));
 		o.default = '1';
 		o.modalonly = true;
+		o.depends('config_mode', 'advanced');
 
 		o = s.taboption('advanced', form.DynamicList, 'vips', _('Virtual IP addresses'),
 			swanctlDescr(_('Virtual IP addresses used as the source IP for outgoing traffic.'), 'connections.<conn>.vips'));
@@ -1383,15 +1470,17 @@ return view.extend({
 			_('Children used by other connections cannot be deleted here.'),
 			addChildOptions);
 
-		addEmbeddedSection(s, 'locals', 'local', _('Local'),
+		o = addEmbeddedSection(s, 'locals', 'local', _('Local'),
 			_('The locals of this connection and their order are selected on the Authentication tab.') + ' ' +
 			_('Locals used by other connections cannot be deleted here.'),
 			addLocalOptions);
+		o.depends('config_mode', 'advanced');
 
-		addEmbeddedSection(s, 'remotes', 'remote', _('Remote'),
+		o = addEmbeddedSection(s, 'remotes', 'remote', _('Remote'),
 			_('The remotes of this connection and their order are selected on the Authentication tab.') + ' ' +
 			_('Remotes used by other connections cannot be deleted here.'),
 			addRemoteOptions);
+		o.depends('config_mode', 'advanced');
 
 		// Local Configuration
 		s = m.section(form.GridSection, 'local', _('Local'),
