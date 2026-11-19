@@ -256,32 +256,40 @@ function addFileOption(s, name, title, descr, root) {
 }
 
 /**
- * Add the tabs and options of a child section (ESP, phase 2) to `s`.
+ * Add the network options of a child to the general tab of `s`.
+ *
+ * If `extra` is set, the options are only shown in the dialog and only if
+ * these dependencies are met as well, so they can be added to other
+ * sections.
  */
-function addChildOptions(s) {
+function addChildNetworkOptions(s, extra) {
 	let o;
 
-	o = s.tab('general', _('General'));
-	o = s.tab('advanced', _('Advanced'));
-	o = s.tab('expert', _('Expert'));
+	const depends = function (option, dependency) {
+		option.depends(Object.assign({}, dependency, extra));
+	};
 
-	o = s.taboption('general', form.ListValue, 'mode', _('Child mode'), swanctlDescr(null, 'connections.<conn>.children.<child>.mode'));
-	o.rmempty = false;
-	o.value('tunnel', _('Tunnel'));
-	o.value('transport', _('Transport'));
-	o.default = 'tunnel';
+	const restrict = function (option) {
+		if (!extra)
+			return;
+
+		option.modalonly = true;
+		depends(option, {});
+	};
 
 	o = s.taboption('general', form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
 		swanctlDescr(_('Local network(s)'), 'connections.<conn>.children.<child>.local_ts'));
 	o.datatype = 'cidr';
 	o.placeholder = '192.168.1.1/24';
 	o.rmempty = false;
+	restrict(o);
 
 	o = s.taboption('general', form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
 		swanctlDescr(_('Remote network(s)'), 'connections.<conn>.children.<child>.remote_ts'));
 	o.datatype = 'cidr';
 	o.placeholder = '192.168.2.1/24';
 	o.rmempty = false;
+	restrict(o);
 
 	o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
 		swanctlDescr(_('XFRM interface ID set on input and output interfaces'), 'connections.<conn>.children.<child>.if_id_in, connections.<conn>.children.<child>.if_id_out'));
@@ -311,6 +319,7 @@ function addChildOptions(s) {
 	o.tooltipicon = '⚠️';
 	o.optional = true;
 	o.modalonly = true;
+	restrict(o);
 
 	o = s.taboption('general', form.ListValue, 'start_action', _('Start Action'),
 		swanctlDescr(_('Action on initial configuration load'), 'connections.<conn>.children.<child>.start_action'));
@@ -321,6 +330,26 @@ function addChildOptions(s) {
 	o.default = '';
 	o.rmempty = true;
 	o.modalonly = true;
+	restrict(o);
+}
+
+/**
+ * Add the tabs and options of a child section (ESP, phase 2) to `s`.
+ */
+function addChildOptions(s) {
+	let o;
+
+	o = s.tab('general', _('General'));
+	o = s.tab('advanced', _('Advanced'));
+	o = s.tab('expert', _('Expert'));
+
+	o = s.taboption('general', form.ListValue, 'mode', _('Child mode'), swanctlDescr(null, 'connections.<conn>.children.<child>.mode'));
+	o.rmempty = false;
+	o.value('tunnel', _('Tunnel'));
+	o.value('transport', _('Transport'));
+	o.default = 'tunnel';
+
+	addChildNetworkOptions(s, null);
 
 	o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
 		swanctlDescr(_('Action when CHILD_SA is closed'), 'connections.<conn>.children.<child>.close_action'));
