@@ -854,39 +854,6 @@ return view.extend({
 			addRemoteOptions);
 		o.depends('config_mode', 'advanced');
 
-		// Local Configuration
-		s = m.section(form.GridSection, 'local', _('Local'),
-			_('Define local IKE authentication rounds referenced from connections.'));
-		s.addremove = true;
-		s.nodescriptions = true;
-		s.renderSectionAdd = sectionNameCheck;
-
-		addLocalOptions(s);
-		addConnectionsOption(s, 'local', _('Referenced by'), [ 'connection' ]);
-		preventReferencedRemove(s, 'local', [ 'connection' ]);
-
-		// Remote Configuration
-		s = m.section(form.GridSection, 'remote', _('Remote'),
-			_('Define remote IKE authentication rounds referenced from connections.'));
-		s.addremove = true;
-		s.nodescriptions = true;
-		s.renderSectionAdd = sectionNameCheck;
-
-		addRemoteOptions(s);
-		addConnectionsOption(s, 'remote', _('Referenced by'), [ 'connection' ]);
-		preventReferencedRemove(s, 'remote', [ 'connection' ]);
-
-		// Children Configuration
-		s = m.section(form.GridSection, 'child', _('Children'),
-			_('Define Connection Children to be used in Remote Configurations.'));
-		s.addremove = true;
-		s.nodescriptions = true;
-		s.renderSectionAdd = sectionNameCheck;
-
-		addChildOptions(s);
-		addConnectionsOption(s, 'child', _('Referenced by'), [ 'connection' ]);
-		preventReferencedRemove(s, 'child', [ 'connection' ]);
-
 		// Crypto Proposals
 		s = m.section(form.GridSection, 'crypto_proposal',
 			_('Encryption Proposals'),
