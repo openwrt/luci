@@ -530,7 +530,8 @@ function _renderCerts(certs) {
 
 	let rows = certs.map(function (cert) {
 		let domain = cert.name.replace(/\.fullchain\.crt$/, '');
-		let issueDate = new Date(cert.mtime * 1000).toLocaleDateString();
+		let mtime = (cert.type === 'symlink') ? cert.target?.mtime : cert.mtime;
+		let issueDate = mtime > 0 ? new Date(mtime * 1000).toLocaleDateString() : '';
 		return [
 			domain,
 			'/etc/ssl/acme/' + domain + '.key',
