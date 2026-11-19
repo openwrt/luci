@@ -13,10 +13,17 @@
 				],
 				"uci": [
 					"get"
+				],
+				"file": [
+					"read",
+					"stat"
 				]
 			},
 			"file": {
-				"/sys/firmware/efi": [ "list" ]
+				"/sys/firmware/efi": [ "list" ],
+				"/rom/etc/uci-defaults/*": [ "read" ],
+				"/etc/uci-defaults/*": [ "read" ],
+				"/root/*": [ "read" ]
 			},
 			"uci": [
 				"attendedsysupgrade"
