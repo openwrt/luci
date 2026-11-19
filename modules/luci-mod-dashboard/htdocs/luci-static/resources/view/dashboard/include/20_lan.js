@@ -57,8 +57,7 @@ return baseclass.extend({
 				device.ipv4,
 				device.macaddr
 			]),
-			emptyText: _('No active leases'),
-			foot: [ _('Total'), String(this.params.lan.devices.length) ]
+			emptyText: _('No active leases')
 		});
 	},
 

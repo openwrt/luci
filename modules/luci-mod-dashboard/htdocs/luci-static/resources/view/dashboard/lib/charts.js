@@ -146,6 +146,14 @@ return baseclass.extend({
 		return E('em', {}, [ text ]);
 	},
 
+	keyValueTable(rows) {
+		return E('table', { 'class': 'table dashboard-key-values' }, rows.map(([ label, value ], i) =>
+			E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, [
+				E('th', { 'class': 'td left', 'scope': 'row' }, [ label ]),
+				E('td', { 'class': 'td left' }, [ value ])
+			])));
+	},
+
 	updateTable(table, opts) {
 		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
 		const head = opts.head || [];
@@ -266,10 +274,9 @@ return baseclass.extend({
 		if (existing && existing.parentNode)
 			return this.updateTable(existing, opts);
 
-		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
 		const head = opts.head || [];
 		const table = E('table', { 'id': opts.id || null, 'class': 'table ' + (opts.className || '') }, [
-			E('tr', { 'class': 'tr table-titles' }, head.map(title => cell('th', title)))
+			E('tr', { 'class': 'tr table-titles' }, head.map(title => E('th', { 'class': 'th', 'scope': 'col' }, [ title ])))
 		]);
 
 		return this.updateTable(table, opts);

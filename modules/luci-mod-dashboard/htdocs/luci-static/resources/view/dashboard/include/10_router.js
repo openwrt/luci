@@ -41,14 +41,6 @@ return baseclass.extend({
 		return (value == null || value === '') ? '-' : value;
 	},
 
-	// Same markup as the status page's system table.
-	renderKeyValueTable(rows) {
-		return E('table', { 'class': 'table' }, rows.map(row => E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td left', 'width': '33%' }, [ row.title ]),
-			E('td', { 'class': 'td left' }, [ this.renderValue(row.value) ])
-		])));
-	},
-
 	renderInternetColumn(group, network) {
 		const connected = group.connected.value === true;
 		const rows = [];
@@ -62,20 +54,20 @@ return baseclass.extend({
 			if (/^addrs/.test(key) && Array.isArray(value))
 				value = value.map(a => a.split('/')[0]);
 
-			rows.push({ title: group[key].title, value: value });
+			rows.push([ group[key].title, this.renderValue(value) ]);
 		}
 
 		return E('div', { 'data-dashboard-network': network }, [
-			E('h3', {}, [
+			E('h3', { 'class': 'dashboard-detail-heading' }, [
 				group.title, network ? ' · ' + network : '', ' ',
 				charts.badge(connected ? _('Connected') : _('Not connected'), connected ? 'success' : 'warning')
 			]),
-			connected ? this.renderKeyValueTable(rows) : charts.empty(_('Not configured or no address acquired'))
+			connected ? charts.keyValueTable(rows) : charts.empty(_('Not configured or no address acquired'))
 		]);
 	},
 
 	renderInternetTab() {
-		this.internetNode = E('div', {}, [ 4, 6 ].flatMap(family => {
+		this.internetNode = E('div', { 'class': 'dashboard-detail-groups' }, [ 4, 6 ].flatMap(family => {
 			const networks = this.wanData[family === 4 ? 0 : 1];
 			return networks.length ? networks.map(net => {
 				const data = this.internetData(family === 4 ? [ [ net ], [] ] : [ [], [ net ] ]);
@@ -94,9 +86,9 @@ return baseclass.extend({
 		const rows = [];
 
 		for (const key in this.params.router)
-			rows.push({ title: this.params.router[key].title, value: this.params.router[key].value });
+			rows.push([ this.params.router[key].title, this.renderValue(this.params.router[key].value) ]);
 
-		return this.renderKeyValueTable(rows);
+		return charts.keyValueTable(rows);
 	},
 
 	renderInternetKpi() {
