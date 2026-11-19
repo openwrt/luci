@@ -1059,43 +1059,6 @@ return view.extend({
 		o.placeholder = '%any';
 		o.modalonly = true;
 
-		o = s.taboption('general', form.DynamicList, 'vips', _('Virtual IP addresses'),
-			swanctlDescr(_('Virtual IP addresses used as the source IP for outgoing traffic.'), 'connections.<conn>.vips'));
-		o.datatype = 'ipaddr';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.MultiValue, 'pools', _('Pools'),
-			swanctlDescr(_('Pools from which virtual IP addresses and configuration attributes are assigned to the remote peers.') + '<br />' +
-			_('Pools can be defined on the general page.'),
-				'connections.<conn>.pools'));
-		o.load = function (section_id) {
-			this.keylist = [];
-			this.vallist = [];
-
-			uci.sections('ipsec', 'pools').forEach(L.bind(function (section) {
-				this.value(section['.name']);
-			}, this));
-
-			return this.super('load', [section_id]);
-		};
-		o.tooltip = multiValueSectionTooltip([
-			_('Configured pools do not exist: %s'),
-			_('Select existing pools or create the missing ones on the general page.')
-		], [
-			_('No pool exists yet.'),
-			_('Create a pool on the general page first.')
-		]);
-
-		o = s.taboption('advanced', form.Flag, 'pull', _('Pull'),
-			swanctlDescr(_('Pull virtual IP addresses and configuration attributes from the remote peer (Config Mode).') + '<br />' +
-			_('If disabled, the client waits for the server to push them.'),
-				'connections.<conn>.pull'));
-		o.default = '1';
-		o.modalonly = true;
-		o.rmempty = true;
-		o.depends('keyexchange', 'ikev1');
-		o.depends('keyexchange', 'ike');
-
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
 			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication'), 'connections.<conn>.proposals'));
 		o.load = function (section_id) {
@@ -1229,6 +1192,44 @@ return view.extend({
 			swanctlDescr(_('Send certificate request payloads to offer trusted root CA certificates to the peer'), 'connections.<conn>.send_certreq'));
 		o.default = '1';
 		o.modalonly = true;
+
+		o = s.taboption('advanced', form.DynamicList, 'vips', _('Virtual IP addresses'),
+			swanctlDescr(_('Virtual IP addresses used as the source IP for outgoing traffic.'), 'connections.<conn>.vips'));
+		o.datatype = 'ipaddr';
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.MultiValue, 'pools', _('Pools'),
+			swanctlDescr(_('Pools from which virtual IP addresses and configuration attributes are assigned to the remote peers.') + '<br />' +
+			_('Pools can be defined on the general page.'),
+				'connections.<conn>.pools'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			uci.sections('ipsec', 'pools').forEach(L.bind(function (section) {
+				this.value(section['.name']);
+			}, this));
+
+			return this.super('load', [section_id]);
+		};
+		o.tooltip = multiValueSectionTooltip([
+			_('Configured pools do not exist: %s'),
+			_('Select existing pools or create the missing ones on the general page.')
+		], [
+			_('No pool exists yet.'),
+			_('Create a pool on the general page first.')
+		]);
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Flag, 'pull', _('Pull'),
+			swanctlDescr(_('Pull virtual IP addresses and configuration attributes from the remote peer (Config Mode).') + '<br />' +
+			_('If disabled, the client waits for the server to push them.'),
+				'connections.<conn>.pull'));
+		o.default = '1';
+		o.modalonly = true;
+		o.rmempty = true;
+		o.depends('keyexchange', 'ikev1');
+		o.depends('keyexchange', 'ike');
 
 		o = s.taboption('advanced', form.Flag, 'mobike', _('MOBIKE'),
 			swanctlDescr(_('MOBIKE (IKEv2 Mobility and Multihoming Protocol)'), 'connections.<conn>.mobike'));
