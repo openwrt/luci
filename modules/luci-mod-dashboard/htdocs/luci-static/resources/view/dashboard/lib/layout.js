@@ -1,9 +1,51 @@
 'use strict';
 'require baseclass';
 'require form';
-'require uci';
 'require ui';
 'require view.dashboard.lib.widgets as widgets';
+
+function attachDetailTabs(map, lists, includes) {
+	const tabs = lists.tabs?.getUIElement('layout');
+	if (!tabs)
+		return;
+	let required = new Set();
+	let syncing = false;
+	const sync = () => {
+		if (syncing)
+			return;
+		syncing = true;
+		try {
+			const layout = Object.fromEntries(widgets.slots.map(slot => {
+				const ids = lists[slot]?.getUIElement('layout')?.getValue() || [];
+				return [ slot, ids.length ? ids : widgets.defaults(includes, slot) ];
+			}));
+			required = widgets.requiredTabs(includes, layout);
+			for (const id of required)
+				if (!tabs.getValue().includes(id)) {
+					tabs.addItem(tabs.node, id, tabs.choices[id]);
+					tabs.node.querySelectorAll('.cbi-dropdown li[data-value]').forEach(item => {
+						if (item.dataset.value === id)
+							item.setAttribute('unselectable', '');
+					});
+				}
+			for (const item of tabs.node.querySelectorAll(':scope > .item')) {
+				const automatic = required.has(item.querySelector('input[type="hidden"]').value);
+				item.classList.toggle('dashboard-required-tab', automatic);
+				item.title = automatic ? _('Shown automatically by network topology') : '';
+			}
+		}
+		finally {
+			syncing = false;
+		}
+	};
+	const removeItem = tabs.removeItem;
+	tabs.removeItem = function(node, item) {
+		if (!required.has(item.querySelector('input[type="hidden"]').value))
+			return removeItem.apply(this, arguments);
+	};
+	map.root.addEventListener('cbi-dynlist-change', sync);
+	sync();
+}
 
 function attachOptions(map, lists, panels) {
 	const parking = E('div', { 'hidden': '' });
@@ -48,7 +90,7 @@ return baseclass.extend({
 	render(includes) {
 		const slots = {
 			cards: _('Status cards'),
-			charts: _('Live charts'),
+			charts: _('Live panels'),
 			tabs: _('Detail tabs')
 		};
 
@@ -63,17 +105,14 @@ return baseclass.extend({
 				return;
 
 			const o = lists[slot] = s.option(form.DynamicList, slot, slots[slot]);
+			if (slot === 'tabs')
+				o.description = _('Network topology automatically enables its available detail tabs.');
 
 			choices.forEach(widget => o.value(widget.id, widget.title));
 
 			// Show the defaults while the slot is not configured, without
 			// writing them.
-			o.cfgvalue = () => {
-				const known = choices.map(widget => widget.id);
-				const ids = L.toArray(uci.get('dashboard', 'layout', slot)).filter(id => known.includes(id));
-
-				return ids.length ? ids : widgets.defaults(includes, slot);
-			};
+			o.cfgvalue = () => widgets.resolveLayout(includes, widgets.configuredLayout(includes))[slot];
 
 			// The list hides a choice once it is picked, but not the ones it
 			// starts out with, and always offers a custom value.
@@ -102,6 +141,7 @@ return baseclass.extend({
 			m.renderContents = function() {
 				return renderContents.apply(this, arguments).then(node => {
 					attachOptions(this, lists, panels);
+					attachDetailTabs(this, lists, includes);
 					return node;
 				});
 			};

@@ -10,7 +10,8 @@ LUCI_TITLE:=LuCI Dashboard Pages
 LUCI_DEPENDS:=+luci-base +libiwinfo +ucode-mod-uloop
 
 PKG_BUILD_DEPENDS:=iwinfo
-PKG_LICENSE:=Apache-2.0
+# The Dashboard uses Lucide icons licensed under ISC.
+PKG_LICENSE:=Apache-2.0 ISC
 PKG_MAINTAINER:=Eamon Xiong <eamonxiong@gmail.com>
 
 define Package/luci-mod-dashboard/conffiles

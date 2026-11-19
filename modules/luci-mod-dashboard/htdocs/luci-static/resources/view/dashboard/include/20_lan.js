@@ -1,10 +1,9 @@
 'use strict';
 'require baseclass';
 'require rpc';
-'require network';
 'require view.dashboard.lib.charts as charts';
 
-var callLuciDHCPLeases = rpc.declare({
+const callLuciDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
 	expect: { '': {} }
@@ -21,13 +20,21 @@ return baseclass.extend({
 	],
 
 	available() {
-		return L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd');
+		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
+			return true;
+		// Some firmware builds omit service flags despite providing leases.
+		return L.resolveDefault(callLuciDHCPLeases(), null).then(data => {
+			if (!Array.isArray(data?.dhcp_leases))
+				return false;
+			this.initialLeases = data;
+			return true;
+		});
 	},
 
 	load() {
-		return Promise.all([
-			callLuciDHCPLeases(),
-		]);
+		const cached = this.initialLeases;
+		this.initialLeases = null;
+		return Promise.all([ cached ? Promise.resolve(cached) : callLuciDHCPLeases() ]);
 	},
 
 	renderKpi() {
@@ -66,7 +73,7 @@ return baseclass.extend({
 	},
 
 	render([leases]) {
-		this.renderUpdateData([...leases.dhcp_leases]);
+		this.renderUpdateData(Array.isArray(leases?.dhcp_leases) ? leases.dhcp_leases : []);
 
 		return {
 			cards: [ { id: 'dhcp', node: () => this.renderKpi() } ],

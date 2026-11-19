@@ -3,6 +3,7 @@
 'require poll';
 'require ui';
 'require network';
+'require view.dashboard.lib.charts as charts';
 'require view.dashboard.lib.widgets as widgets';
 
 document.querySelector('head').appendChild(E('link', {
@@ -24,6 +25,7 @@ function invokeIncludesLoad(includes, layout) {
 		const declared = includes[i].widgets || [];
 
 		includes[i].failed = false;
+		includes[i].topologyEnabled = layout.charts.includes('topology');
 
 		includes[i].skipped = (declared.length > 0 && !declared.some(widget => layout[widget.slot]?.includes(widget.id)));
 
@@ -88,6 +90,7 @@ function collectSections(includes, results, layout) {
 		}
 		catch (e) {
 			console.error(e);
+			includes[i].failed = true;
 			continue;
 		}
 	}
@@ -113,10 +116,16 @@ function rowSizes(n, max, shortFirst) {
 
 function fillRows(nodes, slot) {
 	let i = 0;
+	const regular = nodes.filter(node => {
+		if (node.dataset.dashboardSpan != 'full')
+			return true;
+		node.style.setProperty('--dashboard-per-row', 1);
+		return false;
+	});
 
-	rowSizes(nodes.length, ROWS[slot].max, ROWS[slot].shortFirst).forEach(size => {
+	rowSizes(regular.length, ROWS[slot].max, ROWS[slot].shortFirst).forEach(size => {
 		for (let n = 0; n < size; n++)
-			nodes[i++].style.setProperty('--dashboard-per-row', size);
+			regular[i++].style.setProperty('--dashboard-per-row', size);
 	});
 
 	return nodes;
@@ -146,22 +155,12 @@ function updateCharts(container, chartNodes) {
 			scrollPositions[el.dataset.chart] = el.scrollLeft;
 	});
 
-	updateNodes(container, fillRows(chartNodes, 'charts'));
+	charts.updateNodes(container, fillRows(chartNodes, 'charts'));
 
 	container.querySelectorAll('[data-chart]').forEach(el => {
 		if (el.dataset.chart && scrollPositions[el.dataset.chart] != null)
 			el.scrollLeft = scrollPositions[el.dataset.chart];
 	});
-}
-
-// Retained widgets need no detach/attach cycle on unchanged samples.
-function updateNodes(container, nodes) {
-	nodes.forEach((node, i) => {
-		if (container.children[i] !== node)
-			container.insertBefore(node, container.children[i] || null);
-	});
-	while (container.children.length > nodes.length)
-		container.removeChild(container.lastChild);
 }
 
 function updateTabs(tabMap, tabGroup, items, form) {
@@ -187,7 +186,8 @@ function updateTabs(tabMap, tabGroup, items, form) {
 
 		items.forEach(tab => {
 			const pane = (tab.id === 'layout' && form) ? form : E('div', {
-				'class': 'cbi-section',
+				'class': 'cbi-section dashboard-detail',
+				'id': 'dashboard-detail-' + tab.id,
 				'data-tab': tab.id,
 				'data-tab-title': (tab.count != null) ? '%s (%d)'.format(tab.title, tab.count) : tab.title
 			}, (typeof(tab.content) == 'function') ? tab.content() : tab.content);
@@ -250,12 +250,129 @@ function startPolling(includes, layout, root, form) {
 		tabs: tabMap,
 		extra: extraContainer
 	};
+	const headerOffset = () => {
+		const header = document.querySelector('header');
+		return header && [ 'fixed', 'sticky' ].includes(getComputedStyle(header).position)
+			? Math.max(0, header.getBoundingClientRect().bottom) : 0;
+	};
+	// Themes may scroll the content pane instead of the browser window.
+	// Resolve it only on navigation, never in the polling loop.
+	const scrollFrame = target => {
+		for (let parent = target.parentElement; parent && parent !== document.body; parent = parent.parentElement) {
+			if ((/^(auto|scroll)$/).test(getComputedStyle(parent).overflowY) && parent.scrollHeight > parent.clientHeight) {
+				const rect = parent.getBoundingClientRect();
+				return { node: parent, top: Math.max(headerOffset(), rect.top), bottom: Math.min(window.innerHeight, rect.bottom) };
+			}
+		}
+		return { node: window, top: headerOffset(), bottom: window.innerHeight };
+	};
+	const scrollToTarget = (frame, top) => {
+		const offset = frame.node === window ? window.scrollY : frame.node.scrollTop;
+		frame.node.scrollTo({ top: Math.max(0, offset + top - frame.top - 16), behavior: 'auto' });
+	};
+	const topologyTarget = ({ network, client }) => Array.from(root.querySelectorAll('[data-dashboard-overview] [data-dashboard-network]'))
+		.find(link => (link.dataset.dashboardNetwork || null) === (network || null) &&
+			(link.dataset.dashboardClient || null) === (client || null));
+	const showTopology = location => {
+		const overview = root.querySelector('[data-dashboard-overview]');
+		if (!overview)
+			return;
+		overview.dispatchEvent(new CustomEvent('dashboard-topology-reveal', { detail: location || {} }));
+		const target = topologyTarget(location) || overview.querySelector('.dashboard-topology-node[aria-current="true"]');
+		if (target?.isConnected)
+			target.focus({ preventScroll: true });
+		const frame = scrollFrame(target?.isConnected ? target : overview);
+		const overviewRect = overview.getBoundingClientRect();
+		const targetRect = target?.isConnected ? target.getBoundingClientRect() : null;
+		// Preserve the overview context only when the requested node fits below it.
+		const fits = !targetRect || targetRect.bottom - overviewRect.top <= frame.bottom - frame.top - 32;
+		scrollToTarget(frame, fits ? overviewRect.top : targetRect.top);
+	};
+	root.addEventListener('dashboard-client-selection', ev => {
+		const location = {
+			tab: 'wifi', network: ev.detail.network || null,
+			client: ev.detail.client ? String(ev.detail.client).toUpperCase() : null
+		};
+		root.querySelectorAll('[data-dashboard-overview]').forEach(overview => {
+			overview.dispatchEvent(new CustomEvent('dashboard-topology-selection', { detail: location }));
+		});
+	});
+
+	// Widgets declare destinations; the shell owns native LuCI tab activation.
+	// Use the tab's own click handler so its state and events stay in sync.
+	root.addEventListener('click', ev => {
+		const locator = ev.target.closest('[data-dashboard-locate]');
+		if (locator && root.contains(locator)) {
+			ev.preventDefault();
+			const location = {
+				tab: 'wifi', network: locator.dataset.dashboardNetwork || null,
+				client: String(locator.dataset.dashboardLocate).toUpperCase()
+			};
+			const owner = includes.find(include => include.widgets?.some(widget => widget.slot == 'tabs' && widget.id == 'wifi'));
+			owner?.selectClient?.(location);
+			showTopology(location);
+			return;
+		}
+		const source = ev.target.closest('[data-dashboard-tab]');
+		if (!source || !root.contains(source))
+			return;
+		ev.preventDefault();
+		const id = source.dataset.dashboardTab;
+		const tab = Array.from(tabMap.querySelectorAll('.cbi-tabmenu > li'))
+			.find(node => node.dataset.tab == id)?.querySelector('a');
+		const pane = Array.from(tabGroup.children).find(node => node.dataset.tab == id);
+		if (!tab || !pane)
+			return;
+		const destination = {
+			network: source.dataset.dashboardNetwork || null,
+			client: source.dataset.dashboardClient ? source.dataset.dashboardClient.toUpperCase() : null,
+			section: source.dataset.dashboardSection || null
+		};
+		if (id !== 'wifi')
+			source.closest('[data-dashboard-overview]')?.dispatchEvent(new CustomEvent('dashboard-topology-selection', {
+				detail: Object.assign({ tab: id }, destination)
+			}));
+		tab.click();
+		const owner = includes.find(include => include.widgets?.some(widget => widget.slot == 'tabs' && widget.id == id));
+		const destinationNode = owner?.navigate?.(destination);
+		const section = Array.from(pane.querySelectorAll('[data-dashboard-section]'))
+			.find(node => node.dataset.dashboardSection == source.dataset.dashboardSection);
+		const row = (destination.client || destination.network) ? Array.from(pane.querySelectorAll('[data-dashboard-client-row]'))
+			.find(node => (!destination.client || node.dataset.dashboardClientRow === destination.client) &&
+				(!destination.network || node.dataset.dashboardNetwork === destination.network)) : null;
+		const target = destinationNode || row || section || pane;
+		target.tabIndex = -1;
+		target.focus({ preventScroll: true });
+		// Keep the tab bar in view when the section fits; on a narrow screen,
+		// scroll straight to the requested list instead of stopping at cards.
+		const frame = scrollFrame(target);
+		const menu = tabMap.querySelector('.cbi-tabmenu');
+		// Keep the active destination visible in horizontally scrolling themes.
+		const menuRect = menu.getBoundingClientRect();
+		const tabRect = tab.parentElement.getBoundingClientRect();
+		if (tabRect.left < menuRect.left || tabRect.right > menuRect.right)
+			menu.scrollLeft += tabRect.left - menuRect.left - (menu.clientWidth - tabRect.width) / 2;
+		const menuTop = menu.getBoundingClientRect().top;
+		const rect = target.getBoundingClientRect();
+		const fits = rect.bottom - menuTop <= frame.bottom - frame.top - 32;
+		const top = (destinationNode || row || section) && !fits ? rect.top : menuTop;
+		scrollToTarget(frame, top);
+	});
 
 	const step = () => {
 		return network.flushCache().then(() => {
 			return invokeIncludesLoad(includes, layout);
 		}).then(results => {
 			const sections = collectSections(includes, results, layout);
+			const consumers = includes.filter(include => !include.failed && !include.skipped && include.updateTopology);
+			if (consumers.length) {
+				const wifiSource = includes.find(include => include.topologySource === 'wifi');
+				const snapshot = {
+					wifiSupported: !!wifiSource,
+					wifi: (wifiSource && !wifiSource.failed && !wifiSource.skipped) ? wifiSource.getTopologyData() : null
+				};
+				consumers.forEach(include => include.updateTopology(snapshot));
+			}
 
 			if (form)
 				sections.tabs.push({ id: 'layout', title: _('Settings'), content: [] });
@@ -263,13 +380,19 @@ function startPolling(includes, layout, root, form) {
 			updateShell(root, sections, containers);
 
 			if (sections.cards.length)
-				updateNodes(cardsContainer, fillRows(sections.cards, 'cards'));
+				charts.updateNodes(cardsContainer, fillRows(sections.cards, 'cards'));
 
 			if (sections.charts.length)
 				updateCharts(chartsContainer, sections.charts);
 
 			if (sections.tabs.length)
 				updateTabs(tabMap, tabGroup, sections.tabs, form);
+
+			root.querySelectorAll('[data-dashboard-tab]').forEach(link => {
+				const available = sections.tabs.some(tab => tab.id == link.dataset.dashboardTab);
+				link.disabled = !available;
+				link.title = available ? '' : _('Details unavailable.');
+			});
 
 			if (sections.extra.length)
 				L.dom.content(extraContainer, sections.extra);
