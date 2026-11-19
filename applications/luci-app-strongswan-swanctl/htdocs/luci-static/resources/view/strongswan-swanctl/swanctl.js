@@ -260,9 +260,10 @@ function addFileOption(s, name, title, descr, root) {
  *
  * If `extra` is set, the options are only shown in the dialog and only if
  * these dependencies are met as well, so they can be added to other
- * sections.
+ * sections. If `proposal` is set, the ESP proposal option with this name is
+ * added after the traffic selectors.
  */
-function addChildNetworkOptions(s, extra) {
+function addChildNetworkOptions(s, extra, proposal) {
 	let o;
 
 	const depends = function (option, dependency) {
@@ -290,6 +291,9 @@ function addChildNetworkOptions(s, extra) {
 	o.placeholder = '192.168.2.1/24';
 	o.rmempty = false;
 	restrict(o);
+
+	if (proposal)
+		addChildProposalOption(s, proposal, extra);
 
 	o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
 		swanctlDescr(_('XFRM interface ID set on input and output interfaces'), 'connections.<conn>.children.<child>.if_id_in, connections.<conn>.children.<child>.if_id_out'));
@@ -387,7 +391,7 @@ function addChildOptions(s) {
 	o.value('transport', _('Transport'));
 	o.default = 'tunnel';
 
-	addChildNetworkOptions(s, null);
+	addChildNetworkOptions(s, null, null);
 
 	o = s.taboption('general', form.ListValue, 'close_action', _('Close Action'),
 		swanctlDescr(_('Action when CHILD_SA is closed'), 'connections.<conn>.children.<child>.close_action'));
@@ -1224,7 +1228,7 @@ return view.extend({
 			return getReferences(section_id, 'child').join(', ') || null;
 		};
 
-		addChildNetworkOptions(s, { 'config_mode': 'simple' });
+		addChildNetworkOptions(s, { 'config_mode': 'simple' }, 'esp_proposal');
 
 		o = s.taboption('authentication', form.Value, 'psk', _('Pre-shared Key'),
 			swanctlDescr(_('Key that both sides use for authentication.') + ' ' +
@@ -1589,7 +1593,7 @@ return view.extend({
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck;
-		preventReferencedRemove(s, 'crypto_proposal', [ 'connection', 'child' ]);
+		preventReferencedRemove(s, [ 'crypto_proposal', 'esp_proposal' ], [ 'connection', 'child' ]);
 
 		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
 			_('Whether this is an ESP (phase 2) proposal or not'));
@@ -1672,7 +1676,7 @@ return view.extend({
 		addAlgorithms(o, algorithms.prf);
 		o.modalonly = true;
 
-		addConnectionsOption(s, 'crypto_proposal', _('Referenced by'), [ 'connection', 'child' ]);
+		addConnectionsOption(s, [ 'crypto_proposal', 'esp_proposal' ], _('Referenced by'), [ 'connection', 'child' ]);
 
 		return m.render().then(function (node) {
 			const banner = service.banner(serviceState,
