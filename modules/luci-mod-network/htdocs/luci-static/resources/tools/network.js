@@ -1143,17 +1143,17 @@ return baseclass.extend({
 		o.depends('type', 'veth');
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'autoneg', _('Auto negotiation'),
-			_('Disable to manually control the duplex and link speed of the network device.'));
+			_('When disabled, the link speed and duplex are forced without auto-negotiation. When enabled, the speed and duplex set below are used to restrict the link modes that are advertised.'));
 		o.value('', _('automatic (enabled)'));
 		o.value('1', _('Enable'));
 		o.value('0', _('Disable'));
 		o.default = '';
 		o.rmempty = true;
 
-		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'duplex', _('Duplex'));
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'duplex', _('Duplex'),
+			_('When auto-negotiation is disabled, the link is forced to operate in the selected duplex mode. When enabled, only the selected duplex is advertised.'));
 		o.default = '';
 		o.rmempty = true;
-		o.depends('autoneg', '0');
 		o.value('', _('automatic'));
 		o.value('1', _('Full duplex'));
 		o.value('0', _('Half duplex'));
@@ -1161,10 +1161,9 @@ return baseclass.extend({
 		let devicePhySpeeds = phyLinkSpeeds
 			.reduce((a, b) => a.includes(b.speed) ? a : a.concat(b.speed), []);
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'speed', _('Speed'),
-			_('Use a speed compatible with your device, forcing a higher speed will result in the system setting a lower value, but one that is compatible with the network interface'));
+			_('Use a speed compatible with your device. When auto-negotiation is disabled, the link is forced to the selected speed, forcing a higher speed will result in the system setting a lower value, but one that is compatible with the network interface. When enabled, only the selected speed is advertised.'));
 		o.datatype = "string";
 		o.rmempty = true;
-		o.depends('autoneg', '0');
 		o.value('', _('automatic'));
 		for (let link of devicePhySpeeds)
 			o.value('%d'.format(link), formatLinkSpeed(link));
