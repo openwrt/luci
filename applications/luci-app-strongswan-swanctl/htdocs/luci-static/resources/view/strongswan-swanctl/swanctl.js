@@ -122,7 +122,7 @@ function proposalTooltip() {
  * The dropdown of a MultiValue only shows values which are available as
  * choice, so warn about configured values which are not available (anymore),
  * e.g. if the section was deleted. Otherwise warn if there is nothing to
- * select at all.
+ * select at all, unless empty is null.
  * Used as o.tooltip, both arguments are arrays of tooltip lines, %s in the
  * first line of missing is replaced by the unavailable values.
  */
@@ -363,7 +363,9 @@ function addChildOptions(s) {
 
 	o = s.taboption('general', form.MultiValue, 'crypto_proposal',
 		_('Crypto Proposal (Phase 2)'),
-		swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'), 'connections.<conn>.children.<child>.esp_proposals'));
+		swanctlDescr(_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable') + '<br />' +
+		_('If none is selected, the default proposals of strongSwan are used.'),
+			'connections.<conn>.children.<child>.esp_proposals'));
 	o.load = function (section_id) {
 		this.keylist = [];
 		this.vallist = [];
@@ -379,10 +381,7 @@ function addChildOptions(s) {
 	o.tooltip = multiValueSectionTooltip([
 		_('Configured proposals are not available as ESP proposal: %s'),
 		_('Check the ESP Proposal option of the proposals or create the missing ones.')
-	], [
-		_('No ESP proposal exists yet.'),
-		_('Create a proposal with the ESP Proposal option enabled first.')
-	]);
+	], null);
 	o.tooltipicon = '⚠️';
 	o.rmempty = true;
 
@@ -1131,7 +1130,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('general', form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
-			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication'), 'connections.<conn>.proposals'));
+			swanctlDescr(_('List of IKE (phase 1) proposals to use for authentication') + '<br />' +
+			_('If none is selected, the default proposals of strongSwan are used.'),
+				'connections.<conn>.proposals'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -1147,10 +1148,7 @@ return view.extend({
 		o.tooltip = multiValueSectionTooltip([
 			_('Configured proposals are not available as IKE proposal: %s'),
 			_('Check the ESP Proposal option of the proposals or create the missing ones.')
-		], [
-			_('No IKE proposal exists yet.'),
-			_('Create a proposal with the ESP Proposal option disabled first.')
-		]);
+		], null);
 		o.tooltipicon = '⚠️';
 		o.rmempty = true;
 
