@@ -263,6 +263,7 @@ function addChildOptions(s) {
 
 	o = s.tab('general', _('General'));
 	o = s.tab('advanced', _('Advanced'));
+	o = s.tab('expert', _('Expert'));
 
 	o = s.taboption('general', form.ListValue, 'mode', _('Child mode'), swanctlDescr(null, 'connections.<conn>.children.<child>.mode'));
 	o.rmempty = false;
@@ -388,33 +389,11 @@ function addChildOptions(s) {
 	o.rmempty = true;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'rand_time', _('Random Time'),
-		swanctlDescr(_('Time range from which to choose a random value to subtract from the rekey time.') + '<br />' +
-		_('If not configured, the difference between life time and rekey time is used.') + '<br />' +
-		_('Use %s to disable randomization.').format('<code>0s</code>'),
-			'connections.<conn>.children.<child>.rand_time')
-	);
-	o.validate = validateTimeFormat;
-	o.rmempty = true;
-	o.modalonly = true;
-
 	o = s.taboption('advanced', form.Value, 'life_time', _('Life Time'),
 		swanctlDescr(_('Maximum time before the CHILD_SA gets closed, as a hard limit.'), 'connections.<conn>.children.<child>.life_time')
 	);
 	o.validate = validateTimeFormat;
 	o.rmempty = true;
-	o.modalonly = true;
-
-	o = s.taboption('advanced', form.Flag, 'ipcomp', _('IPComp'),
-		swanctlDescr(_('Enable ipcomp compression'), 'connections.<conn>.children.<child>.ipcomp'));
-	o.default = '0';
-	o.modalonly = true;
-
-	o = s.taboption('advanced', form.Flag, 'policies', _('Policies'),
-		swanctlDescr(_('Whether to install IPsec policies or not.') + ' ' +
-		_('Disabling this is only useful in special cases, e.g. with route based routing.'),
-			'connections.<conn>.children.<child>.policies'));
-	o.default = '1';
 	o.modalonly = true;
 
 	o = s.taboption('advanced', form.ListValue, 'hw_offload', _('H/W Offload'),
@@ -425,12 +404,34 @@ function addChildOptions(s) {
 	o.optional = true;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'priority', _('Priority'),
+	o = s.taboption('expert', form.Value, 'rand_time', _('Random Time'),
+		swanctlDescr(_('Time range from which to choose a random value to subtract from the rekey time.') + '<br />' +
+		_('If not configured, the difference between life time and rekey time is used.') + '<br />' +
+		_('Use %s to disable randomization.').format('<code>0s</code>'),
+			'connections.<conn>.children.<child>.rand_time')
+	);
+	o.validate = validateTimeFormat;
+	o.rmempty = true;
+	o.modalonly = true;
+
+	o = s.taboption('expert', form.Flag, 'ipcomp', _('IPComp'),
+		swanctlDescr(_('Enable ipcomp compression'), 'connections.<conn>.children.<child>.ipcomp'));
+	o.default = '0';
+	o.modalonly = true;
+
+	o = s.taboption('expert', form.Flag, 'policies', _('Policies'),
+		swanctlDescr(_('Whether to install IPsec policies or not.') + ' ' +
+		_('Disabling this is only useful in special cases, e.g. with route based routing.'),
+			'connections.<conn>.children.<child>.policies'));
+	o.default = '1';
+	o.modalonly = true;
+
+	o = s.taboption('expert', form.Value, 'priority', _('Priority'),
 		swanctlDescr(_('Priority of the CHILD_SA'), 'connections.<conn>.children.<child>.priority'));
 	o.datatype = 'uinteger';
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'mark_in', _('Mark In'),
+	o = s.taboption('expert', form.Value, 'mark_in', _('Mark In'),
 		swanctlDescr(_('Netfilter mark on inbound traffic, used to match the policy.') + '<br />' +
 			markDescription(),
 			'connections.<conn>.children.<child>.mark_in'));
@@ -440,7 +441,7 @@ function addChildOptions(s) {
 	o.validate = validateMark;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'mark_out', _('Mark Out'),
+	o = s.taboption('expert', form.Value, 'mark_out', _('Mark Out'),
 		swanctlDescr(_('Netfilter mark applied to outbound traffic, used to match the policy.') + '<br />' +
 			markDescription(),
 			'connections.<conn>.children.<child>.mark_out'));
@@ -450,14 +451,14 @@ function addChildOptions(s) {
 	o.validate = validateMark;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'replay_window', _('Replay Window'),
+	o = s.taboption('expert', form.Value, 'replay_window', _('Replay Window'),
 		swanctlDescr('%s; %s'.format(_('Replay Window of the CHILD_SA'),
 			_('Values larger than 32 are supported by the Netlink backend only')),
 			'connections.<conn>.children.<child>.replay_window'));
 	o.datatype = 'uinteger';
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'rekey_bytes', _('Rekey Bytes'),
+	o = s.taboption('expert', form.Value, 'rekey_bytes', _('Rekey Bytes'),
 		swanctlDescr(_('Number of bytes processed before initiating CHILD_SA rekeying.') + ' ' +
 		_('Also used to derive lifebytes if set (110% of this value).') + ' ' +
 		_('Use "0" to disable byte based rekeying.'),
@@ -468,7 +469,7 @@ function addChildOptions(s) {
 	o.rmempty = true;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'life_bytes', _('Life Bytes'),
+	o = s.taboption('expert', form.Value, 'life_bytes', _('Life Bytes'),
 		swanctlDescr(_('Maximum number of bytes processed before the CHILD_SA gets closed.') + ' ' +
 		_('Use "0" to disable (default).'),
 			'connections.<conn>.children.<child>.life_bytes')
@@ -478,7 +479,7 @@ function addChildOptions(s) {
 	o.rmempty = true;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'rekey_packets', _('Rekey Packets'),
+	o = s.taboption('expert', form.Value, 'rekey_packets', _('Rekey Packets'),
 		swanctlDescr(_('Number of packets processed before initiating CHILD_SA rekeying.') + ' ' +
 		_('Also used to derive lifepackets if set (110% of this value).') + ' ' +
 		_('Use "0" to disable packet based rekeying (default).'),
@@ -489,7 +490,7 @@ function addChildOptions(s) {
 	o.rmempty = true;
 	o.modalonly = true;
 
-	o = s.taboption('advanced', form.Value, 'life_packets', _('Life Packets'),
+	o = s.taboption('expert', form.Value, 'life_packets', _('Life Packets'),
 		swanctlDescr(_('Maximum number of packets processed before the CHILD_SA gets closed.') + ' ' +
 		_('Use "0" to disable (default).'),
 			'connections.<conn>.children.<child>.life_packets')
@@ -1034,6 +1035,7 @@ return view.extend({
 		o = s.tab('general', _('General'));
 		o = s.tab('authentication', _('Authentication'));
 		o = s.tab('advanced', _('Advanced'));
+		o = s.tab('expert', _('Expert'));
 		o = s.tab('children', _('Children'));
 		o = s.tab('locals', _('Locals'));
 		o = s.tab('remotes', _('Remotes'));
@@ -1235,15 +1237,6 @@ return view.extend({
 		o.depends('keyexchange', 'ikev2');
 		o.depends('keyexchange', 'ike');
 
-		o = s.taboption('advanced', form.ListValue, 'fragmentation', _('IKE Fragmentation'),
-			swanctlDescr(_('Use IKE fragmentation'), 'connections.<conn>.fragmentation'));
-		o.value('yes');
-		o.value('no');
-		o.value('force');
-		o.value('accept');
-		o.default = 'yes';
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.Value, 'keyingtries', _('Keying Retries'),
 			swanctlDescr(_('Number of retransmissions attempts during initial negotiation.') + '<br />' +
 			_('Use %s to retry until the connection is established or fails with a permanent error.').format('<code>0</code>'),
@@ -1272,27 +1265,6 @@ return view.extend({
 		o.validate = validateTimeFormat;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'over_time', _('Overtime'),
-			swanctlDescr(_('Limit on time to complete rekeying/reauthentication'), 'connections.<conn>.over_time'));
-		o.validate = validateTimeFormat;
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'reauth_time', _('Reauthentication Time'),
-			swanctlDescr(_('Interval to reauthenticate the IKE SA by creating a new one from scratch.') + '<br />' +
-			_('The default is %s, which means that reauthentication is off.').format('<code>0s</code>'),
-				'connections.<conn>.reauth_time'));
-		o.validate = validateTimeFormat;
-		o.placeholder = '0s';
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.Value, 'rand_time', _('Random Time'),
-			swanctlDescr(_('Time range from which to choose a random value to subtract from the rekey and reauthentication times.') + '<br />' +
-			_('If not configured, the overtime is used.') + '<br />' +
-			_('Use %s to disable randomization.').format('<code>0s</code>'),
-				'connections.<conn>.rand_time'));
-		o.validate = validateTimeFormat;
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.Flag, 'encap', _('ESP Encapsulation'),
 			swanctlDescr(_('To enforce UDP encapsulation of ESP packets, the IKE daemon can manipulate the NAT detection payloads.') + '<br />' +
 			_('This makes the peer believe that a NAT situation exist on the transmission path, forcing it to encapsulate ESP packets in UDP.') + '<br />' +
@@ -1301,46 +1273,6 @@ return view.extend({
 		o.modalonly = true;
 		o.default = '0';
 		o.rmempty = true;
-
-		o = s.taboption('advanced', form.Value, 'dscp', _('DSCP'),
-			swanctlDescr(_('Differentiated Services Field Codepoint to set on outgoing IKE packets as six digit binary string'),
-				'connections.<conn>.dscp'));
-		o.value('000000', '%s / %s (000000)'.format(_('CS0'), _('Default')));
-		o.value('001000', '%s (001000)'.format(_('CS1')));
-		o.value('010000', '%s (010000)'.format(_('CS2')));
-		o.value('011000', '%s (011000)'.format(_('CS3')));
-		o.value('100000', '%s (100000)'.format(_('CS4')));
-		o.value('101000', '%s (101000)'.format(_('CS5')));
-		o.value('110000', '%s (110000)'.format(_('CS6')));
-		o.value('111000', '%s (111000)'.format(_('CS7')));
-		o.value('101110', '%s (101110)'.format(_('EF')));
-		o.value('001010', '%s (001010)'.format(_('AF11')));
-		o.value('010010', '%s (010010)'.format(_('AF21')));
-		o.value('011010', '%s (011010)'.format(_('AF31')));
-		o.value('100010', '%s (100010)'.format(_('AF41')));
-		o.validate = function (section_id, value) {
-			if (value && !value.match(/^[01]{6}$/))
-				return _('Expecting a six digit binary string');
-
-			return true;
-		};
-		o.modalonly = true;
-
-		o = s.taboption('advanced', form.ListValue, 'unique', _('Uniqueness Policy'),
-			swanctlDescr(_('Connection uniqueness policy to avoid multiple connections from the same user.') + '<br />' +
-			'<code>no</code>: ' + _('Replace an existing connection if the peer sends an INITIAL_CONTACT notify.') + '<br />' +
-			'<code>never</code>: ' + _('Never replace an existing connection, even if the peer sends an INITIAL_CONTACT notify.') + '<br />' +
-			'<code>keep</code>: ' + _('Reject a new connection and keep the existing one.') + '<br />' +
-			'<code>replace</code>: ' + _('Delete an existing connection if a new one is established.'),
-				'connections.<conn>.unique'));
-		o.value('', '%s (%s)'.format('no', _('default')));
-		o.value('never');
-		o.value('keep');
-		o.value('replace');
-		o.optional = true;
-		o.default = '';
-		o.rmempty = true;
-		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'keyexchange', _('Keyexchange'),
 			swanctlDescr(_('Version of IKE for negotiation'), 'connections.<conn>.version'));
@@ -1374,6 +1306,76 @@ return view.extend({
 		o.modalonly = true;
 		o.depends('keyexchange', 'ikev1');
 		o.depends('keyexchange', 'ike');
+
+		o = s.taboption('expert', form.ListValue, 'fragmentation', _('IKE Fragmentation'),
+			swanctlDescr(_('Use IKE fragmentation'), 'connections.<conn>.fragmentation'));
+		o.value('yes');
+		o.value('no');
+		o.value('force');
+		o.value('accept');
+		o.default = 'yes';
+		o.modalonly = true;
+
+		o = s.taboption('expert', form.Value, 'over_time', _('Overtime'),
+			swanctlDescr(_('Limit on time to complete rekeying/reauthentication'), 'connections.<conn>.over_time'));
+		o.validate = validateTimeFormat;
+		o.modalonly = true;
+
+		o = s.taboption('expert', form.Value, 'reauth_time', _('Reauthentication Time'),
+			swanctlDescr(_('Interval to reauthenticate the IKE SA by creating a new one from scratch.') + '<br />' +
+			_('The default is %s, which means that reauthentication is off.').format('<code>0s</code>'),
+				'connections.<conn>.reauth_time'));
+		o.validate = validateTimeFormat;
+		o.placeholder = '0s';
+		o.modalonly = true;
+
+		o = s.taboption('expert', form.Value, 'rand_time', _('Random Time'),
+			swanctlDescr(_('Time range from which to choose a random value to subtract from the rekey and reauthentication times.') + '<br />' +
+			_('If not configured, the overtime is used.') + '<br />' +
+			_('Use %s to disable randomization.').format('<code>0s</code>'),
+				'connections.<conn>.rand_time'));
+		o.validate = validateTimeFormat;
+		o.modalonly = true;
+
+		o = s.taboption('expert', form.Value, 'dscp', _('DSCP'),
+			swanctlDescr(_('Differentiated Services Field Codepoint to set on outgoing IKE packets as six digit binary string'),
+				'connections.<conn>.dscp'));
+		o.value('000000', '%s / %s (000000)'.format(_('CS0'), _('Default')));
+		o.value('001000', '%s (001000)'.format(_('CS1')));
+		o.value('010000', '%s (010000)'.format(_('CS2')));
+		o.value('011000', '%s (011000)'.format(_('CS3')));
+		o.value('100000', '%s (100000)'.format(_('CS4')));
+		o.value('101000', '%s (101000)'.format(_('CS5')));
+		o.value('110000', '%s (110000)'.format(_('CS6')));
+		o.value('111000', '%s (111000)'.format(_('CS7')));
+		o.value('101110', '%s (101110)'.format(_('EF')));
+		o.value('001010', '%s (001010)'.format(_('AF11')));
+		o.value('010010', '%s (010010)'.format(_('AF21')));
+		o.value('011010', '%s (011010)'.format(_('AF31')));
+		o.value('100010', '%s (100010)'.format(_('AF41')));
+		o.validate = function (section_id, value) {
+			if (value && !value.match(/^[01]{6}$/))
+				return _('Expecting a six digit binary string');
+
+			return true;
+		};
+		o.modalonly = true;
+
+		o = s.taboption('expert', form.ListValue, 'unique', _('Uniqueness Policy'),
+			swanctlDescr(_('Connection uniqueness policy to avoid multiple connections from the same user.') + '<br />' +
+			'<code>no</code>: ' + _('Replace an existing connection if the peer sends an INITIAL_CONTACT notify.') + '<br />' +
+			'<code>never</code>: ' + _('Never replace an existing connection, even if the peer sends an INITIAL_CONTACT notify.') + '<br />' +
+			'<code>keep</code>: ' + _('Reject a new connection and keep the existing one.') + '<br />' +
+			'<code>replace</code>: ' + _('Delete an existing connection if a new one is established.'),
+				'connections.<conn>.unique'));
+		o.value('', '%s (%s)'.format('no', _('default')));
+		o.value('never');
+		o.value('keep');
+		o.value('replace');
+		o.optional = true;
+		o.default = '';
+		o.rmempty = true;
+		o.modalonly = true;
 
 		addEmbeddedSection(s, 'children', 'child', _('Children'),
 			_('The children of this connection are selected on the General tab.') + ' ' +
