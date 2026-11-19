@@ -4,16 +4,8 @@
 'require strongswan-swanctl.service as service';
 'require strongswan-swanctl.sections as sections';
 'require form';
-'require rpc';
 'require uci';
-'require ui';
 'require fs';
-
-const callListAlgorithms = rpc.declare({
-	object: 'luci.swanctl',
-	method: 'list-algs',
-	expect: { }
-});
 
 const {
 	swanctlDescr,
@@ -306,16 +298,14 @@ function handleMigrate() {
 return view.extend({
 	load: function () {
 		return Promise.all([
-			callListAlgorithms(),
 			L.resolveDefault(uci.load('network'), null),
 			L.resolveDefault(uci.load('ipsec'), null),
 			service.getState(),
 		]).then(function (data) {
 			let hasNoGlobals = uci.sections('ipsec', 'globals').length === 0;
 			return {
-				algorithms: data[0],
 				legacyConfig: hasNoGlobals,
-				serviceState: data[3],
+				serviceState: data[2],
 			};
 		});
 	},
@@ -324,19 +314,12 @@ return view.extend({
 		let m, s, o;
 		const legacyConfig = result.legacyConfig;
 		const serviceState = result.serviceState;
-		const algorithms = result.algorithms.data ?? {};
-		const error = result.algorithms.error;
-
-		if (error && serviceState.running)
-			ui.addNotification(null, E('p', _('Some options are unavailable because swanctl failed to load: %s').format(error)), 'warning');
 
 		m = new form.Map('ipsec', _('Connection configurations'),
 			_('On this page, you can configure the IPsec connections.'));
-		m.tabbed = true;
 
 		// Connection Configuration
-		s = m.section(form.GridSection, 'connection', _('Connection'),
-			_('Define Connection IKE Configurations.'));
+		s = m.section(form.GridSection, 'connection');
 		s.addremove = true;
 		s.nodescriptions = true;
 		s.renderSectionAdd = sectionNameCheck
