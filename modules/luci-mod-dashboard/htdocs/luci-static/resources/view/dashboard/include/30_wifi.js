@@ -1,10 +1,26 @@
 'use strict';
 'require baseclass';
-'require dom';
 'require network';
 'require rpc';
 'require uci';
 'require view.dashboard.lib.charts as charts';
+
+// WifiNetwork.getAssocList() maps some ubus errors to an empty list. Here an
+// unavailable sample must stay distinct from a successful zero-client sample.
+const callAssocList = rpc.declare({ object: 'iwinfo', method: 'assoclist', params: [ 'device' ], reject: true });
+
+async function readAssociations(net) {
+	const lists = await Promise.allSettled([ ...net.getVlans(), net ].map(async dev => {
+		const reply = await callAssocList(dev.getIfname());
+		if (!Array.isArray(reply?.results))
+			throw new Error('Missing iwinfo association list');
+		return dev === net ? reply.results : reply.results.map(peer => ({ ...peer, vlan: dev }));
+	}));
+	return {
+		complete: lists.every(list => list.status === 'fulfilled'),
+		peers: lists.flatMap(list => list.status === 'fulfilled' ? list.value : [])
+	};
+}
 
 /* -67 dBm is the minimum RSSI Cisco specifies for voice-grade coverage;
    below it the client is still usable, just not at that level. */
@@ -26,6 +42,7 @@ function rssiOf(device) {
 return baseclass.extend({
 
 	title: _('Wireless'),
+	topologySource: 'wifi',
 
 	params: [],
 
@@ -52,10 +69,13 @@ return baseclass.extend({
 		]).then(radios_networks_hints => {
 			const tasks = [];
 
-			for (let i = 0; i < radios_networks_hints[1].length; i++)
-				tasks.push(L.resolveDefault(radios_networks_hints[1][i].getAssocList(), []).then(L.bind((net, list) => {
-					net.assoclist = list.sort((a, b) => a.mac.localeCompare(b.mac));
-				}, this, radios_networks_hints[1][i])));
+			for (const net of radios_networks_hints[1]) {
+				const sample = net.isDisabled() ? Promise.resolve({ complete: true, peers: [] }) : readAssociations(net);
+				tasks.push(sample.then(({ complete, peers }) => {
+					net.assoclistKnown = complete;
+					net.assoclist = peers.filter(peer => typeof(peer?.mac) === 'string').sort((a, b) => a.mac.localeCompare(b.mac));
+				}));
+			}
 
 			return Promise.all(tasks).then(() => {
 				return radios_networks_hints;
@@ -69,13 +89,26 @@ return baseclass.extend({
 
 		return charts.kpi({
 			icon: 'wireless',
-			title: _('Wireless clients'),
-			value: [ String(this.params.wifi.devices.length) ],
+			title: this.associationTitle(),
+			value: [ radios.some(radio => radio.clientsKnown === false) ? '?' : String(this.params.wifi.devices.length) ],
 			sub: [ _('%d of %d SSIDs active').format(active, radios.length) ]
 		});
 	},
 
+	associationTitle() {
+		return this.params.wifi.radios.some(radio => radio.mode !== 'ap' && radio.mode !== 'ap-wds')
+			? _('Wireless peers and clients') : _('Wireless clients');
+	},
+
+	unavailableChart(title) {
+		return this.params.wifi.radios.some(radio => radio.clientsKnown === false)
+			? charts.card({ title, body: charts.empty(_('Wireless association data unavailable.')) }) : null;
+	},
+
 	renderDistributionChart() {
+		const unavailable = this.unavailableChart(_('Wireless client distribution'));
+		if (unavailable)
+			return unavailable;
 		const devices = this.params.wifi.devices;
 		const series = this.params.wifi.radios.map(radio => ({
 			label: [ radio.ssid.value, ' ', E('small', {}, [ radio.chan.value ]) ],
@@ -92,6 +125,9 @@ return baseclass.extend({
 	},
 
 	renderSignalChart() {
+		const unavailable = this.unavailableChart(_('Signal Strength'));
+		if (unavailable)
+			return unavailable;
 		const devices = this.params.wifi.devices.slice().sort((a, b) => rssiOf(b) - rssiOf(a));
 
 		return charts.card({
@@ -152,6 +188,9 @@ return baseclass.extend({
 	},
 
 	renderTrafficChart() {
+		const unavailable = this.unavailableChart(_('Wireless client data usage'));
+		if (unavailable)
+			return unavailable;
 		const devices = this.params.wifi.devices.slice().sort((a, b) =>
 			(b.transferred.value.bytes.rx + b.transferred.value.bytes.tx) - (a.transferred.value.bytes.rx + a.transferred.value.bytes.tx));
 		const peak = Math.max(1, ...devices.map(device => Math.max(device.transferred.value.bytes.rx, device.transferred.value.bytes.tx)));
@@ -194,58 +233,178 @@ return baseclass.extend({
 					E('b', {}, [ radio[key].value ])
 				]));
 
-		return E('div', { 'class': 'ifacebox' }, [
-			E('div', { 'class': 'ifacebox-head' + (active ? ' active' : '') }, [
-				E('strong', {}, [ radio.ssid.value ])
+		return E('div', {
+			'class': 'ifacebox', 'data-dashboard-network-card': radio.network,
+			'aria-current': this.selectedNetwork === radio.network ? 'true' : null
+		}, [
+			E('div', { 'class': 'ifacebox-head' }, [
+				E('div', { 'class': 'dashboard-net-title' }, [
+					E('strong', {}, [ radio.ssid.value ]),
+					radio.band ? E('span', { 'class': 'dashboard-net-band' }, [ radio.band ]) : ''
+				]),
+				charts.badge(active ? _('Active') : (radio.disabled ? _('Disabled') : _('Link down')), active ? 'success' : '')
 			]),
 			E('div', { 'class': 'ifacebox-body' }, [
 				E('div', { 'class': 'dashboard-net-count' }, [
-					E('b', {}, [ String(active ? radio.associations.value : 0) ]),
+					E('b', {}, [ String(radio.associations.value) ]),
 					E('small', {}, [ radio.associations.title ])
 				]),
 				active
 					? E('div', { 'class': 'dashboard-net-fields' }, fields)
-					: E('div', { 'class': 'dashboard-net-note' }, [ _('Interface is disabled') ])
+					: E('div', { 'class': 'dashboard-net-note' }, [ radio.disabled ? _('Interface is disabled') : _('Link down') ])
 			])
 		]);
 	},
 
+	getTopologyData() {
+		if (!this.params.wifi)
+			return null;
+
+		const radios = this.params.wifi.radios.filter(radio => radio.mode !== 'monitor');
+		const networks = new Set(radios.map(radio => radio.network));
+		return {
+			networks: radios.map(radio => ({
+				id: radio.network,
+				device: radio.device,
+				name: radio.ssid.value,
+				band: radio.band,
+				mode: radio.mode,
+				interfaces: radio.interfaces,
+				clientsKnown: radio.clientsKnown,
+				active: radio.isactive.value
+			})),
+			clients: this.params.wifi.devices.filter(device => networks.has(device.network)).map(device => ({
+				network: device.network,
+				mac: device.mac,
+				interfaces: device.interfaces,
+				associated: device.associated,
+				name: device.hostname.value && device.hostname.value !== '?' ? device.hostname.value : device.mac,
+				addresses: device.addresses.value
+			}))
+		};
+	},
+
 	renderClientTable() {
+		const devices = this.params.wifi.devices;
+		const locateNetworks = this.topologyEnabled ? new Set(this.params.wifi.radios
+			.filter(radio => radio.mode !== 'monitor')
+			.map(radio => radio.network)) : null;
+		const clientName = device => device.hostname.value && device.hostname.value !== '?' ? device.hostname.value : device.mac;
+		const selected = device => !!this.selectedNetwork && device.network === this.selectedNetwork &&
+			(!this.selectedClient || device.mac === this.selectedClient);
+		const stack = (primary, secondary) => E('div', { 'class': 'dashboard-client-stack' }, [
+			E('div', { 'class': 'dashboard-client-primary' }, [ primary ]),
+			secondary ? E('div', { 'class': 'dashboard-client-secondary' }, [ secondary ]) : ''
+		]);
+
 		return charts.table({
 			id: 'dashboard-wifi-table',
 			head: [
-				_('Hostname'),
-				_('IP Address'),
-				_('SSID'),
-				_('Band'),
-				'%s / %s'.format(_('Signal'), _('Noise floor')),
-				'%s / %s'.format(_('Up.'), _('Down.')),
+				_('Device / peer'),
+				_('Network'),
+				_('Signal'),
+				_('Transferred'),
 				_('Connected')
 			],
-			rows: this.params.wifi.devices.map(device => [
-				device.hostname.value,
-				device.addresses.value.length
-					? E('div', { 'class': 'dashboard-client-addresses' }, device.addresses.value.map(address => E('div', {}, [ address ])))
-					: '-',
-				device.ssid.value,
-				device.band.value || '-',
-				E('span', {}, [
+			rowKeys: devices.map(device => device.network + '/' + device.mac),
+			rowAttrs: devices.map(device => ({
+				'data-dashboard-client-row': device.mac,
+				'data-dashboard-network': device.network,
+				'class': selected(device) ? 'dashboard-client-located' : '',
+				'aria-current': selected(device) ? 'true' : null
+			})),
+			rows: devices.map(device => [
+				stack(locateNetworks?.has(device.network) ? E('button', {
+					type: 'button', 'class': 'dashboard-client-locate',
+					'data-dashboard-locate': device.mac,
+					'data-dashboard-network': device.network,
+					'aria-label': _('Locate %s in network topology').format(clientName(device))
+				}, clientName(device)) : clientName(device),
+					device.addresses.value.length
+						? E('div', { 'class': 'dashboard-client-addresses' }, device.addresses.value.map(address => E('div', {}, [ address ])))
+						: '-'),
+				stack(device.ssid.value, [ device.band.value, device.associated === false ? _('Peer state unknown') : device.peer ? _('Peer') : null ].filter(Boolean).join(' · ') || '-'),
+				stack(
 					charts.badge((device.signal.value.rssi != null) ? '%d %s'.format(device.signal.value.rssi, _('dBm')) : _('No RX signal'), signalGrade(device.signal.value.rssi).kind),
-					' ',
 					(device.signal.value.noise != null)
-						? E('small', {}, [ '/ %d %s'.format(device.signal.value.noise, _('dBm')) ])
-						: ''
-				]),
-				E('span', {}, [
-					E('span', { 'title': _('Up.') }, [ device.transferred.value.rx ]),
-					' / ',
-					E('span', { 'title': _('Down.') }, [ device.transferred.value.tx ])
+						? '%s: %d %s'.format(_('Noise floor'), device.signal.value.noise, _('dBm'))
+						: null),
+				E('div', { 'class': 'dashboard-client-stack dashboard-client-transfer' }, [
+					E('span', { 'title': _('Download'), 'aria-label': '%s: %s'.format(_('Download'), device.transferred.value.tx) }, [ '↓ ', device.transferred.value.tx ]),
+					E('span', { 'title': _('Upload'), 'aria-label': '%s: %s'.format(_('Upload'), device.transferred.value.rx) }, [ '↑ ', device.transferred.value.rx ])
 				]),
 				device.connected.value || '-'
 			]),
-			emptyText: _('No wireless clients connected'),
-			foot: [ _('Total'), String(this.params.wifi.devices.length) ]
+			emptyText: this.params.wifi.radios.some(radio => radio.clientsKnown === false) ? _('Wireless association data unavailable.') : _('No wireless associations reported.')
 		});
+	},
+
+	navigate(selection) {
+		this.selectClient(selection);
+		if (selection.network && !selection.client && selection.section === 'networks') {
+			const card = Array.from(this.tabNode?.querySelectorAll('[data-dashboard-network-card]') || [])
+				.find(node => node.dataset.dashboardNetworkCard === selection.network);
+			if (card) {
+				card.closest('details').open = true;
+				return card;
+			}
+		}
+	},
+
+	selectClient({ network, client }) {
+		this.selectedClient = client ? String(client).toUpperCase() : null;
+		this.selectedNetwork = network || (this.selectedClient
+			? this.params.wifi.devices.find(device => device.mac === this.selectedClient)?.network : null) || null;
+		this.clearStaleSelection();
+		this.tabNode?.querySelectorAll('[data-dashboard-client-row]').forEach(row => {
+			const active = !!this.selectedNetwork && row.dataset.dashboardNetwork === this.selectedNetwork &&
+				(!this.selectedClient || row.dataset.dashboardClientRow === this.selectedClient);
+			row.classList.toggle('dashboard-client-located', active);
+			if (active)
+				row.setAttribute('aria-current', 'true');
+			else
+				row.removeAttribute('aria-current');
+		});
+		this.tabNode?.querySelectorAll('[data-dashboard-network-card]').forEach(card => {
+			if (card.dataset.dashboardNetworkCard === this.selectedNetwork)
+				card.setAttribute('aria-current', 'true');
+			else
+				card.removeAttribute('aria-current');
+		});
+		this.notifyClientSelection();
+	},
+
+	clearStaleSelection() {
+		const present = this.selectedClient
+			? this.params.wifi.devices.some(device => device.mac === this.selectedClient && device.network === this.selectedNetwork)
+			: !this.selectedNetwork || this.params.wifi.radios.some(radio => radio.network === this.selectedNetwork);
+		if (present)
+			return false;
+		this.selectedClient = null;
+		this.selectedNetwork = null;
+		return true;
+	},
+
+	notifyClientSelection() {
+		this.tabNode?.dispatchEvent(new CustomEvent('dashboard-client-selection', {
+			bubbles: true, detail: {
+				network: this.selectedNetwork || null,
+				client: this.selectedClient || null
+			}
+		}));
+	},
+
+	updateClientSummary() {
+		const failed = this.params.wifi.radios.filter(radio => radio.clientsKnown === false);
+		const text = failed.length ? '?' : String(this.params.wifi.devices.length);
+		if (this.clientCount.textContent !== text)
+			this.clientCount.textContent = text;
+		const summary = _('Wireless networks (%d)').format(this.params.wifi.radios.length);
+		if (this.networkSummary.textContent !== summary)
+			this.networkSummary.textContent = summary;
+		this.clientHeadingText.textContent = this.associationTitle();
+		this.dataNote.hidden = !failed.length;
+		this.dataNote.textContent = failed.length ? _('Wireless association data is unavailable for: %s').format(failed.map(radio => radio.ssid.value).join(', ')) : '';
 	},
 
 	frequencyBand(frequency) {
@@ -274,6 +433,17 @@ return baseclass.extend({
 		return band ? '%s %s'.format(band, _('GHz')) : null;
 	},
 
+	networkBand(net) {
+		const band = this.frequencyBand(net.getFrequency());
+		if (band)
+			return band;
+		// An inactive radio has no runtime frequency. Use its explicit band,
+		// never the radio index or a channel number shared by several bands.
+		const configured = uci.get('wireless', net.getWifiDeviceName(), 'band');
+		const bands = { '2g': '2.4', '5g': '5', '6g': '6', '60g': '60' };
+		return Object.hasOwn(bands, configured) ? '%s %s'.format(bands[configured], _('GHz')) : null;
+	},
+
 	renderTab() {
 		const netGrid = E('div', { 'class': 'dashboard-net-grid' }, this.params.wifi.radios.map(radio => this.renderNetworkCard(radio)));
 		const clientTable = this.renderClientTable();
@@ -281,22 +451,33 @@ return baseclass.extend({
 		if (this.tabNode && this.tabNode.parentNode) {
 			const oldGrid = this.tabNode.querySelector('.dashboard-net-grid');
 			if (oldGrid)
-				this.tabNode.replaceChild(netGrid, oldGrid);
+				oldGrid.replaceWith(netGrid);
+			this.updateClientSummary();
 			return this.tabNode;
 		}
 
+		this.clientCount = E('span', { 'class': 'dashboard-client-count', 'role': 'status' });
+		this.clientHeadingText = E('span');
+		this.dataNote = E('p', { 'class': 'dashboard-net-note' });
+		this.networkSummary = E('summary');
 		this.tabNode = E('div', {}, [
-			netGrid,
-			E('h3', {}, [ _('Wireless clients') ]),
-			clientTable
+			E('div', { 'data-dashboard-section': 'clients' }, [
+				E('div', { 'class': 'dashboard-client-heading' }, [
+					E('h3', {}, [ this.clientHeadingText, this.clientCount ])
+				]),
+				this.dataNote,
+				clientTable
+			]),
+			E('details', { 'class': 'dashboard-network-details', 'data-dashboard-section': 'networks' }, [ this.networkSummary, netGrid ])
 		]);
+		this.updateClientSummary();
 
 		return this.tabNode;
 	},
 
 	clientAddresses(ipv4, hint) {
 		const ipv6 = L.toArray(hint?.ip6addrs || hint?.ipv6)
-			.find(address => address && !/^fe[89ab][0-9a-f]:/i.test(address));
+			.find(address => address && !(/^fe[89ab][0-9a-f]:/i).test(address));
 
 		return [ ipv4, ipv6 ].filter(Boolean);
 	},
@@ -307,23 +488,32 @@ return baseclass.extend({
 
 			for (let j = 0; j < network_items.length; j++) {
 				const net = network_items[j];
-				const is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled());
+				const disabled = net.isDisabled();
+				const active = !disabled && net.isUp();
+				const is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && active);
 				const chan = net.getChannel();
 				const freq = net.getFrequency();
 				const rate = net.getBitRate();
 
 				this.params.wifi.radios.push(
 					{
+						network: net.getName(),
+						device: net.getIfname(),
+						mode: net.getMode(),
+						interfaces: net.getNetworkNames(),
+						clientsKnown: net.assoclistKnown,
+						band: this.networkBand(net),
+						disabled,
 						ssid : {
 							title: _('SSID'),
 							visible: true,
-							value: net.getActiveSSID() || '?'
+							value: net.getActiveSSID() || net.getMeshID() || net.getName()
 						},
 
 						isactive : {
 							title: _('Active'),
 							visible: true,
-							value: !net.isDisabled()
+							value: active
 						},
 
 						chan : {
@@ -351,9 +541,9 @@ return baseclass.extend({
 						},
 
 						associations : {
-							title: _('Devices Connected'),
+							title: _('Reported associations'),
 							visible: true,
-							value: is_assoc ? (net.assoclist.length || '0') : 0
+							value: net.assoclistKnown === false ? '?' : net.assoclist.length
 						}
 					}
 				);
@@ -361,15 +551,23 @@ return baseclass.extend({
 		}
 
 		for (let i = 0; i < networks.length; i++) {
-			const band = this.frequencyBand(networks[i].getFrequency());
+			const band = this.networkBand(networks[i]);
 
 			for (let k = 0; k < networks[i].assoclist.length; k++) {
 				const bss = networks[i].assoclist[k];
 				const mac = bss.mac.toUpperCase();
 				const name = hosthints.getHostnameByMACAddr(mac);
+				const rx = Number.isFinite(bss.rx?.bytes) && bss.rx.bytes >= 0 ? bss.rx.bytes : null;
+				const tx = Number.isFinite(bss.tx?.bytes) && bss.tx.bytes >= 0 ? bss.tx.bytes : null;
 
 				this.params.wifi.devices.push(
 					{
+						network: networks[i].getName(),
+						peer: networks[i].getMode() !== 'ap' && networks[i].getMode() !== 'ap-wds',
+						// A dynamic VLAN's network overrides the parent SSID binding.
+						interfaces: bss.vlan ? L.toArray(bss.vlan.getNetwork()) : networks[i].getNetworkNames(),
+						associated: networks[i].getMode() !== 'mesh' || (/^(ESTAB|ESTABLISHED)$/i).test(bss['mesh plink'] || ''),
+						mac,
 						band : {
 							title: _('Band'),
 							visible: true,
@@ -391,7 +589,7 @@ return baseclass.extend({
 						ssid : {
 							title: _('SSID'),
 							visible: true,
-							value: networks[i].getActiveSSID()
+							value: networks[i].getActiveSSID() || networks[i].getMeshID() || networks[i].getName()
 						},
 
 						signal : {
@@ -409,9 +607,9 @@ return baseclass.extend({
 							title: _('Transferred'),
 							visible: true,
 							value: {
-								rx: '%s'.format('%1024.2mB'.format(bss.rx.bytes)),
-								tx: '%s'.format('%1024.2mB'.format(bss.tx.bytes)),
-								bytes: { rx: bss.rx.bytes || 0, tx: bss.tx.bytes || 0 }
+								rx: rx != null ? '%1024.2mB'.format(rx) : '-',
+								tx: tx != null ? '%1024.2mB'.format(tx) : '-',
+								bytes: { rx, tx }
 							}
 						},
 
@@ -435,6 +633,8 @@ return baseclass.extend({
 		};
 
 		this.renderUpdateData(radios, networks, hosthints);
+		if (this.clearStaleSelection())
+			this.notifyClientSelection();
 
 		if (!this.params.wifi.radios.length)
 			return null;
@@ -447,7 +647,7 @@ return baseclass.extend({
 				{ id: 'traffic', node: () => this.renderTrafficChart() }
 			],
 			tabs: [
-				{ id: 'wifi', title: this.title, count: this.params.wifi.devices.length, content: () => this.renderTab() }
+				{ id: 'wifi', title: this.title, count: this.params.wifi.radios.some(radio => radio.clientsKnown === false) ? null : this.params.wifi.devices.length, content: () => this.renderTab() }
 			]
 		};
 	}
