@@ -126,8 +126,8 @@ return view.extend({
 	render: function (result) {
 		let m, s, o;
 
-		m = new form.Map('ipsec', _('General connections configurations'),
-			_('On this page, you can configure the general settings for IPsec connections.'));
+		m = new form.Map('ipsec', _('Pools & Authorities'),
+			_('On this page, you can configure the pools, certificate authorities and shunt policies used by IPsec connections.'));
 		m.tabbed = true;
 
 		// Shunt Configuration

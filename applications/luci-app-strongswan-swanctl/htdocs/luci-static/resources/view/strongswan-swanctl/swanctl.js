@@ -1357,7 +1357,7 @@ return view.extend({
 
 		o = s.taboption('advanced', form.MultiValue, 'pools', _('Pools'),
 			swanctlDescr(_('Pools from which virtual IP addresses and configuration attributes are assigned to the remote peers.') + '<br />' +
-			_('Pools can be defined on the general page.'),
+			_('Pools can be defined on the Pools & Authorities page.'),
 				'connections.<conn>.pools'));
 		o.load = function (section_id) {
 			this.keylist = [];
@@ -1371,10 +1371,10 @@ return view.extend({
 		};
 		o.tooltip = multiValueSectionTooltip([
 			_('Configured pools do not exist: %s'),
-			_('Select existing pools or create the missing ones on the general page.')
+			_('Select existing pools or create the missing ones on the Pools & Authorities page.')
 		], [
 			_('No pool exists yet.'),
-			_('Create a pool on the general page first.')
+			_('Create a pool on the Pools & Authorities page first.')
 		]);
 		o.modalonly = true;
 
