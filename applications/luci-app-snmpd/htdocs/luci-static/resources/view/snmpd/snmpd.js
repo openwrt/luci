@@ -445,7 +445,7 @@ return L.view.extend({
 
 		go = g.option(form.Value, 'username',
 			_('username'),
-			_('Set username to access SNMP'));
+			_('Define username'));
 		go.rmempty = false;
 		go.optional = false;
 		go.modalonly = true;
