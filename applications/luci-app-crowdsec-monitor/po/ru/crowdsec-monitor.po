@@ -1,0 +1,151 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-crowdsec-monitor 0.3.4\n"
+"Report-Msgid-Bugs-To: hellresistor@protonmail.com\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Expiring"
+msgstr "Скоро истекает"
+
+#, c-format
+msgid "%dd %dh"
+msgstr "%dд %dч"
+
+#, c-format
+msgid "%dh %dmin"
+msgstr "%dч %dмин"
+
+#, c-format
+msgid "%dmin"
+msgstr "%dмин"
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
+#, c-format
+msgid "Page %d of %d"
+msgstr "Страница %d из %d"
+
+msgid "CrowdSec Monitor"
+msgstr "CrowdSec Monitor"
+
+msgid "Local monitoring of the CrowdSec Firewall Bouncer. Shows the blocks currently applied in the OpenWrt nftables sets. The Bouncer synchronises decisions with the LAPI automatically; this dashboard is read-only."
+msgstr "Локальный мониторинг CrowdSec Firewall Bouncer. Показывает блокировки, применённые в настоящее время в наборах nftables OpenWrt. Bouncer автоматически синхронизирует решения с LAPI; эта панель доступна только для чтения."
+
+#, c-format
+msgid "Bouncer: %s"
+msgstr "Bouncer: %s"
+
+msgid "running"
+msgstr "работает"
+
+msgid "not detected"
+msgstr "не обнаружен"
+
+msgid "nftables table accessible"
+msgstr "таблица nftables доступна"
+
+msgid "Could not query the ip crowdsec table"
+msgstr "Не удалось запросить таблицу ip crowdsec"
+
+msgid "Traffic processed"
+msgstr "Обработанный трафик"
+
+msgid "Counter unavailable"
+msgstr "Счётчик недоступен"
+
+msgid "Packets blocked"
+msgstr "Заблокированные пакеты"
+
+msgid "set counters"
+msgstr "счётчики наборов"
+
+msgid "IPs in active sets"
+msgstr "IP в активных наборах"
+
+msgid "No active sets"
+msgstr "Нет активных наборов"
+
+msgid "Bouncer rules"
+msgstr "Правила Bouncer"
+
+msgid "Check rules"
+msgstr "Проверить правила"
+
+msgid "yes"
+msgstr "да"
+
+msgid "no"
+msgstr "нет"
+
+msgid "Collecting samples. History is temporary and resets when the router restarts."
+msgstr "Сбор данных. История временная и сбрасывается при перезагрузке роутера."
+
+#, c-format
+msgid "processed/s: %s · blocked/s: %s"
+msgstr "обработано/с: %s · заблокировано/с: %s"
+
+#, c-format
+msgid "Samples: %d · window: %d s · blue bars: processed packets/s · red: blocked packets/s. Volatile history (/tmp), resets with the router."
+msgstr "Образцов: %d · окно: %d с · синие столбцы: обработанные пакеты/с · красные: заблокированные пакеты/с. Временная история (/tmp), сбрасывается вместе с роутером."
+
+msgid "Activity history"
+msgstr "История активности"
+
+msgid "IPs currently blocked in nftables"
+msgstr "IP, заблокированные сейчас в nftables"
+
+msgid "All origins"
+msgstr "Все источники"
+
+msgid "Search IPv4"
+msgstr "Поиск IPv4"
+
+msgid "Search IPv4 address"
+msgstr "Поиск адреса IPv4"
+
+msgid "Refresh list"
+msgstr "Обновить список"
+
+msgid "Previous"
+msgstr "Назад"
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "Could not retrieve the IP list."
+msgstr "Не удалось получить список IP."
+
+msgid "List unavailable"
+msgstr "Список недоступен"
+
+msgid "IP address"
+msgstr "IP-адрес"
+
+msgid "Origin"
+msgstr "Источник"
+
+msgid "Time remaining"
+msgstr "Осталось времени"
+
+msgid "Initial duration"
+msgstr "Начальная длительность"
+
+msgid "No IP found."
+msgstr "IP не найдены."
+
+#, c-format
+msgid "%s addresses found"
+msgstr "Найдено адресов: %s"
+
+msgid "Querying…"
+msgstr "Выполняется запрос…"
+
+msgid "The list shows the IPs currently present in the nftables sets managed by the Bouncer, not a direct query of the LAPI decisions. The Bouncer synchronises additions and removals automatically. Time remaining and initial duration come from the nftables expires and timeout fields. The exact time of the last LAPI query must be confirmed on the central server with cscli bouncers list."
+msgstr "Список показывает IP-адреса, присутствующие в наборах nftables, которыми управляет Bouncer, а не результат прямого запроса решений LAPI. Bouncer автоматически синхронизирует добавления и удаления. Оставшееся время и начальная длительность берутся из полей expires и timeout nftables. Точное время последнего запроса к LAPI нужно проверить на центральном сервере командой cscli bouncers list."
+
+msgid "Indicators refresh every 15 seconds. History keeps up to 240 samples in /tmp and is lost when the router restarts. The list refreshes when you search, filter or change page."
+msgstr "Показатели обновляются каждые 15 секунд. История хранит до 240 образцов в /tmp и теряется при перезагрузке роутера. Список обновляется при поиске, фильтрации или смене страницы."
