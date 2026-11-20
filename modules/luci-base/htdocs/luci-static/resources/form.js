@@ -6295,7 +6295,15 @@ const CBISectionValue = CBIValue.extend(/** @lends LuCI.form.SectionValue.protot
 	 * @returns {null}
 	 */
 	checkDepends(section_id) {
-		this.subsection.checkDepends(section_id);
+		/*
+		 * The subsection is only rendered within the field of this option,
+		 * e.g. not in the table of a grid section if the option is
+		 * modalonly. Checking all its sections without the field is
+		 * useless and very slow with many section instances.
+		 */
+		if (this.map.findElement('data-field', this.cbid(section_id)))
+			this.subsection.checkDepends(section_id);
+
 		return CBIValue.prototype.checkDepends.apply(this, [ section_id ]);
 	},
 
