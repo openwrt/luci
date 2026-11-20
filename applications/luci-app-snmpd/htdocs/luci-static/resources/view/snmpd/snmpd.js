@@ -449,11 +449,6 @@ return L.view.extend({
 		go.rmempty = false;
 		go.optional = false;
 
-		go = g.option(form.Flag, 'allow_write',
-			_('Allow write'));
-		go.rmempty = false;
-		go.default = '0';
-
 		go = g.option(form.ListValue, 'auth_type',
 			_('Authentication type'));
 		go.value('', _('none'));
@@ -510,6 +505,12 @@ return L.view.extend({
 			_('OID'));
 		this.oid.datatype = 'string';
 		this.oid.depends('RestrictOID', 'yes');
+
+		go = g.option(form.Flag, 'allow_write',
+			_('Allow write'));
+		go.rmempty = false;
+		go.default = '0';
+
 	},
 
 	populateTrapsSettings: function(subsection, desc, s, type) {
