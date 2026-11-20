@@ -1,0 +1,436 @@
+/*
+ * Darkstrap Mobile Stylesheet (max-width: 854px)
+ * Precision-engineered for ultra-smooth mobile UX, zero horizontal jank,
+ * authentic obsidian liquid glass drawer, and touch-first ergonomics.
+ */
+
+@media screen and (max-width: 854px) {
+  /* 1. Mobile Root & Viewport Guards */
+  html, body {
+    overflow-x: clip !important;
+    max-width: 100vw !important;
+    -webkit-text-size-adjust: 100% !important;
+  }
+
+  /* Prevent text blowout on mobile */
+  .nowrap,
+  .table td .nowrap,
+  .cbi-value-field .nowrap,
+  span.nowrap {
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  /* 2. Abstract Background Sizing Guard */
+  #darkstrap-abstract-bg {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    overflow: hidden !important;
+    position: fixed !important;
+    inset: 0 !important;
+    pointer-events: none !important;
+  }
+
+  .darkstrap-abstract-positioner {
+    width: min(100vw, 380px) !important;
+    height: min(100vw, 380px) !important;
+    max-width: 100vw !important;
+    right: -20px !important;
+    left: auto !important;
+    top: -5% !important;
+    overflow: hidden !important;
+  }
+
+  .darkstrap-abstract-spinner,
+  .darkstrap-abstract-layer {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* 3. Mobile Header & Brand Logo */
+  header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: 54px !important;
+    min-height: 54px !important;
+    padding: 0 16px !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    background: rgba(6, 10, 18, 0.94) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(255, 176, 32, 0.25) !important;
+  }
+
+  header .brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #ffb020 !important;
+    text-decoration: none !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.01em !important;
+    order: 1 !important;
+  }
+
+  header .brand::before {
+    content: '' !important;
+    display: inline-block !important;
+    width: 22px !important;
+    height: 22px !important;
+    background-image: url('logo.svg') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
+
+  /* Hamburger Toggle Button */
+  #darkstrap-mobile-toggle,
+  .darkstrap-mobile-toggle-btn {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    padding: 9px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    order: 3 !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    gap: 4px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    z-index: 1001 !important;
+    transition: background 0.2s ease, border-color 0.2s ease !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .darkstrap-mobile-toggle-btn:active {
+    background: rgba(255, 176, 32, 0.15) !important;
+    border-color: rgba(255, 176, 32, 0.4) !important;
+  }
+
+  .darkstrap-mobile-toggle-btn .darkstrap-hamburger-bar {
+    display: block !important;
+    width: 18px !important;
+    height: 2px !important;
+    background: #e2eeff !important;
+    border-radius: 2px !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease !important;
+  }
+
+  /* Hamburger to X transition */
+  .darkstrap-mobile-toggle-btn.active .darkstrap-hamburger-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg) !important;
+  }
+  .darkstrap-mobile-toggle-btn.active .darkstrap-hamburger-bar:nth-child(2) {
+    opacity: 0 !important;
+    transform: scaleX(0) !important;
+  }
+  .darkstrap-mobile-toggle-btn.active .darkstrap-hamburger-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg) !important;
+  }
+
+  /* Indicators next to toggle */
+  header #indicators,
+  header .pull-right {
+    display: flex !important;
+    align-items: center !important;
+    order: 2 !important;
+    margin-left: auto !important;
+    margin-right: 10px !important;
+  }
+
+  /* 4. Mobile Navigation Drawer (#topmenu) */
+  #topmenu {
+    display: none !important;
+  }
+
+  body.darkstrap-mobile-menu-open {
+    overflow: hidden !important;
+    touch-action: none !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu {
+    display: flex !important;
+    flex-direction: column !important;
+    position: fixed !important;
+    top: 54px !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: calc(100vh - 54px) !important;
+    height: calc(100dvh - 54px) !important;
+    background: rgba(6, 10, 18, 0.98) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    padding: 16px 16px 40px !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    z-index: 9999 !important;
+    list-style: none !important;
+    border-top: 1px solid rgba(255, 176, 32, 0.15) !important;
+    gap: 8px !important;
+    animation: darkstrapSlideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  @keyframes darkstrapSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    overflow: hidden !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li > a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 13px 16px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #e2eeff !important;
+    text-decoration: none !important;
+    min-height: 48px !important;
+    line-height: 1.2 !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li.dropdown > a::after {
+    content: '' !important;
+    display: inline-block !important;
+    width: 8px !important;
+    height: 8px !important;
+    border-right: 2px solid rgba(255, 176, 32, 0.7) !important;
+    border-bottom: 2px solid rgba(255, 176, 32, 0.7) !important;
+    transform: rotate(45deg) !important;
+    transition: transform 0.2s ease !important;
+    margin-right: 4px !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li.darkstrap-touch-open > a::after {
+    transform: rotate(-135deg) !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li .dropdown-menu {
+    display: none !important;
+    position: static !important;
+    float: none !important;
+    width: 100% !important;
+    background: rgba(4, 7, 14, 0.7) !important;
+    border: none !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-radius: 0 !important;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+    padding: 6px 8px !important;
+    margin: 0 !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li.darkstrap-touch-open .dropdown-menu {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li .dropdown-menu li {
+    display: block !important;
+    width: 100% !important;
+    background: transparent !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li .dropdown-menu a {
+    display: flex !important;
+    align-items: center !important;
+    padding: 10px 14px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    color: #94a3b8 !important;
+    text-decoration: none !important;
+    border-radius: 6px !important;
+    min-height: 42px !important;
+  }
+
+  body.darkstrap-mobile-menu-open #topmenu > li .dropdown-menu a:hover,
+  body.darkstrap-mobile-menu-open #topmenu > li .dropdown-menu a:active {
+    color: #ffb020 !important;
+    background: rgba(255, 176, 32, 0.08) !important;
+  }
+
+  /* 5. Horizontal Momentum-Scroll Tab Strips (Apple HIG / Appllama standard) */
+  .tabs,
+  .cbi-tabmenu,
+  .cbi-section[data-tab] ul,
+  ul.tabs {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    gap: 6px !important;
+    padding: 6px 4px !important;
+    margin: 8px 0 14px !important;
+    background: rgba(6, 11, 20, 0.6) !important;
+    border-radius: 10px !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .tabs::-webkit-scrollbar,
+  .cbi-tabmenu::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .tabs > li,
+  .cbi-tabmenu > li {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+    height: auto !important;
+  }
+
+  .tabs > li > a,
+  .cbi-tabmenu > li > a {
+    display: inline-flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    padding: 7px 14px !important;
+    font-size: 12.5px !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* 6. Realtime Charts Viewport Containment */
+  .cbi-section div[style*="300px"],
+  #view div[style*="300px"],
+  .cbi-section div:has(> svg[height="100%"]) {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+  }
+
+  .cbi-section div[style*="300px"] svg,
+  #view div[style*="300px"] svg {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .cbi-section .right #scale,
+  #scale, #scale2 {
+    display: inline-block !important;
+    margin-top: 10px !important;
+    margin-bottom: 8px !important;
+  }
+
+  /* 7. Mobile Modal Ergonomics */
+  #modal_overlay {
+    padding: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  #modal_overlay .modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    max-height: 90dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-radius: 14px !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  #modal_overlay .modal > form,
+  #modal_overlay .modal > .cbi-map {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex: 1 1 auto !important;
+    max-height: calc(90vh - 120px) !important;
+    padding: 12px 14px 24px !important;
+  }
+
+  /* Modal tabs horizontal scroll */
+  #modal_overlay .cbi-tabmenu,
+  #modal_overlay .tabs {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Pinned action buttons at bottom */
+  #modal_overlay .modal > .right,
+  #modal_overlay .modal > .button-row,
+  #modal_overlay .cbi-page-actions {
+    margin-top: auto !important;
+    padding: 12px 16px !important;
+    background: rgba(7, 11, 19, 0.95) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+  }
+
+  /* 8. Touch Hit Targets & Input Comfort */
+  button,
+  .btn,
+  .cbi-button {
+    min-height: 38px !important;
+    padding: 8px 14px !important;
+    font-size: 13.5px !important;
+  }
+
+  .cbi-dropdown,
+  select,
+  input[type="text"],
+  input[type="password"] {
+    min-height: 38px !important;
+    font-size: 14px !important;
+  }
+
+  /* Table mobile stacking and scroll */
+  .table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .tr {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    border-top: 1px solid var(--border-color-medium, rgba(255, 255, 255, 0.06));
+    margin: 0 -3px;
+    padding: 5px 0;
+  }
+}
