@@ -1046,6 +1046,15 @@ return baseclass.extend({
 		o.default = o.disabled;
 		o.depends('type', 'bridge');
 
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'stp_proto', _('STP protocol'),
+			_('Used by the ustp daemon, which defaults to RSTP. Without the ustp package the kernel runs classic STP and ignores this setting.'));
+		o.value('', _('Default'));
+		o.value('stp', _('STP (IEEE 802.1D)'));
+		o.value('rstp', _('RSTP (IEEE 802.1w)'));
+		o.value('mstp', _('MSTP (IEEE 802.1s)'));
+		o.rmempty = true;
+		o.depends({ type: 'bridge', stp: '1' });
+
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'hello_time', _('Hello interval'), _('Interval in seconds for STP hello packets'));
 		o.placeholder = '1';
 		o.datatype = 'range(1, 10)';
@@ -1169,6 +1178,14 @@ return baseclass.extend({
 		for (let link of devicePhySpeeds)
 			o.value('%d'.format(link), formatLinkSpeed(link));
 
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'pause', _('Advertise flow control'),
+			_('Advertise pause frame support to the link partner. Flow control is used only if both sides support it. Setting the RX or TX option below forces flow control without autonegotiation; this option then also applies to any direction left at Default, and Disable turns both directions off.'));
+		o.rmempty = true;
+		o.default = '';
+		o.value('', _('Default'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
+
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'rxpause', _('Controls the receive (RX) flow control'));
 		o.rmempty = true;
 		o.default = '';
@@ -1177,6 +1194,14 @@ return baseclass.extend({
 		o.value('0', _('Disable'));
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'txpause', _('Controls the transmission (TX) flow control'));
+		o.rmempty = true;
+		o.default = '';
+		o.value('', _('Default'));
+		o.value('1', _('Enable'));
+		o.value('0', _('Disable'));
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'eee', _('Energy Efficient Ethernet (EEE)'),
+			_('Advertise EEE to the link partner. It is only used if both sides support it.'));
 		o.rmempty = true;
 		o.default = '';
 		o.value('', _('Default'));
