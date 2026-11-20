@@ -1,0 +1,105 @@
+{
+	"admin/services/routelink": {
+		"title": "RouteLink",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "routelink" ]
+		}
+	},
+
+	"admin/services/routelink/overview": {
+		"title": "Overview",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "routelink/overview"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap-only": "absent" }
+		}
+	},
+
+	"admin/services/routelink/traffic": {
+		"title": "Traffic",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "routelink/traffic"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap-only": "absent" }
+		}
+	},
+
+	"admin/services/routelink/latency": {
+		"title": "Latency",
+		"order": 4,
+		"action": {
+			"type": "view",
+			"path": "routelink/latency"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap-only": "absent" }
+		}
+	},
+
+	"admin/services/routelink/wireless": {
+		"title": "Wireless",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "routelink/wireless"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap": "file" }
+		}
+	},
+
+	"admin/services/routelink/limits": {
+		"title": "Limits & Quotas",
+		"order": 5,
+		"action": {
+			"type": "view",
+			"path": "routelink/limits"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap-only": "absent" }
+		}
+	},
+
+	"admin/services/routelink/access": {
+		"title": "Access Log",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "routelink/dns"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap-only": "absent" }
+		}
+	},
+
+	"admin/services/routelink/notify": {
+		"title": "Push",
+		"order": 7,
+		"action": {
+			"type": "view",
+			"path": "routelink/notify"
+		},
+		"depends": {
+			"fs": { "/var/run/routelink/ap-only": "absent" }
+		}
+	},
+
+	"admin/services/routelink/settings": {
+		"title": "Settings",
+		"order": 9,
+		"action": {
+			"type": "view",
+			"path": "routelink/settings"
+		}
+	}
+}
