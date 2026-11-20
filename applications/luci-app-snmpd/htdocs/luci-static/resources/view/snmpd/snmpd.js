@@ -449,6 +449,14 @@ return L.view.extend({
 		go.rmempty = false;
 		go.optional = false;
 
+		go = g.option(form.ListValue, 'security_level',
+			_('Security level'),
+			_('Define security level for SNMPv3'));
+		go.value('noAuthNoPriv', _('without authentication and privacy (noAuthNoPriv)'));
+		go.value('authNoPriv', _('with authentication but without privacy (authNoPriv)'));
+		go.value('authPriv', _('with authentication and privacy (authPriv)'));
+		go.optional = false;
+
 		go = g.option(form.ListValue, 'auth_type',
 			_('Authentication type'));
 		go.value('', _('none'));
@@ -459,7 +467,9 @@ return L.view.extend({
 		go.value('SHA', _('SHA'));
 		go.value('MD5', _('MD5'));
 		go.default = 'SHA-256';
+		go.modalonly = true;
 		go.rmempty = false;
+		go.depends({'security_level': 'noAuthNoPriv', '!reverse': true});
 
 		// SNMPv3 auth pass
 		go = g.option(form.Value, 'auth_pass',
@@ -469,7 +479,7 @@ return L.view.extend({
 		go.modalonly = true;
 		go.optional = false;
 		go.validate = this.testPassLength;
-		go.depends({'auth_type': '', '!reverse': true});
+		go.depends({'security_level': 'noAuthNoPriv', '!reverse': true});
 
 		// SNMPv3 privacy/encryption type
 		go = g.option(form.ListValue, 'privacy_type',
@@ -480,7 +490,9 @@ return L.view.extend({
 		go.value('AES', _('AES'));
 		go.value('DES', _('DES'));
 		go.default = 'AES';
+		go.modalonly = true;
 		go.rmempty = false;
+		go.depends('security_level', 'authPriv');
 
 		// SNMPv3 privacy/encryption pass
 		go = g.option(form.Value, 'privacy_pass',
@@ -490,7 +502,7 @@ return L.view.extend({
 		go.modalonly = true;
 		go.optional = false;
 		go.validate = this.testPassLength;
-		go.depends({'privacy_type': '', '!reverse': true});
+		go.depends('security_level', 'authPriv');
 
 		go = g.option(form.ListValue, 'RestrictOID',
 			_('OID-Restriction'));
@@ -510,7 +522,6 @@ return L.view.extend({
 			_('Allow write'));
 		go.rmempty = false;
 		go.default = '0';
-
 	},
 
 	populateTrapsSettings: function(subsection, desc, s, type) {
