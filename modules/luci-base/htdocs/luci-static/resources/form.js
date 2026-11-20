@@ -447,16 +447,25 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * Returns a (possibly empty) DOM `NodeList` containing the found DOM nodes.
 	 */
 	findElements(...args) /* ... */{
-		let q = null;
+		return this.root.querySelectorAll(this.elementQuery('findElements', args));
+	},
 
+	/**
+	 * Build the selector expression of `findElements()` and `findElement()`.
+	 *
+	 * @private
+	 * @param {string} caller
+	 * @param {Array<string>} args
+	 * @returns {string}
+	 */
+	elementQuery(caller, args) {
 		if (args.length == 1)
-			q = args[0];
-		else if (args.length == 2)
-			q = '[%s="%s"]'.format(args[0], args[1]);
-		else
-			L.error('InternalError', 'Expecting one or two arguments to findElements()');
+			return args[0];
 
-		return this.root.querySelectorAll(q);
+		if (args.length == 2)
+			return '[%s="%s"]'.format(args[0], args[1]);
+
+		L.error('InternalError', `Expecting one or two arguments to ${caller}()`);
 	},
 
 	/**
@@ -492,8 +501,11 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * Returns the first found DOM node or `null` if no element matched.
 	 */
 	findElement(...args) /* ... */{
-		const res = this.findElements(...args);
-		return res.length ? res[0] : null;
+		/*
+		 * querySelector() stops at the first match, while
+		 * querySelectorAll() always searches the whole map.
+		 */
+		return this.root.querySelector(this.elementQuery('findElement', args));
 	},
 
 	/**
