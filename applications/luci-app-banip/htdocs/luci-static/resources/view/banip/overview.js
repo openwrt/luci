@@ -601,7 +601,7 @@ return view.extend({
 		o.placeholder = '/tmp/banIP-error';
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and tidy up the local blocklist.'));
+		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets with the same direction and port limitation.'));
 		o.default = 1;
 		o.rmempty = false;
 
@@ -777,14 +777,6 @@ return view.extend({
 			o.placeholder = _('-- default --');
 			o.optional = true;
 			o.rmempty = true;
-
-			o = s.taboption('adv_set', form.MultiValue, 'ban_feedcomplete', _('Feed Complete'), _('Opt out specific feeds from the deduplication process.'));
-			o.value('allowlist', _('local allowlist'));
-			o.value('blocklist', _('local blocklist'));
-			feedKeys.forEach(f => o.value(f.trim()));
-			o.placeholder = _('-- default --');
-			o.optional = true;
-			o.rmempty = true;
 		}
 
 		/*
@@ -874,9 +866,9 @@ return view.extend({
 		o.value('luci: failed login', _('LuCI failed login'));
 		o.value('error: maximum authentication attempts exceeded', _('sshd failed login'));
 		o.value('sshd.*Connection closed by.*\\[preauth\\]', _('sshd closed connection'));
-		o.value('SecurityEvent=\\"InvalidAccountID\\".*RemoteAddress=', _('asterisk invalid account'));
-		o.value('TLS Error: could not determine wrapping from \\[AF_INET\\]', _('openvpn TLS error'));
-		o.value('AdGuardHome.*\\[error\\].*/control/login: from ip', _('AdGuardHome login error'));
+		o.value('SecurityEvent="InvalidAccountID".*RemoteAddress=', _('asterisk invalid account'));
+		o.value('TLS Error: could not determine wrapping from \\[AF_INET', _('openvpn TLS error'));
+		o.value('AdGuardHome.*\\[error\\].*url=/control/login status=40[13] ip=', _('AdGuardHome login error'));
 		o.value('received a suspicious remote IP', _('Remote logging Event'));
 		o.placeholder = _('-- Please choose (optional) --');
 		o.optional = true;
