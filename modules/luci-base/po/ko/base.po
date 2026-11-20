@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-11-16 16:25+0000\n"
+"PO-Revision-Date: 2026-11-19 00:07+0000\n"
 "Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/>"
 "\n"
@@ -400,7 +400,7 @@ msgstr "39: LoongArch 64비트 UEFI"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:348
 msgid "3: Allow passwords in env"
-msgstr "3: 환경 변수에 암호 허용"
+msgstr "3: 환경 변수 내 비밀번호 허용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1059
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1090
@@ -746,8 +746,8 @@ msgid ""
 "A default MTU of 65535 is set by Yggdrasil. It is recomended to utilize the "
 "default."
 msgstr ""
-"Yggdrasil은 기본 MTU 값을 65535로 설정합니다. 이 기본값을 사용하는 것이 좋습"
-"니다."
+"Yggdrasil에서 기본 MTU 값을 65535로 설정합니다. 기본값을 사용하는 것을 "
+"권장합니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3373
 msgid "A directory with the same name already exists."
@@ -966,7 +966,7 @@ msgstr "허용할 VLAN 유형"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:267
 msgid "Accept from public keys"
-msgstr "공개 키로부터 수락"
+msgstr "허용할 공개 키"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1243
 msgid "Accept local"
@@ -974,7 +974,7 @@ msgstr "로컬 허용"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1480
 msgid "Accept options pushed from server"
-msgstr "서버에서 푸시된 옵션 수락"
+msgstr "서버에서 푸시한 옵션 수락"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:101
 msgctxt "nft accept action"
@@ -1148,11 +1148,11 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
-"로컬이 아닌 노드로부터의 피어링 요청을 수락하려면 리스너를 추가하세요. 멀티캐"
-"스트 피어 검색은 여기에 설정된 리스너 수와 관계없이 작동합니다. URI 형식: 모"
-"든 인터페이스에서 수신하려면 <code>tls://0.0.0.0:0</code> 또는 <code>tls://"
-"[::]:0</code>을 사용하세요. 허용되는 URI <code>tls://</code>, <code>tcp://</"
-"code>, <code>unix://</code> 또는 <code>quic://</code> 중에서 선택"
+"로컬이 아닌 노드로부터의 피어링 요청을 수락하려면 리스너를 추가하세요. "
+"멀티캐스트 피어 탐색은 여기에 설정된 리스너와 관계없이 작동합니다. URI 형식: "
+"모든 인터페이스에서 수신 대기하려면 <code>tls://0.0.0.0:0</code> 또는 <code>"
+"tls://[::]:0</code>을 사용하세요. 허용되는 URI <code>tls://</code>, <code>"
+"tcp://</code>, <code>unix://</code>, <code>quic://</code> 중 1개를 선택하세요"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:219
 msgid "Add local domain suffix to names served from hosts files."
@@ -1234,11 +1234,11 @@ msgstr "추가 피어"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1182
 msgid "Additional authentication over TLS"
-msgstr "TLS를 통한 추가 인증"
+msgstr "TLS 추가 인증"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:379
 msgid "Additional configuration settings (in TOML format)."
-msgstr "(TOML 형식) 추가 구성 설정입니다."
+msgstr "(TOML 형식의) 추가 구성 설정입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:815
 msgid "Additional hosts files"
@@ -1411,20 +1411,20 @@ msgstr "IP 순차 할당"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:358
 msgid "Allocate listen addresses"
-msgstr "수신 주소 할당"
+msgstr "수신 대기 주소 할당"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
 msgid ""
 "Allow <abbr title=\"Prefix Information Option\">PIO</abbr> flags sent in RA "
 "messages, globally for all prefixes."
 msgstr ""
-"RA 메시지에 전송되는 <abbr title=\"접두사 정보 옵션(Prefix Information "
-"Option)\">PIO</abbr> 플래그를 모든 접두사에 대해 전역적으로 허용합니다."
+"RA 메시지에 <abbr title=\"접두사 정보 옵션(Prefix Information Option)\">PIO</"
+"abbr> 플래그를 포함하여 전송하도록 허용합니다. 모든 접두사에 전역적으로 "
+"적용됩니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
-msgstr ""
-"<abbr title=\"보안 셸(Secure Shell)\">SSH</abbr> 암호 인증을 허용합니다"
+msgstr "<abbr title=\"보안 셸(Secure Shell)\">SSH</abbr> 비밀번호 인증을 허용합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1292
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
@@ -1435,8 +1435,8 @@ msgid ""
 "Allow Yggdrasil Jumper to configure Yggdrasil with proper listen address and "
 "random port automatically."
 msgstr ""
-"Yggdrasil 점퍼가 Yggdrasil을 적절한 수신 주소와 임의 포트로 자동으로 구성하도"
-"록 허용합니다."
+"Yggdrasil Jumper에서 Yggdrasil을 적절한 수신 대기 주소 및 랜덤 포트로 자동 "
+"구성하도록 허용합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1181
 msgid "Allow all except listed"
@@ -1484,11 +1484,11 @@ msgstr "원격 호스트가 로컬 SSH 포워딩 포트로 접속할 수 있도�
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:588
 msgid "Allow remote to change its IP or port"
-msgstr "원격 접속자가 IP 주소 또는 포트를 변경할 수 있도록 허용"
+msgstr "원격 피어의 IP 또는 포트 변경 허용"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
-msgstr "루트(root) 암호 로그인 허용"
+msgstr "비밀번호로 root 로그인 허용"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:3
 msgid "Allow system feature probing"
@@ -1496,7 +1496,7 @@ msgstr "시스템 기능 프로빙 허용"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
-msgstr "암호를 이용한 <em>root</em> 사용자 접근을 허용합니다"
+msgstr "<em>root</em> 사용자가 비밀번호로 로그인하는 것을 허용합니다"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:600
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:772
@@ -1506,15 +1506,15 @@ msgstr "허용된 IP"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1451
 msgid "Allowed maximum of connected clients"
-msgstr "허용된 최대 접속 클라이언트 수"
+msgstr "최대 동시 연결 클라이언트 수"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1458
 msgid "Allowed maximum of internal"
-msgstr "내부 최대 허용치"
+msgstr "클라이언트당 최대 내부 경로 수"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1465
 msgid "Allowed maximum of new connections"
-msgstr "최대 신규 연결 허용"
+msgstr "최대 신규 연결 수"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:88
 msgid "Allowed network technology"
@@ -1529,8 +1529,8 @@ msgid ""
 "Almost nothing here prevents you from selecting invalid configuration "
 "options which prevent openvpn from starting. Read the manual."
 msgstr ""
-"여기에는 openvpn 시작을 방해하는 잘못된 구성 옵션을 선택하는 것을 막아주는 기"
-"능이 거의 없습니다. 설명서를 읽어보세요."
+"잘못된 설정 옵션을 선택하여 OpenVPN이 시작되지 않더라도 막아주는 안전장치가 "
+"거의 없습니다. 매뉴얼을 참고하세요."
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:42
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:42
@@ -1709,7 +1709,7 @@ msgstr ""
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:493
 msgctxt "footstrap"
 msgid "As in file"
-msgstr ""
+msgstr "파일 그대로"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch-vlan.js:672
 msgid "Assign VLAN %d as tagged on selected ports"
@@ -1801,7 +1801,7 @@ msgstr "권위 부여(Authoritative)"
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:11
 #: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:96
 msgid "Authorization Required"
-msgstr "인증이 필요합니다"
+msgstr "인증 필요"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:335
 msgctxt "footstrap"
@@ -2427,7 +2427,7 @@ msgstr "체인 훅 \"%h\""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:102
 msgid "Change password for rpcd user"
-msgstr "rpcd 사용자 암호 변경"
+msgstr "rpcd 사용자 비밀번호 변경"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:282
 msgid "Change process priority"
@@ -2465,7 +2465,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:92
 msgid "Changes the password for accessing the device as (rpcd) user"
-msgstr "(rpcd) 사용자로 장치에 접속하기 위한 암호를 변경합니다"
+msgstr "(rpcd) 사용자로 장치에 접속하기 위한 비밀번호를 변경합니다"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:190
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:136
@@ -2547,7 +2547,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:267
 msgid "Chroot to directory after initialization"
-msgstr "초기화 후 디렉터리로 chroot"
+msgstr "초기화 후 chroot할 디렉터리"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1329
 msgid "Cipher"
@@ -2562,7 +2562,7 @@ msgctxt "footstrap"
 msgid ""
 "Cleaned before upload: removed %d unsafe element(s) and %d external "
 "reference(s)."
-msgstr ""
+msgstr "업로드 전 정화됨: 안전하지 않은 요소 %d개 및 외부 참조 %d개를 제거했습니다."
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1734
 msgid "Clear"
@@ -2633,7 +2633,7 @@ msgstr "닫기"
 msgid ""
 "Close inactive connection after the given amount of seconds, use 0 to "
 "persist connection"
-msgstr "지정된 시간(초) 후 비활성 연결을 닫고, 연결을 유지하려면 0을 사용"
+msgstr "지정한 시간(초) 후 비활성 연결을 종료합니다. 연결을 유지하려면 0을 입력하세요"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1249
 msgid ""
@@ -4478,7 +4478,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:28
 msgid "Enable password policy"
-msgstr "암호 정책 활성화"
+msgstr "비밀번호 정책 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1218
 msgid "Enable promiscuous mode"
@@ -4937,7 +4937,7 @@ msgstr "실패 원인"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:182
 msgid "Failed to change the system password."
-msgstr "시스템 암호를 변경하지 못했습니다."
+msgstr "시스템 비밀번호를 변경하지 못했습니다."
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:21
 msgid "Failed to configure modem"
@@ -5194,7 +5194,7 @@ msgctxt "footstrap"
 msgid ""
 "Footstrap theme settings apply at once and are stored permanently in this "
 "browser."
-msgstr ""
+msgstr "Footstrap 테마 설정은 즉시 적용되며 이 브라우저에 영구적으로 저장됩니다."
 
 #: themes/luci-theme-footstrap/root/usr/share/rpcd/acl.d/luci-theme-footstrap.json:3
 msgid ""
@@ -5559,7 +5559,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:169
 msgid "Given password confirmation did not match, password not changed!"
-msgstr ""
+msgstr "입력한 비밀번호 확인이 일치하지 않습니다. 비밀번호가 변경되지 않았습니다!"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:125
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/plugins.js:58
@@ -5584,7 +5584,7 @@ msgstr "펌웨어 업그레이드로 이동..."
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:58
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:73
 msgid "Go to password configuration..."
-msgstr "암호 설정으로 이동..."
+msgstr "비밀번호 설정으로 이동..."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2947
 #: modules/luci-base/htdocs/luci-static/resources/form.js:4534
@@ -5697,7 +5697,7 @@ msgstr "네트워크 상태 정보에 접근 권한 부여"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:228
 msgid "Grant access to password policy configuration"
-msgstr "암호 정책 설정에 접근 권한 부여"
+msgstr "비밀번호 정책 설정에 접근 권한 부여"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:52
 msgid "Grant access to port status display"
@@ -5747,7 +5747,7 @@ msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:66
 msgid "Group Password"
-msgstr "그룹 암호"
+msgstr "그룹 비밀번호"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:22
 msgid "Guest"
@@ -5755,7 +5755,7 @@ msgstr "게스트"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid "HE.net password"
-msgstr "HE.net 암호"
+msgstr "HE.net 비밀번호"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:73
 msgid "HE.net username"
@@ -6672,7 +6672,7 @@ msgstr "초기 EPS 베어러 IP 유형"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:208
 msgid "Initial EPS Bearer Password"
-msgstr "초기 EPS 베어러 암호"
+msgstr "초기 EPS 베어러 비밀번호"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:204
 msgid "Initial EPS Bearer Username"
@@ -6973,7 +6973,7 @@ msgstr "잘못된 서버 URL"
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:68
 #: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:78
 msgid "Invalid username and/or password! Please try again."
-msgstr "사용자 이름 또는 암호가 잘못되었습니다! 다시 시도하세요."
+msgstr "사용자 이름 또는 비밀번호가 잘못되었습니다! 다시 시도하세요."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:13
 msgid "Invert blinking"
@@ -8922,7 +8922,7 @@ msgstr "페이지를 찾을 수 없음"
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:55
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:70
 msgid "No password set!"
-msgstr "암호 미설정!"
+msgstr "비밀번호 미설정!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:93
 msgid "No peers connected"
@@ -9169,11 +9169,11 @@ msgstr "확인"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
-msgstr "난독화된 그룹 암호"
+msgstr "난독화된 그룹 비밀번호"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:61
 msgid "Obfuscated Password"
-msgstr "난독화된 암호"
+msgstr "난독화된 비밀번호"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:118
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:111
@@ -9224,7 +9224,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:121
 msgid "Old Password"
-msgstr "기존 암호"
+msgstr "기존 비밀번호"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1246
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:19
@@ -9740,7 +9740,7 @@ msgstr "PAP/CHAP"
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:50
 msgid "PAP/CHAP password"
-msgstr "PAP/CHAP 암호"
+msgstr "PAP/CHAP 비밀번호"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:84
@@ -9921,34 +9921,34 @@ msgstr "패스스루 (물리 장치의 모든 트래픽을 단일 MACVLAN에 전
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:19
 #: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:108
 msgid "Password"
-msgstr "암호"
+msgstr "비밀번호"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:38
 msgid "Password Policy"
-msgstr "암호 정책"
+msgstr "비밀번호 정책"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
-msgstr "암호 인증"
+msgstr "비밀번호 인증"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2060
 msgid "Password of Private Key"
-msgstr "개인 키의 암호"
+msgstr "개인 키 비밀번호"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2118
 msgid "Password of inner Private Key"
-msgstr "내부 개인 키 암호"
+msgstr "내부 개인 키 비밀번호"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:44
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:48
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:50
 msgid "Password strength"
-msgstr "암호 강도"
+msgstr "비밀번호 강도"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:148
 msgid "Password2"
-msgstr "암호2"
+msgstr "비밀번호2"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:279
 msgid ""
@@ -10180,7 +10180,7 @@ msgstr "%d 이상 %d 이하의 VLAN ID를 입력해 주세요."
 #: modules/luci-base/ucode/template/sysauth.ut:25
 #: themes/luci-theme-footstrap/ucode/template/themes/footstrap/sysauth.ut:98
 msgid "Please enter your username and password."
-msgstr "사용자 이름과 암호를 입력해 주세요."
+msgstr "사용자 이름과 비밀번호를 입력해 주세요."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_vlan.js:63
 msgid ""
@@ -10323,7 +10323,7 @@ msgstr "포트 우선순위"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/bridgevlan.js:235
 msgid "Port specification \"%s\" on VLAN %d cannot be parsed."
-msgstr "VLAN %d의 \"%s\" 포트 지정을 파싱할 수 없습니다."
+msgstr "VLAN %d의 \"%s\" 포트 지정을 구문 분석할 수 없습니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:375
 msgid "Port status"
@@ -10615,9 +10615,10 @@ msgid ""
 "OpenSSH-compatible public key or drag a <code>.pub</code> file into the "
 "input field."
 msgstr ""
-"공개 키를 사용하면 암호 없는 SSH 로그인을 할 수 있습니다. 일반 암호보다 "
-"보안성이 훨씬 뛰어납니다. 장치에 새 키를 업로드하려면, 입력 필드에 OpenSSH "
-"호환 공개 키를 붙여넣거나 <code>.pub</code> 파일을 드래그하세요."
+"공개 키를 사용하면 비밀번호 없는 SSH 로그인을 할 수 있습니다. 일반 "
+"비밀번호보다 보안성이 훨씬 뛰어납니다. 장치에 새 키를 업로드하려면, 입력 "
+"필드에 OpenSSH 호환 공개 키를 붙여넣거나 <code>.pub</code> 파일을 "
+"드래그하세요."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:219
 msgid "Public prefix routed to this device for distribution to clients."
@@ -11205,7 +11206,7 @@ msgstr "요청 시간 초과"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:32
 msgid "Require a minimum password length"
-msgstr "최소 암호 길이"
+msgstr "최소 비밀번호 길이"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/pwpolicy.js:38
 msgid "Require digits"
@@ -11382,12 +11383,12 @@ msgstr "필터 초기화"
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:677
 msgctxt "footstrap"
 msgid "Reset to built-in"
-msgstr ""
+msgstr "기본값으로 초기화"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:705
 msgctxt "footstrap"
 msgid "Reset to built-in — go back to the look the theme ships with."
-msgstr ""
+msgstr "기본값으로 초기화 — 테마에서 기본 제공하는 원래 외관으로 되돌립니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:402
 msgid "Reset to defaults"
@@ -11489,7 +11490,7 @@ msgstr "SOCKS 프록시 오류 발생 시 무한 재시도"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:425
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:426
 msgid "Reveal/hide password"
-msgstr "암호 보이기/숨기기"
+msgstr "비밀번호 보이기/숨기기"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1221
 msgid "Reverse path filter"
@@ -11636,7 +11637,7 @@ msgstr ""
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
 msgid "Router Password"
-msgstr "라우터 암호"
+msgstr "라우터 비밀번호"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:920
 msgid "Router Priority"
@@ -11812,8 +11813,8 @@ msgstr "SSID"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1526
 msgid "SSID and passwords with URIencoded sequences (e.g. %20) may not work."
 msgstr ""
-"SSID 및 암호에 URI 인코딩 문자열(예: %20)을 사용하면 작동하지 않을 수 있습니"
-"다."
+"SSID 및 비밀번호에 URI 인코딩 문자열(예: %20)을 사용하면 작동하지 않을 수 "
+"있습니다."
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:9
 msgid "SSTP"
@@ -11879,21 +11880,23 @@ msgid ""
 "Save to router — store this look on the router. Browsers with a look of "
 "their own keep it."
 msgstr ""
+"라우터에 저장 — 이 테마 외관을 라우터에 저장합니다. 자체 외관을 사용하는 "
+"브라우저는 그대로 유지합니다."
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:711
 msgctxt "footstrap"
 msgid "Saved look"
-msgstr ""
+msgstr "저장된 외관"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:635
 msgctxt "footstrap"
 msgid "Saved to router"
-msgstr ""
+msgstr "라우터에 저장됨"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:827
 msgctxt "footstrap"
 msgid "Saving"
-msgstr ""
+msgstr "저장"
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:475
 msgctxt "footstrap"
@@ -13222,7 +13225,7 @@ msgstr "종료"
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-assets.js:40
 msgctxt "footstrap"
 msgid "That SVG had nothing left once the unsafe parts were removed."
-msgstr ""
+msgstr "해당 SVG에서 안전하지 않은 부분을 제거한 후 남은 내용이 없습니다."
 
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-assets.js:472
 msgctxt "footstrap"
@@ -13582,7 +13585,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:166
 msgid "The given software repository public key is already present."
-msgstr ""
+msgstr "제공된 소프트웨어 저장소 공개 키가 이미 존재합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:954
 msgid "The hardware address(es) of this host."
@@ -13845,7 +13848,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:180
 msgid "The system password has been successfully changed."
-msgstr "시스템 암호가 성공적으로 변경되었습니다."
+msgstr "시스템 비밀번호가 성공적으로 변경되었습니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:347
 msgid "The sysupgrade command failed with code %d"
@@ -13932,8 +13935,8 @@ msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface."
 msgstr ""
-"현재 라우터에 암호가 설정되어 있지 않습니다. 웹 관리 화면을 보호하기 위해 관"
-"리자(root) 암호를 설정해 주세요."
+"이 라우터에 비밀번호가 설정되어 있지 않습니다. 루트 비밀번호를 설정하여 웹 "
+"인터페이스를 보호하세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 msgid "They filter which options apply to which hosts."
@@ -13954,6 +13957,9 @@ msgid ""
 "here lasts until you reload. Saving as default still works and applies to "
 "every browser."
 msgstr ""
+"이 브라우저는 환경 설정을 저장하지 않습니다. (사이트 데이터 차단됨) 따라서 "
+"여기서의 변경 사항은 다시 불러오기 전까지만 유지됩니다. 기본값으로 저장 "
+"기능은 정상 작동하며 모든 브라우저에 적용됩니다."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:48
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
@@ -14119,7 +14125,7 @@ msgstr ""
 #: themes/luci-theme-footstrap/htdocs/luci-static/resources/fs-appearance.js:743
 msgctxt "footstrap"
 msgid "This theme is not translated on this router yet."
-msgstr ""
+msgstr "이 라우터에 해당 테마의 번역이 설치되어 있지 않습니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:155
 msgid "Time Format"
@@ -14862,7 +14868,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:581
 msgid "Use protocol"
-msgstr "사용 프로토콜"
+msgstr "사용할 프로토콜"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:179
 msgid "Use routing table"
@@ -16138,7 +16144,8 @@ msgctxt "footstrap"
 msgid ""
 "the uploaded file could not be removed either; it is still on the router."
 msgstr ""
-"업로드한 파일 역시 삭제하지 못했습니다. 파일이 여전히 라우터에 남아 있습니다."
+"업로드한 파일을 제거하는 데도 실패했습니다. 파일이 여전히 라우터에 남아 "
+"있습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1926
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
