@@ -1324,11 +1324,18 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 		let changed = false;
 		const sids = this.cfgsections();
 
+		/*
+		 * Query the rendered sections once, instead of searching the
+		 * whole map for each section.
+		 */
+		const rendered = new Set(Array.from(this.map.findElements('[data-section-id]'),
+			(el) => el.getAttribute('data-section-id')));
+
 		for (let i = 0, sid = sids[0]; (sid = sids[i]) != null; i++) {
 			/*
 			 * do not remove elements that are not rendered yet
 			 */
-			if (!this.map.findElement('data-section-id', sid))
+			if (!rendered.has(sid))
 				continue;
 
 			for (let j = 0, o = this.children[0]; (o = this.children[j]) != null; j++) {
