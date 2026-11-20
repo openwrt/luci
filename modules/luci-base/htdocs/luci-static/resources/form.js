@@ -5275,6 +5275,15 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 	 */
 
 	/**
+	 * Allows preserving user selection order for multiple-choice dropdowns.
+	 *
+	 * @memberof LuCI.form.MultiValue.prototype
+	 * @member keep_order
+	 * @type {boolean}
+	 * @default false
+	 */
+
+	/**
 	 * @private
 	 * @param {string} section_id
 	 * @param {number} option_index
@@ -5289,9 +5298,10 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 			id: this.cbid(section_id),
 			sort: this.keylist,
 			multiple: true,
+			keep_order: this.keep_order,
 			optional: this.optional || this.rmempty,
 			select_placeholder: this.placeholder,
-			create: this.create,		
+			create: this.create,
 			display_items: this.display_size ?? this.size ?? 3,
 			dropdown_items: this.dropdown_size ?? this.size ?? -1,
 			validate: this.getValidator(section_id),
@@ -5299,7 +5309,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 		});
 
 		return widget.render();
-	},
+	}
 });
 
 /**
