@@ -448,7 +448,6 @@ return L.view.extend({
 			_('Define username'));
 		go.rmempty = false;
 		go.optional = false;
-		go.modalonly = true;
 
 		go = g.option(form.Flag, 'allow_write',
 			_('Allow write'));
