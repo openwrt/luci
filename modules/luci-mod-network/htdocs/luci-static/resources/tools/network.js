@@ -1525,5 +1525,14 @@ return baseclass.extend({
 	},
 
 	updateDevBadge: updateDevBadge,
-	updatePortStatus: updatePortStatus
+	updatePortStatus: updatePortStatus,
+
+	generateDnsmasqInstanceEntry(d) {
+		const idx = d['.index'], name = d['.name'], anon = d['.anonymous'];
+		const label = anon ? `dnsmasq[${idx}]` : name;
+		const parts = [`${idx} (${_('Name')}: ${label}`];
+		if (d.domain) parts.push(`${_('Domain')}: ${d.domain}`);
+		if (d.local) parts.push(`${_('Local')}: ${d.local}`);
+		return [name, parts.join(', ') + ')'];
+	}
 });
