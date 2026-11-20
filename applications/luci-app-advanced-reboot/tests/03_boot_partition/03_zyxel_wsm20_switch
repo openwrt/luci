@@ -1,0 +1,25 @@
+Test boot_partition for ZyXEL WSM20: switch to partition 2 (success).
+Writes the boot-number byte "02" at offset 4 of the "persist" partition.
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+zyxel,wsm20
+-- End --
+
+-- File fs/popen~_lib_functions_sh_find_mtd_part_persist_.txt --
+/dev/mtdblock7
+-- End --
+
+-- File fs/popen~printf_b_x02_dd_of_dev_mtdblock7_bs_1_seek_4_count_1_conv_notrunc_2_dev_null_echo_.txt --
+0
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.boot_partition.call({ args: { number: "2" } });
+printf("%J\n", result);
+-- End --
+
+-- Expect stdout --
+{ }
+-- End --

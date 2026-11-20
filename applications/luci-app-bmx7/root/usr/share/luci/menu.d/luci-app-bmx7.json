@@ -1,0 +1,73 @@
+{
+	"admin/network/bmx7": {
+		"title": "BMX7",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "bmx7/config"
+		},
+		"depends": {
+			"acl": [ "luci-app-bmx7" ]
+		}
+	},
+
+	"admin/network/bmx7/config": {
+		"title": "Config",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "bmx7/config"
+		},
+		"depends": {
+			"acl": [ "luci-app-bmx7" ]
+		}
+	},
+
+	"admin/network/bmx7/status": {
+		"title": "Status",
+		"order": 3,
+		"action": {
+			"type": "template",
+			"path": "bmx7/bmxstatus"
+		},
+		"depends": {
+			"acl": [ "luci-app-bmx7" ]
+		}
+	},
+
+	"admin/network/bmx7/topology": {
+		"title": "Topology",
+		"order": 4,
+		"action": {
+			"type": "template",
+			"path": "bmx7/bmxtopology"
+		},
+		"depends": {
+			"acl": [ "luci-app-bmx7" ]
+		}
+	},
+
+	"admin/network/bmx7/nodes": {
+		"title": "Nodes",
+		"order": 5,
+		"action": {
+			"type": "template",
+			"path": "bmx7/bmxnodes"
+		},
+		"depends": {
+			"acl": [ "luci-app-bmx7" ]
+		}
+	},
+
+	"admin/network/bmx7/tunnels": {
+		"title": "Tunnels",
+		"order": 6,
+		"action": {
+			"type": "template",
+			"path": "bmx7/bmxtunnels"
+		},
+		"depends": {
+			"acl": [ "luci-app-bmx7" ]
+		}
+	}
+}

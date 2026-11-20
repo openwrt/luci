@@ -1,0 +1,20 @@
+Test boot_partition with a valid numeric partition that does not exist on the device.
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+linksys,e7350
+-- End --
+
+-- File fs/popen~fw_printenv_-n_bootimage_2_dev_null.txt --
+1
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.boot_partition.call({ args: { number: "9" } });
+printf("%J\n", result);
+-- End --
+
+-- Expect stdout --
+{ "error": "PARTITION_NOT_FOUND", "args": [ "9" ] }
+-- End --

@@ -1,0 +1,39 @@
+{
+	"admin/services/ser2net": {
+		"title": "ser2net",
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-ser2net" ],
+			"uci": { "ser2net": true }
+		}
+	},
+
+	"admin/services/ser2net/settings": {
+		"title": "Settings",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "ser2net/settings"
+		}
+	},
+
+	"admin/services/ser2net/proxies": {
+		"title": "Proxies",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "ser2net/proxies"
+		}
+	},
+
+	"admin/services/ser2net/leds": {
+		"title": "LEDs",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "ser2net/leds"
+		}
+	}
+}

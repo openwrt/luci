@@ -1,0 +1,47 @@
+name: GitHub pages
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      # One day we might include all htdocs folders:
+      # - '**/htdocs/**'
+      # Until then, follow jsdoc.conf.json:source directive
+      - 'modules/luci-base/htdocs/luci-static/resources/**'
+      - 'docs/**'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: endsWith(github.repository, 'luci')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        run: npm run doc
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./docs/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

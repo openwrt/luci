@@ -1,0 +1,68 @@
+{
+	"admin/vpn/strongswan-swanctl": {
+		"title": "strongSwan IPsec",
+		"order": 90,
+		"action": {
+			"type": "alias",
+			"path": "admin/vpn/strongswan-swanctl/swanctl"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-strongswan-swanctl"
+			]
+		}
+	},
+	"admin/vpn/strongswan-swanctl/swanctl": {
+		"title": "Connections",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/swanctl"
+		}
+	},
+	"admin/vpn/strongswan-swanctl/secrets": {
+		"title": "Secrets",
+		"order": 12,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/secrets"
+		}
+	},
+	"admin/vpn/strongswan-swanctl/strongswan": {
+		"title": "Service",
+		"order": 15,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/strongswan"
+		}
+	},
+	"admin/vpn/strongswan-swanctl/general": {
+		"title": "General",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/general"
+		}
+	},
+	"admin/vpn/strongswan-swanctl/log": {
+		"title": "Log",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/log"
+		}
+	},
+	"admin/status/strongswan": {
+		"title": "strongSwan IPsec",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "strongswan-swanctl/status"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-strongswan-swanctl"
+			]
+		}
+	}
+}

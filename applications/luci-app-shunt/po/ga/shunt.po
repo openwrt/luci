@@ -1,0 +1,786 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: ga\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: Aindriú Mac Giolla Eoin "
+"<aindriu80@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsshunt/ga/>\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
+"6 && n<11) ? 3 : 4;\n"
+"PO-Revision-Date: 2026-11-10 03:51+0000\n"
+"X-Generator: Weblate 2026.11.2.dev0\n"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:396
+msgid "%d name(s) every %ds"
+msgstr "%d ainm gach %d soicind"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:198
+msgid ""
+"%d of %d observed responses were not used. That is normal: the observer sees "
+"every answer on the network, and only the ones for a domain you routed are "
+"of any interest."
+msgstr ""
+"Níor úsáideadh %d as na %d freagra a breathnaíodh. Tá sé sin gnáth: feiceann "
+"an breathnóir gach freagra ar an líonra, agus níl suim ach sna freagraí sin "
+"a bhaineann le fearann a ródáil tú."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:86
+msgid "%d pkt matched"
+msgstr "%d paicéad meaitseáilte"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:28
+msgid "%dh %dm"
+msgstr "%du %dn"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:32
+msgid "%dm %ds"
+msgstr "%dn %ds"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:34
+msgid "%ds"
+msgstr "%ds"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:243
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:116
+msgid "Action"
+msgstr "Gníomh"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:96
+msgid "Add policy"
+msgstr "Cuir polasaí leis"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:135
+msgid "Address"
+msgstr "Seoladh"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:495
+msgid ""
+"Addresses that answer ICMP echo, reachable through every policy interface - "
+"public resolvers are the usual choice. Every interface a route policy uses "
+"is probed through itself every 5 seconds; one that answers no target for "
+"three rounds is treated as down and its policies fall back until it answers "
+"again. Empty means no tracking, see the README."
+msgstr ""
+"Seoltaí a fhreagraíonn d’iarratais ICMP echo, ar féidir teacht orthu trí "
+"gach comhéadan beartais — is iad réititheoirí poiblí an rogha is gnách. "
+"Déantar tástáil ar gach comhéadan a úsáideann beartas ródaithe tríd an "
+"gcomhéadan céanna gach 5 soicind; má theipeann ar chomhéadan freagra a "
+"thabhairt ar feadh trí thimthriall, meastar go bhfuil sé as feidhm, agus "
+"aistríonn na beartais chuig roghanna eile go dtí go dtosaíonn sé ag "
+"freagairt arís. Ciallaíonn iontráil fholamh nach ndéantar aon rianú; féach "
+"an comhad README."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:130
+msgid "Answer carried no usable address"
+msgstr "Ní raibh aon seoladh inúsáidte sa fhreagra"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:193
+msgid "Answers used for a policy"
+msgstr "Freagraí a úsáidtear le haghaidh polasaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:56
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:42
+msgid "Apply failed: %s"
+msgstr "Theip ar an gcur i bhfeidhm: %s"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:148
+msgid "Block the traffic (killswitch)"
+msgstr "Cuir bac ar an trácht (lasc maraithe)"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:120
+msgid "Bypass - leave the traffic alone"
+msgstr "Seachbhóthar – ná bac leis an trácht"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:138
+msgid "Bytes routed"
+msgstr "Bearta ródaithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:469
+msgid ""
+"Ceiling in seconds for a learned address in its Set. An address learned from "
+"a DNS answer expires with the TTL of that answer, clamped to the range 60 to "
+"this value; a polled address uses this value. Keep it well above the poll "
+"interval."
+msgstr ""
+"Socraítear an teorainn ama (i soicindí) le haghaidh seoladh a fhaightear "
+"laistigh den tacar. Téann seoladh a fhaightear ó fhreagra DNS in éag de réir "
+"an luacha TTL atá ag an bhfreagra sin, ach é teorannaithe laistigh den raon "
+"ó 60 go dtí an luach seo; i gcás seoladh a fhaightear trí vótáil (polling), "
+"úsáidtear an luach seo. Cinntigh go bhfuil an luach seo i bhfad níos airde "
+"ná an t-eatramh vótála."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:167
+msgid "Client MACs this policy applies to, ORed with the addresses above."
+msgstr ""
+"Seoltaí MAC cliant a mbaineann an polasaí seo leo, comhcheangailte (trí "
+"oibríocht OR) leis na seoltaí thuas."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:179
+msgid "Client Selectors"
+msgstr "Roghnóirí Cliaint"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:162
+msgid ""
+"Client addresses or prefixes this policy applies to. Leave empty to apply to "
+"every client."
+msgstr ""
+"Seoltaí nó réimíreanna cliant a mbaineann an polasaí seo leo. Fág folamh é "
+"chun é a chur i bhfeidhm ar gach cliant."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:138
+msgid "Compression pointer in the question"
+msgstr "Táscaire comhbhrúite sa cheist"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:448
+msgid "DNS Observer Settings"
+msgstr "Socruithe an Bhreathnóra DNS"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:188
+msgid "DNS responses observed on %s since the service started"
+msgstr "Freagraí DNS a breathnaíodh ar %s ó thosaigh an tseirbhís"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:455
+msgid "Debug Logging"
+msgstr "Logáil Dífhabhtaithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:194
+msgid "Destination Address Files"
+msgstr "Comhaid Seoltaí Cinn Scríbe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:189
+msgid "Destination Addresses"
+msgstr "Seoltaí Cinn Scríbe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:184
+msgid "Destination Ports"
+msgstr "Calafoirt Chinn Scríbe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:190
+msgid "Destination addresses or prefixes to route into this policy."
+msgstr "Seoltaí cinn scríbe nó réimíreanna le ródú isteach sa pholasaí seo."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:206
+msgid "Domain Files"
+msgstr "Comhaid Fearainn"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:128
+msgid "Domain is in no policy"
+msgstr "Níl an fearann i gceist in aon pholasaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:201
+msgid "Domains"
+msgstr "Fearainn"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:452
+msgid "Enable the shunt service."
+msgstr "Cumasaigh an tseirbhís sheunta."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:451
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:111
+msgid "Enabled"
+msgstr "Cumasaithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:132
+msgid "Error reply, e.g. NXDOMAIN"
+msgstr "Freagra earráide, m.sh. NXDOMAIN"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:89
+msgid ""
+"Evaluated top to bottom - the first policy a packet matches wins. Within one "
+"policy the selectors are ANDed: source plus domain means only that client, "
+"and only to those domains."
+msgstr ""
+"Déantar meastóireacht ó bharr go bun – is í an chéad bheartas a "
+"mheaitseálann paicéad a bhíonn i réim. Laistigh de bheartas amháin, cuirtear "
+"na roghnóirí i bhfeidhm trí oibríocht loighciúil AND: ciallaíonn 'foinse "
+"móide fearann' an cliant sin amháin, agus na fearainn sin amháin."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:172
+msgid ""
+"Everything arriving on these devices, ORed with the client selectors above - "
+"a whole guest network or VLAN, in IPv4 and IPv6 alike, whatever prefix it "
+"gets. Not the router's own traffic. For domains, add the device to the "
+"observed devices as well."
+msgstr ""
+"Gach rud a shroicheann na gléasanna seo – i gcomhcheangal leis na roghnóirí "
+"cliant thuas – bíodh sé ina líonra aíonna iomlán nó ina VLAN, in IPv4 agus "
+"in IPv6 araon, is cuma cén réimír a fhaigheann sé. Ní chuimsítear trácht an "
+"ródaire féin. I gcás fearann, cuir an gléas leis na gléasanna atá á "
+"mbreathnú chomh maith."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:53
+msgid "Expecting a bare file name or an absolute path, without whitespace"
+msgstr "Ag súil le hainm comhaid amháin nó le cosán iomlán, gan spásanna"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:136
+msgid "Expires"
+msgstr "In éag"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:150
+msgid "Extension header chain too long"
+msgstr "Tá slabhra na gceanntásc síneadh rófhada"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:147
+msgid "Fall through to the normal uplink"
+msgstr "Aistrigh go dtí an nasc suas gnáth"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:249
+msgid "Fallback"
+msgstr "Titim siar"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:144
+msgid "Fallback Behavior"
+msgstr "Iompar Cúltaca"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:195
+msgid ""
+"Files with one address or prefix per line, IPv4 and IPv6 mixed, for large "
+"published ranges. A bare name lives under /tmp/shunt, an absolute path is "
+"used as given. After the file changed, refresh below."
+msgstr ""
+"Comhaid ina bhfuil seoladh amháin nó réimír amháin ar gach líne — meascán de "
+"IPv4 agus IPv6 — le haghaidh raonta móra atá foilsithe. Má thugtar ainm "
+"amháin, cuirtear é faoi /tmp/shunt; má thugtar cosán iomlán, úsáidtear é mar "
+"atá. Tar éis an comhad a athrú, déan athnuachan thíos."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:207
+msgid ""
+"Files with one domain pattern per line, for large or community-maintained "
+"lists. A bare name lives under /tmp/shunt, an absolute path is used as "
+"given. Entries from a file are learned by the DNS observer only, never "
+"polled; after the file changed, refresh below."
+msgstr ""
+"Comhaid ina bhfuil patrún fearainn amháin ar gach líne, le húsáid i gcás "
+"liostaí móra nó liostaí a chothaíonn an pobal. Má tá ainm ann gan "
+"chomhthéacs, cuirtear é faoi /tmp/shunt; má tá cosán iomlán ann, úsáidtear é "
+"mar atá. Ní fhoghlaimíonn ach an breathnóir DNS iontrálacha ó chomhad, ní "
+"dhéantar suirbhé orthu riamh; Má dhéantar athrú ar chomhad, déan athnuachan "
+"thíos."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:145
+msgid "Frame ends mid-structure"
+msgstr "Críochnaíonn an fráma i lár an struchtúir"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:447
+msgid "General Settings"
+msgstr "Socruithe Ginearálta"
+
+#: applications/luci-app-shunt/root/usr/share/rpcd/acl.d/luci-app-shunt.json:3
+msgid "Grant access to LuCI app shunt"
+msgstr "Deonaigh rochtain ar shunt aip LuCI"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:424
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:449
+msgid "Health Tracking"
+msgstr "Rianú Sláinte"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:149
+msgid "IP fragment"
+msgstr "Codán IP"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:213
+msgid "IPv4 Gateway Override"
+msgstr "Sárú ar Gheata IPv4"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:219
+msgid "IPv6 Gateway Override"
+msgstr "Sárú ar Gheata IPv6"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:148
+msgid "Inconsistent IP header length"
+msgstr "Fad ceanntásca IP neamhréireach"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:152
+msgid "Inconsistent UDP length"
+msgstr "Fad UDP neamhréireach"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:244
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:125
+msgid "Interface"
+msgstr "Comhéadan"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:153
+msgid "Keep Local Traffic"
+msgstr "Coinnigh Trácht Áitiúil"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:419
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:127
+msgid "Learned addresses"
+msgstr "Óráidí léannta"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:154
+msgid "Learned addresses (%d)"
+msgstr "Seoltaí foghlamtha (%d)"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:456
+msgid ""
+"Log every observed DNS answer and every set write. Useful for a bug report, "
+"noisy in normal operation - on a router running adblock roughly half of all "
+"answers are error replies, and each one gets a line."
+msgstr ""
+"Logáil gach freagra DNS a breathnaíodh agus gach scríobh tacair. Úsáideach "
+"le haghaidh tuairisc fabht, torannach i ngnáthoibriú - ar ródaire a ritheann "
+"adblock is freagraí earráide iad leath de na freagraí go léir, agus "
+"faigheann gach ceann líne."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:459
+msgid "Manage rp_filter"
+msgstr "Bainistigh rp_filter"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:245
+msgid "Mark"
+msgstr "Marc"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:468
+msgid "Maximum Entry Lifetime"
+msgstr "Uastréimhse Iontrála"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:136
+msgid "Message ends mid-structure"
+msgstr "Críochnaíonn an teachtaireacht i lár an struchtúir"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:137
+msgid "Message too long"
+msgstr "Teachtaireacht rófhada"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:141
+msgid "Name has a byte outside a-z 0-9 - _"
+msgstr "Tá beart san ainm lasmuigh de a-z 0-9 - _"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:140
+msgid "Name too long"
+msgstr "Ainm rófhada"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:146
+msgid "Neither IPv4 nor IPv6"
+msgstr "Ná IPv4 ná IPv6"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/logtemplate.js:33
+msgid "No %s related logs yet!"
+msgstr "Níl aon logaí a bhaineann le %s ann go fóill!"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:180
+msgid "No client is selected, so every client is covered."
+msgstr "Níl aon chliant roghnaithe, mar sin tá gach cliant clúdaithe."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:63
+msgid "No output"
+msgstr "Gan aschur"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:237
+msgid "No policy is active."
+msgstr "Níl aon bheartas gníomhach."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:309
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:82
+msgid "No shunt config found!"
+msgstr "Níor aimsíodh aon chumraíocht shunt!"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:151
+msgid "Not UDP"
+msgstr "Ní UDP é"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:133
+msgid "Not a response"
+msgstr "Ní freagra é"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:129
+msgid "Not an address query"
+msgstr "Ní ceist faoi sheoladh í seo"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:135
+msgid "Not exactly one question"
+msgstr "Ní ceist amháin go díreach é"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:128
+msgid ""
+"Nothing learned yet. The service fills these from its poll cycle and from "
+"observed DNS answers."
+msgstr ""
+"Níl aon rud foghlamtha go fóill. Líonann an tseirbhís iad seo óna timthriall "
+"vótála agus ó fhFreagraí DNS a breathnaíodh."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:488
+msgid "Observed Devices"
+msgstr "Feistí a breathnaíodh"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:214
+msgid ""
+"Only needed when the gateway discovered from netifd is wrong. Point to point "
+"interfaces need no gateway at all."
+msgstr ""
+"Ní gá é seo ach amháin nuair atá an geata a aimsíodh ó netifd mícheart. Ní "
+"bhíonn aon gheata ag teastáil ar chor ar bith i gcás comhéadain pointe-go-"
+"pointe."
+
+#: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:23
+msgid "Overview"
+msgstr "Forléargas"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:137
+msgid "Packets routed"
+msgstr "Paicéid ródaithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:483
+msgid "Passive DNS Observer"
+msgstr "Breathnóir DNS Éighníomhach"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:88
+#: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:31
+msgid "Policies"
+msgstr "Polasaithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:242
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:134
+msgid "Policy"
+msgstr "Beartas"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:316
+msgid ""
+"Policy based routing by mac, source, destination and domain. For further "
+"information please check the %s."
+msgstr ""
+"Ródú bunaithe ar bheartais, ag brath ar MAC, foinse, ceann scríbe agus "
+"fearann. Chun tuilleadh eolais a fháil, féach ar %s."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:422
+msgid "Poll"
+msgstr "Polaitíocht"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:463
+msgid "Poll Interval"
+msgstr "Eatramh Vótála"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:494
+msgid "Probe Targets"
+msgstr "Spriocanna Taiscéalaíochta"
+
+#: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:47
+msgid "Processing Log"
+msgstr "Loga Próiseála"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:178
+msgid "Protocols"
+msgstr "Prótacail"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:137
+msgid "Proxy Port"
+msgstr "Port Seachfhreastalaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:484
+msgid ""
+"Read DNS answers as they pass the LAN device, whichever resolver produced "
+"them. Required for wildcard domains, which cannot be resolved ahead of time."
+msgstr ""
+"Léigh freagraí DNS agus iad ag dul thar an bhfeiste LAN, is cuma cén "
+"réiteoir a chruthaigh iad. Tá sé seo riachtanach i gcás fearainn cárta "
+"fiáin, nach féidir a réiteach roimh ré."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:142
+msgid "Record length does not fit the type"
+msgstr "Ní oireann fad an taifid don chineál"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:250
+msgid "Refresh"
+msgstr "Athnuaigh"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:242
+msgid "Refresh List Files"
+msgstr "Athnuachan ar Liosta na gComhad"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:68
+msgid "Refresh failed: %s"
+msgstr "Theip ar an athnuachan: %s"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:290
+msgid "Rejected settings"
+msgstr "Socruithe diúltaithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:139
+msgid "Reserved label type"
+msgstr "Cineál lipéid forchoimeádta"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:179
+msgid "Restrict to tcp, udp or both. A port without a protocol covers both."
+msgstr ""
+"Cuir teorainn le TCP, UDP nó an dá cheann. Clúdaíonn port gan phrótacal an "
+"dá cheann."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:381
+msgid "Reverse path filtering is strict"
+msgstr "Tá scagadh conairí droim ar ais dian"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:119
+msgid "Route into a policy interface"
+msgstr "Bealach isteach i gcomhéadan polasaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:117
+msgid ""
+"Route the selected traffic into the interface below, bypass it - a bypass "
+"policy marks nothing and exempts the traffic from every policy after it - or "
+"hand it to a transparent proxy on the router."
+msgstr ""
+"Atreoraigh an trácht roghnaithe chuig an gcomhéadan thíos, seachain é – ní "
+"dhéanann polasaí seachanta aon rud a mharcáil agus díolmhaíonn sé an trácht "
+"ó gach polasaí a thagann ina dhiaidh – nó cuir ar aghaidh chuig "
+"seachfhreastalaí trédhearcach ar an ródaire é."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:248
+msgid "Routes"
+msgstr "Bealaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:247
+msgid "Rules"
+msgstr "Rialacha"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:517
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:234
+msgid "Save & Restart"
+msgstr "Sábháil agus Atosaigh"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:464
+msgid "Seconds between poll cycles."
+msgstr "Soicindí idir timthriallta vótála."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:414
+msgid "Service"
+msgstr "Seirbhís"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:233
+#: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:39
+msgid "Set Reporting"
+msgstr "Socraigh Tuairisciú"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:460
+msgid ""
+"Set rp_filter to 2 on shunt's own policy interfaces, at start and when one "
+"comes up."
+msgstr ""
+"Socraigh rp_filter go 2 ar chomhéadain beartais an shunt féin, ag an tús "
+"agus nuair a thagann ceann aníos."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:444
+msgid "Settings"
+msgstr "Socruithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:477
+msgid ""
+"Should be at least twice the poll interval (%d), otherwise entries expire "
+"between cycles."
+msgstr ""
+"Ba cheart go mbeadh sé ar a laghad faoi dhó an t-eatramh vótála (%d); murach "
+"sin, rachaidh iontrálacha in éag idir timthriallta."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:185
+msgid ""
+"Single ports or ranges like 8000-8080, ANDed with the addresses below. Ports "
+"alone select that traffic from every client."
+msgstr ""
+"Poirt aonair nó raonta ar nós 8000-8080, curtha i bhfeidhm i gcomhar (trí "
+"oibríocht loighciúil AND) leis na seoltaí thíos. Trí na poirt amháin a "
+"úsáid, roghnaítear an trácht sin ó gach cliant."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:161
+msgid "Source Addresses"
+msgstr "Seoltaí Foinse"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:171
+msgid "Source Devices"
+msgstr "Gléasanna Foinse"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:166
+msgid "Source MAC Addresses"
+msgstr "Seoltaí MAC Foinse"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:181
+msgid "Static Destinations"
+msgstr "Cinn Scríbe Statacha"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:510
+msgid "Stop"
+msgstr "Stop"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:383
+msgid ""
+"Strict rp_filter will drop shunt's marked traffic on %s. Set rp_filter to 2 "
+"on the policy interface, enable rp_filter_manage to have shunt do it, or "
+"loosen it box-wide; see the README."
+msgstr ""
+"Scaoilfidh rp_filter dian trácht marcáilte an shunt ar %s. Socraigh "
+"rp_filter go 2 ar an gcomhéadan beartais, cumasaigh rp_filter_manage chun go "
+"ndéanfadh an shunt é, nó scaoil é ar fud an bhosca; féach an comhad README."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:246
+msgid "Table"
+msgstr "Tábla"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:489
+msgid ""
+"The LAN device the DNS answers cross on their way to the clients, normally "
+"br-lan. One entry per network segment, see the README."
+msgstr ""
+"An gléas LAN a dtéann freagraí DNS tríd agus iad ar a mbealach chuig na "
+"cliaint; de ghnáth is é br-lan é. Iontráil amháin in aghaidh gach deighleog "
+"líonra; féach an comhad README."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:126
+msgid ""
+"The device or logical interface this policy routes into. A netifd name is "
+"resolved to its device; any other device name is used as entered."
+msgstr ""
+"An gléas nó an comhéadan loighciúil a ndíríonn an polasaí seo trácht chuige. "
+"Déantar ainm netifd a réiteach go dtí an gléas a fhreagraíonn dó; úsáidtear "
+"aon ainm gléis eile mar a cuireadh isteach é."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:138
+msgid ""
+"The port the transparent proxy listens on, for tcp and udp. It must listen "
+"on loopback or on the wildcard address. Needs kmod-nft-tproxy."
+msgstr ""
+"An port a n-éisteann an seachfhreastalaí trédhearcach air, le haghaidh TCP "
+"agus UDP. Caithfidh sé éisteacht ar lúb siar nó ar an seoladh fiáin. Tá gá "
+"le kmod-nft-tproxy."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/logtemplate.js:44
+msgid "The syslog output, pre-filtered for messages related to: %s"
+msgstr ""
+"Aschur syslog, réamhscagtha le haghaidh teachtaireachtaí a bhaineann le: %s"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:292
+msgid ""
+"These entries were skipped. Everything else was applied - a rejected entry "
+"never takes the service down."
+msgstr ""
+"Rinneadh neamhaird de na hiontrálacha seo. Cuireadh gach rud eile i bhfeidhm "
+"– ní chuireann iontráil a dhiúltaítear an tseirbhís as feidhm riamh."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:143
+msgid "Too many answers"
+msgstr "An iomarca freagraí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:147
+msgid "Too many stacked VLAN tags"
+msgstr "An iomarca clibeanna VLAN cruachta"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:154
+msgid ""
+"Traffic to networks the routing table already has a route for - your other "
+"subnets, your static routes - stays on the normal path instead of entering "
+"the policy interface. Turn this off only for a hermetic killswitch."
+msgstr ""
+"Fanann trácht chuig líonraí a bhfuil bealach dóibh sa tábla ródaithe cheana "
+"féin — amhail do fho-líonraí eile nó do bhealaí statacha — ar an "
+"ngnáthbhealach, in áit dul isteach sa chomhéadan beartais. Ná díchumasaigh é "
+"seo ach amháin i gcás lasc maraithe iomlán atá scoite amach go hiomlán ón "
+"saol lasmuigh."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:121
+msgid "Transparent proxy on the router"
+msgstr "Seachfhreastalaí trédhearcach ar an ródaire"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:134
+msgid "Truncated response"
+msgstr "Freagra giorraithe"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:416
+msgid "Version"
+msgstr "Leagan"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:145
+msgid ""
+"What new traffic does when the interface is down or, for a transparent "
+"proxy, when nothing listens on its port."
+msgstr ""
+"Cad a tharlaíonn do thrácht nua nuair a bhíonn an comhéadan as feidhm, nó — "
+"i gcás seachfhreastalaí trédhearcach — nuair nach bhfuil aon rud ag "
+"éisteacht ar a phort."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:236
+msgid ""
+"What the nftables Sets currently hold. Counters are reset whenever an entry "
+"is refreshed, so they show recent activity, not a lifetime total."
+msgstr ""
+"An méid atá i seilbh na dtacar nftables faoi láthair. Athshocraítear na "
+"cuntair gach uair a dhéantar iontráil a athnuachan; dá bhrí sin, léiríonn "
+"siad gníomhaíocht le déanaí, seachas an t-iomlán ó thús ama."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:421
+msgid "across all policies"
+msgstr "thar gach polasaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:193
+msgid "all policies"
+msgstr "gach polasaí"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:216
+msgid "answers the health probes"
+msgstr "freagraíonn sé na fiosrúcháin sláinte"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:202
+msgid ""
+"example.com matches that name only, *.example.com matches its subdomains but "
+"not the apex - list both to cover both."
+msgstr ""
+"Meaitseálann example.com an t-ainm sin amháin; meaitseálann *.example.com a "
+"fho-fhearainn ach ní an fearann fréimhe féin – liostaigh an dá cheann chun "
+"iad araon a chuimsiú."
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:133
+msgid "interface"
+msgstr "comhéadan"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:391
+msgid "n/a"
+msgstr "n/b"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:91
+msgid "no answer from the backend"
+msgstr "gan freagra ón gcúlchóras"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:217
+msgid "no answer to the health probes since %s - the fallback applies"
+msgstr ""
+"níl aon freagra ar na seiceálacha sláinte ó %s i leith – cuirtear an rogha "
+"chúltaca i bhfeidhm"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:317
+msgid "online documentation"
+msgstr "doiciméadú ar líne"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:425
+msgid "policy interfaces answering the probes"
+msgstr "comhéadain bheartais ag freagairt na bhfiosrúchán"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:116
+msgid "ruleset present, service not running"
+msgstr "tá tacar rialacha i láthair, níl an tseirbhís ag rith"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:104
+msgid "ruleset re-applied %d time(s)"
+msgstr "tacar rialacha curtha i bhfeidhm arís %d uair"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:110
+msgid "running, but no ruleset in the kernel"
+msgstr "ag rith, ach gan tacar rialacha sa núicléas"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:102
+msgid "running, policy applied"
+msgstr "ag rith, beartas curtha i bhfeidhm"
+
+#: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:3
+msgid "shunt"
+msgstr "shunt"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:121
+msgid "stopped"
+msgstr "stad"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:397
+msgid "unavailable - ucode-mod-resolv missing"
+msgstr "níl ar fáil - ucode-mod-resolv ar iarraidh"
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:423
+msgid "wildcards are covered by the observer only"
+msgstr "Ní chlúdaíonn an breathnóir ach na carachtair fhiáine"

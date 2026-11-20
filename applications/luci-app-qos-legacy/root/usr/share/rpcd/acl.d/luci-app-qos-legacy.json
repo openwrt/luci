@@ -1,0 +1,14 @@
+{
+	"luci-app-qos-legacy": {
+		"description": "Grant UCI access for luci-app-qos-legacy",
+		"read": {
+			"uci": [ "qos" ],
+			"ubus": {
+				"luci-rpc": [ "getHostHints" ]
+			}
+		},
+		"write": {
+			"uci": [ "qos" ]
+		}
+	}
+}

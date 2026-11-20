@@ -1,0 +1,616 @@
+/* Switch/VLAN configuration view */
+
+/* Conflict notifications via ui.addNotification (flex layout; theme zeros ul padding) */
+#maincontent > .alert-message .svc-vlan-conflict {
+	min-width: 0;
+	width: 100%;
+}
+
+#maincontent > .alert-message .svc-vlan-conflict > p {
+	margin: 0 0 0.35em;
+}
+
+#maincontent > .alert-message .svc-vlan-conflict-ports {
+	margin: 0.35em 0 0;
+	padding: 0;
+}
+
+#maincontent > .alert-message .svc-vlan-conflict-port {
+	margin: 0.15em 0 0;
+	padding: 0;
+}
+
+#maincontent > .alert-message .svc-vlan-conflict-port::before {
+	content: '•\00a0';
+}
+
+#maincontent > .alert-message .svc-vlan-conflict ul {
+	margin: 0.35em 0 0;
+	padding-left: 1.35em;
+	list-style-position: inside;
+}
+
+#switch-vlan-view {
+	--svc-port-selected-bg: #e8f4fc;
+	--svc-port-selected-border: #3c7aa8;
+	--svc-port-selected-ring: rgba(60, 141, 188, 0.28);
+	/* Teal + amber-orange: distinguishable from grey port text */
+	--svc-vlan-untagged: #0d9488;
+	--svc-vlan-tagged: #d97706;
+	--svc-vlan-untagged-bg: rgba(13, 148, 136, 0.12);
+	--svc-vlan-tagged-bg: rgba(217, 119, 6, 0.14);
+	--svc-vlan-untagged-stripe: rgba(13, 148, 136, 0.2);
+	--svc-vlan-tagged-stripe: rgba(217, 119, 6, 0.2);
+	--svc-row-bg: var(--background-color-medium, #fafafa);
+	--svc-row-hover-bg: var(--background-color-high, #f3f3f3);
+	--svc-row-add-bg: #f7faff;
+}
+
+/* Theme overrides: several LuCI themes set large min-widths on text inputs
+ * (e.g. openwrt-2020: 20rem, material: 25rem in .cbi-value) and global
+ * button/input resets (openwrt-2020 zeros borders on *). Scope fixes here. */
+#switch-vlan-view input[type="text"],
+#switch-vlan-view input[type="number"] {
+	min-width: 0;
+	max-width: 100%;
+	width: 100%;
+	box-sizing: border-box;
+	min-height: unset;
+	line-height: normal;
+	font-size: inherit;
+	color: var(--text-color-high, inherit);
+	background-color: var(--background-color-high, #fff);
+	background-image: none;
+	border: 1px solid var(--border-color-low, #ddd);
+	border-radius: 2px;
+	box-shadow: none;
+}
+
+#switch-vlan-view input[type="text"]:focus,
+#switch-vlan-view input[type="number"]:focus {
+	border-color: var(--primary-color-high, #3c8dbc);
+	outline: none;
+}
+
+#switch-vlan-view .svc-vlan-btn-tagged,
+#switch-vlan-view .svc-vlan-btn-untagged,
+#switch-vlan-view .svc-vlan-btn-remove,
+#switch-vlan-view .svc-vlan-btn-add,
+#switch-vlan-view .svc-vlan-assign-btn {
+	box-shadow: none;
+	background-image: none;
+}
+
+:root[data-darkmode="true"] #switch-vlan-view {
+	--svc-port-selected-bg: rgba(126, 184, 232, 0.22);
+	--svc-port-selected-border: #b3d4f0;
+	--svc-port-selected-ring: rgba(126, 184, 232, 0.45);
+	--svc-vlan-untagged: #2dd4bf;
+	--svc-vlan-tagged: #fbbf24;
+	--svc-vlan-untagged-bg: rgba(45, 212, 191, 0.18);
+	--svc-vlan-tagged-bg: rgba(251, 191, 36, 0.2);
+	--svc-vlan-untagged-stripe: rgba(45, 212, 191, 0.32);
+	--svc-vlan-tagged-stripe: rgba(251, 191, 36, 0.36);
+	--svc-row-bg: var(--background-color-medium, #2a2a2a);
+	--svc-row-hover-bg: var(--background-color-high, #333);
+	--svc-row-add-bg: var(--background-color-high, #2d333b);
+}
+
+#switch-vlan-view .svc-block {
+	margin: 1em 0;
+}
+
+.svc-block-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.svc-block-header h3 {
+	margin: 0;
+	font-size: 1.1em;
+}
+
+.svc-port-header-actions {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4em;
+}
+
+#switch-vlan-view .cbi-section-descr {
+	margin-bottom: 1em;
+}
+
+.svc-empty {
+	margin: 0.5em 0;
+	color: var(--text-color-low, #888);
+	font-style: italic;
+}
+
+/* Port tiles */
+.svc-ports {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(11em, 1fr));
+	gap: 0.5em;
+}
+
+.svc-port-tile {
+	border: 1px solid var(--border-color-medium, #ccc);
+	border-radius: 4px;
+	padding: 0.5em 0.6em;
+	background: var(--background-color-medium, #fafafa);
+	color: var(--text-color-high, #000);
+	cursor: pointer;
+	user-select: none;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35em;
+	transition: background 0.05s linear, border-color 0.05s linear, box-shadow 0.05s linear;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.svc-port-tile:hover {
+	border-color: var(--border-color-high, #888);
+	background: var(--background-color-high, #f3f3f3);
+}
+
+.svc-port-tile.selected {
+	background: var(--svc-port-selected-bg);
+	border-width: 3px;
+	border-color: var(--svc-port-selected-border);
+	box-shadow: 0 0 0 2px var(--svc-port-selected-ring);
+}
+
+.svc-port-tile.selected:hover {
+	background: #dff0fb;
+	border-color: #336b95;
+}
+
+:root[data-darkmode="true"] #switch-vlan-view .svc-port-tile.selected:hover {
+	background: rgba(126, 184, 232, 0.3);
+}
+
+.svc-port-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.4em;
+}
+
+.svc-port-name {
+	font-family: monospace;
+	font-weight: bold;
+	font-size: 1.05em;
+}
+
+.svc-port-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3em;
+	font-size: 0.92em;
+	color: inherit;
+	white-space: nowrap;
+}
+
+.svc-port-dot {
+	display: inline-block;
+	width: 0.7em;
+	height: 0.7em;
+	border-radius: 50%;
+	background: #aaa;
+	flex: 0 0 auto;
+}
+
+.svc-port-link[data-state="up"] .svc-port-dot   { background: #1aaf5d; }
+.svc-port-link[data-state="down"] .svc-port-dot { background: #b0b0b0; }
+
+.svc-port-label {
+	font-size: 0.92em;
+	padding: 2px 4px;
+}
+
+.svc-port-label:focus {
+	border-color: var(--primary-color-high, #3c8dbc);
+	outline: none;
+}
+
+.svc-port-vlans {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1em;
+	font-size: 0.9em;
+	min-height: 2.2em;
+}
+
+.svc-port-vlan {
+	font-family: monospace;
+	font-weight: bold;
+	color: inherit;
+	overflow-wrap: anywhere;
+}
+
+.svc-port-vlan:empty {
+	min-height: 1.1em;
+}
+
+.svc-port-tag-prefix {
+	margin-right: 0.25em;
+}
+
+#switch-vlan-view .svc-port-vlan.native .svc-port-tag-prefix {
+	font-weight: bold;
+	color: var(--svc-vlan-untagged);
+}
+
+#switch-vlan-view .svc-port-vlan.tagged .svc-port-tag-prefix {
+	font-weight: bold;
+	color: var(--svc-vlan-tagged);
+}
+
+/* Highlight ports when hovering a VLAN row (teal = untagged, amber = tagged) */
+.svc-port-tile.highlight-untagged {
+	border: 2px solid var(--svc-vlan-untagged);
+	background:
+		repeating-linear-gradient(
+			90deg,
+			var(--svc-vlan-untagged-stripe) 0 24px,
+			var(--svc-vlan-untagged-bg) 24px 48px
+		);
+}
+
+.svc-port-tile.highlight-tagged {
+	border: 2px solid var(--svc-vlan-tagged);
+	background:
+		repeating-linear-gradient(
+			180deg,
+			var(--svc-vlan-tagged-stripe) 0 24px,
+			var(--svc-vlan-tagged-bg) 24px 48px
+		);
+}
+
+/* VLAN list — table layout keeps column widths and dividers aligned */
+.svc-vlans {
+	display: table;
+	width: 100%;
+	max-width: 100%;
+	border-collapse: separate;
+	border-spacing: 0 0.3em;
+	table-layout: auto;
+}
+
+.svc-vlan-header,
+.svc-vlan-row {
+	display: table-row;
+}
+
+.svc-vlan-header > .svc-vlan-cell,
+.svc-vlan-row > .svc-vlan-cell {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0.4em 0.5em;
+	box-sizing: border-box;
+}
+
+.svc-vlan-header > .svc-vlan-cell {
+	color: var(--text-color-low, #666);
+	font-size: 0.9em;
+	font-weight: normal;
+	white-space: nowrap;
+	padding-bottom: 0.35em;
+	border-bottom: 1px solid var(--border-color-low, #ddd);
+}
+
+.svc-vlan-header > .svc-vlan-cell:not(.svc-vlan-cell-id),
+.svc-vlan-row > .svc-vlan-cell:not(.svc-vlan-cell-id) {
+	text-align: center;
+}
+
+.svc-vlan-cell-id {
+	width: 6em;
+	white-space: nowrap;
+	padding-left: 0.6em;
+	padding-right: 0.5em;
+	text-align: right;
+}
+
+/* Label column absorbs remaining width; keep inputs inside the cell */
+.svc-vlan-cell-label {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.svc-vlan-cell-label,
+.svc-vlan-cell-local,
+.svc-vlan-cell-select,
+.svc-vlan-cell-assign,
+.svc-vlan-cell-action {
+	padding-left: 0.65em;
+	border-left: 1px solid var(--border-color-low, #ccc);
+}
+
+.svc-vlan-cell-local {
+	width: 1%;
+	white-space: nowrap;
+}
+
+.svc-vlan-cell-select,
+.svc-vlan-cell-assign,
+.svc-vlan-cell-action {
+	width: 1%;
+	white-space: nowrap;
+}
+
+.svc-vlan-cell-action {
+	padding-right: 0.75em;
+}
+
+.svc-vlan-row > .svc-vlan-cell-id {
+	border: 1px solid var(--border-color-low, #ddd);
+	border-right: none;
+	border-radius: 4px 0 0 4px;
+	background: var(--svc-row-bg);
+}
+
+.svc-vlan-row > .svc-vlan-cell-label,
+.svc-vlan-row > .svc-vlan-cell-local,
+.svc-vlan-row > .svc-vlan-cell-select,
+.svc-vlan-row > .svc-vlan-cell-assign {
+	border-top: 1px solid var(--border-color-low, #ddd);
+	border-bottom: 1px solid var(--border-color-low, #ddd);
+	background: var(--svc-row-bg);
+}
+
+.svc-vlan-row > .svc-vlan-cell-action {
+	border: 1px solid var(--border-color-low, #ddd);
+	border-left: 1px solid var(--border-color-low, #ccc);
+	border-radius: 0 4px 4px 0;
+	background: var(--svc-row-bg);
+}
+
+.svc-vlan-row:hover > .svc-vlan-cell {
+	background: var(--svc-row-hover-bg);
+	border-color: var(--border-color-medium, #bbb);
+}
+
+.svc-vlan-row.svc-vlan-add-row > .svc-vlan-cell {
+	background: var(--svc-row-add-bg);
+}
+
+/* Dashed outline on the outside of the add row only — not between columns */
+.svc-vlan-row.svc-vlan-add-row > .svc-vlan-cell-id {
+	border-left-style: dashed;
+	border-top-style: dashed;
+	border-bottom-style: dashed;
+}
+
+.svc-vlan-row.svc-vlan-add-row > .svc-vlan-cell-action {
+	border-right-style: dashed;
+	border-top-style: dashed;
+	border-bottom-style: dashed;
+}
+
+.svc-vlan-row > .svc-vlan-cell-empty {
+	border-left: none;
+	padding-left: 0;
+}
+
+.svc-vlan-row.flash {
+	animation: svc-flash 0.8s ease-out;
+}
+
+@keyframes svc-flash {
+	0%   { background: #fff5b1; }
+	100% { background: var(--svc-row-bg); }
+}
+
+.svc-vlan-id {
+	font-family: monospace;
+	font-weight: bold;
+}
+
+.svc-vlan-id-input {
+	padding: 2px 4px;
+	font-family: monospace;
+}
+
+.svc-vlan-label {
+	padding: 2px 4px;
+}
+
+.svc-vlan-label:focus,
+.svc-vlan-id-input:focus {
+	border-color: var(--primary-color-high, #3c8dbc);
+	outline: none;
+}
+
+.svc-vlan-select-group,
+.svc-vlan-assign-group {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.3em;
+	white-space: nowrap;
+}
+
+.svc-vlan-cell-local > .cbi-checkbox {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.svc-vlan-select-group .cbi-button,
+.svc-vlan-assign-group .cbi-button {
+	min-width: 3.25em;
+}
+
+.svc-vlan-btn-tagged,
+.svc-vlan-btn-untagged,
+.svc-vlan-btn-remove,
+.svc-vlan-btn-add,
+.svc-vlan-assign-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0 8px !important;
+	font-size: 13px !important;
+	line-height: 2em !important;
+	min-height: 2em;
+	white-space: nowrap;
+	cursor: pointer;
+	user-select: none;
+}
+
+.svc-vlan-assign-btn.svc-vlan-assign-disabled {
+	opacity: 0.55;
+	cursor: default;
+}
+
+/* T = tagged (amber), U = untagged (teal) — select + assign buttons */
+#switch-vlan-view .svc-vlan-btn-tagged:not(:disabled),
+#switch-vlan-view .svc-vlan-btn-assign-tagged:not(.svc-vlan-assign-disabled) {
+	border: 1px solid var(--svc-vlan-tagged);
+	background-color: var(--svc-vlan-tagged-bg);
+	color: var(--svc-vlan-tagged);
+}
+
+#switch-vlan-view .svc-vlan-btn-untagged:not(:disabled),
+#switch-vlan-view .svc-vlan-btn-assign-untagged:not(.svc-vlan-assign-disabled) {
+	border: 1px solid var(--svc-vlan-untagged);
+	background-color: var(--svc-vlan-untagged-bg);
+	color: var(--svc-vlan-untagged);
+}
+
+#switch-vlan-view .svc-vlan-btn-tagged .svc-vlan-btn-prefix,
+#switch-vlan-view .svc-vlan-btn-assign-tagged .svc-vlan-btn-prefix {
+	color: inherit;
+}
+
+#switch-vlan-view .svc-vlan-btn-untagged .svc-vlan-btn-prefix,
+#switch-vlan-view .svc-vlan-btn-assign-untagged .svc-vlan-btn-prefix {
+	color: inherit;
+}
+
+#switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked,
+#switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked {
+	color: #fff;
+}
+
+#switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked .svc-vlan-btn-prefix,
+#switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked .svc-vlan-btn-prefix {
+	color: #fff;
+}
+
+#switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked {
+	background: linear-gradient(#b45309, var(--svc-vlan-tagged));
+	border: 1px solid #b45309;
+}
+
+#switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked {
+	background: linear-gradient(#0f766e, var(--svc-vlan-untagged));
+	border: 1px solid #0f766e;
+}
+
+#switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-mixed {
+	background: linear-gradient(
+		135deg,
+		var(--svc-vlan-tagged) 45%,
+		transparent 45%,
+		transparent 55%,
+		var(--svc-vlan-tagged-bg) 55%
+	);
+	border: 1px solid var(--svc-vlan-tagged);
+	color: var(--svc-vlan-tagged);
+}
+
+#switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-mixed {
+	background: linear-gradient(
+		135deg,
+		var(--svc-vlan-untagged) 45%,
+		transparent 45%,
+		transparent 55%,
+		var(--svc-vlan-untagged-bg) 55%
+	);
+	border: 1px solid var(--svc-vlan-untagged);
+	color: var(--svc-vlan-untagged);
+}
+
+:root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked,
+:root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked {
+	color: #1a1a1a;
+}
+
+:root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked .svc-vlan-btn-prefix,
+:root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked .svc-vlan-btn-prefix {
+	color: #1a1a1a;
+}
+
+:root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-tagged.svc-vlan-assign-checked {
+	background: linear-gradient(#f59e0b, var(--svc-vlan-tagged));
+	border: 1px solid var(--svc-vlan-tagged);
+}
+
+:root[data-darkmode="true"] #switch-vlan-view .svc-vlan-btn-assign-untagged.svc-vlan-assign-checked {
+	background: linear-gradient(#14b8a6, var(--svc-vlan-untagged));
+	border: 1px solid var(--svc-vlan-untagged);
+}
+
+.svc-vlan-btn-prefix {
+	font-family: monospace;
+	font-weight: bold;
+}
+
+@media (max-width: 720px) {
+	.svc-vlans,
+	.svc-vlan-header,
+	.svc-vlan-row,
+	.svc-vlan-header > .svc-vlan-cell,
+	.svc-vlan-row > .svc-vlan-cell {
+		display: block;
+		width: 100%;
+	}
+
+	.svc-vlan-header > .svc-vlan-cell {
+		border-bottom: none;
+		padding: 0.15em 0;
+	}
+
+	.svc-vlan-row > .svc-vlan-cell {
+		border: none !important;
+		border-radius: 0 !important;
+		background: transparent !important;
+		padding: 0.25em 0;
+	}
+
+	.svc-vlan-row {
+		border: 1px solid var(--border-color-low, #ddd);
+		border-radius: 4px;
+		background: var(--svc-row-bg);
+		padding: 0.4em 0.6em;
+		margin-bottom: 0.3em;
+	}
+
+	.svc-vlan-row.svc-vlan-add-row {
+		border-style: dashed;
+		background: var(--svc-row-add-bg);
+	}
+
+	.svc-vlan-row > .svc-vlan-cell-label,
+	.svc-vlan-row > .svc-vlan-cell-local,
+	.svc-vlan-row > .svc-vlan-cell-select,
+	.svc-vlan-row > .svc-vlan-cell-assign,
+	.svc-vlan-row > .svc-vlan-cell-action {
+		border-left: none;
+		padding-left: 0;
+	}
+
+	.svc-vlan-row > .svc-vlan-cell-empty {
+		display: none;
+	}
+}

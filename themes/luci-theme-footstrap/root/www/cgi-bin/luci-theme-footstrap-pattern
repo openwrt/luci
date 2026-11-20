@@ -1,0 +1,30 @@
+#!/bin/sh
+# Serves the uploaded wallpaper pattern with headers a browser will not execute: opened directly as
+# a /www symlink it was a same-origin document with an authenticated LuCI session in reach (OpenWrt
+# forum 251930: a marker SVG read document.cookie, pre-login too). The theme's own use paints it via
+# mask-image or background-image, which never run script, so only the direct URL is closed here.
+#
+# Unauthenticated on purpose: the pattern paints before login (head.ut pre-paint). Safe only because
+# the script takes no input: FILE is a constant, never $QUERY_STRING or $PATH_INFO.
+
+FILE=/etc/footstrap/pattern.svg
+
+if [ ! -r "$FILE" ]; then
+	printf 'Status: 404 Not Found\r\n'
+	printf 'Content-Type: text/plain\r\n'
+	printf '\r\n'
+	exit 0
+fi
+
+printf 'Status: 200 OK\r\n'
+printf 'Content-Type: image/svg+xml\r\n'
+# Cacheable forever: fs-axes.js appends `?v=<token>`, which changes with every upload. A static
+# /www file had an ETag; this handler must not make the tile re-fetch on every page load, off flash
+# with no gzip.
+printf 'Cache-Control: public, max-age=31536000, immutable\r\n'
+printf 'X-Content-Type-Options: nosniff\r\n'
+printf "Content-Security-Policy: default-src 'none'; sandbox\r\n"
+printf '\r\n'
+cat "$FILE"
+
+exit 0

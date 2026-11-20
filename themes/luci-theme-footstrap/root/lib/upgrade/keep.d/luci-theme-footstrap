@@ -1,0 +1,7 @@
+# Keep the admin's uploads across sysupgrade: login background, pattern, webfonts. They are written
+# at runtime, so only a firmware sysupgrade needs them listed. Not conffiles: they live outside
+# root/etc/config, and a conffiles entry the package does not ship is rejected.
+/etc/footstrap/login-bg
+/etc/footstrap/pattern.svg
+# Whole directory: the faces without the generated fonts.css leave settings.fonts 404ing every page.
+/etc/footstrap/fonts

@@ -1,0 +1,17 @@
+{
+	"luci-app-v2raya": {
+		"description": "Grant access to v2rayA configuration",
+		"read": {
+			"file": {
+				"/var/log/v2raya/v2raya.log": [ "read" ]
+			},
+			"ubus": {
+				"service": [ "list" ]
+			},
+			"uci": [ "v2raya" ]
+		},
+		"write": {
+			"uci": [ "v2raya" ]
+		}
+	}
+}

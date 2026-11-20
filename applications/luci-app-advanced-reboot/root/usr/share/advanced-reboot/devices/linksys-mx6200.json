@@ -1,0 +1,32 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "MX6200",
+		"board": ["linksys,mx6200"]
+	},
+	"commands": {
+		"params": ["boot_part"],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null,
+		"set_helper": "/usr/share/advanced-reboot/helpers/linksys-mx6200.sh"
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [1],
+			"firmware": {
+				"rootfs": "mtd19",
+				"rootfs_ubi_volume": 1
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [2],
+			"firmware": {
+				"rootfs": "mtd19",
+				"rootfs_ubi_volume": 1
+			}
+		}
+	]
+}

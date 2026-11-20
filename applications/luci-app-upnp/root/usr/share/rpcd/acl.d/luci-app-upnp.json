@@ -1,0 +1,17 @@
+{
+	"luci-app-upnp": {
+		"description": "Grant access to UPnP IGD & PCP/NAT-PMP",
+		"read": {
+			"ubus": {
+				"luci.upnp": [ "get_status" ]
+			},
+			"uci": [ "upnpd" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.upnp": [ "delete_rule" ]
+			},
+			"uci": [ "upnpd" ]
+		}
+	}
+}

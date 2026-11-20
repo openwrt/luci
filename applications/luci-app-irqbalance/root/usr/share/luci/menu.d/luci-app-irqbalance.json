@@ -1,0 +1,21 @@
+{
+    "admin/services/irqbalance": {
+        "title": "irqbalance",
+        "order": 90,
+        "action": {
+            "type": "view",
+            "path": "irqbalance"
+        },
+        "depends": {
+            "acl": [
+                "luci-app-irqbalance"
+            ],
+            "uci": {
+                "irqbalance": true
+            },
+            "fs": {
+                "/proc/interrupts": "file"
+            }
+        }
+    }
+}

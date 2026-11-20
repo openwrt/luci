@@ -1,0 +1,89 @@
+{
+	"luci-app-travelmate": {
+		"description": "Grant access to LuCI app travelmate",
+		"write": {
+			"file": {
+				"/var/run/travelmate/travelmate.refresh": [
+					"write"
+				],
+				"/tmp/run/travelmate/travelmate.refresh": [
+					"write"
+				],
+				"/sbin/ifup *": [
+					"exec"
+				],
+				"/etc/init.d/travelmate start": [
+					"exec"
+				],
+				"/etc/init.d/travelmate restart": [
+					"exec"
+				],
+				"/etc/init.d/travelmate stop": [
+					"exec"
+				],
+				"/etc/init.d/travelmate setup *": [
+					"exec"
+				],
+				"/etc/init.d/travelmate scan *": [
+					"exec"
+				]
+			},
+			"ubus": {
+				"file": [
+					"exec",
+					"remove"
+				]
+			},
+			"uci": [
+				"travelmate",
+				"wireless"
+			]
+		},
+		"read": {
+			"file": {
+				"/etc/travelmate": [
+					"list"
+				],
+				"/etc/travelmate/*.uc": [
+					"list"
+				],
+				"/var/run/travelmate/travelmate.scan": [
+					"read"
+				],
+				"/tmp/run/travelmate/travelmate.scan": [
+					"read"
+				],
+				"/var/run/travelmate/travelmate.refresh": [
+					"read",
+					"list"
+				],
+				"/tmp/run/travelmate/travelmate.refresh": [
+					"read",
+					"list"
+				],
+				"/var/run/travelmate/travelmate.runtime.json": [
+					"read",
+					"list"
+				],
+				"/tmp/run/travelmate/travelmate.runtime.json": [
+					"read",
+					"list"
+				]
+			},
+			"ubus": {
+				"file": [
+					"list",
+					"read",
+					"stat"
+				],
+				"log": [
+					"read"
+				]
+			},
+			"uci": [
+				"travelmate",
+				"wireless"
+			]
+		}
+	}
+}

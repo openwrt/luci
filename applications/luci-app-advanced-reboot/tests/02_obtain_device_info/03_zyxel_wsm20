@@ -1,0 +1,55 @@
+Test obtain_device_info for ZyXEL WSM20 using the dual-flag method with a
+custom MTD partition ("persist") and byte offset (4).
+Partition 1 active (the flag byte at offset 4 reads "01", matching partition 1).
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+zyxel,wsm20
+-- End --
+
+-- File fs/popen~_lib_functions_sh_find_mtd_part_persist_.txt --
+/dev/mtdblock7
+-- End --
+
+-- File fs/popen~dd_if_dev_mtdblock7_bs_1_count_1_skip_4_2_dev_null_hexdump_-n_1_-e_1_1_02x_.txt --
+01
+-- End --
+
+-- File fs/popen~_etc_os-release_2_dev_null_echo_OPENWRT_RELEASE_2_dev_null.txt --
+OpenWrt 25.12.2 r32802-f505120278
+-- End --
+
+-- File fs/open~_proc_version.txt --
+Linux version 6.12.74 (builder@buildhost) (mipsel-openwrt-linux-musl-gcc) #0
+-- End --
+
+-- File fs/popen~dd_if_dev_mtd6_bs_1_skip_32_count_64.txt --
+Linux-6.6.50 ZyXEL
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.obtain_device_info.call();
+
+printf("vendor: %s\n", result.device.vendor);
+printf("model: %s\n", result.device.model);
+printf("board: %s\n", result.device.board);
+printf("active: %s\n", result.device.partition_active);
+printf("partitions: %d\n", length(result.partitions));
+
+let p1 = result.partitions[0];
+printf("p1: number=%s label=%s os=%s\n", p1.number, p1.label, p1.os);
+
+let p2 = result.partitions[1];
+printf("p2: number=%s label=%s os=%s\n", p2.number, p2.label, p2.os);
+-- End --
+
+-- Expect stdout --
+vendor: ZyXEL
+model: WSM20
+board: zyxel,wsm20
+active: 1
+partitions: 2
+p1: number=1 label=OpenWrt 25.12.2 r32802-f505120278 os=6.12.74
+p2: number=2 label=ZyXEL os=6.6.50
+-- End --

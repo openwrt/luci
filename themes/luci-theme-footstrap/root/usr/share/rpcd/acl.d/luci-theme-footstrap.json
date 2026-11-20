@@ -1,0 +1,37 @@
+{
+	"luci-theme-footstrap": {
+		"description": "Footstrap theme settings saved to the router, the login background and pattern uploads, and the Footstrap settings page",
+		"read": {
+			"uci": [
+				"footstrap"
+			]
+		},
+		"write": {
+			"ubus": {
+				"uci": [
+					"set",
+					"commit"
+				],
+				"file": [
+					"remove"
+				]
+			},
+			"uci": [
+				"footstrap"
+			],
+			"cgi-io": [
+				"upload"
+			],
+			"file": {
+				"/etc/footstrap/login-bg": [
+					"write",
+					"remove"
+				],
+				"/etc/footstrap/pattern.svg": [
+					"write",
+					"remove"
+				]
+			}
+		}
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "WRT1900ACv1",
+		"board": [
+			"linksys-mamba",
+			"linksys,mamba",
+			"linksys,wrt1900ac-v1"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part",
+			"bootcmd"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1,
+				"run nandboot"
+			],
+			"firmware": {
+				"kernel": "mtd4",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd5"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2,
+				"run altnandboot"
+			],
+			"firmware": {
+				"kernel": "mtd6",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd7"
+			}
+		}
+	]
+}

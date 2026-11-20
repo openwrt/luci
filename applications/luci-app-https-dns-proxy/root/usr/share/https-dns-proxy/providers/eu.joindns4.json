@@ -1,0 +1,36 @@
+{
+	"title": "DNS4EU",
+	"template": "https://{option}.joindns4.eu/dns-query",
+	"bootstrap_dns": "86.54.11.100,86.54.11.200,2a13:1001::86:54:11:100,2a13:1001::86:54:11:200",
+	"help_link": "https://www.joindns4.eu/for-public/",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(unfiltered|protective|noads|child|child-noads)",
+			"options": [
+				{
+					"value": "unfiltered",
+					"description": "Unfiltered"
+				},
+				{
+					"value": "protective",
+					"description": "Protective (blocks malicous and fraudulent websites)"
+				},
+				{
+					"value": "noads",
+					"description": "Protective with ad-blocking"
+				},
+				{
+					"value": "child",
+					"description": "Protective with child protection"
+				},
+				{
+					"value": "child-noads",
+					"description": "Protective with child protection & ad-blocking"
+				}
+			],
+			"default": "unfiltered"
+		}
+	}
+}

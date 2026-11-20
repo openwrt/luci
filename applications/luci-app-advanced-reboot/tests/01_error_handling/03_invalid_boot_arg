@@ -1,0 +1,28 @@
+Test boot_partition with missing or non-numeric number argument.
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+linksys,e7350
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+
+// No args at all
+let r1 = api.boot_partition.call();
+printf("no_args: %s\n", r1.error);
+
+// Empty object
+let r2 = api.boot_partition.call({ args: {} });
+printf("empty: %s\n", r2.error);
+
+// Non-numeric
+let r3 = api.boot_partition.call({ args: { number: "abc" } });
+printf("abc: %s\n", r3.error);
+-- End --
+
+-- Expect stdout --
+no_args: INVALID_ARG
+empty: INVALID_ARG
+abc: INVALID_ARG
+-- End --

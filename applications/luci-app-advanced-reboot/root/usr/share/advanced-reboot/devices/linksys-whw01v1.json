@@ -1,0 +1,41 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "WHW01 V1 (Velop)",
+		"board": [
+			"linksys,whw01"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd9",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd10"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd11",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd12"
+			}
+		}
+	]
+}

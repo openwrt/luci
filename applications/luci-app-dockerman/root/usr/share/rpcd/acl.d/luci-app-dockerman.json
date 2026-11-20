@@ -1,0 +1,36 @@
+{
+	"luci-app-dockerman": {
+		"description": "Grant UCI access for luci-app-dockerman",
+		"read": {
+			"file_comment": "so directory picker can browse the FS",
+			"file": {
+				"/*": ["list", "read"]
+			},
+			"ubus": {
+				"docker": [ "df", "events", "info", "ping", "version" ],
+				"docker.container": [ "changes", "export", "get_archive", "info", "info_archive", "inspect", "list", "logs", "stats", "top" ],
+				"docker.exec": [ "inspect" ],
+				"docker.image": [ "get", "history", "inspect", "list", "load", "search" ],
+				"docker.network": [ "inspect", "list" ],
+				"docker.volume": [ "inspect", "list" ],
+				"file": [ "*" ],
+				"luci": [ "getMountPoints" ],
+				"network.interface": [ "dump" ],
+				"rc": [ "init" ]
+			},
+			"uci": [ "dockerd" ]
+			},
+		"write": {
+			"ubus": {
+				"docker": [ "df", "events", "info", "ping", "version" ],
+				"docker.container": [ "changes", "create", "exec", "export", "get_archive", "info", "info_archive", "inspect", "kill", "list", "logs", "pause", "prune", "put_archive", "rename", "remove", "restart", "resize", "start", "stats", "stop", "top", "unpause", "update", "ttyd_start" ],
+				"docker.exec": [ "inspect", "resize", "start" ],
+				"docker.image": [ "build", "build_prune", "create", "get", "history", "inspect", "list", "load", "prune", "push", "remove", "search", "tag" ],
+				"docker.network": [ "connect", "create", "disconnect", "inspect", "list", "prune", "remove" ],
+				"docker.volume": [ "create", "inspect", "list", "prune", "remove", "update" ],
+				"rc": [ "init" ]
+			},
+			"uci": [ "dockerd" ]
+		}
+	}
+}

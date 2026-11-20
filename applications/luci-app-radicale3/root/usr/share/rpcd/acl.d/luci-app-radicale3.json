@@ -1,0 +1,21 @@
+{
+	"luci-app-radicale3": {
+		"description": "Grant UCI access for luci-app-radicale3",
+		"read": {
+			"ubus": {
+				"rpc-sys": [ "packagelist" ],
+				"service": [ "list" ]
+			},
+			"uci": [ "radicale3" ]
+		},
+		"write": {
+			"ubus": {
+				"rad3-enc": [ "encrypt" ]
+			},
+			"uci": [ "radicale3" ],
+			"file": {
+				"/etc/luci-uploads/*": ["write"]
+			}
+		}
+	}
+}

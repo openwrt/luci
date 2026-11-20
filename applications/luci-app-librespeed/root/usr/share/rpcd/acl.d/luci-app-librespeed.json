@@ -1,0 +1,30 @@
+{
+	"luci-app-librespeed": {
+		"description": "Grant access to LibreSpeed measurements",
+		"read": {
+			"ubus": {
+				"librespeed": [
+					"status",
+					"result",
+					"history",
+					"config",
+					"links"
+				]
+			},
+			"uci": [
+				"librespeed"
+			]
+		},
+		"write": {
+			"ubus": {
+				"librespeed": [
+					"start",
+					"stop"
+				]
+			},
+			"uci": [
+				"librespeed"
+			]
+		}
+	}
+}

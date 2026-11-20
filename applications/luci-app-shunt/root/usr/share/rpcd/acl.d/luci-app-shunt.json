@@ -1,0 +1,49 @@
+{
+	"luci-app-shunt": {
+		"description": "Grant access to LuCI app shunt",
+		"write": {
+			"uci": [
+				"shunt"
+			],
+			"file": {
+				"/etc/init.d/shunt stop": [
+					"exec"
+				],
+				"/etc/init.d/shunt start": [
+					"exec"
+				],
+				"/etc/init.d/shunt restart": [
+					"exec"
+				],
+				"/usr/sbin/shunt refresh": [
+					"exec"
+				]
+			}
+		},
+		"read": {
+			"ubus": {
+				"luci.shunt": [
+					"status",
+					"sets"
+				],
+				"rpc-sys": [
+					"packagelist"
+				],
+				"log": [
+					"read"
+				]
+			},
+			"uci": [
+				"shunt"
+			],
+			"file": {
+				"/etc/init.d/shunt running": [
+					"exec"
+				]
+			},
+			"cgi-io": [
+				"exec"
+			]
+		}
+	}
+}

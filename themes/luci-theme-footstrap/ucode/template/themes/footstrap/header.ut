@@ -1,0 +1,217 @@
+{#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2012 David Menting <david@nut-bolt.nl>
+ Copyright 2008-2022 Jo-Philipp Wich <jo@mein.io>
+ Copyright 2026 footstrap theme
+ Licensed to the public under the Apache License 2.0.
+
+ i18n, and the rule the other templates point at. A msgid is a GLOBAL name: LuCI serves one merged
+ catalogue and the first archive holding the hash wins, so the Appearance layout toggle rendered
+ "Максимум" on a Russian router because another catalogue translates `Top` as "maximum". Every
+ Appearance label and every string of the search overlay therefore carries the `footstrap` msgctxt;
+ the chrome's strings (the Search trigger included), the login and notice sentences and
+ System/Memory/Storage in fs-overview.js stay msgctxt-free, so a bare msgid
+ inherits a translation in the ~40 languages this theme ships no catalogue for. Skip to content
+ and Log out are luci-base msgids verbatim; the other chrome strings stay bare for it to adopt.
+-#}
+
+{%
+	import { getuid, getspnam } from 'luci.core';
+
+	const boardinfo = ubus.call('system', 'board') ?? {};
+	/* The router's saved Appearance defaults (/etc/config/footstrap): head.ut stamps them before
+	   paint and the client's localStorage overrides every one. Absent = the built-in defaults.
+	   Handed over as the whole section: head.ut validates every key it reads, so no list of axes
+	   lives here to fall out of step. `uci` is the cursor dispatcher.uc builds per request; a
+	   second one here would allocate one per page render. */
+	const fs_defaults = uci.get_all('footstrap', 'settings') ?? {};
+
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+
+{% include('themes/footstrap/partials/head', { boardinfo, fs_defaults }) %}
+
+	{#
+		data-page carries the DISPATCH path (ctx.path), not request_path: on a firstchild route
+		/admin/status renders the overview while request_path is only ['admin','status'], so a
+		`[data-page='admin-status-overview']` rule would silently not apply. The SPA router stamps the
+		resolved leaf path, so both ways of arriving agree. Stamped on <body> for the JS modules and
+		again on .fs-content below for page-scoped CSS: the modules load too late, and the
+		Overview's stray <h2 name="content"> was painted for 65-138 ms before them.
+	#}
+	{% const fs_page = entityencode(join('-', length(ctx.path) ? ctx.path : ctx.request_path), true) %}
+	<body class="lang_{{ dispatcher.lang }}" data-page="{{ fs_page }}">
+		{% if (!blank_page): %}
+		<script>
+			/* Records every node a script parks directly on <body>: a page that does so makes the next
+			 * navigation a full load, because the document is spent. fs-router.js's
+			 * strayBodyNode()/bodyLittered() read window.__fsBodyAdds. First script in <body>, before
+			 * any script-built node; chrome pages only, the one place fs-router loads. Own property of
+			 * this <body> instance, never Node.prototype. */
+			(() => {
+				const body = document.body;
+				const adds = window.__fsBodyAdds || (window.__fsBodyAdds = []);
+				[ 'appendChild', 'insertBefore', 'replaceChild', 'append', 'prepend',
+					'insertAdjacentElement', 'insertAdjacentHTML' ].forEach((name) => {
+					const orig = body[name];
+					Object.defineProperty(body, name, {
+						configurable: true,
+						writable: true,
+						value() {
+							const before = Array.prototype.slice.call(this.children);
+							const ret = orig.apply(this, arguments);
+							const after = this.children;
+							for (let i = 0; i < after.length; i++) {
+								if (before.indexOf(after[i]) === -1) adds.push(after[i]);
+							}
+							return ret;
+						}
+					});
+				});
+			})();
+		</script>
+		{% endif %}
+		{#
+			The wallpaper pattern's paint surface: a mask on this element lets an uploaded SVG take the
+			theme's ink, and a mask applies to the whole rendering, children included, so it needs a
+			layer of its own with nothing in it. Outside the blank_page guard on purpose: the login
+			page renders without the shell, and a router whose saved default is Pattern shows it
+			there too. Inert unless the axis is on (display:none by default).
+			data-fs-chrome: zone 1, ours; see the <nav> below.
+		#}
+		<div class="fs-pattern" data-fs-chrome aria-hidden="true"></div>
+		{% if (!blank_page): %}
+		{#
+			Skip link: jump the menu instead of tabbing through every section on every page.
+			Visually hidden until focused. data-fs-chrome: zone 1; see the <nav> below.
+		#}
+		<a class="fs-skip" data-fs-chrome href="#maincontent">{{ _('Skip to content') }}</a>
+		<div class="fs-shell">
+			{#
+				<nav>, not <aside>: this column IS the site navigation; <aside> gets
+				role="complementary" and leaves the shell with no navigation landmark.
+				data-fs-chrome marks a zone-1 ROOT: no third-party rule may match it (the fence in
+				fs-sheets.js) or reach it by inheritance (the pin). Both key off the attribute, never
+				a class list: the skip link and search overlay sit outside this <nav>. Roots only,
+				never nested: a direct declaration beats an inherited one, and nesting cost
+				.fs-label its nowrap and forced text-align left on 302 elements.
+			#}
+			<nav class="fs-sidebar" data-fs-chrome aria-label="{{ _('Menu') }}">
+				<div class="fs-brandrow">
+					{# Brand block: logo + hostname wordmark. #}
+					<a class="fs-brand" href="{{ dispatcher.build_url() }}">
+						<span class="fs-logo">
+							{#
+								The OpenWrt mark, same as the tab favicon (logo.svg): the cyan arcs are baked, the
+								ring flips with the theme mode through .fs-logo-ring.
+							#}
+							<svg aria-hidden="true" viewBox="-9 -1 100 100"><path d="m40.5 50.8a6.6 6.6 0 1 0 0 13.2 6.6 6.6 0 0 0 0-13.2m-40.5-33.9 7 6.8a47.5 47.5 0 0 1 67.2 0l7-6.8a57.2 57.2 0 0 0-81.2 0" fill="#00b5e2"/><path d="m12.5 29.2 6.8 7a30 30 0 0 1 42.6 0l6.8-7a39.7 39.7 0 0 0-56.3 0" fill="#00b5e2"/><path d="m24.8 41.6 6.8 6.9a12.6 12.6 0 0 1 18 0l6.8-6.9a22.3 22.3 0 0 0-31.6 0" fill="#00b5e2"/><path class="fs-logo-ring" d="m64.9 39.7a30.2 30.2 0 1 1-48.7 0l-6.9-7a39.9 39.9 0 1 0 62.5 0z"/></svg>
+						</span>
+						<span class="fs-wordmark">{{ entityencode(striptags(boardinfo.hostname ?? 'OpenWrt'), true) }}</span>
+					</a>
+					{#
+						The three chrome icons below are the same 24x24 outline differing only in path data;
+						the stroke is `.fs-ico` in theme/20-shell.css, not attributes, and fs-chrome.js's
+						svgIcon() emits the same markup client-side. aria-hidden: each sits beside its own label.
+					#}
+					<button type="button" class="fs-railtoggle" id="fs-rail-toggle" aria-label="{{ _('Collapse menu') }}" title="{{ _('Collapse menu') }}">
+						<svg class="fs-ico" aria-hidden="true" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+					</button>
+				</div>
+
+				{# LuCI's poll status ("Refreshing") and other indicators land here by id. #}
+				<div id="indicators"></div>
+
+				<div class="fs-navlabel">{{ _('Menu') }}</div>
+				<ul class="nav" id="topmenu"></ul>
+				<ul id="modemenu" class="fs-modemenu"></ul>
+
+				<div class="fs-spacer"></div>
+
+				{#
+					right cluster, in visual order: the poll pill above, then Search, Log out. The
+					Appearance controls are their own page, System -> Footstrap, from the theme's own
+					menu.d entry; nothing of them mounts in this header.
+				#}
+				{#
+					Search trigger (#fs-search-btn), wired by menu-footstrap.js. A `.fs-themerow`, the chrome's
+					shared row/button class: a square icon button in the bar and the rail, a full-width
+					labelled row in the vertical sidebar. It shares `order: 2` with the poll pill and Log
+					out, so DOM order is visual order. 'Search' carries no msgctxt (see the i18n note).
+				#}
+				<button type="button" class="fs-themerow" id="fs-search-btn" aria-haspopup="dialog" aria-expanded="false" aria-controls="fs-search-ov" title="{{ _('Search') }}" aria-label="{{ _('Search') }}">
+					<svg class="fs-ico" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 21 21"/></svg>
+					<span class="fs-label">{{ _('Search') }}</span>
+				</button>
+				{#
+					Log out, guarded on the node being dispatchable. It is the only logout the theme
+					renders: fs-chrome.js drops the menu tree's own admin/logout node (fs-search.js likewise).
+				#}
+				{% if (dispatcher.lookup("admin/logout")): %}
+				<a class="fs-logout" href="{{ dispatcher.build_url('admin/logout') }}" title="{{ _('Log out') }}" aria-label="{{ _('Log out') }}">
+					{#
+						Mirrored about x=12, so the glyph reads LEAVING rather than entering: each x becomes
+						24-x and each arc's sweep flag flips with it, leaving stroke widths, corner radii and
+						the 24x24 box untouched.
+					#}
+					<svg class="fs-ico" aria-hidden="true" viewBox="0 0 24 24"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M14 12h7m0 0-3-3m3 3-3 3"/></svg>
+					<span class="fs-label">{{ _('Log out') }}</span>
+				</a>
+				{% endif %}
+			</nav>
+
+			<main class="fs-main" id="maincontent" tabindex="-1">
+				{#
+					The document's <h1>: LuCI views start at <h2>, so without it the heading outline
+					begins mid-way down. It must exist for a screen reader without being seen, which
+					`hidden` cannot do — display:none strips the element from the accessibility tree,
+					so the SPA router's .fs-title-main sync would update a node no assistive tech can
+					read. .fs-sr clips instead, and since a foreign `*` outranks that class with one
+					`!important` it is marked zone 1 too. Inside .fs-main, which is not marked: that
+					is where app pages render.
+				#}
+				<h1 class="fs-title-main fs-sr" data-fs-chrome>{{ entityencode(striptags(dispatched?.title ? _(dispatched.title) : (boardinfo.hostname ?? 'OpenWrt')), true) }}</h1>
+
+				{#
+					The SPA router swaps the page with no reload, which a screen reader cannot
+					notice: no load event, focus dies with the clicked <a>, the new <title> is not
+					announced. The router writes the incoming title here after every nav; empty on a
+					full load, which announces itself.
+				#}
+				<div id="fs-nav-status" class="fs-sr" data-fs-chrome role="status" aria-live="polite"></div>
+
+				<div class="fs-content" data-page="{{ fs_page }}">
+					{#
+						Top-of-content notices: no-root-password, initramfs recovery, the <noscript> fallback
+						and the #tabmenu container. The sentences carry no msgctxt on purpose (see the i18n
+						note at the top). empty_password is read here, not above: /etc/shadow is only worth
+						a read on a page that renders the shell.
+					#}
+					{% const empty_password = (getuid() == 0 && getspnam('root')?.pwdp === '') %}
+					{% if (empty_password): %}
+						{% include('themes/footstrap/partials/notice', {
+							title: _('No password set!'),
+							text: _('There is no password set on this router. Please configure a root password to protect the web interface.'),
+							path: "admin/system/admin",
+							label: _('Go to password configuration...')
+						}) %}
+					{% endif %}
+
+					{% if (boardinfo.rootfs_type == "initramfs"): %}
+						{% include('themes/footstrap/partials/notice', {
+							title: _('System running in recovery (initramfs) mode.'),
+							text: _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade'),
+							path: "admin/system/flash",
+							label: _('Go to firmware upgrade...')
+						}) %}
+					{% endif %}
+
+					<noscript>
+						{% include('themes/footstrap/partials/notice', {
+							title: _('JavaScript required!'),
+							text: _('You must enable JavaScript in your browser or LuCI will not work properly.')
+						}) %}
+					</noscript>
+
+					<div id="tabmenu" style="display:none"></div>
+		{% endif %}

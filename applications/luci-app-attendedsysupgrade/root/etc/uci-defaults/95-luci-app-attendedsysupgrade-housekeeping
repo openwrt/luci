@@ -1,0 +1,9 @@
+#!/bin/sh
+check="$(uci -q get luci.main.check_for_newer_firmwares)"
+if [ -n "$check" ]; then
+        if ! uci -q get attendedsysupgrade.client.login_check_for_upgrades >/dev/null; then
+                uci set attendedsysupgrade.client.login_check_for_upgrades="$check"
+        fi
+        uci -q delete luci.main.check_for_newer_firmwares
+fi
+exit 0

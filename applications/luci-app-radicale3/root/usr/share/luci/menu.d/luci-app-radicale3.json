@@ -1,0 +1,17 @@
+{
+	"admin/services/radicale3": {
+		"title": "Radicale3",
+		"order": 120,
+		"action": {
+			"type": "view",
+			"path": "radicale3"
+		},
+		"depends": {
+			"acl": [ "luci-app-radicale3" ],
+			"fs": {
+				"/etc/init.d/radicale3": "executable",
+				"/usr/bin/radicale3": "executable"
+			}
+		}
+	}
+}

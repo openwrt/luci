@@ -1,0 +1,16 @@
+Test obtain_device_info when board name has no matching device config.
+
+-- File fs/open~_tmp_sysinfo_board_name.txt --
+unknown,device
+-- End --
+
+-- Testcase --
+let ar = require('advanced_reboot');
+let api = ar["luci.advanced-reboot"];
+let result = api.obtain_device_info.call();
+printf("%J\n", result);
+-- End --
+
+-- Expect stdout --
+{ "error": "NO_BOARD_NAME_MATCH", "rom_board_name": "unknown,device" }
+-- End --

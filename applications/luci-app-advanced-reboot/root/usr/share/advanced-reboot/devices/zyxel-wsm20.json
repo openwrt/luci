@@ -1,0 +1,42 @@
+{
+	"device": {
+		"vendor": "ZyXEL",
+		"model": "WSM20",
+		"board": [
+			"zyxel,wsm20"
+		]
+	},
+	"commands": {
+		"params": [],
+		"get": null,
+		"set": null,
+		"save": null,
+		"dual_flag": {
+			"mtd": "persist",
+			"offset": 4
+		}
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				"01"
+			],
+			"firmware": {
+				"kernel": "mtd4",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd5"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				"02"
+			],
+			"firmware": {
+				"kernel": "mtd6",
+				"kernel_label_offset": 32
+			}
+		}
+	]
+}

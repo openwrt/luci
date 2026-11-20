@@ -1,0 +1,36 @@
+{
+	"luci-app-weechat": {
+		"description": "Grant access for luci-app-weechat",
+		"read": {
+			"uci": [
+				"weechat"
+			],
+			"ubus": {
+				"service": [
+					"list"
+				],
+				"rc": [
+					"list"
+				],
+				"weechat": [
+					"get_certificate_status",
+					"get_daemon_info"
+				]
+			}
+		},
+		"write": {
+			"uci": [
+				"weechat"
+			],
+			"ubus": {
+				"rc": [
+					"init"
+				],
+				"weechat": [
+					"enable_service",
+					"generate_certificate"
+				]
+			}
+		}
+	}
+}

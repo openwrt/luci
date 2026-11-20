@@ -1,0 +1,14 @@
+{
+	"luci-app-xfrpc": {
+		"description": "Grant access to LuCI app xfrpc",
+		"read": {
+			"ubus": {
+				"service": [ "list" ]
+			},
+			"uci": ["xfrpc"]
+		},
+		"write": {
+			"uci": ["xfrpc"]
+		}
+	}
+}

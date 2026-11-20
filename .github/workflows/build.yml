@@ -1,0 +1,32 @@
+name: Test Build
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  checks: read
+
+jobs:
+  wait-for-formalities:
+    name: Wait for FormalityCheck
+    if: github.event.pull_request.user.login != 'weblate'
+    runs-on: ubuntu-slim
+    steps:
+      - name: Wait for Check Run
+        if: |
+          github.event.pull_request.user.login != 'dependabot[bot]' &&
+          github.event.pull_request.user.login != 'Copilot' &&
+          github.event.pull_request.user.type != 'Bot'
+        uses: lewagon/wait-on-check-action@v1.8.0
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          check-name: 'FormalityCheck / Git & Commits'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 5
+
+  build:
+    needs: wait-for-formalities
+    uses: openwrt/actions-shared-workflows/.github/workflows/multi-arch-test-build.yml@main
+    with:
+      matrix: '{"include": [{"arch": "x86_64", "target": "x86-64"}]}'

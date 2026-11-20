@@ -1,0 +1,20 @@
+{
+	"luci-app-sshtunnel": {
+		"description": "Grant UCI access for luci-app-sshtunnel",
+		"read": {
+			"file": {
+				"/root/.ssh/": [ "list" ],
+				"/root/.ssh/*.pub": [ "read" ],
+				"/root/.ssh/known_hosts": [ "read" ],
+				"/usr/bin/ssh-keygen": [ "list" ],
+				"/usr/bin/ssh-keygen *": [ "exec" ],
+				"/usr/bin/dropbearkey": [ "list" ],
+				"/usr/bin/dropbearkey *": [ "exec" ]
+			},
+			"uci": [ "sshtunnel" ]
+		},
+		"write": {
+			"uci": [ "sshtunnel" ]
+		}
+	}
+}

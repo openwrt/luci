@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# luci-app-rustdesk-server UCI defaults
+# This script runs on first install to set up sensible defaults
+
+uci -q batch <<-EOF >/dev/null
+	set rustdesk-server.@rustdesk-server[0]=rustdesk-server
+	set rustdesk-server.@rustdesk-server[0].enabled='0'
+	set rustdesk-server.@rustdesk-server[0].enabled_relay='0'
+	commit rustdesk-server
+EOF
+
+exit 0

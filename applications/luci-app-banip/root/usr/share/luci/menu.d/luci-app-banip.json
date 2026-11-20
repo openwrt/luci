@@ -1,0 +1,80 @@
+{
+	"admin/services/banip": {
+		"title": "banIP",
+		"order": "60",
+		"action": {
+			"type": "alias",
+			"path": "admin/services/banip/overview"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-banip"
+			],
+			"fs": {
+				"/usr/bin/banip-service.sh": "executable",
+				"/etc/init.d/banip": "executable",
+				"/etc/banip/banip.feeds": "file",
+				"/etc/banip/banip.countries": "file"
+			},
+			"uci": {
+				"banip": true
+			}
+		}
+	},
+	"admin/services/banip/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "banip/overview"
+		}
+	},
+	"admin/services/banip/allowlist": {
+		"title": "Edit Allowlist",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "banip/allowlist"
+		}
+	},
+	"admin/services/banip/blocklist": {
+		"title": "Edit Blocklist",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "banip/blocklist"
+		}
+	},
+	"admin/services/banip/feeds": {
+		"title": "Custom Feed Editor",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "banip/feeds"
+		}
+	},
+	"admin/services/banip/setreport": {
+		"title": "Set Reporting",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "banip/setreport"
+		}
+	},
+	"admin/services/banip/firewall_log": {
+		"title": "Firewall Log",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "banip/firewall_log"
+		}
+	},
+	"admin/services/banip/processing_log": {
+		"title": "Processing Log",
+		"order": 70,
+		"action": {
+			"type": "view",
+			"path": "banip/processing_log"
+		}
+	}
+}

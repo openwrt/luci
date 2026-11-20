@@ -1,0 +1,129 @@
+#!/bin/sh /etc/rc.common
+# shellcheck disable=SC2034,SC2154
+
+START=98
+STOP=10
+USE_PROCD=1
+
+NAME=rustdesk-server
+# Use wrapper scripts that set working directory for key generation
+# See /usr/libexec/rustdesk-hbbs and /usr/libexec/rustdesk-hbbr for details
+PROG_HBBS=/usr/libexec/rustdesk-hbbs
+PROG_HBBR=/usr/libexec/rustdesk-hbbr
+BIN_HBBS=/usr/bin/hbbs
+BIN_HBBR=/usr/bin/hbbr
+KEY_DIR=/etc/rustdesk
+
+get_config() {
+	config_get_bool enabled "$1" enabled 0
+	config_get_bool enabled_relay "$1" enabled_relay 0
+
+	# HBBS settings
+	config_get server_port "$1" server_port
+	config_get server_key "$1" server_key
+	config_get server_relay_servers "$1" server_relay_servers
+	config_get server_rendezvous_servers "$1" server_rendezvous_servers
+	config_get server_mask "$1" server_mask
+	config_get server_rmem "$1" server_rmem
+	config_get server_serial "$1" server_serial
+	config_get server_software_url "$1" server_software_url
+	config_get_bool server_env_always_use_relay "$1" server_env_always_use_relay 0
+	config_get server_env_rust_log "$1" server_env_rust_log
+
+	# HBBR settings
+	config_get relay_port "$1" relay_port
+	config_get relay_key "$1" relay_key
+	config_get relay_env_rust_log "$1" relay_env_rust_log
+	config_get relay_env_limit_speed "$1" relay_env_limit_speed
+	config_get relay_env_single_bandwidth "$1" relay_env_single_bandwidth
+	config_get relay_env_total_bandwidth "$1" relay_env_total_bandwidth
+	config_get relay_env_downgrade_threshold "$1" relay_env_downgrade_threshold
+	config_get relay_env_downgrade_start_check "$1" relay_env_downgrade_start_check
+}
+
+start_hbbs() {
+	[ "$enabled" = "1" ] || return 0
+	[ -x "$BIN_HBBS" ] || {
+		logger -t "$NAME" "Error: $BIN_HBBS not found or not executable"
+		return 1
+	}
+
+	# Convert UCI lists (space-separated) to comma-separated for CLI
+	local relay_servers_csv="${server_relay_servers// /,}"
+	local rendezvous_servers_csv="${server_rendezvous_servers// /,}"
+
+	# Build command arguments
+	local cmd_args="${server_port:+ -p $server_port}${relay_servers_csv:+ -r $relay_servers_csv}${server_key:+ -k $server_key}${rendezvous_servers_csv:+ -R $rendezvous_servers_csv}${server_mask:+ --mask $server_mask}${server_rmem:+ -M $server_rmem}${server_serial:+ -s $server_serial}${server_software_url:+ -u $server_software_url}"
+
+	procd_open_instance hbbs
+	procd_set_param command "$PROG_HBBS" $cmd_args
+
+	procd_set_param respawn 3600 5 5
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_set_param pidfile /var/run/hbbs.pid
+
+	# Environment variables
+	procd_append_param env "DB_URL=/tmp/rustdesk_db_v2.sqlite3"
+	[ "$server_env_always_use_relay" = "1" ] && procd_append_param env "ALWAYS_USE_RELAY=Y"
+	[ -n "$server_env_rust_log" ] && procd_append_param env "RUST_LOG=$server_env_rust_log"
+
+	procd_close_instance
+}
+
+start_hbbr() {
+	[ "$enabled_relay" = "1" ] || return 0
+	[ -x "$BIN_HBBR" ] || {
+		logger -t "$NAME" "Error: $BIN_HBBR not found or not executable"
+		return 1
+	}
+
+	# Build command arguments
+	local cmd_args="${relay_port:+ -p $relay_port}${relay_key:+ -k $relay_key}"
+
+	procd_open_instance hbbr
+	procd_set_param command "$PROG_HBBR" $cmd_args
+
+	procd_set_param respawn 3600 5 5
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_set_param pidfile /var/run/hbbr.pid
+
+	# Environment variables
+	[ -n "$relay_env_rust_log" ] && procd_append_param env "RUST_LOG=$relay_env_rust_log"
+	[ "${relay_env_limit_speed:-0}" != "0" ] && procd_append_param env "LIMIT_SPEED=$relay_env_limit_speed"
+	[ "${relay_env_single_bandwidth:-0}" != "0" ] && procd_append_param env "SINGLE_BANDWIDTH=$relay_env_single_bandwidth"
+	[ "${relay_env_total_bandwidth:-0}" != "0" ] && procd_append_param env "TOTAL_BANDWIDTH=$relay_env_total_bandwidth"
+	[ -n "$relay_env_downgrade_threshold" ] && procd_append_param env "DOWNGRADE_THRESHOLD=$relay_env_downgrade_threshold"
+	[ -n "$relay_env_downgrade_start_check" ] && procd_append_param env "DOWNGRADE_START_CHECK=$relay_env_downgrade_start_check"
+
+	procd_close_instance
+}
+
+start_service() {
+	mkdir -p "$KEY_DIR"
+
+	config_load "$NAME"
+	config_foreach get_config "$NAME"
+
+	[ "$enabled" != "1" ] && [ "$enabled_relay" != "1" ] && {
+		logger -t "$NAME" "Services disabled. Not starting."
+		return 0
+	}
+
+	start_hbbs
+	start_hbbr
+}
+
+stop_service() {
+	logger -t "$NAME" "Service stopping"
+}
+
+service_triggers() {
+	procd_add_reload_trigger "$NAME"
+}
+
+reload_service() {
+	stop
+	start
+}

@@ -1,0 +1,44 @@
+{
+	"device": {
+		"vendor": "Xiaomi",
+		"model": "AX3600",
+		"board": [
+			"xiaomi,ax3600"
+		]
+	},
+	"commands": {
+		"params": [
+			"flag_boot_rootfs",
+			"flag_last_success"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				0,
+				0
+			],
+			"firmware": {
+				"kernel": "mtd12",
+				"kernel_label_offset": 266432,
+				"rootfs": "mtd13"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				1,
+				1
+			],
+			"firmware": {
+				"kernel": "mtd13",
+				"kernel_label_offset": 266432,
+				"rootfs": "mtd14"
+			}
+		}
+	]
+}

@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Registration plus the symlinks that expose the admin's uploads. Nothing migrates an older footstrap
+# (OpenWrt expects a sysupgrade) except the stale pattern symlink removed below.
+
+changed=0
+
+set_opt() {
+	uci -q get "luci.$1" >/dev/null 2>&1 && return
+	uci set "luci.$1=$2"
+	changed=1
+}
+
+set_opt themes.Footstrap /luci-static/footstrap
+
+# set_opt never overwrites, and luci-base ships main.mediaurlbase, so on a stock router this line
+# sets nothing on install or upgrade: the admin picks Footstrap in Language and Style. An upgrade
+# must never move a router off its theme; on an upgrade the themes entry exists, so `changed` is 0
+# (apk exports no PKG_UPGRADE).
+if [ "${PKG_UPGRADE:-}" != 1 ] && [ "$changed" = 1 ]; then
+	set_opt main.mediaurlbase /luci-static/footstrap
+fi
+
+[ "$changed" = 1 ] && uci commit luci
+
+# uhttpd serves /www only, so uploads live in /etc (kept by lib/upgrade/keep.d) behind symlinks.
+# The pattern is NOT symlinked: an SVG opened through a same-origin URL runs as a script with the
+# admin's session (OpenWrt forum 251930). cgi-bin/luci-theme-footstrap-pattern serves it under CSP
+# 'none' + sandbox + nosniff, which uhttpd cannot attach to a static file.
+# The login background stays a symlink: its extension-less name makes uhttpd answer
+# application/octet-stream, so a direct open downloads instead of rendering. The canvas re-encode in
+# fs-assets.js is compression, not a boundary.
+mkdir -p /etc/footstrap
+if [ -d /www/luci-static/footstrap ]; then
+	ln -sf /etc/footstrap/login-bg /www/luci-static/footstrap/bg
+	ln -sfn /etc/footstrap/fonts /www/luci-static/footstrap/fonts
+fi
+# Remove a pre-0.14.11 install's stale pattern symlink (a reported security hole); `-L` only, never a
+# real file.
+[ -L /www/luci-static/footstrap/pattern.svg ] && rm -f /www/luci-static/footstrap/pattern.svg
+
+exit 0

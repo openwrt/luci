@@ -1,0 +1,42 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "WHW03 V2 (Velop)",
+		"board": [
+			"linksys-whw03v2",
+			"linksys,whw03v2"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd9",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd10"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd11",
+				"kernel_label_offset": 192,
+				"rootfs": "mtd12"
+			}
+		}
+	]
+}

@@ -1,0 +1,673 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright 2023-2026 MOSSDeF, Stan Grishin (stangri@melmac.ca).
+//
+// rpcd ucode plugin for adblock-fast.
+
+/*
+ubus -v list luci.adblock-fast
+ubus call luci.adblock-fast getInitList '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getInitStatus '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getPlatformSupport '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getCronStatus '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getCronEntry '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getFileUrlFilesizes '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast setInitAction '{"name":"adblock-fast","action":"start"}'
+ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","auto_update_enabled":"1","auto_update_mode":"daily","auto_update_hour":"4","auto_update_minute":"0"}'  # set schedule (validated server-side, replaces setCronEntry)
+ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","action":"stop"}'  # state-only change, preserves existing schedule
+ubus call luci.adblock-fast setRpcdToken '{"name":"adblock-fast","token":"newtoken"}'
+ubus call luci.adblock-fast getQueryLogStatus '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast setQueryLog '{"name":"adblock-fast","action":"enable"}'
+*/
+
+import adb from '/lib/adblock-fast/adblock-fast.uc';
+import { readfile, writefile, stat, rename, unlink, chmod, mkdir, access } from 'fs';
+import { cursor } from 'uci';
+
+const packageName = 'adblock-fast';
+const rpcdCompat = 17; // ucode-lsp disable
+
+// ── Helpers ─────────────────────────────────────────────────────────
+
+function uci_bool(val) {
+	if (val == null) return false;
+	switch ('' + val) {
+	case '1': case 'yes': case 'on': case 'true': case 'enabled':
+		return true;
+	default:
+		return false;
+	}
+}
+
+// Coerce a scheduling field to a bounded integer. Anything that is not a
+// plain decimal in [lo, hi] falls back to dflt. This is the security gate
+// for cron-line assembly: the returned value is an int, so no newline or
+// shell metacharacter from UCI/RPC input can ever reach /etc/crontabs/root.
+function cron_field(val, lo, hi, dflt) {
+	val = '' + (val ?? '');
+	if (!match(val, /^[0-9]+$/)) return dflt;
+	let n = int(val);
+	return (n < lo || n > hi) ? dflt : n;
+}
+
+// Allowlist of accepted scheduling modes.
+const CRON_MODES = { daily: 1, weekly: 1, monthly: 1, every_n_days: 1, every_n_hours: 1 };
+
+// Return resolved list of selected instance section names.
+// null = all instances, [] = none, [...] = specific names.
+function get_selected_instances(uci_ctx, config, section_type, instance_option) {
+	let instances = uci_ctx.get(packageName, 'config', instance_option);
+
+	if (!instances || !length(instances))
+		return null;
+
+	if (type(instances) == 'string')
+		instances = [instances];
+
+	if (instances[0] == '*')
+		return null;
+	if (instances[0] == '-')
+		return [];
+
+	let result = [];
+	for (let inst in instances) {
+		if (!inst) continue;
+		let s = uci_ctx.get_all(config, '@' + section_type + '[' + inst + ']');
+		push(result, s?.['.name'] || inst);
+	}
+	return result;
+}
+
+// ── Cron Management ─────────────────────────────────────────────────
+
+// Parse one adblock-fast cron line body (comment marker already stripped) into
+// raw schedule fields, or null if it isn't a well-formed adblock-fast line.
+// Values are returned as-is (strings); cron_write re-validates them through
+// cron_field/CRON_MODES, so this never has to be trusted on its own.
+function parse_cron_line(body) {
+	let f = split(trim(body), /\s+/);
+	if (length(f) < 7) return null;
+	if (f[3] != '*') return null;
+	if (f[5] != '/etc/init.d/' + packageName) return null;
+	if (f[6] != 'dl') return null;
+	if (!match(f[0], /^[0-9]+$/)) return null;
+
+	let minute = f[0], hour = f[1], dom = f[2], dow = f[4];
+	let r = { minute: minute, hour: hour };
+
+	if (index(hour, '/') >= 0) {
+		if (dom != '*' || dow != '*') return null;
+		let n = split(hour, '/')[1];
+		if (!match(n, /^[0-9]+$/)) return null;
+		r.mode = 'every_n_hours'; r.nhours = n;
+	} else if (index(dom, '/') >= 0) {
+		if (dow != '*' || !match(hour, /^[0-9]+$/)) return null;
+		let n = split(dom, '/')[1];
+		if (!match(n, /^[0-9]+$/)) return null;
+		r.mode = 'every_n_days'; r.ndays = n;
+	} else if (dom != '*') {
+		if (dow != '*' || !match(hour, /^[0-9]+$/) || !match(dom, /^[0-9]+$/)) return null;
+		r.mode = 'monthly'; r.mday = dom;
+	} else if (dow != '*') {
+		if (!match(hour, /^[0-9]+$/) || !match(dow, /^[0-9]+$/)) return null;
+		r.mode = 'weekly'; r.wday = dow;
+	} else {
+		if (!match(hour, /^[0-9]+$/)) return null;
+		r.mode = 'daily';
+	}
+	return r;
+}
+
+// cron_write: assemble and write the adblock-fast crontab line.
+//   action   - optional state change ('enable'/'start' → active,
+//              'disable'/'stop' → suspended; anything else → derive from
+//              the service 'enabled' flag).
+//   schedule - object of auto_update_* fields (from a validated RPC call), or
+//              null for a state-only change, in which case the schedule of the
+//              EXISTING line is preserved.
+// SECURITY: this is the single validation chokepoint. Every field that gets
+// interpolated — whether it came from the RPC args or from parsing the existing
+// crontab line — is forced through cron_field()/CRON_MODES immediately below,
+// so no input path can write a newline or shell metacharacter into the crontab
+// (GHSA-ggpf-xrph-wg5v class). No schedule is read from or written to UCI.
+function cron_write(action, schedule) {
+	let cron_file = '/etc/crontabs/root';
+	let tmp_file = cron_file + '.tmp';
+
+	// Read existing cron, drop our line(s), and remember the existing schedule
+	// and on/off state so a state-only change can preserve them.
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+	let lines = [];
+	let existing = null, existing_enabled = false;
+	for (let line in split(content, '\n')) {
+		let commented = match(line, /^\s*#/) ? true : false;
+		let body = commented ? replace(line, /^\s*#\s*/, '') : line;
+		if (match(body, re)) {
+			let st = (index(line, 'adblock-fast-auto-disabled') >= 0) ? 'disabled' :
+			         (index(line, 'adblock-fast-auto-suspended') >= 0) ? 'suspended' :
+			         (commented ? 'disabled' : 'active');
+			if (st == 'active' || st == 'suspended') existing_enabled = true;
+			let p = parse_cron_line(body);
+			if (p) existing = p;
+			continue;
+		}
+		push(lines, line);
+	}
+	while (length(lines) > 0 && lines[length(lines) - 1] === '')
+		pop(lines);
+
+	// Choose the schedule source, then validate every field at the gate.
+	let src, auto_enabled;
+	if (schedule != null) {
+		src = {
+			mode:   schedule.auto_update_mode,
+			minute: schedule.auto_update_minute,
+			hour:   schedule.auto_update_hour,
+			wday:   schedule.auto_update_weekday,
+			mday:   schedule.auto_update_monthday,
+			ndays:  schedule.auto_update_every_ndays,
+			nhours: schedule.auto_update_every_nhours,
+		};
+		auto_enabled = uci_bool(schedule.auto_update_enabled ?? '0');
+	} else {
+		src = existing || {};
+		auto_enabled = existing_enabled;
+	}
+
+	let mode = CRON_MODES[src.mode] ? src.mode : 'daily';
+	let minute = cron_field(src.minute, 0, 59, 0);
+	let hour = cron_field(src.hour, 0, 23, 4);
+	let wday = cron_field(src.wday, 0, 7, 0);
+	let mday = cron_field(src.mday, 1, 31, 1);
+	let ndays = cron_field(src.ndays, 1, 31, 3);
+	let nhours = cron_field(src.nhours, 1, 23, 6);
+
+	let dom = '*', dow = '*';
+	switch (mode) {
+	case 'weekly': dow = wday; break;
+	case 'monthly': dom = mday; break;
+	case 'every_n_days': dom = '*/' + ndays; break;
+	case 'every_n_hours': hour = '*/' + nhours; break;
+	}
+
+	let base_line = sprintf('%s %s %s * %s /etc/init.d/%s dl', minute, hour, dom, dow, packageName);
+	let active_line = base_line + ' # adblock-fast-auto';
+	let disabled_line = '# ' + base_line + ' # adblock-fast-auto-disabled';
+	let suspended_line = '# ' + base_line + ' # adblock-fast-auto-suspended';
+
+	let add_line = 0;
+	if (auto_enabled) {
+		switch (action) {
+		case 'disable': case 'stop':
+			add_line = 2; break;
+		case 'enable': case 'start':
+			add_line = 1; break;
+		default: {
+			let c = cursor(); c.load(packageName);
+			add_line = uci_bool(c.get(packageName, 'config', 'enabled') ?? '0') ? 1 : 2;
+			break;
+		}
+		}
+	} else {
+		add_line = 3;
+	}
+
+	let line_to_add;
+	switch (add_line) {
+	case 1: line_to_add = active_line; break;
+	case 2: line_to_add = suspended_line; break;
+	case 3: line_to_add = disabled_line; break;
+	}
+
+	if (line_to_add)
+		push(lines, line_to_add);
+
+	writefile(tmp_file, join('\n', lines) + '\n');
+
+	if (!rename(tmp_file, cron_file)) {
+		unlink(tmp_file);
+		return false;
+	}
+	chmod(cron_file, 0600);
+	if (access('/etc/init.d/cron', 'x'))
+		system('/etc/init.d/cron reload >/dev/null 2>&1');
+	return true;
+}
+
+// cron_read: report the state of the adblock-fast crontab line. Read-only —
+// it parses the crontab and returns status + the matched entry to the caller
+// (the UI parses the entry for display). It does NOT write UCI: the crontab is
+// the single source of truth for the schedule, so there is nothing to sync.
+function cron_read(req) {
+	let name = req.args?.name || packageName;
+	let cron_file = '/etc/crontabs/root';
+
+	let cron_init = !!access('/etc/init.d/cron', 'x');
+	let cron_bin = system('command -v crond >/dev/null 2>&1') == 0 || !!access('/usr/sbin/crond', 'x');
+	let cron_enabled = cron_init && system('/etc/init.d/cron enabled >/dev/null 2>&1') == 0;
+	let cron_running = (cron_init && system('/etc/init.d/cron status >/dev/null 2>&1') == 0) ||
+		system('pidof crond >/dev/null 2>&1') == 0;
+
+	let cron_line_present = false, cron_line_match = false, cron_multi = false;
+	let cron_parse_ok = false, cron_state = 'none';
+	let auto_enabled = false;
+	let parsed_state = '';
+
+	let line_count = 0, match_count = 0;
+	let active_seen = false, suspended_seen = false;
+	let last_line_state = '';
+	let matched_entry = '';
+
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+
+	for (let line in split(content, '\n')) {
+		if (!length(trim(line))) continue;
+
+		let commented = match(line, /^\s*#/) ? true : false;
+		let body = commented ? replace(line, /^\s*#\s*/, '') : line;
+		if (!match(body, re)) continue;
+
+		line_count++;
+		matched_entry = line;
+		let state = (index(line, 'adblock-fast-auto-disabled') >= 0) ? 'disabled' :
+		            (index(line, 'adblock-fast-auto-suspended') >= 0) ? 'suspended' :
+		            (commented ? 'disabled' : 'active');
+		last_line_state = state;
+		if (state == 'active') active_seen = true;
+		if (state == 'suspended') suspended_seen = true;
+
+		if (parse_cron_line(body) != null) {
+			match_count++;
+			parsed_state = state;
+		}
+	}
+
+	if (line_count > 0) cron_line_present = true;
+
+	if (line_count == 0) {
+		cron_state = 'missing';
+		auto_enabled = false;
+	} else if (line_count > 1) {
+		cron_multi = true;
+		cron_state = 'multi';
+		auto_enabled = active_seen || suspended_seen;
+	} else if (match_count == 1) {
+		cron_line_match = true;
+		cron_parse_ok = true;
+		cron_state = parsed_state;
+		auto_enabled = (parsed_state == 'active' || parsed_state == 'suspended');
+	} else {
+		cron_state = 'unsupported';
+		auto_enabled = (last_line_state == 'active' || last_line_state == 'suspended');
+	}
+
+	let result = {};
+	result[name] = {
+		auto_update_enabled: auto_enabled,
+		cron_init: cron_init,
+		cron_bin: cron_bin,
+		cron_enabled: cron_enabled,
+		cron_running: cron_running,
+		cron_line_present: cron_line_present,
+		cron_line_match: cron_line_match,
+		cron_line_multi: cron_multi,
+		cron_line_parse_ok: cron_parse_ok,
+		cron_line_state: cron_state,
+		entry: matched_entry,
+	};
+	return result;
+}
+
+function get_cron_entry(req) {
+	let name = req.args?.name || packageName;
+	let cron_file = '/etc/crontabs/root';
+	let entry = '';
+
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+
+	for (let line in split(content, '\n')) {
+		if (!length(trim(line))) continue;
+		if (match(line, re)) {
+			entry = line;
+			break;
+		}
+	}
+
+	let result = {};
+	result[name] = { entry: entry };
+	return result;
+}
+
+// NOTE: the former set_cron_entry() RPC (which wrote a caller-supplied cron
+// line verbatim into /etc/crontabs/root) has been removed — it allowed a
+// delegated user to inject arbitrary root crontab lines via embedded
+// newlines (GHSA-ggpf-xrph-wg5v). The schedule now travels as discrete
+// auto_update_* fields in the syncCron RPC and is rendered server-side by
+// cron_write(), which validates every field before assembling the line.
+
+function sync_cron(req) {
+	let a = req.args || {};
+	// Reject a mismatched package name up front, consistent with the other
+	// write methods (setInitAction/setRpcdToken). cron_write only ever touches
+	// the adblock-fast crontab, so a wrong name must be a no-op, not a silent
+	// operation on adblock-fast.
+	if ((a.name || packageName) != packageName)
+		return { result: false };
+	// Presence of auto_update_enabled marks an explicit schedule update (from
+	// the UI). Without it this is a state-only change and cron_write preserves
+	// the existing line's schedule. Either way cron_write validates.
+	let schedule = (a.auto_update_enabled != null) ? a : null;
+	if (cron_write(a.action, schedule))
+		return { result: true };
+	return { result: false };
+}
+
+// ── rpcd Method Handlers ────────────────────────────────────────────
+
+const methods = {
+	getFileUrlFilesizes: {
+		args: { name: 'name' },
+		call: function(req) {
+		return adb.get_file_url_filesizes(req.args.name || packageName);
+		}
+	},
+	getInitList: {
+		args: { name: 'name' },
+		call: function(req) {
+		return adb.get_init_list(req.args.name || packageName);
+		}
+	},
+	getInitStatus: {
+		args: { name: 'name' },
+		call: function(req) {
+		let name = req.args.name || packageName;
+			let result = adb.get_init_status(name);
+			if (result[name])
+				result[name].rpcdCompat = rpcdCompat;
+			return result;
+		}
+	},
+	getPlatformSupport: {
+		args: { name: 'name' },
+		call: function(req) {
+		return adb.get_platform_support(req.args.name || packageName);
+		}
+	},
+	setInitAction: {
+		args: { name: 'name', action: 'action' },
+		call: function(req) {
+			let name = req.args.name || packageName;
+			let action = req.args.action;
+			if (name != packageName) return { result: false };
+			// Allowlist the action up front so the value interpolated into the
+			// system() calls below can only ever be one of these literals.
+			const INIT_ACTIONS = { enable: 1, disable: 1, start: 1, stop: 1,
+				reload: 1, restart: 1, dl: 1, pause: 1 };
+			if (!INIT_ACTIONS[action]) return { result: false };
+			// dl/start/reload/restart download and process every block-list
+			// synchronously inside the init script, and 'pause' additionally
+			// sleeps for pause_timeout. rpcd is single-threaded, so running any
+			// of these under a blocking system() ties it up — and freezes every
+			// LuCI page — until the operation finishes (issue #9). Detach these
+			// so the RPC returns immediately; the UI polls getInitStatus for
+			// progress. 'stop' is quick and stays synchronous so the UI reflects
+			// the stopped state right away.
+			const BG_INIT_ACTIONS = { start: 1, reload: 1, restart: 1, dl: 1, pause: 1 };
+			if (!access('/etc/init.d/' + packageName, 'x'))
+				return { error: 'Init script not found!' };
+
+			let result = false;
+			switch (action) {
+			case 'enable':
+			case 'disable': {
+				let val = (action === 'enable') ? '1' : '0';
+				if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0) {
+					let uci_ctx = cursor();
+					uci_ctx.load(packageName);
+					uci_ctx.set(packageName, 'config', 'enabled', val);
+					uci_ctx.commit(packageName);
+					result = true;
+				}
+				break;
+			}
+			case 'start': case 'stop': case 'reload': case 'restart': case 'dl': case 'pause':
+				if (BG_INIT_ACTIONS[action]) {
+					// Fire-and-forget: sh backgrounds the job and exits, so
+					// system() returns at once and the job is reparented to init
+					// and runs to completion. Report success optimistically — the
+					// UI tracks the real outcome by polling getInitStatus.
+					system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1 &", packageName, action));
+					result = true;
+				} else if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0) {
+					result = true;
+				}
+				break;
+			}
+
+			switch (action) {
+			case 'enable': case 'start': case 'disable': case 'stop':
+				// State-only change: preserve the existing schedule line, flip
+				// its active/suspended/disabled marker.
+				cron_write(action, null);
+				break;
+			}
+			return { result: result };
+		}
+	},
+	getCronStatus: {
+		args: { name: 'name' },
+		call: cron_read,
+	},
+	getCronEntry: {
+		args: { name: 'name' },
+		call: get_cron_entry,
+	},
+	syncCron: {
+		args: {
+			name: 'name', action: 'action',
+			auto_update_enabled: 'auto_update_enabled',
+			auto_update_mode: 'auto_update_mode',
+			auto_update_minute: 'auto_update_minute',
+			auto_update_hour: 'auto_update_hour',
+			auto_update_weekday: 'auto_update_weekday',
+			auto_update_monthday: 'auto_update_monthday',
+			auto_update_every_ndays: 'auto_update_every_ndays',
+			auto_update_every_nhours: 'auto_update_every_nhours',
+		},
+		call: sync_cron,
+	},
+	setRpcdToken: {
+		args: { name: 'name', token: 'token' },
+		call: function(req) {
+			let name = req.args.name || packageName;
+			let token = req.args.token;
+			if (name != packageName || !token || token == '')
+				return { result: false };
+			// Token becomes the adblock-fast-api system password; constrain it
+			// to an alphanumeric charset so nothing can perturb the passwd
+			// pipeline (defence in depth — the value is already shell-quoted).
+			if (!match('' + token, /^[A-Za-z0-9]+$/))
+				return { result: false };
+
+			// Update UCI config
+			let uci_ctx = cursor();
+			uci_ctx.load(packageName);
+			uci_ctx.set(packageName, 'config', 'rpcd_token', token);
+			uci_ctx.commit(packageName);
+
+			// Sync to system password
+			if (system(sprintf("grep -q '^adblock-fast-api:' /etc/passwd")) == 0) {
+				system(sprintf("printf '%%s\\n%%s\\n' '%s' '%s' | passwd adblock-fast-api >/dev/null 2>&1",
+					replace(token, "'", "'\\''"),
+					replace(token, "'", "'\\''")));
+			}
+
+			return { result: true };
+		}
+	},
+	getQueryLogStatus: {
+		args: { name: 'name' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let uci_ctx = cursor();
+
+			uci_ctx.load(packageName);
+			let dns = uci_ctx.get(packageName, 'config', 'dns') || 'dnsmasq.servers';
+			let resolver = split(dns, '.')[0];
+			let logging_enabled = false;
+
+			switch (resolver) {
+			case 'dnsmasq': {
+				uci_ctx.load('dhcp');
+				let sel = get_selected_instances(uci_ctx, 'dhcp', 'dnsmasq', 'dnsmasq_instance');
+				uci_ctx.foreach('dhcp', 'dnsmasq', function(s) {
+					if (sel != null && index(sel, s['.name']) < 0) return;
+					if (uci_bool(s.logqueries))
+						logging_enabled = true;
+				});
+				break;
+			}
+			case 'smartdns': {
+				uci_ctx.load('smartdns');
+				let sel = get_selected_instances(uci_ctx, 'smartdns', 'smartdns', 'smartdns_instance');
+				uci_ctx.foreach('smartdns', 'smartdns', function(s) {
+					if (sel != null && index(sel, s['.name']) < 0) return;
+					let lvl = s.log_level;
+					if (lvl == 'info' || lvl == 'debug')
+						logging_enabled = true;
+				});
+				break;
+			}
+			case 'unbound':
+				uci_ctx.load('unbound');
+				uci_ctx.foreach('unbound', 'unbound', function(s) {
+					if (+s.verbosity >= 2)
+						logging_enabled = true;
+				});
+				break;
+			}
+
+			let result = {};
+			result[name] = {
+				resolver: resolver,
+				dns: dns,
+				logging_enabled: logging_enabled,
+			};
+			return result;
+		}
+	},
+	setQueryLog: {
+		args: { name: 'name', action: 'action' },
+		call: function(req) {
+			let name = req.args?.name || packageName;
+			let action = req.args?.action;
+			if (action != 'enable' && action != 'disable')
+				return { result: false };
+
+			let uci_ctx = cursor();
+			uci_ctx.load(packageName);
+			let dns = uci_ctx.get(packageName, 'config', 'dns') || 'dnsmasq.servers';
+			let resolver = split(dns, '.')[0];
+			let enable = (action == 'enable');
+
+			switch (resolver) {
+			case 'dnsmasq': {
+				uci_ctx.load('dhcp');
+				let dsel = get_selected_instances(uci_ctx, 'dhcp', 'dnsmasq', 'dnsmasq_instance');
+				uci_ctx.foreach('dhcp', 'dnsmasq', function(s) {
+					if (dsel != null && index(dsel, s['.name']) < 0) return;
+					let sect = s['.name'];
+					if (enable) {
+						if (!uci_bool(s.logqueries))
+							uci_ctx.set('dhcp', sect, 'adbf_backup_logqueries', s.logqueries || '0');
+						uci_ctx.set('dhcp', sect, 'logqueries', '1');
+						if (s.logfacility) {
+							uci_ctx.set('dhcp', sect, 'adbf_backup_logfacility', s.logfacility);
+							uci_ctx.delete('dhcp', sect, 'logfacility');
+						}
+					} else {
+						let saved = s.adbf_backup_logqueries;
+						if (saved != null) {
+							if (uci_bool(saved))
+								uci_ctx.set('dhcp', sect, 'logqueries', saved);
+							else
+								uci_ctx.delete('dhcp', sect, 'logqueries');
+							uci_ctx.delete('dhcp', sect, 'adbf_backup_logqueries');
+						} else {
+							uci_ctx.delete('dhcp', sect, 'logqueries');
+						}
+						let saved_fac = s.adbf_backup_logfacility;
+						if (saved_fac != null) {
+							uci_ctx.set('dhcp', sect, 'logfacility', saved_fac);
+							uci_ctx.delete('dhcp', sect, 'adbf_backup_logfacility');
+						}
+					}
+				});
+				uci_ctx.commit('dhcp');
+				system('/etc/init.d/dnsmasq restart >/dev/null 2>&1');
+				break;
+			}
+			case 'smartdns': {
+				uci_ctx.load('smartdns');
+				let ssel = get_selected_instances(uci_ctx, 'smartdns', 'smartdns', 'smartdns_instance');
+				uci_ctx.foreach('smartdns', 'smartdns', function(s) {
+					if (ssel != null && index(ssel, s['.name']) < 0) return;
+					let sect = s['.name'];
+					if (enable) {
+						let lvl = s.log_level;
+						if (lvl != 'info' && lvl != 'debug')
+							uci_ctx.set('smartdns', sect, 'adbf_backup_log_level', lvl || 'error');
+						uci_ctx.set('smartdns', sect, 'log_level', 'info');
+					} else {
+						let saved = s.adbf_backup_log_level;
+						if (saved != null) {
+							uci_ctx.set('smartdns', sect, 'log_level', saved);
+							uci_ctx.delete('smartdns', sect, 'adbf_backup_log_level');
+						} else {
+							uci_ctx.set('smartdns', sect, 'log_level', 'error');
+						}
+					}
+					return false;
+				});
+				uci_ctx.commit('smartdns');
+				system('/etc/init.d/smartdns restart >/dev/null 2>&1');
+				break;
+			}
+			case 'unbound':
+				uci_ctx.load('unbound');
+				uci_ctx.foreach('unbound', 'unbound', function(s) {
+					let sect = s['.name'];
+					if (enable) {
+						let verb = s.verbosity;
+						if (+verb < 2)
+							uci_ctx.set('unbound', sect, 'adbf_backup_verbosity', verb || '1');
+						uci_ctx.set('unbound', sect, 'verbosity', '2');
+					} else {
+						let saved = s.adbf_backup_verbosity;
+						if (saved != null) {
+							uci_ctx.set('unbound', sect, 'verbosity', saved);
+							uci_ctx.delete('unbound', sect, 'adbf_backup_verbosity');
+						} else {
+							uci_ctx.set('unbound', sect, 'verbosity', '1');
+						}
+					}
+					return false;
+				});
+				uci_ctx.commit('unbound');
+				system('/etc/init.d/unbound restart >/dev/null 2>&1');
+				break;
+			default:
+				return { result: false };
+			}
+
+			return { result: true };
+		}
+	},
+};
+
+return { 'luci.adblock-fast': methods };

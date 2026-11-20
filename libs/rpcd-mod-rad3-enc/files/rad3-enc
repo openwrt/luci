@@ -1,0 +1,71 @@
+#!/usr/bin/python3
+
+# cspell:words encpass enctype hpasswd jsonin passlib plainpass radicale
+
+import sys
+import json
+from passlib.hash import apr_md5_crypt, sha256_crypt, sha512_crypt # pyright: ignore[reportMissingModuleSource]
+from radicale import utils # pyright: ignore[reportMissingImports]
+
+def main():
+
+    if len(sys.argv) < 2:
+        return -1
+
+    if sys.argv[1] == 'list':
+        print('{ "encrypt": { "type": "str", "plainpass": "str" } }\n')
+        return 0
+
+    if sys.argv[1] == 'call':
+        if len(sys.argv) < 3:
+            return -1
+
+    if sys.argv[2] != 'encrypt':
+        return -1
+
+    encpass = ""
+    error = ""
+
+    try:
+        jsonin = json.loads(sys.stdin.readline())
+        enctype = jsonin['type'].strip()
+        plainpass = jsonin['plainpass']
+
+        if enctype == 'plain':
+            encpass = plainpass
+        elif enctype == 'md5':
+            encpass = apr_md5_crypt.hash(plainpass).strip()
+        elif enctype == 'sha256':
+            encpass = sha256_crypt.using(rounds=5000).hash(plainpass).strip()
+        elif enctype == 'sha512':
+            encpass = sha512_crypt.using(rounds=5000).hash(plainpass).strip()
+        elif enctype == 'bcrypt':
+            try:
+                from passlib.hash import bcrypt  # pyright: ignore[reportMissingModuleSource]
+            except ImportError as e:
+                raise RuntimeError("hpasswd encryption method 'bcrypt' requires the bcrypt module, which is missing") from e
+            else:
+                encpass = bcrypt.hash(plainpass).strip()
+        elif enctype == 'argon2':
+            try:
+                import argon2 # pyright: ignore[reportMissingImports]
+            except ImportError as e:
+                raise RuntimeError("hpasswd encryption method 'argon2' requires the argon2 module, which is missing") from e
+            else:
+                encpass = argon2.using(type="ID").hash(plainpass).strip()
+
+    except Exception as e:
+        encpass = ""
+        error = str(e)
+
+    if ((encpass == "") and (error == "")):
+        error = "unable to encrypt password"
+
+    if error:
+        print(json.dumps({ "encrypted_password": encpass, "error": error}))
+    else:
+        print(json.dumps({ "encrypted_password": encpass}))
+
+    return 0
+
+main()

@@ -1,0 +1,42 @@
+{
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA8500",
+		"board": [
+			"linksys-ea8500",
+			"linksys,ea8500"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"firmware": {
+				"kernel": "mtd13",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd14"
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"firmware": {
+				"kernel": "mtd15",
+				"kernel_label_offset": 32,
+				"rootfs": "mtd16"
+			}
+		}
+	]
+}
