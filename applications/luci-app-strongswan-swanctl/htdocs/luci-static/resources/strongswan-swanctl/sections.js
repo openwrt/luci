@@ -661,6 +661,49 @@ function getListWidget(map, connection, option) {
 }
 
 /**
+ * Show the names of referencing sections in a dialog.
+ *
+ * LuCI only has one dialog, which ui.showModal() replaces. If a dialog is
+ * already open, e.g. the connection dialog, its nodes are moved aside and
+ * put back on close, so the form keeps its state.
+ */
+function showReferencesModal(title, names) {
+	const modalOpen = document.body.classList.contains('modal-overlay-active');
+	const overlay = document.getElementById('modal_overlay');
+	const dlg = overlay?.firstElementChild;
+	let restore = null;
+
+	if (modalOpen && dlg) {
+		const nodes = Array.from(dlg.childNodes);
+		const className = dlg.getAttribute('class');
+		const scrollTop = overlay.scrollTop;
+
+		restore = function () {
+			dlg.setAttribute('class', className);
+			dlg.replaceChildren(...nodes);
+			overlay.scrollTop = scrollTop;
+		};
+	}
+
+	const close = function () {
+		if (restore)
+			restore();
+		else
+			ui.hideModal();
+	};
+
+	ui.showModal(title, [
+		E('p', {}, [ names.join(', ') ]),
+		E('div', { 'class': 'right' }, [
+			E('button', {
+				'class': 'btn cbi-button',
+				'click': close
+			}, [ _('Dismiss') ])
+		])
+	], 'cbi-modal');
+}
+
+/**
  * Show the sections of the given `types` referencing a section in a list
  * option.
  *
@@ -688,7 +731,30 @@ function addConnectionsOption(s, option, title, types) {
 			});
 		}).map(section => section['.name']);
 
-		return names.length > 0 ? names.join(', ') : null;
+		return names.length > 0 ? names : null;
+	};
+	/*
+	 * Long lists make the table hard to read, so only show the number of
+	 * sections and list their names in a dialog.
+	 */
+	o.textvalue = function (section_id) {
+		// Number of sections shown by name, more are only counted.
+		const MAX_SHOWN_REFERENCES = 3;
+		const names = this.cfgvalue(section_id);
+
+		if (!names)
+			return null;
+
+		if (names.length <= MAX_SHOWN_REFERENCES)
+			return '%h'.format(names.join(', '));
+
+		return E('a', {
+			'href': '#',
+			'click': function (ev) {
+				ev.preventDefault();
+				showReferencesModal('%s - %s'.format(title, section_id), names);
+			}
+		}, [ _('%d references').format(names.length) ]);
 	};
 
 	return o;
