@@ -12,6 +12,8 @@ Review the Contributing Guidelines: https://github.com/openwrt/luci/blob/master/
 MUST NOT:
 - Add a PR from your *main* branch - instead, put it on a separate branch.
 - Add merge commits to your PR - instead, rebase locally and force-push.
+- Change existing `*.po` files or add translated strings - instead, use Weblate.
+- Fetch the sources of an application from outside this repository at build time - instead, keep them next to its Makefile.
 
 MUST:
 - Increment any PKG_VERSION in the affected Makefile.
@@ -58,5 +60,7 @@ MAY:
 ## Checklist
 <!-- Place an x inside each [ ] and remove the empty space to check each item off the list. 
 They should look like this: [x], otherwise leave them as is. -->
+- [ ] I have reviewed the [AI policy](https://github.com/openwrt/luci/blob/master/CONTRIBUTING.md#ai-policy).
+    - [ ] I have used AI or LLM in my pull request, description, or commit messages, and the description says what it was used for.
 - [ ] _(Nice to have)_ Includes what Issue it closes (e.g. openwrt/luci#issue-number).
 - [ ] _(Nice to have)_ Includes what it depends on (e.g. openwrt/packages#pr-number in sister repo).
