@@ -1,0 +1,33 @@
+{
+	"admin/services/corosync-qnetd": {
+		"title": "Corosync QNetd",
+		"order": 85,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/corosync-qnetd/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-corosync-qnetd" ]
+		}
+	},
+	"admin/services/corosync-qnetd/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": { "type": "view", "path": "corosync-qnetd/overview" }
+	},
+	"admin/services/corosync-qnetd/setup": {
+		"title": "Setup",
+		"order": 20,
+		"action": { "type": "view", "path": "corosync-qnetd/setup" }
+	},
+	"admin/services/corosync-qnetd/configuration": {
+		"title": "Configuration",
+		"order": 30,
+		"action": { "type": "view", "path": "corosync-qnetd/configuration" }
+	},
+	"admin/services/corosync-qnetd/certificates": {
+		"title": "Certificates",
+		"order": 40,
+		"action": { "type": "view", "path": "corosync-qnetd/certificates" }
+	}
+}
