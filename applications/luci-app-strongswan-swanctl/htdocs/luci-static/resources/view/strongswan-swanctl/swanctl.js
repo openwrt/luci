@@ -190,6 +190,14 @@ function addEmbeddedSection(s, tab, option, title, description, addOptions) {
 
 	// The embedded section needs the connection to look up the references.
 	o.load = function (section_id) {
+		/*
+		 * The embedded section is only shown in the connection dialog,
+		 * which uses a named section. Loading it for every connection
+		 * on the main page is not needed and slows it down a lot.
+		 */
+		if (!(this.section instanceof form.NamedSection))
+			return Promise.resolve();
+
 		this.subsection.connection = section_id;
 
 		return form.SectionValue.prototype.load.apply(this, [section_id]);
