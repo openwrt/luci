@@ -447,16 +447,25 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * Returns a (possibly empty) DOM `NodeList` containing the found DOM nodes.
 	 */
 	findElements(...args) /* ... */{
-		let q = null;
+		return this.root.querySelectorAll(this.elementQuery('findElements', args));
+	},
 
+	/**
+	 * Build the selector expression of `findElements()` and `findElement()`.
+	 *
+	 * @private
+	 * @param {string} caller
+	 * @param {Array<string>} args
+	 * @returns {string}
+	 */
+	elementQuery(caller, args) {
 		if (args.length == 1)
-			q = args[0];
-		else if (args.length == 2)
-			q = '[%s="%s"]'.format(args[0], args[1]);
-		else
-			L.error('InternalError', 'Expecting one or two arguments to findElements()');
+			return args[0];
 
-		return this.root.querySelectorAll(q);
+		if (args.length == 2)
+			return '[%s="%s"]'.format(args[0], args[1]);
+
+		L.error('InternalError', `Expecting one or two arguments to ${caller}()`);
 	},
 
 	/**
@@ -492,8 +501,11 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * Returns the first found DOM node or `null` if no element matched.
 	 */
 	findElement(...args) /* ... */{
-		const res = this.findElements(...args);
-		return res.length ? res[0] : null;
+		/*
+		 * querySelector() stops at the first match, while
+		 * querySelectorAll() always searches the whole map.
+		 */
+		return this.root.querySelector(this.elementQuery('findElement', args));
 	},
 
 	/**
@@ -1312,11 +1324,18 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 		let changed = false;
 		const sids = this.cfgsections();
 
+		/*
+		 * Query the rendered sections once, instead of searching the
+		 * whole map for each section.
+		 */
+		const rendered = new Set(Array.from(this.map.findElements('[data-section-id]'),
+			(el) => el.getAttribute('data-section-id')));
+
 		for (let i = 0, sid = sids[0]; (sid = sids[i]) != null; i++) {
 			/*
 			 * do not remove elements that are not rendered yet
 			 */
-			if (!this.map.findElement('data-section-id', sid))
+			if (!rendered.has(sid))
 				continue;
 
 			for (let j = 0, o = this.children[0]; (o = this.children[j]) != null; j++) {
@@ -6276,7 +6295,15 @@ const CBISectionValue = CBIValue.extend(/** @lends LuCI.form.SectionValue.protot
 	 * @returns {null}
 	 */
 	checkDepends(section_id) {
-		this.subsection.checkDepends(section_id);
+		/*
+		 * The subsection is only rendered within the field of this option,
+		 * e.g. not in the table of a grid section if the option is
+		 * modalonly. Checking all its sections without the field is
+		 * useless and very slow with many section instances.
+		 */
+		if (this.map.findElement('data-field', this.cbid(section_id)))
+			this.subsection.checkDepends(section_id);
+
 		return CBIValue.prototype.checkDepends.apply(this, [ section_id ]);
 	},
 
