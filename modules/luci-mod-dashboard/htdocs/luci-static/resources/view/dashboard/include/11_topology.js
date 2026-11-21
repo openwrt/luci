@@ -160,7 +160,7 @@ return baseclass.extend({
 		attr(node.button, 'data-status', data.status || null);
 		attr(node.button, 'aria-current', selected ? 'true' : null);
 		const shownName = cleanHostname(data.name, !!data.mac);
-		const description = [ data.detail, data.mac ? [ data.mac, data.context ].filter(Boolean).join(' · ') : null, data.gatewayAddresses?.join(' / ') ].filter(Boolean).join(' · ');
+		const description = [ data.detail, data.hint, data.mac ? [ data.mac, data.context ].filter(Boolean).join(' · ') : null, data.gatewayAddresses?.join(' / ') ].filter(Boolean).join(' · ');
 		const label = [ shownName, description ].filter(Boolean).join(' · ');
 		attr(node.button, 'aria-label', expandable ? label : data.tab ? _('%s: go to details').format(label) : null);
 		attr(node.name, 'title', data.name);
