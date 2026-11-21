@@ -4,10 +4,11 @@ import { readfile } from 'fs';
 import * as uloop from 'uloop';
 import { connect } from 'ubus';
 import { start as start_temperature } from 'luci.dashboard.temperature';
+import { collect as collect_topology } from 'luci.dashboard.topology';
 
 const STEP = 5000, SLOTS = 60;
 
-let ring = [], seq = 0, timer;
+let ring = [], seq = 0, timer, topology;
 const bus = connect();
 
 // Observe one main-table default-route device. Prefer IPv4, then route metric;
@@ -107,6 +108,7 @@ function sample() {
 // Sampling never stops, so the charts are full whenever somebody looks.
 function tick() {
 	timer.set(STEP);
+	topology = null; // Share on-demand scans until the next sample.
 
 	// An exception here would end rpcd's uloop, not just this timer.
 	try {
@@ -120,6 +122,12 @@ function tick() {
 timer = uloop.timer(0, tick);
 
 const methods = {
+	topology: {
+		args: {},
+		call: function() {
+			return topology ??= collect_topology();
+		}
+	},
 	history: {
 		args: { since: 0, id: 'id' },
 		call: function(request) {
