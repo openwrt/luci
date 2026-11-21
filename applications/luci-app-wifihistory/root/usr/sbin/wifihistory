@@ -2,34 +2,249 @@
 
 'use strict';
 
-import { readfile, writefile, open, mkdir, rename } from 'fs';
+import { readfile, writefile, mkdir, rename, unlink, stat, error, lsdir, dirname, basename } from 'fs';
 import { connect } from 'ubus';
+import {
+	RAM_DIR, HISTORY_NAME, persistent_dir, save_interval,
+	acquire_lock, ensure_storage_dir
+} from 'wifihistory.storage';
+import {
+	read_clear_marker, complete_pending_clear
+} from 'wifihistory.recovery';
 
-const HISTORY_DIR = '/var/lib/wifihistory';
-const HISTORY_FILE = HISTORY_DIR + '/history.json';
-const LOCK_FILE = '/var/lock/wifihistory.lock';
+/* The working copy always lives in RAM. It is mirrored to the persistent
+ * storage (if configured and mounted) on connection changes, periodically
+ * and when the service stops, to keep writes to flash media low. */
+const HISTORY_DIR = RAM_DIR;
+const HISTORY_FILE = HISTORY_DIR + '/' + HISTORY_NAME;
 
-function load_history() {
-	let content = readfile(HISTORY_FILE);
-	if (content == null)
-		return {};
+/* Holds the storage path the history was last restored from in this boot */
+const RESTORE_MARKER = '/var/run/wifihistory.restored';
+const CLEAR_MARKER = '/etc/wifihistory.clear-pending';
+const STOP_MARKER = '/var/run/wifihistory.stopping';
+
+function load_file(path) {
+	let dir = dirname(path);
+	let name = basename(path);
+	let entries = lsdir(dir);
+
+	if (entries == null) {
+		warn(sprintf('Cannot list directory %s: %s\n', dir, error()));
+		return { ok: false, exists: false, data: null };
+	}
+
+	let exists = false;
+	for (let entry in entries) {
+		if (entry == name) {
+			exists = true;
+			break;
+		}
+	}
+
+	if (!exists)
+		return { ok: true, exists: false, data: {} };
+
+	let content = readfile(path);
+	if (content == null) {
+		warn(sprintf('Cannot read %s: %s\n', path, error()));
+		return { ok: false, exists: true, data: null };
+	}
 
 	try {
-		return json(content) || {};
+		let data = json(content);
+		if (type(data) != 'object') {
+			warn(sprintf('Invalid history format in %s\n', path));
+			return { ok: false, exists: true, data: null };
+		}
+
+		return { ok: true, exists: true, data: data };
 	}
 	catch (e) {
-		return {};
+		warn(sprintf('Invalid JSON in %s\n', path));
+		return { ok: false, exists: true, data: null };
 	}
 }
 
-function save_history(data) {
-	let tmp = HISTORY_FILE + '.tmp';
+function save_file(path, data) {
+	let tmp = path + '.tmp';
 
-	writefile(tmp, sprintf('%J', data));
-	rename(tmp, HISTORY_FILE);
+	if (writefile(tmp, sprintf('%J', data)) == null) {
+		warn(sprintf('Failed to write %s: %s\n', tmp, error()));
+		return false;
+	}
+
+	if (!rename(tmp, path)) {
+		warn(sprintf('Failed to rename %s: %s\n', tmp, error()));
+		unlink(tmp);
+		return false;
+	}
+
+	return true;
+}
+/* Combine two histories, the record with the newest last_seen wins */
+function merge_history(base, update) {
+	let out = {};
+
+	for (let mac, rec in base)
+		out[mac] = rec;
+
+	for (let mac, rec in update) {
+		let cur = out[mac];
+
+		if (!cur) {
+			out[mac] = rec;
+			continue;
+		}
+
+		let newer = ((rec.last_seen || 0) >= (cur.last_seen || 0)) ? rec : cur;
+		let a = cur.first_seen || 0;
+		let b = rec.first_seen || 0;
+
+		newer.first_seen = (a && b) ? (a < b ? a : b) : (a || b);
+		out[mac] = newer;
+	}
+
+	return out;
+}
+
+/* Load the persisted history into the RAM working copy */
+function restore(dir) {
+	let persisted = load_file(dir + '/' + HISTORY_NAME);
+	if (!persisted.ok)
+		return;
+
+	let ram = load_file(HISTORY_FILE);
+	if (!ram.ok)
+		return;
+
+	/* nobody is connected right after (re)start, polling will fix it */
+	for (let mac, rec in persisted.data)
+		rec.connected = false;
+
+	let merged = merge_history(persisted.data, ram.data);
+
+	if (!save_file(HISTORY_FILE, merged))
+		return;
+
+	if (writefile(RESTORE_MARKER, dir) == null)
+		warn(sprintf('Failed to write restore marker: %s\n', error()));
+}
+
+/* Make sure persistent storage is initialised; handles storage that
+ * is mounted late, replaced or unplugged. */
+
+function sync_storage() {
+	let marker = read_clear_marker(CLEAR_MARKER);
+
+	if (!marker.ok)
+		return false;
+
+	if (marker.pending) {
+		let dir = persistent_dir();
+
+		/* Only prepare the storage directory that was recorded
+		 * when the clear operation started. */
+		if (dir && dir == marker.data.storage_path &&
+		    !ensure_storage_dir())
+			dir = null;
+
+		return complete_pending_clear(CLEAR_MARKER, HISTORY_FILE, RESTORE_MARKER, dir);
+	}
+
+	if (!ensure_storage_dir()) {
+		unlink(RESTORE_MARKER);
+		return true;
+	}
+
+	let dir = persistent_dir();
+
+	if (!dir) {
+		unlink(RESTORE_MARKER);
+		return true;
+	}
+
+	if (readfile(RESTORE_MARKER) != dir)
+		restore(dir);
+
+	return true;
+}
+
+
+function persist(history, force) {
+	let marker = read_clear_marker(CLEAR_MARKER);
+
+	/* Never persist while a clear operation is pending or its marker
+	 * cannot be read safely. */
+	if (!marker.ok || marker.pending)
+		return;
+
+	let dir = persistent_dir();
+
+	/* Never overwrite persistent data unless it was restored successfully. */
+	if (!dir || readfile(RESTORE_MARKER) != dir)
+		return;
+
+	let target = dir + '/' + HISTORY_NAME;
+	let stored = load_file(target);
+
+	/* Do not overwrite existing data if it cannot be read or parsed. */
+	if (!stored.ok) {
+		warn('Cannot inspect persistent history; skipping save\n');
+		return;
+	}
+
+	/* A missing history file is safe to create. */
+	if (!stored.exists) {
+		save_file(target, history);
+		return;
+	}
+
+	let info = stat(target);
+	if (!info) {
+		warn(sprintf('Cannot stat persistent history %s: %s\n',
+			target, error()));
+		return;
+	}
+
+	let age = time() - info.mtime;
+
+	/* negative age: clock was corrected, do not wait for it to catch up */
+	if (force || age < 0 || age >= save_interval())
+		save_file(target, history);
+}
+
+/* Unconditionally write the RAM copy to the storage (used on stop) */
+
+function flush() {
+	let marker = read_clear_marker(CLEAR_MARKER);
+
+	/* Never flush while a clear operation is pending or its marker
+	 * cannot be read safely. */
+	if (!marker.ok || marker.pending)
+		return;
+
+	let dir = persistent_dir();
+
+	/* never overwrite stored data with a history that was not restored */
+	if (!dir || readfile(RESTORE_MARKER) != dir)
+		return;
+
+	let history = load_file(HISTORY_FILE);
+	if (!history.ok) {
+		warn('Cannot flush invalid or unreadable RAM history\n');
+		return;
+	}
+
+	save_file(dir + '/' + HISTORY_NAME, history.data);
 }
 
 function poll_stations() {
+	let loaded = load_file(HISTORY_FILE);
+	if (!loaded.ok) {
+		warn('Cannot poll with invalid or unreadable history\n');
+		return;
+	}
+
 	let ubus = connect();
 	if (!ubus) {
 		warn('Failed to connect to ubus\n');
@@ -37,12 +252,15 @@ function poll_stations() {
 	}
 
 	let now = time();
-	let history = load_history();
+	let history = loaded.data;
 	let seen_macs = {};
+	let changed = false;
 
 	let wifi_status = ubus.call('network.wireless', 'status');
-	if (!wifi_status)
+	if (!wifi_status) {
+		ubus.disconnect();
 		return;
+	}
 
 	let hints = ubus.call('luci-rpc', 'getHostHints') || {};
 
@@ -78,6 +296,9 @@ function poll_stations() {
 				let existing = history[mac];
 				let first_seen = existing?.first_seen || now;
 
+				if (!existing?.connected)
+					changed = true;
+
 				history[mac] = {
 					mac: mac,
 					hostname: hostname,
@@ -95,30 +316,54 @@ function poll_stations() {
 		}
 	}
 
-	for (let mac in history)
-		if (!seen_macs[mac])
+	for (let mac in history) {
+		if (!seen_macs[mac]) {
+			if (history[mac].connected)
+				changed = true;
+
 			history[mac].connected = false;
+		}
+	}
 
 	ubus.disconnect();
 
-	save_history(history);
+	if (save_file(HISTORY_FILE, history))
+		persist(history, changed);
 }
 
 mkdir(HISTORY_DIR);
 
-let lock_fd = open(LOCK_FILE, 'w');
-if (!lock_fd) {
-	warn('Failed to open lock file\n');
-	exit(1);
-}
+/* A flush must wait until the polling instance releases the lock. */
+if (ARGV[0] == 'flush') {
+	let lock_fd = acquire_lock(false);
 
-if (!lock_fd.lock('xn')) {
-	warn('Another instance is already running\n');
+	if (!lock_fd) {
+		warn('Failed to acquire history lock for flush\n');
+		exit(1);
+	}
+
+	flush();
 	lock_fd.close();
+	exit(0);
+}
+
+/* Only one polling instance may access the history at a time. */
+let lock_fd = acquire_lock(true);
+
+if (!lock_fd) {
+	warn('Another instance is already running\n');
 	exit(1);
 }
 
-poll_stations();
 
-lock_fd.lock('u');
+if (stat(STOP_MARKER)) {
+	lock_fd.close();
+	exit(0);
+}
+
+if (sync_storage())
+	poll_stations();
+else
+	warn('Storage synchronisation blocked; skipping polling\n');
+
 lock_fd.close();
