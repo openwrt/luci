@@ -43,6 +43,10 @@ The UI plugin provides configuration interface in System > Plugins. It must:
 
 **Example structure**:
 ```javascript
+'use strict';
+'require baseclass';
+'require form';
+
 return baseclass.extend({
     class: 'auth',
     class_i18n: _('Authentication'),

@@ -2777,6 +2777,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * @private
 	 * @param {string} section_id
 	 * @param {boolean} put_next
+	 * @param {Event} ev
 	 * @param {string} name
 	 * @returns {null}
 	 */
