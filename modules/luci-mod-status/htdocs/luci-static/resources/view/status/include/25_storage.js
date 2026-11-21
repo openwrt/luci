@@ -16,6 +16,7 @@ var callMountPoints = rpc.declare({
 var MountSkipList = [
 	"/rom",
 	"/tmp",
+	"/tmp/.ujail",
 	"/dev",
 	"/overlay",
 	"/",
