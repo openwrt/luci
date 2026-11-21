@@ -11,6 +11,14 @@ const view_plugins = `/www/${L.resource('view/plugins')}`;
 
 const luci_plugins = 'luci_plugins';
 
+// Names for the plugin classes LuCI itself provides hook points for.
+// Other classes are named after the class and type labels the plugin
+// declares.
+const class_names = {
+	auth_login: _('Login methods'),
+	http_headers: _('HTTP response headers'),
+};
+
 return view.extend({
 	load() {
 		return Promise.all([
@@ -30,16 +38,12 @@ return view.extend({
 	render([plugins]) {
 		let m, s, o, p_enabled;
 		const groups = new Set();
-
-		// Set global uci config if absent
-		if (!uci.get(luci_plugins, 'global')) {
-			uci.add(luci_plugins, 'global', 'global');
-		}
+		const all_off = uci.get(luci_plugins, 'global', 'enabled') == '0';
 
 		for (let plugin of plugins) {
 			const name = plugin.id;
 			const class_type = `${plugin.class}_${plugin.type}`;
-			const class_type_i18n = `${plugin.class_i18n} ${plugin.type_i18n}`
+			const class_type_i18n = class_names[class_type] ?? `${plugin.class_i18n} ${plugin.type_i18n}`;
 			groups.add(class_type);
 			groups[class_type] = class_type_i18n;
 			plugins[plugin.id] = plugin;
@@ -52,20 +56,26 @@ return view.extend({
 			}
 		}
 
-		m = new form.Map(luci_plugins, _('Plugins'));
+		m = new form.Map(luci_plugins, _('Plugins'),
+			_('Plugins change how this web interface works, for example by adding ways to log in or headers to its HTTP responses. ' +
+			  'Each plugin stays off until it is enabled here.'));
 		m.tabbed = true;
 
-		s = m.section(form.NamedSection, 'global', 'global', _('Global Settings'));
+		// No tabs, so no Global Settings tab for the warning to point at
+		if (!groups.size)
+			return E([], [
+				E('h2', {}, _('Plugins')),
+				E('div', { 'class': 'cbi-map-descr' }, m.description),
+				E('p', {}, E('em', {}, _('No plugins are installed.')))
+			]);
 
-		o = s.option(form.Flag, 'enabled', _('Enabled'));
-		o.default = o.disabled;
-		o.optional = true;
-
-		for (const group of new Set([...groups].sort())) {
-			o = s.option(form.Flag, group + '_enabled', groups[group] + ' ' + _('Enabled'));
-			o.default = o.disabled;
-			o.optional = true;
-		}
+		// Above the tab menu: ui.tabs expects the panes right after it
+		if (all_off)
+			m.description = [
+				m.description,
+				E('div', { 'class': 'alert-message warning' },
+					_('All plugins are switched off under Global Settings. Their own settings have no effect until plugins run again.'))
+			];
 
 		for (const group of new Set([...groups].sort())) {
 
@@ -101,6 +111,9 @@ return view.extend({
 
 				if (section.enabled != '1')
 					return E('em', {}, [_('Plugin is disabled')]);
+
+				if (all_off)
+					return E('em', {}, [_('Inactive: all plugins are switched off')]);
 
 				const  summary = plugin ? plugin.configSummary(section) : null;
 				return summary || E('em', _('none'));
@@ -157,6 +170,18 @@ return view.extend({
 			};
 
 		}
+
+		// Create the global section on save if it is missing
+		if (!uci.get(luci_plugins, 'global'))
+			uci.add(luci_plugins, 'global', 'global');
+
+		s = m.section(form.NamedSection, 'global', 'global', _('Global Settings'));
+
+		o = s.option(form.Flag, 'enabled', _('Run plugins'),
+			_('Untick to switch off all plugins at once, for example when one misbehaves. Each plugin keeps its own settings.') + ' ' +
+			_('If a plugin locks you out of this web interface, run %s from a shell instead.')
+				.format('<code>uci set luci_plugins.global.enabled=0; uci commit luci_plugins</code>'));
+		o.default = o.enabled;
 
 		return m.render();
 	}

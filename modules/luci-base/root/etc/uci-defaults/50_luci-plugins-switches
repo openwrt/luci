@@ -1,0 +1,40 @@
+#!/bin/sh
+# Plugins used to need luci_plugins.global.enabled, a switch for their
+# class (such as auth_login_enabled) and their own enabled option all set
+# to 1. The class switches are gone, and global.enabled only switches all
+# plugins off when it is 0. Switch off the plugins the old switches kept
+# inactive, then drop the class switches and let global.enabled start out
+# on. Only configs that still have class switches are touched, so a later
+# global.enabled '0' survives this script running again.
+
+[ -s /etc/config/luci_plugins ] || exit 0
+
+class_switches="$(uci -q show luci_plugins.global | sed -n 's/^luci_plugins\.global\.\([a-z0-9_]*_enabled\)=.*/\1/p')"
+[ -n "$class_switches" ] || exit 0
+
+. /lib/functions.sh
+
+global_on="$(uci -q get luci_plugins.global.enabled)"
+
+disable_inactive() {
+	local sid="$1" stype
+
+	[ "$sid" = global ] && return
+	config_get stype "$sid" TYPE
+
+	[ "$(uci -q get "luci_plugins.$sid.enabled")" = 1 ] || return
+	[ "$global_on" = 1 ] && [ "$(uci -q get "luci_plugins.global.${stype}_enabled")" = 1 ] && return
+
+	uci set "luci_plugins.$sid.enabled=0"
+}
+
+config_load luci_plugins
+config_foreach disable_inactive
+
+for opt in enabled $class_switches; do
+	uci -q delete "luci_plugins.global.$opt"
+done
+
+uci commit luci_plugins
+
+exit 0

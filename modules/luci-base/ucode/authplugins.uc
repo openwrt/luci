@@ -176,21 +176,14 @@ function normalize_assets(uuid, assets) {
 // - Export a plugin object
 // - Plugin object must have check(http, user) and verify(http, user) methods
 //
-// Configuration hierarchy:
-// - luci_plugins.global.enabled = '1'
-// - luci_plugins.global.auth_login_enabled = '1'
-// - luci_plugins.<uuid>.enabled = '1'
+// A plugin runs when luci_plugins.<uuid>.enabled = '1', unless
+// luci_plugins.global.enabled = '0' switches all plugins off.
 //
 // Returns array of loaded plugin objects
 export function load() {
 	let uci = cursor();
 
-	// Check global plugin system enabled
-	if (uci.get("luci_plugins", "global", "enabled") != "1")
-		return [];
-
-	// Check auth plugins class enabled
-	if (uci.get("luci_plugins", "global", "auth_login_enabled") != "1")
+	if (uci.get("luci_plugins", "global", "enabled") == "0")
 		return [];
 
 	// Return cached plugins if already loaded

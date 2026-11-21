@@ -69,10 +69,6 @@ return baseclass.extend({
 Plugins are configured through the `luci_plugins` UCI config:
 
 ```
-config global 'global'
-    option enabled '1'                    # Global plugin system
-    option auth_login_enabled '1'         # Auth plugin class
-
 config auth_login 'd0ecde1b009d44ff82faa8b0ff219cef'
     option name 'Example Auth Plugin'
     option enabled '1'
@@ -81,6 +77,17 @@ config auth_login 'd0ecde1b009d44ff82faa8b0ff219cef'
     option help_text 'Enter your code'
     option test_code '123456'
 ```
+
+A plugin runs when its own `enabled` option is `1`. To switch off all
+plugins at once, for example when one locks you out of LuCI, set the
+global off switch from a shell:
+
+```
+uci set luci_plugins.global.enabled=0
+uci commit luci_plugins
+```
+
+Set it back to `1` (or delete it) to let plugins run again.
 
 ## Integration with Login Flow
 
@@ -142,11 +149,9 @@ Common authentication plugin types:
 
 1. Install the plugin package
 2. Navigate to System > Plugins
-3. Enable "Global plugin system"
-4. Enable "Authentication > Login"
-5. Enable the specific auth plugin and configure it
-6. Log out and try logging in
-7. After entering correct password, you should see the auth challenge
+3. Enable the auth plugin and configure it
+4. Log out and try logging in
+5. After entering correct password, you should see the auth challenge
 
 ## Real Implementation Examples
 

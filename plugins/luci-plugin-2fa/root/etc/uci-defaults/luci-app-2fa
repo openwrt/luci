@@ -8,17 +8,6 @@ PLUGIN_UUID="bb4ea47fcffb44ec9bb3d3673c9b4ed2"
 # Ensure luci_plugins config file exists
 touch /etc/config/luci_plugins
 
-# Create global section if not exists
-uci -q get luci_plugins.global >/dev/null || {
-	uci set luci_plugins.global=global
-	uci set luci_plugins.global.enabled='0'
-}
-
-# Enable auth_login plugins class if not set
-uci -q get luci_plugins.global.auth_login_enabled >/dev/null || {
-	uci set luci_plugins.global.auth_login_enabled='0'
-}
-
 # Create 2FA plugin section if not exists
 uci -q get "luci_plugins.${PLUGIN_UUID}" >/dev/null || {
 	uci set "luci_plugins.${PLUGIN_UUID}=auth_login"
