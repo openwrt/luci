@@ -103,7 +103,7 @@ msgstr ""
 "Umožňuje stroji, který má nižší prioritu, ponechat si roli hlavního, i když "
 "se navrátí do provozu stroj, který má vyšší prioritu."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:23
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
 msgid "Alternative config"
 msgstr "Alternativní nastavení"
 
@@ -126,6 +126,12 @@ msgstr "Záloha"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:57
 msgid "Blackhole"
 msgstr "Černá díra"
+
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:25
+msgid ""
+"Bypass UCI-generated configuration and load a native keepalived.conf "
+"directly from a file you provide."
+msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:159
 msgid "Check"
@@ -172,7 +178,7 @@ msgstr "Prodleva před opakováním pokusu"
 msgid "Delay Loop"
 msgstr "Smyčka prodlevy"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:67
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:77
 msgid "Delay in seconds before VRRP instances start up after"
 msgstr "Prodleva (v sekundách) po až které bude VRRP instance spuštěna"
 
@@ -222,7 +228,7 @@ msgstr "Zakázat sledování primárního"
 msgid "Do not send VRRP adverts over VRRP multicast group."
 msgstr "Neposílat VRRP propagace přes VRRP skupinu vícesměrového vysílání."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:34
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
 msgid "EMail accounts that will receive the notification mail"
 msgstr "E-mailové účty, které obdrží upozornění"
 
@@ -234,7 +240,7 @@ msgstr "E-mailová výstraha"
 msgid "Email Notification"
 msgstr "E-mailové upozornění"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
 msgid "Email to use when processing “MAIL FROM:” SMTP command"
 msgstr ""
 "E-mailová adresa kterou použít při zpracovávání SMTP příkazu “MAIL FROM:”"
@@ -247,7 +253,7 @@ msgstr "Povolit"
 msgid "Enable Sync"
 msgstr "Povolit synchronizaci"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:15
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:16
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:137
 msgid "Enabled"
 msgstr "Povoleno"
@@ -499,7 +505,7 @@ msgstr ""
 "Jeho návratový kód bude zaznamenán pro všechny instance VRRP a "
 "synchronizační skupiny, které ho monitorují"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:11
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:12
 msgid "Keepalived Global Settings"
 msgstr "Globální nastavení pro keepalived"
 
@@ -524,7 +530,7 @@ msgstr "Nejméně spojení"
 msgid "Link"
 msgstr "Odkaz"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:28
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
 msgid "Link Polling"
 msgstr "Periodické dotazování linky"
 
@@ -548,11 +554,11 @@ msgstr "Značka"
 msgid "Master"
 msgstr "Hlavní"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:55
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:65
 msgid "Multicast Group to use for IPv4 VRRP adverts"
 msgstr "Skupina vícesměrového vysílání kterou použít pro IPv4 VRRP inzerci"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:61
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:71
 msgid "Multicast Group to use for IPv6 VRRP adverts"
 msgstr "Skupina vícesměrového vysílání kterou používat pro IPv6 VRRP propagace"
 
@@ -595,11 +601,11 @@ msgstr "Žádné"
 msgid "Notification"
 msgstr "Upozornění"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
 msgid "Notification E-Mail"
 msgstr "Notifikační e-mail"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
 msgid "Notification E-Mail From"
 msgstr "„Od“ pro notifikační e-mail"
 
@@ -649,7 +655,7 @@ msgstr "Jemnost trvání"
 msgid "Persist Timeout"
 msgstr "Časový limit trvalosti"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:29
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
 msgid ""
 "Poll to detect media link failure using ETHTOOL, MII or ioctl interface "
 "otherwise uses netlink interface"
@@ -745,7 +751,7 @@ msgstr "Trasa"
 msgid "Route Table"
 msgstr "Tabulka směrování"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:18
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
 msgid "Router ID"
 msgstr "Identifikátor směrovače"
 
@@ -767,11 +773,11 @@ msgid ""
 msgstr ""
 "Na trasy bude odkazováno jako na statické a virtuální trasy instancí VRRP"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:58
 msgid "SMTP Connect Timeout"
 msgstr "Časový limit SMTP spojení"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:53
 msgid "SMTP Server"
 msgstr "SMTP server"
 
@@ -836,7 +842,7 @@ msgstr "Port serveru"
 msgid "Server to be added to the pool if all real servers are down"
 msgstr "Server který přidat do fondu pokud jsou všechny skutečné servery dole"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
 msgid "Server to use for sending mail notifications"
 msgstr "Server který používat pro odesílání e-mailových upozornění"
 
@@ -888,7 +894,7 @@ msgstr "Statické trasy"
 msgid "Static Routes are not moved by vrrpd, they stay on the machine."
 msgstr "Statické trasy nejsou vrrpd přesouvány – zůstávají na stroji."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:20
 msgid "String identifying the machine (need not be hostname)"
 msgstr "Řetězec identifikující stroj (může se lišit od názvu hostitele)"
 
@@ -957,7 +963,7 @@ msgstr ""
 msgid "Time in seconds to delay preempting compared"
 msgstr "Doba (v sekundách) o kterou odložit předporovnání"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:59
 msgid "Timeout in seconds for SMTP stream processing"
 msgstr "Časový limit (v sekundách) pro zpracovávání SMTP proudu"
 
@@ -1048,6 +1054,10 @@ msgstr "Použít VMAC základ"
 msgid "Use VRRP Virtual MAC"
 msgstr "Použít VRRP virtuální MAC"
 
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:24
+msgid "Use alternative config file"
+msgstr ""
+
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:175
 msgid "User Check Script"
 msgstr "Použít kontrolní skript"
@@ -1070,11 +1080,11 @@ msgstr "VRRP IP vynechána z VRRP."
 msgid "VRRP Instance"
 msgstr "Instance VRRP"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:64
 msgid "VRRP Multicast Group 4"
 msgstr "VRRP skupina vícesměrového vysílání 4"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:60
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:70
 msgid "VRRP Multicast Group 6"
 msgstr "VRRP skupina vícesměrového vysílání 6"
 
@@ -1088,7 +1098,7 @@ msgid "VRRP Scripts must be configured for Track Scripts"
 msgstr ""
 "Aby bylo možné používat sledovací skripty, je třeba nastavit VRRP skripty"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:66
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:76
 msgid "VRRP Startup Delay"
 msgstr "Prodleva spuštění VRRP"
 

@@ -103,7 +103,7 @@ msgstr ""
 "Дозволяє машині з нижчим пріоритетом зберігати роль головного, навіть якщо "
 "машина з вищим пріоритетом повертається в режим онлайн."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:23
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
 msgid "Alternative config"
 msgstr "Альтернативна конфігурація"
 
@@ -127,6 +127,12 @@ msgstr "Резервна копія"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:57
 msgid "Blackhole"
 msgstr "Чорна діра"
+
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:25
+msgid ""
+"Bypass UCI-generated configuration and load a native keepalived.conf "
+"directly from a file you provide."
+msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:159
 msgid "Check"
@@ -173,7 +179,7 @@ msgstr "Затримка перед повторною спробою"
 msgid "Delay Loop"
 msgstr "Цикл затримки"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:67
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:77
 msgid "Delay in seconds before VRRP instances start up after"
 msgstr "Затримка в секундах перед запуском екземплярів VRRP"
 
@@ -224,7 +230,7 @@ msgstr "Вимкнути основне відстеження"
 msgid "Do not send VRRP adverts over VRRP multicast group."
 msgstr "Не надсилати анонси VRRP через групу багатоадресної передачі VRRP."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:34
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
 msgid "EMail accounts that will receive the notification mail"
 msgstr "Облікові записи електронної пошти, які отримуватимуть сповіщення"
 
@@ -236,7 +242,7 @@ msgstr "Сповіщення електронною поштою"
 msgid "Email Notification"
 msgstr "Сповіщення електронною поштою"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
 msgid "Email to use when processing “MAIL FROM:” SMTP command"
 msgstr ""
 "Електронна пошта для використання під час обробки команди SMTP «MAIL FROM:»"
@@ -249,7 +255,7 @@ msgstr "Увімкнути"
 msgid "Enable Sync"
 msgstr "Увімкнути синхронізацію"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:15
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:16
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:137
 msgid "Enabled"
 msgstr "Увімкнено"
@@ -504,7 +510,7 @@ msgstr ""
 "Його код виходу буде записаний для всіх екземплярів VRRP і груп "
 "синхронізації, які його відстежують"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:11
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:12
 msgid "Keepalived Global Settings"
 msgstr "Глобальні налаштування Keepalived"
 
@@ -529,7 +535,7 @@ msgstr "Найменша кількість підключень"
 msgid "Link"
 msgstr "Канал"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:28
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
 msgid "Link Polling"
 msgstr "Опитування каналу"
 
@@ -553,11 +559,11 @@ msgstr "Мітка"
 msgid "Master"
 msgstr "Основний"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:55
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:65
 msgid "Multicast Group to use for IPv4 VRRP adverts"
 msgstr "Група багатоадресної передачі для IPv4-анонсів VRRP"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:61
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:71
 msgid "Multicast Group to use for IPv6 VRRP adverts"
 msgstr "Група багатоадресної передачі для IPv6-анонсів VRRP"
 
@@ -600,11 +606,11 @@ msgstr "Немає"
 msgid "Notification"
 msgstr "Сповіщення"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
 msgid "Notification E-Mail"
 msgstr "Сповіщення електронною поштою"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
 msgid "Notification E-Mail From"
 msgstr "Сповіщення електронною поштою від"
 
@@ -654,7 +660,7 @@ msgstr "Гранулярність збереження"
 msgid "Persist Timeout"
 msgstr "Тайм-аут збереження"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:29
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
 msgid ""
 "Poll to detect media link failure using ETHTOOL, MII or ioctl interface "
 "otherwise uses netlink interface"
@@ -750,7 +756,7 @@ msgstr "Маршрут"
 msgid "Route Table"
 msgstr "Таблиця маршрутів"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:18
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
 msgid "Router ID"
 msgstr "ID маршрутизатора"
 
@@ -773,11 +779,11 @@ msgstr ""
 "Маршрути будуть посилатися на статичні та віртуальні маршрути екземплярів "
 "VRRP"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:58
 msgid "SMTP Connect Timeout"
 msgstr "Час очікування підключення SMTP"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:53
 msgid "SMTP Server"
 msgstr "Сервер SMTP"
 
@@ -844,7 +850,7 @@ msgstr "Порт сервера"
 msgid "Server to be added to the pool if all real servers are down"
 msgstr "Сервер для додавання до пулу, якщо всі реальні сервери не працюють"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
 msgid "Server to use for sending mail notifications"
 msgstr "Сервер для надсилання сповіщень електронною поштою"
 
@@ -896,7 +902,7 @@ msgstr "Статичні маршрути"
 msgid "Static Routes are not moved by vrrpd, they stay on the machine."
 msgstr "Vrrpd не переміщує статичні маршрути, вони залишаються на машині."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:20
 msgid "String identifying the machine (need not be hostname)"
 msgstr "Рядок, що ідентифікує машину (не обовʼязково має бути імʼям вузла)"
 
@@ -962,7 +968,7 @@ msgstr "Цей огляд показує поточний статус екзе�
 msgid "Time in seconds to delay preempting compared"
 msgstr "Час у секундах для затримки випередження"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:59
 msgid "Timeout in seconds for SMTP stream processing"
 msgstr "Час очікування в секундах для обробки потоку SMTP"
 
@@ -1053,6 +1059,10 @@ msgstr "Використовувати VMAC Base"
 msgid "Use VRRP Virtual MAC"
 msgstr "Використовувати VRRP Virtual MAC"
 
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:24
+msgid "Use alternative config file"
+msgstr ""
+
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:175
 msgid "User Check Script"
 msgstr "Скрипт перевірки користувача"
@@ -1075,11 +1085,11 @@ msgstr "VRRP IP виключено з VRRP."
 msgid "VRRP Instance"
 msgstr "Екземпляр VRRP"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:64
 msgid "VRRP Multicast Group 4"
 msgstr "Багатоадресна група VRRP IPv4"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:60
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:70
 msgid "VRRP Multicast Group 6"
 msgstr "Багатоадресна група VRRP IPv6"
 
@@ -1092,7 +1102,7 @@ msgstr "Сценарій VRRP"
 msgid "VRRP Scripts must be configured for Track Scripts"
 msgstr "Сценарії VRRP необхідно налаштувати для сценаріїв відстеження"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:66
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:76
 msgid "VRRP Startup Delay"
 msgstr "Затримка запуску VRRP"
 

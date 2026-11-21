@@ -100,7 +100,7 @@ msgstr ""
 "Lehetővé teszi, hogy az alacsonyabb prioritású gép megtartsa a mester "
 "szerepet akkor is, ha egy magasabb prioritású gép ismét online lesz."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:23
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
 msgid "Alternative config"
 msgstr "Alternatív beállítás"
 
@@ -123,6 +123,12 @@ msgstr "Biztonsági mentés"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:57
 msgid "Blackhole"
 msgstr "Fekete lyuk"
+
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:25
+msgid ""
+"Bypass UCI-generated configuration and load a native keepalived.conf "
+"directly from a file you provide."
+msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:159
 msgid "Check"
@@ -171,7 +177,7 @@ msgstr "Késleltetés újrapróbálkozás előtt"
 msgid "Delay Loop"
 msgstr "Ellenőrzési ciklus"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:67
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:77
 msgid "Delay in seconds before VRRP instances start up after"
 msgstr "Késleltetés másodpercben a VRRP-példányok indulása előtt"
 
@@ -224,7 +230,7 @@ msgstr ""
 "A VRRP-hirdetések ne a VRRP multicast csoporton keresztül kerüljenek "
 "küldésre."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:34
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
 msgid "EMail accounts that will receive the notification mail"
 msgstr "Az értesítő levelet fogadó e-mail-fiókok"
 
@@ -236,7 +242,7 @@ msgstr "E-mail-riasztás"
 msgid "Email Notification"
 msgstr "E-mail-értesítés"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
 msgid "Email to use when processing “MAIL FROM:” SMTP command"
 msgstr "A “MAIL FROM:” SMTP-parancs feldolgozásakor használt e-mail-cím"
 
@@ -248,7 +254,7 @@ msgstr "Engedélyezés"
 msgid "Enable Sync"
 msgstr "Szinkronizálás engedélyezése"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:15
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:16
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:137
 msgid "Enabled"
 msgstr "Engedélyezve"
@@ -499,7 +505,7 @@ msgstr ""
 "A kilépési kódja minden olyan VRRP-példánynál és szinkronizálási csoportnál "
 "rögzítésre kerül, amely figyeli"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:11
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:12
 msgid "Keepalived Global Settings"
 msgstr "Keepalived globális beállítások"
 
@@ -524,7 +530,7 @@ msgstr "Legkevesebb kapcsolat"
 msgid "Link"
 msgstr "Hivatkozás"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:28
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
 msgid "Link Polling"
 msgstr "Kapcsolat lekérdezése"
 
@@ -548,11 +554,11 @@ msgstr "Jelölés"
 msgid "Master"
 msgstr "Mester"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:55
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:65
 msgid "Multicast Group to use for IPv4 VRRP adverts"
 msgstr "Az IPv4 VRRP-hirdetésekhez használt multicast csoport"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:61
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:71
 msgid "Multicast Group to use for IPv6 VRRP adverts"
 msgstr "Az IPv6 VRRP-hirdetésekhez használt multicast csoport"
 
@@ -595,11 +601,11 @@ msgstr "Nincs"
 msgid "Notification"
 msgstr "Értesítés"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
 msgid "Notification E-Mail"
 msgstr "Értesítési e-mail"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
 msgid "Notification E-Mail From"
 msgstr "Értesítési e-mail feladója"
 
@@ -649,7 +655,7 @@ msgstr "Tartóssági granularitás"
 msgid "Persist Timeout"
 msgstr "Tartóssági időkorlát"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:29
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
 msgid ""
 "Poll to detect media link failure using ETHTOOL, MII or ioctl interface "
 "otherwise uses netlink interface"
@@ -745,7 +751,7 @@ msgstr "Útvonal"
 msgid "Route Table"
 msgstr "Útválasztási tábla"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:18
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
 msgid "Router ID"
 msgstr "Útválasztó-azonosító"
 
@@ -755,7 +761,8 @@ msgstr "Útvonalak"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:258
 msgid "Routes add|del when changing to MASTER, to BACKUP"
-msgstr "Útvonalak hozzáadása|törlése MASTER, illetve BACKUP állapotba váltáskor"
+msgstr ""
+"Útvonalak hozzáadása|törlése MASTER, illetve BACKUP állapotba váltáskor"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:68
 msgid "Routes must be configured for Static Routes"
@@ -768,11 +775,11 @@ msgstr ""
 "Az útvonalakra a VRRP-példányok statikus és virtuális útvonalainál lehet "
 "hivatkozni"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:58
 msgid "SMTP Connect Timeout"
 msgstr "SMTP-kapcsolódási időkorlát"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:53
 msgid "SMTP Server"
 msgstr "SMTP-szerver"
 
@@ -838,7 +845,7 @@ msgstr "Szerverport"
 msgid "Server to be added to the pool if all real servers are down"
 msgstr "A készlethez hozzáadandó szerver, ha az összes valós szerver leállt"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
 msgid "Server to use for sending mail notifications"
 msgstr "A levélértesítések küldéséhez használt szerver"
 
@@ -890,7 +897,7 @@ msgstr "Statikus útvonalak"
 msgid "Static Routes are not moved by vrrpd, they stay on the machine."
 msgstr "A statikus útvonalakat a vrrpd nem helyezi át, azok a gépen maradnak."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:20
 msgid "String identifying the machine (need not be hostname)"
 msgstr "A gépet azonosító karakterlánc (nem kell gépnévnek lennie)"
 
@@ -945,7 +952,8 @@ msgstr "Nincsenek aktív példányok"
 msgid ""
 "This is the /etc/keepalived.user file in which custom commands can be "
 "defined."
-msgstr "Ez az /etc/keepalived.user fájl, amelyben egyéni parancsok adhatók meg."
+msgstr ""
+"Ez az /etc/keepalived.user fájl, amelyben egyéni parancsok adhatók meg."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/overview.js:84
 msgid ""
@@ -957,7 +965,7 @@ msgstr ""
 msgid "Time in seconds to delay preempting compared"
 msgstr "Az átvétel (preempt) késleltetése másodpercben"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:59
 msgid "Timeout in seconds for SMTP stream processing"
 msgstr "Az SMTP-adatfolyam feldolgozásának időkorlátja másodpercben"
 
@@ -1048,6 +1056,10 @@ msgstr "VMAC-alap használata"
 msgid "Use VRRP Virtual MAC"
 msgstr "VRRP virtuális MAC használata"
 
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:24
+msgid "Use alternative config file"
+msgstr ""
+
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:175
 msgid "User Check Script"
 msgstr "Felhasználói ellenőrző szkript"
@@ -1070,11 +1082,11 @@ msgstr "A VRRP-ből kizárt VRRP IP-cím."
 msgid "VRRP Instance"
 msgstr "VRRP-példány"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:64
 msgid "VRRP Multicast Group 4"
 msgstr "VRRP multicast csoport 4"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:60
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:70
 msgid "VRRP Multicast Group 6"
 msgstr "VRRP multicast csoport 6"
 
@@ -1087,7 +1099,7 @@ msgstr "VRRP-szkript"
 msgid "VRRP Scripts must be configured for Track Scripts"
 msgstr "A követési szkriptekhez VRRP-szkripteket kell beállítani"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:66
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:76
 msgid "VRRP Startup Delay"
 msgstr "VRRP indítási késleltetés"
 

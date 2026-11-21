@@ -104,7 +104,7 @@ msgstr ""
 "Tillåter datorn med lägre prioritet att behålla masterrollen även när en "
 "dator med högre prioritet kommer tillbaka online."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:23
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
 msgid "Alternative config"
 msgstr "Alternativ konfiguration"
 
@@ -127,6 +127,12 @@ msgstr "Säkerhetskopia"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:57
 msgid "Blackhole"
 msgstr "Kassera"
+
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:25
+msgid ""
+"Bypass UCI-generated configuration and load a native keepalived.conf "
+"directly from a file you provide."
+msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:159
 msgid "Check"
@@ -174,7 +180,7 @@ msgstr "Fördröjning före nytt försök"
 msgid "Delay Loop"
 msgstr "Fördröjning mellan kontroller"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:67
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:77
 msgid "Delay in seconds before VRRP instances start up after"
 msgstr "Fördröjning i sekunder innan VRRP-instanser startar efter"
 
@@ -224,7 +230,7 @@ msgstr "Inaktivera övervakning av primär enhet"
 msgid "Do not send VRRP adverts over VRRP multicast group."
 msgstr "Skicka inte VRRP-annonser via VRRP-multicastgruppen."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:34
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
 msgid "EMail accounts that will receive the notification mail"
 msgstr "E-postkonton som ska ta emot aviseringsmeddelandet"
 
@@ -236,7 +242,7 @@ msgstr "E-postvarning"
 msgid "Email Notification"
 msgstr "E-postavisering"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
 msgid "Email to use when processing “MAIL FROM:” SMTP command"
 msgstr "E-postadress att använda vid hantering av SMTP-kommandot ”MAIL FROM:”"
 
@@ -248,7 +254,7 @@ msgstr "Aktivera"
 msgid "Enable Sync"
 msgstr "Aktivera synkronisering"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:15
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:16
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:137
 msgid "Enabled"
 msgstr "Aktiverad"
@@ -273,7 +279,8 @@ msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:66
 msgid "For this to work, the initial state of this entry must be BACKUP."
-msgstr "För att detta ska fungera måste postens initiala tillstånd vara BACKUP."
+msgstr ""
+"För att detta ska fungera måste postens initiala tillstånd vara BACKUP."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:191
 msgid "Force instance to use IPv6"
@@ -500,7 +507,7 @@ msgstr ""
 "Dess slutkod registreras för alla VRRP-instanser och synkroniseringsgrupper "
 "som övervakar det."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:11
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:12
 msgid "Keepalived Global Settings"
 msgstr "Globala inställningar för Keepalived"
 
@@ -525,7 +532,7 @@ msgstr "Minst antal anslutningar"
 msgid "Link"
 msgstr "Länk"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:28
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
 msgid "Link Polling"
 msgstr "Länkavsökning"
 
@@ -549,11 +556,11 @@ msgstr "Märkning"
 msgid "Master"
 msgstr "Master"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:55
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:65
 msgid "Multicast Group to use for IPv4 VRRP adverts"
 msgstr "Multicastgrupp för IPv4-VRRP-annonser"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:61
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:71
 msgid "Multicast Group to use for IPv6 VRRP adverts"
 msgstr "Multicastgrupp för IPv6-VRRP-annonser"
 
@@ -596,11 +603,11 @@ msgstr "Ingen"
 msgid "Notification"
 msgstr "Avisering"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:33
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
 msgid "Notification E-Mail"
 msgstr "E-post för aviseringar"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:38
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
 msgid "Notification E-Mail From"
 msgstr "Avsändaradress för e-postaviseringar"
 
@@ -650,7 +657,7 @@ msgstr "Granularitet för beständighet"
 msgid "Persist Timeout"
 msgstr "Tidsgräns för beständighet"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:29
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:39
 msgid ""
 "Poll to detect media link failure using ETHTOOL, MII or ioctl interface "
 "otherwise uses netlink interface"
@@ -746,7 +753,7 @@ msgstr "Rutt"
 msgid "Route Table"
 msgstr "Routningstabell"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:18
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
 msgid "Router ID"
 msgstr "Router-ID"
 
@@ -769,11 +776,11 @@ msgid ""
 msgstr ""
 "Rutter kan refereras från statiska och virtuella rutter i VRRP-instanser."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:48
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:58
 msgid "SMTP Connect Timeout"
 msgstr "Tidsgräns för SMTP-anslutning"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:43
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:53
 msgid "SMTP Server"
 msgstr "SMTP-server"
 
@@ -840,7 +847,7 @@ msgstr "Serverport"
 msgid "Server to be added to the pool if all real servers are down"
 msgstr "Server som ska läggas till i poolen om alla backendservrar är nere"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:44
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
 msgid "Server to use for sending mail notifications"
 msgstr "Server som ska användas för att skicka e-postaviseringar"
 
@@ -892,7 +899,7 @@ msgstr "Statiska rutter"
 msgid "Static Routes are not moved by vrrpd, they stay on the machine."
 msgstr "Statiska rutter flyttas inte av vrrpd utan stannar på datorn."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:19
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:20
 msgid "String identifying the machine (need not be hostname)"
 msgstr "Sträng som identifierar datorn (behöver inte vara värdnamnet)"
 
@@ -960,7 +967,7 @@ msgstr ""
 msgid "Time in seconds to delay preempting compared"
 msgstr "Tid i sekunder att fördröja preemption"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:49
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:59
 msgid "Timeout in seconds for SMTP stream processing"
 msgstr "Tidsgräns i sekunder för behandling av SMTP-strömmen"
 
@@ -1051,6 +1058,10 @@ msgstr "Använd VMAC-bas"
 msgid "Use VRRP Virtual MAC"
 msgstr "Använd virtuell MAC för VRRP"
 
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:24
+msgid "Use alternative config file"
+msgstr ""
+
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:175
 msgid "User Check Script"
 msgstr "Användarkontrollskript"
@@ -1073,11 +1084,11 @@ msgstr "VRRP-IP som utesluts från VRRP."
 msgid "VRRP Instance"
 msgstr "VRRP-instans"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:54
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:64
 msgid "VRRP Multicast Group 4"
 msgstr "VRRP-multicastgrupp 4"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:60
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:70
 msgid "VRRP Multicast Group 6"
 msgstr "VRRP-multicastgrupp 6"
 
@@ -1090,7 +1101,7 @@ msgstr "VRRP-skript"
 msgid "VRRP Scripts must be configured for Track Scripts"
 msgstr "VRRP-skript måste konfigureras för övervakningsskript."
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:66
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:76
 msgid "VRRP Startup Delay"
 msgstr "Startfördröjning för VRRP"
 

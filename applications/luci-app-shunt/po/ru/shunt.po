@@ -12,11 +12,11 @@ msgstr ""
 "PO-Revision-Date: 2026-11-07 18:24+0000\n"
 "X-Generator: Weblate 2026.11.2.dev0\n"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:396
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:420
 msgid "%d name(s) every %ds"
 msgstr "%d имён каждые %d с"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:198
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:209
 msgid ""
 "%d of %d observed responses were not used. That is normal: the observer sees "
 "every answer on the network, and only the ones for a domain you routed are "
@@ -26,7 +26,11 @@ msgstr ""
 "видит каждый ответ в сети, а интерес представляют только ответы для домена, "
 "который вы маршрутизировали."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:86
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:48
+msgid "%d of %d shown"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:101
 msgid "%d pkt matched"
 msgstr "Совпало пакетов: %d"
 
@@ -42,20 +46,33 @@ msgstr "%d мин %d с"
 msgid "%ds"
 msgstr "%d с"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:243
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:116
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:132
+msgid "(limit)"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:257
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:127
 msgid "Action"
 msgstr "Действие"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:96
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:62
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:48
+msgid "Action failed: %s"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:107
 msgid "Add policy"
 msgstr "Добавить политику"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:135
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:179
 msgid "Address"
 msgstr "Адрес"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:495
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:300
+msgid "Address begins with …"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:524
 msgid ""
 "Addresses that answer ICMP echo, reachable through every policy interface - "
 "public resolvers are the usual choice. Every interface a route policy uses "
@@ -71,11 +88,11 @@ msgstr ""
 "начнёт отвечать. Пустое значение означает отсутствие отслеживания, см. "
 "README."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:130
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:141
 msgid "Answer carried no usable address"
 msgstr "Ответ не содержал пригодного адреса"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:193
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:204
 msgid "Answers used for a policy"
 msgstr "Ответы, использованные для политики"
 
@@ -84,19 +101,19 @@ msgstr "Ответы, использованные для политики"
 msgid "Apply failed: %s"
 msgstr "Не удалось применить: %s"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:148
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:164
 msgid "Block the traffic (killswitch)"
 msgstr "Блокировать трафик (killswitch)"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:120
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:131
 msgid "Bypass - leave the traffic alone"
 msgstr "Обход — оставить трафик без изменений"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:138
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:182
 msgid "Bytes routed"
 msgstr "Маршрутизировано байт"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:469
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:493
 msgid ""
 "Ceiling in seconds for a learned address in its Set. An address learned from "
 "a DNS answer expires with the TTL of that answer, clamped to the range 60 to "
@@ -108,17 +125,17 @@ msgstr ""
 "диапазоном от 60 до этого значения; опрашиваемый адрес использует его. "
 "Держите значительно больше интервала опроса."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:167
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:183
 msgid "Client MACs this policy applies to, ORed with the addresses above."
 msgstr ""
 "MAC-адреса клиентов, к которым применяется эта политика; объединяются по ИЛИ "
 "с адресами выше."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:179
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:226
 msgid "Client Selectors"
 msgstr "Селекторы клиентов"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:162
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:178
 msgid ""
 "Client addresses or prefixes this policy applies to. Leave empty to apply to "
 "every client."
@@ -126,64 +143,64 @@ msgstr ""
 "Адреса или префиксы клиентов, к которым применяется эта политика. Оставьте "
 "пустым, чтобы применять ко всем клиентам."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:138
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:149
 msgid "Compression pointer in the question"
 msgstr "Указатель сжатия в вопросе"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:448
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:472
 msgid "DNS Observer Settings"
 msgstr "Настройки наблюдателя DNS"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:188
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:199
 msgid "DNS responses observed on %s since the service started"
 msgstr "Ответы DNS, наблюдаемые на %s с момента запуска службы"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:455
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:479
 msgid "Debug Logging"
 msgstr "Отладочное журналирование"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:194
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:210
 msgid "Destination Address Files"
 msgstr "Файлы адресов назначения"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:189
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:205
 msgid "Destination Addresses"
 msgstr "Адреса назначения"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:184
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:200
 msgid "Destination Ports"
 msgstr "Порты назначения"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:190
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:206
 msgid "Destination addresses or prefixes to route into this policy."
 msgstr "Адреса или префиксы назначения для маршрутизации в эту политику."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:206
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:222
 msgid "Domain Files"
 msgstr "Файлы доменов"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:128
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:139
 msgid "Domain is in no policy"
 msgstr "Домен не входит ни в одну политику"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:201
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:217
 msgid "Domains"
 msgstr "Домены"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:452
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:476
 msgid "Enable the shunt service."
 msgstr "Включить службу shunt."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:451
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:111
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:475
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:122
 msgid "Enabled"
 msgstr "Включено"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:132
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:143
 msgid "Error reply, e.g. NXDOMAIN"
 msgstr "Ответ с ошибкой, например NXDOMAIN"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:89
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:100
 msgid ""
 "Evaluated top to bottom - the first policy a packet matches wins. Within one "
 "policy the selectors are ANDed: source plus domain means only that client, "
@@ -193,7 +210,7 @@ msgstr ""
 "пакет. В рамках одной политики селекторы объединяются (AND): источник плюс "
 "домен означает только этого клиента и только для этих доменов."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:172
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:188
 msgid ""
 "Everything arriving on these devices, ORed with the client selectors above - "
 "a whole guest network or VLAN, in IPv4 and IPv6 alike, whatever prefix it "
@@ -206,31 +223,31 @@ msgstr ""
 "роутера. Для доменов также добавьте это устройство в список наблюдаемых "
 "устройств."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:53
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:64
 msgid "Expecting a bare file name or an absolute path, without whitespace"
 msgstr "Ожидается простое имя файла или абсолютный путь без пробелов"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:136
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:180
 msgid "Expires"
 msgstr "Истекает"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:150
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:161
 msgid "Extension header chain too long"
 msgstr "Цепочка заголовков расширения слишком длинна"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:147
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:163
 msgid "Fall through to the normal uplink"
 msgstr "Передавать в обычный вышестоящий канал"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:249
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:263
 msgid "Fallback"
 msgstr "Резервный вариант"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:144
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:160
 msgid "Fallback Behavior"
 msgstr "Поведение при сбое"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:195
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:211
 msgid ""
 "Files with one address or prefix per line, IPv4 and IPv6 mixed, for large "
 "published ranges. A bare name lives under /tmp/shunt, an absolute path is "
@@ -241,7 +258,7 @@ msgstr ""
 "абсолютный путь используется как указан. После изменения файла обновите "
 "список ниже."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:207
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:223
 msgid ""
 "Files with one domain pattern per line, for large or community-maintained "
 "lists. A bare name lives under /tmp/shunt, an absolute path is used as "
@@ -253,11 +270,11 @@ msgstr ""
 "путь используется как указан. Записи из файла изучаются только наблюдателем "
 "DNS и никогда не опрашиваются; после изменения файла обновите список ниже."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:145
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:156
 msgid "Frame ends mid-structure"
 msgstr "Кадр заканчивается посреди структуры"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:447
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:471
 msgid "General Settings"
 msgstr "Основные настройки"
 
@@ -265,50 +282,58 @@ msgstr "Основные настройки"
 msgid "Grant access to LuCI app shunt"
 msgstr "Предоставить доступ к LuCI-приложению Shunt"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:424
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:449
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:448
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:473
 msgid "Health Tracking"
 msgstr "Отслеживание состояния"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:149
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:160
 msgid "IP fragment"
 msgstr "IP-фрагмент"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:213
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:229
 msgid "IPv4 Gateway Override"
 msgstr "Переопределение шлюза IPv4"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:219
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:235
 msgid "IPv6 Gateway Override"
 msgstr "Переопределение шлюза IPv6"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:148
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:159
 msgid "Inconsistent IP header length"
 msgstr "Несогласованная длина заголовка IP"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:152
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:163
 msgid "Inconsistent UDP length"
 msgstr "Несогласованная длина UDP"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:244
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:125
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:258
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:136
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:153
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:169
 msgid "Keep Local Traffic"
 msgstr "Сохранять локальный трафик"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:419
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:127
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:507
+msgid "Learned Address Limit"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:443
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:171
 msgid "Learned addresses"
 msgstr "Изученные адреса"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:154
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:198
+msgid "Learned addresses (%d of %d shown)"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:199
 msgid "Learned addresses (%d)"
 msgstr "Изученные адреса (%d)"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:456
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:480
 msgid ""
 "Log every observed DNS answer and every set write. Useful for a bug report, "
 "noisy in normal operation - on a router running adblock roughly half of all "
@@ -319,35 +344,44 @@ msgstr ""
 "роутере с Adblock примерно половина всех ответов являются ответами с "
 "ошибкой, и каждый из них попадает в журнал."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:459
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:483
 msgid "Manage rp_filter"
 msgstr "Управлять rp_filter"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:245
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:259
 msgid "Mark"
 msgstr "Метка"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:468
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:492
 msgid "Maximum Entry Lifetime"
 msgstr "Максимальное время жизни записи"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:136
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:147
 msgid "Message ends mid-structure"
 msgstr "Сообщение заканчивается посреди структуры"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:137
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:148
 msgid "Message too long"
 msgstr "Сообщение слишком длинное"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:141
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:508
+msgid ""
+"Most addresses one learned Set holds, per policy and address family. An "
+"address beyond it is not learned until older ones expire and takes the "
+"normal uplink meanwhile. It bounds what a host on an observed segment can do "
+"with forged DNS answers; raise it only if a policy with a very large list "
+"reaches it."
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:152
 msgid "Name has a byte outside a-z 0-9 - _"
 msgstr "Имя содержит байт вне a-z 0-9 - _"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:140
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:151
 msgid "Name too long"
 msgstr "Имя слишком длинное"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:146
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:157
 msgid "Neither IPv4 nor IPv6"
 msgstr "Ни IPv4, ни IPv6"
 
@@ -355,40 +389,40 @@ msgstr "Ни IPv4, ни IPv6"
 msgid "No %s related logs yet!"
 msgstr "Пока нет журналов, связанных с %s!"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:180
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:227
 msgid "No client is selected, so every client is covered."
 msgstr "Клиент не выбран, поэтому охватываются все клиенты."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:63
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:74
 msgid "No output"
 msgstr "Нет вывода"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:237
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:251
 msgid "No policy is active."
 msgstr "Нет активной политики."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:309
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:82
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:325
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:93
 msgid "No shunt config found!"
 msgstr "Конфигурация Shunt не найдена!"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:151
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:162
 msgid "Not UDP"
 msgstr "Не UDP"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:133
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:144
 msgid "Not a response"
 msgstr "Не является ответом"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:129
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:140
 msgid "Not an address query"
 msgstr "Не является запросом адреса"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:135
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:146
 msgid "Not exactly one question"
 msgstr "Не ровно один вопрос"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:128
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:172
 msgid ""
 "Nothing learned yet. The service fills these from its poll cycle and from "
 "observed DNS answers."
@@ -396,41 +430,40 @@ msgstr ""
 "Пока ничего не изучено. Служба заполняет их в цикле опроса и из наблюдаемых "
 "ответов DNS."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:488
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:517
 msgid "Observed Devices"
 msgstr "Наблюдаемые устройства"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:214
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:230
 msgid ""
-"Only needed when the gateway discovered from netifd is wrong. Point to point "
-"interfaces need no gateway at all."
+"Only needed when the gateway discovered from netifd is wrong, and only for a "
+"policy with a single interface. Point to point interfaces need no gateway at "
+"all."
 msgstr ""
-"Нужно только когда шлюз, обнаруженный через netifd, неверен. Интерфейсам "
-"точка-точка шлюз не нужен."
 
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:23
 msgid "Overview"
 msgstr "Обзор"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:137
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:181
 msgid "Packets routed"
 msgstr "Маршрутизировано пакетов"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:483
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:512
 msgid "Passive DNS Observer"
 msgstr "Пассивный наблюдатель DNS"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:88
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:99
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:31
 msgid "Policies"
 msgstr "Политики"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:242
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:134
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:256
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:178
 msgid "Policy"
 msgstr "Политика"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:316
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:332
 msgid ""
 "Policy based routing by mac, source, destination and domain. For further "
 "information please check the %s."
@@ -438,15 +471,15 @@ msgstr ""
 "Маршрутизация на основе политик по MAC, источнику, назначению и домену. "
 "Подробнее: %s."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:422
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:446
 msgid "Poll"
 msgstr "Опрос"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:463
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:487
 msgid "Poll Interval"
 msgstr "Интервал опроса"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:494
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:523
 msgid "Probe Targets"
 msgstr "Цели проверки"
 
@@ -454,15 +487,15 @@ msgstr "Цели проверки"
 msgid "Processing Log"
 msgstr "Журнал обработки"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:178
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:194
 msgid "Protocols"
 msgstr "Протоколы"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:137
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:153
 msgid "Proxy Port"
 msgstr "Порт прокси-сервера"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:484
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:513
 msgid ""
 "Read DNS answers as they pass the LAN device, whichever resolver produced "
 "them. Required for wildcard domains, which cannot be resolved ahead of time."
@@ -471,43 +504,43 @@ msgstr ""
 "того, какой резолвер их создал. Требуется для доменов с подстановочными "
 "знаками (wildcard), которые невозможно разрешить заранее."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:142
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:153
 msgid "Record length does not fit the type"
 msgstr "Длина записи не соответствует типу"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:250
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:313
 msgid "Refresh"
 msgstr "Обновить"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:242
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:262
 msgid "Refresh List Files"
 msgstr "Обновить файлы списков"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:68
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:79
 msgid "Refresh failed: %s"
 msgstr "Не удалось обновить: %s"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:290
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:306
 msgid "Rejected settings"
 msgstr "Отклонённые настройки"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:139
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:150
 msgid "Reserved label type"
 msgstr "Зарезервированный тип метки"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:179
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:195
 msgid "Restrict to tcp, udp or both. A port without a protocol covers both."
 msgstr "Ограничить до TCP, UDP или обоих. Порт без протокола охватывает оба."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:381
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:397
 msgid "Reverse path filtering is strict"
 msgstr "Строгая фильтрация обратного пути"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:119
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:130
 msgid "Route into a policy interface"
 msgstr "Маршрутизировать в интерфейс политики"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:117
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:128
 msgid ""
 "Route the selected traffic into the interface below, bypass it - a bypass "
 "policy marks nothing and exempts the traffic from every policy after it - or "
@@ -517,33 +550,33 @@ msgstr ""
 "политика обхода ничего не помечает и освобождает трафик от всех последующих "
 "политик — или передавать его прозрачному прокси-серверу на роутере."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:248
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:262
 msgid "Routes"
 msgstr "Маршруты"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:247
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:261
 msgid "Rules"
 msgstr "Правила"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:517
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:234
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:550
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:253
 msgid "Save & Restart"
 msgstr "Сохранить и перезапустить"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:464
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:488
 msgid "Seconds between poll cycles."
 msgstr "Секунды между циклами опроса."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:414
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:438
 msgid "Service"
 msgstr "Служба"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:233
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:282
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:39
 msgid "Set Reporting"
 msgstr "Отчёт по наборам"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:460
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:484
 msgid ""
 "Set rp_filter to 2 on shunt's own policy interfaces, at start and when one "
 "comes up."
@@ -551,11 +584,11 @@ msgstr ""
 "Устанавливать rp_filter в 2 на собственных интерфейсах политик Shunt при "
 "запуске и при поднятии интерфейса."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:444
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:468
 msgid "Settings"
 msgstr "Настройки"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:477
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:501
 msgid ""
 "Should be at least twice the poll interval (%d), otherwise entries expire "
 "between cycles."
@@ -563,7 +596,7 @@ msgstr ""
 "Должно быть не меньше удвоенного интервала опроса (%d), иначе записи "
 "истекают между циклами."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:185
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:201
 msgid ""
 "Single ports or ranges like 8000-8080, ANDed with the addresses below. Ports "
 "alone select that traffic from every client."
@@ -571,27 +604,27 @@ msgstr ""
 "Отдельные порты или диапазоны, например 8000-8080, объединяются по И с "
 "адресами ниже. Одни только порты выбирают этот трафик от всех клиентов."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:161
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:177
 msgid "Source Addresses"
 msgstr "Адреса источника"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:171
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:187
 msgid "Source Devices"
 msgstr "Устройства источника"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:166
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:182
 msgid "Source MAC Addresses"
 msgstr "MAC-адреса источника"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:181
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:228
 msgid "Static Destinations"
 msgstr "Статические назначения"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:510
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:542
 msgid "Stop"
 msgstr "Остановить"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:383
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:399
 msgid ""
 "Strict rp_filter will drop shunt's marked traffic on %s. Set rp_filter to 2 "
 "on the policy interface, enable rp_filter_manage to have shunt do it, or "
@@ -601,11 +634,11 @@ msgstr ""
 "Установите rp_filter в 2 на интерфейсе политики, включите rp_filter_manage, "
 "чтобы Shunt сделал это сам, или ослабьте его для всей системы; см. README."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:246
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:260
 msgid "Table"
 msgstr "Таблица"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:489
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:518
 msgid ""
 "The LAN device the DNS answers cross on their way to the clients, normally "
 "br-lan. One entry per network segment, see the README."
@@ -613,16 +646,16 @@ msgstr ""
 "Устройство LAN, через которое проходят DNS-ответы на пути к клиентам, обычно "
 "br-lan. По одной записи на сетевой сегмент, см. README."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:126
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:137
 msgid ""
 "The device or logical interface this policy routes into. A netifd name is "
-"resolved to its device; any other device name is used as entered."
+"resolved to its device; any other device name is used as entered. Several "
+"interfaces are used in order: new connections go to the first one that works "
+"and move to the next one when it goes down or, with probe targets set, stops "
+"answering; running connections stay where they started."
 msgstr ""
-"Устройство или логический интерфейс, в который маршрутизирует эта политика. "
-"Имя netifd преобразуется в его устройство; любое другое имя устройства "
-"используется как введено."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:138
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:154
 msgid ""
 "The port the transparent proxy listens on, for tcp and udp. It must listen "
 "on loopback or on the wildcard address. Needs kmod-nft-tproxy."
@@ -635,7 +668,7 @@ msgid "The syslog output, pre-filtered for messages related to: %s"
 msgstr ""
 "Вывод syslog, предварительно отфильтрованный по сообщениям, связанным с: %s"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:292
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:308
 msgid ""
 "These entries were skipped. Everything else was applied - a rejected entry "
 "never takes the service down."
@@ -643,15 +676,15 @@ msgstr ""
 "Эти записи были пропущены. Всё остальное применено — отклонённая запись "
 "никогда не останавливает службу."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:143
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:154
 msgid "Too many answers"
 msgstr "Слишком много ответов"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:147
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:158
 msgid "Too many stacked VLAN tags"
 msgstr "Слишком много вложенных VLAN-тегов"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:154
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:170
 msgid ""
 "Traffic to networks the routing table already has a route for - your other "
 "subnets, your static routes - stays on the normal path instead of entering "
@@ -662,19 +695,19 @@ msgstr ""
 "в интерфейс политики. Отключайте это только для полностью изолирующей "
 "аварийной блокировки (killswitch)."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:121
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:132
 msgid "Transparent proxy on the router"
 msgstr "Прозрачный прокси-сервер на роутере"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:134
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:145
 msgid "Truncated response"
 msgstr "Усечённый ответ"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:416
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:440
 msgid "Version"
 msgstr "Версия"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:145
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:161
 msgid ""
 "What new traffic does when the interface is down or, for a transparent "
 "proxy, when nothing listens on its port."
@@ -682,28 +715,27 @@ msgstr ""
 "Что происходит с новым трафиком, когда интерфейс недоступен или, для "
 "прозрачного прокси, когда на его порту ничего не прослушивается."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:236
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:285
 msgid ""
 "What the nftables Sets currently hold. Counters are reset whenever an entry "
-"is refreshed, so they show recent activity, not a lifetime total."
+"is refreshed, so they show recent activity, not a lifetime total. A large "
+"Set is shown in part, the entries with the most traffic first - to find one "
+"address in it, enter how it begins."
 msgstr ""
-"Что в настоящее время содержат наборы nftables. Счётчики сбрасываются при "
-"каждом обновлении записи, поэтому они показывают недавнюю активность, а не "
-"общее количество за всё время."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:421
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:445
 msgid "across all policies"
 msgstr "по всем политикам"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:193
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:242
 msgid "all policies"
 msgstr "все политики"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:216
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:230
 msgid "answers the health probes"
 msgstr "отвечает на проверки состояния"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:202
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:218
 msgid ""
 "example.com matches that name only, *.example.com matches its subdomains but "
 "not the apex - list both to cover both."
@@ -712,43 +744,51 @@ msgstr ""
 "его поддоменам, но не самому домену (apex) — укажите оба, чтобы охватить и "
 "то, и другое."
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:133
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:221
+msgid "in use"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:149
 msgid "interface"
 msgstr "интерфейс"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:391
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:415
+msgid "limit reached: %s"
+msgstr ""
+
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:407
 msgid "n/a"
 msgstr "н/д"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:91
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:102
 msgid "no answer from the backend"
 msgstr "нет ответа от внутренней службы"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:217
-msgid "no answer to the health probes since %s - the fallback applies"
-msgstr "нет ответа на проверки состояния с %s — применяется резервный вариант"
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:231
+msgid "no answer to the health probes since %s"
+msgstr ""
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:317
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:333
 msgid "online documentation"
 msgstr "документация"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:425
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:449
 msgid "policy interfaces answering the probes"
 msgstr "интерфейсы политик, отвечающие на проверки"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:116
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:127
 msgid "ruleset present, service not running"
 msgstr "набор правил присутствует, служба не работает"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:104
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:115
 msgid "ruleset re-applied %d time(s)"
 msgstr "набор правил повторно применён %d раз(а)"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:110
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:121
 msgid "running, but no ruleset in the kernel"
 msgstr "работает, но в ядре нет набора правил"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:102
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:113
 msgid "running, policy applied"
 msgstr "работает, политика применена"
 
@@ -756,14 +796,41 @@ msgstr "работает, политика применена"
 msgid "shunt"
 msgstr "Shunt"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:121
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:132
 msgid "stopped"
 msgstr "остановлен"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:397
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:421
 msgid "unavailable - ucode-mod-resolv missing"
 msgstr "недоступно — отсутствует ucode-mod-resolv"
 
-#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:423
+#: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:447
 msgid "wildcards are covered by the observer only"
 msgstr "wildard-адреса обрабатываются только наблюдателем"
+
+#~ msgid ""
+#~ "Only needed when the gateway discovered from netifd is wrong. Point to "
+#~ "point interfaces need no gateway at all."
+#~ msgstr ""
+#~ "Нужно только когда шлюз, обнаруженный через netifd, неверен. Интерфейсам "
+#~ "точка-точка шлюз не нужен."
+
+#~ msgid ""
+#~ "The device or logical interface this policy routes into. A netifd name is "
+#~ "resolved to its device; any other device name is used as entered."
+#~ msgstr ""
+#~ "Устройство или логический интерфейс, в который маршрутизирует эта "
+#~ "политика. Имя netifd преобразуется в его устройство; любое другое имя "
+#~ "устройства используется как введено."
+
+#~ msgid ""
+#~ "What the nftables Sets currently hold. Counters are reset whenever an "
+#~ "entry is refreshed, so they show recent activity, not a lifetime total."
+#~ msgstr ""
+#~ "Что в настоящее время содержат наборы nftables. Счётчики сбрасываются при "
+#~ "каждом обновлении записи, поэтому они показывают недавнюю активность, а "
+#~ "не общее количество за всё время."
+
+#~ msgid "no answer to the health probes since %s - the fallback applies"
+#~ msgstr ""
+#~ "нет ответа на проверки состояния с %s — применяется резервный вариант"
