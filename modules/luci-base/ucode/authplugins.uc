@@ -1,6 +1,6 @@
 'use strict';
 
-import { glob, basename, open, readfile, writefile } from 'fs';
+import { glob, basename, open, readfile, writefile, unlink } from 'fs';
 import { cursor } from 'uci';
 import { syslog, LOG_INFO, LOG_WARNING, LOG_AUTHPRIV } from 'log';
 
@@ -180,6 +180,8 @@ function normalize_assets(uuid, assets) {
 // - luci_plugins.global.enabled = '1'
 // - luci_plugins.global.auth_login_enabled = '1'
 // - luci_plugins.<uuid>.enabled = '1'
+// - luci_plugins.<uuid>.primary = '1' also lets a primary plugin log users
+//   in without a password
 //
 // Returns array of loaded plugin objects
 export function load() {
@@ -222,13 +224,23 @@ export function load() {
 			if (uci.get("luci_plugins", uuid, "enabled") != "1")
 				continue;
 
-			// Validate plugin interface
-			if (type(plugin) == 'object' &&
-				type(plugin.check) == 'function' &&
-				type(plugin.verify) == 'function') {
-				
+			// Validate plugin interface: a plugin is a second factor
+			// (check + verify), a primary authenticator (begin + identify)
+			// or both.
+			let second_factor = (type(plugin.check) == 'function' &&
+				type(plugin.verify) == 'function');
+			let primary = (plugin.primary === true &&
+				type(plugin.begin) == 'function' &&
+				type(plugin.identify) == 'function' &&
+				// Logging in without a password needs its own opt-in
+				// per plugin, on top of the plugin being enabled.
+				uci.get("luci_plugins", uuid, "primary") == "1");
+
+			if (second_factor || primary) {
 				plugin.uuid = uuid;
 				plugin.name = uci.get("luci_plugins", uuid, "name") || uuid;
+				plugin.second_factor = second_factor;
+				plugin.primary_enabled = primary;
 				push(auth_plugins, plugin);
 			}
 		}
@@ -257,8 +269,9 @@ export function load() {
 //   plugin - the plugin requiring auth (if pending)
 //   fields - array of form fields to render (if pending)
 //   message - message to display (if pending)
-export function get_challenges(http, user) {
-	let plugins = load();
+export function get_challenges(http, user, skip_plugins) {
+	let plugins = filter(load(), p => p.second_factor &&
+		!(type(skip_plugins) == 'array' && p.uuid in skip_plugins));
 	let challenges = [];
 	let fields = [];
 	let messages = [];
@@ -389,6 +402,171 @@ export function verify(http, user, required_plugins) {
 
 	clear_verify_rate_limit(user, client_ip);
 	return { success: true };
+};
+
+// Collect the login page additions of primary authenticators.
+//
+// Calls begin(http) on every enabled primary plugin. A plugin that has
+// nothing to offer (e.g. no credentials registered yet) returns null or
+// { available: false }.
+//
+// Returns object with:
+//   html - joined markup to render inside the login form (or null)
+//   assets - script assets to load
+//   message - joined messages (or null)
+export function get_primary(http) {
+	let html_parts = [];
+	let assets = [];
+	let messages = [];
+
+	for (let plugin in load()) {
+		if (!plugin.primary_enabled)
+			continue;
+
+		try {
+			let result = plugin.begin(http);
+			if (!(result && result.available))
+				continue;
+
+			if (result.html)
+				push(html_parts, result.html);
+
+			if (result.message)
+				push(messages, result.message);
+
+			for (let asset in normalize_assets(plugin.uuid, result.assets))
+				push(assets, asset);
+		}
+		catch (e) {
+			syslog(LOG_WARNING,
+				sprintf("luci: auth plugin '%s' begin error: %s", plugin.name, e));
+		}
+	}
+
+	return {
+		html: length(html_parts) ? join('\n', html_parts) : null,
+		assets: assets,
+		message: length(messages) ? join(' ', messages) : null
+	};
+};
+
+// Let a primary authenticator identify the user of a login request.
+//
+// Calls identify(http) on each enabled primary plugin. A plugin returns
+// null when the request carries nothing for it, so at most one plugin
+// handles a given request.
+//
+// Returns null when no plugin claimed the request, otherwise:
+//   success - boolean, true if the plugin authenticated a user
+//   username - the authenticated user (if success)
+//   plugin - the plugin that handled the request
+//   message - error message (if failed)
+export function identify(http) {
+	let client_ip = http.getenv("REMOTE_ADDR") || "?";
+
+	for (let plugin in load()) {
+		if (!plugin.primary_enabled)
+			continue;
+
+		let result;
+
+		try {
+			result = plugin.identify(http);
+		}
+		catch (e) {
+			syslog(LOG_WARNING,
+				sprintf("luci: auth plugin '%s' identify error: %s", plugin.name, e));
+			return { success: false, plugin, message: 'Authentication plugin error' };
+		}
+
+		if (result == null)
+			continue;
+
+		// The username is unknown until the plugin succeeds, so failed
+		// attempts are limited per plugin and client address.
+		let rl_user = `primary:${plugin.uuid}`;
+		let rate_limit = check_verify_rate_limit(rl_user, client_ip);
+
+		if (rate_limit.limited)
+			return {
+				success: false,
+				plugin,
+				message: sprintf('Too many failed authentication attempts. Please try again in %d seconds.', rate_limit.remaining)
+			};
+
+		let username = result.authenticated ? result.username : null;
+
+		if (type(username) != 'string' || !match(username, /^[A-Za-z0-9_.@:-]{1,64}$/)) {
+			let fail_limit = note_verify_failure(rl_user, client_ip);
+			syslog(LOG_WARNING|LOG_AUTHPRIV,
+				sprintf("luci: auth plugin '%s' failed to identify a user from %s",
+					plugin.name, client_ip));
+			return {
+				success: false,
+				plugin,
+				message: fail_limit.limited
+					? sprintf('Too many failed authentication attempts. Please try again in %d seconds.', fail_limit.remaining)
+					: (result.message || 'Authentication failed')
+			};
+		}
+
+		clear_verify_rate_limit(rl_user, client_ip);
+		syslog(LOG_INFO|LOG_AUTHPRIV,
+			sprintf("luci: auth plugin '%s' identified %s from %s",
+				plugin.name, username, client_ip));
+
+		return { success: true, username, plugin };
+	}
+
+	return null;
+};
+
+const PRIMARY_TICKET_PREFIX = '/tmp/luci-auth-primary-ticket-';
+const PRIMARY_TICKET_MAX_AGE = 300;
+
+// Remember, for one second-factor round trip, that a primary plugin
+// identified a user. Returns an opaque token for the login form.
+export function issue_primary_ticket(user, plugin) {
+	let data = readfile('/dev/urandom', 16);
+
+	if (length(data) != 16)
+		return null;
+
+	let token = hexenc(data);
+	let fd = open(PRIMARY_TICKET_PREFIX + token, 'wx', 0600);
+
+	if (!fd)
+		return null;
+
+	fd.write(sprintf('%J', { username: user, uuid: plugin.uuid, time: time() }));
+	fd.close();
+
+	return token;
+};
+
+// Redeem a ticket from issue_primary_ticket(). Tickets are single use.
+// Returns null when there is no usable ticket, otherwise the same shape
+// as a successful identify().
+export function redeem_primary_ticket(token) {
+	if (type(token) != 'string' || !match(token, /^[0-9a-f]{32}$/))
+		return null;
+
+	let path = PRIMARY_TICKET_PREFIX + token;
+	let content = readfile(path);
+
+	unlink(path);
+
+	let data = content ? json(content) : null;
+
+	if (type(data) != 'object' || type(data.username) != 'string' ||
+	    time() - int(data.time) > PRIMARY_TICKET_MAX_AGE)
+		return null;
+
+	for (let plugin in load())
+		if (plugin.uuid == data.uuid && plugin.primary_enabled)
+			return { success: true, username: data.username, plugin };
+
+	return null;
 };
 
 // Clear plugin cache.
