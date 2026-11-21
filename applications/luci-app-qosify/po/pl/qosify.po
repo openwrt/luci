@@ -8,8 +8,8 @@ msgstr ""
 "luciapplicationsqosify/pl/>\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"PO-Revision-Date: 2026-11-07 11:22+0000\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"PO-Revision-Date: 2026-11-21 18:40+0000\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1318
 msgid "\"%s\" is not a value qosify accepts for %s."
@@ -49,9 +49,9 @@ msgid ""
 "%s \"%s\" is not a tc rate — tc refuses the qdisc, so nothing is shaped "
 "although qosify reports the section active"
 msgstr ""
-"%s „%s” nie jest wartością typu „tc rate” — narzędzie tc odrzuca "
-"konfigurację qdisc, więc ruch nie jest kształtowany, mimo że qosify zgłasza "
-"daną sekcję jako aktywną"
+"%s „%s” nie jest przepustowością tc — narzędzie tc odrzuca konfigurację "
+"qdisc, więc ruch nie jest kształtowany, mimo że qosify zgłasza daną sekcję "
+"jako aktywną"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:335
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:338
@@ -128,6 +128,8 @@ msgstr ""
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:437
 msgid "%s is not one plain statement in this section — edit %s directly"
 msgstr ""
+"%s nie stanowi w tej sekcji pojedynczego, prostego stwierdzenia — edytuj %s "
+"bezpośrednio"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:352
 msgid ""
@@ -214,10 +216,16 @@ msgid ""
 "hyphens — qosify 143d71d (snapshots) drops it otherwise, and 24.10 and 25.12 "
 "paste it into a tc command run with sh -c as root"
 msgstr ""
+"%s: %s może zawierać wyłącznie litery, cyfry, spacje, kropki, znaki "
+"podkreślenia oraz myślniki — w przeciwnym razie wersja qosify 143d71d "
+"(snapshots) odrzuca taki ciąg, natomiast wersje 24.10 i 25.12 wstawiają go "
+"do polecenia tc wykonywanego za pomocą sh -c z uprawnieniami użytkownika root"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2084
 msgid "%s: multiqueue is set, but %s has one queue, so qosify uses plain cake"
 msgstr ""
+"%s: włączono obsługę wielokolejkowości, ale %s ma tylko jedną kolejkę, więc "
+"qosify używa standardowego mechanizmu cake"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1215
 msgid "(alias)"
@@ -344,7 +352,7 @@ msgstr "Zawartość binarna odrzucona"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1631
 msgid "Bytes"
-msgstr ""
+msgstr "Bajty"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:82
 msgid "CAKE diffserv mode"
@@ -487,6 +495,13 @@ msgid ""
 "override only when the DSCP field is zero (as described from qosify c698349; "
 "24.10 and 25.12 do not honour it)."
 msgstr ""
+"Punkty kodowe DSCP: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF (wartość NQB "
+"wymaga qosify z czerwca 2026 r.; wersje 24.10 i 25.12 jej nie obsługują). "
+"Akceptowana jest również surowa wartość z zakresu od 0 do 63, a każda nazwa "
+"typu dscp_* może także odnosić się do określonej klasy. Użycie przedrostka + "
+"pozwala na zastąpienie wartości tylko wtedy, gdy pole DSCP wynosi zero "
+"(zgodnie z opisem w qosify c698349; wersje 24.10 i 25.12 nie uwzględniają "
+"tego mechanizmu)."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:66
 msgid "DSCP value for ICMP packets"
@@ -543,6 +558,12 @@ msgid ""
 "udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/"
 "bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled)."
 msgstr ""
+"Domyślne ustawienia stosowane przez qosify w przypadku braku określonego "
+"klucza — dla interfejsu: mode diffserv4, ingress 1, egress 1, nat 1, "
+"host_isolate 1, autorate_ingress 0, multiqueue 0. Dla urządzenia: ustawienia "
+"identyczne, z wyjątkiem nat 0. Ustawienia ogólne: timeout 3600, "
+"dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/dscp_icmp – nieustawione; "
+"bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len – 0 (wyłączone)."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1415
 msgid "Description"
@@ -584,7 +605,7 @@ msgstr "Pobierz"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1991
 msgid "Download (ingress)"
-msgstr ""
+msgstr "Pobieranie (ruch przychodzący)"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:823
 msgid "Download bandwidth"
@@ -719,6 +740,8 @@ msgid ""
 "Error: invalid characters in bandwidth or options fields. Use letters, "
 "digits, spaces, dots, underscores and hyphens only."
 msgstr ""
+"Błąd: niedozwolone znaki w polach przepustowości lub opcji. Należy używać "
+"wyłącznie liter, cyfr, spacji, kropek, podkreślników oraz myślników."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2227
 msgid "Error: name must be a device or interface name"
@@ -844,6 +867,9 @@ msgid ""
 "Match not loaded by qosify on line %s — ports 1-%d, one IPv4/IPv6 address "
 "(no CIDR or %%zone), or dns:, dns_c:, dns_q:"
 msgstr ""
+"Dopasowanie nie zostało wczytane przez qosify w wierszu %s — porty 1-%d, "
+"pojedynczy adres IPv4/IPv6 (bez notacji CIDR ani %%strefy) lub format dns:, "
+"dns_c:, dns_q:"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:69
 msgid "Maximum average packet length for marking a flow as priority"
@@ -853,7 +879,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1629
 msgid "Measure"
-msgstr ""
+msgstr "Pomiar"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:837
 msgid "Minimum packet unit (MPU)"
@@ -879,7 +905,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:832
 msgid "Multiqueue CAKE"
-msgstr ""
+msgstr "Wielokolejkowy CAKE"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:830
 msgid "NAT awareness"
@@ -909,7 +935,7 @@ msgstr "Brak jeszcze ruchu DSCP."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1881
 msgid "No class traffic yet."
-msgstr ""
+msgstr "Brak jeszcze ruchu w ramach klas."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1213
 msgid "No classes defined in %s"
@@ -1014,11 +1040,11 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1631
 msgid "Packets"
-msgstr ""
+msgstr "Pakiety"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2585
 msgid "Port must be 1-%d."
-msgstr ""
+msgstr "Port musi mieścić się w zakresie 1-%d."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2581
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2584
@@ -1383,7 +1409,7 @@ msgstr "Wyślij i zastosuj"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1991
 msgid "Upload (egress)"
-msgstr ""
+msgstr "Wysyłanie (ruch wychodzący)"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2444
 msgid "Upload and apply"
@@ -1417,6 +1443,8 @@ msgstr "Czas pracy"
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:86
 msgid "Use cake_mq instead of cake on devices with more than one queue"
 msgstr ""
+"W przypadku urządzeń z więcej niż jedną kolejką należy używać cake_mq "
+"zamiast cake"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:838
 msgid "VLAN tags"
@@ -1475,12 +1503,16 @@ msgid ""
 "bandwidth_down does not look like a tc rate (100mbit, 12MBps; leave empty "
 "for unlimited) — passing it through anyway"
 msgstr ""
+"bandwidth_down nie przypomina przepustowości tc (np. 100mbit, 12MBps; "
+"pozostaw puste, aby uzyskać brak ograniczeń) — mimo to przekazuję dalej"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2193
 msgid ""
 "bandwidth_up does not look like a tc rate (100mbit, 12MBps; leave empty for "
 "unlimited) — passing it through anyway"
 msgstr ""
+"bandwidth_up nie przypomina przepustowości tc (np. 100mbit, 12MBps; pozostaw "
+"puste, aby uzyskać brak ograniczeń) — mimo to przekazuję dalej"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1117
 msgid ""
@@ -1566,6 +1598,8 @@ msgstr ""
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:340
 msgid "multiqueue is set, but this qosify.init does not pass it to qosify"
 msgstr ""
+"Wielokolejkowość jest ustawiona, ale skrypt qosify.init nie przekazuje jej "
+"do qosify"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:328
 msgid ""
@@ -1691,7 +1725,7 @@ msgstr "Szablon pakietu qosify"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1634
 msgid "qosify reports packets only per class."
-msgstr ""
+msgstr "qosify raportuje pakiety wyłącznie w podziale na klasy."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1462
 msgid "qosify-status"
@@ -1749,7 +1783,7 @@ msgstr "łącznie"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/status/include/75_qosify.js:36
 msgid "unlimited"
-msgstr ""
+msgstr "nieograniczona"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1267
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1299
