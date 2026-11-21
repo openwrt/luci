@@ -1,0 +1,88 @@
+'use strict';
+
+import { open, rename, unlink, chmod } from 'fs';
+
+const NOTES_FILE = '/etc/notes.md';
+
+return {
+	notes: {
+		read: {
+			call: function() {
+				let file = open(NOTES_FILE, 'r');
+
+				if (!file)
+					return { error: 'open_read', path: NOTES_FILE };
+
+				let contents = file.read('all');
+				file.close();
+
+				return {
+					contents: contents || ''
+				};
+			}
+		},
+
+		write: {
+			args: {
+				contents: ''
+			},
+
+			call: function(request) {
+				let contents = request.args.contents;
+
+				if (type(contents) != 'string')
+					return { error: 'invalid_contents' };
+
+				let file = null;
+				let path = null;
+
+				for (let i = 0; i < 100; i++) {
+					path = '/etc/.notes-' + i;
+					file = open(path, 'wx', 0o600);
+
+					if (file)
+						break;
+				}
+
+				if (!file)
+					return { error: 'temp_create', path: NOTES_FILE };
+
+				let cleanup = function() {
+					unlink(path);
+				};
+
+				let written = file.write(contents);
+				let write_ok = written == length(contents);
+
+				/*
+				 * Older ucode versions return null from flush()
+				 * even when flushing succeeds. Do not interpret
+				 * the return value as a boolean.
+				 */
+				if (write_ok)
+					file.flush();
+
+				file.close();
+
+				if (!write_ok) {
+					cleanup();
+					return { error: 'write_incomplete', path: NOTES_FILE };
+				}
+
+				if (!chmod(path, 0o644)) {
+					cleanup();
+					return { error: 'chmod_failed', path: NOTES_FILE };
+				}
+
+				if (!rename(path, NOTES_FILE)) {
+					cleanup();
+					return { error: 'rename_failed', path: NOTES_FILE };
+				}
+
+				return {
+					success: true
+				};
+			}
+		}
+	}
+};
