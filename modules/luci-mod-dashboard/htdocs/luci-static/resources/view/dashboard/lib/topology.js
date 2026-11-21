@@ -111,11 +111,12 @@ return baseclass.extend({
 			observations: observations || null,
 			devices: devices.map(deviceData).filter(dev => dev.id),
 			interfaces: interfaces?.filter(net => net.getName() !== 'loopback' && net.getL3Device()?.getName() !== 'lo').map(net => {
-				const dev = net.getL3Device() || net.getDevice();
+				const l3 = net.getL3Device(), dev = l3 || net.getDevice();
 				return {
 					id: net.getName(),
 					name: net.getName(),
 					device: dev?.getName() || '',
+					l3Device: l3?.getName() || null,
 					protocol: net.getProtocol(),
 					type: dev?.getType() || '',
 					up: net.isUp(),
@@ -172,14 +173,22 @@ return baseclass.extend({
 
 		// These are reported default-route links, not Internet reachability or
 		// policy-routing decisions. Families share a reported device or interface identity.
-		for (const item of Array.isArray(router.upstreams) ? router.upstreams : []) {
-			if (!item || (item.family !== 4 && item.family !== 6))
+		const routes = (Array.isArray(router.upstreams) ? router.upstreams : []).filter(item => item?.family === 4 || item?.family === 6);
+		const owners = new Map(), ambiguous = new Set();
+		for (const { device, family, network } of routes) {
+			if (!device || !network)
 				continue;
+			const key = family + ':' + device;
+			if (owners.has(key) && owners.get(key) !== network)
+				ambiguous.add(device);
+			owners.set(key, network);
+		}
+		for (const item of routes) {
 			const network = text(item.network), device = text(item.device);
 			const gateway = addressKey(item.gateway);
 			if (!network && !device)
 				continue;
-			const id = device ? 'device:' + device : 'network:' + network;
+			const id = device && !ambiguous.has(device) ? 'device:' + device : 'network:' + network;
 			if (!upstreams.has(id))
 				upstreams.set(id, { id, device, names: [], families: [], states: [], gateways: [], gatewayAddresses: [], network, tab: 'internet', icon: 'internet' });
 			const up = upstreams.get(id);
@@ -194,11 +203,22 @@ return baseclass.extend({
 			}
 		}
 		const upstreamList = Array.from(upstreams.values());
+		const represented = new Set(upstreamList.flatMap(up => up.names));
+		for (const item of interfaces) {
+			const up = item.l3Device && upstreams.get('device:' + item.l3Device);
+			if (up && item.id && !represented.has(item.id)) {
+				(up.linked ||= []).push(item.id);
+				represented.add(item.id);
+			}
+		}
 		for (const up of upstreamList) {
-			up.name = up.names.join(' / ') || up.id.slice(7);
+			up.name = up.names.concat(up.linked || []).join(' / ') || up.id.slice(7);
 			const allUp = up.states.every(Boolean), anyUp = up.states.some(Boolean);
 			const state = allUp ? _('Link up') : anyUp ? _('Mixed link state') : _('Link down');
-			up.detail = up.families.sort().map(family => 'IPv' + family).join(' / ') + ' · ' + state;
+			up.detail = _('Default route: %s').format(up.families.sort().map(family => 'IPv' + family).join(' / '));
+			if (!allUp)
+				up.detail += ' · ' + state;
+			up.hint = [ allUp ? state : null, up.linked ? _('Same link: %s').format(up.linked.join(', ')) : null ].filter(Boolean).join(' · ');
 			up.active = anyUp;
 			up.status = allUp ? 'up' : anyUp ? 'warn' : 'down';
 		}
@@ -438,9 +458,8 @@ return baseclass.extend({
 			router: { id: 'router', name: text(router.hostname) || text(router.model) || _('This device'), detail: text(router.managementAddress) || text(router.model), icon: 'router', tab: 'system' },
 			upstreams: upstreamList.sort(byId),
 			groups: Array.from(groups.values()).filter(group => !(
-				upstreamList.some(up => up.names.includes(group.network)) &&
-				([ 'dhcp', 'dhcpv6', 'pppoe', 'ppp', 'qmi', 'mbim', 'ncm', '3g' ].includes(group.protocol) || [ 'tunnel', 'wireguard' ].includes(group.type)) &&
-				!group.radios && !group.members.length
+				group.kind === 'logical' && represented.has(group.network) && !group.radios && !group.members.length &&
+				group.access.every(access => access.device === group.device)
 			)).sort(byId),
 			interfacesAvailable: Array.isArray(connections.interfaces),
 			wifiAvailable: source.wifi != null,
