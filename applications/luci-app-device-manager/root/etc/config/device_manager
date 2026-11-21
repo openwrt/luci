@@ -1,0 +1,21 @@
+# LAN Device Manager configuration
+# Stores custom device names, remarks, and groups mapped by MAC address.
+
+config group 'smart_home'
+	option name 'Smart home'
+
+config group 'phone'
+	option name 'Phones'
+
+config group 'computer'
+	option name 'Computers'
+
+config group 'network'
+	option name 'Network devices'
+
+config group 'other'
+	option name 'Other devices'
+
+# Logical netifd interfaces eligible for the explicit Scan LAN operation.
+config settings 'settings'
+	list scan_interface 'lan'
