@@ -530,12 +530,13 @@ return view.extend({
 						'click': handleAction
 					}, [_('Blocklist...')]);
 				}
+				/* plain strings in table cells are rendered via innerHTML, pass the captured values as text nodes */
 				rows.push([
-					request.date,
-					request.time,
-					request.client,
-					request.iface,
-					request.type,
+					E('span', {}, [request.date]),
+					E('span', {}, [request.time]),
+					E('span', {}, [request.client]),
+					E('span', {}, [request.iface]),
+					E('span', {}, [request.type]),
 					makeDomainLink(request.domain),
 					badge,
 					button
