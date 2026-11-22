@@ -292,11 +292,14 @@ body {
 }
 
 .container {
-	width: 100%;
-	max-width: 1180px;
-	margin-left: auto;
-	margin-right: auto;
+	margin: 0 max(7vw, calc((100vw - 1180px) / 2)) 0 max(7vw, calc((100vw - 1180px) / 2));
 	zoom: 1;
+}
+
+@media (max-width: 854px) {
+    .container {
+        margin: 0;
+    }
 }
 
 a {
@@ -1069,10 +1072,14 @@ header p {
 header {
 	background: linear-gradient(#333333, #222222);
 	box-shadow: 0 1px 3px hsla(var(--border-color-low-hsl), .25), inset 0 -1px 0 hsla(var(--border-color-low-hsl), .01);
-	padding: 0;
-	/* the redundant properties below work around a csstidy bug */
-	padding-left: calc((100% - 1180px) / 2);
-	padding-right: calc((100% - 1180px) / 2);
+	/* Match header with container margin left and right so they are aligned */ 
+	padding: 0 max(7vw, calc((100vw - 1180px) / 2)) 0 max(7vw, calc((100vw - 1180px) / 2));
+}
+
+@media (max-width: 854px) {
+	header {
+		padding: 0;
+	}
 }
 
 .nav {
@@ -1363,7 +1370,6 @@ a.menu:after {
 }
 
 footer {
-	padding-top: 17px;
 	margin-top: auto;
 	border-top: 1px solid var(--border-color-low);
 	display: flex;
@@ -1372,10 +1378,14 @@ footer {
 	justify-content: space-between;
 	font-size: 12px;
 	color: var(--text-color-medium);
-	/* the redundant properties below work around a csstidy bug */
-	/* Match footer with header padding left and right so they are aligned (header uses 1180px, but footer was using 940px) */ 
-	padding-left: calc((100% - 1180px) / 2);
-	padding-right: calc((100% - 1180px) / 2);
+	/* Match footer with container margin left and right so they are aligned */ 
+	padding: 17px max(7vw, calc((100vw - 1180px) / 2)) 0 max(7vw, calc((100vw - 1180px) / 2));
+}
+
+@media (max-width: 854px) {
+	footer {
+		padding: 17px 0 0 0;
+	}
 }
 
 footer a {
