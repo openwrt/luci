@@ -77,7 +77,7 @@ return baseclass.extend({
 			const tasks = [];
 
 			for (const net of radios_networks_hints[1]) {
-				const sample = net.isDisabled() ? Promise.resolve({ complete: true, peers: [] }) : readAssociations(net);
+				const sample = (net.isDisabled() || !net.isUp()) ? Promise.resolve({ complete: true, peers: [] }) : readAssociations(net);
 				tasks.push(sample.then(({ complete, peers }) => {
 					net.assoclistKnown = complete;
 					net.assoclist = peers.filter(peer => typeof(peer?.mac) === 'string').sort((a, b) => a.mac.localeCompare(b.mac));
@@ -107,40 +107,30 @@ return baseclass.extend({
 			? _('Wireless peers and clients') : _('Wireless clients');
 	},
 
-	unavailableChart(title) {
-		return this.params.wifi.radios.some(radio => radio.clientsKnown === false)
-			? charts.card({ title, body: charts.empty(_('Wireless association data unavailable.')) }) : null;
+	associationChart(title, desc, body) {
+		const partial = this.params.wifi.radios.some(radio => radio.clientsKnown === false);
+		if (!body)
+			return charts.card({ title, body: charts.empty(partial ? _('Wireless association data unavailable.') : _('No wireless clients connected')) });
+
+		return charts.card({ title, desc: partial ? '%s · %s'.format(desc, _('Showing reported associations only.')) : desc, body });
 	},
 
 	renderDistributionChart() {
-		const unavailable = this.unavailableChart(_('Wireless client distribution'));
-		if (unavailable)
-			return unavailable;
 		const devices = this.params.wifi.devices;
-		const series = this.params.wifi.radios.map(radio => ({
+		const series = this.params.wifi.radios.filter(radio => radio.clientsKnown || radio.associations > 0).map(radio => ({
 			label: [ radio.ssid, ' ', E('small', {}, [ radio.channel ]) ],
 			value: radio.active ? radio.associations : 0
 		}));
 
-		return charts.card({
-			title: _('Wireless client distribution'),
-			desc: _('by SSID'),
-			body: devices.length
-				? charts.donut({ series: series, centerLabel: _('clients'), ariaLabel: _('Wireless client distribution') })
-				: charts.empty(_('No wireless clients connected'))
-		});
+		return this.associationChart(_('Wireless client distribution'), _('by SSID'), devices.length
+			? charts.donut({ series, centerLabel: _('clients'), ariaLabel: _('Wireless client distribution') }) : null);
 	},
 
 	renderSignalChart() {
-		const unavailable = this.unavailableChart(_('Signal Strength'));
-		if (unavailable)
-			return unavailable;
 		const devices = this.params.wifi.devices.slice().sort((a, b) => rssiOf(b) - rssiOf(a));
 
-		return charts.card({
-			title: _('Signal Strength'),
-			desc: devices.length ? '%s · %s'.format(_('%d clients').format(devices.length), _('dBm')) : '',
-			body: devices.length ? [ charts.barChart({
+		return this.associationChart(_('Signal Strength'), '%s · %s'.format(_('%d clients').format(devices.length), _('dBm')),
+			devices.length ? [ charts.barChart({
 				id: 'signal',
 				// iwinfo's nl80211 backend clamps the signal to -110..-40 dBm
 				// (the cfg80211 wext compat range) before deriving quality.
@@ -155,8 +145,7 @@ return baseclass.extend({
 			}), charts.legend([
 				{ className: 'dashboard-bar-ok', label: '%s ≥ -67 %s'.format(_('Good'), _('dBm')) },
 				{ className: 'dashboard-bar-mid', label: '%s < -67 %s'.format(_('Weak'), _('dBm')) }
-			]) ] : charts.empty(_('No wireless clients connected'))
-		});
+			]) ] : null);
 	},
 
 	signalText(device) {
@@ -195,38 +184,31 @@ return baseclass.extend({
 	},
 
 	renderTrafficChart() {
-		const unavailable = this.unavailableChart(_('Wireless client data usage'));
-		if (unavailable)
-			return unavailable;
 		const devices = this.params.wifi.devices.slice().sort((a, b) =>
 			(b.transferred.value.bytes.rx + b.transferred.value.bytes.tx) - (a.transferred.value.bytes.rx + a.transferred.value.bytes.tx));
 		const peak = Math.max(1, ...devices.map(device => Math.max(device.transferred.value.bytes.rx, device.transferred.value.bytes.tx)));
 		const scale = this.byteScale(peak);
 
-		return charts.card({
-			title: _('Wireless client data usage'),
-			desc: devices.length ? _('Transferred') : '',
-			body: devices.length ? [
-				charts.barChart({
-					id: 'traffic',
-					max: scale.step * 4,
-					ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: scale.step * n, label: scale.format(scale.step * n) })),
-					items: devices.map(device => ({
-						label: device.hostname.value,
-						title: '%s · %s %s · %s %s'.format(device.hostname.value, _('Download'), device.transferred.value.tx, _('Upload'), device.transferred.value.rx)
-							+ (device.connected.value ? ' · %s %s'.format(_('Connected'), device.connected.value) : ''),
-						values: [
-							{ value: device.transferred.value.bytes.tx, className: 'dashboard-bar-down' },
-							{ value: device.transferred.value.bytes.rx, className: 'dashboard-bar-up' }
-						]
-					}))
-				}),
-				charts.legend([
-					{ className: 'dashboard-bar-down', label: _('Download') },
-					{ className: 'dashboard-bar-up', label: _('Upload') }
-				])
-			] : charts.empty(_('No wireless clients connected'))
-		});
+		return this.associationChart(_('Wireless client data usage'), _('Transferred'), devices.length ? [
+			charts.barChart({
+				id: 'traffic',
+				max: scale.step * 4,
+				ticks: [ 0, 1, 2, 3, 4 ].map(n => ({ value: scale.step * n, label: scale.format(scale.step * n) })),
+				items: devices.map(device => ({
+					label: device.hostname.value,
+					title: '%s · %s %s · %s %s'.format(device.hostname.value, _('Download'), device.transferred.value.tx, _('Upload'), device.transferred.value.rx)
+						+ (device.connected.value ? ' · %s %s'.format(_('Connected'), device.connected.value) : ''),
+					values: [
+						{ value: device.transferred.value.bytes.tx, className: 'dashboard-bar-down' },
+						{ value: device.transferred.value.bytes.rx, className: 'dashboard-bar-up' }
+					]
+				}))
+			}),
+			charts.legend([
+				{ className: 'dashboard-bar-down', label: _('Download') },
+				{ className: 'dashboard-bar-up', label: _('Upload') }
+			])
+		] : null);
 	},
 
 	getTopologyData() {
@@ -408,7 +390,7 @@ return baseclass.extend({
 		const head = E('div', { 'class': 'ifacebox-head' + (network.active ? ' active' : '') }, [ E('strong', {}, network.ssid) ]);
 		const body = E('div', { 'class': 'ifacebox-body' }, [
 			E('div', {}, [
-				E('b', { 'class': 'dashboard-kpi-value' }, String(network.associations ?? '?')),
+				E('b', { 'class': 'dashboard-kpi-value' }, network.clientsKnown ? String(network.associations) : '?'),
 				E('small', { 'class': 'dashboard-detail-secondary' }, _('Reported associations'))
 			]),
 			network.active ? E('div', { 'class': 'dashboard-net-fields' }, [
@@ -470,7 +452,7 @@ return baseclass.extend({
 					rate: rate ? '%d %s'.format(rate, _('Mbit/s')) : null,
 					encryption: associated ? net.getActiveEncryption() : null,
 					bssid: associated ? net.getActiveBSSID() : null,
-					associations: net.assoclistKnown === false ? null : net.assoclist.length
+					associations: net.assoclist.length
 				});
 			}
 		}
