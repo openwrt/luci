@@ -931,15 +931,6 @@ return view.extend({
 			}
 		}
 
-		o = s.taboption('feeds', form.DummyValue, '_feeds1');
-		o.rawhtml = true;
-		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('1Hosts List Selection') + '</em>';
-
-		o = s.taboption('feeds', form.DynamicList, 'adb_hst_feed', _('Categories'));
-		addCategoryOptions(o, 'hst');
-		o.optional = true;
-		o.rmempty = true;
-
 		o = s.taboption('feeds', form.DummyValue, '_feeds2');
 		o.rawhtml = true;
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('Hagezi List Selection') + '</em>';
