@@ -1,0 +1,18 @@
+{
+	"luci-app-telldus-mqtt": {
+		"description": "Grant access to telldus-mqtt status and configuration",
+		"read": {
+			"ubus": {
+				"luci.telldus-mqtt": [ "getStatus" ]
+			},
+			"uci": [ "telldus-mqtt" ]
+		},
+		"write": {
+			"ubus": {
+				"luci": [ "setInitAction" ],
+				"luci.telldus-mqtt": [ "setSwitch" ]
+			},
+			"uci": [ "telldus-mqtt" ]
+		}
+	}
+}

@@ -1,0 +1,119 @@
+// rpcd backend of luci-app-telldus-mqtt: ubus object "luci.telldus-mqtt".
+// getStatus returns, in one call:
+// - now: the router time (epoch seconds). The pages compute ages from it,
+//   not from the browser clock. The status file has epoch seconds too.
+// - status: the status file of the daemon, or null. status_error says why
+//   it is null: "missing" or "invalid".
+// - service: { installed, running } from procd (ubus service list).
+// - mosquitto: { installed, luci }: for the broker hint.
+// setSwitch { id, on } runs tdtool --on <id> or tdtool --off <id>.
+// Returns { ok: true } or { ok: false, error: "..." }.
+
+'use strict';
+
+import { readfile, stat, access } from 'fs';
+import { connect } from 'ubus';
+
+const STATUS_FILE = '/var/run/telldus-mqtt.json';
+const SERVICE = 'telldus-mqtt';
+const TDTOOL_DIRS = [ '/usr/bin', '/usr/sbin', '/bin', '/sbin' ];
+// rpcd is single-threaded: keep the blocking tdtool call short
+const TDTOOL_TIMEOUT_MS = 3000;
+
+// Exit codes of tdtool (minus the telldus-core error code)
+const TDTOOL_ERRORS = {
+	'1': 'TellStick not found',
+	'3': 'Device not found in telldusd',
+	'6': 'Cannot connect to telldusd'
+};
+
+// One ubus connection for all calls, as luci.upnp does (a connection made
+// in the call handler can be garbage collected too early). Made again if
+// a call fails.
+let conn = null;
+
+function service_state() {
+	let state = { installed: !!access('/etc/init.d/' + SERVICE), running: false };
+	if (!conn)
+		conn = connect();
+	let list = conn ? conn.call('service', 'list', { name: SERVICE }) : null;
+	if (list == null) {
+		conn = null;
+		return state;
+	}
+	let instances = list?.[SERVICE]?.instances;
+	if (type(instances) == 'object')
+		for (let name in instances)
+			if (instances[name]?.running)
+				state.running = true;
+	return state;
+}
+
+function tdtool_path() {
+	for (let dir in TDTOOL_DIRS)
+		if (access(dir + '/tdtool'))
+			return dir + '/tdtool';
+	return null;
+}
+
+// No shell: system() with an array runs the program directly
+function set_switch(id, on) {
+	if (type(id) != 'int' || id < 1 || id > 999999999)
+		return { ok: false, error: 'Invalid switch id' };
+	if (type(on) != 'bool')
+		return { ok: false, error: 'Invalid state' };
+	let tdtool = tdtool_path();
+	if (!tdtool)
+		return { ok: false, error: 'tdtool not found (install telldus-core)' };
+	let rc = system([ tdtool, on ? '--on' : '--off', '' + id ], TDTOOL_TIMEOUT_MS);
+	if (rc == 0)
+		return { ok: true };
+	if (rc < 0)
+		return { ok: false, error: 'tdtool did not finish in 3 s' };
+	return { ok: false, error: TDTOOL_ERRORS['' + rc] || ('tdtool failed (exit code ' + rc + ')') };
+}
+
+const methods = {
+	getStatus: {
+		call: function() {
+			let result = {
+				now: time(),
+				status: null,
+				status_error: null,
+				service: service_state(),
+				mosquitto: {
+					installed: !!stat('/etc/init.d/mosquitto'),
+					luci: !!stat('/usr/share/luci/menu.d/luci-app-mosquitto.json')
+				}
+			};
+
+			let text = readfile(STATUS_FILE);
+			if (text == null) {
+				result.status_error = 'missing';
+			}
+			else {
+				let status = null;
+				try {
+					status = json(text);
+				}
+				catch (e) {
+					status = null;
+				}
+				if (type(status) == 'object')
+					result.status = status;
+				else
+					result.status_error = 'invalid';
+			}
+			return result;
+		}
+	},
+
+	setSwitch: {
+		args: { id: 0, on: false },
+		call: function(req) {
+			return set_switch(req.args.id, req.args.on);
+		}
+	}
+};
+
+return { 'luci.telldus-mqtt': methods };
