@@ -466,7 +466,7 @@ return baseclass.extend({
 			return L.naturalCompare(a.device, b.device);
 		});
 
-		return E('div', { 'style': 'display:grid;grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));margin-bottom:1em' }, known_ports.map(function(port) {
+		return E('div', { 'style': 'display:grid;grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));gap:5px;justify-items:center;margin:3px 0 1em 0' }, known_ports.map(function(port) {
 			const speed = port.netdev.getSpeed();
 			const duplex = port.netdev.getDuplex();
 			const carrier = port.netdev.getCarrier();
@@ -497,7 +497,7 @@ return baseclass.extend({
 
 			statsContent.push(E('span', { 'class': 'cbi-tooltip' }, formatStats(port.netdev, pse)));
 
-			return E('div', { 'class': 'ifacebox', 'style': 'margin:.25em;min-width:70px;max-width:100px' }, [
+			return E('div', { 'class': 'ifacebox', 'style': 'margin:0;width:100%;min-width:70px;max-width:100px' }, [
 				E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:bold' }, [ port.netdev.getName() ]),
 				E('div', { 'class': 'ifacebox-body' }, [
 					E('img', { 'src': L.resource('icons/port_%s.svg').format(portIcon) }),
