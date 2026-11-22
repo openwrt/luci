@@ -1,0 +1,18 @@
+{
+  "admin/system/athena": {
+    "title": "Athena theme",
+    "order": 90,
+    "action": {
+      "type": "view",
+      "path": "athena-config"
+    },
+    "depends": {
+      "acl": [
+        "luci-theme-athena"
+      ],
+      "uci": {
+        "athena": true
+      }
+    }
+  }
+}

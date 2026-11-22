@@ -1,0 +1,32 @@
+{
+  "luci-theme-athena": {
+    "description": "Configure Athena appearance and manage login assets",
+    "read": {
+      "ubus": {
+        "luci.athena": [
+          "get"
+        ]
+      },
+      "uci": [
+        "athena"
+      ]
+    },
+    "write": {
+      "ubus": {
+        "luci.athena": [
+          "install",
+          "select",
+          "remove"
+        ]
+      },
+      "uci": [
+        "athena"
+      ],
+      "file": {
+        "/tmp/athena-upload-*.tmp": [
+          "write"
+        ]
+      }
+    }
+  }
+}

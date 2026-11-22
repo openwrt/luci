@@ -1,0 +1,6 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+uci -q get luci.themes >/dev/null || uci set luci.themes=internal
+uci set luci.themes.Athena='/luci-static/athena'
+uci commit luci
+exit 0
