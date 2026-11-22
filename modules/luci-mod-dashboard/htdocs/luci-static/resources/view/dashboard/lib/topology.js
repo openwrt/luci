@@ -464,7 +464,7 @@ return baseclass.extend({
 			interfacesAvailable: Array.isArray(connections.interfaces),
 			wifiAvailable: source.wifi != null,
 			wifiSupported: source.wifiSupported ?? source.wifi != null,
-			partial: !connections.observations || !!observations.partial || (observations.bridges || []).some(bridge => bridge.partial)
+			partial: !connections.observations || !!observations.partial
 		};
 	}
 });

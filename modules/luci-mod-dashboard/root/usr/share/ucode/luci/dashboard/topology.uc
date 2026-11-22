@@ -34,7 +34,7 @@ export function collect() {
 		}
 		remaining--;
 		const device = basename(substr(path, 0, length(path) - 7));
-		const filtering = trim(readfile(`${path}/vlan_filtering`) ?? '') != '0';
+		const filtering = trim(readfile(`${path}/vlan_filtering`) ?? '');
 		const ports = {}, members = [];
 		for (let member in glob(`${root}/${device}/brif/*`) ?? []) {
 			if (!remaining) {
@@ -44,7 +44,7 @@ export function collect() {
 			remaining--;
 			const name = basename(member);
 			push(members, name);
-			if (!filtering) {
+			if (filtering == '0') {
 				const number = int(trim(readfile(`${member}/port_no`) ?? ''), 16);
 				if (number > 0)
 					ports[number] = name;
@@ -52,10 +52,11 @@ export function collect() {
 		}
 		// Read one extra whole record to distinguish truncation from EOF.
 		const limit = remaining * 16;
-		const data = filtering ? null : readfile(`${root}/${device}/brforward`, limit + 16);
+		const data = filtering == '0' ? readfile(`${root}/${device}/brforward`, limit + 16) : null;
 		const available = type(data) == 'string';
 		const size = available ? min(length(data), limit) : 0;
-		if (!available || length(data) > limit || size % 16)
+		// Skipping a known VLAN-filtering bridge is intentional; an unreadable flag is not.
+		if (filtering != '1' && (!available || length(data) > limit || size % 16))
 			partial = true;
 		remaining -= int((size + 15) / 16);
 		push(bridges, { device, members, available, entries: decode_fdb(data, size, ports) });
