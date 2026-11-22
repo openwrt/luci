@@ -115,8 +115,8 @@ return view.extend({
 				callRcInit('unbound', cmd);
 				document.removeEventListener('uci-applied', Fn);
 			});
+			document.addEventListener('uci-applied', Fn);
 		}
-		document.addEventListener('uci-applied', Fn);
 		this.super('handleSaveApply', [ev, mode]);
 	}
 });
