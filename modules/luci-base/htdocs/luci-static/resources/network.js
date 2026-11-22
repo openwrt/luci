@@ -391,6 +391,7 @@ function initNetworkState(refresh) {
 					stats:    dev.stats,
 					macaddr:  dev.mac,
 					pse:      dev?.pse,
+					wol:      dev?.wol,
 					type:     dev.type,
 					devtype:  dev.devtype,
 					mtu:      dev.mtu,
@@ -3311,6 +3312,35 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 */
 	hasPSE() {
 		return this._devstate('pse') != null;
+	},
+
+	/**
+	 * Get the Wake-on-LAN (WoL) status of the device.
+	 *
+	 * @returns {Object|null}
+	 * Returns an object containing WoL status information (`supported` and
+	 * `selected` arrays) or null if WoL is not available on this device.
+	 */
+	getWOL() {
+		const wol = this._devstate('wol');
+		if (!wol)
+			return null;
+
+		return {
+			supported: Array.isArray(wol.supported) ? wol.supported : [],
+			selected: Array.isArray(wol.selected) ? wol.selected : []
+		};
+	},
+
+	/**
+	 * Check if Wake-on-LAN (WoL) is supported on this device.
+	 *
+	 * @returns {boolean}
+	 * Returns true if WoL is supported on this device.
+	 */
+	hasWOL() {
+		const wol = this.getWOL();
+		return wol != null && wol.supported.length > 0;
 	},
 
 	/**
