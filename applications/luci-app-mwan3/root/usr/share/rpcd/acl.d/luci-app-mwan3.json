@@ -58,11 +58,17 @@
 				"exec"
 			],
 			"file": {
+				"/etc/mwan3.user": [
+					"read"
+				],
 				"/usr/libexec/luci-mwan3 ipset dump": [
 					"exec"
 				]
 			},
 			"ubus": {
+				"file": [
+					"read"
+				],
 				"mwan3": [
 					"status"
 				]
