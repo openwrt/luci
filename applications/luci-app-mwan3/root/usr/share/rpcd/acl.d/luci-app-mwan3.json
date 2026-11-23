@@ -21,12 +21,6 @@
 				"/usr/libexec/luci-mwan3 diag routes *": [
 					"exec"
 				],
-				"/usr/sbin/mwan3 ifup *": [
-					"exec"
-				],
-				"/usr/sbin/mwan3 ifdown *": [
-					"exec"
-				],
 				"/usr/sbin/mwan3 internal ipv4": [
 					"exec"
 				]
@@ -42,6 +36,14 @@
 			]
 		},
 		"write": {
+			"file": {
+				"/usr/sbin/mwan3 ifup *": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 ifdown *": [
+					"exec"
+				]
+			},
 			"ubus": {
 				"file": [
 					"exec"
