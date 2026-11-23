@@ -108,8 +108,7 @@ return view.extend({
 		const zoneId = requestPath[requestPath.length-1] || '';
 
 		if (zoneId) {
-			const enabled = uci.get('unbound', zoneId, 'enabled');
-			const cmd = enabled ? 'reload' : 'stop';
+			const cmd = 'reload';
 
 			const Fn = L.bind(() => {
 				callRcInit('unbound', cmd);
