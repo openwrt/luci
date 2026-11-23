@@ -5,6 +5,8 @@
 'require ui';
 'require view';
 
+var isReadonlyView = !L.hasViewPermission() || null;
+
 return view.extend({
 	handleCommand: function(exec, args) {
 		var buttons = document.querySelectorAll('.cbi-button');
@@ -64,8 +66,14 @@ return view.extend({
 			E('option', { 'value': 'tracking' }, [ _('Ping tracking IP') ]),
 			E('option', { 'value': 'rules' }, [ _('Check IP rules') ]),
 			E('option', { 'value': 'routes' }, [ _('Check routing table') ]),
-			E('option', { 'value': 'ifup' }, [ _('Hotplug ifup') ]),
-			E('option', { 'value': 'ifdown' }, [ _('Hotplug ifdown') ])
+			E('option', {
+				'value': 'ifup',
+				'disabled': isReadonlyView
+			}, [ _('Hotplug ifup') ]),
+			E('option', {
+				'value': 'ifdown',
+				'disabled': isReadonlyView
+			}, [ _('Hotplug ifdown') ])
 		];
 
 		var ifaceSel = [E('option', { value: '' }, [_('-- Interface Selection --')])];
