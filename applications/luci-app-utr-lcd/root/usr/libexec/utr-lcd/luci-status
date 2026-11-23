@@ -1,0 +1,26 @@
+#!/bin/sh
+# Read-only status for the LuCI page: prints one JSON object. BusyBox ash, no dependencies.
+LIBEXEC=/usr/libexec/utr-lcd
+STOCK=/usr/share/utr-lcd/stock
+
+esc() { printf '%s' "$1" | tr -d '\r\n\t' | sed 's/\\/\\\\/g; s/"/\\"/g'; }
+
+mode=stopped
+pidof utr-lcd-status >/dev/null 2>&1 && mode=native
+pgrep -f "$STOCK/lib/libc.so" >/dev/null 2>&1 && mode=stock
+
+bundle=false; ver=""
+[ -x "$STOCK/bin/ulcmd" ] && { bundle=true; ver=$(head -n1 "$STOCK/VERSION" 2>/dev/null); }
+drm=false; [ -e /dev/dri/card0 ] && drm=true
+
+printf '{"mode":"%s","stock_installed":%s,"stock_version":"%s","drm":%s,"state":{' \
+	"$mode" "$bundle" "$(esc "$ver")" "$drm"
+"$LIBEXEC/collect.sh" 2>/dev/null | {
+	sep=""
+	while IFS= read -r line; do
+		k=${line%%=*}; v=${line#*=}
+		printf '%s"%s":"%s"' "$sep" "$(esc "$k")" "$(esc "$v")"
+		sep=","
+	done
+}
+printf '}}\n'
