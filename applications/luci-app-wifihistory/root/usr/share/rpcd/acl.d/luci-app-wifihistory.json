@@ -4,13 +4,15 @@
 		"read": {
 			"ubus": {
 				"iwinfo": [ "assoclist" ],
-				"luci.wifihistory": [ "getHistory" ]
-			}
+				"luci.wifihistory": [ "getHistory", "getStatus" ]
+			},
+			"uci": [ "wifihistory" ]
 		},
 		"write": {
 			"ubus": {
 				"luci.wifihistory": [ "clearHistory" ]
-			}
+			},
+			"uci": [ "wifihistory" ]
 		}
 	}
 }
