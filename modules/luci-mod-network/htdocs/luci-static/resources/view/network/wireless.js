@@ -1022,6 +1022,9 @@ return view.extend({
 				o.ucisection = s.section;
 
 				if (hwtype == 'mac80211') {
+					o = ss.taboption('general', form.Flag, 'acs_exclude_dfs', _('Exclude DFS channels'), _('Automatic channel selection skips the DFS channels. These need a radar check of 1 to 10 minutes before the access point starts, and the access point has to leave the channel when a radar is detected. Where all 5 GHz channels are DFS channels, no channel is found then.'));
+					o.depends({'_freq': /,5g,auto$/});
+
 					o = ss.taboption('general', form.Flag, 'legacy_rates', _('Allow legacy 802.11b rates'), _('Legacy or badly behaving devices may require legacy 802.11b rates to interoperate. Airtime efficiency may be significantly reduced where these are used. It is recommended to not allow 802.11b rates where possible.'));
 					o.depends({'_freq': '2g', '!contains': true});
 
