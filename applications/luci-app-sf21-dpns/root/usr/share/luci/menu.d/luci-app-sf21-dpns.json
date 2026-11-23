@@ -1,0 +1,39 @@
+{
+	"admin/network/sf21-dpns": {
+		"title": "NPU offload",
+		"order": 62,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-sf21-dpns" ]
+		}
+	},
+
+	"admin/network/sf21-dpns/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "sf21-dpns/status"
+		}
+	},
+
+	"admin/network/sf21-dpns/qos": {
+		"title": "Hardware QoS",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "sf21-dpns/qos"
+		}
+	},
+
+	"admin/network/sf21-dpns/settings": {
+		"title": "Settings",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "sf21-dpns/settings"
+		}
+	}
+}
