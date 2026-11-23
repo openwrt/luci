@@ -459,7 +459,6 @@ return L.view.extend({
 
 		go = g.option(form.ListValue, 'auth_type',
 			_('Authentication type'));
-		go.value('', _('none'));
 		go.value('SHA-512', _('SHA-512'));
 		go.value('SHA-384', _('SHA-384'));
 		go.value('SHA-256', _('SHA-256'));
@@ -484,7 +483,6 @@ return L.view.extend({
 		// SNMPv3 privacy/encryption type
 		go = g.option(form.ListValue, 'privacy_type',
 			_('Encryption type'));
-		go.value('', _('none'));
 		go.value('AES-256', _('AES-256'));
 		go.value('AES-192', _('AES-192'));
 		go.value('AES', _('AES'));
