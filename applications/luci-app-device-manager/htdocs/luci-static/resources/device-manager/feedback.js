@@ -39,7 +39,13 @@ return baseclass.extend({
 		};
 	},
 	notify: function(message, level) {
-		const node = ui.addNotification(null, E('p', {}, [ message ]), level);
+		const content = E('p', {}, [ message ]);
+		if (typeof ui.addTimeLimitedNotification === 'function') {
+			ui.addTimeLimitedNotification(null, content, TIMEOUT, level);
+			return;
+		}
+
+		const node = ui.addNotification(null, content, level);
 		if (node) setTimeout(() => node.remove(), TIMEOUT);
 	}
 });
