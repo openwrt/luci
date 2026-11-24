@@ -233,6 +233,7 @@ return view.extend({
 		o.modalonly = true;
 		o.noaliases = true;
 		o.multiple = true;
+		o.firewallPatterns = true;
 
 		o = s.taboption('advanced', form.DynamicList, 'subnet', _('Covered subnets'), _('Use this option to classify zone traffic by source or destination subnet instead of networks or devices.'));
 		o.datatype = 'neg(cidr("true"))';
