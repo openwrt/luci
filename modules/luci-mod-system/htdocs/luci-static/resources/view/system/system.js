@@ -5,6 +5,7 @@
 'require uci';
 'require rpc';
 'require form';
+'require fs';
 'require tools.widgets as widgets';
 
 const callRcList = rpc.declare({
@@ -96,12 +97,13 @@ return view.extend({
 			callRcList('sysntpd'),
 			callTimezone(),
 			callGetUnixtime(),
+			L.hasSystemFeature('zram') ? L.resolveDefault(fs.trimmed('/sys/devices/virtual/block/zram0/comp_algorithm'), '') : '',
 			uci.load('luci'),
 			uci.load('system')
 		]);
 	},
 
-	render([ntpd_enabled, timezones, unixtime]) {
+	render([ntpd_enabled, timezones, unixtime, zram_algos]) {
 		let m, s, o;
 
 		m = new form.Map('system',
@@ -205,6 +207,10 @@ return view.extend({
 		 */
 
 		if (L.hasSystemFeature('zram')) {
+			const algos = zram_algos
+				? zram_algos.replaceAll('[', '').replaceAll(']', '').split(/\s+/).filter(Boolean)
+				: [ 'lzo-rle', 'lzo', 'lz4', 'zstd' ];
+
 			s.tab('zram', _('ZRam Settings'));
 
 			o = s.taboption('zram', form.Value, 'zram_size_mb', _('ZRam Size'), _('Size of the ZRam device in megabytes'));
@@ -215,9 +221,8 @@ return view.extend({
 			o = s.taboption('zram', form.ListValue, 'zram_comp_algo', _('ZRam Compression Algorithm'));
 			o.optional    = true;
 			o.default     = 'lzo';
-			o.value('lzo', 'lzo');
-			o.value('lz4', 'lz4');
-			o.value('zstd', 'zstd');
+			for (let algo of algos)
+				o.value(algo, algo);
 		}
 
 		/*
