@@ -250,11 +250,14 @@ function renderMigrationContent(errorMessage) {
 		E('h4', _('Migrate IPsec configuration')),
 		E('p', _('A legacy IPsec configuration was found.') + ' ' +
 			_('It must be migrated to the new swanctl uci schema in ' +
-				'\'/etc/config/ipsec\' before it can be managed here.')),
-		E('p', _('Before migration, the file \'/etc/config/ipsec\' is moved to \'/etc/config/ipsec_bak\'.') + ' ' +
+				'/etc/config/ipsec before it can be managed here.')),
+		E('p', _('Before migration, the file /etc/config/ipsec is moved to /etc/config/ipsec_bak.') + ' ' +
 			_('The migration may require manual intervention.') + ' ' +
-			_('Therefore, the VPN is not restarted.')),
-		E('p', _('Warning: The migration will drop all IPsec VPN connections.'))
+			_('Therefore, the migrated configuration is not applied immediately.') + ' ' +
+			_('Please review it and apply it with Save & Apply.')),
+		E('p', _('Warning: Applying the migrated configuration will drop all IPsec VPN connections.') + ' ' +
+			_('They are re-established afterwards if the new configuration is working.') + ' ' +
+			_('If the web interface is accessed via an IPsec VPN connection and is no longer reachable after applying, the configuration is rolled back to the previous state.'))
 	]);
 
 	if (errorMessage)
