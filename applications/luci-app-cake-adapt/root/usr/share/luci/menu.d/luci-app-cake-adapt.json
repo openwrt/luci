@@ -1,0 +1,21 @@
+{
+	"admin/services/cake-adapt": {
+		"title": "CAKE Adapt",
+		"order": 60,
+		"action": { "type": "firstchild" },
+		"depends": {
+			"acl": [ "luci-app-cake-adapt" ],
+			"uci": { "cake-adapt": true }
+		}
+	},
+	"admin/services/cake-adapt/status": {
+		"title": "Status",
+		"order": 10,
+		"action": { "type": "view", "path": "cake-adapt/status" }
+	},
+	"admin/services/cake-adapt/config": {
+		"title": "Configuration",
+		"order": 20,
+		"action": { "type": "view", "path": "cake-adapt/config" }
+	}
+}
