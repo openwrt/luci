@@ -39,11 +39,11 @@ let ouiData = [];
 
 return view.extend({
 	load() {
+		this.loadOUI();
 		return Promise.all([
 			this.loadHosts(),
 			this.loadPeriods(),
-			this.loadData(),
-			this.loadOUI()
+			this.loadData()
 		]);
 	},
 
