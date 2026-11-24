@@ -251,6 +251,14 @@ static void umap_file(struct file_map *m)
 		close(m->fd);
 }
 
+static int is_wireless(const char *ifname)
+{
+	char path[512];
+
+	snprintf(path, sizeof(path), "/sys/class/net/%s/phy80211", ifname);
+	return !access(path, F_OK);
+}
+
 static void * iw_open(void)
 {
 	void *iwlib = NULL;
@@ -515,7 +523,8 @@ static int run_daemon(void)
 				if (!strcmp(e->d_name, "lo") || !strcmp(e->d_name, ".") || !strcmp(e->d_name, ".."))
 					continue;
 
-				if (iw && iw_update(iw, e->d_name, &rate, &rssi, &noise))
+				if (iw && is_wireless(e->d_name) &&
+				    iw_update(iw, e->d_name, &rate, &rssi, &noise))
 					update_radiostat(e->d_name, rate, rssi, noise);
 
 				for (i = 0; i < sizeof(sysfs_stats)/sizeof(sysfs_stats[0]); i++)
