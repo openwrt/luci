@@ -10,3 +10,5 @@ PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 
 include ../../luci.mk
+
+# call BuildPackage - OpenWrt buildroot signature
