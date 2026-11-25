@@ -3,7 +3,7 @@
 
 'use strict';
 
-import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, readlink, realpath, error } from 'fs';
+import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, readlink, realpath, error, writefile } from 'fs';
 import { cursor } from 'uci';
 
 import { init_list, init_index, init_enabled, conntrack_list, process_list } from 'luci.sys';
@@ -170,6 +170,59 @@ const methods = {
 			};
 
 			return result;
+		}
+	},
+
+	getWakealarm: {
+		call: function() {
+			let path = '/sys/class/rtc/rtc0/wakealarm';
+			let cur = trim(readfile(path));
+
+			if (cur != null && match(cur, /^[1-9][0-9]*$/)) {
+				let epoch = int(cur);
+				if (epoch != null && epoch > time() && epoch <= 0x7fffffff)
+					return { wakealarm: epoch };
+			}
+
+			return { wakealarm: 0 };
+		}
+	},
+
+	setWakealarm: {
+		args: { epoch: 0 },
+		call: function(request) {
+			let path = '/sys/class/rtc/rtc0/wakealarm';
+			let epoch = request.args.epoch;
+
+			if (type(epoch) != 'int' || epoch < 0 || epoch > 0x7fffffff)
+				return { result: -1, error: 'Invalid wake-up timestamp' };
+
+			if (epoch > 0 && epoch <= time())
+				return { result: -1, error: 'Wake-up timestamp must be in the future' };
+
+			if (!access(path, 'w'))
+				return { result: -1, error: 'RTC wakealarm is not writable' };
+
+			let cur = trim(readfile(path));
+
+			if (cur != null && cur != '') {
+				if (writefile(path, '0\n') == null)
+					return { result: -1, error: 'Failed to clear existing wakealarm' };
+			}
+
+			if (epoch > 0) {
+				if (writefile(path, sprintf('%d\n', epoch)) == null) {
+					if (cur != null && match(cur, /^[1-9][0-9]*$/)) {
+						let prev = int(cur);
+						if (prev != null && prev > time() && prev <= 0x7fffffff)
+							writefile(path, sprintf('%d\n', prev));
+					}
+
+					return { result: -2, error: 'Failed to set new wakealarm' };
+				}
+			}
+
+			return { result: 0 };
 		}
 	},
 
