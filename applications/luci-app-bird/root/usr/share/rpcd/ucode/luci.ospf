@@ -653,13 +653,24 @@ function error(message) {
 }
 
 function reconfigured(result) {
-	return result.ok && !!match(result.text, /(^|\n)Reconfigured(\n|$)/);
+	return result.ok && !!match(result.text,
+		/(^|\n)(Reconfigured|Reconfiguration in progress|Reconfiguration already in progress, queueing new config)(\n|$)/);
+}
+
+function waitForService() {
+	// A configure request may be accepted while protocol shutdown is still in progress.
+	return command('for attempt in 1 2 3 4 5; do ' +
+		'/usr/sbin/birdc show status 2>/dev/null | grep -Fxq "Daemon is up and running" && exit 0; ' +
+		'[ "$attempt" -eq 5 ] || sleep 1; done; exit 1').ok;
+}
+
+function reloadConfiguration() {
+	return reconfigured(command('/usr/sbin/birdc configure 2>/dev/null')) && waitForService();
 }
 
 function restoreService(was_running) {
 	if (was_running)
-		return reconfigured(command('/usr/sbin/birdc configure 2>/dev/null')) &&
-			command('/usr/sbin/birdc show status 2>/dev/null').ok;
+		return reloadConfiguration();
 	command('/etc/init.d/bird stop 2>/dev/null');
 	return !command('/etc/init.d/bird running 2>/dev/null').ok &&
 		!command('/usr/sbin/birdc show status 2>/dev/null').ok;
@@ -679,10 +690,9 @@ function installConfig(staged, backup, candidate, original, expected, preserve) 
 	const running = command('/usr/sbin/birdc show status 2>/dev/null').ok;
 	if (!rename(staged, config))
 		return error('Could not replace the BIRD configuration.');
-	const result = running ? command('/usr/sbin/birdc configure 2>/dev/null') :
-		command('/etc/init.d/bird start >/dev/null 2>&1 && ' +
-			'for delay in 0 1 2; do /usr/sbin/birdc show status 2>/dev/null && exit 0; sleep 1; done; exit 1');
-	if (running ? reconfigured(result) : result.ok) {
+	const applied = running ? reloadConfiguration() :
+		command('/etc/init.d/bird start >/dev/null 2>&1').ok && waitForService();
+	if (applied) {
 		const enabled = system('/etc/init.d/bird enable >/dev/null 2>&1') == 0;
 		return { ok: true, boot_enabled: enabled };
 	}
