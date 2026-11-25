@@ -5,7 +5,6 @@ import { popen, readfile, writefile, rename, unlink } from 'fs';
 
 const config = '/etc/bird.conf';
 const marker = '# luci-app-bird: ';
-const previous_marker = '# luci-app-ospf: ';
 const native_marker = marker + 'native configuration\n';
 const backup_path = '/etc/bird.conf.pre-luci-bird';
 const options = [
@@ -130,19 +129,12 @@ function readLegacy(source) {
 	return settings;
 }
 
-function configurationMarker(source) {
-	for (let prefix in [marker, previous_marker])
-		if (substr(source, 0, length(prefix)) == prefix) return prefix;
-	return null;
-}
-
 function readSettings(source) {
-	const prefix = configurationMarker(source);
-	if (prefix) {
-		if (substr(source, 0, length(prefix) + length('native configuration\n')) == prefix + 'native configuration\n')
-			return { mode: 'native' };
+	if (substr(source, 0, length(native_marker)) == native_marker)
+		return { mode: 'native' };
+	if (substr(source, 0, length(marker)) == marker) {
 		try {
-			const state = json(substr(split(source, '\n')[0], length(prefix)));
+			const state = json(substr(split(source, '\n')[0], length(marker)));
 			if (type(state) == 'object' && type(state.links) == 'array')
 				return { mode: 'managed', state };
 		} catch (error) {
@@ -776,7 +768,7 @@ return {
 				const before = revision();
 				const source = readfile(config) ?? '';
 				if (revision() != before) return error('Configuration changed. Open the editor again.');
-				const contents = configurationMarker(source) ?
+				const contents = substr(source, 0, length(marker)) == marker ?
 					substr(source, index(source, '\n') + 1) : source;
 				return { contents, revision: before };
 			}
