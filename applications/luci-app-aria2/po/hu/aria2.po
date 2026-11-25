@@ -1,15 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-11-05 07:53+0000\n"
-"Last-Translator: Kövecses József <kovecses@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-11-22 21:47+0000\n"
+"Last-Translator: foxi <foxi69@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/hu/>\n"
 "Language: hu\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -21,7 +20,7 @@ msgstr "További BT követő"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:556
 msgid "Advanced Options"
-msgstr "Speciális beállítások"
+msgstr "Haladó beállítások"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:309
 msgid "All proxy"
@@ -154,11 +153,11 @@ msgstr "IPv6 DHT funkcionalitás engedélyezése."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:435
 msgid "Enable Local Peer Discovery."
-msgstr "Helyi partnerfelderítés engedélyezése."
+msgstr "Helyi peer-felderítés engedélyezése."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:444
 msgid "Enable Peer Exchange extension."
-msgstr "Partnerkicserélés kiterjesztés engedélyezése."
+msgstr "Peer-kicserélés kiterjesztés engedélyezése."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:579
 msgid "Enable disk cache (in bytes), set 0 to disabled."
@@ -171,7 +170,7 @@ msgstr "Naplózás engedélyezése"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:442
 msgid "Enable peer exchange"
-msgstr "Partnerkicserélés engedélyezése"
+msgstr "Peer-kicserélés engedélyezése"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:306
 msgid "Enable proxy"
@@ -262,7 +261,7 @@ msgid ""
 "download speed in some cases."
 msgstr ""
 "Ha az egyes torrentek teljes letöltési sebessége kisebb mint SEBESSÉG, akkor "
-"az aria2 átmenetileg megnöveli a partnerek számát, hogy nagyobb letöltési "
+"az aria2 átmenetileg megnöveli a peerek számát, hogy nagyobb letöltési "
 "sebességet próbáljon. Ennek a beállításnak az előnyben részesített letöltési "
 "sebességgel történő beállítása megnövelheti a letöltési sebességet néhány "
 "esetben."
@@ -361,7 +360,7 @@ msgstr "Legnagyobb összesített feltöltési korlát"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:509
 msgid "Max peers"
-msgstr "Legtöbb partner"
+msgstr "Legtöbb peer"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:399
 msgid "Max tries"
@@ -416,7 +415,7 @@ msgstr "Írja be a token hosszát:"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:530
 msgid "Prefix of peer ID"
-msgstr "Partnerazonosító előtagja"
+msgstr "Peer-azonosító előtagja"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:341
 msgid "Private key"
@@ -495,7 +494,7 @@ msgstr ""
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:514
 msgid "Request peer speed limit"
-msgstr "Partner-sebességkorlát kérése"
+msgstr "Peer-sebességkorlát kérése"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:403
 msgid "Retry wait"
@@ -503,7 +502,7 @@ msgstr "Újrapróbálás várakozása"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:209
 msgid "Run daemon as user"
-msgstr "Démon futtatása felhasználóként"
+msgstr "Háttérfolyamat futtatása felhasználóként"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:194
 msgid "Running Status"
@@ -708,8 +707,8 @@ msgid ""
 msgstr ""
 "Megosztási idő megadása percben. Ha a „Megosztási arány” beállítás meg van "
 "adva ezzel a beállítással együtt, akkor a megosztás befejeződik, ha a "
-"feltételek legalább egyike kielégítésre kerül. A 0 megadása letiltja a "
-"megosztást a letöltés befejezése után."
+"feltételek legalább egyike teljesül. A 0 megadása letiltja a megosztást a "
+"letöltés befejezése után."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -725,7 +724,7 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
 msgstr ""
-"A partnerek legnagyobb számának megadása torrentenként. A 0 azt jeleni, hogy "
+"A peerek legnagyobb számának megadása torrentenként. A 0 azt jeleni, hogy "
 "korlátlan."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:531
@@ -735,11 +734,11 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
-"A partnerazonosító előtagjának megadása. A BitTorrentben lévő "
-"partnerazonosító 20 bájt hosszúságú. Ha több mint 20 bájt van megadva, akkor "
-"csak az első 20 bájt lesz használva. Ha kevesebb mint 20 bájt van megadva, "
-"akkor véletlenszerű bájtadatok lesznek hozzáadva, hogy kiegészítsék a "
-"hosszát 20 bájtra."
+"A peer-azonosító előtagjának megadása. A BitTorrentben lévő peer-azonosító "
+"20 bájt hosszúságú. Ha több mint 20 bájt van megadva, akkor csak az első 20 "
+"bájt lesz használva. Ha kevesebb mint 20 bájt van megadva, akkor "
+"véletlenszerű bájtadatok lesznek hozzáadva, hogy kiegészítsék a hosszát 20 "
+"bájtra."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:525
 msgid ""
@@ -810,8 +809,8 @@ msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
 msgstr ""
-"A FÁJLBAN lévő hitelesítésszolgáltató használata a partnerek ellenőrzéséhez. "
-"A tanúsítványfájlnak PEM formátumban kell lennie és tartalmazhat több CA-"
+"A FÁJLBAN lévő hitelesítésszolgáltató használata a peerek ellenőrzéséhez. A "
+"tanúsítványfájlnak PEM formátumban kell lennie és tartalmazhat több CA-"
 "tanúsítványt."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:284
@@ -873,8 +872,8 @@ msgstr "Felhasználónév és jelszó"
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
-"A „CA-tanúsítvány” beállításban meghatározott tanúsítványokat használó "
-"partner ellenőrzése."
+"A „CA-tanúsítvány” beállításban meghatározott tanúsítványokat használó peer "
+"ellenőrzése."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:233
 msgid "Warn"

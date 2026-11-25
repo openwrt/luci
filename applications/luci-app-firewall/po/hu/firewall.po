@@ -1,9 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-11-05 07:53+0000\n"
-"Last-Translator: Kövecses József <kovecses@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-11-22 21:47+0000\n"
+"Last-Translator: foxi <foxi69@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/hu/>\n"
 "Language: hu\n"
@@ -11,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -247,7 +246,7 @@ msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
 "Kapcsolatkövetés-segítők automatikus hozzárendelése a forgalom protokollja "
-"és portja alapján."
+"és portja alapján"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:62
@@ -298,8 +297,8 @@ msgid ""
 msgstr ""
 "Az egyéni szabályok lehetővé teszik tetszőleges iptables parancsok "
 "végrehajtását, amelyeket a tűzfal keretrendszer egyébként nem fed le. A "
-"parancsok minden tűzfal-újraindítás után végrehajtásra kerülnek, közvetlenül "
-"az alapértelmezett szabálykészletek betöltődése után."
+"parancsok minden tűzfal-újraindítás után lefutnak, közvetlenül az "
+"alapértelmezett szabálykészletek betöltődése után."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:417
 msgid "DSCP classification"
@@ -940,10 +939,10 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"A megfelelő csomagmezők.<br />Elrendezés: <em>direction_datatype</em>. pl.: "
-"<code>src_port, dest_net</code>.<br />Útvonal: <code>src, dst</code>. "
-"Adattípusok: <code>ip, port, mac, net, set</code>.<br />Az irány előtagok "
-"nem kötelezőek.<br />Megjegyzés: a <code>set</code> adattípust az fw4 nem "
+"Az illesztendő csomagmezők.<br />Szintaxis: <em>direction_datatype</em>, "
+"pl.: <code>src_port, dest_net</code>.<br />Irányok: <code>src, dst</code>. "
+"Adattípusok: <code>ip, port, mac, net, set</code>.<br />Az irány előtag "
+"opcionális.<br />*Megjegyzés: a <code>set</code> adattípust az fw4 nem "
 "támogatja."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:356
@@ -972,9 +971,8 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:189
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
 msgstr ""
-"Elérési út a <abbr title=\"Osztály nélküli tartományok közötti útválasztás "
-"(Classless Inter-Domain Routing)\">CIDR</abbr>-ek, alhálózatok, gazdagép IP-"
-"címek, stb. fájljához.<br />"
+"Elérési út a CIDR-eket, alhálózatokat, gépek IP-címeit stb. tartalmazó "
+"fájlhoz.<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:152
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:26
@@ -1003,11 +1001,11 @@ msgstr "Protokoll"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:296
 msgid ""
 "Redirect matched incoming traffic to the given port on the internal host"
-msgstr "Egyező bejövő forgalom átirányítása a belső gép megadott portjára."
+msgstr "Egyező bejövő forgalom átirányítása a belső gép megadott portjára"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:291
 msgid "Redirect matched incoming traffic to the specified internal host"
-msgstr "Egyező bejövő forgalom átirányítása a megadott belső gépre."
+msgstr "Egyező bejövő forgalom átirányítása a megadott belső gépre"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:123
 msgid "Refer To External Set"
@@ -1133,22 +1131,22 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:514
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:384
 msgid "Start Date (yyyy-mm-dd)"
-msgstr "Kezdés dátuma<br />(ÉÉÉÉ-HH-NN)"
+msgstr "Kezdés dátuma (ÉÉÉÉ-HH-NN)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:506
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:376
 msgid "Start Time (hh:mm:ss)"
-msgstr "Kezdés ideje<br />(ÓÓ.PP.MM)"
+msgstr "Kezdés ideje (ÓÓ:PP:MM)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:518
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:388
 msgid "Stop Date (yyyy-mm-dd)"
-msgstr "Leállítás dátuma<br />(ÉÉÉÉ-HH-NN)"
+msgstr "Leállítás dátuma (ÉÉÉÉ-HH-NN)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:510
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:380
 msgid "Stop Time (hh:mm:ss)"
-msgstr "Leállítás ideje<br />(ÓÓ.PP.MM)"
+msgstr "Leállítás ideje (ÓÓ:PP:MM)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:131
 msgid "Storage Method"
@@ -1164,7 +1162,7 @@ msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
 msgstr ""
-"A meglévő tűzfalkonfigurációt módosítani kell a LuCI megfelelő működéséhez."
+"A meglévő tűzfalbeállítást módosítani kell a LuCI megfelelő működéséhez."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:37
 msgid ""
@@ -1185,12 +1183,12 @@ msgid ""
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
 "Az alábbi beállítások vezérlik a továbbítási szabályokat a jelenlegi zóna "
-"(%s) és a többi zóna között. A <em>célzónák</em> fedik le a továbbított "
-"forgalmat, <strong>amelynek forrása %q</strong>. A <em>forrászónák</em> "
-"illesztik a továbbított forgalmat más zónákból, <strong>amelynek célja %q</"
-"strong>. A továbbítási szabály <em>egyirányú</em>, például egy továbbítás "
-"LAN-ból WAN-ba <em>nem</em> jelenti azt, hogy a továbbítás WAN-ból LAN-ba is "
-"engedélyezett."
+"(%s) és a többi zóna között. A <em>célzónák</em> a <strong>%q zónából "
+"induló</strong> továbbított forgalomra vonatkoznak. A <em>forrászónák</em> a "
+"más zónákból érkező, <strong>%q zónába tartó</strong> továbbított forgalomra "
+"illeszkednek. A továbbítási szabály <em>egyirányú</em>, például a lan-ból "
+"wan-ba történő továbbítás <em>nem</em> jelenti azt, hogy a wan-ból lan-ba "
+"történő továbbítás is engedélyezett."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:124
 msgid ""
@@ -1290,7 +1288,7 @@ msgid ""
 msgstr ""
 "A forgalmi szabályok a különböző zónák között utazó csomagokra vonatkozó "
 "szabályokat határozzák meg, például bizonyos gépek közötti forgalom "
-"visszautasításához vagy WAN-portok megnyitásához az útválasztón."
+"visszautasításához vagy WAN-portok megnyitásához a routeren."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:486
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:356
@@ -1306,9 +1304,9 @@ msgid ""
 "Unit: seconds. Default <code>0</code> means the entry is added permanently "
 "to the set.<br />Max: 2147483 seconds."
 msgstr ""
-"Mértékegység: másodperc. Max: 2 147 483 másodperc.<br />Az alapértelmezett "
-"<code>0</code> azt jelenti, hogy a bejegyzés véglegesen hozzáadódik a "
-"készlethez."
+"Mértékegység: másodperc. Az alapértelmezett <code>0</code> azt jelenti, hogy "
+"a bejegyzés véglegesen hozzáadódik a készlethez.<br />Legfeljebb 2147483 "
+"másodperc."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:339
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:457
@@ -1349,7 +1347,7 @@ msgid ""
 "the updated configuration."
 msgstr ""
 "A „Folytatás” gomb megnyomására a \"SNAT\" célú \"átirányítás\" szakaszok "
-"\"NAT\" szakaszokká alakulnak, és a tűzfal újraindul a frissített "
+"\"nat\" szakaszokká alakulnak, és a tűzfal újraindul a frissített "
 "beállítások alkalmazásához."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:313
@@ -1426,7 +1424,7 @@ msgid ""
 "destination zone is used."
 msgstr ""
 "Zónák, amikből tükrözési szabályokat kell létrehozni. Ha nincs beállítva, "
-"csak a célzóna kerül felhasználásra."
+"csak a célzónát használja."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:411
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68

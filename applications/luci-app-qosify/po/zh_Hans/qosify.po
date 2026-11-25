@@ -8,8 +8,8 @@ msgstr ""
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsqosify/zh_Hans/>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"PO-Revision-Date: 2026-10-25 22:46+0000\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"PO-Revision-Date: 2026-11-22 12:33+0000\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1318
 msgid "\"%s\" is not a value qosify accepts for %s."
@@ -105,7 +105,7 @@ msgstr "%s 不在默认列表中— qosify 不加载它，因此规则标签页�
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:437
 msgid "%s is not one plain statement in this section — edit %s directly"
-msgstr ""
+msgstr "%s 不是这个部分中的一个 plain statement —— 直接编辑 %s"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:352
 msgid ""
@@ -180,10 +180,12 @@ msgid ""
 "hyphens — qosify 143d71d (snapshots) drops it otherwise, and 24.10 and 25.12 "
 "paste it into a tc command run with sh -c as root"
 msgstr ""
+"%s： %s 只能包含字母、数字、点、下划线和连字符—— 不然 qosify 143d71d (快照) "
+"会丢弃它， 24.10 和 25.12 将它粘贴进 tc 命令，通过 sh-c 以 root 权限运行"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2084
 msgid "%s: multiqueue is set, but %s has one queue, so qosify uses plain cake"
-msgstr ""
+msgstr "%s： 设置了多队列，但 %s 有一个队列，因此 qosify 使用 plain cake"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1215
 msgid "(alias)"
@@ -300,7 +302,7 @@ msgstr "拒绝了二进制内容"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1631
 msgid "Bytes"
-msgstr ""
+msgstr "字节"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:82
 msgid "CAKE diffserv mode"
@@ -308,11 +310,11 @@ msgstr "CAKE diffserv 模式"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:93
 msgid "CAKE egress options"
-msgstr "CAKE 出口选项"
+msgstr "CAKE 出站选项"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:842
 msgid "CAKE egress options, space separated."
-msgstr "CAKE 出口选项，空格隔开。"
+msgstr "CAKE 出站选项，空格隔开。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:92
 msgid "CAKE ingress options"
@@ -324,7 +326,7 @@ msgstr "CAKE 入口选项，空格隔开。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:94
 msgid "CAKE options for ingress + egress"
-msgstr "CAKE 出口+入口选项"
+msgstr "CAKE 出站+入站选项"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:87
 msgid ""
@@ -441,6 +443,10 @@ msgid ""
 "override only when the DSCP field is zero (as described from qosify c698349; "
 "24.10 and 25.12 do not honour it)."
 msgstr ""
+"DSCP 代码点： CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF （NQB 需要 2026 年 6 月"
+"的 qosify；24.10 和 25.12 没有它）。也接受 0 到 63 的原始值，任何 dscp_* 值也"
+"可以命名一个类。仅在 DSCP 字段为 0 时加上 + 前缀进行覆盖（如 qosify c698349 "
+"所述；24.10 和 25.12 不遵照它）。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:66
 msgid "DSCP value for ICMP packets"
@@ -452,7 +458,7 @@ msgstr "批量标记的数据包的 DSCP 值"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:74
 msgid "DSCP value for egress"
-msgstr "DSCP 出口值"
+msgstr "DSCP 出站值"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:73
 msgid "DSCP value for ingress"
@@ -460,7 +466,7 @@ msgstr "DSCP 入口值"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:72
 msgid "DSCP value for ingress and egress, where they are not set"
-msgstr "未设置 DSCP 出口值和入口值"
+msgstr "未设置 DSCP 出站和入站值"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:67
 msgid "DSCP value for priority-marked packets"
@@ -495,6 +501,11 @@ msgid ""
 "udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/"
 "bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled)."
 msgstr ""
+"没有 key 时应用默认的 qosify —— 接口：mode diffserv4, ingress 1, egress 1, "
+"nat 1, host_isolate 1, autorate_ingress 0, multiqueue 0。设备：除 nat 0 外都"
+"一样。默认：timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/"
+"dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len "
+"0 (disabled)。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1415
 msgid "Description"
@@ -534,7 +545,7 @@ msgstr "下载"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1991
 msgid "Download (ingress)"
-msgstr ""
+msgstr "下载（入站）"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:823
 msgid "Download bandwidth"
@@ -563,7 +574,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:842
 msgid "Egress CAKE options"
-msgstr "出口 CAKE 选项"
+msgstr "CAKE 出站选项"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2455
 msgid "Empty file"
@@ -593,7 +604,7 @@ msgstr "启用 CAKE 主机隔离"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:81
 msgid "Enable egress shaping"
-msgstr "启用出口整形"
+msgstr "启用出站流量整形"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:80
 msgid "Enable ingress shaping"
@@ -660,6 +671,8 @@ msgid ""
 "Error: invalid characters in bandwidth or options fields. Use letters, "
 "digits, spaces, dots, underscores and hyphens only."
 msgstr ""
+"错误：带宽或选项字段中无效的字符。仅使用字母、数字、空格、点、下划线和连字符"
+"。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2227
 msgid "Error: name must be a device or interface name"
@@ -781,6 +794,8 @@ msgid ""
 "Match not loaded by qosify on line %s — ports 1-%d, one IPv4/IPv6 address "
 "(no CIDR or %%zone), or dns:, dns_c:, dns_q:"
 msgstr ""
+"qosify 没有在第 %s 行上加载匹配——端口 1-%d， 一个 IPv4/IPv6 地址 (无 CIDR 或 "
+"%%区域)，或 dns:， dns_c:， dns_q："
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:69
 msgid "Maximum average packet length for marking a flow as priority"
@@ -788,7 +803,7 @@ msgstr "将数据流标记为优先的最大平均数据包长度"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1629
 msgid "Measure"
-msgstr ""
+msgstr "测量"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:837
 msgid "Minimum packet unit (MPU)"
@@ -812,7 +827,7 @@ msgstr "第 %s 行上有超过 2 个字段 — qosify 将剩余行读取为 DSCP
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:832
 msgid "Multiqueue CAKE"
-msgstr ""
+msgstr "多队列 CAKE"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:830
 msgid "NAT awareness"
@@ -840,7 +855,7 @@ msgstr "尚无 DSCP 流量。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1881
 msgid "No class traffic yet."
-msgstr ""
+msgstr "还没有类流量。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1213
 msgid "No classes defined in %s"
@@ -939,11 +954,11 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1631
 msgid "Packets"
-msgstr ""
+msgstr "数据包"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2585
 msgid "Port must be 1-%d."
-msgstr ""
+msgstr "端口必须为 1-%d。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2581
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2584
@@ -1292,7 +1307,7 @@ msgstr "上传并应用"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1991
 msgid "Upload (egress)"
-msgstr ""
+msgstr "上传（出站）"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2444
 msgid "Upload and apply"
@@ -1325,7 +1340,7 @@ msgstr "已运行时长"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:86
 msgid "Use cake_mq instead of cake on devices with more than one queue"
-msgstr ""
+msgstr "在有不止一个队列的设备上使用 cake_mq 而不是 cake"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:838
 msgid "VLAN tags"
@@ -1380,12 +1395,16 @@ msgid ""
 "bandwidth_down does not look like a tc rate (100mbit, 12MBps; leave empty "
 "for unlimited) — passing it through anyway"
 msgstr ""
+"bandwidth_down 看上去不像一个 tc 速率 （100mbit, 12MBps；留空代表无限制）—— "
+"仍然传递它"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2193
 msgid ""
 "bandwidth_up does not look like a tc rate (100mbit, 12MBps; leave empty for "
 "unlimited) — passing it through anyway"
 msgstr ""
+"bandwidth_up 看上去不像一个 tc 速率 （100mbit, 12MBps；留空代表无限制）—— 仍"
+"然传递它"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1117
 msgid ""
@@ -1402,7 +1421,7 @@ msgstr "%s 设备"
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1006
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/status/include/75_qosify.js:76
 msgid "device: %s, ingress: %s, egress: %s"
-msgstr "设备：%s，入口：%s，接口：%s"
+msgstr "设备：%s，入站：%s，出站：%s"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:355
 msgid ""
@@ -1440,7 +1459,7 @@ msgstr "不活跃"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1215
 msgid "ingress %s, egress %s"
-msgstr "入口 %s，出口 %s"
+msgstr "入站 %s，出站 %s"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:348
 msgid "ingress and egress are both 0 — nothing is shaped"
@@ -1466,7 +1485,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:340
 msgid "multiqueue is set, but this qosify.init does not pass it to qosify"
-msgstr ""
+msgstr "设置了多队列，但这个 qosify.init 不把它传给 qosify"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:328
 msgid ""
@@ -1578,7 +1597,7 @@ msgstr "qosify 包模板"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1634
 msgid "qosify reports packets only per class."
-msgstr ""
+msgstr "qosify 只按照类报告数据包。"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1462
 msgid "qosify-status"
@@ -1634,7 +1653,7 @@ msgstr "总计"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/status/include/75_qosify.js:36
 msgid "unlimited"
-msgstr ""
+msgstr "无限制"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1267
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1299

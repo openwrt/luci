@@ -8,8 +8,8 @@ msgstr ""
 "luciapplicationsshunt/pl/>\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"PO-Revision-Date: 2026-11-04 21:09+0000\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"PO-Revision-Date: 2026-11-21 18:40+0000\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:420
 msgid "%d name(s) every %ds"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:48
 msgid "%d of %d shown"
-msgstr ""
+msgstr "%d z %d wyświetlono"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:101
 msgid "%d pkt matched"
@@ -47,7 +47,7 @@ msgstr "%ds"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:132
 msgid "(limit)"
-msgstr ""
+msgstr "(limit)"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:257
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:127
@@ -57,7 +57,7 @@ msgstr "Akcja"
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:62
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:48
 msgid "Action failed: %s"
-msgstr ""
+msgstr "Akcja nie powiodła się: %s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:107
 msgid "Add policy"
@@ -69,7 +69,7 @@ msgstr "Adres"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:300
 msgid "Address begins with …"
-msgstr ""
+msgstr "Adres zaczyna się od…"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:524
 msgid ""
@@ -325,7 +325,7 @@ msgstr "Utrzymaj ruch lokalny"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:507
 msgid "Learned Address Limit"
-msgstr ""
+msgstr "Limit nauczonych adresów"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:443
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:171
@@ -334,7 +334,7 @@ msgstr "Nauczone adresy"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:198
 msgid "Learned addresses (%d of %d shown)"
-msgstr ""
+msgstr "Nauczone adresy (widoczne %d z %d)"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:199
 msgid "Learned addresses (%d)"
@@ -380,6 +380,12 @@ msgid ""
 "with forged DNS answers; raise it only if a policy with a very large list "
 "reaches it."
 msgstr ""
+"Większość adresów, które ma jeden nauczony zestaw, obowiązuje zgodnie z "
+"polityką i rodziną adresów. Adresy znajdujące się poza nim nie są nauczone, "
+"dopóki starsze nie wygasną i w tym czasie korzystają z normalnego łącza. "
+"Ogranicza to to, co host w obserwowanym segmencie może zrobić ze "
+"sfałszowanymi odpowiedziami DNS; należy go zgłosić tylko wtedy, gdy dotrze "
+"do niego polityka z bardzo długą listą."
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:152
 msgid "Name has a byte outside a-z 0-9 - _"
@@ -449,6 +455,10 @@ msgid ""
 "policy with a single interface. Point to point interfaces need no gateway at "
 "all."
 msgstr ""
+"Jest to wymagane tylko wtedy, gdy brama wykryta przez netifd jest "
+"niepoprawna, i dotyczy wyłącznie polityki przypisanej do pojedynczego "
+"interfejsu. W przypadku interfejsów typu point-to-point brama nie jest w "
+"ogóle potrzebna."
 
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:23
 msgid "Overview"
@@ -672,6 +682,14 @@ msgid ""
 "and move to the next one when it goes down or, with probe targets set, stops "
 "answering; running connections stay where they started."
 msgstr ""
+"Urządzenie lub interfejs logiczny, na które kieruje dana polityka "
+"trasowania. Nazwa określona w netifd jest tłumaczona na odpowiadające jej "
+"urządzenie; każda inna nazwa urządzenia jest używana w podanej postaci. "
+"Można wskazać kilka interfejsów, które są sprawdzane kolejno: nowe "
+"połączenia są kierowane do pierwszego dostępnego interfejsu, a w razie jego "
+"awarii (lub braku odpowiedzi, jeśli skonfigurowano cele sprawdzania – "
+"przekierowywane do kolejnego; istniejące połączenia pozostają przypisane do "
+"interfejsu, przez który zostały nawiązane."
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:154
 msgid ""
@@ -742,6 +760,12 @@ msgid ""
 "Set is shown in part, the entries with the most traffic first - to find one "
 "address in it, enter how it begins."
 msgstr ""
+"Aktualna zawartość zestawów w nftables. Liczniki są zerowane przy każdym "
+"odświeżeniu wpisu, dzięki czemu odzwierciedlają bieżącą aktywność, a nie "
+"sumaryczne wartości z całego okresu istnienia wpisu. W przypadku dużych "
+"zestawów wyświetlana jest tylko ich część – w pierwszej kolejności "
+"prezentowane są wpisy z największym natężeniem ruchu. Aby odnaleźć konkretny "
+"adres, należy wpisać jego początkowy fragment."
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:445
 msgid "across all policies"
@@ -766,7 +790,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:221
 msgid "in use"
-msgstr ""
+msgstr "w użyciu"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:149
 msgid "interface"
@@ -774,7 +798,7 @@ msgstr "interfejs"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:415
 msgid "limit reached: %s"
-msgstr ""
+msgstr "osiągnięto limit: %s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:407
 msgid "n/a"
@@ -786,7 +810,7 @@ msgstr "brak odpowiedzi z backendu"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:231
 msgid "no answer to the health probes since %s"
-msgstr ""
+msgstr "brak odpowiedzi na sprawdzenia stanu od %s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:333
 msgid "online documentation"
