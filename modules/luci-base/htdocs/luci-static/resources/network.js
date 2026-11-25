@@ -756,6 +756,31 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	formatWifiEncryption: formatWifiEncryption,
 
 	/**
+	 * Describe the Wi-Fi generation of a reported RX or TX rate.
+	 *
+	 * @param {LuCI.network.WifiRateEntry} rate
+	 * The rate metadata reported by iwinfo.
+	 * @returns {null|string}
+	 * A localized generation label, or null when no PHY flag was reported.
+	 */
+	formatWifiRateGeneration(rate) {
+		let generation;
+
+		if (rate.eht)
+			generation = 7;
+		else if (rate.he)
+			generation = 6;
+		else if (rate.vht)
+			generation = 5;
+		else if (rate.ht)
+			generation = 4;
+		else
+			return null;
+
+		return _('Wi-Fi %d').format(generation).replace(/ /g, '\xa0');
+	},
+
+	/**
 	 * Flushes the local network state cache and fetches updated information
 	 * from the remote `ubus` apis.
 	 *
