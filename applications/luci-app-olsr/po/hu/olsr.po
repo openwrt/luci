@@ -1,9 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-11-05 07:53+0000\n"
-"Last-Translator: Kövecses József <kovecses@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-11-22 21:47+0000\n"
+"Last-Translator: foxi <foxi69@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/hu/>\n"
 "Language: hu\n"
@@ -11,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.11.1.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:79
 msgid "Active MID announcements"
@@ -244,7 +243,7 @@ msgstr "Helló"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:147
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:131
 msgid "Hello interval"
-msgstr "HELLO időköz"
+msgstr "Hello időköz"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:392
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:371
@@ -366,7 +365,7 @@ msgid ""
 "multicast."
 msgstr ""
 "IPv6 csoportcímzési cím. Alapértelmezetten „FF02::6D”, a mobil eseti hálózat "
-"útválasztójának kapcsolatszintű csoportcímzése."
+"routerének kapcsolatszintű csoportcímzése."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
@@ -412,10 +411,10 @@ msgid ""
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
 "Ha a jelenlegi átjáróhoz vezető útvonalat meg kell változtatni, akkor ennek "
-"az átjárónak az ETX értéke meg lesz szorozva ezzel az értékkel, mielőtt az "
-"összehasonlításra kerül az újjal. A paraméter egy 0.1 és 1.0 közötti érték "
-"lehet, de az 1.0-hoz közelinek kell lennie, ha megváltoztatják.<br /"
-"><b>FIGYELMEZTETÉS:</b> ezt a paramétert nem szabad együtt használni az "
+"az átjárónak az ETX értékét megszorozza ezzel az értékkel, mielőtt "
+"összehasonlítja az újjal. A paraméter egy 0.1 és 1.0 közötti érték lehet, de "
+"az 1.0-hoz közelinek kell lennie, ha megváltoztatják.<br /><b>"
+"FIGYELMEZTETÉS:</b> ezt a paramétert nem szabad együtt használni az "
 "etx_ffeth mérőszámmal!<br />Alapértelmezetten „1.0”."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:91
@@ -480,7 +479,7 @@ msgid ""
 "It runs on any wifi card that supports ad-hoc mode and of course on any "
 "ethernet device. Visit %s for help and documentation."
 msgstr ""
-"Bármely ad-hoc módot támogató wifikártyán és természetesen bármely Ethernet-"
+"Bármely ad-hoc módot támogató wifi-kártyán és természetesen bármely Ethernet-"
 "eszközön fut. Súgóért és dokumentációért látogasson el ide: %s."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:194
@@ -546,7 +545,7 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
-"A kapcsolatminőség öregedési tényezője (csak 2-es szintű LQ-nál). "
+"A kapcsolatminőség öregedési tényezője (csak 2-es szintű lq-nál). "
 "Finomhangolási paraméter az etx_float és etx_fpm használatakor. A kisebb "
 "értékek az ETX érték lassabb változtatásait jelentik (az engedélyezett "
 "értékek 0.01 és 1.0 között vannak)"
@@ -561,7 +560,7 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"A kapcsolatminőség algoritmusa (csak 2-es szintű LQ-nál).<br /><b>etx_float</"
+"A kapcsolatminőség algoritmusa (csak 2-es szintű lq-nál).<br /><b>etx_float</"
 "b>: lebegőpontos ETX exponenciális öregedéssel<br /><b>etx_fpm</b>: ugyanaz "
 "mint az etx_float, de egész számú aritmetikával<br /><b>etx_ff</b>: ETX "
 "freifunk, egy ETX-változat, amely az összes OLSR-forgalmat használja (csak a "
@@ -710,9 +709,7 @@ msgstr "Hálózat"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:38
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:19
 msgid "Network address"
-msgstr ""
-"Hálózati cím IP-cím/maszk (<abbr title=\"Osztály nélküli tartományok közötti "
-"útválasztás (Classless Inter-Domain Routing)\">CIDR</abbr>) formátumban."
+msgstr "Hálózati cím"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:137
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:131
@@ -746,12 +743,12 @@ msgstr "OLSR – bővítmények"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:35
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:8
 msgid "OLSR Daemon"
-msgstr "OLSR-démon"
+msgstr "OLSR-háttérfolyamat"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:16
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:16
 msgid "OLSR Daemon - Interface"
-msgstr "OLSR-démon – interfész"
+msgstr "OLSR-háttérfolyamat – interfész"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:3
 msgid "OLSR IPv4"
@@ -894,7 +891,7 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
-"Beállítja az útválasztó fő IP-jét (kezdeményező IP). Ez az IP SOHA nem lesz "
+"Beállítja a router fő IP-jét (kezdeményező IP). Ez az IP SOHA nem lesz "
 "megváltoztatva az olsrd működési ideje alatt. Alapértelmezetten 0.0.0.0, "
 "amely az első interfész IP-jének használatát aktiválja."
 
@@ -904,7 +901,7 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
-"Beállítja az útválasztó fő IP-jét (kezdeményező IP). Ez az IP SOHA nem lesz "
+"Beállítja a router fő IP-jét (kezdeményező IP). Ez az IP SOHA nem lesz "
 "megváltoztatva az olsrd működési ideje alatt. Alapértelmezetten ::, amely az "
 "első interfész IP-jének használatát aktiválja."
 
@@ -1007,9 +1004,9 @@ msgid ""
 "The OLSR daemon is an implementation of the Optimized Link State Routing "
 "protocol. As such it allows mesh routing for any network equipment."
 msgstr ""
-"Az OLSR-démon az Optimized Link State Routing (optimalizált kapcsolatállapot-"
-"alapú útválasztás) protokoll megvalósítása. Így bármilyen hálózati eszköz "
-"számára lehetővé teszi a hálós útválasztást."
+"Az OLSR-háttérfolyamat az Optimized Link State Routing (optimalizált "
+"kapcsolatállapot-alapú útválasztás) protokoll megvalósítása. Így bármilyen "
+"hálózati eszköz számára lehetővé teszi a mesh-útválasztást."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:242
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:236
@@ -1071,7 +1068,7 @@ msgstr ""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:9
 msgid "Unable to connect to the OLSR daemon!"
-msgstr "Nem lehet kapcsolódni az OLSR-démonhoz!"
+msgstr "Nem lehet kapcsolódni az OLSR-háttérfolyamathoz!"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:66
 msgid "Uplink"
@@ -1151,9 +1148,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
-"A kifelé menő kapcsolat mely fajtája van exportálva az egyéb "
-"hálócsomópontokhoz. Egy kifelé menő kapcsolat a 0.0.0.0/0, ::ffff:0:0/96 "
-"vagy 2000::/3 helyi HNA-jára történő keresés alapján van felismerve. Az "
+"A kifelé menő kapcsolat mely fajtája van exportálva a többi mesh-"
+"csomóponthoz. Egy kifelé menő kapcsolat a 0.0.0.0/0, ::ffff:0:0/96 vagy "
+"2000::/3 helyi HNA-jára történő keresés alapján van felismerve. Az "
 "alapértelmezett érték „both”."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:80
@@ -1162,10 +1159,10 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
-"A kifelé menő kapcsolat mely fajtája van exportálva az egyéb "
-"hálócsomópontokhoz. Egy kifelé menő kapcsolat a ::ffff:0:0/96 vagy 2000::/3 "
-"helyi HNA6-jára történő keresés alapján van felismerve. Az alapértelmezett "
-"érték „both”."
+"A kifelé menő kapcsolat mely fajtája van exportálva a többi mesh-"
+"csomóponthoz. Egy kifelé menő kapcsolat a ::ffff:0:0/96 vagy 2000::/3 helyi "
+"HNA6-jára történő keresés alapján van felismerve. Az alapértelmezett érték „"
+"both”."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:242
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:236

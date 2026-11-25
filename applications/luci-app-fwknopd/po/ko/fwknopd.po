@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-04-01 16:08+0000\n"
-"Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
+"PO-Revision-Date: 2026-11-24 04:55+0000\n"
+"Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/ko/>\n"
 "Language: ko\n"
@@ -10,19 +10,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
 msgstr ""
-"SPA 클라이언트가 iptables 방화벽 대신 서비스에 대한 액세스를 요청할 수 있도"
-"록 허용합니다."
+"SPA 클라이언트가 iptables 방화벽 자체에 대한 접근뿐만 아니라 이를 경유한 "
+"서비스에 대한 접근도 요청할 수 있도록 허용합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
 msgid "Allow SPA clients to request forwarding destination by DNS name."
-msgstr ""
+msgstr "SPA 클라이언트가 DNS 이름으로 전달 목적지를 요청할 수 있도록 허용합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:437
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:454
@@ -42,7 +42,7 @@ msgstr "사용자 정의 설정"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "/etc/fwknop/access.conf에서 읽어온 사용자 정의 설정입니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -64,12 +64,16 @@ msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"SPA 패킷을 복호화하기 전에 패킷의 진위를 검증하는 데 사용할 (Base64 "
+"인코딩된) HMAC 인증 키를 정의합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"SPA 패킷을 복호화하기 전에 패킷의 진위를 검증하는 데 사용할 HMAC 인증 키를 "
+"정의합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:580
 msgid ""
@@ -84,12 +88,16 @@ msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"수신 SPA 패킷을 복호화하는 데 사용할 (Base64 인코딩된) 대칭 키를 정의합니다. "
+"해당 패킷은 fwknop 클라이언트에서 Rijndael로 암호화한 것입니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
+"수신 SPA 패킷을 복호화하는 데 사용할 대칭 키를 정의합니다. 해당 패킷은 "
+"fwknop 클라이언트에서 Rijndael로 암호화한 것입니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:475
 msgid "Enable Uci/Luci control"
@@ -136,7 +144,7 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
-msgstr "luci-app-fwknopd의 UCI 접근 권한 부여"
+msgstr "luci-app-fwknopd에 UCI 접근 권한 부여"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:566
 msgid "HMAC key type"
@@ -181,6 +189,9 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"/etc/fwknop/access.conf 파일 (및 포함된 파일/폴더/키)을 구문 분석하여, "
+"발견한 모든 스탠자에 대해 QR코드를 생성합니다. 접근 권한 제한으로 /etc/"
+"fwknop 폴더 내 파일만 처리합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:418
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:501
@@ -193,14 +204,14 @@ msgstr "access.conf QR코드 표시"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:596
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
-msgstr ""
+msgstr "fwknopd에서 패킷을 스니핑할 이더넷 인터페이스를 지정합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:443
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:449
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:563
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "HMAC 인증 키를 지정해야 합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:512
 msgid ""
@@ -217,6 +228,8 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"데몬이 수신 대기할 네트워크입니다. 네트워크가 활성화되어 실행 중일 때 데몬이 "
+"자동으로 시작됩니다. 이 옵션은 “PCAP_INTF” 옵션보다 우선합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:503
 msgid ""
@@ -229,14 +242,14 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:509
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "출발지 주소를 지정해야 합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:426
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:432
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:541
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "대칭 키를 지정해야 합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:589
 msgid ""
@@ -251,11 +264,13 @@ msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
 msgstr ""
+"선택 해제 시 /etc/fwknopd의 설정 파일을 그대로 사용하고 여기의 설정을 "
+"무시합니다."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:497
 msgid "access.conf stanzas"
-msgstr "access.conf 항목(Stanza)"
+msgstr "access.conf 스탠자"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:593
 msgid "fwknopd.conf config options"

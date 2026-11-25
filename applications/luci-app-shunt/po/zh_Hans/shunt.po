@@ -8,8 +8,8 @@ msgstr ""
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsshunt/zh_Hans/>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"PO-Revision-Date: 2026-11-08 07:34+0000\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"PO-Revision-Date: 2026-11-22 12:33+0000\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:420
 msgid "%d name(s) every %ds"
@@ -26,7 +26,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:48
 msgid "%d of %d shown"
-msgstr ""
+msgstr "已显示 %d 个，共 %d 个"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:101
 msgid "%d pkt matched"
@@ -46,7 +46,7 @@ msgstr "%d 秒"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:132
 msgid "(limit)"
-msgstr ""
+msgstr "(限制)"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:257
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:127
@@ -56,7 +56,7 @@ msgstr "操作"
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:62
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:48
 msgid "Action failed: %s"
-msgstr ""
+msgstr "操作失败：%s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:107
 msgid "Add policy"
@@ -68,7 +68,7 @@ msgstr "地址"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:300
 msgid "Address begins with …"
-msgstr ""
+msgstr "地址开头为…"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:524
 msgid ""
@@ -223,7 +223,7 @@ msgstr "扩展头链太长"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:163
 msgid "Fall through to the normal uplink"
-msgstr ""
+msgstr "退回正常上行链路"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:263
 msgid "Fallback"
@@ -301,7 +301,7 @@ msgstr "保持本地流量"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:507
 msgid "Learned Address Limit"
-msgstr ""
+msgstr "学到的地址的限制"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:443
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:171
@@ -310,7 +310,7 @@ msgstr "学到的地址"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:198
 msgid "Learned addresses (%d of %d shown)"
-msgstr ""
+msgstr "学到的地址数（显示了 %d 个，共 %d 个）"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:199
 msgid "Learned addresses (%d)"
@@ -420,6 +420,8 @@ msgid ""
 "policy with a single interface. Point to point interfaces need no gateway at "
 "all."
 msgstr ""
+"仅在从 netifd 发现的网关不正确时才需要，仅对于有单一接口的策略。点到点接口根"
+"本无需网关。"
 
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:23
 msgid "Overview"
@@ -627,6 +629,10 @@ msgid ""
 "and move to the next one when it goes down or, with probe targets set, stops "
 "answering; running connections stay where they started."
 msgstr ""
+"这个策略路由进的设备或逻辑接口。netifd 名称解析到其设备；任何其他设备名按输入"
+"的使用。按顺序使用几个接口：新连接前往第一个正常工作的接口，在其出现故障时移"
+"到下个接口或者在设置了探测目标情况下停止响应；运行中的连接留在它们启动的地方"
+"。"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:154
 msgid ""
@@ -688,6 +694,9 @@ msgid ""
 "Set is shown in part, the entries with the most traffic first - to find one "
 "address in it, enter how it begins."
 msgstr ""
+"nftables 集合当前有的东西。刷新一个条目计数器就会重置，因此它们显示近期活动，"
+"而不是生存时间内的总数。大的集合不会全部显示，优先显示流量最多的条目——要在其"
+"中找到一个地址，请输入它如何开始。"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:445
 msgid "across all policies"
@@ -711,7 +720,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:221
 msgid "in use"
-msgstr ""
+msgstr "使用中"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:149
 msgid "interface"
@@ -719,7 +728,7 @@ msgstr "接口"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:415
 msgid "limit reached: %s"
-msgstr ""
+msgstr "达到了限制：%s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:407
 msgid "n/a"
@@ -731,7 +740,7 @@ msgstr "后端无回应"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:231
 msgid "no answer to the health probes since %s"
-msgstr ""
+msgstr "自 %s 起没有回应健康度探测"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:333
 msgid "online documentation"
