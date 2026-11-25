@@ -212,15 +212,31 @@
 	},
 
 	"luci-mod-system-reboot": {
-		"description": "Allow rebooting the device",
+		"description": "Allow rebooting and powering off the device",
+		"read": {
+			"file": {
+				"/sbin/poweroff": [ "list" ],
+				"/sys/class/rtc/rtc0/wakealarm": [ "list" ]
+			},
+			"ubus": {
+				"file": [ "lstat", "read", "stat" ],
+				"luci": [ "getWakealarm" ],
+				"network.device": [ "status" ],
+				"network.interface": [ "dump" ]
+			},
+			"uci": [ "network", "power_schedule" ]
+		},
 		"write": {
 			"file": {
+				"/sbin/poweroff": [ "exec" ],
 				"/sbin/reboot": [ "exec" ]
 			},
 			"ubus": {
 				"file": [ "exec" ],
+				"luci": [ "setWakealarm" ],
 				"system": [ "reboot" ]
-			}
+			},
+			"uci": [ "power_schedule" ]
 		}
 	},
 

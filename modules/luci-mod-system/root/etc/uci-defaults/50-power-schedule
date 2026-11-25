@@ -1,0 +1,7 @@
+#!/bin/sh
+
+[ -f /etc/config/power_schedule ] || touch /etc/config/power_schedule
+/etc/init.d/power-schedule enable
+/etc/init.d/power-schedule start
+
+exit 0

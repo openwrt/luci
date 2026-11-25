@@ -1,0 +1,245 @@
+#!/usr/bin/ucode
+'use strict';
+
+import { open, mkdir, unlink, access, readfile, error } from 'fs';
+import { cursor } from 'uci';
+import { connect } from 'ubus';
+
+const DAY_MAP = {
+	sun: 0,
+	mon: 1,
+	tue: 2,
+	wed: 3,
+	thu: 4,
+	fri: 5,
+	sat: 6,
+};
+
+function parse_hhmm(str) {
+	let m = match(str || '', /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/);
+	if (!m)
+		return null;
+
+	return { hour: int(m[1]), min: int(m[2]) };
+}
+
+const CRONTAB_DIR = '/etc/crontabs';
+const CRONTAB_FILE = '/etc/crontabs/root';
+const MARKER_BEGIN = '# BEGIN power-schedule (managed by luci-mod-system)';
+const MARKER_END = '# END power-schedule';
+const SECTION_RE = /^[A-Za-z0-9_-]+$/;
+const MIN_VALID_EPOCH = 1735689600; /* 2025-01-01 00:00:00 UTC */
+
+function is_clock_valid() {
+	let now = time();
+	if (now < MIN_VALID_EPOCH)
+		return false;
+
+	/* Accept if ntpd has synchronized the system clock */
+	if (access('/var/run/ntpd.done', 'r'))
+		return true;
+
+	/* Otherwise accept if hardware RTC holds a valid timestamp consistent with system time */
+	let rtc_str = trim(readfile('/sys/class/rtc/rtc0/since_epoch'));
+	if (rtc_str != null && match(rtc_str, /^[1-9][0-9]*$/)) {
+		let rtc_epoch = int(rtc_str);
+		let diff = now - rtc_epoch;
+		if (rtc_epoch >= MIN_VALID_EPOCH && diff >= -86400 && diff <= 86400)
+			return true;
+	}
+
+	return false;
+}
+
+function shellquote(s) {
+	return "'" + replace(tostring(s), "'", "'\\''") + "'";
+}
+
+function sync_cron() {
+	let uci = cursor();
+	let sched_lines = [];
+
+	uci.foreach('power_schedule', 'schedule', (s) => {
+		let sec_name = s['.name'];
+		if (s.enabled != '1' || !sec_name || !match(sec_name, SECTION_RE))
+			return;
+
+		let poff = parse_hhmm(s.poweroff_time);
+		let wake = parse_hhmm(s.wakeup_time);
+		if (!poff || !wake)
+			return;
+
+		let days = type(s.days) == 'array' ? s.days : (s.days ? [ s.days ] : []);
+		let cron_days = [];
+
+		for (let d in days) {
+			let num = DAY_MAP[lc(d)];
+			if (num != null && !(num in cron_days))
+				push(cron_days, num);
+		}
+
+		if (length(cron_days) == 0)
+			return;
+
+		sort(cron_days);
+		push(sched_lines, sprintf('%d %d * * %s /usr/libexec/rtc-power-schedule run %s',
+			poff.min, poff.hour, join(',', cron_days), shellquote(sec_name)));
+
+	});
+
+	/* Read existing /etc/crontabs/root and strip any previous managed block */
+	let old_lines = [];
+	let kept = [];
+	let in_block = false;
+	let old = open(CRONTAB_FILE, 'r');
+	if (old) {
+		for (let line = old.read('line'); length(line); line = old.read('line')) {
+			let trimmed = rtrim(line, '\r\n');
+			push(old_lines, trimmed);
+			if (trimmed == MARKER_BEGIN) {
+				in_block = true;
+				continue;
+			}
+			if (trimmed == MARKER_END) {
+				in_block = false;
+				continue;
+			}
+			if (!in_block)
+				push(kept, trimmed);
+		}
+		old.close();
+	}
+
+	if (length(sched_lines) > 0) {
+		push(kept, MARKER_BEGIN);
+		for (let l in sched_lines)
+			push(kept, l);
+		push(kept, MARKER_END);
+	}
+
+	let old_content = length(old_lines) ? join('\n', old_lines) + '\n' : '';
+	let new_content = length(kept) ? join('\n', kept) + '\n' : '';
+
+	if (old_content == new_content)
+		return 0;
+
+	if (length(kept) == 0) {
+		unlink(CRONTAB_FILE);
+	} else {
+		if (!access(CRONTAB_DIR, 'd'))
+			mkdir(CRONTAB_DIR, 0755);
+
+		let fd = open(CRONTAB_FILE, 'w');
+		if (!fd) {
+			warn(`Failed to write ${CRONTAB_FILE}: ${error()}\n`);
+			return 1;
+		}
+		fd.write(new_content);
+		fd.close();
+	}
+
+	system('/etc/init.d/cron reload >/dev/null 2>&1');
+	return 0;
+}
+
+function compute_wakeup_epoch(poff, wake) {
+	let now = time();
+	let lt = localtime(now);
+
+	/* Add 1 day if wake-up time is earlier than or equal to power-off time (overnight) */
+	let add_days = (wake.hour * 60 + wake.min <= poff.hour * 60 + poff.min) ? 1 : 0;
+
+	let target = {
+		year: lt.year,
+		mon: lt.mon,
+		mday: lt.mday + add_days,
+		hour: wake.hour,
+		min: wake.min,
+		sec: 0,
+		isdst: -1,
+	};
+
+	let epoch = timelocal(target);
+
+	/* Ensure target is strictly in the future (e.g. if cron fired a few seconds late) */
+	if (epoch <= now) {
+		target.mday += 1;
+		epoch = timelocal(target);
+	}
+
+	return epoch;
+}
+
+function log_msg(msg) {
+	system('logger -t rtc-power-schedule ' + shellquote(msg));
+}
+
+function run_schedule(sec_name) {
+	if (!sec_name || !match(sec_name, SECTION_RE))
+		return 1;
+
+	let uci = cursor();
+	let s = uci.get_all('power_schedule', sec_name);
+	if (!s || s['.type'] != 'schedule' || s.enabled != '1')
+		return 0;
+
+	let poff = parse_hhmm(s.poweroff_time);
+	let wake = parse_hhmm(s.wakeup_time);
+	if (!poff || !wake) {
+		log_msg('Invalid time format in section ' + sec_name);
+		return 1;
+	}
+
+	if (!is_clock_valid()) {
+		log_msg('System clock is not synchronized; skipping scheduled poweroff for ' + sec_name);
+		return 1;
+	}
+
+	let epoch = compute_wakeup_epoch(poff, wake);
+	if (!epoch || epoch <= time() || epoch > 0x7fffffff) {
+		log_msg('Computed invalid wakeup epoch (' + epoch + ') for ' + sec_name);
+		return 1;
+	}
+
+	let ubus = connect();
+	if (!ubus) {
+		log_msg('Failed to connect to ubus');
+		return 1;
+	}
+
+	/* Respect an already-armed earlier one-shot alarm if present */
+	let cur = ubus.call('luci', 'getWakealarm');
+	let prev_alarm = (cur && type(cur.wakealarm) == 'int' && cur.wakealarm > time()) ? cur.wakealarm : 0;
+	if (prev_alarm > 0 && prev_alarm < epoch)
+		epoch = prev_alarm;
+
+	let res = ubus.call('luci', 'setWakealarm', { epoch });
+	if (!res || res.result != 0) {
+		ubus.disconnect();
+		let err = (res && res.error) ? res.error : 'unknown error';
+		log_msg('Failed to arm RTC wakealarm (' + err + '); aborting poweroff');
+		return 1;
+	}
+
+	log_msg('Armed RTC wakealarm for ' + epoch + '; powering off');
+	let rc = system('/sbin/poweroff');
+	if (rc != 0) {
+		ubus.call('luci', 'setWakealarm', { epoch: prev_alarm });
+		ubus.disconnect();
+		log_msg('Poweroff failed (rc=' + rc + '); rolled back RTC wakealarm');
+		return 1;
+	}
+
+	ubus.disconnect();
+	return 0;
+}
+
+switch (ARGV[0]) {
+case 'sync':
+	exit(sync_cron());
+case 'run':
+	exit(run_schedule(ARGV[1]));
+default:
+	warn('Usage: rtc-power-schedule <sync|run <section>>\n');
+	exit(1);
+}
