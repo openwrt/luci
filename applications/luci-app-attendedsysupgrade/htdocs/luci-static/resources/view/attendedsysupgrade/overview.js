@@ -88,6 +88,25 @@ const apk_repositories_dir = '/etc/apk/repositories.d';
 const apk_keys_dir = '/etc/apk/keys';
 
 /**
+ * Values of the `repositories_mode` option shared with owut that are
+ * supported here, see
+ * https://github.com/efahl/owut/commit/b0fdc16a0143d4c8bc6179353c5fc52c338f76e2
+ * `replace` is not, as it needs kernel information the app doesn't have.
+ */
+const supported_repositories_modes = [ 'append', 'disable' ];
+
+/**
+ * Returns the `repositories_mode` of the owut section, `append` if unset.
+ * The configuration must be loaded.
+ *
+ * @returns {string}
+ */
+function get_repositories_mode() {
+	const mode = uci.get('attendedsysupgrade', 'owut', 'repositories_mode');
+	return (mode == null || mode === '') ? 'append' : String(mode);
+}
+
+/**
  * Reads the contents of all regular files in a directory, sorted by name.
  *
  * @param {string} dir
@@ -116,10 +135,16 @@ function read_dir_files(dir, filter) {
  *
  * Uses the same files as owut, see
  * https://github.com/efahl/owut/commit/2fab581877f3c17542b1836e2df8933554063ace
+ * Nothing is read unless the repositories mode is `append`.
  *
+ * @param {string} mode
+ * The repositories mode
  * @returns {Promise<{repositories: string[], repository_keys: string[]}>}
  */
-async function get_custom_repositories() {
+async function get_custom_repositories(mode) {
+	if (mode != 'append')
+		return { repositories: [], repository_keys: [] };
+
 	const lists = await read_dir_files(apk_repositories_dir,
 		(name) => name != 'distfeeds.list');
 	const repositories = lists
@@ -931,15 +956,17 @@ return view.extend({
 	},
 
 	load: async function () {
+		const config = uci.load('attendedsysupgrade');
 		const promises = await Promise.all([
 			L.resolveDefault(callPackagelist(), {}),
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(fs.stat('/sys/firmware/efi'), null),
-			uci.load('attendedsysupgrade'),
-			get_custom_repositories(),
+			config,
+			config.then(() => get_custom_repositories(get_repositories_mode())),
 		]);
 		this.custom_repositories = promises[4];
 		const data = {
+			repositories_mode: get_repositories_mode(),
 			system_board: promises[1],
 			advanced_mode: uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0,
 			url: uci.get_first('attendedsysupgrade', 'server', 'url').replace(/\/+$/, ''),
@@ -968,6 +995,7 @@ return view.extend({
 	render: function (response) {
 		const data = response[0];
 		const firmware = response[1];
+		const mode_supported = supported_repositories_modes.includes(data.repositories_mode);
 
 		return E('p', [
 			E('h2', _('Attended Sysupgrade')),
@@ -990,11 +1018,18 @@ return view.extend({
 					data.revision
 				)
 			),
+			mode_supported ? '' : E('div', { class: 'alert-message error' }, [
+				E('p', _('The repositories mode "%h" is not supported, so no upgrade can be requested. Choose another mode in the %s.').format(
+					data.repositories_mode, '<a href="%h">%h</a>'.format(
+						L.url('admin/system/attendedsysupgrade/configuration'),
+						_('Configuration')))),
+			]),
 			E(
 				'button',
 				{
 					class: 'btn cbi-button cbi-button-positive important',
 					click: ui.createHandlerFn(this, this.handleCheck, data, firmware),
+					disabled: mode_supported ? null : true,
 				},
 				_('Search for firmware upgrade')
 			),

@@ -47,8 +47,21 @@ used in the upgrade dialog and in the error report. A reference to the
 installed version or branch in a repository url is
 replaced with the target one, further adjustments can be made with the
 `repository_aliases` list in the `owut` section of
-`/etc/config/attendedsysupgrade`. Unlike owut, `repositories_mode 'replace'` is
-not supported, the repositories are always appended to the default ones.
+`/etc/config/attendedsysupgrade`.
+
+The `repositories_mode` option of the same section, also editable in the
+configuration page, controls this, as in owut:
+
+- `append` (default): add the custom repositories to the build request
+- `disable`: don't read nor send any custom repository
+- `replace`: not supported here, as it needs kernel information the app
+  doesn't have; no upgrade can be requested while it is set
+
+```sh
+uci set attendedsysupgrade.owut=owut
+uci set attendedsysupgrade.owut.repositories_mode='disable'
+uci commit attendedsysupgrade
+```
 
 > [!NOTE]
 > Following the announcement of a major OpenWrt upgrade, availability of
