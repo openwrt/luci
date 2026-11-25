@@ -4,9 +4,10 @@
 import { popen, readfile, writefile, rename, unlink } from 'fs';
 
 const config = '/etc/bird.conf';
-const marker = '# luci-app-ospf: ';
-const native_marker = '# luci-app-ospf: native configuration\n';
-const backup_path = '/etc/bird.conf.pre-luci-ospf';
+const marker = '# luci-app-bird: ';
+const previous_marker = '# luci-app-ospf: ';
+const native_marker = marker + 'native configuration\n';
+const backup_path = '/etc/bird.conf.pre-luci-bird';
 const options = [
 	['cost', 10, 1, 65535],
 	['priority', 1, 0, 255],
@@ -129,12 +130,19 @@ function readLegacy(source) {
 	return settings;
 }
 
+function configurationMarker(source) {
+	for (let prefix in [marker, previous_marker])
+		if (substr(source, 0, length(prefix)) == prefix) return prefix;
+	return null;
+}
+
 function readSettings(source) {
-	if (substr(source, 0, length(native_marker)) == native_marker)
-		return { mode: 'native' };
-	if (substr(source, 0, length(marker)) == marker) {
+	const prefix = configurationMarker(source);
+	if (prefix) {
+		if (substr(source, 0, length(prefix) + length('native configuration\n')) == prefix + 'native configuration\n')
+			return { mode: 'native' };
 		try {
-			const state = json(substr(split(source, '\n')[0], length(marker)));
+			const state = json(substr(split(source, '\n')[0], length(prefix)));
 			if (type(state) == 'object' && type(state.links) == 'array')
 				return { mode: 'managed', state };
 		} catch (error) {
@@ -764,12 +772,11 @@ return {
 			call: function(req) { return apply(req.args); }
 		},
 		native_read: {
-			call: function(req) {
-				if (req.info?.acl?.user != 'root') return error('Root access is required.');
+			call: function() {
 				const before = revision();
 				const source = readfile(config) ?? '';
 				if (revision() != before) return error('Configuration changed. Open the editor again.');
-				const contents = substr(source, 0, length(marker)) == marker ?
+				const contents = configurationMarker(source) ?
 					substr(source, index(source, '\n') + 1) : source;
 				return { contents, revision: before };
 			}
@@ -777,7 +784,6 @@ return {
 		native_apply: {
 			args: { revision: '', contents: '' },
 			call: function(req) {
-				if (req.info?.acl?.user != 'root') return error('Root access is required.');
 				const args = req.args;
 				const source = readfile(config) ?? '';
 				if (!args.revision || revision() != args.revision)

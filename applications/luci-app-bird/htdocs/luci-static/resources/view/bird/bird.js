@@ -14,8 +14,157 @@ const nativeApply = rpc.declare({
 	object: 'luci.ospf', method: 'native_apply', params: [ 'revision', 'contents' ], reject: true
 });
 
+// The backend supplies these message IDs. Literal calls let LuCI extract them.
+const backendMessages = new Map([
+	[ "%s is not applicable to interface %s in the selected address family.", _("%s is not applicable to interface %s in the selected address family.") ],
+	[ "accept", _("accept") ],
+	[ "Accept from", _("Accept from") ],
+	[ "Accept to", _("Accept to") ],
+	[ "Action", _("Action") ],
+	[ "Add an OSPF interface for IPv%s before adding %s.", _("Add an OSPF interface for IPv%s before adding %s.") ],
+	[ "Add the matching virtual link before adding its authentication key.", _("Add the matching virtual link before adding its authentication key.") ],
+	[ "Additional OSPF interface instance", _("Additional OSPF interface instance") ],
+	[ "Algorithm", _("Algorithm") ],
+	[ "Area ID", _("Area ID") ],
+	[ "Assign area %s to the selected address family before adding area options.", _("Assign area %s to the selected address family before adding area options.") ],
+	[ "Authentication mode", _("Authentication mode") ],
+	[ "BFD authentication", _("BFD authentication") ],
+	[ "BFD idle transmit interval", _("BFD idle transmit interval") ],
+	[ "BFD minimum receive interval", _("BFD minimum receive interval") ],
+	[ "BFD minimum transmit interval", _("BFD minimum transmit interval") ],
+	[ "BFD passive mode", _("BFD passive mode") ],
+	[ "BIRD could not apply the configuration. The previous file and service state were restored.", _("BIRD could not apply the configuration. The previous file and service state were restored.") ],
+	[ "BIRD could not apply the configuration. The previous file was restored, but the service could not be verified.", _("BIRD could not apply the configuration. The previous file was restored, but the service could not be verified.") ],
+	[ "BIRD does not support virtual links for the OSPFv3 IPv4 address family.", _("BIRD does not support virtual links for the OSPFv3 IPv4 address family.") ],
+	[ "BIRD rejected the configuration. Check areas and export prefixes.", _("BIRD rejected the configuration. Check areas and export prefixes.") ],
+	[ "broadcast", _("broadcast") ],
+	[ "Bytes", _("Bytes") ],
+	[ "Configuration changed or request too large. Reload the page.", _("Configuration changed or request too large. Reload the page.") ],
+	[ "Configuration changed. Open the editor again.", _("Configuration changed. Open the editor again.") ],
+	[ "Configuration changed. Reload the page.", _("Configuration changed. Reload the page.") ],
+	[ "Configure up to 32 areas.", _("Configure up to 32 areas.") ],
+	[ "Configure up to 96 additional settings.", _("Configure up to 96 additional settings.") ],
+	[ "Confirm replacing the existing BIRD configuration.", _("Confirm replacing the existing BIRD configuration.") ],
+	[ "Cost", _("Cost") ],
+	[ "Could not allocate configuration files.", _("Could not allocate configuration files.") ],
+	[ "Could not back up the existing BIRD configuration.", _("Could not back up the existing BIRD configuration.") ],
+	[ "Could not replace the BIRD configuration.", _("Could not replace the BIRD configuration.") ],
+	[ "Could not restore the original configuration. Backup: %s", _("Could not restore the original configuration. Backup: %s") ],
+	[ "Could not write configuration files.", _("Could not write configuration files.") ],
+	[ "Custom stub network", _("Custom stub network") ],
+	[ "Dead interval (seconds)", _("Dead interval (seconds)") ],
+	[ "Dead interval multiplier", _("Dead interval multiplier") ],
+	[ "Dead interval must exceed hello interval on %s.", _("Dead interval must exceed hello interval on %s.") ],
+	[ "Direction", _("Direction") ],
+	[ "DR election wait", _("DR election wait") ],
+	[ "DSCP", _("DSCP") ],
+	[ "Duplicate additional setting.", _("Duplicate additional setting.") ],
+	[ "E1 metric", _("E1 metric") ],
+	[ "E2 metric", _("E2 metric") ],
+	[ "Each interface must have a unique, valid device name.", _("Each interface must have a unique, valid device name.") ],
+	[ "Eligible", _("Eligible") ],
+	[ "Enable BFD on %s before adding BFD options.", _("Enable BFD on %s before adding BFD options.") ],
+	[ "Enable OSPFv3 or select an IPv4 interface.", _("Enable OSPFv3 or select an IPv4 interface.") ],
+	[ "Enabled", _("Enabled") ],
+	[ "Enter a 16–64 character key on %s.", _("Enter a 16–64 character key on %s.") ],
+	[ "Enter a BIRD configuration of up to 64 KiB.", _("Enter a BIRD configuration of up to 64 KiB.") ],
+	[ "Enter a valid area and mode for %s.", _("Enter a valid area and mode for %s.") ],
+	[ "Enter a valid, nonzero router ID.", _("Enter a valid, nonzero router ID.") ],
+	[ "Enter up to 64 IPv4 prefixes for the selected route policy.", _("Enter up to 64 IPv4 prefixes for the selected route policy.") ],
+	[ "Enter up to 64 neighbors on %s.", _("Enter up to 64 neighbors on %s.") ],
+	[ "Exact prefix", _("Exact prefix") ],
+	[ "Generate from", _("Generate from") ],
+	[ "Generate to", _("Generate to") ],
+	[ "Hello interval (seconds)", _("Hello interval (seconds)") ],
+	[ "Hidden", _("Hidden") ],
+	[ "Hide area prefix", _("Hide area prefix") ],
+	[ "hmac sha1", _("hmac sha1") ],
+	[ "hmac sha256", _("hmac sha256") ],
+	[ "hmac sha384", _("hmac sha384") ],
+	[ "hmac sha512", _("hmac sha512") ],
+	[ "install", _("install") ],
+	[ "Instance ID", _("Instance ID") ],
+	[ "Invalid %s on %s.", _("Invalid %s on %s.") ],
+	[ "Invalid additional setting target.", _("Invalid additional setting target.") ],
+	[ "Invalid additional setting.", _("Invalid additional setting.") ],
+	[ "Invalid advanced settings.", _("Invalid advanced settings.") ],
+	[ "Invalid configuration request.", _("Invalid configuration request.") ],
+	[ "Invalid ECMP or graceful restart setting.", _("Invalid ECMP or graceful restart setting.") ],
+	[ "Invalid IPv4 prefix.", _("Invalid IPv4 prefix.") ],
+	[ "Invalid neighbor address on %s.", _("Invalid neighbor address on %s.") ],
+	[ "Invalid or duplicate area. Area 0 must be normal.", _("Invalid or duplicate area. Area 0 must be normal.") ],
+	[ "Invalid route prefix.", _("Invalid route prefix.") ],
+	[ "Invalid value for %s in %s.", _("Invalid value for %s in %s.") ],
+	[ "Key ID", _("Key ID") ],
+	[ "keyed md5", _("keyed md5") ],
+	[ "keyed sha1", _("keyed sha1") ],
+	[ "large", _("large") ],
+	[ "meticulous keyed md5", _("meticulous keyed md5") ],
+	[ "meticulous keyed sha1", _("meticulous keyed sha1") ],
+	[ "Milliseconds", _("Milliseconds") ],
+	[ "Mode", _("Mode") ],
+	[ "Multiplier", _("Multiplier") ],
+	[ "nbma", _("nbma") ],
+	[ "NBMA neighbor election eligibility", _("NBMA neighbor election eligibility") ],
+	[ "Neighbor address", _("Neighbor address") ],
+	[ "Neighbor address does not match the selected OSPF transport.", _("Neighbor address does not match the selected OSPF transport.") ],
+	[ "no", _("no") ],
+	[ "normal", _("normal") ],
+	[ "NSSA default route origination requires summary propagation.", _("NSSA default route origination requires summary propagation.") ],
+	[ "NSSA external summary", _("NSSA external summary") ],
+	[ "OSPF authentication key", _("OSPF authentication key") ],
+	[ "OSPF instance ID must be between 0 and 255, or -1 for default.", _("OSPF instance ID must be between 0 and 255, or -1 for default.") ],
+	[ "OSPF interface instance ID", _("OSPF interface instance ID") ],
+	[ "OSPF packet DSCP", _("OSPF packet DSCP") ],
+	[ "OSPF packet priority", _("OSPF packet priority") ],
+	[ "OSPF receive buffer", _("OSPF receive buffer") ],
+	[ "OSPF receive buffer preset", _("OSPF receive buffer preset") ],
+	[ "OSPF send length", _("OSPF send length") ],
+	[ "OSPF transmit delay", _("OSPF transmit delay") ],
+	[ "OSPF virtual link", _("OSPF virtual link") ],
+	[ "OSPF virtual-link authentication key", _("OSPF virtual-link authentication key") ],
+	[ "OSPFv3 IPv4 address family", _("OSPFv3 IPv4 address family") ],
+	[ "passive", _("passive") ],
+	[ "Peer router ID", _("Peer router ID") ],
+	[ "Point-to-point address", _("Point-to-point address") ],
+	[ "Point-to-point netmask", _("Point-to-point netmask") ],
+	[ "Prefix", _("Prefix") ],
+	[ "Priority", _("Priority") ],
+	[ "ptmp", _("ptmp") ],
+	[ "ptp", _("ptp") ],
+	[ "Real broadcast", _("Real broadcast") ],
+	[ "redistribute", _("redistribute") ],
+	[ "reject", _("reject") ],
+	[ "Retransmit interval", _("Retransmit interval") ],
+	[ "RFC 5838", _("RFC 5838") ],
+	[ "Route filter rule", _("Route filter rule") ],
+	[ "Route tag", _("Route tag") ],
+	[ "Secondary interface", _("Secondary interface") ],
+	[ "Seconds", _("Seconds") ],
+	[ "Secret key", _("Secret key") ],
+	[ "Select a valid authentication mode.", _("Select a valid authentication mode.") ],
+	[ "Select a valid IP family on %s.", _("Select a valid IP family on %s.") ],
+	[ "Select a valid system route policy.", _("Select a valid system route policy.") ],
+	[ "Select at least one interface when enabling OSPF.", _("Select at least one interface when enabling OSPF.") ],
+	[ "Select at least one IPv6 or dual-stack interface for OSPFv3.", _("Select at least one IPv6 or dual-stack interface for OSPFv3.") ],
+	[ "simple", _("simple") ],
+	[ "Size", _("Size") ],
+	[ "Summary", _("Summary") ],
+	[ "Suppress link LSA", _("Suppress link LSA") ],
+	[ "The saved BIRD configuration metadata is invalid.", _("The saved BIRD configuration metadata is invalid.") ],
+	[ "This configuration is managed in the BIRD native editor.", _("This configuration is managed in the BIRD native editor.") ],
+	[ "This setting must use the IPv4 or shared scope.", _("This setting must use the IPv4 or shared scope.") ],
+	[ "TTL security mode", _("TTL security mode") ],
+	[ "tx only", _("tx only") ],
+	[ "yes", _("yes") ]
+]);
+
+function backendLabel(key) {
+	return backendMessages.get(key) ?? key;
+}
+
 function replyError(reply, fallback) {
-	const message = reply.error ? _(reply.error) : fallback;
+	const message = reply.error ? backendLabel(reply.error) : fallback;
 	return new Error(reply.error_args?.length ? message.format(...reply.error_args) : message);
 }
 
@@ -260,7 +409,7 @@ function additionalSettings(schema, devices, links, initial) {
 	]);
 	function edit(index) {
 		const existing = entries[index];
-		const option = select('bird-detail-name', names.map(name => [ name, _(name) ]), existing?.name ?? names[0]);
+		const option = select('bird-detail-name', names.map(name => [ name, backendLabel(name) ]), existing?.name ?? names[0]);
 		const family = select('bird-detail-family', [ [ '4', 'IPv4' ], [ '6', 'IPv6' ] ], String(existing?.family ?? 4));
 		const fields = E('div');
 		const feedback = E('p', { class: 'cbi-section-error', role: 'alert', hidden: '' });
@@ -298,7 +447,7 @@ function additionalSettings(schema, devices, links, initial) {
 				const value = current?.values[i];
 				let field;
 				if (Array.isArray(kind))
-					field = select(id, kind.map(key => [ key, _(key) ]), value ?? kind[0]);
+					field = select(id, kind.map(key => [ key, backendLabel(key) ]), value ?? kind[0]);
 				else if (kind === 'switch')
 					field = checkbox(id, value);
 				else if (kind === 'uint' || kind === 'optional_uint') {
@@ -310,7 +459,7 @@ function additionalSettings(schema, devices, links, initial) {
 						kind === 'date' ? { placeholder: 'YYYY-MM-DD HH:MM:SS' } : { required: '' });
 					if (kind === 'secret') field.required = !current;
 				}
-				rows.push(row(_(label), field));
+				rows.push(row(backendLabel(label), field));
 				return field;
 			});
 			dom.content(fields, rows);
@@ -337,7 +486,7 @@ function additionalSettings(schema, devices, links, initial) {
 	function render() {
 		add.disabled = entries.length >= 96 || names.length === 0;
 		dom.content(body, entries.length ? entries.map((entry, index) => E('tr', { class: 'tr' }, [
-			...[ _(entry.name), [ 'bfd', 'bfd-auth' ].includes(schema[entry.name]?.[0]) ? _('Shared') : 'IPv' + entry.family,
+			...[ backendLabel(entry.name), [ 'bfd', 'bfd-auth' ].includes(schema[entry.name]?.[0]) ? _('Shared') : 'IPv' + entry.family,
 				entry.target || '—' ].map(value => E('td', { class: 'td' }, value)),
 			E('td', { class: 'td cbi-section-actions' }, [
 				E('button', { class: 'btn cbi-button-edit', type: 'button', click: () => edit(index) }, _('Edit')), ' ',
