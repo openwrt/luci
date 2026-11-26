@@ -151,6 +151,123 @@ function encryptionValue(o, value) {
 }
 
 /*
+	limit the choices of a list to the values accepted by allowed(), e.g. depending
+	on another option of the dialog; key identifies the condition, the choices are
+	only updated when it changes. Like the LuCI wireless page, this changes the
+	options of the native <select> element of a ListValue, ui.Select only uses its
+	choices for rendering; without such an element nothing is changed.
+	A value that is not accepted is replaced by the replacement, if that is accepted
+	and available, and hint() gets the labels of both values for a note below the
+	field, otherwise the value is kept. A replaced value is restored once it is
+	accepted again, unless another value was picked in the meantime.
+*/
+function limitChoices(o, section_id, key, allowed, replacement, hint) {
+	const sel = o.getUIElement(section_id)?.node.querySelector('select');
+
+	if (!sel || sel.limitKey === key) {
+		return;
+	}
+	sel.allOptions ??= Array.from(sel.options);
+	sel.limitKey = key;
+
+	const option = value => sel.allOptions.find(opt => opt.value === value);
+	const field = () => o.map.findElement('data-field', o.cbid(section_id))?.querySelector('.cbi-value-field');
+	const prev = sel.value;
+	const orig = (sel.replaced?.[1] === prev) ? sel.replaced[0] : prev;
+	const value = [ orig, replacement, prev ].find(v => v != null && allowed(v) && option(v)) ?? orig;
+
+	dom.content(sel, sel.allOptions.filter(opt => allowed(opt.value) || opt.value === value));
+	sel.value = value;
+	sel.replaced = (value !== orig) ? [ orig, value ] : null;
+
+	field()?.querySelector('.limit-choices-hint')?.remove();
+	if (sel.replaced && hint) {
+		field()?.appendChild(E('div', { 'class': 'cbi-value-description limit-choices-hint' },
+			hint(option(orig)?.text ?? orig, option(value).text)));
+	}
+
+	/* the note is obsolete once another value is picked */
+	if (!sel.limitListener) {
+		sel.limitListener = true;
+		sel.addEventListener('change', () => {
+			if (sel.value !== sel.replaced?.[1]) {
+				field()?.querySelector('.limit-choices-hint')?.remove();
+			}
+		});
+	}
+
+	/* notify like a user selection, so that dependent options update */
+	if (sel.value !== prev) {
+		sel.dispatchEvent(new Event('change'));
+	}
+}
+
+/*
+	phase 2 authentication types applicable to the EAP methods with an inner one:
+	PEAP and FAST only tunnel EAP methods, PEAP also accepts MSCHAPv2, which
+	wifi-scripts treat like EAP-MSCHAPv2 there, TTLS tunnels any type
+*/
+const eapAuthTypes = {
+	fast: [ 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	peap: [ 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	ttls: [ 'PAP', 'CHAP', 'MSCHAP', 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ]
+};
+
+/*
+	set up an EAP authentication list: offer the types applicable to the EAP method
+	of the dialog, default to the phase 2 of wifi-scripts without auth, show a stored
+	'auth=PAP' or 'auth=MSCHAPV2' as its type and keep any other unknown value
+*/
+function eapAuthOption(o) {
+	const labels = {
+		'PAP': _('PAP'),
+		'CHAP': _('CHAP'),
+		'MSCHAP': _('MSCHAP'),
+		'MSCHAPV2': _('MSCHAPV2'),
+		'EAP-GTC': _('EAP-GTC'),
+		'EAP-MD5': _('EAP-MD5'),
+		'EAP-MSCHAPV2': _('EAP-MSCHAPV2'),
+		'EAP-TLS': _('EAP-TLS')
+	};
+
+	eapAuthTypes.ttls.forEach(type => o.value(type, labels[type]));
+	[ 'fast', 'peap', 'ttls' ].forEach(method => o.depends({ encryption: 'wpa', eap_type: method, '!contains': true }));
+	/*
+		the phase 2 of wifi-scripts without auth: EAP-MSCHAPv2 for PEAP
+		and FAST, which only tunnel EAP methods, MSCHAPv2 for TTLS
+	*/
+	o.defaults = {
+		'MSCHAPV2': [{ eap_type: 'ttls' }],
+		'EAP-MSCHAPV2': []
+	};
+	o.load = function (section_id) {
+		let value = form.ListValue.prototype.load.call(this, section_id);
+
+		if (typeof value === 'string') {
+			value = value.replace(/^auth=(PAP|MSCHAPV2)$/, '$1');
+			if (!(this.keylist || []).includes(value)) {
+				this.value(value, value);
+			}
+		}
+		return value;
+	};
+	o.checkDepends = function (section_id) {
+		const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+		const method = this.section.formvalue(section_id, 'eap_type');
+
+		/* an unknown value is only offered for the uplink that has it */
+		const stored = this.cfgvalue(section_id);
+
+		if (eapAuthTypes[method]) {
+			limitChoices(this, section_id, method, type => eapAuthTypes[method].includes(type) || (type === stored && !eapAuthTypes.ttls.includes(type)),
+				(method === 'ttls') ? 'MSCHAPV2' : 'EAP-MSCHAPV2',
+				(type, replacement) => _('%s is not applicable to the selected EAP method and has been replaced by %s.').format(type, replacement));
+		}
+		return active;
+	};
+}
+
+/*
 	normalize a bssid to upper case for case-insensitive comparison
 */
 function normBssid(bssid) {
@@ -641,7 +758,7 @@ return view.extend({
 		o.password = true;
 
 		o = s.taboption('wireless', form.Value, 'password', _('Password'));
-		o.depends({ encryption: 'wpa', '!contains': true });
+		[ 'fast', 'peap', 'ttls' ].forEach(method => o.depends({ encryption: 'wpa', eap_type: method, '!contains': true }));
 		o.modalonly = true;
 		o.password = true;
 
@@ -657,25 +774,7 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('wireless', form.ListValue, 'auth', _('Authentication'));
-		o.value('PAP', _('PAP'));
-		o.value('CHAP', _('CHAP'));
-		o.value('MSCHAP', _('MSCHAP'));
-		o.value('MSCHAPV2', _('MSCHAPV2'));
-		o.value('EAP-GTC', _('EAP-GTC'));
-		o.value('EAP-MD5', _('EAP-MD5'));
-		o.value('EAP-MSCHAPV2', _('EAP-MSCHAPV2'));
-		o.value('EAP-TLS', _('EAP-TLS'));
-		o.value('auth=PAP', _('auth=PAP'));
-		o.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
-		/*
-			the phase 2 of wifi-scripts without auth: EAP-MSCHAPv2 for PEAP
-			and FAST, which only tunnel EAP methods, MSCHAPv2 for TTLS
-		*/
-		o.defaults = {
-			'MSCHAPV2': [{ eap_type: 'ttls' }],
-			'EAP-MSCHAPV2': []
-		};
-		o.depends({ encryption: 'wpa', '!contains': true });
+		eapAuthOption(o);
 		o.modalonly = true;
 
 		o = s.taboption('wireless', form.Value, 'identity', _('Identity'));
@@ -1168,7 +1267,7 @@ return view.extend({
 			o2.password = true;
 
 			o2 = s2.option(form.Value, 'password', _('Password'));
-			o2.depends({ encryption: 'wpa', '!contains': true });
+			[ 'fast', 'peap', 'ttls' ].forEach(method => o2.depends({ encryption: 'wpa', eap_type: method, '!contains': true }));
 			o2.password = true;
 
 			o2 = s2.option(form.ListValue, 'eap_type', _('EAP-Method'));
@@ -1180,25 +1279,7 @@ return view.extend({
 			o2.default = 'peap';
 
 			o2 = s2.option(form.ListValue, 'auth', _('Authentication'));
-			o2.depends({ encryption: 'wpa', '!contains': true });
-			o2.value('PAP', _('PAP'));
-			o2.value('CHAP', _('CHAP'));
-			o2.value('MSCHAP', _('MSCHAP'));
-			o2.value('MSCHAPV2', _('MSCHAPV2'));
-			o2.value('EAP-GTC', _('EAP-GTC'));
-			o2.value('EAP-MD5', _('EAP-MD5'));
-			o2.value('EAP-MSCHAPV2', _('EAP-MSCHAPV2'));
-			o2.value('EAP-TLS', _('EAP-TLS'));
-			o2.value('auth=PAP', _('auth=PAP'));
-			o2.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
-			/*
-				the phase 2 of wifi-scripts without auth: EAP-MSCHAPv2 for PEAP
-				and FAST, which only tunnel EAP methods, MSCHAPv2 for TTLS
-			*/
-			o2.defaults = {
-				'MSCHAPV2': [{ eap_type: 'ttls' }],
-				'EAP-MSCHAPV2': []
-			};
+			eapAuthOption(o2);
 
 			o2 = s2.option(form.Value, 'identity', _('Identity'));
 			o2.depends({ encryption: 'wpa', '!contains': true });
