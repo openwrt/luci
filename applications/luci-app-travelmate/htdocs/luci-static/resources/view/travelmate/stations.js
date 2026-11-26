@@ -652,6 +652,8 @@ return view.extend({
 		o.value('peap', _('PEAP'));
 		o.value('fast', _('FAST'));
 		o.default = 'peap';
+		/* wifi-scripts have no default EAP method, keep it when it equals the default */
+		o.rmempty = false;
 		o.modalonly = true;
 
 		o = s.taboption('wireless', form.ListValue, 'auth', _('Authentication'));
