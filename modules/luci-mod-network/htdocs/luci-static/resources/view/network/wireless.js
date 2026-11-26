@@ -286,6 +286,39 @@ function next_free_sid(offset) {
 	return sid;
 }
 
+// Encryption for joining a scanned 802.1X network: iwinfo reports WPA3 for
+// 802.1X only with the Suite-B AKMs of the 192-bit mode
+function join_eap_encryption(enc) {
+	if (enc.wpa.includes(2))
+		return 'wpa2';
+	else if (enc.wpa.includes(3))
+		return 'wpa3-192';
+
+	return 'wpa';
+}
+
+// Reason why a scanned 802.1X or OWE network cannot be joined with the
+// installed wpa_supplicant, whose basic variants e.g. lack EAP, or null
+function join_unsupported(enc) {
+	const auth = L.toArray(enc?.authentication);
+
+	if (!Array.isArray(enc?.wpa) || auth.includes('psk') || auth.includes('sae'))
+		return null;
+
+	if (auth.includes('802.1x')) {
+		if (!L.hasSystemFeature('wpasupplicant', 'eap'))
+			return _('This network requires WPA-Enterprise (802.1X), which the installed wpa_supplicant does not support.');
+
+		if (join_eap_encryption(enc) == 'wpa3-192' && !L.hasSystemFeature('wpasupplicant', 'suiteb192'))
+			return _('This network requires the WPA3-EAP 192-bit mode, which the installed wpa_supplicant does not support.');
+	}
+	else if (auth.includes('owe') && !L.hasSystemFeature('wpasupplicant', 'owe')) {
+		return _('This network requires OWE, which the installed wpa_supplicant does not support.');
+	}
+
+	return null;
+}
+
 function add_dependency_permutations(o, deps) {
 	let res = [{}];
 
@@ -2554,9 +2587,26 @@ return view.extend({
 			const is_wep = (enc && Array.isArray(enc.wep));
 			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'psk'));
 			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'sae'));
+			const is_eap = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == '802.1x'));
+			const is_owe = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'owe'));
+			const eap = {};
 
-			if (nameval == null || (passopt && passval == null))
+			if (join_unsupported(enc) || nameval == null || (passopt && passval == null))
 				return;
+
+			/* EAP settings asked for an 802.1X network, see handleJoin() */
+			for (const [ opt, uciopt ] of [ [ 'eap_type', 'eap_type' ], [ 'auth', 'auth' ], [ 'identity', 'identity' ],
+			                                [ 'eap_password', 'password' ], [ 'ca_cert_usesystem', 'ca_cert_usesystem' ] ]) {
+				const o = L.toArray(form.lookupOption(opt, '_new_'))[0];
+
+				if (!o || !o.isActive('_new_'))
+					continue;
+
+				if (!o.isValid('_new_'))
+					return;
+
+				eap[uciopt] = o.formvalue('_new_');
+			}
 
 			let section_id = null;
 
@@ -2640,6 +2690,19 @@ return view.extend({
 					uci.set('wireless', section_id, 'key', '1');
 					uci.set('wireless', section_id, 'key1', passval);
 				}
+				else if (is_eap) {
+					uci.set('wireless', section_id, 'encryption', join_eap_encryption(enc));
+					uci.set('wireless', section_id, 'eap_type', eap.eap_type);
+					uci.set('wireless', section_id, 'auth', eap.auth);
+					uci.set('wireless', section_id, 'identity', eap.identity);
+					uci.set('wireless', section_id, 'password', eap.password);
+
+					if (eap.ca_cert_usesystem == '1')
+						uci.set('wireless', section_id, 'ca_cert_usesystem', '1');
+				}
+				else if (is_owe) {
+					uci.set('wireless', section_id, 'encryption', 'owe');
+				}
 				else {
 					uci.set('wireless', section_id, 'encryption', 'none');
 				}
@@ -2671,7 +2734,9 @@ return view.extend({
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
 			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'psk'  || a == 'sae'));
-			let replace, passphrase, name, bssid, zone;
+			const is_eap = (!is_psk && enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == '802.1x'));
+			const unsupported = join_unsupported(enc);
+			let replace, passphrase, identity, name, bssid, zone;
 
 			function nameUsed(name) {
 				const s = uci.get('network', name);
@@ -2719,6 +2784,31 @@ return view.extend({
 				passphrase.rmempty = false;
 			}
 
+			if (is_eap && !unsupported) {
+				const encryption = join_eap_encryption(enc);
+
+				const eap_type = s2.option(form.ListValue, 'eap_type', _('EAP-Method'));
+				for (const [ type, title ] of [ [ 'tls', 'TLS' ], [ 'ttls', 'TTLS' ], [ 'peap', 'PEAP' ], [ 'fast', 'FAST' ] ])
+					if (eap_type_allowed(encryption, type))
+						eap_type.value(type, title);
+				eap_type.default = eap_type_allowed(encryption, 'peap') ? 'peap' : 'tls';
+
+				const auth = s2.option(form.ListValue, 'auth', _('Authentication'));
+				eap_auth_option(auth);
+				[ 'fast', 'peap', 'ttls' ].forEach(type => auth.depends('eap_type', type));
+
+				identity = s2.option(form.Value, 'identity', _('Identity'));
+				identity.rmempty = false;
+
+				const password = s2.option(form.Value, 'eap_password', _('Password'));
+				[ 'fast', 'peap', 'ttls' ].forEach(type => password.depends('eap_type', type));
+				password.password = true;
+				password.rmempty = false;
+
+				if (L.hasSystemFeature('cabundle'))
+					s2.option(form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"));
+			}
+
 			if (bss.ssid != null) {
 				bssid = s2.option(form.Flag, 'bssid', _('Lock to BSSID'), _('Instead of joining any network with a matching SSID, only connect to the BSSID <code>%h</code>.').format(bss.bssid));
 				bssid.default = '0';
@@ -2730,6 +2820,7 @@ return view.extend({
 			return m2.render().then(L.bind(function(nodes) {
 				ui.showModal(_('Joining Network: %q').replace(/%q/, '"%h"'.format(bss.ssid)), [
 					nodes,
+					unsupported ? E('p', { 'class': 'alert-message warning' }, unsupported) : null,
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
@@ -2737,10 +2828,11 @@ return view.extend({
 						}, _('Cancel')), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
+							'disabled': unsupported ? '' : null,
 							'click': ui.createHandlerFn(this, 'handleJoinConfirm', radioDev, bss, m2)
 						}, _('Submit'))
 					])
-				], 'cbi-modal').querySelector('[id="%s"] input[class][type]'.format((passphrase || name).cbid('_new_'))).focus();
+				], 'cbi-modal').querySelector('[id="%s"] input[class][type]'.format((passphrase || identity || name).cbid('_new_'))).focus();
 			}, this));
 		};
 
