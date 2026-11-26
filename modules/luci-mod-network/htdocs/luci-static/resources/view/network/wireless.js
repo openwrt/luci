@@ -319,6 +319,22 @@ function join_unsupported(enc) {
 	return null;
 }
 
+// Cipher to force for joining a scanned network: none, i.e. cipher 'auto', if
+// the network offers CCMP or no known cipher, otherwise its strongest cipher,
+// as wifi-scripts usually pick CCMP for 'auto'
+function join_cipher(enc) {
+	const ciphers = L.toArray(enc?.ciphers);
+
+	if (ciphers.includes('ccmp'))
+		return null;
+
+	for (const [ name, cipher ] of [ [ 'gcmp-256', 'gcmp256' ], [ 'ccmp-256', 'ccmp256' ], [ 'gcmp', 'gcmp' ], [ 'tkip', 'tkip' ] ])
+		if (ciphers.includes(name))
+			return cipher;
+
+	return null;
+}
+
 function add_dependency_permutations(o, deps) {
 	let res = [{}];
 
@@ -2589,6 +2605,8 @@ return view.extend({
 			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'sae'));
 			const is_eap = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == '802.1x'));
 			const is_owe = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'owe'));
+			const cipher = join_cipher(enc);
+			const encryption = (mode) => (cipher && cipher_allowed(mode, cipher)) ? `${mode}+${cipher}` : mode;
 			const eap = {};
 
 			if (join_unsupported(enc) || nameval == null || (passopt && passval == null))
@@ -2668,17 +2686,17 @@ return view.extend({
 					uci.set('wireless', section_id, 'ssid', ssidval);
 
 				if (is_sae) {
-					uci.set('wireless', section_id, 'encryption', 'sae');
+					uci.set('wireless', section_id, 'encryption', encryption('sae'));
 					uci.set('wireless', section_id, 'key', passval);
 				}
 				else if (is_psk) {
 					for (let i = enc.wpa.length - 1; i >= 0; i--) {
 						if (enc.wpa[i] == 2) {
-							uci.set('wireless', section_id, 'encryption', 'psk2');
+							uci.set('wireless', section_id, 'encryption', encryption('psk2'));
 							break;
 						}
 						else if (enc.wpa[i] == 1) {
-							uci.set('wireless', section_id, 'encryption', 'psk');
+							uci.set('wireless', section_id, 'encryption', encryption('psk'));
 							break;
 						}
 					}
@@ -2691,7 +2709,9 @@ return view.extend({
 					uci.set('wireless', section_id, 'key1', passval);
 				}
 				else if (is_eap) {
-					uci.set('wireless', section_id, 'encryption', join_eap_encryption(enc));
+					/* the 192-bit mode has its cipher, GCMP-256 */
+					const mode = join_eap_encryption(enc);
+					uci.set('wireless', section_id, 'encryption', (mode == 'wpa3-192') ? mode : encryption(mode));
 					uci.set('wireless', section_id, 'eap_type', eap.eap_type);
 					uci.set('wireless', section_id, 'auth', eap.auth);
 					uci.set('wireless', section_id, 'identity', eap.identity);
