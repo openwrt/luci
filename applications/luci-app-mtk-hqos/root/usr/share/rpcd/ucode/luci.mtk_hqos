@@ -1,0 +1,29 @@
+'use strict';
+
+import { readfile } from 'fs';
+import { rates, profiles, policyState } from 'mtk_hqos.core';
+
+function readJSON(path) {
+	try { return json(readfile(path) || '{}'); }
+	catch (e) { return {}; }
+};
+
+return {
+	'luci.mtk_hqos': {
+		status: {
+			call: function() {
+				const full = profiles(readfile('/sys/kernel/debug/ppe0/hqos_queue'));
+				const extended = length(keys(full)) == 16;
+				const queues = extended ? full : rates(readfile('/sys/kernel/debug/ppe0/hqos_rate'));
+				return {
+					supported: length(keys(queues)) == 16,
+					extended,
+					queues,
+					policy: policyState(readfile('/sys/kernel/debug/ppe0/hqos_policy')),
+					state: readJSON('/var/run/mtk-hqos/state.json'),
+					last: readJSON('/var/run/mtk-hqos/status.json')
+				};
+			}
+		}
+	}
+};
