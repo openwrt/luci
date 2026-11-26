@@ -322,6 +322,103 @@ function eht_compat_default(section_id) {
 	return form.Flag.prototype.updateDefaultValue.call(this, section_id);
 }
 
+// Limit the choices of a list option to the values accepted by allowed(), e.g.
+// depending on another option of the same modal. Called from the option's
+// checkDepends(), which runs on every change in the modal; key identifies the
+// condition, the choices are only updated when it changes. Like the frequency
+// widget, this changes the options of the native <select> element of a
+// ListValue, ui.Select only uses its choices for rendering; without such an
+// element nothing is changed.
+// A value that is not accepted is replaced by the candidate returned by
+// replace(), if that is accepted and available, and hint() gets the labels of
+// both values for a note below the field. Otherwise the value is kept for the
+// validation to report it. A replaced value is restored as soon as it is
+// accepted again, unless another value was picked in the meantime.
+function limit_choices(o, section_id, key, allowed, replace, hint) {
+	const sel = o.getUIElement(section_id)?.node.querySelector('select');
+
+	if (!sel || sel.limit_key === key)
+		return;
+
+	sel.all_options ??= Array.from(sel.options);
+	sel.limit_key = key;
+
+	const option = value => sel.all_options.find(opt => opt.value == value);
+	const hint_node = () => o.map.findElement('data-field', o.cbid(section_id))?.querySelector('.limit-choices-hint');
+	const prev = sel.value;
+	const orig = (sel.replaced?.[1] == prev) ? sel.replaced[0] : prev;
+	const value = [ orig, replace?.(orig), prev ].find(v => v != null && allowed(v) && option(v)) ?? orig;
+
+	dom.content(sel, sel.all_options.filter(opt => allowed(opt.value) || opt.value == value));
+	sel.value = value;
+	sel.replaced = (value != orig) ? [ orig, value ] : null;
+
+	hint_node()?.remove();
+
+	if (sel.replaced && hint)
+		o.map.findElement('data-field', o.cbid(section_id))?.querySelector('.cbi-value-field')?.appendChild(
+			E('div', { 'class': 'cbi-value-description limit-choices-hint' },
+				hint(option(orig)?.text ?? orig, option(value).text)));
+
+	/* the note is obsolete once another value is picked */
+	if (!sel.limit_listener) {
+		sel.limit_listener = true;
+		sel.addEventListener('change', () => {
+			if (sel.value != sel.replaced?.[1])
+				hint_node()?.remove();
+		});
+	}
+
+	/* notify like a user selection so dependent options and validation update */
+	if (sel.value != prev)
+		sel.dispatchEvent(new Event('change'));
+}
+
+// Wi-Fi 6E (6 GHz) mandates WPA3 or OWE together with management frame
+// protection, so these are the only encryption modes offered on a 6 GHz radio.
+const crypto_modes_6g = [ 'sae', 'wpa3', 'wpa3-192', 'owe' ];
+
+// Replacement of the same kind for an encryption mode not allowed on 6 GHz:
+// like the upgrade wifi-scripts apply on 6 GHz radios, PSK modes become
+// WPA3-SAE, EAP modes WPA3-EAP, and an open network uses OWE. WEP and the
+// WPA2/WPA3 compatibility mode, which wifi-scripts do not upgrade, become
+// WPA3-SAE as well.
+function crypto_mode_6g_replacement(mode) {
+	switch (mode) {
+	case 'wpa':
+	case 'wpa2':
+	case 'wpa3-mixed':
+		return 'wpa3';
+
+	case 'none':
+		return 'owe';
+
+	default:
+		return 'sae';
+	}
+}
+
+// Band of the radio of a wireless interface. Like eht_compat_default(), read it
+// from the radio's frequency widget, so that a band change made in the same
+// modal is seen, and only fall back to the saved config if that widget is not
+// available.
+function radio_band(section_id) {
+	const dev = uci.get('wireless', section_id, 'device');
+	const freq = dev ? this.map.lookupOption('_freq', dev) : null;
+
+	return (freq ? freq[0].formvalue(dev)?.[1] : null) ?? (dev ? uci.get('wireless', dev, 'band') : null);
+}
+
+// Offer only the encryption modes usable on the band of the radio
+function update_crypto_modes(section_id) {
+	const is_6g = (radio_band.call(this, section_id) == '6g');
+
+	limit_choices(this, section_id, is_6g ? '6g' : '',
+		mode => !is_6g || crypto_modes_6g.includes(mode), crypto_mode_6g_replacement,
+		(mode, replacement) => _('%s is not available on 6 GHz and has been replaced by %s.')
+			.format(mode.replace(/ \(.*\)$/, ''), replacement.replace(/ \(.*\)$/, '')));
+}
+
 // Define a class CBIWifiFrequencyValue that extends form.Value
 var CBIWifiFrequencyValue = form.Value.extend({
 	// Declare an RPC method to get the frequency list for a given device
@@ -1332,6 +1429,12 @@ return view.extend({
 					uci.set('wireless', section_id, 'encryption', e);
 				};
 
+				o.checkDepends = function(section_id) {
+					const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+					update_crypto_modes.call(this, section_id);
+					return active;
+				};
+
 				o = ss.taboption('encryption', form.ListValue, 'cipher', _('Cipher'));
 				o.depends('encryption', 'wpa');
 				o.depends('encryption', 'wpa2');
@@ -1365,8 +1468,8 @@ return view.extend({
 				};
 
 
+				// All modes are registered, update_crypto_modes() limits the choices on 6 GHz
 				const crypto_modes = [];
-				const is_6ghz = uci.get('wireless', radioNet.getWifiDeviceName(), 'band') == '6g';
 
 				if (hwtype == 'mac80211') {
 					const has_supplicant = L.hasSystemFeature('wpasupplicant');
@@ -1393,11 +1496,9 @@ return view.extend({
 					const has_sta_wep = L.hasSystemFeature('wpasupplicant', 'wep');
 
 					if (has_hostapd || has_supplicant) {
-						if (!is_6ghz) {
-							crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
-							crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
-							crypto_modes.push(['psk',       'WPA-PSK',                     12]);
-						}
+						crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
+						crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
+						crypto_modes.push(['psk',       'WPA-PSK',                     12]);
 					}
 					else {
 						encr.description = _('WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP and ad-hoc mode) to be installed.');
@@ -1405,15 +1506,14 @@ return view.extend({
 
 					if (has_ap_sae || has_sta_sae) {
 						crypto_modes.push(['sae',       'WPA3-SAE',                     31]);
-						if (!is_6ghz)
-							crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
+						crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
 					}
 
 					// WPA3-Personal Compatibility Mode uses RSN overriding, which is an AP-only feature
-					if (has_ap_sae && !is_6ghz)
+					if (has_ap_sae)
 						crypto_modes.push(['sae-compat', 'WPA2-PSK/WPA3-SAE Compatibility Mode', 30]);
 
-					if (!is_6ghz && (has_ap_wep || has_sta_wep)) {
+					if (has_ap_wep || has_sta_wep) {
 						crypto_modes.push(['wep-open',   _('WEP Open System'), 11]);
 						crypto_modes.push(['wep-shared', _('WEP Shared Key'),  10]);
 					}
@@ -1421,15 +1521,12 @@ return view.extend({
 					if (has_ap_eap || has_sta_eap) {
 						if (has_ap_eap192 || has_sta_eap192) {
 							crypto_modes.push(['wpa3', 'WPA3-EAP', 33]);
-							if (!is_6ghz)
-								crypto_modes.push(['wpa3-mixed', 'WPA2-EAP/WPA3-EAP Mixed Mode', 32]);
+							crypto_modes.push(['wpa3-mixed', 'WPA2-EAP/WPA3-EAP Mixed Mode', 32]);
 							crypto_modes.push(['wpa3-192', 'WPA3-EAP 192-bit Mode', 36]);
 						}
 
-						if (!is_6ghz) {
-							crypto_modes.push(['wpa2', 'WPA2-EAP', 34]);
-							crypto_modes.push(['wpa',  'WPA-EAP',  20]);
-						}
+						crypto_modes.push(['wpa2', 'WPA2-EAP', 34]);
+						crypto_modes.push(['wpa',  'WPA-EAP',  20]);
 					}
 
 					if (has_ap_owe || has_sta_owe) {
@@ -1497,6 +1594,9 @@ return view.extend({
 						const modetitle = modeopt.vallist[modeopt.keylist.indexOf(modeval)];
 						const enctitle = this.vallist[this.keylist.indexOf(value)];
 
+						if (radio_band.call(this, section_id) == '6g' && !crypto_modes_6g.includes(value))
+							return _('This encryption mode is not allowed on 6 GHz.');
+
 						if (value == 'none')
 							return true;
 
@@ -1514,8 +1614,7 @@ return view.extend({
 					crypto_modes.push(['wep-shared', _('WEP Shared Key'),         10]);
 				}
 
-				if (!is_6ghz)
-					crypto_modes.push(['none',       _('No Encryption'),   0]);
+				crypto_modes.push(['none',       _('No Encryption'),   0]);
 
 				crypto_modes.sort(function(a, b) { return b[2] - a[2]; });
 
