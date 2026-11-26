@@ -419,6 +419,14 @@ function update_crypto_modes(section_id) {
 			.format(mode.replace(/ \(.*\)$/, ''), replacement.replace(/ \(.*\)$/, '')));
 }
 
+// TKIP is only usable with WPA and WPA2, WPA3 requires management frame
+// protection, which cannot be used with TKIP
+const tkip_crypto_modes = [ 'psk', 'psk2', 'psk-mixed', 'wpa', 'wpa2', 'wpa-mixed' ];
+
+function cipher_allowed(encryption, cipher) {
+	return (!/tkip/.test(cipher) || tkip_crypto_modes.includes(encryption));
+}
+
 // WPA3-Enterprise 192-bit mode only allows EAP-TLS
 function eap_type_allowed(encryption, eap_type) {
 	return (encryption != 'wpa3-192' || eap_type == 'tls');
@@ -1504,6 +1512,16 @@ return view.extend({
 							v = 'tkip+ccmp';
 					}
 					return v;
+				};
+
+				o.checkDepends = function(section_id) {
+					const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+					const encryption = this.section.formvalue(section_id, 'encryption');
+
+					limit_choices(this, section_id, encryption, cipher => cipher_allowed(encryption, cipher), () => 'auto',
+						(cipher, replacement) => _('%s is not available with WPA3 and has been replaced by %s.').format(cipher, replacement));
+
+					return active;
 				};
 
 				/* without a cipher to choose, e.g. GCMP-256 in 192-bit mode, drop a forced one */
