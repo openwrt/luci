@@ -268,34 +268,71 @@ function scanCard(quality, minQuality, ssidNode, channel, bssid, encLabel, encOp
 }
 
 /*
-	change the status of travelmate stations
+	name of the travelmate 'uplink' section of a wireless station, null if it
+	has none, e.g. a station configured on the LuCI wireless page
 */
-function handleToggle(sid) {
-	let w_device, w_ssid, w_bssid, t_sections, row, element, value, enabled;
-
-	w_device = uci.get('wireless', sid, 'device');
-	w_ssid = uci.get('wireless', sid, 'ssid');
-	w_bssid = uci.get('wireless', sid, 'bssid');
-	t_sections = uci.sections('travelmate', 'uplink');
+function uplinkSection(sid) {
+	const w_device = uci.get('wireless', sid, 'device');
+	const w_ssid = uci.get('wireless', sid, 'ssid');
+	const w_bssid = uci.get('wireless', sid, 'bssid');
+	const t_sections = uci.sections('travelmate', 'uplink');
 
 	for (let i = 0; i < t_sections.length; i++) {
 		if (t_sections[i].device === w_device && t_sections[i].ssid === w_ssid && normBssid(t_sections[i].bssid) === normBssid(w_bssid)) {
-			value = t_sections[i]['enabled'];
-			value = (value == 0 ? 1 : 0);
-			enabled = (value == 0 ? _('No') : _('Yes'));
-			uci.set('travelmate', t_sections[i]['.name'], 'enabled', value);
-			return uci.save().then(function () {
-				row = document.querySelector('.cbi-section-table-row[data-sid="%s"]'.format(sid));
-				if (row) {
-					element = row.querySelector('.cbi-value-field');
-					if (element) {
-						element.textContent = enabled;
-					}
-					row.setAttribute('style', 'opacity: 0.5; color: #37c !important;');
-				}
-			});
+			return t_sections[i]['.name'];
 		}
 	}
+	return null;
+}
+
+/*
+	add the travelmate 'uplink' section of a wireless station, with the
+	defaults of a new uplink (enabled, default vpn) if requested
+*/
+function addUplink(sid, defaults) {
+	const vpn_stdiface = uci.get('travelmate', 'global', 'trm_stdvpniface');
+	const t_sid = uci.add('travelmate', 'uplink');
+
+	if (defaults) {
+		uci.set('travelmate', t_sid, 'enabled', '1');
+	}
+	uci.set('travelmate', t_sid, 'device', uci.get('wireless', sid, 'device'));
+	uci.set('travelmate', t_sid, 'ssid', uci.get('wireless', sid, 'ssid'));
+	uci.set('travelmate', t_sid, 'bssid', uci.get('wireless', sid, 'bssid'));
+	if (defaults && vpn_stdiface) {
+		uci.set('travelmate', t_sid, 'vpn', '1');
+		uci.set('travelmate', t_sid, 'vpniface', vpn_stdiface);
+	}
+	return t_sid;
+}
+
+/*
+	change the status of travelmate stations
+*/
+function handleToggle(sid) {
+	let t_sid, row, element, value, enabled;
+
+	t_sid = uplinkSection(sid);
+	if (t_sid) {
+		value = uci.get('travelmate', t_sid, 'enabled');
+		value = (value == 0 ? 1 : 0);
+		uci.set('travelmate', t_sid, 'enabled', value);
+	} else {
+		/* a station without uplink section counts as disabled, add it enabled */
+		addUplink(sid, true);
+		value = 1;
+	}
+	enabled = (value == 0 ? _('No') : _('Yes'));
+	return uci.save().then(function () {
+		row = document.querySelector('.cbi-section-table-row[data-sid="%s"]'.format(sid));
+		if (row) {
+			element = row.querySelector('.cbi-value-field');
+			if (element) {
+				element.textContent = enabled;
+			}
+			row.setAttribute('style', 'opacity: 0.5; color: #37c !important;');
+		}
+	});
 }
 
 /*
@@ -340,34 +377,11 @@ function handleRemove(sid) {
 	add missing travelmate sections
 */
 function handleSectionsAdd(iface) {
-	let w_sections, t_sections, match;
-
-	w_sections = uci.sections('wireless', 'wifi-iface');
-	t_sections = uci.sections('travelmate', 'uplink');
+	const w_sections = uci.sections('wireless', 'wifi-iface');
 
 	for (let i = 0; i < w_sections.length; i++) {
-		if (w_sections[i].mode !== 'sta' || w_sections[i].network !== iface) {
-			continue;
-		}
-		match = false;
-		for (let j = 0; j < t_sections.length; j++) {
-			if (w_sections[i].device === t_sections[j].device && w_sections[i].ssid === t_sections[j].ssid && normBssid(w_sections[i].bssid) === normBssid(t_sections[j].bssid)) {
-				match = true;
-				break;
-			}
-		}
-		if (match === false) {
-			let vpn_stdiface = uci.get('travelmate', 'global', 'trm_stdvpniface');
-			let sid = uci.add('travelmate', 'uplink');
-
-			uci.set('travelmate', sid, 'enabled', '1');
-			uci.set('travelmate', sid, 'device', w_sections[i].device);
-			uci.set('travelmate', sid, 'ssid', w_sections[i].ssid);
-			uci.set('travelmate', sid, 'bssid', w_sections[i].bssid);
-			if (vpn_stdiface) {
-				uci.set('travelmate', sid, 'vpn', '1');
-				uci.set('travelmate', sid, 'vpniface', vpn_stdiface);
-			}
+		if (w_sections[i].mode === 'sta' && w_sections[i].network === iface && !uplinkSection(w_sections[i]['.name'])) {
+			addUplink(w_sections[i]['.name'], true);
 		}
 	}
 }
@@ -376,23 +390,20 @@ function handleSectionsAdd(iface) {
 	update travelmate sections
 */
 function handleSectionsVal(action, section_id, option, value) {
-	let w_device, w_ssid, w_bssid, t_sections;
+	let t_sid = uplinkSection(section_id);
 
-	w_device = uci.get('wireless', section_id, 'device');
-	w_ssid = uci.get('wireless', section_id, 'ssid');
-	w_bssid = uci.get('wireless', section_id, 'bssid');
-	t_sections = uci.sections('travelmate', 'uplink');
-
-	for (let i = 0; i < t_sections.length; i++) {
-		if (t_sections[i].device === w_device && t_sections[i].ssid === w_ssid && normBssid(t_sections[i].bssid) === normBssid(w_bssid)) {
-			if (action === 'get') {
-				return t_sections[i][option];
-			} else if (action === 'set') {
-				return uci.set('travelmate', t_sections[i]['.name'], option, value);
-			} else if (action === 'del') {
-				return uci.unset('travelmate', t_sections[i]['.name'], option);
-			}
-		}
+	if (action === 'set') {
+		/*
+			a station without uplink section, e.g. configured on the LuCI
+			wireless page, gets it when its dialog is saved, with the values
+			of the dialog
+		*/
+		t_sid ??= addUplink(section_id, false);
+		return uci.set('travelmate', t_sid, option, value);
+	} else if (t_sid && action === 'get') {
+		return uci.get('travelmate', t_sid, option);
+	} else if (t_sid && action === 'del') {
+		return uci.unset('travelmate', t_sid, option);
 	}
 }
 
@@ -721,7 +732,7 @@ return view.extend({
 		o.rmempty = false;
 		o.readonly = true;
 		o.cfgvalue = function (section_id) {
-			return handleSectionsVal('get', section_id, 'ssid');
+			return handleSectionsVal('get', section_id, 'ssid') ?? uci.get('wireless', section_id, 'ssid');
 		}
 
 		o = s.taboption('travelmate', form.Value, '_bssid', _('BSSID'));
@@ -732,7 +743,7 @@ return view.extend({
 		o.rmempty = true;
 		o.readonly = true;
 		o.cfgvalue = function (section_id) {
-			return handleSectionsVal('get', section_id, 'bssid');
+			return handleSectionsVal('get', section_id, 'bssid') ?? uci.get('wireless', section_id, 'bssid');
 		}
 
 		o = s.taboption('travelmate', form.Flag, '_opensta', _('Auto Added Open Uplink'),
