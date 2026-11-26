@@ -419,6 +419,11 @@ function update_crypto_modes(section_id) {
 			.format(mode.replace(/ \(.*\)$/, ''), replacement.replace(/ \(.*\)$/, '')));
 }
 
+// WPA3-Enterprise 192-bit mode only allows EAP-TLS
+function eap_type_allowed(encryption, eap_type) {
+	return (encryption != 'wpa3-192' || eap_type == 'tls');
+}
+
 // Phase 2 authentication types applicable to the EAP methods with an inner
 // one: PEAP and FAST only tunnel EAP methods, PEAP also accepts MSCHAPv2, which
 // wifi-scripts treat like EAP-MSCHAPv2 there, TTLS tunnels any type.
@@ -1475,7 +1480,6 @@ return view.extend({
 				o.depends('encryption', 'wpa2');
 				o.depends('encryption', 'wpa3');
 				o.depends('encryption', 'wpa3-mixed');
-				o.depends('encryption', 'wpa3-192');
 				o.depends('encryption', 'psk');
 				o.depends('encryption', 'sae');
 				o.depends('encryption', 'psk2');
@@ -1500,6 +1504,14 @@ return view.extend({
 							v = 'tkip+ccmp';
 					}
 					return v;
+				};
+
+				/* without a cipher to choose, e.g. GCMP-256 in 192-bit mode, drop a forced one */
+				o.remove = function(section_id) {
+					const e = uci.get('wireless', section_id, 'encryption');
+
+					if (e?.match(/\+/))
+						uci.set('wireless', section_id, 'encryption', e.replace(/\+.+$/, ''));
 				};
 
 
@@ -2163,6 +2175,15 @@ return view.extend({
 					o.value('peap', 'PEAP');
 					o.value('fast', 'FAST');
 					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed', 'wpa3-192'] });
+					o.checkDepends = function(section_id) {
+						const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+						const encryption = this.section.formvalue(section_id, 'encryption');
+
+						limit_choices(this, section_id, encryption, type => eap_type_allowed(encryption, type), () => 'tls',
+							(type, replacement) => _('%s is not allowed in WPA3-EAP 192-bit mode and has been replaced by %s.').format(type, replacement));
+
+						return active;
+					};
 
 					o = ss.taboption('encryption', form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"));
 					o.enabled = '1';
