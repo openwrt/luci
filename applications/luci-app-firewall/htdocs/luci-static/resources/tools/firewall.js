@@ -346,12 +346,13 @@ return baseclass.extend({
 	addLimitOption(s) {
 		const o = s.taboption('advanced', form.Value, 'limit',
 			_('Limit matching'),
-			_('Limits traffic matching to the specified rate.'));
+			_('Limits traffic matching to the specified rate. Prefix with ! to match packets exceeding the rate.'));
 
 		o.modalonly = true;
 		o.rmempty = true;
 		o.placeholder = _('unlimited');
 		o.value('10/second');
+		o.value('!10/second');
 		o.value('60/minute');
 		o.value('3/hour');
 		o.value('500/day');
@@ -359,19 +360,16 @@ return baseclass.extend({
 			if (value == '')
 				return true;
 
-			const m = String(value).toLowerCase().match(/^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\/([a-z]+)$/),
-			    u = ['second', 'minute', 'hour', 'day'],
-			    i = 0;
+			const raw = String(value).replace(/^[ \t]*!/, '').trim();
+			const m = raw.match(/^[0-9]{1,10}\/([a-z]+)$/);
+			const units = ['second', 'minute', 'hour', 'day'];
 
 			if (m)
-				for (let i = 0; i < u.length; i++)
-					if (u[i].indexOf(m[1]) == 0)
-						break;
+				for (let i = 0; i < units.length; i++)
+					if (units[i].indexOf(m[1]) == 0)
+						return true;
 
-			if (!m || i >= u.length)
-				return _('Invalid limit value');
-
-			return true;
+			return _('Invalid limit value');
 		};
 
 		return o;

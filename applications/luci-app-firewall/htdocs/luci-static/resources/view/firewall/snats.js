@@ -61,17 +61,17 @@ function rule_dest_txt(s) {
 }
 
 function rule_limit_txt(s) {
-	const m = String(uci.get('firewall', s, 'limit')).match(/^(\d+)\/([smhd])\w*$/i);
+	const m = String(uci.get('firewall', s, 'limit')).match(/^[ \t]*(!)?[ \t]*(\d+)\/([smhd])\w*$/i);
 	const l = m ? {
-			num:   +m[1],
-			unit:  ({ s: _('second'), m: _('minute'), h: _('hour'), d: _('day') })[m[2]],
+			num:   +m[2], inv: !!m[1],
+			unit:  ({ s: _('second'), m: _('minute'), h: _('hour'), d: _('day') })[m[3].toLowerCase()],
 			burst: uci.get('firewall', s, 'limit_burst')
 		} : null;
 
 	if (!l)
 		return '';
 
-	return fwtool.fmt(_('Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</var>%{limit.burst? burst <var>%{limit.burst}</var>}'), { limit: l });
+	return fwtool.fmt(_('Limit matching to %{limit.inv?more than }<var>%{limit.num}</var> packets per <var>%{limit.unit}</var>%{limit.burst? burst <var>%{limit.burst}</var>}'), { limit: l });
 }
 
 function rule_target_txt(sid) {
