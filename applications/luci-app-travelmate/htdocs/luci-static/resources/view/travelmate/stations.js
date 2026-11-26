@@ -52,6 +52,24 @@ function resolveCiphers(list) {
 }
 
 /*
+	cipher suffix of the encryption value for the cipher list of a scan result:
+	CCMP if offered, otherwise the other AES cipher or TKIP, no suffix (cipher
+	'auto') if none of them is known
+*/
+function cipherSuffix(list) {
+	const names = list.map(c => resolveCipher(c).name);
+	const cipher = [
+		[ 'CCMP', 'ccmp' ],
+		[ 'GCMP-256', 'gcmp256' ],
+		[ 'CCMP-256', 'ccmp256' ],
+		[ 'GCMP', 'gcmp' ],
+		[ 'TKIP', 'tkip' ]
+	].find(c => names.includes(c[0]));
+
+	return cipher ? '+' + cipher[1] : '';
+}
+
+/*
 	label of an encryption value, any value without a fixed label is labeled
 	by its mode and cipher suffix, e.g. 'wpa2+gcmp256' or 'psk2' as written
 	by the LuCI wireless page for cipher 'auto'
@@ -991,6 +1009,7 @@ return view.extend({
 									let hasOWE = auth.includes("OWE");
 									let hasSuiteB = auth.some(a => a.includes("SUITE-B"));
 									let resCipher = resolveCiphers(r.ciphers || []);
+									let suffix = cipherSuffix(r.ciphers || []);
 
 									/*
 										encryption classification
@@ -1021,22 +1040,22 @@ return view.extend({
 										encryption = 'wpa3';
 									} else if (hasWPA1 && hasWPA2 && has8021x) {
 										tbl_encryption = `Mixed WPA/WPA2 802.1X (${resCipher.name})`;
-										encryption = resCipher.aes ? 'wpa-mixed+ccmp' : 'wpa-mixed+tkip';
+										encryption = 'wpa-mixed' + suffix;
 									} else if (hasWPA2 && has8021x) {
 										tbl_encryption = `WPA2 802.1X (${resCipher.name})`;
-										encryption = resCipher.aes ? 'wpa2+ccmp' : 'wpa2+tkip';
+										encryption = 'wpa2' + suffix;
 									} else if (hasWPA1 && has8021x) {
 										tbl_encryption = `WPA 802.1X (${resCipher.name})`;
-										encryption = resCipher.aes ? 'wpa+ccmp' : 'wpa+tkip';
+										encryption = 'wpa' + suffix;
 									} else if (hasWPA1 && hasWPA2 && hasPSK) {
 										tbl_encryption = `Mixed WPA/WPA2 PSK (${resCipher.name})`;
-										encryption = resCipher.aes ? 'psk-mixed+ccmp' : 'psk-mixed+tkip';
+										encryption = 'psk-mixed' + suffix;
 									} else if (hasWPA2 && hasPSK) {
 										tbl_encryption = `WPA2 PSK (${resCipher.name})`;
-										encryption = resCipher.aes ? 'psk2+ccmp' : 'psk2+tkip';
+										encryption = 'psk2' + suffix;
 									} else if (hasWPA1 && hasPSK) {
 										tbl_encryption = `WPA PSK (${resCipher.name})`;
-										encryption = resCipher.aes ? 'psk+ccmp' : 'psk+tkip';
+										encryption = 'psk' + suffix;
 									} else {
 										tbl_encryption = _('unknown');
 										encryption = 'none';
@@ -1117,24 +1136,8 @@ return view.extend({
 			o2.default = bssid;
 
 			o2 = s2.option(form.ListValue, 'encryption', _('Encryption'));
-			o2.value('sae', _('WPA3 PSK (SAE)'));
-			o2.value('sae-mixed', _('Mixed WPA2/WPA3 PSK (CCMP)'));
-			o2.value('psk2+ccmp', _('WPA2 PSK (CCMP)'));
-			o2.value('psk2+tkip', _('WPA2 PSK (TKIP)'));
-			o2.value('psk+ccmp', _('WPA PSK (CCMP)'));
-			o2.value('psk+tkip', _('WPA PSK (TKIP)'));
-			o2.value('psk-mixed+ccmp', _('Mixed WPA/WPA2 PSK (CCMP)'));
-			o2.value('psk-mixed+tkip', _('Mixed WPA/WPA2 PSK (TKIP)'));
-			o2.value('wpa3', _('WPA3 802.1X'));
-			o2.value('wpa3-mixed', _('Mixed WPA2/WPA3 802.1X'));
-			o2.value('wpa2+ccmp', _('WPA2 802.1X (CCMP)'));
-			o2.value('wpa2+tkip', _('WPA2 802.1X (TKIP)'));
-			o2.value('wpa+ccmp', _('WPA 802.1X (CCMP)'));
-			o2.value('wpa+tkip', _('WPA 802.1X (TKIP)'));
-			o2.value('wpa-mixed+ccmp', _('Mixed WPA/WPA2 802.1X (CCMP)'));
-			o2.value('wpa-mixed+tkip', _('Mixed WPA/WPA2 802.1X (TKIP)'));
-			o2.value('owe', _('WPA3 OWE'));
-			o2.value('none', _('Open'));
+			encryptionValues(o2);
+			encryptionValue(o2, encryption);
 			o2.default = encryption;
 
 			o2 = s2.option(form.Value, 'key', _('Password'));
