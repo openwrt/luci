@@ -52,6 +52,87 @@ function resolveCiphers(list) {
 }
 
 /*
+	label of an encryption value, any value without a fixed label is labeled
+	by its mode and cipher suffix, e.g. 'wpa2+gcmp256' or 'psk2' as written
+	by the LuCI wireless page for cipher 'auto'
+*/
+function encryptionLabel(value) {
+	const labels = {
+		'sae': _('WPA3 PSK (SAE)'),
+		'sae-mixed': _('Mixed WPA2/WPA3 PSK (CCMP)'),
+		'psk2+ccmp': _('WPA2 PSK (CCMP)'),
+		'psk2+tkip': _('WPA2 PSK (TKIP)'),
+		'psk+ccmp': _('WPA PSK (CCMP)'),
+		'psk+tkip': _('WPA PSK (TKIP)'),
+		'psk-mixed+ccmp': _('Mixed WPA/WPA2 PSK (CCMP)'),
+		'psk-mixed+tkip': _('Mixed WPA/WPA2 PSK (TKIP)'),
+		'wpa3': _('WPA3 802.1X'),
+		'wpa3-mixed': _('Mixed WPA2/WPA3 802.1X'),
+		'wpa2+ccmp': _('WPA2 802.1X (CCMP)'),
+		'wpa2+tkip': _('WPA2 802.1X (TKIP)'),
+		'wpa+ccmp': _('WPA 802.1X (CCMP)'),
+		'wpa+tkip': _('WPA 802.1X (TKIP)'),
+		'wpa-mixed+ccmp': _('Mixed WPA/WPA2 802.1X (CCMP)'),
+		'wpa-mixed+tkip': _('Mixed WPA/WPA2 802.1X (TKIP)'),
+		'owe': _('WPA3 OWE'),
+		'none': _('Open')
+	};
+	const modes = {
+		'sae': _('WPA3 PSK (SAE)'),
+		'psk2': _('WPA2 PSK'),
+		'psk': _('WPA PSK'),
+		'psk-mixed': _('Mixed WPA/WPA2 PSK'),
+		'wpa3': _('WPA3 802.1X'),
+		'wpa3-mixed': _('Mixed WPA2/WPA3 802.1X'),
+		'wpa3-192': _('WPA3 802.1X 192-bit'),
+		'wpa2': _('WPA2 802.1X'),
+		'wpa': _('WPA 802.1X'),
+		'wpa-mixed': _('Mixed WPA/WPA2 802.1X'),
+		'wep-open': _('WEP Open System'),
+		'wep-shared': _('WEP Shared Key')
+	};
+	const ciphers = { 'aes': 'CCMP', 'ccmp': 'CCMP', 'ccmp256': 'CCMP-256', 'gcmp': 'GCMP', 'gcmp256': 'GCMP-256', 'tkip': 'TKIP' };
+	const [ mode, ...suffix ] = String(value).split('+');
+
+	if (labels[value])
+		return labels[value];
+	else if (!modes[mode])
+		return String(value);
+	else if (suffix.length)
+		return '%s (%s)'.format(modes[mode], suffix.map(c => ciphers[c] ?? c.toUpperCase()).join('+'));
+	else if (/^(psk|wpa)(2|-mixed)?$/.test(mode))
+		return '%s (%s)'.format(modes[mode], _('auto'));
+
+	return modes[mode];
+}
+
+/*
+	encryption values offered in the uplink dialogs
+*/
+function encryptionValues(o) {
+	[
+		'sae', 'sae-mixed',
+		'psk2', 'psk2+ccmp', 'psk2+tkip',
+		'psk', 'psk+ccmp', 'psk+tkip',
+		'psk-mixed', 'psk-mixed+ccmp', 'psk-mixed+tkip',
+		'wpa3', 'wpa3-mixed', 'wpa3-192',
+		'wpa2', 'wpa2+ccmp', 'wpa2+tkip',
+		'wpa', 'wpa+ccmp', 'wpa+tkip',
+		'wpa-mixed', 'wpa-mixed+ccmp', 'wpa-mixed+tkip',
+		'owe', 'none'
+	].forEach(value => o.value(value, encryptionLabel(value)));
+}
+
+/*
+	add an encryption value the list does not offer yet, so that the list
+	shows it and saving the dialog keeps it
+*/
+function encryptionValue(o, value) {
+	if (value != null && !(o.keylist || []).includes(value))
+		o.value(value, encryptionLabel(value));
+}
+
+/*
 	normalize a bssid to upper case for case-insensitive comparison
 */
 function normBssid(bssid) {
@@ -501,86 +582,22 @@ return view.extend({
 		};
 
 		o = s.taboption('wireless', form.ListValue, 'encryption', _('Encryption'));
-		o.value('sae', _('WPA3 PSK (SAE)'));
-		o.value('sae-mixed', _('Mixed WPA2/WPA3 PSK (CCMP)'));
-		o.value('psk2+ccmp', _('WPA2 PSK (CCMP)'));
-		o.value('psk2+tkip', _('WPA2 PSK (TKIP)'));
-		o.value('psk+ccmp', _('WPA PSK (CCMP)'));
-		o.value('psk+tkip', _('WPA PSK (TKIP)'));
-		o.value('psk-mixed+ccmp', _('Mixed WPA/WPA2 PSK (CCMP)'));
-		o.value('psk-mixed+tkip', _('Mixed WPA/WPA2 PSK (TKIP)'));
-		o.value('wpa3', _('WPA3 802.1X'));
-		o.value('wpa3-mixed', _('Mixed WPA2/WPA3 802.1X'));
-		o.value('wpa2+ccmp', _('WPA2 802.1X (CCMP)'));
-		o.value('wpa2+tkip', _('WPA2 802.1X (TKIP)'));
-		o.value('wpa+ccmp', _('WPA 802.1X (CCMP)'));
-		o.value('wpa+tkip', _('WPA 802.1X (TKIP)'));
-		o.value('wpa-mixed+ccmp', _('Mixed WPA/WPA2 802.1X (CCMP)'));
-		o.value('wpa-mixed+tkip', _('Mixed WPA/WPA2 802.1X (TKIP)'));
-		o.value('owe', _('WPA3 OWE'));
-		o.value('none', _('Open'));
+		encryptionValues(o);
 		o.default = 'none';
+		o.load = function (section_id) {
+			const value = form.ListValue.prototype.load.call(this, section_id);
+
+			/*
+				keep a value the list does not offer, e.g. 'wpa2' as written by the
+				LuCI wireless page for cipher 'auto', otherwise the dialog shows the
+				first entry instead and saving it overwrites the uplink settings
+			*/
+			encryptionValue(this, value);
+			return value;
+		};
 		o.textvalue = function (section_id) {
-			let cfgvalue = this.map.data.get('wireless', section_id, 'encryption');
-			switch (cfgvalue) {
-				case 'sae':
-					cfgvalue = _('WPA3 PSK (SAE)');
-					break;
-				case 'sae-mixed':
-					cfgvalue = _('Mixed WPA2/WPA3 PSK (CCMP)');
-					break;
-				case 'psk2+ccmp':
-					cfgvalue = _('WPA2 PSK (CCMP)');
-					break;
-				case 'psk2+tkip':
-					cfgvalue = _('WPA2 PSK (TKIP)');
-					break;
-				case 'psk+ccmp':
-					cfgvalue = _('WPA PSK (CCMP)');
-					break;
-				case 'psk+tkip':
-					cfgvalue = _('WPA PSK (TKIP)');
-					break;
-				case 'psk-mixed+ccmp':
-					cfgvalue = _('Mixed WPA/WPA2 PSK (CCMP)');
-					break;
-				case 'psk-mixed+tkip':
-					cfgvalue = _('Mixed WPA/WPA2 PSK (TKIP)');
-					break;
-				case 'wpa3':
-					cfgvalue = _('WPA3 802.1X');
-					break;
-				case 'wpa3-mixed':
-					cfgvalue = _('Mixed WPA2/WPA3 802.1X');
-					break;
-				case 'wpa2+ccmp':
-					cfgvalue = _('WPA2 802.1X (CCMP)');
-					break;
-				case 'wpa2+tkip':
-					cfgvalue = _('WPA2 802.1X (TKIP)');
-					break;
-				case 'wpa+ccmp':
-					cfgvalue = _('WPA 802.1X (CCMP)');
-					break;
-				case 'wpa+tkip':
-					cfgvalue = _('WPA 802.1X (TKIP)');
-					break;
-				case 'wpa-mixed+ccmp':
-					cfgvalue = _('Mixed WPA/WPA2 802.1X (CCMP)');
-					break;
-				case 'wpa-mixed+tkip':
-					cfgvalue = _('Mixed WPA/WPA2 802.1X (TKIP)');
-					break;
-				case 'owe':
-					cfgvalue = _('WPA3 OWE');
-					break;
-				case 'none':
-					cfgvalue = _('Open');
-					break;
-				default:
-					cfgvalue = (cfgvalue != null) ? '%h'.format(cfgvalue) : null;
-			}
-			return cfgvalue;
+			const cfgvalue = this.map.data.get('wireless', section_id, 'encryption');
+			return (cfgvalue != null) ? '%h'.format(encryptionLabel(cfgvalue)) : null;
 		};
 		handleStatus();
 
