@@ -419,6 +419,41 @@ function update_crypto_modes(section_id) {
 			.format(mode.replace(/ \(.*\)$/, ''), replacement.replace(/ \(.*\)$/, '')));
 }
 
+// Phase 2 authentication types applicable to the EAP methods with an inner
+// one: PEAP and FAST only tunnel EAP methods, PEAP also accepts MSCHAPv2, which
+// wifi-scripts treat like EAP-MSCHAPv2 there, TTLS tunnels any type.
+const eap_auth_types = {
+	fast: [ 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	peap: [ 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	ttls: [ 'PAP', 'CHAP', 'MSCHAP', 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ]
+};
+
+// Set up a phase 2 authentication option offering the types applicable to the
+// EAP method selected in the same section. Defaults to the phase 2 wifi-scripts
+// use without 'auth': MSCHAPv2 for TTLS, the same as EAP-MSCHAPv2 for the
+// others.
+function eap_auth_option(o) {
+	for (const type of eap_auth_types.ttls)
+		o.value(type, type.replace(/V2$/, 'v2'));
+
+	o.defaults = {
+		'MSCHAPV2': [ { eap_type: 'ttls' } ],
+		'EAP-MSCHAPV2': []
+	};
+
+	o.checkDepends = function(section_id) {
+		const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+		const eap_type = this.section.formvalue(section_id, 'eap_type');
+
+		if (eap_auth_types[eap_type])
+			limit_choices(this, section_id, eap_type, type => eap_auth_types[eap_type].includes(type),
+				() => (eap_type == 'ttls') ? 'MSCHAPV2' : 'EAP-MSCHAPV2',
+				(type, replacement) => _('%s is not applicable to the selected EAP method and has been replaced by %s.').format(type, replacement));
+
+		return active;
+	};
+}
+
 // Define a class CBIWifiFrequencyValue that extends form.Value
 var CBIWifiFrequencyValue = form.Value.extend({
 	// Declare an RPC method to get the frequency list for a given device
@@ -2167,14 +2202,7 @@ return view.extend({
 					o.password = true;
 
 					o = ss.taboption('encryption', form.ListValue, 'auth', _('Authentication'));
-					o.value('PAP', 'PAP');
-					o.value('CHAP', 'CHAP');
-					o.value('MSCHAP', 'MSCHAP');
-					o.value('MSCHAPV2', 'MSCHAPv2');
-					o.value('EAP-GTC', 'EAP-GTC');
-					o.value('EAP-MD5', 'EAP-MD5');
-					o.value('EAP-MSCHAPV2', 'EAP-MSCHAPv2');
-					o.value('EAP-TLS', 'EAP-TLS');
+					eap_auth_option(o);
 					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed', 'wpa3-192'], eap_type: ['fast', 'peap', 'ttls'] });
 
 					o.validate = function(section_id, value) {
