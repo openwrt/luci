@@ -665,7 +665,14 @@ return view.extend({
 		o.value('EAP-TLS', _('EAP-TLS'));
 		o.value('auth=PAP', _('auth=PAP'));
 		o.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
-		o.default = 'EAP-MSCHAPV2';
+		/*
+			the phase 2 of wifi-scripts without auth: EAP-MSCHAPv2 for PEAP
+			and FAST, which only tunnel EAP methods, MSCHAPv2 for TTLS
+		*/
+		o.defaults = {
+			'MSCHAPV2': [{ eap_type: 'ttls' }],
+			'EAP-MSCHAPV2': []
+		};
 		o.depends({ encryption: 'wpa', '!contains': true });
 		o.modalonly = true;
 
@@ -1182,7 +1189,14 @@ return view.extend({
 			o2.value('EAP-TLS', _('EAP-TLS'));
 			o2.value('auth=PAP', _('auth=PAP'));
 			o2.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
-			o2.default = 'EAP-MSCHAPV2';
+			/*
+				the phase 2 of wifi-scripts without auth: EAP-MSCHAPv2 for PEAP
+				and FAST, which only tunnel EAP methods, MSCHAPv2 for TTLS
+			*/
+			o2.defaults = {
+				'MSCHAPV2': [{ eap_type: 'ttls' }],
+				'EAP-MSCHAPV2': []
+			};
 
 			o2 = s2.option(form.Value, 'identity', _('Identity'));
 			o2.depends({ encryption: 'wpa', '!contains': true });
