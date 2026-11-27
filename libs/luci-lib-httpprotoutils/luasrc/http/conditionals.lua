@@ -10,7 +10,7 @@ local date = require("luci.http.date")
 
 function mk_etag( stat )
 	if stat ~= nil then
-		return string.format( '"%x-%x-%x"', stat.ino, stat.size, stat.mtime )
+		return string.format( '"%x-%.0f-%.0f"', stat.ino, stat.size, stat.mtime )
 	end
 end
 
