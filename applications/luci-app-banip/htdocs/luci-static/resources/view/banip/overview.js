@@ -85,6 +85,37 @@ function expandPairs(pairs) {
 	return result;
 }
 
+/*
+	show the burst limits next to the related rates, e.g.
+	"limit udp: 100" + "burst udp: 5" => "limit udp: 100 (burst 5)"
+	"loglimit rate: 10" + "loglimit burst: 5" => "loglimit: 10 (burst 5)"
+*/
+function mergeBurst(pairs) {
+	const burst = {};
+	const target = function (key) {
+		let m = key && key.match(/^burst (\S+)$/);
+		if (m) {
+			return 'limit ' + m[1];
+		}
+		m = key && key.match(/^(\S+) burst$/);
+		return m ? m[1] + ' rate' : null;
+	};
+	pairs.forEach(function (pair) {
+		const key = target(pair[0]);
+		if (key) {
+			burst[key] = pair[1];
+		}
+	});
+	return pairs.filter(function (pair) {
+		return !target(pair[0]);
+	}).map(function (pair) {
+		if (pair[0] && burst[pair[0]] !== undefined) {
+			return [pair[0].replace(/ rate$/, ''), pair[1] + ' (' + _('burst') + ' ' + burst[pair[0]] + ')'];
+		}
+		return pair;
+	});
+}
+
 function flagChips(text) {
 	return expandPairs(parsePairs(text)).filter(function (pair) {
 		return pair[0];
@@ -288,7 +319,7 @@ return view.extend({
 					const uplinks = splitUplinks(info.active_uplink);
 					setText('uplink4', uplinks.v4);
 					setText('uplink6', uplinks.v6);
-					setNodes('nft', stackNodes(expandPairs(parsePairs(info.nft_info)), false));
+					setNodes('nft', stackNodes(mergeBurst(expandPairs(parsePairs(info.nft_info))), false));
 					setNodes('sys', stackNodes(sysPairs(info.system_info), false));
 					setNodes('feeds', feedChips(info.active_feeds));
 					setNodes('flags', flagChips(info.run_flags));
@@ -658,6 +689,20 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_chain', form.ListValue, 'ban_icmpburstlimit', _('ICMP Burst Limit'), _('Burst size in packets for the ICMP-Threshold. Short spikes up to this size pass before the threshold applies, the limit is shared across all matching WAN traffic.'));
+		o.depends({ ban_icmplimit: '0', '!reverse': true });
+		o.value('5');
+		o.value('10');
+		o.value('25');
+		o.value('50');
+		o.value('100');
+		o.default = '5';
+		o.datatype = 'and(uinteger,min(1))';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Threshold'), _('SYN-Threshold in packets per second to prevent WAN-DoS attacks. To disable this safeguard set it to \'0\'.'));
 		o.value('0');
 		o.value('10');
@@ -672,6 +717,20 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_chain', form.ListValue, 'ban_synburstlimit', _('SYN Burst Limit'), _('Burst size in packets for the SYN-Threshold. Short spikes up to this size pass before the threshold applies, the limit is shared across all matching WAN traffic.'));
+		o.depends({ ban_synlimit: '0', '!reverse': true });
+		o.value('5');
+		o.value('10');
+		o.value('25');
+		o.value('50');
+		o.value('100');
+		o.default = '5';
+		o.datatype = 'and(uinteger,min(1))';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Threshold'), _('UDP-Threshold in packets per second to prevent WAN-DoS attacks. To disable this safeguard set it to \'0\'.'));
 		o.value('0');
 		o.value('100');
@@ -681,6 +740,20 @@ return view.extend({
 		o.value('2500');
 		o.value('5000');
 		o.default = '100';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', form.ListValue, 'ban_udpburstlimit', _('UDP Burst Limit'), _('Burst size in packets for the UDP-Threshold. Short spikes up to this size pass before the threshold applies, the limit is shared across all matching WAN traffic.'));
+		o.depends({ ban_udplimit: '0', '!reverse': true });
+		o.value('5');
+		o.value('10');
+		o.value('25');
+		o.value('50');
+		o.value('100');
+		o.default = '5';
+		o.datatype = 'and(uinteger,min(1))';
 		o.placeholder = _('-- default --');
 		o.create = true;
 		o.optional = true;
@@ -944,7 +1017,7 @@ return view.extend({
 			o.rmempty = true;
 		}
 
-		o = s.taboption('feeds', form.Value, 'ban_authkey', _('Feed Auth-Key'), _('Personal auth-key for feeds with an \'{authkey}\' URL placeholder, e.g. the free abuse.ch key required by the \'urlhaus\' feed.'));
+		o = s.taboption('feeds', form.Value, 'ban_authkey', _('Feed Auth-Key'), _('Personal auth-key for feeds with an \'{authkey}\' URL placeholder, e.g. the free abuse.ch key required by the \'urlhaus\' and \'threatfox\' feed.'));
 		o.password = true;
 		o.validate = function (section_id, value) {
 			if (value && !value.match(/^[A-Za-z0-9_-]+$/)) {
