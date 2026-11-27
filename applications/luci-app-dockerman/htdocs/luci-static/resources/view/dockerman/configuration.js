@@ -104,7 +104,7 @@ return L.view.extend({
 			_('Destinations prefixed with a Registry host matching an entry in this table invoke its corresponding credentials.') + '<br/>' +
 			_('The first match is used.') + '<br/>' +
 			_('A Token is preferred over a Password.') + '<br/>' +
-			_('Tokes and Passwords are not encrypted in the uci configuration.'));
+			_('Tokens and Passwords are not encrypted in the uci configuration.'));
 		ss = o.subsection;
 		ss.anonymous = true;
 		ss.nodescriptions = true;
