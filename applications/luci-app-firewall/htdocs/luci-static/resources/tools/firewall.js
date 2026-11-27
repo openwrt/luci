@@ -531,6 +531,52 @@ return baseclass.extend({
 		return o;
 	},
 
+	addIPSetOption(s, tab) {
+		const fw4 = L.hasSystemFeature('firewall4');
+		const o = s.taboption(tab, fw4 ? form.DynamicList : form.Value, 'ipset', _('Use ipset'),
+			fw4 ? _('Match against one or more named sets. All listed sets must match (logical AND). Append <code>src</code> or <code>dest</code> per set field to override the match direction, prefix a set name with <code>!</code> to negate the match.') : null);
+
+		uci.sections('firewall', 'ipset', function(s) {
+			if (typeof(s.name) == 'string')
+				o.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
+		});
+
+		o.modalonly = true;
+		o.rmempty = true;
+
+		/* fw3 takes a single reference only */
+		if (!fw4)
+			return o;
+
+		/* A legacy scalar value may carry direction tokens ("set src"); keep it
+		   as one entry instead of letting the list widget split it at spaces. */
+		o.cfgvalue = function(/* section_id, set_value */) {
+			const v = this.super('cfgvalue', arguments);
+			return (v == null) ? null : (Array.isArray(v) ? v : [ v ]);
+		};
+
+		/* Separators are collapsed so that a reference is stored the way fw4
+		   splits it ("set src dst"). A single reference stays an `option`,
+		   which older fw4 accepts; several references become a `list`. */
+		o.write = function(section_id, value) {
+			value = (Array.isArray(value) ? value : [ value ])
+				.map(v => String(v).trim().replace(/[ \t,]+/g, ' '));
+			return this.super('write', [ section_id, (value.length == 1) ? value[0] : value ]);
+		};
+
+		/* Syntax only: a set name, optionally negated (fw4 allows blanks after
+		   the "!"), followed by up to three direction tokens (one per set
+		   field). fw4 checks that the set exists. */
+		o.validate = function(section_id, value) {
+			value = String(value ?? '').trim();
+			if (value == '' || /^!?[ \t]*[a-zA-Z_.][a-zA-Z0-9\/_.-]*(?:[ \t,]+(?:src|dst|dest)){0,3}$/.test(value))
+				return true;
+			return _('Expecting: set name, optionally prefixed with "!" and followed by up to three "src"/"dest" tokens');
+		};
+
+		return o;
+	},
+
 	CBIProtocolSelect: form.MultiValue.extend({
 		__name__: 'CBI.ProtocolSelect',
 
