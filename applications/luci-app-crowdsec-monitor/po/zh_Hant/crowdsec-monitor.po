@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-crowdsec-monitor 0.1.0\n"
+"Report-Msgid-Bugs-To: hellresistor@protonmail.com\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_Hant\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Expiring"
+msgstr "即將到期"
+
+#, c-format
+msgid "%dd %dh"
+msgstr "%dd %dh"
+
+#, c-format
+msgid "%dh %dmin"
+msgstr "%dh %dmin"
+
+#, c-format
+msgid "%dmin"
+msgstr "%dmin"
+
+msgid "Loading…"
+msgstr "載入中…"
+
+#, c-format
+msgid "Page %d of %d"
+msgstr "第 %d 頁，共 %d 頁"
+
+msgid "CrowdSec Monitor"
+msgstr "CrowdSec Monitor"
+
+msgid "Local monitoring of the CrowdSec Firewall Bouncer. Shows the blocks currently applied in the OpenWrt nftables sets. The Bouncer synchronises decisions with the LAPI automatically; this dashboard is read-only."
+msgstr "CrowdSec Firewall Bouncer 的本機監控。顯示目前套用於 OpenWrt nftables 集合的封鎖項目。Bouncer 會自動與 LAPI 同步決策；此儀表板僅供讀取。"
+
+#, c-format
+msgid "Bouncer: %s"
+msgstr "Bouncer: %s"
+
+msgid "running"
+msgstr "執行中"
+
+msgid "not detected"
+msgstr "未偵測到"
+
+msgid "nftables table accessible"
+msgstr "nftables 表可存取"
+
+msgid "Could not query the ip crowdsec table"
+msgstr "無法查詢 ip crowdsec 表"
+
+msgid "Traffic processed"
+msgstr "已處理流量"
+
+msgid "Counter unavailable"
+msgstr "計數器無法使用"
+
+msgid "Packets blocked"
+msgstr "已封鎖的封包"
+
+msgid "set counters"
+msgstr "集合計數器"
+
+msgid "IPs in active sets"
+msgstr "作用中集合中的 IP"
+
+msgid "No active sets"
+msgstr "沒有作用中的集合"
+
+msgid "Bouncer rules"
+msgstr "Bouncer 規則"
+
+msgid "Check rules"
+msgstr "檢查規則"
+
+msgid "yes"
+msgstr "是"
+
+msgid "no"
+msgstr "否"
+
+msgid "Collecting samples. History is temporary and resets when the router restarts."
+msgstr "正在收集樣本。歷史記錄為暫存資料，路由器重新啟動時會重設。"
+
+#, c-format
+msgid "processed/s: %s · blocked/s: %s"
+msgstr "已處理/秒：%s · 已封鎖/秒：%s"
+
+#, c-format
+msgid "Samples: %d · window: %d s · blue bars: processed packets/s · red: blocked packets/s. Volatile history (/tmp), resets with the router."
+msgstr "樣本：%d · 時間範圍：%d 秒 · 藍色長條：每秒處理的封包 · 紅色：每秒封鎖的封包。暫存歷史記錄位於 /tmp，路由器重新啟動後會重設。"
+
+msgid "Activity history"
+msgstr "活動記錄"
+
+msgid "IPs currently blocked in nftables"
+msgstr "目前在 nftables 中封鎖的 IP 位址"
+
+msgid "All origins"
+msgstr "所有來源"
+
+msgid "Search IP"
+msgstr "搜尋 IP"
+
+msgid "Search IP address"
+msgstr "搜尋 IP 位址"
+
+msgid "Refresh list"
+msgstr "重新整理清單"
+
+msgid "Previous"
+msgstr "上一頁"
+
+msgid "Next"
+msgstr "下一頁"
+
+msgid "Could not retrieve the IP list."
+msgstr "無法取得 IP 清單。"
+
+msgid "List unavailable"
+msgstr "清單無法使用"
+
+msgid "IP address"
+msgstr "IP 位址"
+
+msgid "Origin"
+msgstr "來源"
+
+msgid "Time remaining"
+msgstr "剩餘時間"
+
+msgid "Initial duration"
+msgstr "初始持續時間"
+
+msgid "No IP found."
+msgstr "找不到 IP。"
+
+#, c-format
+msgid "%s addresses found"
+msgstr "%s IP found"
+
+msgid "Querying…"
+msgstr "查詢中…"
+
+msgid "The list shows the IPs currently present in the nftables sets managed by the Bouncer, not a direct query of the LAPI decisions. The Bouncer synchronises additions and removals automatically. Time remaining and initial duration come from the nftables expires and timeout fields. The exact time of the last LAPI query must be confirmed on the central server with cscli bouncers list."
+msgstr "清單顯示 Bouncer 管理的 nftables 集合中目前存在的 IP，而非直接查詢 LAPI 決策。Bouncer 會自動同步新增與移除。剩餘時間和初始持續時間來自 nftables 的 expires 與 timeout 欄位。最後一次 LAPI 查詢時間應在中央伺服器使用 cscli bouncers list 確認。"
+
+msgid "Indicators refresh every 15 seconds. History keeps up to 240 samples in /tmp and is lost when the router restarts. The list refreshes when you search, filter or change page."
+msgstr "指標每 15 秒更新一次。歷史記錄最多在 /tmp 保留 240 個樣本，路由器重新啟動後會遺失。搜尋、篩選或切換頁面時會更新清單。"
+
