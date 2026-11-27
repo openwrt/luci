@@ -4,9 +4,11 @@
 		"read": {
 			"cgi-io": [ "read" ],
 			"file": {
-				"/etc/passwd": [ "read" ]
+				"/etc/passwd": [ "read" ],
+				"/sys/devices/virtual/block/zram0/comp_algorithm": [ "read" ]
 			},
 			"ubus": {
+				"file": [ "read" ],
 				"luci": [ "getLEDs", "getTimezones", "getUSBDevices", "getUnixtime" ],
 				"rc": [ "list" ]
 			},
