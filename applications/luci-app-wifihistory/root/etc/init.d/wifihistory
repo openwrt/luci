@@ -9,6 +9,7 @@ PROG=/usr/sbin/wifihistory
 INTERVAL=30
 
 start_service() {
+	rm -f /var/run/wifihistory.stopping
 	mkdir -p /var/lib/wifihistory
 
 	procd_open_instance "$NAME"
@@ -19,6 +20,14 @@ start_service() {
 	procd_close_instance
 }
 
+stop_service() {
+	# Prevent new polling instances from starting during shutdown.
+	touch /var/run/wifihistory.stopping
+
+	# Write the in-memory history to the persistent storage (if any).
+	/usr/bin/ucode $PROG flush
+}
+
 service_triggers() {
-	procd_add_reload_trigger "wireless"
+	procd_add_reload_trigger "wireless" "wifihistory"
 }

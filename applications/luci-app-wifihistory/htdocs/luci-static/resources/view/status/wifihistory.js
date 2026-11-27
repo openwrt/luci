@@ -2,18 +2,48 @@
 'require view';
 'require poll';
 'require rpc';
+'require form';
 'require ui';
 
 const callGetHistory = rpc.declare({
 	object: 'luci.wifihistory',
-	method: 'getHistory',
-	expect: { history: {} }
+	method: 'getHistory'
+});
+
+function getHistory() {
+	return callGetHistory().then(function(result) {
+		if (result?.error)
+			throw new Error(result.error);
+
+		if (!result || typeof result.history != 'object' ||
+		    result.history == null || Array.isArray(result.history))
+			throw new Error('history-invalid-response');
+
+		return result.history;
+	});
+}
+
+function historyErrorMessage(error) {
+	switch (error?.message) {
+	case 'history-read-failed':
+		return _('Unable to read station history. Check the system log for details.');
+	case 'history-invalid-json':
+	case 'history-invalid-format':
+	case 'history-invalid-response':
+		return _('Station history is invalid or corrupted. Check the system log for details.');
+	default:
+		return _('Unable to retrieve station history. Please try again.');
+	}
+}
+
+const callGetStatus = rpc.declare({
+	object: 'luci.wifihistory',
+	method: 'getStatus'
 });
 
 const callClearHistory = rpc.declare({
 	object: 'luci.wifihistory',
-	method: 'clearHistory',
-	expect: { result: true }
+	method: 'clearHistory'
 });
 
 function formatDate(epoch) {
@@ -25,9 +55,17 @@ function formatDate(epoch) {
 
 return view.extend({
 	load() {
-		return callGetHistory();
+		return Promise.all([
+			getHistory().then(
+				history => ({ history }),
+				error => ({ historyError: error })
+			),
+			callGetStatus().catch(function(error) {
+				console.warn('Unable to retrieve WiFi history storage status:', error);
+				return null;
+			})
+		]);
 	},
-
 	updateTable(table, history) {
 		const stations = Object.values(history);
 
@@ -121,61 +159,174 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button-negative',
 					'click': ui.createHandlerFn(this, function() {
-						return callClearHistory().then(L.bind(function() {
+						return callClearHistory().then(L.bind(function(result) {
+							if (!result || result.result !== true) {
+								let message;
+
+								switch (result?.error) {
+								case 'busy':
+									message = _('History is currently being updated. Try again.');
+									break;
+								case 'storage-unavailable':
+									message = _('Configured storage is unavailable (%s). History was not cleared.').format(result.reason || 'unknown');
+									break;
+								case 'storage-clear-pending':
+									message = _('History clearing is pending. The operation will be retried when storage is available.');
+									break;
+								case 'marker-check-failed':
+									message = _('Unable to check the history clear status. No changes were made.');
+									break;
+								case 'marker-write-failed':
+									message = _('Unable to create the history clear marker. No changes were made.');
+									break;
+								case 'ram-write-failed':
+									message = _('Failed to clear history in RAM. The operation may be retried automatically.');
+									break;
+								default:
+									message = _('Failed to clear station history.');
+								}
+
+								ui.addNotification(_('Clear History'), E('p', message), 'error');
+								return;
+							}
+
 							ui.hideModal();
-							return callGetHistory().then(L.bind(function(history) {
+							return getHistory().then(L.bind(function(history) {
 								this.updateTable('#wifi_history_table', history);
-							}, this));
-						}, this));
+							}, this)).catch(function(err) {
+								ui.addNotification(_('Clear History'), E('p',
+									_('History was cleared, but could not be reloaded: %s').format(historyErrorMessage(err))), 'warning');
+							});
+						}, this)).catch(function(err) {
+							ui.addNotification(_('Clear History'), E('p',
+								_('RPC request failed: %s').format(err.message || err)), 'error');
+						});
 					})
 				}, _('Clear'))
 			])
 		]);
 	},
 
-	render(history) {
-		const isReadonlyView = !L.hasViewPermission();
+	renderStorageStatus(status) {
+		if (!status)
+			return E('div', { 'class': 'cbi-map-descr' },
+				_('Unable to retrieve storage status.'));
+		let text;
 
-		const v = E([], [
-			E('h2', _('Station History')),
-			E('div', { 'class': 'cbi-map-descr' },
-				_('This page displays a history of all WiFi stations that have connected to this device, including currently connected and previously seen devices.')),
+		switch (status?.reason) {
+		case 'ok':
+			text = _('History is saved to %s and survives a reboot.').format(status.path);
+			break;
 
-			E('div', { 'class': 'cbi-section' }, [
-				E('div', { 'class': 'right', 'style': 'margin-bottom:1em' }, [
-					E('button', {
-						'class': 'btn cbi-button-negative',
-						'disabled': isReadonlyView || null,
-						'click': ui.createHandlerFn(this, 'handleClearHistory')
-					}, _('Clear History'))
-				]),
+		case 'not-mounted':
+			text = _('%s is not on a mounted external device. History is kept in RAM only until the device is available.').format(status.path);
+			break;
 
-				E('table', { 'class': 'table', 'id': 'wifi_history_table' }, [
-					E('tr', { 'class': 'tr table-titles' }, [
-						E('th', { 'class': 'th' }, _('Connected')),
-						E('th', { 'class': 'th' }, _('MAC address')),
-						E('th', { 'class': 'th' }, _('Host')),
-						E('th', { 'class': 'th' }, _('Network')),
-						E('th', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
-						E('th', { 'class': 'th' }, _('First seen')),
-						E('th', { 'class': 'th' }, _('Last seen'))
-					])
-				])
-			])
-		]);
+		case 'not-usb':
+			text = _('%s is not on a USB device. History is kept in RAM only.').format(status.path);
+			break;
 
-		this.updateTable(v.querySelector('#wifi_history_table'), history);
+		case 'invalid':
+			text = _('The configured storage path is invalid or points outside the mounted device. History is kept in RAM only.');
+			break;
 
-		poll.add(L.bind(function() {
-			return callGetHistory().then(L.bind(function(history) {
-				this.updateTable('#wifi_history_table', history);
-			}, this));
-		}, this), 5);
+		default:
+			text = _('History is kept in RAM only and is lost on reboot.');
+		}
 
-		return v;
+		return E('div', { 'class': 'cbi-map-descr' }, text);
 	},
 
-	handleSaveApply: null,
-	handleSave: null,
-	handleReset: null
+	renderSettings() {
+		const m = new form.Map('wifihistory');
+		const s = m.section(form.NamedSection, 'config', 'wifihistory');
+		let o;
+
+		o = s.option(form.Value, 'storage_path', _('Storage path'),
+			_('Directory on a mounted external drive (for example USB) used to keep the history across reboots. Leave empty to keep the history in RAM only.'));
+		o.placeholder = '/mnt/sda1/wifihistory';
+		o.rmempty = true;
+		o.validate = function(section_id, value) {
+			if (value && value.charAt(0) !== '/')
+				return _('The path must be absolute');
+
+			return true;
+		};
+
+		o = s.option(form.Value, 'save_interval', _('Write interval'),
+			_('Seconds between periodic writes to the storage path. Connection changes and service stop are written immediately.'));
+		o.datatype = 'range(30,86400)';
+		o.placeholder = '300';
+		o.rmempty = true;
+
+		return m.render();
+	},
+
+	render([ historyResult, status ]) {
+		const isReadonlyView = !L.hasViewPermission();
+		const history = historyResult.history;
+
+		return this.renderSettings().then(L.bind(function(settings) {
+			const v = E([], [
+				E('h2', _('Station History')),
+				E('div', { 'class': 'cbi-map-descr' },
+					_('This page displays a history of all WiFi stations that have connected to this device, including currently connected and previously seen devices.')),
+
+				E('div', { 'class': 'cbi-section' }, [
+					E('div', { 'class': 'right', 'style': 'margin-bottom:1em' }, [
+						E('button', {
+							'class': 'btn cbi-button-negative',
+							'disabled': isReadonlyView || null,
+							'click': ui.createHandlerFn(this, 'handleClearHistory')
+						}, _('Clear History'))
+					]),
+
+					E('div', {
+						'id': 'wifi_history_error',
+						'class': 'alert-message warning',
+						'style': historyResult.historyError ? '' : 'display:none'
+					}, historyResult.historyError
+						? historyErrorMessage(historyResult.historyError) : ''),
+					E('table', { 'class': 'table', 'id': 'wifi_history_table' }, [
+						E('tr', { 'class': 'tr table-titles' }, [
+							E('th', { 'class': 'th' }, _('Connected')),
+							E('th', { 'class': 'th' }, _('MAC address')),
+							E('th', { 'class': 'th' }, _('Host')),
+							E('th', { 'class': 'th' }, _('Network')),
+							E('th', { 'class': 'th' }, '%s / %s'.format(_('Signal'), _('Noise'))),
+							E('th', { 'class': 'th' }, _('First seen')),
+							E('th', { 'class': 'th' }, _('Last seen'))
+						])
+					])
+				]),
+
+				E('h3', _('Storage')),
+				this.renderStorageStatus(status),
+				settings
+			]);
+
+			if (history)
+				this.updateTable(v.querySelector('#wifi_history_table'), history);
+
+			poll.add(L.bind(function() {
+				return getHistory().then(L.bind(function(history) {
+					this.updateTable('#wifi_history_table', history);
+
+					const errorNode = v.querySelector('#wifi_history_error');
+					if (errorNode) {
+						errorNode.style.display = 'none';
+						errorNode.textContent = '';
+					}
+				}, this)).catch(function(error) {
+					const errorNode = v.querySelector('#wifi_history_error');
+					if (errorNode) {
+						errorNode.textContent = historyErrorMessage(error);
+						errorNode.style.display = '';
+					}
+				});
+			}, this), 5);
+
+			return v;
+		}, this));
+	}
 });
