@@ -1,0 +1,7 @@
+{
+  "luci-app-bird-native": {
+    "description": "Read and replace the complete BIRD configuration, including authentication keys",
+    "read": { "ubus": { "luci.ospf": [ "native_read" ] } },
+    "write": { "ubus": { "luci.ospf": [ "native_apply" ] } }
+  }
+}

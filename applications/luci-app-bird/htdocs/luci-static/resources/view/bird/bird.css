@@ -1,0 +1,204 @@
+/* SPDX-License-Identifier: MIT */
+.ospf-page-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.ospf-page-header h2 {
+	margin: 0 0 .35rem;
+}
+
+.ospf-page-header .cbi-section-descr {
+	margin: 0;
+	padding: 0;
+}
+
+.ospf-page-actions {
+	display: flex;
+	flex: 0 0 auto;
+	gap: .5rem;
+}
+
+.ospf-form > .cbi-tabmenu {
+	margin-bottom: .5rem;
+}
+
+.ospf-tabs {
+	display: flex !important;
+	overflow-x: auto;
+	white-space: nowrap;
+}
+
+.ospf-tabs > li {
+	float: none !important;
+	flex: 0 0 auto;
+}
+
+.ospf-section {
+	margin-top: 1rem;
+	padding: 1.25rem 1.5rem;
+}
+
+.ospf-section > h3 {
+	margin-top: 0;
+}
+
+.ospf-section > .cbi-button-add {
+	margin-bottom: .75rem;
+}
+
+.ospf-table-wrap {
+	max-width: 100%;
+	margin: .5rem 0 1rem;
+	overflow-x: auto;
+}
+
+.ospf-table-wrap .table {
+	width: 100%;
+	min-width: 680px;
+}
+
+.ospf-table-wrap .table.ospf-table-summary {
+	min-width: 0;
+}
+
+.ospf-table-wrap .table.ospf-table-auth {
+	min-width: 620px;
+}
+
+.ospf-table-auth .td.cbi-section-actions {
+	min-width: 9rem;
+}
+
+.ospf-table-auth .td.cbi-section-actions > * {
+	flex-wrap: nowrap;
+}
+
+.ospf-table-auth .td.cbi-section-actions .btn {
+	white-space: nowrap;
+}
+
+.ospf-table-wrap .td {
+	vertical-align: middle;
+}
+
+.ospf-readonly-value {
+	display: inline-block;
+	padding-top: .35rem;
+	font-weight: 600;
+}
+
+.ospf-detail-value {
+	min-width: 16rem;
+	white-space: normal !important;
+	word-break: break-word;
+}
+
+.ospf-empty {
+	padding: 1.5rem 1rem !important;
+	color: var(--gray-color-high, var(--text-color-low, #666));
+	text-align: center;
+}
+
+.ospf-status-stack > .cbi-section:first-child {
+	margin-top: 0;
+}
+
+.ospf-output {
+	max-height: 28rem;
+	overflow: auto;
+	white-space: pre;
+}
+
+.ospf-output-group + .ospf-output-group {
+	margin-top: 1rem;
+}
+
+.ospf-output-group > h4 {
+	margin: .75rem 0 .35rem;
+}
+
+@media (max-width: 700px) {
+	.ospf-page-header {
+		flex-direction: column;
+	}
+
+	.ospf-page-actions {
+		width: 100%;
+	}
+
+	.ospf-section {
+		padding: 1rem;
+	}
+
+	.ospf-table-wrap .table:not(.ospf-table-interfaces) {
+		display: table !important;
+		min-width: 720px;
+	}
+
+	.ospf-table-wrap .table:not(.ospf-table-interfaces) thead {
+		display: table-header-group !important;
+	}
+
+	.ospf-table-wrap .table:not(.ospf-table-interfaces) tbody {
+		display: table-row-group !important;
+	}
+
+	.ospf-table-wrap .table:not(.ospf-table-interfaces) .tr {
+		display: table-row !important;
+	}
+
+	.ospf-table-wrap .table:not(.ospf-table-interfaces) .th,
+	.ospf-table-wrap .table:not(.ospf-table-interfaces) .td {
+		display: table-cell !important;
+	}
+
+	.ospf-table-wrap .ospf-table-interfaces,
+	.ospf-table-interfaces tbody {
+		display: block;
+		min-width: 0;
+	}
+
+	.ospf-table-interfaces thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.ospf-table-interfaces tbody .tr {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		border-block-end: 1px solid var(--border-color-medium, #ddd);
+	}
+
+	.ospf-table-interfaces .td {
+		display: block;
+		min-width: 0;
+		max-width: none;
+		overflow-wrap: anywhere;
+		white-space: normal !important;
+	}
+
+	.ospf-table-interfaces .td[data-title]::before {
+		content: attr(data-title);
+		display: block;
+		font-weight: bold;
+	}
+
+	.ospf-table-interfaces .cbi-section-actions,
+	.ospf-table-interfaces .ospf-empty {
+		grid-column: 1 / -1;
+		width: auto;
+	}
+
+	.ospf-table-interfaces .cbi-section-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: .5rem;
+	}
+}

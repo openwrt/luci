@@ -1,0 +1,7 @@
+{
+  "luci-app-bird": {
+    "description": "View and configure BIRD OSPF",
+    "read": { "ubus": { "luci.ospf": [ "status" ] } },
+    "write": { "ubus": { "luci.ospf": [ "apply" ] } }
+  }
+}
