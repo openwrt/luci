@@ -1,0 +1,114 @@
+config general 'general'
+	option enabled '1'
+	option log_level 'info'
+	option log_output '/tmp/sing-box.log'
+	option stack 'gvisor'
+	option tun_address '172.19.0.1/30'
+	option tun_mtu '1400'
+	option auto_route '1'
+	option strict_route '1'
+	option clash_api '1'
+	option clash_api_port '9090'
+	option final_outbound 'direct'
+
+config urltest 'urltest'
+	option enabled '1'
+	option interval '3m'
+	option tolerance '50'
+	option test_url 'http://www.gstatic.com/generate_204'
+
+config dns 'dns'
+	option direct_server 'auto'
+	option tunnel_server '8.8.8.8'
+	option strategy 'prefer_ipv4'
+
+# Example VLESS+REALITY server. Disabled by default — replace with your own
+# credentials or import via the Servers tab → Subscription.
+config server
+	option name 'example-server'
+	option enabled '0'
+	option type 'vless'
+	option server 'example.com'
+	option port '443'
+	option uuid '00000000-0000-0000-0000-000000000000'
+	option flow 'xtls-rprx-vision'
+	option sni 'www.microsoft.com'
+	option utls_fingerprint 'chrome'
+	option reality_public_key 'REPLACE_WITH_YOUR_REALITY_PUBLIC_KEY'
+	option reality_short_id '0000000000000000'
+
+config rule
+	option name 'YouTube'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-youtube'
+	option outbound 'auto'
+
+config rule
+	option name 'Google'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-google'
+	option outbound 'auto'
+
+config rule
+	option name 'Instagram'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-instagram'
+	option outbound 'auto'
+
+config rule
+	option name 'Twitter'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-twitter'
+	option outbound 'auto'
+
+config rule
+	option name 'Facebook'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-facebook'
+	option outbound 'auto'
+
+config rule
+	option name 'Telegram Domains'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-telegram'
+	option outbound 'auto'
+
+config rule
+	option name 'Telegram IPs'
+	option enabled '1'
+	option type 'ip_cidr'
+	option match '91.105.192.0/23 91.108.0.0/16 95.161.64.0/20 149.154.160.0/20 185.76.151.0/24'
+	option outbound 'auto'
+
+config rule
+	option name 'OpenAI'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-openai'
+	option outbound 'auto'
+
+config rule
+	option name 'SoundCloud'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-soundcloud'
+	option outbound 'auto'
+
+config rule
+	option name 'Ad Block'
+	option enabled '1'
+	option type 'geosite'
+	option match 'geosite-category-ads-all'
+	option outbound 'block'
+
+config subscription
+	option enabled '0'
+	option url ''
+	option auto_update '0'
+	option update_interval '24h'

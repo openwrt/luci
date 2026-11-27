@@ -1,0 +1,83 @@
+#!/bin/sh
+# singbox-migrate — one-shot UCI defaults script run on first boot after
+# install. If /etc/sing-box/config.json exists from a pre-luci-app-singbox
+# setup, parse the first REALITY outbound out of it and create a matching
+# `config server` section in /etc/config/singbox, then enable the service.
+#
+# Uses a marker file rather than testing for /etc/config/singbox (which the
+# package always ships as a conffile, so its presence is not a reliable
+# signal of "already migrated").
+
+MARKER="/etc/.singbox.migrated"
+
+[ -f /etc/sing-box/config.json ] || exit 0
+[ -f "$MARKER" ] && exit 0
+
+CONFIG="/etc/sing-box/config.json"
+
+exists() { [ -n "$1" ]; }
+
+get_json_val() {
+	local key="$1"
+	grep -o "\"$key\"[^,]*" "$CONFIG" 2>/dev/null | head -1 | sed 's/.*: *"//' | sed 's/".*//'
+}
+
+get_json_num() {
+	local key="$1"
+	grep -o "\"$key\"[^,]*" "$CONFIG" 2>/dev/null | head -1 | sed 's/.*: *//' | sed 's/,.*//'
+}
+
+uci -q batch << EOF
+set singbox.general.enabled=1
+set singbox.general.stack=gvisor
+set singbox.general.tun_address=172.19.0.1/30
+set singbox.general.tun_mtu=1400
+set singbox.general.auto_route=1
+set singbox.general.strict_route=1
+set singbox.general.clash_api=1
+set singbox.general.clash_api_port=9090
+set singbox.general.final_outbound=direct
+set singbox.urltest.enabled=1
+set singbox.urltest.interval=3m
+set singbox.urltest.tolerance=50
+set singbox.dns.direct_server=auto
+set singbox.dns.tunnel_server=8.8.8.8
+set singbox.dns.strategy=prefer_ipv4
+EOF
+
+SERVERS=$(grep -o '"tag":"[^"]*xray"' "$CONFIG" 2>/dev/null | sed 's/"tag":"//;s/"//')
+for TAG in $SERVERS; do
+	SERVER=$(grep -A20 "\"tag\":\"$TAG\"" "$CONFIG" | grep '"server"' | head -1 | sed 's/.*: *"//;s/".*')
+	PORT=$(grep -A20 "\"tag\":\"$TAG\"" "$CONFIG" | grep '"server_port"' | head -1 | sed 's/.*: *//;s/,.*//')
+	UUID=$(grep -A20 "\"tag\":\"$TAG\"" "$CONFIG" | grep '"uuid"' | head -1 | sed 's/.*: *"//;s/".*')
+	SNI=$(grep -A20 "\"tag\":\"$TAG\"" "$CONFIG" | grep '"server_name"' | head -1 | sed 's/.*: *"//;s/".*')
+	PUBKEY=$(grep -A20 "\"tag\":\"$TAG\"" "$CONFIG" | grep '"public_key"' | head -1 | sed 's/.*: *"//;s/".*')
+	SHORTID=$(grep -A20 "\"tag\":\"$TAG\"" "$CONFIG" | grep '"short_id"' | head -1 | sed 's/.*: *"//;s/".*')
+
+	[ -z "$SERVER" ] && continue
+
+	SID=$(uci -q add singbox server)
+	uci -q set "singbox.$SID.name=$TAG"
+	uci -q set "singbox.$SID.enabled=1"
+	uci -q set "singbox.$SID.type=vless"
+	uci -q set "singbox.$SID.server=$SERVER"
+	uci -q set "singbox.$SID.port=${PORT:-443}"
+	uci -q set "singbox.$SID.uuid=$UUID"
+	uci -q set "singbox.$SID.flow=xtls-rprx-vision"
+	uci -q set "singbox.$SID.sni=$SNI"
+	uci -q set "singbox.$SID.utls_fingerprint=chrome"
+	exists "$PUBKEY" && uci -q set "singbox.$SID.reality_public_key=$PUBKEY"
+	exists "$SHORTID" && uci -q set "singbox.$SID.reality_short_id=$SHORTID"
+done
+
+uci -q commit singbox
+
+/etc/init.d/sing-box enable >/dev/null 2>&1
+
+# Marker so this script never re-runs (uci-defaults are normally invoked once,
+# but be defensive).
+touch "$MARKER"
+
+logger -t singbox-init "Imported existing sing-box config into UCI"
+
+exit 0
