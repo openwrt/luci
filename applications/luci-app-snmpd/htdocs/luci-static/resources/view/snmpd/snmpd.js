@@ -445,19 +445,29 @@ return L.view.extend({
 
 		go = g.option(form.Value, 'username',
 			_('username'),
-			_('Set username to access SNMP'));
+			_('Define username'));
 		go.rmempty = false;
 		go.optional = false;
-		go.modalonly = true;
 
-		go = g.option(form.Flag, 'allow_write',
-			_('Allow write'));
-		go.rmempty = false;
-		go.default = '0';
+		go = g.option(form.ListValue, 'security_level',
+			_('Security level'),
+			_('Define security level for SNMPv3'));
+		go.value('noAuthNoPriv', _('without authentication and privacy (noAuthNoPriv)'));
+		go.value('authNoPriv', _('with authentication but without privacy (authNoPriv)'));
+		go.value('authPriv', _('with authentication and privacy (authPriv)'));
+		go.optional = false;
+		go.cfgvalue = function(section_id) {
+			let sec = uci.get('snmpd', section_id, 'security_level');
+			let priv = uci.get('snmpd', section_id, 'privacy_pass');
+			let auth = uci.get('snmpd', section_id, 'auth_pass');
+
+			return sec ||
+				(priv ? 'authPriv' : 
+					auth ? 'authNoPriv' : 'authPriv')
+		};
 
 		go = g.option(form.ListValue, 'auth_type',
-			_('SNMPv3 authentication type'));
-		go.value('', _('none'));
+			_('Authentication type'));
 		go.value('SHA-512', _('SHA-512'));
 		go.value('SHA-384', _('SHA-384'));
 		go.value('SHA-256', _('SHA-256'));
@@ -465,38 +475,41 @@ return L.view.extend({
 		go.value('SHA', _('SHA'));
 		go.value('MD5', _('MD5'));
 		go.default = 'SHA-256';
+		go.modalonly = true;
 		go.rmempty = false;
+		go.depends({'security_level': 'noAuthNoPriv', '!reverse': true});
 
 		// SNMPv3 auth pass
 		go = g.option(form.Value, 'auth_pass',
-			_('SNMPv3 authentication passphrase'));
+			_('Authentication passphrase'));
 		go.password = true;
 		go.rmempty = true;
 		go.modalonly = true;
 		go.optional = false;
 		go.validate = this.testPassLength;
-		go.depends({'auth_type': '', '!reverse': true});
+		go.depends({'security_level': 'noAuthNoPriv', '!reverse': true});
 
 		// SNMPv3 privacy/encryption type
 		go = g.option(form.ListValue, 'privacy_type',
-			_('SNMPv3 encryption type'));
-		go.value('', _('none'));
+			_('Encryption type'));
 		go.value('AES-256', _('AES-256'));
 		go.value('AES-192', _('AES-192'));
 		go.value('AES', _('AES'));
 		go.value('DES', _('DES'));
 		go.default = 'AES';
+		go.modalonly = true;
 		go.rmempty = false;
+		go.depends('security_level', 'authPriv');
 
 		// SNMPv3 privacy/encryption pass
 		go = g.option(form.Value, 'privacy_pass',
-			_('SNMPv3 encryption passphrase'));
+			_('Encryption passphrase'));
 		go.password = true;
 		go.rmempty = true;
 		go.modalonly = true;
 		go.optional = false;
 		go.validate = this.testPassLength;
-		go.depends({'privacy_type': '', '!reverse': true});
+		go.depends('security_level', 'authPriv');
 
 		go = g.option(form.ListValue, 'RestrictOID',
 			_('OID-Restriction'));
@@ -511,6 +524,11 @@ return L.view.extend({
 			_('OID'));
 		this.oid.datatype = 'string';
 		this.oid.depends('RestrictOID', 'yes');
+
+		go = g.option(form.Flag, 'allow_write',
+			_('Allow write'));
+		go.rmempty = false;
+		go.default = '0';
 	},
 
 	populateTrapsSettings: function(subsection, desc, s, type) {
