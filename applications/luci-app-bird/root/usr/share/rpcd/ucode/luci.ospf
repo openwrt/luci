@@ -1,0 +1,810 @@
+// SPDX-License-Identifier: MIT
+'use strict';
+
+import { popen, readfile, writefile, rename, unlink } from 'fs';
+
+const config = '/etc/bird.conf';
+const marker = '# luci-app-bird: v2 ';
+const native_marker = marker + 'native configuration\n';
+const backup_path = '/etc/bird.conf.pre-luci-bird';
+const options = [
+	['cost', 10, 1, 65535],
+	['priority', 1, 0, 255],
+	['hello', 10, 1, 65535]
+];
+const link_options = [
+	['retransmit', 0, 0, 65535], ['wait', 0, 0, 65535], ['poll', 0, 0, 65535],
+	['weight', 1, 1, 256], ['bfd_multiplier', 3, 2, 255]
+];
+const bfd_modes = ['none', 'simple', 'keyed md5', 'meticulous keyed md5', 'keyed sha1', 'meticulous keyed sha1'];
+// Each row is an independent LuCI control. Only these directives can be emitted.
+const details = {
+	'RFC 5838': ['protocol', 'rfc5838', [['Enabled', 'switch']]],
+	'OSPFv3 IPv4 address family': ['transport', '', [['Enabled', 'switch']]],
+	'OSPF packet DSCP': ['link', 'tx dscp', [['DSCP', 'uint', 63]]],
+	'OSPF packet priority': ['link', 'tx priority', [['Priority', 'uint', 255]]],
+	'OSPF receive buffer': ['link', 'rx buffer', [['Size mode', ['normal', 'large', 'bytes']], ['Bytes', 'optional_uint', 65535]]],
+	'OSPF send length': ['link', 'tx length', [['Bytes', 'uint', 65535]]],
+	'OSPF transmit delay': ['link', 'transmit delay', [['Seconds', 'uint', 65535]]],
+	'Point-to-point netmask': ['link', 'ptp netmask', [['Enabled', 'switch']]],
+	'Point-to-point address': ['link', 'ptp address', [['Enabled', 'switch']]],
+	'Real broadcast': ['link', 'real broadcast', [['Enabled', 'switch']]],
+	'Secondary interface': ['link', 'secondary', [['Enabled', 'switch']]],
+	'Suppress link LSA': ['link', 'link lsa suppression', [['Enabled', 'switch']]],
+	'TTL security mode': ['link', 'ttl security', [['Mode', ['no', 'yes', 'tx only']]]],
+	'Interface dead interval': ['link', '', [['Mode', ['seconds', 'multiplier']], ['Value', 'uint', 65535]]],
+	'OSPF interface instance ID': ['link', '', [['Instance ID', 'uint', 255]]],
+	'Additional OSPF interface instance': ['link', '', [['Instance ID', 'uint', 255], ['Area ID', 'area'],
+		['Mode', ['broadcast', 'ptp', 'nbma', 'ptmp', 'passive']], ['Cost', 'uint', 65535],
+		['Hello interval (seconds)', 'uint', 65535], ['Dead interval (seconds)', 'uint', 65535]]],
+	'BFD minimum receive interval': ['bfd', 'min rx interval', [['Milliseconds', 'uint', 60000]]],
+	'BFD minimum transmit interval': ['bfd', 'min tx interval', [['Milliseconds', 'uint', 60000]]],
+	'BFD idle transmit interval': ['bfd', 'idle tx interval', [['Milliseconds', 'uint', 60000]]],
+	'BFD passive mode': ['bfd', 'passive', [['Enabled', 'switch']]],
+	'BFD authentication key': ['bfd-key', '', [['Key ID', 'uint', 255], ['Secret key', 'secret']]],
+	'NBMA neighbor election eligibility': ['peer', '', [['Neighbor address', 'ip'], ['Eligible', 'switch']]],
+	'OSPF authentication key': ['key', '', [['Key ID', 'uint', 255],
+		['Algorithm', ['simple', 'keyed md5', 'keyed sha1', 'hmac sha1', 'hmac sha256', 'hmac sha384', 'hmac sha512']],
+		['Secret key', 'secret'], ['Generate from', 'date'], ['Generate to', 'date'],
+		['Accept from', 'date'], ['Accept to', 'date']]],
+	'OSPF virtual link': ['virtual', '', [['Peer router ID', 'ipv4'], ['Instance ID', 'optional_uint', 255],
+		['Hello interval (seconds)', 'uint', 65535], ['Dead interval (seconds)', 'uint', 65535],
+		['Retransmit interval', 'uint', 65535], ['DR election wait', 'uint', 65535]]],
+	'OSPF virtual-link authentication key': ['virtual-key', '', [['Peer router ID', 'ipv4'],
+		['Instance ID', 'optional_uint', 255], ['Key ID', 'uint', 255],
+		['Algorithm', ['keyed md5', 'keyed sha1', 'hmac sha1', 'hmac sha256', 'hmac sha384', 'hmac sha512']],
+		['Secret key', 'secret'], ['Generate from', 'date'], ['Generate to', 'date'],
+		['Accept from', 'date'], ['Accept to', 'date']]],
+	'NSSA external summary': ['external', '', [['Prefix', 'prefix'], ['Hidden', 'switch'], ['Route tag', 'optional_uint', 4294967295]]],
+	'Custom stub network': ['stubnet', '', [['Prefix', 'prefix'], ['Hidden', 'switch'],
+		['Summary', 'switch'], ['Cost', 'optional_uint', 16777214]]],
+	'Route filter rule': ['filter', '', [['Direction', ['install', 'redistribute']], ['Action', ['accept', 'reject']],
+		['Exact prefix', 'prefix'], ['Metric type', ['none', 'e1', 'e2']],
+		['Metric', 'optional_uint', 16777214], ['Route tag', 'optional_uint', 4294967295]]]
+};
+
+function command(cmd) {
+	const pipe = popen(cmd, 'r');
+	if (!pipe)
+		return { ok: false, text: '' };
+	const output = pipe.read('all');
+	return { ok: pipe.close() == 0, text: trim(output ?? '') };
+}
+
+function birdIsRunning(result) {
+	return result.ok && !!match(result.text, /(^|\n)Daemon is up and running(\n|$)/);
+}
+
+function revision() {
+	const result = command('/usr/bin/sha256sum /etc/bird.conf 2>/dev/null');
+	return result.ok ? split(result.text, ' ')[0] : 'missing';
+}
+
+function ipv4(value) {
+	if (type(value) != 'string' || !match(value, /^([0-9]{1,3}\.){3}[0-9]{1,3}$/))
+		return false;
+	for (let part in split(value, '.'))
+		if (+part > 255 || sprintf('%d', +part) != part)
+			return false;
+	return true;
+}
+
+function deviceName(value) {
+	return type(value) == 'string' && !!match(value, /^[a-zA-Z0-9_.-]{1,15}$/) && value != 'lo';
+}
+
+function readSettings(source) {
+	if (substr(source, 0, length(native_marker)) == native_marker)
+		return { mode: 'native' };
+	if (substr(source, 0, length(marker)) == marker) {
+		try {
+			const state = json(substr(split(source, '\n')[0], length(marker)));
+			if (type(state) == 'object' && type(state.links) == 'array')
+				return { mode: 'managed', state };
+		} catch (error) {
+			return { mode: 'invalid' };
+		}
+		return { mode: 'invalid' };
+	}
+	return { mode: source ? 'external' : 'new',
+		state: { enabled: false, router_id: '', policy: 'none', links: [] } };
+}
+
+function areaNumber(value) {
+	if (ipv4(value)) {
+		const parts = split(value, '.');
+		return sprintf('%.0f', (((+parts[0] * 256 + +parts[1]) * 256 + +parts[2]) * 256 + +parts[3]));
+	}
+	if (type(value) == 'string' && match(value, /^(0|[1-9][0-9]{0,9})$/) && +value <= 4294967295)
+		return value;
+	return null;
+}
+
+function prefixList(values, family) {
+	if (type(values) != 'array' || length(values) > 64)
+		return null;
+	const result = [];
+	for (let value in values) {
+		const parts = type(value) == 'string' ? split(value, '/') : [];
+		if (length(parts) != 2 || !match(parts[1], /^(0|[1-9][0-9]{0,2})$/) ||
+		    +parts[1] > (family == 4 ? 32 : 128))
+			return null;
+		if (family == 4 ? !ipv4(parts[0]) :
+		    !match(parts[0], /^[a-fA-F0-9:.]+$/) || length(iptoarr(parts[0])) != 16)
+			return null;
+		if (index(result, value) < 0) push(result, value);
+	}
+	return result;
+}
+
+function prefixIdentity(prefix) {
+	const parts = split(prefix, '/');
+	return arrtoip(iptoarr(parts[0])) + '/' + parts[1];
+}
+
+function cleanDetail(field, value, family, previous) {
+	const kind = field[1];
+	if (type(kind) == 'array') return index(kind, value) >= 0 ? value : null;
+	if (kind == 'switch') return type(value) == 'bool' ? value : null;
+	if (kind == 'uint' || kind == 'optional_uint') {
+		if (kind == 'optional_uint' && value == '') return '';
+		return type(value) == 'int' && value >= 0 && value <= field[2] ? value : null;
+	}
+	if (type(value) != 'string') return null;
+	if (kind == 'area') return areaNumber(value);
+	if (kind == 'ipv4') return ipv4(value) ? value : null;
+	if (kind == 'ip') return (ipv4(value) ||
+		!!match(value, /^[0-9a-fA-F:.]+$/) && length(iptoarr(value)) == 16) ? value : null;
+	if (kind == 'prefix') return prefixList([value], family) == null ? null : value;
+	if (kind == 'date') return value == '' || match(value, /^[0-9]{4}-[0-9]{2}-[0-9]{2}( [0-9]{2}:[0-9]{2}:[0-9]{2})?$/) ? value : null;
+	if (kind == 'secret') {
+		value = value == '' ? previous : value;
+		return type(value) == 'string' && match(value, /^[A-Za-z0-9_.!@%+=:-]{1,64}$/) ? value : null;
+	}
+	return null;
+}
+
+function cleanDetails(rows, previous) {
+	if (type(rows) != 'array' || length(rows) > 96)
+		return { error: 'Configure up to 96 additional settings.' };
+	const result = [];
+	for (let row in rows) {
+		const definition = details[row?.name];
+		if (type(definition) != 'array' || index([4, 6], row.family) < 0 ||
+		    type(row.values) != 'array' || length(row.values) != length(definition[2]))
+			return { error: 'Invalid additional setting.' };
+		const scope = definition[0];
+		if ((scope == 'bfd' || scope == 'bfd-key' || scope == 'transport') && row.family != 4)
+			return { error: 'This setting must use the IPv4 or shared scope.' };
+		let target = '';
+		if (index(['link', 'bfd', 'bfd-key', 'peer', 'key'], scope) >= 0) {
+			if (!deviceName(row.target)) return { error: 'Invalid additional setting target.' };
+			target = row.target;
+		} else if (index(['virtual', 'virtual-key', 'external', 'stubnet'], scope) >= 0) {
+			target = areaNumber(row.target);
+			if (target == null || ((scope == 'virtual' || scope == 'virtual-key') && target == '0'))
+				return { error: 'Invalid additional setting target.' };
+		}
+		const values = [];
+		let old;
+		const indexes = scope == 'virtual-key' ? [0, 1, 2] : [0];
+		for (let item in previous)
+			if (item.name == row.name && item.target == target && item.family == row.family &&
+			    !length(filter(indexes, i => item.values[i] !== row.values[i]))) old = item.values;
+		for (let i, field in definition[2]) {
+			const value = cleanDetail(field, row.values[i], row.family, old?.[i]);
+			if (value == null)
+				return { error: 'Invalid value for %s in %s.', error_args: [field[0], row.name] };
+			push(values, value);
+		}
+		if (row.name == 'OSPF receive buffer') {
+			if (values[0] != 'bytes') values[1] = '';
+			else if (values[1] === '' || values[1] < 1) return { error: 'Enter the OSPF receive buffer size.' };
+		}
+		if (scope == 'filter') {
+			const v = values;
+			if (v[0] != 'redistribute' || v[1] != 'accept') v[3] = 'none', v[4] = v[5] = '';
+			else if (v[3] == 'none') v[4] = '';
+			else if (v[4] === '') return { error: 'Enter a metric for the selected route metric type.' };
+			const id = prefixIdentity(v[2]);
+			if (length(filter(result, item => item.name == row.name && item.family == row.family &&
+			    item.values[0] == v[0] && prefixIdentity(item.values[2]) == id)))
+				return { error: 'A rule already exists for this address family, direction and prefix. Edit the existing rule.' };
+		}
+		if (length(filter(result, item => item.target == target && item.family == row.family &&
+		    ((definition[1] && details[item.name][1] == definition[1] && details[item.name][0] == scope) ||
+		    (item.name == row.name && scope != 'filter' &&
+		    (scope == 'transport' || row.name == 'OSPF interface instance ID' ||
+		    !length(filter(indexes, i => item.values[i] !== values[i]))))))))
+			return { error: 'Duplicate additional setting.' };
+		push(result, { name: row.name, family: row.family, target, values });
+	}
+	if (length(filter(result, row => row.name == 'OSPFv3 IPv4 address family' && row.values[0])) &&
+	    length(filter(result, row => row.family == 4 && index(['virtual', 'virtual-key'], details[row.name][0]) >= 0)))
+		return { error: 'BIRD does not support virtual links for the OSPFv3 IPv4 address family.' };
+	return { rows: result };
+}
+
+function cleanAdvanced(value, old) {
+	if (type(value) != 'object')
+		return { error: 'Invalid advanced settings.' };
+	const state = {
+		ipv6: value.ipv6 == true, install6: value.install6 == true,
+		ecmp: value.ecmp ?? 0, graceful: value.graceful ?? 'default',
+		grace_time: value.grace_time ?? 120, areas: [],
+		stub_router: value.stub_router == true, merge_external: value.merge_external == true,
+		rfc1583: value.rfc1583 == true, tick: value.tick ?? 0,
+		instance4: value.instance4 ?? -1, instance6: value.instance6 ?? -1
+	};
+	if (type(state.ecmp) != 'int' || state.ecmp < 0 || state.ecmp > 64 ||
+	    index(['default', 'off', 'aware', 'on'], state.graceful) < 0 ||
+	    type(state.grace_time) != 'int' || state.grace_time < 1 || state.grace_time > 3600 ||
+	    type(state.tick) != 'int' || state.tick < 0 || state.tick > 60)
+		return { error: 'Invalid ECMP or graceful restart setting.' };
+	const extra = cleanDetails(value.details ?? [], old?.details ?? []);
+	if (extra.error) return extra;
+	state.details = extra.rows;
+	for (let id in [state.instance4, state.instance6])
+		if (type(id) != 'int' || id < -1 || id > 255)
+			return { error: 'OSPF instance ID must be between 0 and 255, or -1 for default.' };
+	const areas = value.areas ?? [];
+	if (type(areas) != 'array' || length(areas) > 32)
+		return { error: 'Configure up to 32 areas.' };
+	const seen = {};
+	for (let row in areas) {
+		const area = areaNumber(row?.area);
+		const networks = row?.networks ?? [];
+		const default_cost = row?.default_cost ?? 0;
+		const default_metric = row?.default_metric ?? 'e1';
+		const translator_stability = row?.translator_stability ?? 0;
+		if (area == null || seen[area] || index(['normal', 'stub', 'nssa'], row.type) < 0 ||
+		    (area == '0' && row.type != 'normal') || type(networks) != 'array' || length(networks) > 128 ||
+		    type(default_cost) != 'int' || default_cost < 0 || default_cost > 16777214 ||
+		    index(['e1', 'e2'], default_metric) < 0 ||
+		    type(translator_stability) != 'int' || translator_stability < 0 || translator_stability > 65535)
+			return { error: 'Invalid or duplicate area. Area 0 must be normal.' };
+		seen[area] = true;
+		const prefixes = {};
+		for (let entry in networks) {
+			if (index([4, 6], entry?.family) < 0 || prefixList([entry.prefix], entry.family) == null ||
+			    type(entry.hidden) != 'bool')
+				return { error: 'Invalid route prefix.' };
+			prefixes[entry.family + ':' + prefixIdentity(entry.prefix)] =
+				{ family: entry.family, prefix: entry.prefix, hidden: entry.hidden };
+		}
+		if (row.type == 'nssa' && row.default_nssa == true && row.no_summary == true)
+			return { error: 'NSSA default route origination requires summary propagation.' };
+		if ((row.type == 'normal' && (default_cost || row.no_summary == true)) ||
+		    (row.type != 'nssa' && (default_metric == 'e2' || translator_stability ||
+			row.default_nssa == true || row.translator == true)))
+			return { error: 'Area settings do not apply to the selected area type.' };
+		push(state.areas, { area, type: row.type, networks: values(prefixes), default_cost, no_summary: row.no_summary == true,
+			default_nssa: row.default_nssa == true, default_metric,
+			translator: row.translator == true, translator_stability });
+	}
+	return { state };
+}
+
+function configuredFamilies(link) {
+	return link.family == 'dual' ? [4, 6] : [link.family == 'ipv6' ? 6 : 4];
+}
+
+function checkDetailTargets(advanced, links) {
+	for (let row in advanced.details) {
+		const scope = details[row.name][0];
+		const eligible = filter(links, link => index(configuredFamilies(link), row.family) >= 0);
+		if (scope == 'key') {
+			if (!length(filter(links, link => link.device == row.target && link.mode != 'passive' &&
+			    (row.family == 4 ? link.family != 'ipv6' : link.family != 'ipv4'))))
+				return { error: '%s is not applicable to interface %s in the selected address family.',
+					error_args: [row.name, row.target] };
+			if (row.values[1] == 'simple') {
+				const ospf3 = row.family == 6 || length(filter(advanced.details, option =>
+					option.name == 'OSPFv3 IPv4 address family' && option.values[0]));
+				if (ospf3 || length(row.values[2]) > 8 ||
+				    length(filter(advanced.details, key => details[key.name][0] == 'key' &&
+					key.target == row.target && key.family == row.family)) != 1 ||
+				    length(filter(slice(row.values, 3), time => time != '')))
+					return { error: 'Simple authentication requires one OSPFv2 password of at most eight characters and no key timing.' };
+			}
+		} else if (scope == 'bfd' || scope == 'bfd-key') {
+			if (!length(filter(links, link => link.device == row.target && link.bfd)))
+				return { error: 'Enable BFD on %s before adding BFD options.', error_args: [row.target] };
+		} else if (index(['link', 'peer'], scope) >= 0) {
+			if (!length(filter(eligible, link => link.device == row.target &&
+			    (link.mode != 'passive' || row.name == 'OSPF interface instance ID' ||
+			     row.name == 'Additional OSPF interface instance') &&
+			    (scope != 'peer' || link.mode == 'nbma' || link.mode == 'ptmp'))))
+				return { error: '%s is not applicable to interface %s in the selected address family.',
+					error_args: [row.name, row.target] };
+			if (scope == 'peer') {
+				const ospf3 = row.family == 6 || length(filter(advanced.details, option =>
+					option.name == 'OSPFv3 IPv4 address family' && option.values[0]));
+				if (ipv4(row.values[0]) == !!ospf3)
+					return { error: 'Neighbor address does not match the selected OSPF transport.' };
+			}
+		} else if (row.target != '') {
+			const has_area = length(filter(eligible, link => link.area == row.target)) ||
+				length(filter(advanced.details, instance => instance.name == 'Additional OSPF interface instance' &&
+					instance.family == row.family && instance.values[1] == row.target &&
+					length(filter(eligible, link => link.device == instance.target))));
+			if (!has_area)
+				return { error: 'Assign area %s to the selected address family before adding area options.',
+					error_args: [row.target] };
+			if (scope == 'virtual-key' && !length(filter(advanced.details, link =>
+			    details[link.name][0] == 'virtual' && link.target == row.target && link.family == row.family &&
+			    link.values[0] == row.values[0] && link.values[1] === row.values[1])))
+				return { error: 'Add the matching virtual link before adding its authentication key.' };
+		} else if (!length(eligible)) {
+			return { error: 'Add an OSPF interface for IPv%s before adding %s.', error_args: [row.family, row.name] };
+		}
+	}
+	return null;
+}
+
+function ipv4UsesOspf3(advanced) {
+	return !!length(filter(advanced.details, row => row.name == 'OSPFv3 IPv4 address family' && row.values[0]));
+}
+
+function checkConflicts(advanced, links) {
+	const ospf3 = ipv4UsesOspf3(advanced);
+	if (ospf3 && advanced.rfc1583)
+		return { error: 'RFC 1583 compatibility requires OSPFv2 for IPv4.' };
+	for (let row in advanced.details) {
+		const scope = details[row.name][0];
+		const v = row.values;
+		if (scope == 'external') {
+			if (v[1] && v[2] !== '')
+				return { error: 'A hidden NSSA external summary cannot have a route tag.' };
+			if (!length(filter(advanced.areas, area => area.area == row.target && area.type == 'nssa')))
+				return { error: 'Set the area type to NSSA before adding an external summary.' };
+		} else if (row.name == 'RFC 5838' && row.family == 4 && (!ospf3 || !v[0])) {
+			return { error: 'The IPv4 channel can only use RFC 5838 when running OSPFv3 with RFC 5838 enabled.' };
+		} else if (row.name == 'Additional OSPF interface instance') {
+			const specific = filter(advanced.details, instance => instance.name == 'OSPF interface instance ID' &&
+				instance.target == row.target && instance.family == row.family);
+			let primary = row.family == 4 ? advanced.instance4 : advanced.instance6;
+			if (length(specific)) primary = specific[0].values[0];
+			if (primary < 0) primary = row.family == 4 && ospf3 ? 64 : 0;
+			if (primary == v[0])
+				return { error: 'An additional OSPF instance must use a different ID from the primary interface instance.' };
+		}
+	}
+	for (let link in links) {
+		if (link.mode == 'passive') continue;
+		const keys = filter(advanced.details, entry => details[entry.name][0] == 'bfd-key' && entry.target == link.device);
+		if ((link.bfd_mode == 'none' && length(keys)) ||
+		    (link.bfd_mode != 'none' && (!length(keys) || !link.bfd)) ||
+		    (link.bfd_mode == 'simple' && length(keys) != 1))
+			return { error: 'BFD authentication keys must match the selected interface mode.' };
+		for (let family in configuredFamilies(link)) {
+			const selected = filter(advanced.details, row => row.name == 'Interface dead interval' &&
+				row.target == link.device && row.family == family)[0]?.values ?? ['seconds', 40];
+			if (selected[0] == 'seconds' ? selected[1] <= link.hello : selected[1] < 2 || selected[1] > 255)
+				return { error: 'Invalid dead interval or multiplier on %s.', error_args: [link.device] };
+		}
+	}
+	return null;
+}
+
+function cleanSettings(payload, old) {
+	if (type(payload) != 'object' || type(payload.enabled) != 'bool' ||
+	    !ipv4(payload.router_id) || payload.router_id == '0.0.0.0')
+		return { error: 'Enter a valid, nonzero router ID.' };
+	const advanced = cleanAdvanced(payload.advanced ?? {}, old.advanced);
+	if (advanced.error) return advanced;
+	if (index(['none', 'all'], payload.policy) < 0)
+		return { error: 'Select a valid system route policy.' };
+	if (type(payload.links) != 'array' || length(payload.links) > 32 ||
+	    (payload.enabled && !length(payload.links)))
+		return { error: 'Select at least one interface when enabling OSPF.' };
+	const links = [];
+	const devices = {};
+	for (let link in payload.links) {
+		if (type(link) != 'object' || !deviceName(link.device) || devices[link.device])
+			return { error: 'Each interface must have a unique, valid device name.' };
+		const area = areaNumber(link.area);
+		if (area == null || index(['broadcast', 'ptp', 'nbma', 'ptmp', 'passive'], link.mode) < 0)
+			return { error: 'Enter a valid area and mode for %s.', error_args: [link.device] };
+		const family = link.family ?? 'ipv4';
+		if (index(['ipv4', 'ipv6', 'dual'], family) < 0)
+			return { error: 'Select a valid IP family on %s.', error_args: [link.device] };
+		const clean = { device: link.device, area, mode: link.mode, family,
+			bfd: link.bfd == true && link.mode != 'passive', strict_nbma: link.strict_nbma == true,
+			ignore_carrier: link.ignore_carrier == true, bfd_mode: link.bfd_mode ?? 'none' };
+		if (index(bfd_modes, clean.bfd_mode) < 0)
+			return { error: 'Select a valid BFD authentication mode.' };
+		for (let option in options) {
+			const value = link[option[0]];
+			if (type(value) != 'int' || value < option[2] || value > option[3])
+				return { error: 'Invalid %s on %s.', error_args: [option[0], link.device] };
+			clean[option[0]] = value;
+		}
+		for (let option in link_options) {
+			const value = link[option[0]] ?? option[1];
+			if (type(value) != 'int' || value < option[2] || value > option[3])
+				return { error: 'Invalid %s on %s.', error_args: [option[0], link.device] };
+			clean[option[0]] = value;
+		}
+		devices[link.device] = true;
+		push(links, clean);
+	}
+	if (payload.enabled && !length(filter(links, link => link.family != 'ipv6')) &&
+	    !advanced.state.ipv6)
+		return { error: 'Enable OSPFv3 or select an IPv4 interface.' };
+	if (payload.enabled && advanced.state.ipv6 &&
+	    !length(filter(links, link => link.family != 'ipv4')))
+		return { error: 'Select at least one IPv6 or dual-stack interface for OSPFv3.' };
+	const state = { enabled: payload.enabled, router_id: payload.router_id,
+		policy: payload.policy, links, advanced: advanced.state };
+	const invalid = checkDetailTargets(advanced.state, links) ?? checkConflicts(advanced.state, links);
+	if (invalid) return invalid;
+	return { state };
+}
+
+function scoped(rows, scope, target) {
+	return filter(rows, row => details[row.name][0] == scope && row.target == target);
+}
+
+function renderScalar(lines, rows, indent, unit) {
+	for (let row in rows) {
+		const directive = details[row.name][1];
+		const value = row.name == 'OSPF receive buffer' && row.values[0] == 'bytes' ? row.values[1] : row.values[0];
+		if (directive)
+			push(lines, indent + directive + ' ' + (type(value) == 'bool' ? value ? 'yes' : 'no' : value) +
+				(unit && type(value) == 'int' ? ' ' + unit : '') + ';');
+	}
+}
+
+function renderKeys(lines, keys, offset) {
+	if (!length(keys)) return;
+	if (!offset && keys[0].values[1] == 'simple') {
+		push(lines, '      authentication simple;', '      password "' + keys[0].values[2] + '";');
+		return;
+	}
+	push(lines, '      authentication cryptographic;');
+	const labels = ['generate from', 'generate to', 'accept from', 'accept to'];
+	for (let row in keys) {
+		const v = row.values;
+		let timing = '';
+		for (let i, label in labels)
+			if (v[offset + i + 3]) timing += ' ' + label + ' "' + v[offset + i + 3] + '";';
+		push(lines, '      password "' + v[offset + 2] + '" { id ' + v[offset] + '; algorithm ' + v[offset + 1] + ';' + timing + ' };');
+	}
+}
+
+function routeRules(rows, direction, fallback, guard) {
+	const rules = filter(rows, row => row.values[0] == direction);
+	if (!length(rules))
+		return fallback ? 'where ' + guard + ' && ' + fallback : 'none';
+	const body = ['if !(' + guard + ') then reject;'];
+	for (let row in rules) {
+		const v = row.values;
+		const action = [];
+		if (direction == 'redistribute' && v[1] == 'accept') {
+			if (v[3] == 'e1') push(action, 'ospf_metric1 = ' + v[4] + ';');
+			if (v[3] == 'e2') push(action, 'ospf_metric2 = ' + v[4] + ';');
+			if (v[5] !== '') push(action, 'ospf_tag = ' + v[5] + ';');
+		}
+		push(action, v[1] + ';');
+		push(body, 'if net = ' + v[2] + ' then { ' + join(' ', action) + ' }');
+	}
+	if (fallback) push(body, 'if ' + fallback + ' then accept;');
+	return 'filter { ' + join(' ', body) + ' reject; }';
+}
+
+function renderProtocol(lines, advanced, links, family, export_filter) {
+	if (!length(links)) return;
+	const links_for_family = links;
+	const additional = filter(advanced.details, row => row.family == family);
+	const ospf3 = family == 6 || length(filter(additional, row => row.name == 'OSPFv3 IPv4 address family' && row.values[0]));
+	const channel = 'ipv' + family;
+	const ospf = family == 4 ? 'lan_ospf' : 'lan_ospf6';
+	const kernel = family == 4 ? 'kernel1' : 'ospf_kernel6';
+	const redistribute = [];
+	const filters = scoped(additional, 'filter', '');
+	for (let row in filters)
+		if (row.values[0] == 'redistribute' && row.values[1] == 'accept' && index(redistribute, row.values[2]) < 0)
+			push(redistribute, row.values[2]);
+	const to_kernel = routeRules(filters, 'install', export_filter, 'proto = "' + ospf + '"');
+	const to_ospf = routeRules(filters, 'redistribute', length(redistribute) ?
+		'net ~ [' + join(', ', redistribute) + ']' : '', 'proto = "' + kernel + '"');
+	if (to_kernel != 'none' || length(redistribute)) {
+		push(lines, 'protocol kernel ' + kernel + ' {', '  metric 64;');
+		if (length(redistribute)) push(lines, '  learn all;');
+		if (advanced.graceful == 'on') push(lines, '  graceful restart yes;');
+		push(lines, '  ' + channel + ' {');
+		push(lines, length(redistribute) ?
+			'    import where net ~ [' + join(', ', redistribute) + '];' : '    import none;');
+		push(lines, '    export ' + to_kernel + ';');
+		push(lines, '  };', '}');
+	}
+	push(lines, 'protocol ospf v' + (ospf3 ? '3' : '2') + ' ' + ospf + ' {');
+	push(lines, '  ' + channel + ' { import all; export ' + to_ospf + '; };');
+	renderScalar(lines, scoped(additional, 'protocol', ''), '  ');
+	if (advanced.ecmp == 1) push(lines, '  ecmp no;');
+	if (advanced.ecmp > 1) push(lines, '  ecmp yes limit ' + advanced.ecmp + ';');
+	if (advanced.stub_router) push(lines, '  stub router yes;');
+	if (advanced.merge_external) push(lines, '  merge external yes;');
+	if (!ospf3 && advanced.rfc1583) push(lines, '  rfc1583compat yes;');
+	const instance = family == 4 ? advanced.instance4 : advanced.instance6;
+	if (instance >= 0) push(lines, '  instance id ' + instance + ';');
+	if (advanced.tick) push(lines, '  tick ' + advanced.tick + ';');
+	if (advanced.graceful != 'default') {
+		const mode = advanced.graceful == 'on' ? 'yes' : advanced.graceful == 'off' ? 'no' : 'aware';
+		push(lines, '  graceful restart ' + mode + ';');
+		if (mode == 'yes') push(lines, '  graceful restart time ' + advanced.grace_time + ';');
+	}
+	const areas = {};
+	for (let link in links) {
+		if (!areas[link.area]) areas[link.area] = [];
+		push(areas[link.area], link);
+	}
+	for (let link in links)
+		for (let row in scoped(additional, 'link', link.device))
+			if (row.name == 'Additional OSPF interface instance' && !areas[row.values[1]])
+				areas[row.values[1]] = [];
+	for (let area, links in areas) {
+		push(lines, '  area ' + area + ' {');
+		for (let row in advanced.areas) {
+			if (row.area != area) continue;
+			if (row.type != 'normal') push(lines, '    ' + row.type + ';');
+			if (row.type != 'normal' && row.no_summary) push(lines, '    summary no;');
+			if (row.type != 'normal' && row.default_cost)
+				push(lines, '    default cost' + (row.default_metric == 'e2' ? '2 ' : ' ') + row.default_cost + ';');
+			if (row.type == 'nssa') {
+				if (row.default_nssa) push(lines, '    summary yes;', '    default nssa yes;');
+				if (row.translator) push(lines, '    translator yes;');
+				if (row.translator_stability) push(lines, '    translator stability ' + row.translator_stability + ';');
+			}
+			const summaries = map(filter(row.networks, entry => entry.family == family),
+				entry => entry.prefix + (entry.hidden ? ' hidden' : ''));
+			if (length(summaries)) push(lines, '    networks { ' + join('; ', summaries) + '; };');
+		}
+		const external = map(scoped(additional, 'external', area), row => row.values[0] +
+			(row.values[1] ? ' hidden' : row.values[2] !== '' ? ' tag ' + row.values[2] : ''));
+		if (length(external)) push(lines, '    external { ' + join('; ', external) + '; };');
+		for (let row in scoped(additional, 'stubnet', area)) {
+			const v = row.values;
+			push(lines, '    stubnet ' + v[0] + ' { hidden ' + (v[1] ? 'yes' : 'no') +
+				'; summary ' + (v[2] ? 'yes' : 'no') + ';' + (v[3] !== '' ? ' cost ' + v[3] + ';' : '') + ' };');
+		}
+		for (let row in scoped(additional, 'virtual', area)) {
+			const v = row.values;
+			const keys = filter(scoped(additional, 'virtual-key', area),
+				key => key.values[0] == v[0] && key.values[1] === v[1]);
+			push(lines, '    virtual link ' + v[0] + (v[1] !== '' ? ' instance ' + v[1] : '') +
+				' { hello ' + v[2] + '; dead ' + v[3] + '; retransmit ' + v[4] + '; wait ' + v[5] + ';');
+			renderKeys(lines, keys, 2);
+			push(lines, '    };');
+		}
+		for (let link in links) {
+			const tuning = scoped(additional, 'link', link.device);
+			const instance = filter(tuning, row => row.name == 'OSPF interface instance ID');
+			push(lines, '    interface "' + link.device + '"' + (length(instance) ? ' instance ' + instance[0].values[0] : '') +
+				' {', '      cost ' + link.cost + ';');
+			if (link.mode == 'passive') {
+				push(lines, '      stub yes;');
+			} else {
+				push(lines, '      type ' + link.mode + ';', '      priority ' + link.priority + ';',
+					'      hello ' + link.hello + ';');
+				const interval = filter(tuning, row => row.name == 'Interface dead interval')[0]?.values ?? ['seconds', 40];
+				push(lines, '      dead ' + (interval[0] == 'multiplier' ? 'count ' : '') + interval[1] + ';');
+				if (link.bfd) push(lines, '      bfd yes;');
+				if (link.ignore_carrier) push(lines, '      check link no;');
+				if (link.weight != 1) push(lines, '      ecmp weight ' + link.weight + ';');
+				if (link.retransmit) push(lines, '      retransmit ' + link.retransmit + ';');
+				if (link.wait) push(lines, '      wait ' + link.wait + ';');
+				if (link.mode == 'nbma' || link.mode == 'ptmp') {
+					if (link.poll) push(lines, '      poll ' + link.poll + ';');
+					if (link.strict_nbma) push(lines, '      strict nonbroadcast yes;');
+					const peers = map(scoped(additional, 'peer', link.device),
+						row => row.values[0] + (link.mode == 'nbma' && row.values[1] ? ' eligible' : ''));
+					if (length(peers))
+						push(lines, '      neighbors { ' + join('; ', peers) + '; };');
+				}
+				renderScalar(lines, tuning, '      ');
+				const keys = scoped(additional, 'key', link.device);
+				renderKeys(lines, keys, 0);
+			}
+			push(lines, '    };');
+		}
+		for (let row in additional) {
+			if (row.name != 'Additional OSPF interface instance' || row.values[1] != area ||
+			    !length(filter(links_for_family, link => link.device == row.target))) continue;
+			const v = row.values;
+			push(lines, '    interface "' + row.target + '" instance ' + v[0] + ' { cost ' + v[3] + '; ' +
+				(v[2] == 'passive' ? 'stub yes;' : 'type ' + v[2] + '; hello ' + v[4] + '; dead ' + v[5] + ';') + ' };');
+		}
+		push(lines, '  };');
+	}
+	push(lines, '}');
+}
+
+function renderConfig(state) {
+	const lines = [marker + sprintf('%J', state), 'router id ' + state.router_id + ';', 'protocol device {}'];
+	if (!state.enabled)
+		return join('\n', lines) + '\n';
+	const advanced = state.advanced;
+	const links4 = filter(state.links, link => link.family != 'ipv6');
+	const links6 = advanced.ipv6 ? filter(state.links, link => link.family != 'ipv4') : [];
+	const bfd = filter(state.links, link => link.bfd && (advanced.ipv6 || link.family != 'ipv6'));
+	if (length(bfd)) {
+		push(lines, 'protocol bfd {', '  accept direct;');
+		for (let link in bfd) {
+			const detail_rows = filter(advanced.details, row => row.family == 4);
+			const timing = scoped(detail_rows, 'bfd', link.device);
+			push(lines, '  interface "' + link.device + '" { multiplier ' + link.bfd_multiplier + ';');
+			if (!length(filter(timing, row => row.name == 'BFD minimum receive interval')))
+				push(lines, '    min rx interval 300 ms;');
+			if (!length(filter(timing, row => row.name == 'BFD minimum transmit interval')))
+				push(lines, '    min tx interval 300 ms;');
+			renderScalar(lines, timing, '    ', 'ms');
+			const keys = scoped(detail_rows, 'bfd-key', link.device);
+			if (length(keys)) push(lines, '    authentication ' + link.bfd_mode + ';');
+			for (let row in keys) {
+				const v = row.values;
+				push(lines, '    password "' + v[1] + '"' + (link.bfd_mode == 'simple' ? ';' : ' { id ' + v[0] + '; };'));
+			}
+			push(lines, '  };');
+		}
+		push(lines, '}');
+	}
+	const export4 = state.policy == 'all' ? 'net != 0.0.0.0/0' : '';
+	renderProtocol(lines, advanced, links4, 4, export4);
+	const export6 = advanced.install6 ? 'net != ::/0' : '';
+	renderProtocol(lines, advanced, links6, 6, export6);
+	return join('\n', lines) + '\n';
+}
+
+function error(message) {
+	return { error: message };
+}
+
+function reconfigured(result) {
+	return result.ok && !!match(result.text,
+		/(^|\n)(Reconfigured|Reconfiguration in progress|Reconfiguration already in progress, queueing new config)(\n|$)/);
+}
+
+function waitForService() {
+	// A configure request may be accepted while protocol shutdown is still in progress.
+	return command('for attempt in 1 2 3 4 5; do ' +
+		'/usr/sbin/birdc show status 2>/dev/null | grep -Fxq "Daemon is up and running" && exit 0; ' +
+		'[ "$attempt" -eq 5 ] || sleep 1; done; exit 1').ok;
+}
+
+function reloadConfiguration() {
+	return reconfigured(command('/usr/sbin/birdc configure 2>/dev/null')) && waitForService();
+}
+
+function restoreService(was_running) {
+	if (was_running)
+		return reloadConfiguration();
+	command('/etc/init.d/bird stop 2>/dev/null');
+	return !command('/etc/init.d/bird running 2>/dev/null').ok &&
+		!command('/usr/sbin/birdc show status 2>/dev/null').ok;
+}
+
+function installConfig(staged, backup, candidate, original, expected, preserve) {
+	if (writefile(staged, candidate) != length(candidate) ||
+	    (expected != 'missing' && writefile(backup, original) != length(original)))
+		return error('Could not write configuration files.');
+	if (system('/usr/sbin/bird -p -c ' + staged + ' >/dev/null 2>&1') != 0)
+		return error('BIRD rejected the configuration. Check areas and export prefixes.');
+	if (revision() != expected)
+		return error('Configuration changed. Reload the page.');
+	if (preserve && readfile(backup_path) == null &&
+	    system('umask 077; cp -n ' + backup + ' ' + backup_path) != 0)
+		return error('Could not back up the existing BIRD configuration.');
+	const running = command('/usr/sbin/birdc show status 2>/dev/null').ok;
+	if (!rename(staged, config))
+		return error('Could not replace the BIRD configuration.');
+	const applied = running ? reloadConfiguration() :
+		command('/etc/init.d/bird start >/dev/null 2>&1').ok && waitForService();
+	if (applied) {
+		const enabled = system('/etc/init.d/bird enable >/dev/null 2>&1') == 0;
+		return { ok: true, boot_enabled: enabled };
+	}
+	if (expected == 'missing' ? !unlink(config) : !rename(backup, config))
+		return { error: 'Could not restore the original configuration. Backup: %s', error_args: [backup], keep_backup: true };
+	if (restoreService(running))
+		return error('BIRD could not apply the configuration. The previous file and service state were restored.');
+	return error('BIRD could not apply the configuration. The previous file was restored, but the service could not be verified.');
+}
+
+function saveCandidate(candidate, original, expected, preserve) {
+	if (candidate == original)
+		return { ok: true, boot_enabled: system('/etc/init.d/bird enabled >/dev/null 2>&1') == 0 };
+	const staged = command('umask 077; mktemp /etc/.bird-ospf.XXXXXXXX');
+	const backup = command('umask 077; mktemp /etc/.bird-ospf.XXXXXXXX');
+	if (!staged.ok || !backup.ok) {
+		if (staged.ok) unlink(staged.text);
+		if (backup.ok) unlink(backup.text);
+		return error('Could not allocate configuration files.');
+	}
+	const result = installConfig(staged.text, backup.text, candidate, original, expected, preserve);
+	unlink(staged.text);
+	if (!result.keep_backup) unlink(backup.text);
+	return result;
+}
+
+function apply(args) {
+	if (!args.revision || revision() != args.revision || length(args.payload ?? '') > 25000)
+		return error('Configuration changed or request too large. Reload the page.');
+	const original = readfile(config) ?? '';
+	const current = readSettings(original);
+	if (current.mode == 'native')
+		return error('This configuration is managed in the BIRD native editor.');
+	if (current.mode == 'invalid')
+		return error('The saved BIRD configuration metadata is invalid.');
+	let payload;
+	try {
+		payload = json(args.payload);
+	} catch (exception) {
+		return error('Invalid configuration request.');
+	}
+	if (current.mode == 'external' && payload?.takeover != true)
+		return error('Confirm replacing the existing BIRD configuration.');
+	const cleaned = cleanSettings(payload, current.state);
+	if (cleaned.error) return cleaned;
+	return saveCandidate(renderConfig(cleaned.state), original, args.revision,
+		current.mode == 'external');
+}
+
+return {
+	'luci.ospf': {
+		status: {
+			call: function() {
+				const current = readSettings(readfile(config) ?? '');
+				const bird_status = command('/usr/sbin/birdc show status 2>/dev/null');
+				const interfaces = filter(split(command('ls -1 /sys/class/net').text, '\n'), deviceName);
+				for (let link in current.state?.links ?? []) {
+					if (index(interfaces, link.device) < 0) push(interfaces, link.device);
+				}
+				for (let row in current.state?.advanced?.details ?? []) {
+					const fields = details[row.name]?.[2] ?? [];
+					for (let i, field in fields)
+						if (field[1] == 'secret') row.values[i] = '';
+				}
+				return {
+					mode: current.mode, settings: current.state, revision: revision(), devices: sort(interfaces),
+					bird_running: birdIsRunning(bird_status),
+					detail_schema: details,
+					neighbors: command('/usr/sbin/birdc show ospf neighbors 2>/dev/null').text,
+					routes: current.mode == 'native' ? '' : command('/usr/sbin/birdc show route protocol lan_ospf 2>/dev/null').text,
+					protocols: current.mode == 'native' ? command('/usr/sbin/birdc show protocols 2>/dev/null').text : '',
+					routes6: command('/usr/sbin/birdc show route protocol lan_ospf6 2>/dev/null').text,
+					bfd: command('/usr/sbin/birdc show bfd sessions 2>/dev/null').text,
+					interfaces: command('/usr/sbin/birdc show ospf interface 2>/dev/null').text
+				};
+			}
+		},
+		apply: {
+			args: { revision: '', payload: '' },
+			call: function(req) { return apply(req.args); }
+		},
+		native_read: {
+			call: function() {
+				const before = revision();
+				const source = readfile(config) ?? '';
+				if (revision() != before) return error('Configuration changed. Open the editor again.');
+				const contents = substr(source, 0, length(marker)) == marker ?
+					substr(source, index(source, '\n') + 1) : source;
+				return { contents, revision: before };
+			}
+		},
+		native_apply: {
+			args: { revision: '', contents: '' },
+			call: function(req) {
+				const args = req.args;
+				const source = readfile(config) ?? '';
+				if (!args.revision || revision() != args.revision)
+					return error('Configuration changed. Open the editor again.');
+				if (!trim(args.contents ?? '') || length(args.contents) > 65536)
+					return error('Enter a BIRD configuration of up to 64 KiB.');
+				const candidate = native_marker + args.contents + (substr(args.contents, -1) == '\n' ? '' : '\n');
+				return saveCandidate(candidate, source, args.revision, args.revision != 'missing');
+			}
+		}
+	}
+};
