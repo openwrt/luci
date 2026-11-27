@@ -64,11 +64,11 @@ return view.extend({
             E('h2', { 'name': 'content' }, [_('Services')]),
             E('legend', {}, [_('Internal services')]),
             E('fieldset', { 'class': 'cbi-section' }, [
-                E('table', { 'id': 'olsr_services' }, [
+                E('table', { 'class': 'table cbi-section-table', 'id': 'olsr_services' }, [
                     E('tr', { 'class' : 'tr table-titles'}, [
-                        E('td', { 'class' : 'th'}, _('Url')),
-                        E('td', { 'class' : 'th'}, _('Protocol')),
-                        E('td', { 'class' : 'th'}, _('Source'))
+                        E('th', { 'class' : 'th cbi-section-table-cell left'}, _('Url')),
+                        E('th', { 'class' : 'th cbi-section-table-cell left'}, _('Protocol')),
+                        E('th', { 'class' : 'th cbi-section-table-cell left'}, _('Source'))
                     ]),
                 ])
             ]),
