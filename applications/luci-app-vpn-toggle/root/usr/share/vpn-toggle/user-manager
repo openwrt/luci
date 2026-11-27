@@ -1,0 +1,59 @@
+#!/bin/sh
+# /usr/share/vpn-toggle/user-manager
+# Manages unix users for VPN Toggle LuCI access.
+# Usage: user-manager <add|remove> <username>
+# Called by the LuCI settings page (admin/root only).
+
+ACTION="$1"
+USERNAME="$2"
+
+# Validate username: must start with a letter, a-z/A-Z/0-9/_ only, 1-32 chars.
+# This is enforced here as well as in the JS layer.
+case "$USERNAME" in
+    ""|*[!a-zA-Z0-9_]*|[0-9]*)
+        printf '{"error":"Invalid username"}\n'
+        exit 1
+        ;;
+esac
+# Extra length check
+if [ "${#USERNAME}" -gt 32 ]; then
+    printf '{"error":"Username too long"}\n'
+    exit 1
+fi
+
+case "$ACTION" in
+    add)
+        # Refuse to create if the user already exists
+        if grep -q "^${USERNAME}:" /etc/passwd 2>/dev/null; then
+            printf '{"error":"User already exists"}\n'
+            exit 1
+        fi
+
+        # Find the next available UID starting at 1000
+        NEXT_UID=1000
+        while grep -q "^[^:]*:[^:]*:${NEXT_UID}:" /etc/passwd 2>/dev/null; do
+            NEXT_UID=$((NEXT_UID + 1))
+        done
+
+        # Add minimal passwd entry: no home dir, no login shell
+        printf '%s:x:%d:65534:VPN Toggle User:/tmp:/bin/false\n' \
+            "$USERNAME" "$NEXT_UID" >> /etc/passwd
+
+        # Add locked shadow entry; luci.setPassword will write the real hash
+        printf '%s:!:19000:0:99999:7:::\n' "$USERNAME" >> /etc/shadow
+
+        printf '{"result":true}\n'
+        ;;
+
+    remove)
+        # Only allow safe (already-validated) characters in sed pattern
+        sed -i "/^${USERNAME}:/d" /etc/passwd
+        sed -i "/^${USERNAME}:/d" /etc/shadow
+        printf '{"result":true}\n'
+        ;;
+
+    *)
+        printf '{"error":"Unknown action"}\n'
+        exit 1
+        ;;
+esac
