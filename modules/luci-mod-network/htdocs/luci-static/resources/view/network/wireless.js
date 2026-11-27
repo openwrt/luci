@@ -229,8 +229,7 @@ function format_wifirate(rate) {
 	if (rate?.eht) s += [
 		`, EHT-MCS\xa0${rate?.mcs}`,
 		rate?.nss    && `, EHT-NSS\xa0${rate?.nss}`,
-		rate?.eht_gi  && `, EHT-GI\xa0${rate?.eht_gi}`,
-		rate?.eht_dcm && `, EHT-DCM\xa0${rate?.eht_dcm}`
+		rate?.eht_gi && `, EHT-GI\xa0${rate?.eht_gi}`
 	].filter(Boolean).join('');
 
 	return s;
