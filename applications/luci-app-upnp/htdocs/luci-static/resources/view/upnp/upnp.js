@@ -108,7 +108,7 @@ return view.extend({
 					rule.intport,
 					rule.extport,
 					rule.proto,
-					rule.descr,
+					'%h'.format(rule.descr),
 					E('button', {
 						'class': 'btn cbi-button-remove',
 						'click': L.bind(handleDelRule, this, rule.num)
