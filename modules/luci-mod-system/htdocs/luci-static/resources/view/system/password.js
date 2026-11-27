@@ -10,9 +10,7 @@
 
 var formData = {
 	data: {
-		rpc_user: null,
-		user: null,
-		rpcd: null,
+		account: null,
 		oldpw: null,
 		pw1: null,
 		pw2: null
@@ -71,63 +69,63 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), null),
-			fs.lines('/etc/passwd'),
 			uci.load('rpcd'),
 			uci.load('luci')
 		]);
 	},
 
-	render: function([has_uhttpd, passwd]) {
-		var m, s, o, rpcd;
+	// The LuCI logins whose password this page can change, from the login
+	// sections in /etc/config/rpcd. A login either uses a Unix account's
+	// password ('$p$<user>') or keeps its own hash, which uhttpd creates.
+	accounts: function(has_uhttpd) {
+		const accounts = { root: { unix: 'root' } };
 
-		const known_unix_users = {};
+		for (let login of uci.sections('rpcd', 'login')) {
+			const name = login.username;
+			const pw = login.password ?? '';
 
-		for (let p of passwd) {
-			const parts = p.split(/:/);
+			if (!name || name == 'root')
+				continue;
 
-			if (parts.length >= 7)
-				known_unix_users[parts[0]] = true;
+			if (pw.startsWith('$p$'))
+				accounts[name] = { unix: pw.substring(3) };
+			else if (has_uhttpd)
+				accounts[name] = { rpcd: name };
 		}
 
-		m = new form.JSONMap(formData, _('Password'), _('Changes the password for accessing the device as (rpcd) user'));
+		return accounts;
+	},
+
+	render: function([has_uhttpd]) {
+		var m, s, o;
+
+		this.accountMap = this.accounts(has_uhttpd);
+		const names = Object.keys(this.accountMap);
+
+		m = new form.JSONMap(formData, _('Router Password'), names.length > 1
+			? _('Changes the password of a login for this device.')
+			: _('Changes the administrator password for accessing the device'));
 		m.readonly = !L.hasViewPermission();
 
 		s = m.section(form.NamedSection, 'data', 'data');
 
-		if (has_uhttpd) {
-			let logins = [];
+		if (names.length > 1) {
+			o = s.option(form.ListValue, 'account', _('Account'));
+			for (let name of names)
+				o.value(name, this.accountMap[name].unix && this.accountMap[name].unix != name
+					? _('%s (password of system user %s)').format(name, this.accountMap[name].unix)
+					: name);
+			o.default = 'root';
 
-			uci.sections('rpcd', 'login', s => logins.push(s.username));
-
-			rpcd = s.option(form.Flag, 'rpcd', _('Change password for rpcd user'));
-			rpcd.default = false;
-
-			o = s.option(form.Value, 'rpc_user', _('rpcd username'));
-			for (let user of logins) {
-				if (user == 'root')
-					continue;
-
-				o.value(user, _('%s').format(user));
+			// A login with its own password hash needs its old password.
+			// Without any depends() the field would show for every login.
+			if (names.some(name => this.accountMap[name].rpcd)) {
+				o = s.option(form.Value, 'oldpw', _('Old Password'));
+				o.password = true;
+				for (let name of names)
+					if (this.accountMap[name].rpcd)
+						o.depends({ 'account': name });
 			}
-			o.rmempty = false;
-			o.depends({ 'rpcd': '1' });
-
-			o = s.option(form.Value, 'user', _('Router username'));
-			for (let user in known_unix_users)
-				o.value(user, _('%s').format(user));
-			o.rmempty = false;
-			o.depends({ 'rpcd': '0' });
-
-			o = s.option(form.Value, 'oldpw', _('Old Password'));
-			o.password = true;
-			o.depends({ 'rpcd': '1' });
-		}
-
-		if (!has_uhttpd) {
-			o = s.option(form.Value, 'user', _('Router username'));
-			for (let user in known_unix_users)
-				o.value(user);
-			o.rmempty = false;
 		}
 
 		o = s.option(form.Value, 'pw1', _('Password'));
@@ -152,14 +150,13 @@ return view.extend({
 
 	handleSave: function() {
 		var map = document.querySelector('.cbi-map');
+		var accountMap = this.accountMap;
 
 		return dom.callClassMethod(map, 'save').then(function() {
-			let rpc_user = formData.data.rpc_user;
-			let user = formData.data.user;
-			let rpcd = formData.data.rpcd;
-			let oldpw = formData.data.oldpw;
+			const account = accountMap[formData.data.account || 'root'];
+			const oldpw = formData.data.oldpw || '';
 
-			if (rpc_user && (oldpw == null || oldpw.length == 0))
+			if (!account)
 				return;
 
 			if (formData.data.pw1 == null || formData.data.pw1.length == 0)
@@ -170,20 +167,23 @@ return view.extend({
 				return;
 			}
 
+			if (account.rpcd && !oldpw) {
+				ui.addNotification(null, E('p', _('Enter the old password to change this login\'s password.')), 'danger');
+				return;
+			}
+
 			return callSetPassword(
-				rpc_user ? rpc_user : user,
+				account.rpcd ?? account.unix,
 				formData.data.pw1,
-				oldpw ? oldpw : '',
-				rpcd ? true : false,
+				oldpw,
+				!!account.rpcd,
 			).then(function(success) {
 				if (success)
 					ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
 				else
 					ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
 
-				formData.data.rpc_user = null;
-				formData.data.user = null;
-				formData.data.rpcd = null;
+				formData.data.account = null;
 				formData.data.pw1 = null;
 				formData.data.pw2 = null;
 				formData.data.oldpw = null;
