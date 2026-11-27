@@ -456,6 +456,15 @@ return L.view.extend({
 		go.value('authNoPriv', _('with authentication but without privacy (authNoPriv)'));
 		go.value('authPriv', _('with authentication and privacy (authPriv)'));
 		go.optional = false;
+		go.cfgvalue = function(section_id) {
+			let sec = uci.get('snmpd', section_id, 'security_level');
+			let priv = uci.get('snmpd', section_id, 'privacy_pass');
+			let auth = uci.get('snmpd', section_id, 'auth_pass');
+
+			return sec ||
+				(priv ? 'authPriv' : 
+					auth ? 'authNoPriv' : 'authPriv')
+		};
 
 		go = g.option(form.ListValue, 'auth_type',
 			_('Authentication type'));
