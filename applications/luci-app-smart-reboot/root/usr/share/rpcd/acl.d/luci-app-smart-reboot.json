@@ -1,0 +1,18 @@
+{
+	"luci-app-smart-reboot": {
+		"description": "Grant access to smart-reboot configuration",
+		"read": {
+			"file": {
+				"/etc/smart-reboot.date": [ "read" ]
+			},
+			"uci": [
+				"smart-reboot"
+			]
+		},
+		"write": {
+			"uci": [
+				"smart-reboot"
+			]
+		}
+	}
+}
