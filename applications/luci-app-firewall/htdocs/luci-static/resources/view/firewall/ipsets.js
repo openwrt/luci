@@ -3,8 +3,60 @@
 'require uci';
 'require form';
 'require firewall';
+'require validation';
 'require tools.firewall as fwtool';
 
+
+/* Validate a single value against one of the validation library's types.
+   The type of a set entry value is only known at runtime, from the match
+   field the value belongs to, so the stub replaces the `datatype` property. */
+const stubValidator = {
+	factory: validation,
+	apply(type, value, args) {
+		if (value != null)
+			this.value = value;
+
+		return validation.types[type].apply(this, args);
+	},
+	assert(condition) {
+		return !!condition;
+	}
+};
+
+/* fw4 reads one value per match field from an entry, separated by blanks,
+   in the order of the fields: `192.0.2.1 00:11:22:33:44:55` for a set with
+   `src_ip src_mac`. Validate the value of field `i` of a `match` list. */
+function validateEntryValue(match, family, i, value) {
+	const type = match[i].replace(/^(?:src|dst|dest)_/, '');
+	const v4 = (family == 'ipv4');
+	const v6 = (family == 'ipv6');
+
+	switch (type) {
+	case 'ip':
+		/* fw4 silently drops a mask here */
+		if (!stubValidator.apply(v4 ? 'ip4addr' : (v6 ? 'ip6addr' : 'ipaddr'), value, [true]))
+			return v4 ? _('valid IPv4 address') : (v6 ? _('valid IPv6 address') : _('valid IP address'));
+		break;
+
+	case 'net':
+		if (!stubValidator.apply(v4 ? 'ip4addr' : (v6 ? 'ip6addr' : 'ipaddr'), value))
+			return v4 ? _('valid IPv4 address or network') : (v6 ? _('valid IPv6 address or network') : _('valid IP address or prefix'));
+		break;
+
+	case 'mac':
+		if (!stubValidator.apply('macaddr', value))
+			return _('valid MAC address');
+		break;
+
+	case 'port':
+		/* fw4 rejects port ranges in set entries */
+		if (!stubValidator.apply('port', value))
+			return _('valid port value');
+		break;
+	}
+
+	return null;
+}
 
 return view.extend({
 
@@ -106,9 +158,33 @@ return view.extend({
 
 			//we have fw4
 			o = s.option(form.DynamicList, 'entry', _('IPs/Networks/MACs'),
-				_('macaddr|ip[/cidr]<br />'));
-			o.datatype = 'or(ipaddr,macaddr)';
+				_('One value per match field, separated by blanks, in the order of the fields.<br />' +
+				  'ip: <code>addr</code>; net: <code>addr[/cidr]</code>; mac: <code>macaddr</code>; port: <code>port</code>.<br />' +
+				  'E.g. <code>192.0.2.1 00:11:22:33:44:55</code> for <code>src_ip src_mac</code>.'));
 			o.rmempty = true;
+			o.validate = function(section_id, value) {
+				if (value == null || value == '')
+					return true;
+
+				const match = L.toArray(this.section.formvalue(section_id, 'match'));
+				const family = this.section.formvalue(section_id, 'family');
+				const values = value.trim().split(/[ \t]+/);
+
+				if (match.length == 0)
+					return true;
+
+				if (values.length != match.length)
+					return _('Expecting: one value per match field (%d), separated by blanks').format(match.length);
+
+				for (let i = 0; i < values.length; i++) {
+					const err = validateEntryValue(match, family, i, values[i]);
+
+					if (err != null)
+						return _('Expecting: %s for match field "%s"').format(err, match[i]);
+				}
+
+				return true;
+			};
 
 
 			o = s.option(form.Value, 'maxelem', _('Max Entries'),
