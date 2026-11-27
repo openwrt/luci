@@ -596,8 +596,8 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:96
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:74
 msgid ""
-"Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
-"var>%{limit.burst? burst <var>%{limit.burst}</var>}"
+"Limit matching to %{limit.inv?more than }<var>%{limit.num}</var> packets per "
+"<var>%{limit.unit}</var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:177
@@ -606,7 +606,9 @@ msgid "Limited masquerading enabled"
 msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:349
-msgid "Limits traffic matching to the specified rate."
+msgid ""
+"Limits traffic matching to the specified rate. Prefix with ! to match "
+"packets exceeding the rate."
 msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:297
