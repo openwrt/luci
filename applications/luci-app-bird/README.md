@@ -16,6 +16,6 @@ The dedicated `luci-app-bird-native` ACL grants access to the complete
 configuration, including authentication keys. Applying from the native
 editor switches the file to native management.
 
-The LuCI package build runs the renderer, saved-configuration and rollback
+The LuCI package build runs configuration rendering and service lifecycle
 regression tests with the OpenWrt host ucode. To run the same tests locally,
 install ucode with its `fs` module and run `sh tests/run.sh`.

@@ -1516,8 +1516,10 @@ return view.extend({
 				routeRules.refresh(nextDetails.filter(entry => entry.name === routeOption));
 				details.refresh(nextDetails);
 				renderInterfaces();
-				ui.addNotification(null, E('p', {}, result.boot_enabled ? _('OSPF configuration applied.') :
-					_('Configuration applied, but BIRD could not be enabled at boot.')), result.boot_enabled ? 'info' : 'warning');
+				const bootFailed = values.enabled && !result.boot_enabled;
+				ui.addNotification(null, E('p', {}, bootFailed ?
+					_('Configuration applied, but BIRD could not be enabled at boot.') : _('OSPF configuration applied.')),
+					bootFailed ? 'warning' : 'info');
 			} catch (error) {
 				ui.addNotification(null, E('p', {}, error.message), 'error');
 			} finally {

@@ -685,7 +685,7 @@ function restoreService(was_running) {
 		!command('/usr/sbin/birdc show status 2>/dev/null').ok;
 }
 
-function installConfig(staged, backup, candidate, original, expected, preserve) {
+function installConfig(staged, backup, candidate, original, expected, preserve, activate) {
 	if (writefile(staged, candidate) != length(candidate) ||
 	    (expected != 'missing' && writefile(backup, original) != length(original)))
 		return error('Could not write configuration files.');
@@ -696,13 +696,15 @@ function installConfig(staged, backup, candidate, original, expected, preserve) 
 	if (preserve && readfile(backup_path) == null &&
 	    system('umask 077; cp -n ' + backup + ' ' + backup_path) != 0)
 		return error('Could not back up the existing BIRD configuration.');
-	const running = command('/usr/sbin/birdc show status 2>/dev/null').ok;
+	const running = command('/usr/sbin/birdc show status 2>/dev/null').ok ||
+		(!activate && command('/etc/init.d/bird running 2>/dev/null').ok);
 	if (!rename(staged, config))
 		return error('Could not replace the BIRD configuration.');
 	const applied = running ? reloadConfiguration() :
-		command('/etc/init.d/bird start >/dev/null 2>&1').ok && waitForService();
+		!activate || (command('/etc/init.d/bird start >/dev/null 2>&1').ok && waitForService());
 	if (applied) {
-		const enabled = system('/etc/init.d/bird enable >/dev/null 2>&1') == 0;
+		const action = activate ? 'enable' : 'enabled';
+		const enabled = system('/etc/init.d/bird ' + action + ' >/dev/null 2>&1') == 0;
 		return { ok: true, boot_enabled: enabled };
 	}
 	if (expected == 'missing' ? !unlink(config) : !rename(backup, config))
@@ -712,7 +714,7 @@ function installConfig(staged, backup, candidate, original, expected, preserve) 
 	return error('BIRD could not apply the configuration. The previous file was restored, but the service could not be verified.');
 }
 
-function saveCandidate(candidate, original, expected, preserve) {
+function saveCandidate(candidate, original, expected, preserve, activate) {
 	if (candidate == original)
 		return { ok: true, boot_enabled: system('/etc/init.d/bird enabled >/dev/null 2>&1') == 0 };
 	const staged = command('umask 077; mktemp /etc/.bird-ospf.XXXXXXXX');
@@ -722,7 +724,7 @@ function saveCandidate(candidate, original, expected, preserve) {
 		if (backup.ok) unlink(backup.text);
 		return error('Could not allocate configuration files.');
 	}
-	const result = installConfig(staged.text, backup.text, candidate, original, expected, preserve);
+	const result = installConfig(staged.text, backup.text, candidate, original, expected, preserve, activate);
 	unlink(staged.text);
 	if (!result.keep_backup) unlink(backup.text);
 	return result;
@@ -748,7 +750,7 @@ function apply(args) {
 	const cleaned = cleanSettings(payload, current.state);
 	if (cleaned.error) return cleaned;
 	return saveCandidate(renderConfig(cleaned.state), original, args.revision,
-		current.mode == 'external');
+		current.mode == 'external', cleaned.state.enabled);
 }
 
 return {
@@ -803,7 +805,7 @@ return {
 				if (!trim(args.contents ?? '') || length(args.contents) > 65536)
 					return error('Enter a BIRD configuration of up to 64 KiB.');
 				const candidate = native_marker + args.contents + (substr(args.contents, -1) == '\n' ? '' : '\n');
-				return saveCandidate(candidate, source, args.revision, args.revision != 'missing');
+				return saveCandidate(candidate, source, args.revision, args.revision != 'missing', true);
 			}
 		}
 	}

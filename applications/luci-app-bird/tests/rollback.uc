@@ -41,3 +41,42 @@ if (!simulate(false, [['bird stop', ok], ['bird running', failed], ['birdc show 
 if (simulate(false, [['bird stop', failed], ['bird running', ok]]))
 	die('Running BIRD was mistaken for a restored stopped state');
 print('Rollback service verification passed\n');
+
+const install_end = index(source, 'function saveCandidate(');
+const loadInstall = loadstring(
+	'return function(command, system, writefile, rename, revision, config) {\n' +
+	substr(source, start, install_end - start) + '\nreturn installConfig;\n};')();
+
+function simulateInstall(activate, replies, boot_action, boot_status) {
+	let commands = 0;
+	let system_calls = 0;
+	let installs = 0;
+	const install = loadInstall(cmd => {
+		const next = replies[commands++];
+		if (!next || index(cmd, next[0]) < 0) die('Unexpected service command: ' + cmd);
+		return next[1];
+	}, cmd => {
+		const expected = system_calls++ == 0 ? '/usr/sbin/bird -p -c staged >/dev/null 2>&1' :
+			'/etc/init.d/bird ' + boot_action + ' >/dev/null 2>&1';
+		if (cmd != expected) die('Unexpected system command: ' + cmd);
+		return system_calls == 1 ? 0 : boot_status;
+	}, (path, contents) => length(contents), (from, to) => {
+		if (from != 'staged' || to != 'config') die('Unexpected configuration rename');
+		installs++;
+		return true;
+	}, () => 'original-revision', 'config');
+	const result = install('staged', 'backup', 'candidate', 'original', 'original-revision', false, activate);
+	if (!result.ok || result.boot_enabled != (boot_status == 0) || installs != 1 ||
+	    commands != length(replies) || system_calls != 2)
+		die('Unexpected configuration installation result');
+}
+
+simulateInstall(false, [['birdc show status', failed], ['bird running', failed]], 'enabled', 1);
+simulateInstall(false, [['birdc show status', failed], ['bird running', failed]], 'enabled', 0);
+simulateInstall(false, [['birdc show status', ok], ['birdc configure', applied],
+                         ['Daemon is up and running', ok]], 'enabled', 1);
+simulateInstall(false, [['birdc show status', failed], ['bird running', ok],
+                         ['birdc configure', applied], ['Daemon is up and running', ok]], 'enabled', 0);
+simulateInstall(true, [['birdc show status', failed], ['bird start', ok],
+                        ['Daemon is up and running', ok]], 'enable', 0);
+print('Configuration installation service policy passed\n');
