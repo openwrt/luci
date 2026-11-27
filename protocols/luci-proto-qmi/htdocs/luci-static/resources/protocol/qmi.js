@@ -143,13 +143,13 @@ return network.registerProtocol('qmi', {
 		o = s.taboption('advanced', form.Value, 'profile',
 			_('APN profile index'));
 		o.placeholder = '1';
-		o.datatype = 'uinteger';
+		o.datatype = 'range(1,9)';
 
 		if (L.hasSystemFeature('ipv6')) {
 			o = s.taboption('advanced', form.Value, 'v6profile',
 				_('IPv6 APN profile index'));
 			o.placeholder = '1';
-			o.datatype = 'uinteger';
+			o.datatype = 'range(1,9)';
 			o.depends('pdptype', 'ipv4v6');
 		};
 	}
