@@ -40,8 +40,6 @@ function rule_proto_txt(s) {
 }
 
 function rule_src_txt(s, hosts) {
-	const z = uci.get('firewall', s, 'src');
-
 	return fwtool.fmt(_('From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
 		src: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(null) }, [E('em', _('any zone'))]),
 		src_ip: fwtool.map_invert(uci.get('firewall', s, 'src_ip'), 'toLowerCase'),
@@ -53,7 +51,7 @@ function rule_dest_txt(s) {
 	const z = uci.get('firewall', s, 'src');
 
 	return fwtool.fmt(_('To %{dest}%{dest_device?, via interface <var>%{dest_device}</var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
-		dest: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(z) }, [(z == '*') ? E('em', _('any zone')) : (z ? E('strong', z) : E('em', _('this device')))]),
+		dest: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(z) }, [(z && z != '*') ? E('strong', z) : E('em', _('any zone'))]),
 		dest_ip: fwtool.map_invert(uci.get('firewall', s, 'dest_ip'), 'toLowerCase'),
 		dest_port: fwtool.map_invert(uci.get('firewall', s, 'dest_port')),
 		dest_device: uci.get('firewall', s, 'device')
@@ -117,18 +115,18 @@ function validate_opt_family(m, section_id, opt) {
 
 	const sip = sopt.formvalue(section_id) || '';
 	const dip = dopt.formvalue(section_id) || '';
-	const rwip = rwopt.formvalue(section_id) || '';
 	const fm = fmopt.formvalue(section_id) || '';
 	const tg = tgopt.formvalue(section_id);
+	const rwip = (tg == 'SNAT') ? (rwopt.formvalue(section_id) || '') : '';
 
-	if (fm == 'ipv6' && (sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && ((rwip.indexOf(':') != -1 && tg == 'SNAT') || rwip == ''))
+	if (fm == 'ipv6' && (sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && (rwip.indexOf(':') != -1 || rwip == ''))
 		return true;
-	if (fm == 'ipv4' && (sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && ((rwip.indexOf(':') == -1 && tg == 'SNAT') || rwip == ''))
+	if (fm == 'ipv4' && (sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && (rwip.indexOf(':') == -1 || rwip == ''))
 		return true;
 	if (fm == '' || fm == 'any') {
-		if ((sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && ((rwip.indexOf(':') != -1 && tg == 'SNAT') || rwip == ''))
+		if ((sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && (rwip.indexOf(':') != -1 || rwip == ''))
 			return true;
-		if ((sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && ((rwip.indexOf(':') == -1 && tg == 'SNAT') || rwip == ''))
+		if ((sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && (rwip.indexOf(':') == -1 || rwip == ''))
 			return true;
 	}
 
@@ -298,10 +296,11 @@ return view.extend({
 		o.placeholder = null;
 		o.depends('target', 'SNAT');
 		o.validate = function(section_id, value) {
+			const target = this.section.formvalue(section_id, 'target');
 			const a = this.formvalue(section_id);
 			const p = this.section.formvalue(section_id, 'snat_port');
 
-			if ((a == null || a == '') && (p == null || p == '') && value == '')
+			if (target == 'SNAT' && (a == null || a == '') && (p == null || p == '') && value == '')
 				return _('A rewrite IP must be specified!');
 
 			return !fw4?true:validate_opt_family(this, section_id, 'snat_ip');
