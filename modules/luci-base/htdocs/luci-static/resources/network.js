@@ -4186,25 +4186,31 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * The amount of retried transmissions. Only applicable to transmit
 	 * rates.
 	 *
-	 * @property {boolean} is_ht
+	 * @property {boolean} ht
 	 * Specifies whether this rate is an HT (IEEE 802.11n) rate.
 	 *
-	 * @property {boolean} is_vht
-	 * Specifies whether this rate is an VHT (IEEE 802.11ac) rate.
+	 * @property {boolean} vht
+	 * Specifies whether this rate is a VHT (IEEE 802.11ac) rate.
+	 *
+	 * @property {boolean} he
+	 * Specifies whether this rate is an HE (IEEE 802.11ax) rate.
+	 *
+	 * @property {boolean} eht
+	 * Specifies whether this rate is an EHT (IEEE 802.11be) rate.
 	 *
 	 * @property {number} mhz
 	 * The channel width in MHz used for the transmission.
 	 *
 	 * @property {number} rate
-	 * The bitrate in bit/s of the transmission.
+	 * The bitrate in kbit/s of the transmission.
 	 *
 	 * @property {number} [mcs]
 	 * The MCS index of the used transmission rate. Only applicable to
-	 * HT or VHT rates.
+	 * HT, VHT, HE or EHT rates.
 	 *
-	 * @property {number} [40mhz]
+	 * @property {boolean} [40mhz]
 	 * Specifies whether the transmission rate used 40MHz wide channel.
-	 * Only applicable to HT or VHT rates.
+	 * Only applicable to HT rates.
 	 *
 	 * Note: this option exists for backwards compatibility only, and its
 	 * use is discouraged. The `mhz` field should be used instead to
@@ -4216,28 +4222,18 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *
 	 * @property {number} [nss]
 	 * Specifies the number of spatial streams used by the transmission.
-	 * Only applicable to VHT rates.
-	 *
-	 * @property {boolean} [he]
-	 * Specifies whether this rate is an HE (IEEE 802.11ax) rate.
+	 * Only applicable to VHT, HE or EHT rates.
 	 *
 	 * @property {number} [he_gi]
-	 * Specifies whether the guard interval used for the transmission.
+	 * The guard interval used for the transmission.
 	 * Only applicable to HE rates.
 	 *
 	 * @property {number} [he_dcm]
-	 * Specifies whether dual concurrent modulation is used for the transmission.
+	 * Specifies whether dual carrier modulation is used for the transmission.
 	 * Only applicable to HE rates.
-	 * 
-	 * @property {boolean} [eht]
-	 * Specifies whether this rate is an EHT (IEEE 802.11be) rate.
-	 * 
-	 * @property {number} [eht_gi]
-	 * Specifies whether the guard interval is used for the transmission.
-	 * Only applicable to EHT rates.
 	 *
-	 * @property {number} [eht_dcm]
-	 * Specifies whether dual concurrent modulation is used for the transmission.
+	 * @property {number} [eht_gi]
+	 * The guard interval used for the transmission.
 	 * Only applicable to EHT rates.
 	 */
 
