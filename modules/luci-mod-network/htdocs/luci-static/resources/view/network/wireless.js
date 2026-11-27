@@ -235,6 +235,38 @@ function format_wifirate(rate) {
 	return s;
 }
 
+async function getAssocListWithSecurity(net) {
+	const stations = await net.getAssocList();
+	const ifname = net.getIfname();
+
+	if (!stations.length || !ifname || net.getMode() !== 'ap')
+		return stations;
+
+	const clients = await L.resolveDefault(rpc.declare({
+		object: 'hostapd.%s'.format(ifname),
+		method: 'get_clients',
+		expect: { clients: {} }
+	})(), {});
+	const securityByMac = new Map();
+
+	for (const [mac, client] of Object.entries(clients)) {
+		if (!client.security)
+			continue;
+
+		securityByMac.set(mac.toLowerCase(), client.security);
+		for (const link of client.links ?? [])
+			securityByMac.set(link.address.toLowerCase(), client.security);
+	}
+
+	for (const station of stations) {
+		const info = securityByMac.get(station.mac.toLowerCase());
+		if (info)
+			station.security = info;
+	}
+
+	return stations;
+}
+
 function radio_restart(id, ev) {
 	const row = document.querySelector('.cbi-section-table-row[data-sid="%s"]'.format(id));
 	const dsc = row.querySelector('[data-name="_stat"] > div');
@@ -759,8 +791,12 @@ return view.extend({
 					}),
 					E('span', [
 						` ${bss.network.getShortName()} `,
-						E('small', `(${bss.network.getIfname()})`)
-					])
+						E('small', `(${bss.network.getIfname()})`),
+						bss.security ? E('br') : null,
+						bss.security ? E('small', [
+							_('Client security: %s · %s').format(bss.security.akm, bss.security.pairwise_cipher)
+						]) : null
+					].filter(Boolean))
 				]),
 				bss.mac,
 				hint,
@@ -2660,7 +2696,7 @@ return view.extend({
 					.then(L.bind(function(hosts_radios_wifis) {
 						const tasks = [];
 
-						hosts_radios_wifis[2].forEach(hrw => tasks.push(hrw.getAssocList()) );
+						hosts_radios_wifis[2].forEach(net => tasks.push(getAssocListWithSecurity(net)));
 
 						return Promise.all(tasks).then(function(data) {
 							hosts_radios_wifis[3] = [];
