@@ -58,7 +58,7 @@ function renderStatus(node, data, detailed) {
 			if (!item) return;
 			var actual = decoded(item.actual || item.effective);
 			table.appendChild(E('tr', { 'class': 'tr' }, [
-				E('td', { 'class': 'td', 'data-title': _('Queue') }, [(names[q] || _('Class')) + ' В· ' + q]),
+				E('td', { 'class': 'td', 'data-title': _('Queue') }, [(names[q] || _('Class')) + ' · ' + q]),
 				E('td', { 'class': 'td', 'data-title': _('Scheduler') }, String(actual.scheduler)),
 				E('td', { 'class': 'td', 'data-title': _('Weight') }, String(actual.weight)),
 				E('td', { 'class': 'td', 'data-title': _('Minimum') }, rateText(actual.min)),
@@ -75,7 +75,7 @@ function renderStatus(node, data, detailed) {
 				var port = data.policy.ports[device];
 				for (var cls = 0; cls < 16; cls++) {
 					var target = data.policy.values[16 + port * 16 + cls];
-					if (target >= 0) mappingLines.push(_('Class %s в†’ %s в†’ queue %s').format(cls, device, target));
+					if (target >= 0) mappingLines.push(_('Class %s → %s → queue %s').format(cls, device, target));
 				}
 			});
 			if (mappingLines.length) rows.push(E('details', {}, [E('summary', {}, _('Applied egress mappings')), E('ul', {}, mappingLines.map(function(line) { return E('li', {}, line); }))]));
@@ -187,16 +187,16 @@ return view.extend({
 		o = s.option(form.Value, 'dscp', _('DSCP'));
 		o.placeholder = _('Any'); o.rmempty = true; o.modalonly = true;
 		o.value('', _('Any'));
-		o.value('EF', 'EF В· 46'); o.value('LE', 'LE В· 1');
-		for (var cs = 0; cs < 8; cs++) o.value('CS' + cs, 'CS' + cs + ' В· ' + (cs * 8));
+		o.value('EF', 'EF · 46'); o.value('LE', 'LE · 1');
+		for (var cs = 0; cs < 8; cs++) o.value('CS' + cs, 'CS' + cs + ' · ' + (cs * 8));
 		for (var af = 1; af <= 4; af++) for (var dp = 1; dp <= 3; dp++)
-			o.value('AF' + af + dp, 'AF' + af + dp + ' В· ' + (af * 8 + dp * 2));
+			o.value('AF' + af + dp, 'AF' + af + dp + ' · ' + (af * 8 + dp * 2));
 		o.description = _('Matches an existing IPv4/IPv6 DSCP value without changing it. Empty matches any value; CS0 matches only 0.');
 		o.textvalue = function(id) { return this.cfgvalue(id) || _('Any'); };
 		o.validate = function(id, value) {
-		return !value || /^(CS[0-7]|AF[1-4][1-3]|EF|LE)$/i.test(value) ||
-			(/^[0-9]+$/.test(value) && Number(value) <= 63) ? true : _('Enter 0вЂ“63, CS0вЂ“CS7, AF11вЂ“AF43, EF or LE.');
-	};
+			return !value || /^(CS[0-7]|AF[1-4][1-3]|EF|LE)$/i.test(value) ||
+				(/^[0-9]+$/.test(value) && Number(value) <= 63) ? true : _('Enter 0–63, CS0–CS7, AF11–AF43, EF or LE.');
+		};
 		o = s.option(form.ListValue, 'queue', _('Class')); o.rmempty = false;
 		o.load = function(id) { this.keylist = []; this.vallist = []; for (var n = 0; n < 16; n++) this.value(String(n), E('span', {}, [_('Class %s').format(n)])); return uci.get('mtk_hqos', id, 'queue'); };
 		o.textvalue = function(id) { var q = this.cfgvalue(id); return E('span', {}, [_('Class %s').format(q)]); };
@@ -211,7 +211,7 @@ return view.extend({
 			if (rule.proto && rule.proto !== 'all') parts.push(rule.proto.toUpperCase());
 			if (rule.port) parts.push(_('Port: %s').format(rule.port));
 			if (rule.dscp != null && rule.dscp !== '') parts.push('DSCP ' + rule.dscp);
-			return parts.join(' В· ');
+			return parts.join(' · ');
 		};
 		s = m.section(form.TypedSection, '_diagnostics', _('Diagnostics'));
 		s.anonymous = true;
