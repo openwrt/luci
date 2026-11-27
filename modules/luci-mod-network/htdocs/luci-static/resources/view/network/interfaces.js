@@ -1097,9 +1097,9 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 
-					so = ss.taboption('ipv6-ra', form.Value, 'ra_lifetime', _('<abbr title="Router Advertisement">RA</abbr> Lifetime'), _('Router Lifetime published  in <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages.  Maximum is 9000 seconds.'));
+					so = ss.taboption('ipv6-ra', form.Value, 'ra_lifetime', _('<abbr title="Router Advertisement">RA</abbr> Lifetime'), _('Router Lifetime published in <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages. 0 means that this router is not a default router. Values above 9000 seconds might not work with some older hosts.'));
 					so.optional = true;
-					so.datatype = 'range(0, 9000)';
+					so.datatype = 'range(0, 65535)';
 					so.placeholder = '2700';
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
