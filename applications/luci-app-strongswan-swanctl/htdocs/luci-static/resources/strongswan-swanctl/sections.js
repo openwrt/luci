@@ -203,7 +203,7 @@ function addChildNetworkOptions(s, extra, proposal) {
 	if (proposal)
 		addChildProposalOption(s, proposal, extra);
 
-	o = s.taboption('general', form.ListValue, 'if_id', ('XFRM Interface ID'),
+	o = s.taboption('general', form.ListValue, 'if_id', _('XFRM Interface ID'),
 		swanctlDescr(_('XFRM interface ID set on input and output interfaces'), 'connections.<conn>.children.<child>.if_id_in, connections.<conn>.children.<child>.if_id_out'));
 	o.load = function (section_id) {
 		this.keylist = [];
