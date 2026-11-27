@@ -1,0 +1,27 @@
+{
+	"luci-app-ha-cluster": {
+		"description": "Grant access to HA Cluster configuration",
+		"read": {
+			"file": {
+				"/etc/hotplug.d/keepalived/*": [ "list", "read" ]
+			},
+			"ubus": {
+				"file": [ "list", "read", "stat" ],
+				"ha-cluster": [ "status", "generate_key" ],
+				"keepalived": [ "dump" ],
+				"service": [ "list" ]
+			},
+			"uci": [ "ha-cluster", "keepalived", "owsync", "lease-sync", "dhcp", "network" ]
+		},
+		"write": {
+			"file": {
+				"/etc/hotplug.d/keepalived/*": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "write" ],
+				"ha-cluster": [ "apply" ]
+			},
+			"uci": [ "ha-cluster" ]
+		}
+	}
+}

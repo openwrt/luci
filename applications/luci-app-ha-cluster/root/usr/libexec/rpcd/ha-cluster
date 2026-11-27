@@ -1,0 +1,334 @@
+#!/bin/sh
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2025-2026 Pierre Gaufillet <pierre.gaufillet@bergamote.eu>
+
+. /lib/functions.sh
+. /usr/share/libubox/jshn.sh
+. /usr/lib/ha-cluster/ha-cluster.sh
+
+# Usage: keepalived_roles <keepalived dump JSON>
+# Prints one name:STATE line per instance. Called in a subshell, which
+# keeps the jshn state clean.
+keepalived_roles() {
+	local instances instance inst_name vrrp_state inst_role
+
+	json_load "$1" 2>/dev/null || return 1
+	json_select status 2>/dev/null || return 1
+	json_get_keys instances
+
+	for instance in $instances; do
+		json_select "$instance" || continue
+		inst_name=""
+		vrrp_state=""
+		if json_select data 2>/dev/null; then
+			json_get_var inst_name iname
+			json_get_var vrrp_state state
+			json_select ..
+		fi
+		json_select ..
+		[ -n "$inst_name" ] || continue
+
+		# VRRP_STATE_* values from keepalived's vrrp.h
+		case "$vrrp_state" in
+			1) inst_role="BACKUP" ;;
+			2) inst_role="MASTER" ;;
+			3) inst_role="FAULT" ;;
+			*) inst_role="UNKNOWN" ;;
+		esac
+
+		echo "$inst_name:$inst_role"
+	done
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "generate_key"
+		json_close_object
+		json_add_object "status"
+		json_close_object
+		json_add_object "apply"
+		json_close_object
+		json_dump
+		;;
+	call)
+		case "$2" in
+			generate_key)
+				key=$(hexdump -n 32 -v -e '1/1 "%02x"' /dev/urandom 2>/dev/null)
+
+				if [ -z "$key" ] || [ ${#key} -ne 64 ]; then
+					json_init
+					json_add_boolean success 0
+					json_add_string error "Failed to generate key"
+					json_dump
+					exit 1
+				fi
+
+				json_init
+				json_add_boolean success 1
+				json_add_string key "$key"
+				json_dump
+				;;
+
+			status)
+				node_role="UNKNOWN"
+				cluster_state="STOPPED"
+				services_ok=1
+				peers_online=0
+				peers_total=0
+				instance_roles=""
+				owsync_required=0
+				lease_sync_required=0
+				owsync_wanted=0
+				lease_sync_wanted=0
+
+				ha_enabled=$(get_bool "$(uci -q get ha-cluster.config.enabled)" 0)
+
+				if [ "$ha_enabled" != "1" ]; then
+					cluster_state="STOPPED"
+				else
+					keepalived_data=$(ubus call keepalived dump 2>/dev/null)
+
+					if [ -n "$keepalived_data" ]; then
+						instance_roles=$(keepalived_roles "$keepalived_data")
+
+						# The dump reads keepalived's stats file without waiting for
+						# it to be written and now and then finds none: retry once
+						if [ -z "$instance_roles" ]; then
+							keepalived_data=$(ubus call keepalived dump 2>/dev/null)
+							instance_roles=$(keepalived_roles "$keepalived_data")
+						fi
+
+						has_fault=0
+						has_master=0
+						has_backup=0
+						instance_count=0
+						for entry in $instance_roles; do
+							role_val="${entry##*:}"
+							case "$role_val" in
+								FAULT) has_fault=1 ;;
+								MASTER) has_master=1 ;;
+								BACKUP) has_backup=1 ;;
+							esac
+							instance_count=$((instance_count + 1))
+						done
+
+						if [ "$has_fault" -eq 1 ]; then
+							node_role="FAULT"
+						elif [ "$has_master" -eq 1 ] && [ "$has_backup" -eq 0 ]; then
+							node_role="MASTER"
+						elif [ "$has_backup" -eq 1 ] && [ "$has_master" -eq 0 ]; then
+							node_role="BACKUP"
+						elif [ "$has_master" -eq 1 ] && [ "$has_backup" -eq 1 ]; then
+							node_role="MIXED"
+						elif [ "$instance_count" -eq 0 ]; then
+							node_role="UNKNOWN"
+						fi
+					else
+						node_role="FAULT"
+						services_ok=0
+					fi
+
+					# The backend writes a daemon config only when procd has to
+					# run that daemon
+					[ -f "$OWSYNC_CONF" ] && owsync_required=1
+					[ -f "$LEASE_SYNC_CONF" ] && lease_sync_required=1
+
+					# Would run if installed
+					config_load ha-cluster
+					ha_owsync_wanted && owsync_wanted=1
+					ha_lease_sync_wanted && lease_sync_wanted=1
+
+					if ! pgrep "keepalived" >/dev/null 2>&1; then
+						services_ok=0
+					fi
+					if [ "$owsync_required" -eq 1 ] && ! pgrep "owsync" >/dev/null 2>&1; then
+						services_ok=0
+					fi
+					if [ "$lease_sync_required" -eq 1 ] && ! pgrep "lease-sync" >/dev/null 2>&1; then
+						services_ok=0
+					fi
+				fi
+
+				config_last_sync=0
+				lease_last_sync=0
+
+				# OpenWrt's BusyBox has no stat(1)
+				owsync_db=""
+				[ -f "$OWSYNC_CONF" ] && owsync_db=$(sed -n 's/^database=//p' "$OWSYNC_CONF" | tail -n 1)
+				if [ -n "$owsync_db" ] && [ -f "$owsync_db" ]; then
+					config_last_sync=$(date -r "$owsync_db" +%s 2>/dev/null || echo 0)
+				fi
+
+				leasefile=$(uci -q get dhcp.@dnsmasq[0].leasefile)
+				leasefile=${leasefile:-/tmp/dhcp.leases}
+				if [ -f "$leasefile" ]; then
+					lease_last_sync=$(date -r "$leasefile" +%s 2>/dev/null || echo 0)
+				fi
+
+				json_init
+				json_add_string role "$node_role"
+
+				json_add_object instances
+				for entry in $instance_roles; do
+					inst_name="${entry%%:*}"
+					inst_role="${entry##*:}"
+					case "$inst_role" in
+						MASTER|BACKUP|FAULT|UNKNOWN) ;;
+						*) inst_role="UNKNOWN" ;;
+					esac
+					json_add_string "$inst_name" "$inst_role"
+				done
+				json_close_object
+
+				json_add_array peers
+				for peer_section in $(uci show ha-cluster 2>/dev/null | grep "=peer$" | cut -d. -f2 | cut -d= -f1); do
+					peer_name=$(uci -q get "ha-cluster.$peer_section.name")
+					peer_addr=$(uci -q get "ha-cluster.$peer_section.address")
+					if [ -n "$peer_addr" ]; then
+						peers_total=$((peers_total + 1))
+						peer_online=0
+						case "$peer_addr" in
+							*:*) ping_cmd="ping6" ;;
+							*) ping_cmd="ping" ;;
+						esac
+						if $ping_cmd -c 1 -W 1 "$peer_addr" >/dev/null 2>&1; then
+							peer_online=1
+							peers_online=$((peers_online + 1))
+							last_seen="Just now"
+						else
+							last_seen="Unreachable"
+						fi
+
+						json_add_object
+						json_add_string name "${peer_name:-$peer_section}"
+						json_add_string address "$peer_addr"
+						json_add_boolean online "$peer_online"
+						json_add_boolean vrrp_only "$(get_bool "$(uci -q get "ha-cluster.$peer_section.vrrp_only")" 0)"
+						json_add_string last_seen "$last_seen"
+						json_close_object
+					fi
+				done
+				json_close_array
+
+				if [ "$ha_enabled" != "1" ]; then
+					cluster_state="STOPPED"
+				elif [ "$services_ok" -eq 0 ]; then
+					cluster_state="FAULTY"
+				elif [ "$peers_online" -lt "$peers_total" ] && [ "$peers_total" -gt 0 ]; then
+					cluster_state="DEGRADED"
+				elif [ "$services_ok" -eq 1 ]; then
+					cluster_state="HEALTHY"
+				fi
+				json_add_string state "$cluster_state"
+
+
+				json_add_object services
+
+				json_add_object "keepalived"
+				json_add_boolean required 1
+				svc_pid=$(pgrep -o "keepalived" 2>/dev/null)
+				if [ -n "$svc_pid" ]; then
+					json_add_boolean running 1
+					json_add_int pid "$svc_pid"
+					start_time=$(awk '{print $22}' /proc/$svc_pid/stat 2>/dev/null)
+					if [ -n "$start_time" ]; then
+						uptime_jiffies=$(awk '{print $1 * 100}' /proc/uptime 2>/dev/null)
+						uptime_sec=$(awk "BEGIN{print int(($uptime_jiffies - $start_time) / 100)}")
+						json_add_int uptime "$uptime_sec"
+					else
+						json_add_int uptime 0
+					fi
+				else
+					json_add_boolean running 0
+					json_add_int pid 0
+					json_add_int uptime 0
+				fi
+				json_close_object
+
+				json_add_object "owsync"
+				if [ "$owsync_required" -eq 1 ]; then
+					json_add_boolean required 1
+				else
+					json_add_boolean required 0
+				fi
+				json_add_boolean wanted "$owsync_wanted"
+				svc_pid=$(pgrep -o "owsync" 2>/dev/null)
+				if [ -n "$svc_pid" ]; then
+					json_add_boolean running 1
+					json_add_int pid "$svc_pid"
+					start_time=$(awk '{print $22}' /proc/$svc_pid/stat 2>/dev/null)
+					if [ -n "$start_time" ]; then
+						uptime_jiffies=$(awk '{print $1 * 100}' /proc/uptime 2>/dev/null)
+						uptime_sec=$(awk "BEGIN{print int(($uptime_jiffies - $start_time) / 100)}")
+						json_add_int uptime "$uptime_sec"
+					else
+						json_add_int uptime 0
+					fi
+				else
+					json_add_boolean running 0
+					json_add_int pid 0
+					json_add_int uptime 0
+				fi
+				json_close_object
+
+				json_add_object "lease-sync"
+				if [ "$lease_sync_required" -eq 1 ]; then
+					json_add_boolean required 1
+				else
+					json_add_boolean required 0
+				fi
+				json_add_boolean wanted "$lease_sync_wanted"
+				svc_pid=$(pgrep -o "lease-sync" 2>/dev/null)
+				if [ -n "$svc_pid" ]; then
+					json_add_boolean running 1
+					json_add_int pid "$svc_pid"
+					start_time=$(awk '{print $22}' /proc/$svc_pid/stat 2>/dev/null)
+					if [ -n "$start_time" ]; then
+						uptime_jiffies=$(awk '{print $1 * 100}' /proc/uptime 2>/dev/null)
+						uptime_sec=$(awk "BEGIN{print int(($uptime_jiffies - $start_time) / 100)}")
+						json_add_int uptime "$uptime_sec"
+					else
+						json_add_int uptime 0
+					fi
+				else
+					json_add_boolean running 0
+					json_add_int pid 0
+					json_add_int uptime 0
+				fi
+				json_close_object
+
+				json_close_object
+
+				json_add_object sync
+				json_add_int config_last_sync "$config_last_sync"
+				json_add_int lease_last_sync "$lease_last_sync"
+				json_close_object
+
+				json_dump
+				;;
+
+			apply)
+				if /etc/init.d/ha-cluster reload >/dev/null 2>&1; then
+					json_init
+					json_add_boolean success 1
+					json_dump
+				else
+					json_init
+					json_add_boolean success 0
+					json_add_string error "Failed to reload service"
+					json_dump
+					exit 1
+				fi
+				;;
+
+			*)
+				json_init
+				json_add_boolean success 0
+				json_add_string error "Unknown method: $2"
+				json_dump
+				exit 1
+				;;
+		esac
+		;;
+esac

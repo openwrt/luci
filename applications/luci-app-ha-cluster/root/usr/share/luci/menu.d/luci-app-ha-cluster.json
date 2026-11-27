@@ -1,0 +1,57 @@
+{
+	"admin/services/ha-cluster": {
+		"title": "High Availability",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-ha-cluster" ]
+		}
+	},
+
+	"admin/services/ha-cluster/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "ha-cluster/status"
+		}
+	},
+
+	"admin/services/ha-cluster/simple": {
+		"title": "General",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "ha-cluster/simple"
+		}
+	},
+
+	"admin/services/ha-cluster/keepalived-advanced": {
+		"title": "Advanced VRRP",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "ha-cluster/keepalived-advanced"
+		}
+	},
+
+	"admin/services/ha-cluster/owsync-advanced": {
+		"title": "Advanced Config Sync",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "ha-cluster/owsync-advanced"
+		}
+	},
+
+	"admin/services/ha-cluster/lease-sync-advanced": {
+		"title": "Advanced Lease Sync",
+		"order": 50,
+		"action": {
+			"type": "view",
+			"path": "ha-cluster/lease-sync-advanced"
+		}
+	}
+}
