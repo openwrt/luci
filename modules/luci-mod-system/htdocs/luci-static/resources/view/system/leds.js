@@ -53,6 +53,13 @@ return view.extend({
 			_('<abbr title="Light Emitting Diode">LED</abbr> Configuration'),
 			_('Customizes the behaviour of the device <abbr title="Light Emitting Diode">LED</abbr>s if possible.'));
 
+		s = m.section(form.NamedSection, '@system[-1]', 'system', _('General Settings'));
+		s.anonymous = true;
+		s.addremove = false;
+
+		o = s.option(form.Flag, 'leds_off', _('Turn off all LEDs'),
+			_('Overrides the individual LED settings without removing them.'));
+
 		s = m.section(form.GridSection, 'led', '');
 		s.anonymous = true;
 		s.addremove = true;
