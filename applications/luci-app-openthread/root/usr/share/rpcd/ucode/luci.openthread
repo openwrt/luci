@@ -1,0 +1,564 @@
+// SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) 2026, The OpenThread Authors.
+'use strict';
+
+let ubus = require('ubus').connect();
+
+function otbr(method, args) {
+	// On total ubus failure (otbr-agent not running), synthesize an error
+	// reply; 255 maps to GenericError in the UI.
+	let r = ubus.call('otbr', method, args ?? {});
+	if (r == null)
+		return { error: 255 };
+	// The daemon reports its otError code in an 'Error' field (see
+	// AppendResult() in ot-br-posix src/openwrt/ubus/otubus.cpp); normalize
+	// it to the lowercase 'error' used throughout this file.
+	if (r.error == null && r.Error != null)
+		r.error = r.Error;
+	return r;
+}
+
+function radio_restart() {
+	// Bouncing the netifd interface that runs the border router respawns
+	// otbr-agent; that is the closest analogue of restarting a radio.
+	let dump = ubus.call('network.interface', 'dump');
+	for (let iface in dump?.interface) {
+		if (iface.proto != 'thread' && iface.proto != 'openthread')
+			continue;
+		ubus.call('network.interface.' + iface.interface, 'down');
+		ubus.call('network.interface.' + iface.interface, 'up');
+		return { error: 0, interface: iface.interface };
+	}
+	return { error: 255 };
+}
+
+function summarize_state() {
+	let s = otbr('state');
+	// Distinguish "otbr-agent is not reachable" from "Thread is disabled";
+	// without this both render as a disabled network.
+	if (s.error)
+		return { error: s.error };
+	let result = { state: s.State ?? 'disabled' };
+	if (result.state != 'disabled') {
+		result.configured = true;
+		result.networkname = otbr('networkname').NetworkName;
+		result.panid = otbr('panid').PanId;
+		result.channel = otbr('channel').Channel;
+		result.rloc16 = otbr('rloc16').rloc16;
+		let leader = otbr('leaderdata').leaderdata;
+		if (leader) result.leaderdata = leader;
+	} else {
+		// A stopped network keeps its committed dataset, which the stock
+		// getters reflect even while Thread is disabled; report it so the
+		// UI can offer to enable the network rather than create one. An
+		// unprovisioned device reads as the broadcast PAN id.
+		// The stock ubus formats the PAN id "0x%04x", but parse rather
+		// than compare the spelling: a bare hex string or a plain number
+		// must not make a factory-fresh device read as provisioned, and
+		// anything unparseable counts as unprovisioned.
+		let raw = otbr('panid').PanId;
+		// ucode's numeric coercion handles "0xffff", "65535" and a plain
+		// number alike, and yields NaN for anything else; NaN != NaN, so
+		// an unparseable reply counts as unprovisioned.
+		let pan = +raw;
+		result.configured = (raw != null && pan == pan && pan != 0xffff);
+		if (result.configured) {
+			result.networkname = otbr('networkname').NetworkName;
+			result.panid = raw;
+			result.channel = otbr('channel').Channel;
+		}
+	}
+	result.interfacename = otbr('interfacename').InterfaceName;
+	return result;
+}
+
+function otctl(args) {
+	// The SRP registrations are not exposed over ubus; read them from the
+	// CLI socket the same way ot-ctl does. Root-only rpcd context.
+	let fs = require('fs');
+	let bin = fs.access('/usr/sbin/ot-ctl', 'x') ? '/usr/sbin/ot-ctl' : 'ot-ctl';
+	return fs.popen(bin + ' ' + args, 'r');
+}
+
+function srp_hostnames() {
+	// address (lowercase) -> registered SRP host name
+	let p = otctl('srp server host');
+	if (!p)
+		return {};
+	let map = {};
+	let host = null;
+	for (let line = p.read('line'); length(line); line = p.read('line')) {
+		line = trim(line);
+		let m = match(line, /^([^.\s]+)\.default\.service\.arpa\.$/);
+		if (m) {
+			host = m[1];
+			continue;
+		}
+		m = match(line, /^addresses: \[(.+)\]$/);
+		if (m && host)
+			for (let a in split(m[1], ', '))
+				map[lc(trim(a))] = host;
+	}
+	p.close();
+	return map;
+}
+
+function child_addresses() {
+	// child rloc16 (lowercase hex, no 0x) -> [registered addresses]
+	let p = otctl('childip');
+	if (!p)
+		return {};
+	let map = {};
+	for (let line = p.read('line'); length(line); line = p.read('line')) {
+		let m = match(trim(line), /^([0-9a-fA-F]{4}): (.+)$/);
+		if (m) {
+			let k = lc(m[1]);
+			map[k] ??= [];
+			push(map[k], lc(trim(m[2])));
+		}
+	}
+	p.close();
+	return map;
+}
+
+// SRP registrations change on the order of minutes; the overview polls
+// every two seconds. Cache the CLI reads so a watching browser does not
+// fork ot-ctl twice per tick.
+let srp_cache = { at: 0, hosts: {}, children: {} };
+
+function srp_lookup() {
+	let now = time();
+	if (srp_cache.at == 0 || now < srp_cache.at || now - srp_cache.at > 30) {
+		srp_cache.hosts = srp_hostnames();
+		srp_cache.children = length(srp_cache.hosts) ? child_addresses() : {};
+		srp_cache.at = now;
+	}
+	return srp_cache;
+}
+
+// One address list serves both filter modes, so an edit that is harmless
+// under one meaning locks devices out under the other. Every mutation is
+// therefore evaluated against the mode and the current contents. A read
+// that failed is not an empty list: the daemon reports an unreadable mode
+// as the literal string "error", and always emits addrlist as an array,
+// so anything else means the state is unknown and no edit is safe.
+function macfilter_mode() {
+	let mode = otbr('macfilterstate').state;
+	return (mode == null || lc(mode) == 'error') ? null : lc(mode);
+}
+
+function macfilter_list() {
+	let list = otbr('macfilteraddr').addrlist;
+	return (type(list) == 'array') ? map(list, lc) : null;
+}
+
+function macfilter_snapshot() {
+	let mode = macfilter_mode();
+	let list = macfilter_list();
+	return (mode == null || list == null) ? null : { mode: mode, list: list };
+}
+
+// An absent or empty state argument means "leave the mode as it is".
+function macfilter_want(state) {
+	return length(state) ? lc(state) : null;
+}
+
+// What makes a mode change unsafe, given the list it would reinterpret.
+// Returns null when the change is safe (or is not a change at all).
+function macfilter_hazard(want, mode, list) {
+	if (want == null || want == mode)
+		return null;
+	// Entries written for the previous meaning would flip to the opposite.
+	if (length(list) > 0)
+		return 'leftovers';
+	// An allowlist that admits nobody filters every device.
+	if (want == 'allowlist' && length(list) == 0)
+		return 'empties_allowlist';
+	return null;
+}
+
+function summarize_neighbors() {
+	let s = otbr('state');
+	if (s.error)
+		return { error: s.error };
+	let state = s.State;
+	let result = { state: state, neighbor: [] };
+
+	if (state == 'disabled')
+		return result;
+
+	let list = (state == 'child')
+		? otbr('parent').parent_list
+		: otbr('neighbor').neighbor_list;
+	for (let n in list)
+		push(result.neighbor, n);
+
+	// A Thread device announces itself to the mesh by registering a host
+	// with the SRP server on this border router; that name is the closest
+	// thing to a hostname the mesh has. Children are matched through their
+	// registered addresses. (Matter devices register their extended MAC as
+	// the host name by design, so for them this adds no friendly name.)
+	if (length(result.neighbor)) {
+		let srp = srp_lookup();
+		let hosts = srp.hosts;
+		if (length(hosts)) {
+			let caddrs = srp.children;
+			for (let n in result.neighbor) {
+				let k = lc(replace(n.Rloc16 ?? '', '0x', ''));
+				for (let a in (caddrs[k] ?? [])) {
+					if (hosts[a] != null) {
+						n.Hostname = hosts[a];
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	// The filter mode and each neighbour's own standing on it are what
+	// the overview needs to offer per-device actions; the full address
+	// list stays with the other settings behind the write grant.
+	// Both are left unset when unreadable, so the page can tell "not
+	// filtered" apart from "unknown" and withhold the per-device actions.
+	result.macfilter = macfilter_mode();
+	let addrlist = macfilter_list();
+	if (addrlist != null)
+		for (let n in result.neighbor)
+			n.Filtered = index(addrlist, lc(n.ExtAddress ?? '')) >= 0;
+
+	let j = otbr('joinernum');
+	result.joinernum = j.joinernum ?? 0;
+	result.joinerlist = [];
+	if ((j.joinernum ?? 0) != 0 && j.joinerList)
+		for (let entry in j.joinerList)
+			push(result.joinerlist, entry);
+
+	return result;
+}
+
+
+
+return {
+	'luci.openthread': {
+		state_summary: {
+			args: {},
+			call: function() {
+				return summarize_state();
+			}
+		},
+		radio_restart: {
+			args: {},
+			call: function() {
+				return radio_restart();
+			}
+		},
+		neighbors_summary: {
+			args: {},
+			call: function() {
+				return summarize_neighbors();
+			}
+		},
+		settings_get: {
+			args: {},
+			call: function() {
+				let st = otbr('state');
+				// Otherwise every field comes back null and the form renders
+				// blank inputs that an admin can Apply against a dead daemon.
+				if (st.error)
+					return { error: st.error };
+				let addrs = macfilter_list();
+				return {
+					networkname: otbr('networkname').NetworkName,
+					interfacename: otbr('interfacename').InterfaceName,
+					panid: otbr('panid').PanId,
+					channel: otbr('channel').Channel,
+					extpanid: otbr('extpanid').ExtPanId,
+					mode: otbr('mode').Mode,
+					// The network key and the commissioner credential are not
+					// handed out with the rest of the settings; a page that
+					// only displays the configuration has no use for them.
+					// secret_get fetches one when the operator asks for it.
+					partitionid: otbr('partitionid').Partitionid,
+					macfilterstate: macfilter_mode(),
+					addrlist: addrs,
+					state: st.State,
+				};
+			}
+		},
+		secret_get: {
+			args: { name: 'string' },
+			call: function(req) {
+				// Reading a secret is an explicit request for that one value,
+				// so it can be logged and reasoned about on its own.
+				if (req.args?.name == 'networkkey') {
+					let r = otbr('networkkey');
+					return { error: r.error ?? 0, value: r.Networkkey };
+				}
+				if (req.args?.name == 'pskc') {
+					let r = otbr('pskc');
+					return { error: r.error ?? 0, value: r.pskc };
+				}
+				return { error: 7 /* OT_ERROR_INVALID_ARGS */ };
+			}
+		},
+		scan: {
+			args: {},
+			call: function(req) {
+				// Deferred: the active scan takes several seconds and rpcd
+				// serves all of LuCI from one event loop, so a synchronous
+				// call here would freeze every page for the scan duration.
+				let replied = false;
+				let d = ubus.defer('otbr', 'scan', {}, function(rc, reply) {
+					replied = true;
+					req.reply({
+						scan_list: reply?.scan_list ?? [],
+						error: reply?.error ?? (rc ? 255 : 0)
+					});
+				});
+				if (!d)
+					return replied ? null : { scan_list: [], error: 255 };
+				return d;
+			}
+		},
+
+		settings_apply: {
+			args: {
+				networkname: 'string',
+				channel:     0,
+				panid:       'string',
+				extpanid:    'string',
+				mode:        'string',
+				networkkey:  'string',
+				pskc:        'string',
+				macfilter:   'string',
+				macfilter_confirmed: true,
+			},
+			call: function(req) {
+				let a = req.args;
+				let st = otbr('state');
+				if (st.error)
+					return { error: st.error };
+				let state = st.State;
+				// The filter mode is the one setting whose meaning depends
+				// on data the form does not carry. Refuse a change that
+				// would reinterpret an existing list or activate an
+				// allowlist that admits nobody, unless the operator
+				// confirmed it with the list on screen.
+				let want = macfilter_want(a.macfilter);
+				if (want != null) {
+					let mode = macfilter_mode();
+					let list = macfilter_list();
+					if (mode == null || list == null)
+						return { error: 0, unchanged: true, reason: 'unreadable' };
+					// Nothing to do, and nothing to warn about.
+					if (want == mode)
+						want = null;
+					else {
+						let hazard = macfilter_hazard(want, mode, list);
+						if (hazard != null && !a.macfilter_confirmed)
+							return { error: 0, unchanged: true, reason: hazard };
+					}
+				}
+				let result;
+				if (state == 'disabled') {
+					// An empty secret means "leave as it is": the form does not
+					// carry the current values, so it cannot resubmit them.
+					let steps = [
+						[ 'setnetworkname', { networkname: a.networkname } ],
+						[ 'setchannel',     { channel:     a.channel } ],
+						[ 'setpanid',       { panid:       a.panid } ],
+						[ 'setextpanid',    { extpanid:    a.extpanid } ],
+						[ 'setmode',        { mode:        a.mode } ],
+					];
+					if (length(a.networkkey))
+						push(steps, [ 'setnetworkkey', { networkkey: a.networkkey } ]);
+					if (length(a.pskc))
+						push(steps, [ 'setpskc', { pskc: a.pskc } ]);
+					for (let step in steps) {
+						let r = otbr(step[0], step[1]);
+						if ((r?.error ?? 0) != 0)
+							return { error: r.error };
+					}
+					if (want != null) {
+						let r = otbr('macfiltersetstate', { state: want });
+						if ((r?.error ?? 0) != 0)
+							return { error: r.error };
+					}
+					result = otbr('threadstart');
+				} else {
+					let args = {
+						networkname: a.networkname,
+						extpanid:    a.extpanid,
+						panid:       a.panid,
+						channel:     sprintf('%d', a.channel),
+					};
+					if (length(a.networkkey))
+						args.networkkey = a.networkkey;
+					if (length(a.pskc))
+						args.pskc = a.pskc;
+					result = otbr('mgmtset', args);
+					if ((result?.error ?? 0) == 0 && want != null)
+						result = otbr('macfiltersetstate', { state: want });
+				}
+				return { error: result?.error ?? 0 };
+			}
+		},
+		attach: {
+			args: { panid: 'string', channel: 0, networkkey: 'string' },
+			call: function(req) {
+				let a = req.args;
+				let steps = [
+					[ 'setpanid',      { panid:      a.panid } ],
+					[ 'setchannel',    { channel:    a.channel } ],
+					[ 'setnetworkkey', { networkkey: a.networkkey } ],
+				];
+				for (let step in steps) {
+					let r = otbr(step[0], step[1]);
+					if ((r?.error ?? 0) != 0)
+						return { error: r.error };
+				}
+				let r = otbr('threadstart');
+				return { error: r?.error ?? 0 };
+			}
+		},
+		thread_start: {
+			args: {},
+			call: function() {
+				let r = otbr('threadstart');
+				return { error: r?.error ?? 0 };
+			}
+		},
+		thread_stop: {
+			args: {},
+			call: function() {
+				let r = otbr('threadstop');
+				return { error: r?.error ?? 0 };
+			}
+		},
+		leave: {
+			args: {},
+			call: function() {
+				let r = otbr('leave');
+				return { error: r?.error ?? 0 };
+			}
+		},
+		commissioner_start: {
+			args: {},
+			call: function() {
+				let r = otbr('commissionerstart');
+				return { error: r?.error ?? 0 };
+			}
+		},
+		joiner_add: {
+			args: { pskd: 'string', eui64: 'string' },
+			call: function(req) {
+				let r = otbr('joineradd', { pskd: req.args.pskd, eui64: req.args.eui64 });
+				return { error: r?.error ?? 0 };
+			}
+		},
+		joiner_remove: {
+			args: { eui64: 'string' },
+			call: function(req) {
+				let r = otbr('joinerremove', { eui64: req.args.eui64 });
+				return { error: r?.error ?? 0 };
+			}
+		},
+		macfilter_clear: {
+			args: { confirmed: true },
+			call: function(req) {
+				let snap = macfilter_snapshot();
+				if (snap == null)
+					return { error: 0, unchanged: true, reason: 'unreadable' };
+				// Emptying an active allowlist blocks every device, so it
+				// needs the operator's explicit go-ahead; the settings
+				// modal asks with the list on screen.
+				if (snap.mode == 'allowlist' && length(snap.list) > 0 && !req.args.confirmed)
+					return { error: 0, unchanged: true, reason: 'empties_allowlist' };
+				let r = otbr('macfilterclear');
+				return { error: r?.error ?? 0 };
+			}
+		},
+		macfilter_add: {
+			args: { addr: 'string', state: 'string', confirmed: true },
+			call: function(req) {
+				if (!length(req.args.addr))
+					return { error: 7 };
+				let snap = macfilter_snapshot();
+				if (snap == null)
+					return { error: 0, unchanged: true, reason: 'unreadable' };
+				let addr = lc(req.args.addr);
+				let want = macfilter_want(req.args.state);
+				let others = filter(snap.list, a => a != addr);
+				// Turning a mode on next to entries from an earlier list
+				// would give those entries the opposite meaning, and the
+				// address added here would join a list that means the
+				// opposite of the intent. Change nothing at all.
+				let hazard = macfilter_hazard(want, snap.mode, others);
+				// Only leftovers can apply to an add. The address written here
+				// is in the list this produces, so it can never leave an active
+				// allowlist empty -- and reporting that would tell the operator
+				// the opposite of what would have happened.
+				if (hazard == 'empties_allowlist')
+					hazard = null;
+				if (hazard != null)
+					return { error: 0, unchanged: true, reason: hazard };
+				// Adding under the mode already in force affects this device
+				// only, but switching the mode on decides what every other
+				// device may do -- an allowlist of one blocks the rest of the
+				// mesh. macfilter_clear and settings_apply make the caller
+				// acknowledge that; so does this.
+				if (want != null && want != snap.mode && !req.args.confirmed)
+					return { error: 0, unchanged: true, reason: 'unconfirmed_mode' };
+				let r = otbr('macfilteradd', { addr: req.args.addr });
+				let err = r?.error ?? 0;
+				// Already (24) means the entry was there; the mode may
+				// still be switched on for it.
+				if (err != 0 && err != 24)
+					return { error: err };
+				if (want != null && want != snap.mode) {
+					let sr = otbr('macfiltersetstate', { state: want });
+					if ((sr?.error ?? 0) != 0)
+						return { error: sr.error, reason: 'mode_unchanged' };
+				}
+				return { error: err };
+			}
+		},
+		macfilter_remove: {
+			args: { addr: 'string', state: 'string', confirmed: true },
+			call: function(req) {
+				if (!length(req.args.addr))
+					return { error: 7 };
+				let snap = macfilter_snapshot();
+				if (snap == null)
+					return { error: 0, unchanged: true, reason: 'unreadable' };
+				let addr = lc(req.args.addr);
+				let want = macfilter_want(req.args.state);
+				let remaining = filter(snap.list, a => a != addr);
+				// A mode switch would reinterpret whatever stays behind.
+				let hazard = macfilter_hazard(want, snap.mode, remaining);
+				if (hazard != null)
+					return { error: 0, unchanged: true, reason: hazard };
+				// An active allowlist with no entries admits nobody, so
+				// emptying one filters every neighbour rather than this
+				// single device.
+				if ((want ?? snap.mode) == 'allowlist' &&
+					length(remaining) == 0 && length(snap.list) > 0)
+					return { error: 0, unchanged: true, reason: 'empties_allowlist' };
+				// Same as in macfilter_add: a mode this call would switch on
+				// reinterprets the whole mesh, not just this address.
+				if (want != null && want != snap.mode && !req.args.confirmed)
+					return { error: 0, unchanged: true, reason: 'unconfirmed_mode' };
+				let r = otbr('macfilterremove', { addr: req.args.addr });
+				let err = r?.error ?? 0;
+				if (err != 0)
+					return { error: err };
+				if (want != null && want != snap.mode) {
+					let sr = otbr('macfiltersetstate', { state: want });
+					if ((sr?.error ?? 0) != 0)
+						return { error: sr.error, reason: 'mode_unchanged' };
+				}
+				return { error: err };
+			}
+		},
+	}
+};
