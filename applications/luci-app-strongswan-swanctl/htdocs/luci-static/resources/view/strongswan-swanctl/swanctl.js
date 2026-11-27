@@ -687,7 +687,7 @@ return view.extend({
 
 		o = s.taboption('expert', form.ListValue, 'fragmentation', _('IKE Fragmentation'),
 			swanctlDescr(_('Use IKE fragmentation'), 'connections.<conn>.fragmentation'));
-		o.value('yes');
+		o.value('yes', '%s (%s)'.format('yes', _('default')));
 		o.value('no');
 		o.value('force');
 		o.value('accept');
