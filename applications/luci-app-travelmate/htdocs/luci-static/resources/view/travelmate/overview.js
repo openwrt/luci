@@ -650,6 +650,23 @@ return view.extend({
 		o.nocreate = true;
 		o.rmempty = true;
 
+		o = s.taboption('general', form.DynamicList, 'trm_uplinkservices', _('Uplink Services'),
+			_('The only init services the uplinks may take down for a captive portal login, e.g. encrypted DNS or a mesh VPN. Select them per uplink in the station settings. An entry is the name of an init script, called with \'stop\' and \'start\', or \'service:down:up\' to set the individual actions.'));
+		o.rmempty = true;
+		o.validate = function (section_id, value) {
+			if (!value) {
+				return true;
+			}
+			const m = value.match(/^([A-Za-z0-9_.-]+)(:[a-z_]+:[a-z_]+)?$/);
+			if (!m) {
+				return _('Expecting: service name or service:down:up');
+			}
+			if (m[1] === 'travelmate') {
+				return _('This service is not allowed');
+			}
+			return true;
+		}
+
 		o = s.taboption('general', form.Flag, 'trm_netcheck', _('Net Error Check'), _('Treat missing internet availability as an error. A detected captive portal does not count as an error.'));
 		o.default = 0;
 		o.rmempty = false;

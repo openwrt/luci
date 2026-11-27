@@ -745,7 +745,7 @@ return view.extend({
 		}
 
 		o = s.taboption('travelmate', form.ListValue, '_revive', _('Revive Uplink'),
-			_('Re-enable this uplink after the selected number of run cycles if it has been disabled by the retry limit. The number of revivals is limited by the global retry limit.'));
+			_('Re-enable this uplink after the selected number of run cycles if it has been disabled by the retry limit, or earlier once it is back in range. The number of revivals is limited by the global retry limit.'));
 		o.modalonly = true;
 		o.uciconfig = 'travelmate';
 		o.ucisection = 'uplink';
@@ -822,6 +822,28 @@ return view.extend({
 		}
 		o.remove = function (section_id) {
 			return handleSectionsVal('del', section_id, 'script_args');
+		}
+
+		const svc_allowed = L.toArray(uci.get('travelmate', 'global', 'trm_uplinkservices')).map((e) => e.split(':')[0]).filter((n) => n && n !== 'travelmate');
+		o = s.taboption('travelmate', form.MultiValue, '_uplink_services', _('Uplink Services'),
+			svc_allowed.length ?
+				_('Services to take down for a captive portal login on this uplink, brought up again afterwards.') :
+				_('No services available, list them first in the global travelmate settings (Uplink Services).'));
+		o.modalonly = true;
+		o.uciconfig = 'travelmate';
+		o.ucisection = 'uplink';
+		o.ucioption = 'uplink_services';
+		o.rmempty = true;
+		o.placeholder = _('none');
+		svc_allowed.forEach((n) => o.value(n));
+		o.cfgvalue = function (section_id) {
+			return L.toArray(handleSectionsVal('get', section_id, 'uplink_services'));
+		}
+		o.write = function (section_id, value) {
+			return handleSectionsVal('set', section_id, 'uplink_services', L.toArray(value));
+		}
+		o.remove = function (section_id) {
+			return handleSectionsVal('del', section_id, 'uplink_services');
 		}
 
 		/*
