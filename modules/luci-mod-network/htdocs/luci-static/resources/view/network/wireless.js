@@ -297,15 +297,19 @@ function join_eap_encryption(enc) {
 	return 'wpa';
 }
 
-// Reason why a scanned 802.1X or OWE network cannot be joined with the
-// installed wpa_supplicant, whose basic variants e.g. lack EAP, or null
+// Reason why a scanned network cannot be joined with the installed
+// wpa_supplicant, whose basic variants e.g. lack EAP, or null
 function join_unsupported(enc) {
 	const auth = L.toArray(enc?.authentication);
 
-	if (!Array.isArray(enc?.wpa) || auth.includes('psk') || auth.includes('sae'))
+	if (!Array.isArray(enc?.wpa) || auth.includes('psk'))
 		return null;
 
-	if (auth.includes('802.1x')) {
+	if (auth.includes('sae')) {
+		if (!L.hasSystemFeature('wpasupplicant', 'sae'))
+			return _('This network requires WPA3-SAE, which the installed wpa_supplicant does not support.');
+	}
+	else if (auth.includes('802.1x')) {
 		if (!L.hasSystemFeature('wpasupplicant', 'eap'))
 			return _('This network requires WPA-Enterprise (802.1X), which the installed wpa_supplicant does not support.');
 
@@ -2602,7 +2606,8 @@ return view.extend({
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
 			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'psk'));
-			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'sae'));
+			/* without SAE support, a network also offering WPA2-PSK is joined with it */
+			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'sae') && L.hasSystemFeature('wpasupplicant', 'sae'));
 			const is_eap = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == '802.1x'));
 			const is_owe = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'owe'));
 			const cipher = join_cipher(enc);
@@ -2797,7 +2802,7 @@ return view.extend({
 			for (let i = 2; nameUsed(name.default); i++)
 				name.default = 'wwan%d'.format(i);
 
-			if (is_wep || is_psk) {
+			if ((is_wep || is_psk) && !unsupported) {
 				passphrase = s2.option(form.Value, 'password', is_wep ? _('WEP passphrase') : _('WPA passphrase'), _('Specify the secret encryption key here.'));
 				passphrase.datatype = is_wep ? 'wepkey' : 'wpakey';
 				passphrase.password = true;
