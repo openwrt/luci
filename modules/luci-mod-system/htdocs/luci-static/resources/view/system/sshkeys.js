@@ -2,9 +2,23 @@
 'require baseclass';
 'require view';
 'require fs';
+'require rpc';
 'require ui';
 
 var isReadonlyView = !L.hasViewPermission() || null;
+
+var dropbearKeysFile = '/etc/dropbear/authorized_keys',
+    opensshKeysDir = '/root/.ssh',
+    opensshKeysFile = opensshKeysDir + '/authorized_keys',
+    keysHelpUrl = 'https://openwrt.org/docs/guide-user/services/ssh/openssh_instead_dropbear#use_one_list_of_keys';
+
+var keysFile = dropbearKeysFile;
+
+var callInitList = rpc.declare({
+	object: 'luci',
+	method: 'getInitList',
+	expect: { '': {} }
+});
 
 var SSHPubkeyDecoder = baseclass.singleton({
 	lengthDecode: function(s, off)
@@ -146,8 +160,26 @@ function renderKeys(keys) {
 		list.insertBefore(E('p', _('No public keys present yet.')), list.lastElementChild);
 }
 
+function readKeys(path) {
+	return fs.lines(path).then(function(lines) {
+		return lines.map(function(line) {
+			return SSHPubkeyDecoder.decode(line);
+		}).filter(function(line) {
+			return line != null;
+		});
+	});
+}
+
+function ensureKeysDir() {
+	if (keysFile !== opensshKeysFile)
+		return Promise.resolve();
+
+	return fs.exec('/bin/mkdir', [ '-p', '-m', '700', opensshKeysDir ]);
+}
+
 function saveKeys(keys) {
-	return fs.write('/etc/dropbear/authorized_keys', keys.join('\n') + '\n', 384 /* 0600 */)
+	return ensureKeysDir()
+		.then(function() { return fs.write(keysFile, keys.join('\n') + '\n', 384 /* 0600 */) })
 		.then(renderKeys.bind(this, keys))
 		.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
 		.finally(ui.hideModal);
@@ -244,16 +276,22 @@ function handleWindowDragDropIgnore(ev) {
 
 return view.extend({
 	load: function() {
-		return fs.lines('/etc/dropbear/authorized_keys').then(function(lines) {
-			return lines.map(function(line) {
-				return SSHPubkeyDecoder.decode(line);
-			}).filter(function(line) {
-				return line != null;
-			});
+		return L.resolveDefault(callInitList(), {}).then(function(services) {
+			keysFile = (services.sshd && (services.sshd.enabled || !services.dropbear))
+				? opensshKeysFile : dropbearKeysFile;
+
+			return Promise.all([
+				readKeys(keysFile),
+				(keysFile === opensshKeysFile) ? readKeys(dropbearKeysFile) : []
+			]);
 		});
 	},
 
-	render: function(keys) {
+	render: function(data) {
+		var keys = data[0],
+		    fingerprints = keys.map(function(pubkey) { return pubkey.fprint }),
+		    unlisted = data[1].filter(function(pubkey) { return fingerprints.indexOf(pubkey.fprint) === -1 });
+
 		var list = E('div', {
 			'class': 'cbi-dynlist',
 			'dragover': isReadonlyView ? null : dragKey,
@@ -288,6 +326,12 @@ return view.extend({
 		return E('div', {}, [
 			E('h2', _('SSH-Keys')),
 			E('div', { 'class': 'cbi-section-descr' }, _('Public keys allow for passwordless SSH logins with higher security than plain passwords. In order to upload a new key to the device, paste an OpenSSH-compatible public key or drag a <code>.pub</code> file into the input field.')),
+			E('p', {}, _('Editing <code>%s</code>, which %s reads for root logins.').format(keysFile, (keysFile === opensshKeysFile) ? 'OpenSSH' : 'Dropbear')),
+			unlisted.length ? E('div', { 'class': 'alert-message warning' },
+				N_(unlisted.length,
+					'%d key in <code>%s</code> is not listed here. OpenSSH still accepts it if <code>AuthorizedKeysFile</code> includes that file. See <a href="%s" target="_blank" rel="noreferrer">how to use one list of keys</a>.',
+					'%d keys in <code>%s</code> are not listed here. OpenSSH still accepts them if <code>AuthorizedKeysFile</code> includes that file. See <a href="%s" target="_blank" rel="noreferrer">how to use one list of keys</a>.'
+				).format(unlisted.length, dropbearKeysFile, keysHelpUrl)) : '',
 			E('div', { 'class': 'cbi-section-node' }, list)
 		]);
 	},
