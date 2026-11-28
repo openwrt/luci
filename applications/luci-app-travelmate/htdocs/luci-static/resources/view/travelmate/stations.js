@@ -268,6 +268,21 @@ function eapAuthOption(o) {
 }
 
 /*
+	set up an EAP method list: WPA3-Enterprise 192-bit mode only allows EAP-TLS,
+	another method is replaced and restored when changing to another encryption
+*/
+function eapMethodChoices(o) {
+	o.checkDepends = function (section_id) {
+		const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+		const encryption = this.section.formvalue(section_id, 'encryption');
+
+		limitChoices(this, section_id, encryption, method => encryption !== 'wpa3-192' || method === 'tls', 'tls',
+			(method, replacement) => _('%s is not allowed in WPA3-EAP 192-bit mode and has been replaced by %s.').format(method, replacement));
+		return active;
+	};
+}
+
+/*
 	normalize a bssid to upper case for case-insensitive comparison
 */
 function normBssid(bssid) {
@@ -768,6 +783,7 @@ return view.extend({
 		o.value('ttls', _('TTLS'));
 		o.value('peap', _('PEAP'));
 		o.value('fast', _('FAST'));
+		eapMethodChoices(o);
 		o.default = 'peap';
 		/* wifi-scripts have no default EAP method, keep it when it equals the default */
 		o.rmempty = false;
@@ -1144,19 +1160,20 @@ return view.extend({
 										encryption = 'owe';
 									} else if (hasSuiteB) {
 										tbl_encryption = `WPA3 Enterprise (${resCipher.name})`;
-										encryption = 'wpa3';
+										encryption = 'wpa3-192';
 									} else if (hasWPA2 && hasWPA3 && hasPSK && !has8021x) {
 										tbl_encryption = `Mixed WPA2/WPA3 PSK (${resCipher.name})`;
 										encryption = 'sae-mixed';
 									} else if (hasWPA2 && hasWPA3 && has8021x) {
 										tbl_encryption = `Mixed WPA2/WPA3 802.1X (${resCipher.name})`;
-										encryption = 'wpa3-mixed';
+										encryption = 'wpa2' + suffix;
 									} else if (hasWPA3 && hasSAE && !has8021x) {
 										tbl_encryption = `WPA3 PSK (SAE)`;
 										encryption = 'sae';
 									} else if (hasWPA3 && has8021x) {
-										tbl_encryption = `WPA3 802.1X (${resCipher.name})`;
-										encryption = 'wpa3';
+										tbl_encryption = `WPA3 802.1X 192-bit (${resCipher.name})`;
+										/* iwinfo reports WPA3 for 802.1X only with the Suite-B AKMs of the 192-bit mode */
+										encryption = 'wpa3-192';
 									} else if (hasWPA1 && hasWPA2 && has8021x) {
 										tbl_encryption = `Mixed WPA/WPA2 802.1X (${resCipher.name})`;
 										encryption = 'wpa-mixed' + suffix;
@@ -1276,6 +1293,7 @@ return view.extend({
 			o2.value('ttls', _('TTLS'));
 			o2.value('peap', _('PEAP'));
 			o2.value('fast', _('FAST'));
+			eapMethodChoices(o2);
 			o2.default = 'peap';
 
 			o2 = s2.option(form.ListValue, 'auth', _('Authentication'));
