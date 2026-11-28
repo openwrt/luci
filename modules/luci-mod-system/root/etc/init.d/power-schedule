@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+USE_PROCD=1
+
+sync_schedule() {
+	[ -x /usr/libexec/rtc-power-schedule ] && /usr/libexec/rtc-power-schedule sync
+}
+
+start_service() {
+	sync_schedule
+}
+
+reload_service() {
+	sync_schedule
+}
+
+service_triggers() {
+	procd_add_reload_trigger "power_schedule"
+}
