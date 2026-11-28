@@ -286,6 +286,59 @@ function next_free_sid(offset) {
 	return sid;
 }
 
+// Encryption for joining a scanned 802.1X network: iwinfo reports WPA3 for
+// 802.1X only with the Suite-B AKMs of the 192-bit mode
+function join_eap_encryption(enc) {
+	if (enc.wpa.includes(2))
+		return 'wpa2';
+	else if (enc.wpa.includes(3))
+		return 'wpa3-192';
+
+	return 'wpa';
+}
+
+// Reason why a scanned network cannot be joined with the installed
+// wpa_supplicant, whose basic variants e.g. lack EAP, or null
+function join_unsupported(enc) {
+	const auth = L.toArray(enc?.authentication);
+
+	if (!Array.isArray(enc?.wpa) || auth.includes('psk'))
+		return null;
+
+	if (auth.includes('sae')) {
+		if (!L.hasSystemFeature('wpasupplicant', 'sae'))
+			return _('This network requires WPA3-SAE, which the installed wpa_supplicant does not support.');
+	}
+	else if (auth.includes('802.1x')) {
+		if (!L.hasSystemFeature('wpasupplicant', 'eap'))
+			return _('This network requires WPA-Enterprise (802.1X), which the installed wpa_supplicant does not support.');
+
+		if (join_eap_encryption(enc) == 'wpa3-192' && !L.hasSystemFeature('wpasupplicant', 'suiteb192'))
+			return _('This network requires the WPA3-EAP 192-bit mode, which the installed wpa_supplicant does not support.');
+	}
+	else if (auth.includes('owe') && !L.hasSystemFeature('wpasupplicant', 'owe')) {
+		return _('This network requires OWE, which the installed wpa_supplicant does not support.');
+	}
+
+	return null;
+}
+
+// Cipher to force for joining a scanned network: none, i.e. cipher 'auto', if
+// the network offers CCMP or no known cipher, otherwise its strongest cipher,
+// as wifi-scripts usually pick CCMP for 'auto'
+function join_cipher(enc) {
+	const ciphers = L.toArray(enc?.ciphers);
+
+	if (ciphers.includes('ccmp'))
+		return null;
+
+	for (const [ name, cipher ] of [ [ 'gcmp-256', 'gcmp256' ], [ 'ccmp-256', 'ccmp256' ], [ 'gcmp', 'gcmp' ], [ 'tkip', 'tkip' ] ])
+		if (ciphers.includes(name))
+			return cipher;
+
+	return null;
+}
+
 function add_dependency_permutations(o, deps) {
 	let res = [{}];
 
@@ -320,6 +373,151 @@ function eht_compat_default(section_id) {
 		: { '0': [] };
 
 	return form.Flag.prototype.updateDefaultValue.call(this, section_id);
+}
+
+// Limit the choices of a list option to the values accepted by allowed(), e.g.
+// depending on another option of the same modal. Called from the option's
+// checkDepends(), which runs on every change in the modal; key identifies the
+// condition, the choices are only updated when it changes. Like the frequency
+// widget, this changes the options of the native <select> element of a
+// ListValue, ui.Select only uses its choices for rendering; without such an
+// element nothing is changed.
+// A value that is not accepted is replaced by the candidate returned by
+// replace(), if that is accepted and available, and hint() gets the labels of
+// both values for a note below the field. Otherwise the value is kept for the
+// validation to report it. A replaced value is restored as soon as it is
+// accepted again, unless another value was picked in the meantime.
+function limit_choices(o, section_id, key, allowed, replace, hint) {
+	const sel = o.getUIElement(section_id)?.node.querySelector('select');
+
+	if (!sel || sel.limit_key === key)
+		return;
+
+	sel.all_options ??= Array.from(sel.options);
+	sel.limit_key = key;
+
+	const option = value => sel.all_options.find(opt => opt.value == value);
+	const hint_node = () => o.map.findElement('data-field', o.cbid(section_id))?.querySelector('.limit-choices-hint');
+	const prev = sel.value;
+	const orig = (sel.replaced?.[1] == prev) ? sel.replaced[0] : prev;
+	const value = [ orig, replace?.(orig), prev ].find(v => v != null && allowed(v) && option(v)) ?? orig;
+
+	dom.content(sel, sel.all_options.filter(opt => allowed(opt.value) || opt.value == value));
+	sel.value = value;
+	sel.replaced = (value != orig) ? [ orig, value ] : null;
+
+	hint_node()?.remove();
+
+	if (sel.replaced && hint)
+		o.map.findElement('data-field', o.cbid(section_id))?.querySelector('.cbi-value-field')?.appendChild(
+			E('div', { 'class': 'cbi-value-description limit-choices-hint' },
+				hint(option(orig)?.text ?? orig, option(value).text)));
+
+	/* the note is obsolete once another value is picked */
+	if (!sel.limit_listener) {
+		sel.limit_listener = true;
+		sel.addEventListener('change', () => {
+			if (sel.value != sel.replaced?.[1])
+				hint_node()?.remove();
+		});
+	}
+
+	/* notify like a user selection so dependent options and validation update */
+	if (sel.value != prev)
+		sel.dispatchEvent(new Event('change'));
+}
+
+// Wi-Fi 6E (6 GHz) mandates WPA3 or OWE together with management frame
+// protection, so these are the only encryption modes offered on a 6 GHz radio.
+const crypto_modes_6g = [ 'sae', 'wpa3', 'wpa3-192', 'owe' ];
+
+// Replacement of the same kind for an encryption mode not allowed on 6 GHz:
+// like the upgrade wifi-scripts apply on 6 GHz radios, PSK modes become
+// WPA3-SAE, EAP modes WPA3-EAP, and an open network uses OWE. WEP and the
+// WPA2/WPA3 compatibility mode, which wifi-scripts do not upgrade, become
+// WPA3-SAE as well.
+function crypto_mode_6g_replacement(mode) {
+	switch (mode) {
+	case 'wpa':
+	case 'wpa2':
+	case 'wpa3-mixed':
+		return 'wpa3';
+
+	case 'none':
+		return 'owe';
+
+	default:
+		return 'sae';
+	}
+}
+
+// Band of the radio of a wireless interface. Like eht_compat_default(), read it
+// from the radio's frequency widget, so that a band change made in the same
+// modal is seen, and only fall back to the saved config if that widget is not
+// available.
+function radio_band(section_id) {
+	const dev = uci.get('wireless', section_id, 'device');
+	const freq = dev ? this.map.lookupOption('_freq', dev) : null;
+
+	return (freq ? freq[0].formvalue(dev)?.[1] : null) ?? (dev ? uci.get('wireless', dev, 'band') : null);
+}
+
+// Offer only the encryption modes usable on the band of the radio
+function update_crypto_modes(section_id) {
+	const is_6g = (radio_band.call(this, section_id) == '6g');
+
+	limit_choices(this, section_id, is_6g ? '6g' : '',
+		mode => !is_6g || crypto_modes_6g.includes(mode), crypto_mode_6g_replacement,
+		(mode, replacement) => _('%s is not available on 6 GHz and has been replaced by %s.')
+			.format(mode.replace(/ \(.*\)$/, ''), replacement.replace(/ \(.*\)$/, '')));
+}
+
+// TKIP is only usable with WPA and WPA2, WPA3 requires management frame
+// protection, which cannot be used with TKIP
+const tkip_crypto_modes = [ 'psk', 'psk2', 'psk-mixed', 'wpa', 'wpa2', 'wpa-mixed' ];
+
+function cipher_allowed(encryption, cipher) {
+	return (!/tkip/.test(cipher) || tkip_crypto_modes.includes(encryption));
+}
+
+// WPA3-Enterprise 192-bit mode only allows EAP-TLS
+function eap_type_allowed(encryption, eap_type) {
+	return (encryption != 'wpa3-192' || eap_type == 'tls');
+}
+
+// Phase 2 authentication types applicable to the EAP methods with an inner
+// one: PEAP and FAST only tunnel EAP methods, PEAP also accepts MSCHAPv2, which
+// wifi-scripts treat like EAP-MSCHAPv2 there, TTLS tunnels any type.
+const eap_auth_types = {
+	fast: [ 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	peap: [ 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	ttls: [ 'PAP', 'CHAP', 'MSCHAP', 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ]
+};
+
+// Set up a phase 2 authentication option offering the types applicable to the
+// EAP method selected in the same section. Defaults to the phase 2 wifi-scripts
+// use without 'auth': MSCHAPv2 for TTLS, the same as EAP-MSCHAPv2 for the
+// others.
+function eap_auth_option(o) {
+	for (const type of eap_auth_types.ttls)
+		o.value(type, type.replace(/V2$/, 'v2'));
+
+	o.defaults = {
+		'MSCHAPV2': [ { eap_type: 'ttls' } ],
+		'EAP-MSCHAPV2': []
+	};
+
+	o.checkDepends = function(section_id) {
+		const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+		const eap_type = this.section.formvalue(section_id, 'eap_type');
+
+		if (eap_auth_types[eap_type])
+			limit_choices(this, section_id, eap_type, type => eap_auth_types[eap_type].includes(type),
+				() => (eap_type == 'ttls') ? 'MSCHAPV2' : 'EAP-MSCHAPV2',
+				(type, replacement) => _('%s is not applicable to the selected EAP method and has been replaced by %s.').format(type, replacement));
+
+		return active;
+	};
 }
 
 // Define a class CBIWifiFrequencyValue that extends form.Value
@@ -1332,12 +1530,17 @@ return view.extend({
 					uci.set('wireless', section_id, 'encryption', e);
 				};
 
+				o.checkDepends = function(section_id) {
+					const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+					update_crypto_modes.call(this, section_id);
+					return active;
+				};
+
 				o = ss.taboption('encryption', form.ListValue, 'cipher', _('Cipher'));
 				o.depends('encryption', 'wpa');
 				o.depends('encryption', 'wpa2');
 				o.depends('encryption', 'wpa3');
 				o.depends('encryption', 'wpa3-mixed');
-				o.depends('encryption', 'wpa3-192');
 				o.depends('encryption', 'psk');
 				o.depends('encryption', 'sae');
 				o.depends('encryption', 'psk2');
@@ -1364,9 +1567,27 @@ return view.extend({
 					return v;
 				};
 
+				o.checkDepends = function(section_id) {
+					const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+					const encryption = this.section.formvalue(section_id, 'encryption');
 
+					limit_choices(this, section_id, encryption, cipher => cipher_allowed(encryption, cipher), () => 'auto',
+						(cipher, replacement) => _('%s is not available with WPA3 and has been replaced by %s.').format(cipher, replacement));
+
+					return active;
+				};
+
+				/* without a cipher to choose, e.g. GCMP-256 in 192-bit mode, drop a forced one */
+				o.remove = function(section_id) {
+					const e = uci.get('wireless', section_id, 'encryption');
+
+					if (e?.match(/\+/))
+						uci.set('wireless', section_id, 'encryption', e.replace(/\+.+$/, ''));
+				};
+
+
+				// All modes are registered, update_crypto_modes() limits the choices on 6 GHz
 				const crypto_modes = [];
-				const is_6ghz = uci.get('wireless', radioNet.getWifiDeviceName(), 'band') == '6g';
 
 				if (hwtype == 'mac80211') {
 					const has_supplicant = L.hasSystemFeature('wpasupplicant');
@@ -1393,11 +1614,9 @@ return view.extend({
 					const has_sta_wep = L.hasSystemFeature('wpasupplicant', 'wep');
 
 					if (has_hostapd || has_supplicant) {
-						if (!is_6ghz) {
-							crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
-							crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
-							crypto_modes.push(['psk',       'WPA-PSK',                     12]);
-						}
+						crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
+						crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
+						crypto_modes.push(['psk',       'WPA-PSK',                     12]);
 					}
 					else {
 						encr.description = _('WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP and ad-hoc mode) to be installed.');
@@ -1405,15 +1624,14 @@ return view.extend({
 
 					if (has_ap_sae || has_sta_sae) {
 						crypto_modes.push(['sae',       'WPA3-SAE',                     31]);
-						if (!is_6ghz)
-							crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
+						crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
 					}
 
 					// WPA3-Personal Compatibility Mode uses RSN overriding, which is an AP-only feature
-					if (has_ap_sae && !is_6ghz)
+					if (has_ap_sae)
 						crypto_modes.push(['sae-compat', 'WPA2-PSK/WPA3-SAE Compatibility Mode', 30]);
 
-					if (!is_6ghz && (has_ap_wep || has_sta_wep)) {
+					if (has_ap_wep || has_sta_wep) {
 						crypto_modes.push(['wep-open',   _('WEP Open System'), 11]);
 						crypto_modes.push(['wep-shared', _('WEP Shared Key'),  10]);
 					}
@@ -1421,15 +1639,12 @@ return view.extend({
 					if (has_ap_eap || has_sta_eap) {
 						if (has_ap_eap192 || has_sta_eap192) {
 							crypto_modes.push(['wpa3', 'WPA3-EAP', 33]);
-							if (!is_6ghz)
-								crypto_modes.push(['wpa3-mixed', 'WPA2-EAP/WPA3-EAP Mixed Mode', 32]);
+							crypto_modes.push(['wpa3-mixed', 'WPA2-EAP/WPA3-EAP Mixed Mode', 32]);
 							crypto_modes.push(['wpa3-192', 'WPA3-EAP 192-bit Mode', 36]);
 						}
 
-						if (!is_6ghz) {
-							crypto_modes.push(['wpa2', 'WPA2-EAP', 34]);
-							crypto_modes.push(['wpa',  'WPA-EAP',  20]);
-						}
+						crypto_modes.push(['wpa2', 'WPA2-EAP', 34]);
+						crypto_modes.push(['wpa',  'WPA-EAP',  20]);
 					}
 
 					if (has_ap_owe || has_sta_owe) {
@@ -1497,6 +1712,9 @@ return view.extend({
 						const modetitle = modeopt.vallist[modeopt.keylist.indexOf(modeval)];
 						const enctitle = this.vallist[this.keylist.indexOf(value)];
 
+						if (radio_band.call(this, section_id) == '6g' && !crypto_modes_6g.includes(value))
+							return _('This encryption mode is not allowed on 6 GHz.');
+
 						if (value == 'none')
 							return true;
 
@@ -1514,8 +1732,7 @@ return view.extend({
 					crypto_modes.push(['wep-shared', _('WEP Shared Key'),         10]);
 				}
 
-				if (!is_6ghz)
-					crypto_modes.push(['none',       _('No Encryption'),   0]);
+				crypto_modes.push(['none',       _('No Encryption'),   0]);
 
 				crypto_modes.sort(function(a, b) { return b[2] - a[2]; });
 
@@ -2029,6 +2246,15 @@ return view.extend({
 					o.value('peap', 'PEAP');
 					o.value('fast', 'FAST');
 					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed', 'wpa3-192'] });
+					o.checkDepends = function(section_id) {
+						const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+						const encryption = this.section.formvalue(section_id, 'encryption');
+
+						limit_choices(this, section_id, encryption, type => eap_type_allowed(encryption, type), () => 'tls',
+							(type, replacement) => _('%s is not allowed in WPA3-EAP 192-bit mode and has been replaced by %s.').format(type, replacement));
+
+						return active;
+					};
 
 					o = ss.taboption('encryption', form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"));
 					o.enabled = '1';
@@ -2068,14 +2294,7 @@ return view.extend({
 					o.password = true;
 
 					o = ss.taboption('encryption', form.ListValue, 'auth', _('Authentication'));
-					o.value('PAP', 'PAP');
-					o.value('CHAP', 'CHAP');
-					o.value('MSCHAP', 'MSCHAP');
-					o.value('MSCHAPV2', 'MSCHAPv2');
-					o.value('EAP-GTC', 'EAP-GTC');
-					o.value('EAP-MD5', 'EAP-MD5');
-					o.value('EAP-MSCHAPV2', 'EAP-MSCHAPv2');
-					o.value('EAP-TLS', 'EAP-TLS');
+					eap_auth_option(o);
 					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed', 'wpa3-192'], eap_type: ['fast', 'peap', 'ttls'] });
 
 					o.validate = function(section_id, value) {
@@ -2387,10 +2606,30 @@ return view.extend({
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
 			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'psk'));
-			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'sae'));
+			/* without SAE support, a network also offering WPA2-PSK is joined with it */
+			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'sae') && L.hasSystemFeature('wpasupplicant', 'sae'));
+			const is_eap = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == '802.1x'));
+			const is_owe = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'owe'));
+			const cipher = join_cipher(enc);
+			const encryption = (mode) => (cipher && cipher_allowed(mode, cipher)) ? `${mode}+${cipher}` : mode;
+			const eap = {};
 
-			if (nameval == null || (passopt && passval == null))
+			if (join_unsupported(enc) || nameval == null || (passopt && passval == null))
 				return;
+
+			/* EAP settings asked for an 802.1X network, see handleJoin() */
+			for (const [ opt, uciopt ] of [ [ 'eap_type', 'eap_type' ], [ 'auth', 'auth' ], [ 'identity', 'identity' ],
+			                                [ 'eap_password', 'password' ], [ 'ca_cert_usesystem', 'ca_cert_usesystem' ] ]) {
+				const o = L.toArray(form.lookupOption(opt, '_new_'))[0];
+
+				if (!o || !o.isActive('_new_'))
+					continue;
+
+				if (!o.isValid('_new_'))
+					return;
+
+				eap[uciopt] = o.formvalue('_new_');
+			}
 
 			let section_id = null;
 
@@ -2452,17 +2691,17 @@ return view.extend({
 					uci.set('wireless', section_id, 'ssid', ssidval);
 
 				if (is_sae) {
-					uci.set('wireless', section_id, 'encryption', 'sae');
+					uci.set('wireless', section_id, 'encryption', encryption('sae'));
 					uci.set('wireless', section_id, 'key', passval);
 				}
 				else if (is_psk) {
 					for (let i = enc.wpa.length - 1; i >= 0; i--) {
 						if (enc.wpa[i] == 2) {
-							uci.set('wireless', section_id, 'encryption', 'psk2');
+							uci.set('wireless', section_id, 'encryption', encryption('psk2'));
 							break;
 						}
 						else if (enc.wpa[i] == 1) {
-							uci.set('wireless', section_id, 'encryption', 'psk');
+							uci.set('wireless', section_id, 'encryption', encryption('psk'));
 							break;
 						}
 					}
@@ -2473,6 +2712,21 @@ return view.extend({
 					uci.set('wireless', section_id, 'encryption', 'wep-open');
 					uci.set('wireless', section_id, 'key', '1');
 					uci.set('wireless', section_id, 'key1', passval);
+				}
+				else if (is_eap) {
+					/* the 192-bit mode has its cipher, GCMP-256 */
+					const mode = join_eap_encryption(enc);
+					uci.set('wireless', section_id, 'encryption', (mode == 'wpa3-192') ? mode : encryption(mode));
+					uci.set('wireless', section_id, 'eap_type', eap.eap_type);
+					uci.set('wireless', section_id, 'auth', eap.auth);
+					uci.set('wireless', section_id, 'identity', eap.identity);
+					uci.set('wireless', section_id, 'password', eap.password);
+
+					if (eap.ca_cert_usesystem == '1')
+						uci.set('wireless', section_id, 'ca_cert_usesystem', '1');
+				}
+				else if (is_owe) {
+					uci.set('wireless', section_id, 'encryption', 'owe');
 				}
 				else {
 					uci.set('wireless', section_id, 'encryption', 'none');
@@ -2505,7 +2759,9 @@ return view.extend({
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
 			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == 'psk'  || a == 'sae'));
-			let replace, passphrase, name, bssid, zone;
+			const is_eap = (!is_psk && enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).some(a => a == '802.1x'));
+			const unsupported = join_unsupported(enc);
+			let replace, passphrase, identity, name, bssid, zone;
 
 			function nameUsed(name) {
 				const s = uci.get('network', name);
@@ -2546,11 +2802,36 @@ return view.extend({
 			for (let i = 2; nameUsed(name.default); i++)
 				name.default = 'wwan%d'.format(i);
 
-			if (is_wep || is_psk) {
+			if ((is_wep || is_psk) && !unsupported) {
 				passphrase = s2.option(form.Value, 'password', is_wep ? _('WEP passphrase') : _('WPA passphrase'), _('Specify the secret encryption key here.'));
 				passphrase.datatype = is_wep ? 'wepkey' : 'wpakey';
 				passphrase.password = true;
 				passphrase.rmempty = false;
+			}
+
+			if (is_eap && !unsupported) {
+				const encryption = join_eap_encryption(enc);
+
+				const eap_type = s2.option(form.ListValue, 'eap_type', _('EAP-Method'));
+				for (const [ type, title ] of [ [ 'tls', 'TLS' ], [ 'ttls', 'TTLS' ], [ 'peap', 'PEAP' ], [ 'fast', 'FAST' ] ])
+					if (eap_type_allowed(encryption, type))
+						eap_type.value(type, title);
+				eap_type.default = eap_type_allowed(encryption, 'peap') ? 'peap' : 'tls';
+
+				const auth = s2.option(form.ListValue, 'auth', _('Authentication'));
+				eap_auth_option(auth);
+				[ 'fast', 'peap', 'ttls' ].forEach(type => auth.depends('eap_type', type));
+
+				identity = s2.option(form.Value, 'identity', _('Identity'));
+				identity.rmempty = false;
+
+				const password = s2.option(form.Value, 'eap_password', _('Password'));
+				[ 'fast', 'peap', 'ttls' ].forEach(type => password.depends('eap_type', type));
+				password.password = true;
+				password.rmempty = false;
+
+				if (L.hasSystemFeature('cabundle'))
+					s2.option(form.Flag, 'ca_cert_usesystem', _('Use system certificates'), _("Validate server certificate using built-in system CA bundle,<br />requires the \"ca-bundle\" package"));
 			}
 
 			if (bss.ssid != null) {
@@ -2564,6 +2845,7 @@ return view.extend({
 			return m2.render().then(L.bind(function(nodes) {
 				ui.showModal(_('Joining Network: %q').replace(/%q/, '"%h"'.format(bss.ssid)), [
 					nodes,
+					unsupported ? E('p', { 'class': 'alert-message warning' }, unsupported) : null,
 					E('div', { 'class': 'right' }, [
 						E('button', {
 							'class': 'btn',
@@ -2571,10 +2853,11 @@ return view.extend({
 						}, _('Cancel')), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-positive important',
+							'disabled': unsupported ? '' : null,
 							'click': ui.createHandlerFn(this, 'handleJoinConfirm', radioDev, bss, m2)
 						}, _('Submit'))
 					])
-				], 'cbi-modal').querySelector('[id="%s"] input[class][type]'.format((passphrase || name).cbid('_new_'))).focus();
+				], 'cbi-modal').querySelector('[id="%s"] input[class][type]'.format((passphrase || identity || name).cbid('_new_'))).focus();
 			}, this));
 		};
 
