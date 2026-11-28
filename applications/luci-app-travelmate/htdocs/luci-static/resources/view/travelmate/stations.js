@@ -52,6 +52,237 @@ function resolveCiphers(list) {
 }
 
 /*
+	cipher suffix of the encryption value for the cipher list of a scan result:
+	CCMP if offered, otherwise the other AES cipher or TKIP, no suffix (cipher
+	'auto') if none of them is known
+*/
+function cipherSuffix(list) {
+	const names = list.map(c => resolveCipher(c).name);
+	const cipher = [
+		[ 'CCMP', 'ccmp' ],
+		[ 'GCMP-256', 'gcmp256' ],
+		[ 'CCMP-256', 'ccmp256' ],
+		[ 'GCMP', 'gcmp' ],
+		[ 'TKIP', 'tkip' ]
+	].find(c => names.includes(c[0]));
+
+	return cipher ? '+' + cipher[1] : '';
+}
+
+/*
+	label of an encryption value, any value without a fixed label is labeled
+	by its mode and cipher suffix, e.g. 'wpa2+gcmp256' or 'psk2' as written
+	by the LuCI wireless page for cipher 'auto'
+*/
+function encryptionLabel(value) {
+	const labels = {
+		'sae': _('WPA3 PSK (SAE)'),
+		'sae-mixed': _('Mixed WPA2/WPA3 PSK (CCMP)'),
+		'psk2+ccmp': _('WPA2 PSK (CCMP)'),
+		'psk2+tkip': _('WPA2 PSK (TKIP)'),
+		'psk+ccmp': _('WPA PSK (CCMP)'),
+		'psk+tkip': _('WPA PSK (TKIP)'),
+		'psk-mixed+ccmp': _('Mixed WPA/WPA2 PSK (CCMP)'),
+		'psk-mixed+tkip': _('Mixed WPA/WPA2 PSK (TKIP)'),
+		'wpa3': _('WPA3 802.1X'),
+		'wpa3-mixed': _('Mixed WPA2/WPA3 802.1X'),
+		'wpa2+ccmp': _('WPA2 802.1X (CCMP)'),
+		'wpa2+tkip': _('WPA2 802.1X (TKIP)'),
+		'wpa+ccmp': _('WPA 802.1X (CCMP)'),
+		'wpa+tkip': _('WPA 802.1X (TKIP)'),
+		'wpa-mixed+ccmp': _('Mixed WPA/WPA2 802.1X (CCMP)'),
+		'wpa-mixed+tkip': _('Mixed WPA/WPA2 802.1X (TKIP)'),
+		'owe': _('WPA3 OWE'),
+		'none': _('Open')
+	};
+	const modes = {
+		'sae': _('WPA3 PSK (SAE)'),
+		'psk2': _('WPA2 PSK'),
+		'psk': _('WPA PSK'),
+		'psk-mixed': _('Mixed WPA/WPA2 PSK'),
+		'wpa3': _('WPA3 802.1X'),
+		'wpa3-mixed': _('Mixed WPA2/WPA3 802.1X'),
+		'wpa3-192': _('WPA3 802.1X 192-bit'),
+		'wpa2': _('WPA2 802.1X'),
+		'wpa': _('WPA 802.1X'),
+		'wpa-mixed': _('Mixed WPA/WPA2 802.1X'),
+		'wep-open': _('WEP Open System'),
+		'wep-shared': _('WEP Shared Key')
+	};
+	const ciphers = { 'aes': 'CCMP', 'ccmp': 'CCMP', 'ccmp256': 'CCMP-256', 'gcmp': 'GCMP', 'gcmp256': 'GCMP-256', 'tkip': 'TKIP' };
+	const [ mode, ...suffix ] = String(value).split('+');
+
+	if (labels[value])
+		return labels[value];
+	else if (!modes[mode])
+		return String(value);
+	else if (suffix.length)
+		return '%s (%s)'.format(modes[mode], suffix.map(c => ciphers[c] ?? c.toUpperCase()).join('+'));
+	else if (/^(psk|wpa)(2|-mixed)?$/.test(mode))
+		return '%s (%s)'.format(modes[mode], _('auto'));
+
+	return modes[mode];
+}
+
+/*
+	encryption values offered in the uplink dialogs
+*/
+function encryptionValues(o) {
+	[
+		'sae', 'sae-mixed',
+		'psk2', 'psk2+ccmp', 'psk2+tkip',
+		'psk', 'psk+ccmp', 'psk+tkip',
+		'psk-mixed', 'psk-mixed+ccmp', 'psk-mixed+tkip',
+		'wpa3', 'wpa3-mixed', 'wpa3-192',
+		'wpa2', 'wpa2+ccmp', 'wpa2+tkip',
+		'wpa', 'wpa+ccmp', 'wpa+tkip',
+		'wpa-mixed', 'wpa-mixed+ccmp', 'wpa-mixed+tkip',
+		'owe', 'none'
+	].forEach(value => o.value(value, encryptionLabel(value)));
+}
+
+/*
+	add an encryption value the list does not offer yet, so that the list
+	shows it and saving the dialog keeps it
+*/
+function encryptionValue(o, value) {
+	if (value != null && !(o.keylist || []).includes(value))
+		o.value(value, encryptionLabel(value));
+}
+
+/*
+	limit the choices of a list to the values accepted by allowed(), e.g. depending
+	on another option of the dialog; key identifies the condition, the choices are
+	only updated when it changes. Like the LuCI wireless page, this changes the
+	options of the native <select> element of a ListValue, ui.Select only uses its
+	choices for rendering; without such an element nothing is changed.
+	A value that is not accepted is replaced by the replacement, if that is accepted
+	and available, and hint() gets the labels of both values for a note below the
+	field, otherwise the value is kept. A replaced value is restored once it is
+	accepted again, unless another value was picked in the meantime.
+*/
+function limitChoices(o, section_id, key, allowed, replacement, hint) {
+	const sel = o.getUIElement(section_id)?.node.querySelector('select');
+
+	if (!sel || sel.limitKey === key) {
+		return;
+	}
+	sel.allOptions ??= Array.from(sel.options);
+	sel.limitKey = key;
+
+	const option = value => sel.allOptions.find(opt => opt.value === value);
+	const field = () => o.map.findElement('data-field', o.cbid(section_id))?.querySelector('.cbi-value-field');
+	const prev = sel.value;
+	const orig = (sel.replaced?.[1] === prev) ? sel.replaced[0] : prev;
+	const value = [ orig, replacement, prev ].find(v => v != null && allowed(v) && option(v)) ?? orig;
+
+	dom.content(sel, sel.allOptions.filter(opt => allowed(opt.value) || opt.value === value));
+	sel.value = value;
+	sel.replaced = (value !== orig) ? [ orig, value ] : null;
+
+	field()?.querySelector('.limit-choices-hint')?.remove();
+	if (sel.replaced && hint) {
+		field()?.appendChild(E('div', { 'class': 'cbi-value-description limit-choices-hint' },
+			hint(option(orig)?.text ?? orig, option(value).text)));
+	}
+
+	/* the note is obsolete once another value is picked */
+	if (!sel.limitListener) {
+		sel.limitListener = true;
+		sel.addEventListener('change', () => {
+			if (sel.value !== sel.replaced?.[1]) {
+				field()?.querySelector('.limit-choices-hint')?.remove();
+			}
+		});
+	}
+
+	/* notify like a user selection, so that dependent options update */
+	if (sel.value !== prev) {
+		sel.dispatchEvent(new Event('change'));
+	}
+}
+
+/*
+	phase 2 authentication types applicable to the EAP methods with an inner one:
+	PEAP and FAST only tunnel EAP methods, PEAP also accepts MSCHAPv2, which
+	wifi-scripts treat like EAP-MSCHAPv2 there, TTLS tunnels any type
+*/
+const eapAuthTypes = {
+	fast: [ 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	peap: [ 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ],
+	ttls: [ 'PAP', 'CHAP', 'MSCHAP', 'MSCHAPV2', 'EAP-GTC', 'EAP-MD5', 'EAP-MSCHAPV2', 'EAP-TLS' ]
+};
+
+/*
+	set up an EAP authentication list: offer the types applicable to the EAP method
+	of the dialog, default to the phase 2 of wifi-scripts without auth, show a stored
+	'auth=PAP' or 'auth=MSCHAPV2' as its type and keep any other unknown value
+*/
+function eapAuthOption(o) {
+	const labels = {
+		'PAP': _('PAP'),
+		'CHAP': _('CHAP'),
+		'MSCHAP': _('MSCHAP'),
+		'MSCHAPV2': _('MSCHAPV2'),
+		'EAP-GTC': _('EAP-GTC'),
+		'EAP-MD5': _('EAP-MD5'),
+		'EAP-MSCHAPV2': _('EAP-MSCHAPV2'),
+		'EAP-TLS': _('EAP-TLS')
+	};
+
+	eapAuthTypes.ttls.forEach(type => o.value(type, labels[type]));
+	[ 'fast', 'peap', 'ttls' ].forEach(method => o.depends({ encryption: 'wpa', eap_type: method, '!contains': true }));
+	/*
+		the phase 2 of wifi-scripts without auth: EAP-MSCHAPv2 for PEAP
+		and FAST, which only tunnel EAP methods, MSCHAPv2 for TTLS
+	*/
+	o.defaults = {
+		'MSCHAPV2': [{ eap_type: 'ttls' }],
+		'EAP-MSCHAPV2': []
+	};
+	o.load = function (section_id) {
+		let value = form.ListValue.prototype.load.call(this, section_id);
+
+		if (typeof value === 'string') {
+			value = value.replace(/^auth=(PAP|MSCHAPV2)$/, '$1');
+			if (!(this.keylist || []).includes(value)) {
+				this.value(value, value);
+			}
+		}
+		return value;
+	};
+	o.checkDepends = function (section_id) {
+		const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+		const method = this.section.formvalue(section_id, 'eap_type');
+
+		/* an unknown value is only offered for the uplink that has it */
+		const stored = this.cfgvalue(section_id);
+
+		if (eapAuthTypes[method]) {
+			limitChoices(this, section_id, method, type => eapAuthTypes[method].includes(type) || (type === stored && !eapAuthTypes.ttls.includes(type)),
+				(method === 'ttls') ? 'MSCHAPV2' : 'EAP-MSCHAPV2',
+				(type, replacement) => _('%s is not applicable to the selected EAP method and has been replaced by %s.').format(type, replacement));
+		}
+		return active;
+	};
+}
+
+/*
+	set up an EAP method list: WPA3-Enterprise 192-bit mode only allows EAP-TLS,
+	another method is replaced and restored when changing to another encryption
+*/
+function eapMethodChoices(o) {
+	o.checkDepends = function (section_id) {
+		const active = form.ListValue.prototype.checkDepends.call(this, section_id);
+		const encryption = this.section.formvalue(section_id, 'encryption');
+
+		limitChoices(this, section_id, encryption, method => encryption !== 'wpa3-192' || method === 'tls', 'tls',
+			(method, replacement) => _('%s is not allowed in WPA3-EAP 192-bit mode and has been replaced by %s.').format(method, replacement));
+		return active;
+	};
+}
+
+/*
 	normalize a bssid to upper case for case-insensitive comparison
 */
 function normBssid(bssid) {
@@ -169,34 +400,71 @@ function scanCard(quality, minQuality, ssidNode, channel, bssid, encLabel, encOp
 }
 
 /*
-	change the status of travelmate stations
+	name of the travelmate 'uplink' section of a wireless station, null if it
+	has none, e.g. a station configured on the LuCI wireless page
 */
-function handleToggle(sid) {
-	let w_device, w_ssid, w_bssid, t_sections, row, element, value, enabled;
-
-	w_device = uci.get('wireless', sid, 'device');
-	w_ssid = uci.get('wireless', sid, 'ssid');
-	w_bssid = uci.get('wireless', sid, 'bssid');
-	t_sections = uci.sections('travelmate', 'uplink');
+function uplinkSection(sid) {
+	const w_device = uci.get('wireless', sid, 'device');
+	const w_ssid = uci.get('wireless', sid, 'ssid');
+	const w_bssid = uci.get('wireless', sid, 'bssid');
+	const t_sections = uci.sections('travelmate', 'uplink');
 
 	for (let i = 0; i < t_sections.length; i++) {
 		if (t_sections[i].device === w_device && t_sections[i].ssid === w_ssid && normBssid(t_sections[i].bssid) === normBssid(w_bssid)) {
-			value = t_sections[i]['enabled'];
-			value = (value == 0 ? 1 : 0);
-			enabled = (value == 0 ? _('No') : _('Yes'));
-			uci.set('travelmate', t_sections[i]['.name'], 'enabled', value);
-			return uci.save().then(function () {
-				row = document.querySelector('.cbi-section-table-row[data-sid="%s"]'.format(sid));
-				if (row) {
-					element = row.querySelector('.cbi-value-field');
-					if (element) {
-						element.textContent = enabled;
-					}
-					row.setAttribute('style', 'opacity: 0.5; color: #37c !important;');
-				}
-			});
+			return t_sections[i]['.name'];
 		}
 	}
+	return null;
+}
+
+/*
+	add the travelmate 'uplink' section of a wireless station, with the
+	defaults of a new uplink (enabled, default vpn) if requested
+*/
+function addUplink(sid, defaults) {
+	const vpn_stdiface = uci.get('travelmate', 'global', 'trm_stdvpniface');
+	const t_sid = uci.add('travelmate', 'uplink');
+
+	if (defaults) {
+		uci.set('travelmate', t_sid, 'enabled', '1');
+	}
+	uci.set('travelmate', t_sid, 'device', uci.get('wireless', sid, 'device'));
+	uci.set('travelmate', t_sid, 'ssid', uci.get('wireless', sid, 'ssid'));
+	uci.set('travelmate', t_sid, 'bssid', uci.get('wireless', sid, 'bssid'));
+	if (defaults && vpn_stdiface) {
+		uci.set('travelmate', t_sid, 'vpn', '1');
+		uci.set('travelmate', t_sid, 'vpniface', vpn_stdiface);
+	}
+	return t_sid;
+}
+
+/*
+	change the status of travelmate stations
+*/
+function handleToggle(sid) {
+	let t_sid, row, element, value, enabled;
+
+	t_sid = uplinkSection(sid);
+	if (t_sid) {
+		value = uci.get('travelmate', t_sid, 'enabled');
+		value = (value == 0 ? 1 : 0);
+		uci.set('travelmate', t_sid, 'enabled', value);
+	} else {
+		/* a station without uplink section counts as disabled, add it enabled */
+		addUplink(sid, true);
+		value = 1;
+	}
+	enabled = (value == 0 ? _('No') : _('Yes'));
+	return uci.save().then(function () {
+		row = document.querySelector('.cbi-section-table-row[data-sid="%s"]'.format(sid));
+		if (row) {
+			element = row.querySelector('.cbi-value-field');
+			if (element) {
+				element.textContent = enabled;
+			}
+			row.setAttribute('style', 'opacity: 0.5; color: #37c !important;');
+		}
+	});
 }
 
 /*
@@ -241,34 +509,11 @@ function handleRemove(sid) {
 	add missing travelmate sections
 */
 function handleSectionsAdd(iface) {
-	let w_sections, t_sections, match;
-
-	w_sections = uci.sections('wireless', 'wifi-iface');
-	t_sections = uci.sections('travelmate', 'uplink');
+	const w_sections = uci.sections('wireless', 'wifi-iface');
 
 	for (let i = 0; i < w_sections.length; i++) {
-		if (w_sections[i].mode !== 'sta' || w_sections[i].network !== iface) {
-			continue;
-		}
-		match = false;
-		for (let j = 0; j < t_sections.length; j++) {
-			if (w_sections[i].device === t_sections[j].device && w_sections[i].ssid === t_sections[j].ssid && normBssid(w_sections[i].bssid) === normBssid(t_sections[j].bssid)) {
-				match = true;
-				break;
-			}
-		}
-		if (match === false) {
-			let vpn_stdiface = uci.get('travelmate', 'global', 'trm_stdvpniface');
-			let sid = uci.add('travelmate', 'uplink');
-
-			uci.set('travelmate', sid, 'enabled', '1');
-			uci.set('travelmate', sid, 'device', w_sections[i].device);
-			uci.set('travelmate', sid, 'ssid', w_sections[i].ssid);
-			uci.set('travelmate', sid, 'bssid', w_sections[i].bssid);
-			if (vpn_stdiface) {
-				uci.set('travelmate', sid, 'vpn', '1');
-				uci.set('travelmate', sid, 'vpniface', vpn_stdiface);
-			}
+		if (w_sections[i].mode === 'sta' && w_sections[i].network === iface && !uplinkSection(w_sections[i]['.name'])) {
+			addUplink(w_sections[i]['.name'], true);
 		}
 	}
 }
@@ -277,23 +522,20 @@ function handleSectionsAdd(iface) {
 	update travelmate sections
 */
 function handleSectionsVal(action, section_id, option, value) {
-	let w_device, w_ssid, w_bssid, t_sections;
+	let t_sid = uplinkSection(section_id);
 
-	w_device = uci.get('wireless', section_id, 'device');
-	w_ssid = uci.get('wireless', section_id, 'ssid');
-	w_bssid = uci.get('wireless', section_id, 'bssid');
-	t_sections = uci.sections('travelmate', 'uplink');
-
-	for (let i = 0; i < t_sections.length; i++) {
-		if (t_sections[i].device === w_device && t_sections[i].ssid === w_ssid && normBssid(t_sections[i].bssid) === normBssid(w_bssid)) {
-			if (action === 'get') {
-				return t_sections[i][option];
-			} else if (action === 'set') {
-				return uci.set('travelmate', t_sections[i]['.name'], option, value);
-			} else if (action === 'del') {
-				return uci.unset('travelmate', t_sections[i]['.name'], option);
-			}
-		}
+	if (action === 'set') {
+		/*
+			a station without uplink section, e.g. configured on the LuCI
+			wireless page, gets it when its dialog is saved, with the values
+			of the dialog
+		*/
+		t_sid ??= addUplink(section_id, false);
+		return uci.set('travelmate', t_sid, option, value);
+	} else if (t_sid && action === 'get') {
+		return uci.get('travelmate', t_sid, option);
+	} else if (t_sid && action === 'del') {
+		return uci.unset('travelmate', t_sid, option);
 	}
 }
 
@@ -501,86 +743,22 @@ return view.extend({
 		};
 
 		o = s.taboption('wireless', form.ListValue, 'encryption', _('Encryption'));
-		o.value('sae', _('WPA3 PSK (SAE)'));
-		o.value('sae-mixed', _('Mixed WPA2/WPA3 PSK (CCMP)'));
-		o.value('psk2+ccmp', _('WPA2 PSK (CCMP)'));
-		o.value('psk2+tkip', _('WPA2 PSK (TKIP)'));
-		o.value('psk+ccmp', _('WPA PSK (CCMP)'));
-		o.value('psk+tkip', _('WPA PSK (TKIP)'));
-		o.value('psk-mixed+ccmp', _('Mixed WPA/WPA2 PSK (CCMP)'));
-		o.value('psk-mixed+tkip', _('Mixed WPA/WPA2 PSK (TKIP)'));
-		o.value('wpa3', _('WPA3 802.1X'));
-		o.value('wpa3-mixed', _('Mixed WPA2/WPA3 802.1X'));
-		o.value('wpa2+ccmp', _('WPA2 802.1X (CCMP)'));
-		o.value('wpa2+tkip', _('WPA2 802.1X (TKIP)'));
-		o.value('wpa+ccmp', _('WPA 802.1X (CCMP)'));
-		o.value('wpa+tkip', _('WPA 802.1X (TKIP)'));
-		o.value('wpa-mixed+ccmp', _('Mixed WPA/WPA2 802.1X (CCMP)'));
-		o.value('wpa-mixed+tkip', _('Mixed WPA/WPA2 802.1X (TKIP)'));
-		o.value('owe', _('WPA3 OWE'));
-		o.value('none', _('Open'));
+		encryptionValues(o);
 		o.default = 'none';
+		o.load = function (section_id) {
+			const value = form.ListValue.prototype.load.call(this, section_id);
+
+			/*
+				keep a value the list does not offer, e.g. 'wpa2' as written by the
+				LuCI wireless page for cipher 'auto', otherwise the dialog shows the
+				first entry instead and saving it overwrites the uplink settings
+			*/
+			encryptionValue(this, value);
+			return value;
+		};
 		o.textvalue = function (section_id) {
-			let cfgvalue = this.map.data.get('wireless', section_id, 'encryption');
-			switch (cfgvalue) {
-				case 'sae':
-					cfgvalue = _('WPA3 PSK (SAE)');
-					break;
-				case 'sae-mixed':
-					cfgvalue = _('Mixed WPA2/WPA3 PSK (CCMP)');
-					break;
-				case 'psk2+ccmp':
-					cfgvalue = _('WPA2 PSK (CCMP)');
-					break;
-				case 'psk2+tkip':
-					cfgvalue = _('WPA2 PSK (TKIP)');
-					break;
-				case 'psk+ccmp':
-					cfgvalue = _('WPA PSK (CCMP)');
-					break;
-				case 'psk+tkip':
-					cfgvalue = _('WPA PSK (TKIP)');
-					break;
-				case 'psk-mixed+ccmp':
-					cfgvalue = _('Mixed WPA/WPA2 PSK (CCMP)');
-					break;
-				case 'psk-mixed+tkip':
-					cfgvalue = _('Mixed WPA/WPA2 PSK (TKIP)');
-					break;
-				case 'wpa3':
-					cfgvalue = _('WPA3 802.1X');
-					break;
-				case 'wpa3-mixed':
-					cfgvalue = _('Mixed WPA2/WPA3 802.1X');
-					break;
-				case 'wpa2+ccmp':
-					cfgvalue = _('WPA2 802.1X (CCMP)');
-					break;
-				case 'wpa2+tkip':
-					cfgvalue = _('WPA2 802.1X (TKIP)');
-					break;
-				case 'wpa+ccmp':
-					cfgvalue = _('WPA 802.1X (CCMP)');
-					break;
-				case 'wpa+tkip':
-					cfgvalue = _('WPA 802.1X (TKIP)');
-					break;
-				case 'wpa-mixed+ccmp':
-					cfgvalue = _('Mixed WPA/WPA2 802.1X (CCMP)');
-					break;
-				case 'wpa-mixed+tkip':
-					cfgvalue = _('Mixed WPA/WPA2 802.1X (TKIP)');
-					break;
-				case 'owe':
-					cfgvalue = _('WPA3 OWE');
-					break;
-				case 'none':
-					cfgvalue = _('Open');
-					break;
-				default:
-					cfgvalue = (cfgvalue != null) ? '%h'.format(cfgvalue) : null;
-			}
-			return cfgvalue;
+			const cfgvalue = this.map.data.get('wireless', section_id, 'encryption');
+			return (cfgvalue != null) ? '%h'.format(encryptionLabel(cfgvalue)) : null;
 		};
 		handleStatus();
 
@@ -595,7 +773,7 @@ return view.extend({
 		o.password = true;
 
 		o = s.taboption('wireless', form.Value, 'password', _('Password'));
-		o.depends({ encryption: 'wpa', '!contains': true });
+		[ 'fast', 'peap', 'ttls' ].forEach(method => o.depends({ encryption: 'wpa', eap_type: method, '!contains': true }));
 		o.modalonly = true;
 		o.password = true;
 
@@ -605,22 +783,14 @@ return view.extend({
 		o.value('ttls', _('TTLS'));
 		o.value('peap', _('PEAP'));
 		o.value('fast', _('FAST'));
+		eapMethodChoices(o);
 		o.default = 'peap';
+		/* wifi-scripts have no default EAP method, keep it when it equals the default */
+		o.rmempty = false;
 		o.modalonly = true;
 
 		o = s.taboption('wireless', form.ListValue, 'auth', _('Authentication'));
-		o.value('PAP', _('PAP'));
-		o.value('CHAP', _('CHAP'));
-		o.value('MSCHAP', _('MSCHAP'));
-		o.value('MSCHAPV2', _('MSCHAPV2'));
-		o.value('EAP-GTC', _('EAP-GTC'));
-		o.value('EAP-MD5', _('EAP-MD5'));
-		o.value('EAP-MSCHAPV2', _('EAP-MSCHAPV2'));
-		o.value('EAP-TLS', _('EAP-TLS'));
-		o.value('auth=PAP', _('auth=PAP'));
-		o.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
-		o.default = 'EAP-MSCHAPV2';
-		o.depends({ encryption: 'wpa', '!contains': true });
+		eapAuthOption(o);
 		o.modalonly = true;
 
 		o = s.taboption('wireless', form.Value, 'identity', _('Identity'));
@@ -686,7 +856,7 @@ return view.extend({
 		o.rmempty = false;
 		o.readonly = true;
 		o.cfgvalue = function (section_id) {
-			return handleSectionsVal('get', section_id, 'ssid');
+			return handleSectionsVal('get', section_id, 'ssid') ?? uci.get('wireless', section_id, 'ssid');
 		}
 
 		o = s.taboption('travelmate', form.Value, '_bssid', _('BSSID'));
@@ -697,7 +867,7 @@ return view.extend({
 		o.rmempty = true;
 		o.readonly = true;
 		o.cfgvalue = function (section_id) {
-			return handleSectionsVal('get', section_id, 'bssid');
+			return handleSectionsVal('get', section_id, 'bssid') ?? uci.get('wireless', section_id, 'bssid');
 		}
 
 		o = s.taboption('travelmate', form.Flag, '_opensta', _('Auto Added Open Uplink'),
@@ -974,6 +1144,7 @@ return view.extend({
 									let hasOWE = auth.includes("OWE");
 									let hasSuiteB = auth.some(a => a.includes("SUITE-B"));
 									let resCipher = resolveCiphers(r.ciphers || []);
+									let suffix = cipherSuffix(r.ciphers || []);
 
 									/*
 										encryption classification
@@ -989,37 +1160,38 @@ return view.extend({
 										encryption = 'owe';
 									} else if (hasSuiteB) {
 										tbl_encryption = `WPA3 Enterprise (${resCipher.name})`;
-										encryption = 'wpa3';
+										encryption = 'wpa3-192';
 									} else if (hasWPA2 && hasWPA3 && hasPSK && !has8021x) {
 										tbl_encryption = `Mixed WPA2/WPA3 PSK (${resCipher.name})`;
 										encryption = 'sae-mixed';
 									} else if (hasWPA2 && hasWPA3 && has8021x) {
 										tbl_encryption = `Mixed WPA2/WPA3 802.1X (${resCipher.name})`;
-										encryption = 'wpa3-mixed';
+										encryption = 'wpa2' + suffix;
 									} else if (hasWPA3 && hasSAE && !has8021x) {
 										tbl_encryption = `WPA3 PSK (SAE)`;
 										encryption = 'sae';
 									} else if (hasWPA3 && has8021x) {
-										tbl_encryption = `WPA3 802.1X (${resCipher.name})`;
-										encryption = 'wpa3';
+										tbl_encryption = `WPA3 802.1X 192-bit (${resCipher.name})`;
+										/* iwinfo reports WPA3 for 802.1X only with the Suite-B AKMs of the 192-bit mode */
+										encryption = 'wpa3-192';
 									} else if (hasWPA1 && hasWPA2 && has8021x) {
 										tbl_encryption = `Mixed WPA/WPA2 802.1X (${resCipher.name})`;
-										encryption = resCipher.aes ? 'wpa-mixed+ccmp' : 'wpa-mixed+tkip';
+										encryption = 'wpa-mixed' + suffix;
 									} else if (hasWPA2 && has8021x) {
 										tbl_encryption = `WPA2 802.1X (${resCipher.name})`;
-										encryption = resCipher.aes ? 'wpa2+ccmp' : 'wpa2+tkip';
+										encryption = 'wpa2' + suffix;
 									} else if (hasWPA1 && has8021x) {
 										tbl_encryption = `WPA 802.1X (${resCipher.name})`;
-										encryption = resCipher.aes ? 'wpa+ccmp' : 'wpa+tkip';
+										encryption = 'wpa' + suffix;
 									} else if (hasWPA1 && hasWPA2 && hasPSK) {
 										tbl_encryption = `Mixed WPA/WPA2 PSK (${resCipher.name})`;
-										encryption = resCipher.aes ? 'psk-mixed+ccmp' : 'psk-mixed+tkip';
+										encryption = 'psk-mixed' + suffix;
 									} else if (hasWPA2 && hasPSK) {
 										tbl_encryption = `WPA2 PSK (${resCipher.name})`;
-										encryption = resCipher.aes ? 'psk2+ccmp' : 'psk2+tkip';
+										encryption = 'psk2' + suffix;
 									} else if (hasWPA1 && hasPSK) {
 										tbl_encryption = `WPA PSK (${resCipher.name})`;
-										encryption = resCipher.aes ? 'psk+ccmp' : 'psk+tkip';
+										encryption = 'psk' + suffix;
 									} else {
 										tbl_encryption = _('unknown');
 										encryption = 'none';
@@ -1100,24 +1272,8 @@ return view.extend({
 			o2.default = bssid;
 
 			o2 = s2.option(form.ListValue, 'encryption', _('Encryption'));
-			o2.value('sae', _('WPA3 PSK (SAE)'));
-			o2.value('sae-mixed', _('Mixed WPA2/WPA3 PSK (CCMP)'));
-			o2.value('psk2+ccmp', _('WPA2 PSK (CCMP)'));
-			o2.value('psk2+tkip', _('WPA2 PSK (TKIP)'));
-			o2.value('psk+ccmp', _('WPA PSK (CCMP)'));
-			o2.value('psk+tkip', _('WPA PSK (TKIP)'));
-			o2.value('psk-mixed+ccmp', _('Mixed WPA/WPA2 PSK (CCMP)'));
-			o2.value('psk-mixed+tkip', _('Mixed WPA/WPA2 PSK (TKIP)'));
-			o2.value('wpa3', _('WPA3 802.1X'));
-			o2.value('wpa3-mixed', _('Mixed WPA2/WPA3 802.1X'));
-			o2.value('wpa2+ccmp', _('WPA2 802.1X (CCMP)'));
-			o2.value('wpa2+tkip', _('WPA2 802.1X (TKIP)'));
-			o2.value('wpa+ccmp', _('WPA 802.1X (CCMP)'));
-			o2.value('wpa+tkip', _('WPA 802.1X (TKIP)'));
-			o2.value('wpa-mixed+ccmp', _('Mixed WPA/WPA2 802.1X (CCMP)'));
-			o2.value('wpa-mixed+tkip', _('Mixed WPA/WPA2 802.1X (TKIP)'));
-			o2.value('owe', _('WPA3 OWE'));
-			o2.value('none', _('Open'));
+			encryptionValues(o2);
+			encryptionValue(o2, encryption);
 			o2.default = encryption;
 
 			o2 = s2.option(form.Value, 'key', _('Password'));
@@ -1128,7 +1284,7 @@ return view.extend({
 			o2.password = true;
 
 			o2 = s2.option(form.Value, 'password', _('Password'));
-			o2.depends({ encryption: 'wpa', '!contains': true });
+			[ 'fast', 'peap', 'ttls' ].forEach(method => o2.depends({ encryption: 'wpa', eap_type: method, '!contains': true }));
 			o2.password = true;
 
 			o2 = s2.option(form.ListValue, 'eap_type', _('EAP-Method'));
@@ -1137,21 +1293,11 @@ return view.extend({
 			o2.value('ttls', _('TTLS'));
 			o2.value('peap', _('PEAP'));
 			o2.value('fast', _('FAST'));
+			eapMethodChoices(o2);
 			o2.default = 'peap';
 
 			o2 = s2.option(form.ListValue, 'auth', _('Authentication'));
-			o2.depends({ encryption: 'wpa', '!contains': true });
-			o2.value('PAP', _('PAP'));
-			o2.value('CHAP', _('CHAP'));
-			o2.value('MSCHAP', _('MSCHAP'));
-			o2.value('MSCHAPV2', _('MSCHAPV2'));
-			o2.value('EAP-GTC', _('EAP-GTC'));
-			o2.value('EAP-MD5', _('EAP-MD5'));
-			o2.value('EAP-MSCHAPV2', _('EAP-MSCHAPV2'));
-			o2.value('EAP-TLS', _('EAP-TLS'));
-			o2.value('auth=PAP', _('auth=PAP'));
-			o2.value('auth=MSCHAPV2', _('auth=MSCHAPV2'));
-			o2.default = 'EAP-MSCHAPV2';
+			eapAuthOption(o2);
 
 			o2 = s2.option(form.Value, 'identity', _('Identity'));
 			o2.depends({ encryption: 'wpa', '!contains': true });
