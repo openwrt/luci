@@ -4,7 +4,9 @@
 'require poll';
 'require ui';
 'require rpc';
-'require olsr-viz as olsrviz';
+
+/* global set_autodeclump, set_maxmetric, set_scale, set_showdesc, viz_reset, viz_save,
+	viz_setup, viz_update, scale, maxmetric -- set up by olsr-viz.js, which load() loads */
 
 
 return view.extend({
@@ -89,45 +91,45 @@ return view.extend({
 					'value': '3',
 					'size': '4',
 					'style': 'min-width: unset !important;',
-					'change': (ev)=>olsrviz.set_maxmetric(ev.target.value)
+					'change': (ev)=>set_maxmetric(ev.target.value)
 				});
 				const autoOptimizationCheckbox = E('input', {
 					'id': 'auto_declump',
 					'name': 'auto_declump',
 					'type': 'checkbox',
-					'change': (ev) => olsrviz.set_autodeclump(ev.target.checked),
+					'change': (ev) => set_autodeclump(ev.target.checked),
 					'checked': 'checked'
 				});
 				const hostnamesCheckbox = E('input', {
 					'id': 'show_hostnames',
 					'name': 'show_hostnames',
 					'type': 'checkbox',
-					'change': (ev) => olsrviz.set_showdesc(ev.target.checked),
+					'change': (ev) => set_showdesc(ev.target.checked),
 					'checked': 'checked'
 				});
 
 				const form = E('form', { 'action': '' }, [
 					E('p', {}, [
 						E('b', { 'title': 'Bestimmt die Vergrößerungsstufe.' }, 'Zoom '),
-						E('a', { 'href': '#', 'click': () =>olsrviz.set_scale(scale+0.1) }, '+ '),
-						E('a', { 'href': '#', 'click': () =>olsrviz.set_scale(scale-0.1) },  '\u2212 '),
+						E('a', { 'href': '#', 'click': () =>set_scale(scale+0.1) }, '+ '),
+						E('a', { 'href': '#', 'click': () =>set_scale(scale-0.1) },  '\u2212 '),
 						zoomInput,
 						E('b', { 'title': 'Beschränkt die Anzeige auf eine maximale Hop-Entfernung.' }, '&nbsp;&nbsp;Metrik'),
-						E('a', { 'href': '#', 'click': () => olsrviz.set_maxmetric(maxmetric+1) }, '+ '),
-						E('a', { 'href': '#', 'click': () => olsrviz.set_maxmetric(Math.max(maxmetric, 1) - 1) }, '\u2212'),
+						E('a', { 'href': '#', 'click': () => set_maxmetric(maxmetric+1) }, '+ '),
+						E('a', { 'href': '#', 'click': () => set_maxmetric(Math.max(maxmetric, 1) - 1) }, '\u2212'),
 						metricInput,
 						E('b', { 'title': 'Schaltet die automatischen Layout-Optimierung ein.' }, '&nbsp;&nbsp;Optimierung'),
 						autoOptimizationCheckbox,
 						E('b', { 'title': 'Zeige Hostnamen an.' }, ' |  Hostnamen'),
 						hostnamesCheckbox,
-						E('a', { 'href': '#', 'click': olsrviz.viz_save, 'title': 'Speichert die aktuellen Einstellungen in einem Cookie.', 'style': 'font-weight:700;' }, '&nbsp;|&nbsp;&nbsp;Speichern'),
-						E('a', { 'href': '#', 'click': olsrviz.viz_reset, 'title': 'Startet das Viz-Skriptprogramm neu.', 'style': 'font-weight:700;' }, '&nbsp;|&nbsp;&nbsp;Zur&uuml;cksetzen')
+						E('a', { 'href': '#', 'click': viz_save, 'title': 'Speichert die aktuellen Einstellungen in einem Cookie.', 'style': 'font-weight:700;' }, '&nbsp;|&nbsp;&nbsp;Speichern'),
+						E('a', { 'href': '#', 'click': viz_reset, 'title': 'Startet das Viz-Skriptprogramm neu.', 'style': 'font-weight:700;' }, '&nbsp;|&nbsp;&nbsp;Zur&uuml;cksetzen')
 					])
 				]);
 
 				const debugSpan = E('span', { 'id': 'debug', 'style': 'visibility:hidden;' });
 				const vizDiv = E('div', { 'id': 'RSIFrame', 'name': 'RSIFrame', 'style': 'border:0px; width:0px; height:0px; visibility:hidden;' });
-				olsrviz.viz_setup(vizDiv, mainDiv, nodeDiv, edgeDiv, debugSpan, zoomInput, metricInput); olsrviz.viz_update();
+				viz_setup(vizDiv, mainDiv, nodeDiv, edgeDiv, debugSpan, zoomInput, metricInput); viz_update();
 				
 				function setInnerHTML(elm, html) {
 					elm.innerHTML = html;
