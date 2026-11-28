@@ -1215,6 +1215,77 @@ return baseclass.extend({
 			o.value('3', _('Low'));
 		}
 
+		const wolInfo = dev ? dev.getWOL() : null;
+		const supportedWol = Array.isArray(wolInfo?.supported)
+			? wolInfo.supported
+			: null;
+		const configuredWol = dev
+			? L.toArray(uci.get('network', dev.getName(), 'wol'))
+			: [];
+
+		if (!dev || dev.hasWOL() || configuredWol.length > 0) {
+			const allWolModes = [
+				[ 'p', _('PHY activity (p)') ],
+				[ 'u', _('Unicast activity (u)') ],
+				[ 'm', _('Multicast activity (m)') ],
+				[ 'b', _('Broadcast activity (b)') ],
+				[ 'a', _('ARP activity (a)') ],
+				[ 'g', _('Magic packet (g)') ]
+			];
+
+			o = this.replaceOption(s, 'devadvanced', form.ListValue, 'wol_mode', _('Wake-on-LAN'));
+			o.depends('type', '');
+			o.default = '';
+			o.value('', _('Default'));
+			o.value('d', _('Disabled'));
+			o.value('e', _('Enabled'));
+
+			o.cfgvalue = function(section_id) {
+				const vals = L.toArray(this.map.data.get('network', section_id, 'wol'));
+				if (!vals.length)
+					return '';
+				return vals.includes('d') ? 'd' : 'e';
+			};
+
+			o.write = function(section_id, formvalue) {
+				if (formvalue === 'd')
+					this.map.data.set('network', section_id, 'wol', ['d']);
+				else if (!formvalue)
+					this.map.data.unset('network', section_id, 'wol');
+			};
+
+			o.remove = function(section_id) {
+				this.map.data.unset('network', section_id, 'wol');
+			};
+
+			o = this.replaceOption(s, 'devadvanced', form.MultiValue, 'wol', _('Wake-on-LAN modes'));
+			o.depends({ type: '', wol_mode: 'e' });
+			o.rmempty = false;
+
+			for (const [ flag, label ] of allWolModes) {
+				if (!supportedWol || supportedWol.includes(flag) || configuredWol.includes(flag))
+					o.value(flag, label);
+			}
+
+			if (!supportedWol || supportedWol.includes('g'))
+				o.default = [ 'g' ];
+			else if (supportedWol.length === 1)
+				o.default = supportedWol;
+
+			o.validate = function(section_id, value) {
+				const vals = L.toArray(value);
+				if (!vals.length)
+					return _('At least one Wake-on-LAN mode must be selected');
+				return true;
+			};
+
+			o.remove = function(section_id) {
+				const vals = L.toArray(this.map.data.get('network', section_id, 'wol'));
+				if (!vals.includes('d'))
+					this.map.data.unset('network', section_id, 'wol');
+			};
+		}
+
 		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'promisc', _('Enable promiscuous mode'));
 		o.sysfs_default = (dev && dev.dev && dev.dev.flags) ? dev.dev.flags.promisc : null;
 

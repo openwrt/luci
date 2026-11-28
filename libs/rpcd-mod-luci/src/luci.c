@@ -31,10 +31,14 @@
 #include <net/if.h>
 #include <arpa/inet.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
+#include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ether.h>
 #include <linux/rtnetlink.h>
 #include <linux/if_packet.h>
+#include <linux/ethtool.h>
+#include <linux/sockios.h>
 
 #include <netlink/msg.h>
 #include <netlink/attr.h>
@@ -907,7 +911,7 @@ lease_fetch(struct reply_context *rctx, int family,
 
 
 static void
-rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
+rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr, int sock)
 {
 	char link[64], buf[512], *p;
 	unsigned int ifa_flags = 0;
@@ -1115,6 +1119,45 @@ rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
 
 	blobmsg_close_table(&blob, o2);
 
+	if (sock >= 0) {
+		struct ethtool_wolinfo wol = { .cmd = ETHTOOL_GWOL };
+		struct ifreq ifr = { .ifr_data = (void *)&wol };
+
+		strncpy(ifr.ifr_name, name, sizeof(ifr.ifr_name) - 1);
+		if (ioctl(sock, SIOCETHTOOL, &ifr) == 0 && wol.supported) {
+			static const struct {
+				unsigned int flag;
+				const char *name;
+			} wol_modes[] = {
+				{ WAKE_PHY,   "p" },
+				{ WAKE_UCAST, "u" },
+				{ WAKE_MCAST, "m" },
+				{ WAKE_BCAST, "b" },
+				{ WAKE_ARP,   "a" },
+				{ WAKE_MAGIC, "g" },
+			};
+
+			o2 = blobmsg_open_table(&blob, "wol");
+
+			a = blobmsg_open_array(&blob, "supported");
+			for (size_t i = 0; i < ARRAY_SIZE(wol_modes); i++) {
+				if (wol.supported & wol_modes[i].flag)
+					blobmsg_add_string(&blob, NULL, wol_modes[i].name);
+			}
+			blobmsg_close_array(&blob, a);
+
+			a = blobmsg_open_array(&blob, "selected");
+			for (size_t i = 0; i < ARRAY_SIZE(wol_modes); i++) {
+				if (wol.wolopts & wol_modes[i].flag)
+					blobmsg_add_string(&blob, NULL, wol_modes[i].name);
+			}
+			blobmsg_close_array(&blob, a);
+
+			blobmsg_close_table(&blob, o2);
+		}
+		close(sock);
+	}
+
 	blobmsg_close_table(&blob, o);
 }
 
@@ -1127,6 +1170,7 @@ rpc_luci_get_network_devices(struct ubus_context *ctx,
 {
 	struct ifaddrs *ifaddr;
 	struct dirent *e;
+	int sock;
 	DIR *d;
 
 	blob_buf_init(&blob, 0);
@@ -1137,6 +1181,8 @@ rpc_luci_get_network_devices(struct ubus_context *ctx,
 		if (getifaddrs(&ifaddr) == 1)
 			ifaddr = NULL;
 
+		sock = socket(AF_INET, SOCK_DGRAM, 0);
+
 		while (true) {
 			e = readdir(d);
 
@@ -1144,8 +1190,11 @@ rpc_luci_get_network_devices(struct ubus_context *ctx,
 				break;
 
 			if (e->d_type != DT_DIR && e->d_type != DT_REG)
-				rpc_luci_parse_network_device_sys(e->d_name, ifaddr);
+				rpc_luci_parse_network_device_sys(e->d_name, ifaddr, sock);
 		}
+
+		if (sock >= 0)
+			close(sock);
 
 		if (ifaddr != NULL)
 			freeifaddrs(ifaddr);
