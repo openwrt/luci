@@ -1,0 +1,189 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: Apache-2.0
+"""Redeem an SSHVPN-Connect share invitation and save its router profile."""
+import base64
+import binascii
+import fcntl
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+from Cryptodome.Cipher import AES
+
+VERSION = "ssh-tunnel-invite-1"
+BASE = Path("/etc/ssh-tunnel")
+
+
+def b64url_decode(value, expected=None):
+    if not value or not re.fullmatch(r"[A-Za-z0-9_-]+", value):
+        raise ValueError("Invalid invitation encoding.")
+    try:
+        decoded = base64.urlsafe_b64decode(value + "=" * (-len(value) % 4))
+    except (ValueError, binascii.Error) as error:
+        raise ValueError("Invalid invitation encoding.") from error
+    if expected is not None and len(decoded) != expected:
+        raise ValueError("Invalid invitation key length.")
+    return decoded
+
+
+def read_ticket(encoded):
+    pieces = encoded.strip().split(":")
+    if len(pieces) != 3 or pieces[0] != VERSION:
+        raise ValueError("Unrecognized SSH Tunnel invitation format.")
+    _, payload, code = pieces
+    if len(payload) > 4096:
+        raise ValueError("Invalid SSH Tunnel invitation.")
+    if len(code) != 43:
+        raise ValueError("Invitation code is missing or invalid.")
+
+    envelope = b64url_decode(payload)
+    if len(envelope) < 12 + 16:
+        raise ValueError("Invitation is truncated.")
+    key = b64url_decode(code, expected=32)
+    try:
+        cipher = AES.new(key, AES.MODE_GCM, nonce=envelope[:12], mac_len=16)
+        cipher.update(VERSION.encode("ascii"))
+        plaintext = cipher.decrypt_and_verify(envelope[12:-16], envelope[-16:])
+    except ValueError as error:
+        raise ValueError("Invitation code is incorrect or the invitation was changed.") from error
+    ticket = json.loads(plaintext)
+    return validate_ticket(ticket)
+
+
+def validate_ticket(ticket):
+    if not isinstance(ticket, dict):
+        raise ValueError("Invalid invitation data.")
+    server = ticket.get("server")
+    user = ticket.get("user")
+    host_key = ticket.get("host_key")
+    temporary_key = ticket.get("temporary_key")
+    if not isinstance(server, str) or len(server) > 253 or not re.fullmatch(r"[A-Za-z0-9.:-]+", server):
+        raise ValueError("Invitation contains an invalid server address.")
+    if not isinstance(user, str) or not re.fullmatch(r"stv_[0-9a-f]{16}", user):
+        raise ValueError("Invitation contains an invalid account.")
+    if not isinstance(host_key, str):
+        raise ValueError("Invitation contains an invalid server key.")
+    host_parts = host_key.split()
+    if len(host_parts) != 2 or host_parts[0] != "ssh-ed25519":
+        raise ValueError("Invitation contains an invalid server key.")
+    key_data = base64.b64decode(host_parts[1], validate=True)
+    prefix = b"\x00\x00\x00\x0bssh-ed25519\x00\x00\x00\x20"
+    if len(key_data) != len(prefix) + 32 or not key_data.startswith(prefix):
+        raise ValueError("Invitation contains an invalid server key.")
+    if not isinstance(temporary_key, str) or not temporary_key.startswith("-----BEGIN OPENSSH PRIVATE KEY-----"):
+        raise ValueError("Invitation contains an invalid temporary key.")
+    return {"server": server, "user": user, "host_key": host_key, "temporary_key": temporary_key}
+
+
+def run(*args, **kwargs):
+    return subprocess.run(args, check=True, **kwargs)
+
+
+def redeem(section, port, invitation):
+    if not re.fullmatch(r"[A-Za-z0-9_]{1,32}", section):
+        raise ValueError("Invalid network interface name.")
+    if not port.isdigit() or not 1 <= int(port) <= 65535:
+        raise ValueError("Invalid SSH port.")
+    ticket = read_ticket(invitation)
+    ssh = shutil.which("ssh")
+    keygen = shutil.which("ssh-keygen")
+    if not ssh or not keygen:
+        raise RuntimeError("OpenSSH client and ssh-keygen are required.")
+
+    key_dir = BASE / "keys"
+    known_dir = BASE / "known_hosts"
+    key_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+    known_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+    os.chmod(BASE, 0o700)
+    os.chmod(key_dir, 0o700)
+    os.chmod(known_dir, 0o700)
+
+    lock_path = BASE / ("invite-" + section + ".lock")
+    with lock_path.open("a") as lock:
+        os.chmod(lock_path, 0o600)
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        identity = key_dir / (section + "-ed25519")
+        known_hosts = known_dir / section
+
+        if not identity.exists():
+            with tempfile.TemporaryDirectory(prefix="invite-", dir=key_dir) as temporary:
+                generated = Path(temporary) / "id_ed25519"
+                run(keygen, "-q", "-t", "ed25519", "-N", "", "-f", str(generated),
+                    stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                os.chmod(generated, 0o600)
+                os.replace(generated, identity)
+        os.chmod(identity, 0o600)
+
+        # The invitation carries the server's Ed25519 host key; never trust-on-first-use here.
+        known_host = ticket["server"] if int(port) == 22 else f"[{ticket['server']}]:{int(port)}"
+        known_hosts.write_text(f"{known_host} {ticket['host_key']}\n", encoding="ascii")
+        os.chmod(known_hosts, 0o600)
+
+        with tempfile.NamedTemporaryFile(prefix="ssh-tunnel-bootstrap-", delete=False) as bootstrap:
+            bootstrap_path = Path(bootstrap.name)
+            os.fchmod(bootstrap.fileno(), 0o600)
+            bootstrap.write(ticket["temporary_key"].encode())
+            if not ticket["temporary_key"].endswith("\n"):
+                bootstrap.write(b"\n")
+        try:
+            public_key = subprocess.check_output(
+                [keygen, "-y", "-f", str(identity)], stderr=subprocess.PIPE, text=True
+            ).split()
+            public_key = " ".join(public_key[:2])
+            data = json.dumps({"public_key": public_key}, separators=(",", ":")).encode() + b"\n"
+            command = [
+                ssh, "-T", "-p", str(int(port)), "-o", "BatchMode=yes",
+                "-o", "ConnectTimeout=15", "-o", "IdentitiesOnly=yes",
+                "-o", "StrictHostKeyChecking=yes", "-o", f"UserKnownHostsFile={known_hosts}",
+                "-o", "GlobalKnownHostsFile=/dev/null", "-i", str(bootstrap_path),
+                "--", f"{ticket['user']}@{ticket['server']}",
+                "/usr/local/libexec/ssh-tunnel-invite redeem",
+            ]
+            result = subprocess.run(command, input=data, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                    timeout=40, check=True)
+            reply = json.loads(result.stdout)
+            if reply.get("user") != ticket["user"]:
+                raise RuntimeError("Server returned a different invitation account.")
+        except subprocess.CalledProcessError as error:
+            detail = error.stderr.decode("utf-8", "replace").strip()
+            raise RuntimeError(detail or "The invitation could not be activated on the server.") from error
+        finally:
+            bootstrap_path.unlink(missing_ok=True)
+
+        values = {
+            "server": ticket["server"],
+            "port": str(int(port)),
+            "username": ticket["user"],
+            "identity_file": str(identity),
+            "host_key_file": str(known_hosts),
+            "invited": "1",
+        }
+        for option, value in values.items():
+            run("uci", "set", f"network.{section}.{option}={value}",
+                stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+        for option in ("invitation", "invitation_key", "password"):
+            subprocess.run(["uci", "-q", "delete", f"network.{section}.{option}"],
+                           stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, check=False)
+        run("uci", "commit", "network", stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL)
+
+
+def main():
+    if len(sys.argv) != 4 or sys.argv[1] != "import":
+        raise RuntimeError("usage: ssh-tunnel-invite import INTERFACE PORT")
+    invitation = sys.stdin.readline(8193).strip()
+    if len(invitation) > 8192:
+        raise ValueError("Invitation is too long.")
+    redeem(sys.argv[2], sys.argv[3], invitation)
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (OSError, RuntimeError, ValueError, binascii.Error, subprocess.SubprocessError, json.JSONDecodeError) as error:
+        print(f"SSH Tunnel invitation: {error}", file=sys.stderr)
+        sys.exit(1)
