@@ -1,5 +1,5 @@
 # Creating Themes
-**Note:** You have already read the [Module Reference](./Modules.md).
+**Note:** You have already read the [Module Reference](../modules/index.html).
 
 We assume you want to call your new theme `mytheme`.
 Replace `mytheme` with your module name every time this is mentioned in this Howto.
