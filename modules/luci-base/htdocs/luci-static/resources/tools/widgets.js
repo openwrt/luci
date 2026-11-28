@@ -743,6 +743,32 @@ var CBIUserSelect = form.ListValue.extend({
 		}, this));
 	},
 
+	renderWidget(section_id, option_index, cfgvalue) {
+		if (this.multiple)
+			return form.MultiValue.prototype.renderWidget.apply(this, arguments);
+
+		return this.super('renderWidget', section_id, option_index, cfgvalue);
+	},
+
+	cfgvalue(section_id, set_value) {
+		const val = this.super('cfgvalue', arguments);
+
+		if (!this.multiple)
+			return val;
+
+		return L.toArray(val).join(' ').split(/[\s,]+/).filter(Boolean);
+	},
+
+	write(section_id, formvalue) {
+		if (!this.multiple)
+			return this.super('write', section_id, formvalue);
+
+		var list = L.toArray(formvalue).map(function(u) { return u.trim(); }).filter(Boolean);
+		if (list.length === 0)
+			return this.remove(section_id);
+		return this.super('write', section_id, list.join(this.delimiter || ' '));
+	},
+
 	filter(section_id, value) {
 		return true;
 	},

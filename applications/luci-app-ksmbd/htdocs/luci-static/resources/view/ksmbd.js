@@ -97,7 +97,10 @@ return view.extend({
 
 		s.option(form.Flag, 'force_root', _('Force Root'));
 
-		o = s.option(form.Value, 'users', _('Allowed users'));
+		o = s.option(widgets.UserSelect, 'users', _('Allowed users'));
+		o.multiple = true;
+		o.create = true;
+		o.delimiter = ',';
 		o.rmempty = true;
 
 		o = s.option(form.Flag, 'guest_ok', _('Allow guests'));

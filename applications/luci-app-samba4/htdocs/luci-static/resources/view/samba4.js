@@ -114,7 +114,10 @@ return view.extend({
 
 		s.option(form.Flag, 'force_root', _('Force Root'));
 
-		o = s.option(form.Value, 'users', _('Allowed users'));
+		o = s.option(widgets.UserSelect, 'users', _('Allowed users'));
+		o.multiple = true;
+		o.create = true;
+		o.delimiter = ',';
 		o.rmempty = true;
 
 		o = s.option(form.Flag, 'guest_ok', _('Allow guests'));
@@ -127,6 +130,7 @@ return view.extend({
 		o.enabled = 'yes';
 		o.disabled = 'no';
 		o.default = 'no';
+		o.depends('guest_ok', 'yes');
 
 		o = s.option(form.Flag, 'inherit_owner', _('Inherit owner'));
 		o.enabled = 'yes';
