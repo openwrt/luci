@@ -1,0 +1,211 @@
+#!/usr/bin/env ucode
+
+'use strict';
+
+import { access, popen, readfile } from 'fs';
+import { cursor } from 'uci';
+import { init_enabled, process_list } from 'luci.sys';
+import { parse_clients, parse_status } from 'qnetd';
+
+const uci = cursor();
+const SERVICE = '/etc/init.d/corosync-qnetd';
+const TOOL = '/usr/sbin/corosync-qnetd-tool';
+const MAINTENANCE = '/usr/libexec/corosync-qnetd-maintenance';
+const CA_FILE = '/etc/corosync/qnetd/nssdb/qnetd-cacert.crt';
+
+function shellquote(value) {
+	return `'${replace('' + value, "'", "'\\''")}'`;
+}
+
+function command(argv) {
+	let cmd = join(' ', map(argv, value => shellquote(value))) + ' 2>&1';
+	let pipe = popen(cmd, 'r');
+	if (!pipe)
+		return { success: false, output: 'Unable to execute command', code: 127 };
+	let output = pipe.read('all') || '';
+	let code = pipe.close();
+	return { success: code == 0, output: trim(output), code };
+}
+
+function process_running(name) {
+	for (let process in process_list())
+		if (index(process.COMMAND || '', name) >= 0)
+			return true;
+	return false;
+}
+
+function parse_health(output) {
+	let result = {};
+	for (let line in split(output || '', '\n')) {
+		let pos = index(line, '=');
+		if (pos > 0)
+			result[substr(line, 0, pos)] = substr(line, pos + 1);
+	}
+	for (let key in [ 'initialized', 'ca_valid', 'server_valid', 'rollback_available' ])
+		result[key] = int(result[key] || 0);
+	let count = result.connected_clients;
+	result.connected_clients = count && match(count, /^[0-9]+$/) ? int(count) : null;
+	return result;
+}
+
+function certificate_details(nickname) {
+	let result = command([ '/usr/bin/certutil', '-L', '-d', '/etc/corosync/qnetd/nssdb', '-n', nickname ]);
+	let details = { nickname, available: result.success, not_before: null, not_after: null };
+	if (!result.success)
+		return details;
+	let m = match(result.output, /Not Before:[[:space:]]*([^\n]+)/);
+	if (m) details.not_before = trim(m[1]);
+	m = match(result.output, /Not After[[:space:]]*:[[:space:]]*([^\n]+)/);
+	if (m) details.not_after = trim(m[1]);
+	return details;
+}
+
+function firewall_rule_found(port) {
+	let found = false;
+	uci.foreach('firewall', 'rule', function(section) {
+		let ports = '' + (section.dest_port || '');
+		let proto = '' + (section.proto || '');
+		let target = lc('' + (section.target || ''));
+		if (section.enabled != '0' &&
+		    index(split(trim(ports), /[[:space:]]+/), '' + port) >= 0 &&
+		    (proto == 'tcp' || proto == 'tcp udp' || proto == 'all') && target == 'accept')
+			found = true;
+	});
+	return found;
+}
+
+function valid_address(address) {
+	if (match(address, /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/)) {
+		for (let part in split(address, '.'))
+			if (int(part) < 0 || int(part) > 255)
+				return false;
+		return true;
+	}
+	return !!match(address, /^[0-9a-fA-F:]+$/) && index(address, ':') >= 0;
+}
+
+function current_health() {
+	return parse_health(command([ MAINTENANCE, 'health' ]).output);
+}
+
+function guard(req) {
+	let health = current_health();
+	return health.connected_clients != null && req.args.fingerprint == health.fingerprint &&
+		int(req.args.clients) == health.connected_clients;
+}
+
+function status() {
+	let status_result = command([ TOOL, '-sv' ]);
+	let clients_result = command([ TOOL, '-lv' ]);
+	let health = current_health();
+	let config = {};
+	for (let key in [ 'enabled', 'address_family', 'listen_address', 'port', 'tls',
+	                 'client_cert_required', 'auto_initialize', 'max_clients', 'debug' ])
+		config[key] = uci.get('corosync-qnetd', 'main', key);
+
+	return {
+		system_time: time(),
+		installed: !!access(TOOL) && !!access(MAINTENANCE),
+		running: process_running('corosync-qnetd'),
+		boot_enabled: init_enabled('corosync-qnetd'),
+		dropbear_running: process_running('dropbear'),
+		firewall_rule_found: firewall_rule_found(config.port || '5403'),
+		config,
+		health,
+		server: parse_status(status_result.output),
+		clients: parse_clients(clients_result.output),
+		ca: certificate_details('QNet CA'),
+		server_certificate: certificate_details('QNetd Cert'),
+	};
+}
+
+const methods = {
+	status: { call: status },
+
+	logs: {
+		call: function() {
+			let result = command([ '/sbin/logread', '-e', 'corosync-qnetd', '-l', '100' ]);
+			return { success: result.success, lines: split(result.output || '', '\n') };
+		}
+	},
+
+	'ca-pem': {
+		call: function() {
+			let pem = readfile(CA_FILE);
+			return { available: !!pem, pem: pem && length(pem) <= 65536 ? pem : null };
+		}
+	},
+
+	setup: {
+		args: { address: '' },
+		call: function(req) {
+			let address = req.args.address || '';
+			if (!valid_address(address))
+				return { success: false, error: 'A valid local IPv4 or IPv6 address is required' };
+			if (current_health().initialized)
+				return { success: false, error: 'QNetd is already initialized' };
+
+			uci.set('corosync-qnetd', 'main', 'enabled', '0');
+			uci.set('corosync-qnetd', 'main', 'listen_address', address);
+			uci.set('corosync-qnetd', 'main', 'port', '5403');
+			uci.set('corosync-qnetd', 'main', 'tls', 'req');
+			uci.set('corosync-qnetd', 'main', 'client_cert_required', 'on');
+			uci.set('corosync-qnetd', 'main', 'auto_initialize', '0');
+			uci.commit('corosync-qnetd');
+
+			let initialized = command([ MAINTENANCE, 'initialize' ]);
+			if (!initialized.success)
+				return { success: false, error: initialized.output };
+
+			uci.set('corosync-qnetd', 'main', 'enabled', '1');
+			uci.commit('corosync-qnetd');
+			let enabled = command([ SERVICE, 'enable' ]);
+			if (!enabled.success)
+				return { success: false, error: enabled.output };
+			let started = command([ SERVICE, 'start' ]);
+			return { success: started.success, error: started.success ? null : started.output };
+		}
+	},
+
+	service: {
+		args: { action: '', fingerprint: '', clients: 0 },
+		call: function(req) {
+			let action = req.args.action || '';
+			if (index([ 'start', 'stop', 'restart', 'enable', 'disable' ], action) < 0)
+				return { success: false, error: 'Invalid service action' };
+			if (index([ 'stop', 'restart' ], action) >= 0 && !guard(req))
+				return { success: false, error: 'QNetd state changed; refresh and retry' };
+			let result = command([ SERVICE, action ]);
+			return { success: result.success, error: result.success ? null : result.output };
+		}
+	},
+
+	rotate: {
+		args: { fingerprint: '', clients: 0, allow_connected: false },
+		call: function(req) {
+			let result = command([ MAINTENANCE, 'rotate', req.args.fingerprint || '',
+				'' + int(req.args.clients || 0), req.args.allow_connected ? '1' : '0' ]);
+			return { success: result.success, error: result.success ? null : result.output };
+		}
+	},
+
+	rollback: {
+		args: { fingerprint: '', clients: 0, allow_connected: false },
+		call: function(req) {
+			let result = command([ MAINTENANCE, 'rollback', req.args.fingerprint || '',
+				'' + int(req.args.clients || 0), req.args.allow_connected ? '1' : '0' ]);
+			return { success: result.success, error: result.success ? null : result.output };
+		}
+	},
+
+	'purge-rollback': {
+		args: { fingerprint: '', clients: 0 },
+		call: function(req) {
+			let result = command([ MAINTENANCE, 'purge-rollback', req.args.fingerprint || '',
+				'' + int(req.args.clients || 0) ]);
+			return { success: result.success, error: result.success ? null : result.output };
+		}
+	},
+};
+
+return { 'luci.qnetd': methods };
