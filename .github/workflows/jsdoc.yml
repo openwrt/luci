@@ -10,6 +10,13 @@ on:
       # Until then, follow jsdoc.conf.json:source directive
       - 'modules/luci-base/htdocs/luci-static/resources/**'
       - 'docs/**'
+      # Anything that shapes the generated documentation
+      - 'jsdoc.conf.json'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'doc_gen/**'
+      - '.github/workflows/jsdoc.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
