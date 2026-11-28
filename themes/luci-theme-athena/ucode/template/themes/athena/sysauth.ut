@@ -1,0 +1,29 @@
+{%
+  // Plain username/password login is a native HTTP form and needs no LuCI RPC client.
+  // Auth plugins with script assets retain the stock LuCI initialization contract.
+  const scripted_auth = !!auth_plugin || length(auth_assets ?? []) > 0;
+  include(scripted_auth ? 'header' : 'themes/' + theme + '/header', { blank_page: true, scripted_auth });
+%}
+<main class="athena-login{{ uci.get('athena', 'global', 'login_style') == 'centered' ? ' athena-login-centered' : '' }}">
+  <section class="athena-login-card" aria-labelledby="athena-login-title">
+    <div class="athena-login-content">
+      <header class="athena-login-brand"><img src="{{ media }}/logo.svg" data-athena-logo width="32" height="32" alt=""><h1 id="athena-login-title">Athena</h1></header>
+      <form class="athena-login-form" method="post" action="{{ entityencode(http.getenv('REQUEST_URI'), true) }}">
+        {% if (fuser && !auth_plugin): %}<div class="alert-message error">{{ _('Invalid username and/or password! Please try again.') }}</div>{% endif %}
+        {% if (auth_message): %}<div class="alert-message error">{{ auth_message }}</div>{% endif %}
+        <div class="athena-login-field"><label class="typography typography--body-sm" for="luci_username">{{ _('Username') }}</label>
+        <input class="input input--full-width" id="luci_username" name="luci_username" autocomplete="username" value="{{ entityencode(duser || 'root', true) }}"></div>
+        <div class="athena-login-field"><label class="typography typography--body-sm" for="luci_password">{{ _('Password') }}</label>
+        <div class="control-group"><input class="input" id="luci_password" name="luci_password" type="password" autocomplete="current-password"><button class="button button--ghost button--sm button--icon-only athena-password-toggle" type="button" data-login-password-toggle aria-controls="luci_password" aria-pressed="false" aria-label="{{ _('Show password') }}" data-label-show="{{ _('Show password') }}" data-label-hide="{{ _('Hide password') }}"><svg class="athena-icon" aria-hidden="true"><use href="{{ media }}/icons/sprite.svg#eye"></use></svg></button></div></div>
+        {% for (let field in auth_fields ?? []): %}
+        <div class="athena-login-field"><label class="typography typography--body-sm" for="{{ entityencode(field.name, true) }}">{{ entityencode(_(field.label || field.name)) }}</label>
+        <input class="input input--full-width" id="{{ entityencode(field.name, true) }}" name="{{ entityencode(field.name, true) }}" type="{{ entityencode(field.type ?? 'text', true) }}" placeholder="{{ entityencode(_(field.placeholder ?? field.label ?? field.name), true) }}" {% if (field.required): %}required{% endif %} {% if (field.pattern): %}pattern="{{ entityencode(field.pattern, true) }}"{% endif %} {% if (field.autocomplete): %}autocomplete="{{ entityencode(field.autocomplete, true) }}"{% endif %} {% if (field.maxlength): %}maxlength="{{ entityencode('' + field.maxlength, true) }}"{% endif %} {% if (field.inputmode): %}inputmode="{{ entityencode(field.inputmode, true) }}"{% endif %}></div>
+        {% endfor %}
+        {% if (auth_html): %}{{ auth_html }}{% endif %}
+        <div class="athena-login-actions"><button type="submit" class="button button--primary button--lg">{{ _('Log in') }}<svg class="athena-icon" aria-hidden="true"><use href="{{ media }}/icons/sprite.svg#chevron"></use></svg></button></div>
+      </form>
+    </div>
+  </section>
+</main>
+{% for (let asset in auth_assets ?? []): %}{% if (asset.type == 'script'): %}<script src="{{ entityencode(asset.src, true) }}"></script>{% endif %}{% endfor %}
+{% include(scripted_auth ? 'footer' : 'themes/' + theme + '/footer', { blank_page: true }) %}

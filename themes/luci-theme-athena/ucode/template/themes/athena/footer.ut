@@ -1,0 +1,19 @@
+{% if (!blank_page): %}
+    </main>
+  </div>
+  <script>
+    // Version only Athena modules. Leave LuCI's native resource cache intact.
+    const athenaLoadClass = LuCI.prototype.require;
+    LuCI.prototype.require = function(name, from) {
+      if (!['menu-athena', 'athena.ui', 'view.athena-config'].includes(name)) return athenaLoadClass.call(this, name, from);
+      const nativeVersion = L.env.resource_version;
+      try {
+        L.env.resource_version = (nativeVersion || '') + '-athena-' + document.body.dataset.assetVersion;
+        return athenaLoadClass.call(this, name, from);
+      } finally { L.env.resource_version = nativeVersion; }
+    };
+    L.require('menu-athena');
+  </script>
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,90 @@
+{# Athena native ucode theme. Based on LuCI bootstrap, Apache-2.0. #}
+{%
+  import { getuid, getspnam } from 'luci.core';
+  import { readfile, lstat } from 'fs';
+  const boardinfo = ubus.call('system', 'board');
+  const hostname = striptags(boardinfo?.hostname ?? 'OpenWrt');
+  const page_path = length(ctx.path) > length(ctx.request_path) ? ctx.path : ctx.request_path;
+  let cpu_count = 0;
+  if (join('-', page_path) in ['admin', 'admin-status', 'admin-status-overview']) {
+    for (let range in split(trim(readfile('/sys/devices/system/cpu/online') ?? ''), ',')) {
+      const limits = match(range, /^([0-9]+)(-([0-9]+))?$/);
+      if (limits && +(limits[3] ?? limits[1]) >= +limits[1]) cpu_count += +(limits[3] ?? limits[1]) - +limits[1] + 1;
+    }
+  }
+  let branding = {};
+  try { branding = json(readfile('/www/luci-static/athena/branding/current.json') ?? '{}'); } catch (e) {}
+  function asset(name, background) {
+    if (type(name) != 'string' || !match(name, background ? /^bg-[a-f0-9]{64}\.(png|jpg|gif|webp|mp4|webm)$/ : /^icon-[a-f0-9]{64}\.png$/)) return null;
+    const path = '/luci-static/athena/branding/' + name;
+    return lstat('/www' + path)?.type == 'file' ? path : null;
+  }
+  const logo = asset(branding.logo, false) ?? media + '/logo.svg';
+  const favicon = asset(branding.favicon, false) ?? media + '/logo.svg';
+  const background = asset(branding.background, true);
+  const login_style = uci.get('athena', 'global', 'login_style') == 'centered' ? 'centered' : 'classic';
+  const configured_mode = uci.get('athena', 'global', 'default_mode');
+  const default_mode = configured_mode in ['light', 'dark', 'system'] ? configured_mode : 'system';
+  const mode_labels = { light: _('Light mode'), dark: _('Dark mode'), system: _('Follow system') };
+  const color = uci.get('athena', 'global', 'primary') ?? '#1672ee';
+  const primary = match(color, /^#[a-fA-F0-9]{6}$/) ? color : '#1672ee';
+  const theme_version = '{# PKG_VERSION #}';
+  http.prepare_content('text/html; charset=UTF-8');
+%}
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}" data-theme="light" data-theme-default="{{ default_mode }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="light dark">
+  <title>{{ entityencode(hostname) }}</title>
+  <link rel="icon" href="{{ favicon }}">
+  {% if (blank_page && !background): %}<link rel="preload" as="image" href="{{ media }}/login.svg" fetchpriority="high">{% endif %}
+  <script src="{{ media }}/theme.js?v={{ theme_version }}"></script>
+  <link id="athena-stylesheet" rel="stylesheet" href="{{ media }}/athena.css?v={{ theme_version }}">
+  <style>:root{--athena-accent:{{ primary }};}</style>
+  {% if (node?.css): %}<link rel="stylesheet" href="{{ resource }}/{{ node.css }}">{% endif %}
+  {% if (css): %}<style>{{ css }}</style>{% endif %}
+  {% if (!blank_page || scripted_auth): %}
+  <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}?v={{ version.luciversion }}"></script>
+  <script src="{{ resource }}/cbi.js?v={{ version.luciversion }}"></script>
+  {% endif %}
+</head>
+<body class="athena-body typography typography--body-sm lang_{{ dispatcher.lang }}{{ blank_page ? ' athena-login-screen' : '' }}" data-page="{{ entityencode(join('-', page_path), true) }}" data-username="{{ entityencode(ctx.authuser ?? '', true) }}" data-logo="{{ logo }}" data-login-style="{{ login_style }}" data-asset-version="{{ theme_version }}">
+<div id="athena-mode-controls" class="athena-modes{{ blank_page ? ' athena-login-modes' : '' }}" role="group" aria-label="{{ _('Appearance') }}"{% if (!blank_page): %} hidden{% endif %}>
+  {% for (let choice in [{ value: 'light', icon: 'sun' }, { value: 'dark', icon: 'moon' }, { value: 'system', icon: 'monitor' }]): %}
+  <button type="button" class="button button--ghost button--icon-only" data-theme-choice="{{ choice.value }}" aria-label="{{ mode_labels[choice.value] }}" title="{{ mode_labels[choice.value] }}" aria-pressed="{{ default_mode == choice.value ? 'true' : 'false' }}"><svg class="athena-icon" aria-hidden="true"><use href="{{ media }}/icons/sprite.svg#{{ choice.icon }}"></use></svg></button>
+  {% endfor %}
+</div>
+{% if (blank_page): %}
+  {% if (!background): %}<div class="athena-login-background athena-login-art" aria-hidden="true"></div>
+  {% elif (match(background, /\.(mp4|webm)$/)): %}<video class="athena-login-background" autoplay loop muted playsinline src="{{ background }}"></video>
+  {% else %}<img class="athena-login-background" src="{{ background }}" alt="">{% endif %}
+{% endif %}
+{% if (!blank_page): %}
+  <a class="athena-skip" href="#maincontent">{{ _('Skip to content') }}</a>
+  <aside id="athena-sidebar" class="athena-sidebar" aria-label="{{ _('Main menu') }}">
+    <div class="athena-brand-row">
+      <a class="athena-brand" aria-label="OpenWrt Athena" href="{{ dispatcher.build_url('admin/status/overview') }}"><img src="{{ logo }}" data-athena-logo alt=""><span class="athena-brand-name"><span>OpenWrt</span><span class="athena-brand-subtitle">Athena</span></span></a>
+      <a id="athena-version" class="athena-version" href="https://openwrt.org/docs/start" target="_blank" rel="noopener noreferrer" title="OpenWrt {{ entityencode(boardinfo?.release?.version ?? '', true) }}"><strong>{{ entityencode(boardinfo?.release?.version ?? '') }}</strong></a>
+    </div>
+    <nav id="athena-sidebar-scroll" class="athena-sidebar-scroll scroll-shadow scroll-shadow--vertical scroll-shadow--fade"><ul id="athena-nav" class="athena-nav"></ul></nav>
+    <div class="athena-sidebar-footer">
+      <a class="athena-repository" aria-label="Athena GitHub v{{ entityencode(theme_version, true) }}" href="https://github.com/NXN-MAX/OpenWRT-Athena" target="_blank" rel="noopener noreferrer"><svg class="athena-icon" aria-hidden="true"><use href="{{ media }}/icons/sprite.svg#github"></use></svg><span>Athena</span><strong>v{{ entityencode(theme_version) }}</strong></a>
+      <div id="athena-account" class="athena-account athena-popup-host"></div>
+    </div>
+  </aside>
+  <div id="athena-backdrop" class="athena-drawer-backdrop"></div>
+  <div class="athena-workspace">
+    <header id="athena-topbar" class="athena-topbar"></header>
+    <div id="indicators" class="athena-indicators"></div>
+    <main id="maincontent" class="athena-main" tabindex="-1">
+      <div id="athena-summary" data-cpu-count="{{ cpu_count }}"></div>
+      {% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+      <div class="alert-message warning"><h4>{{ _('No password set!') }}</h4><p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p><a class="button button--primary button--sm" href="{{ dispatcher.build_url('admin/system/admin') }}">{{ _('Go to password configuration...') }}</a></div>
+      {% endif %}
+      {% if (boardinfo?.rootfs_type == 'initramfs'): %}<div class="alert-message warning">{{ _('System running in recovery (initramfs) mode.') }}</div>{% endif %}
+      <noscript><div class="alert-message warning">{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</div></noscript>
+      <div id="tabmenu" hidden></div>
+{% endif %}
