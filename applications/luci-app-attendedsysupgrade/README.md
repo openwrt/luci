@@ -29,6 +29,40 @@ closes the prompt and the install proceeds with a system reboot.
 ASU servers typically take between 30 seconds and 5 minutes
 to process each build request and prepare a custom image.
 
+## Custom package repositories
+
+On apk based releases, repositories listed in
+`/etc/apk/repositories.d/*` (except `distfeeds.list`) are added to the
+build request together with the keys in `/etc/apk/keys`, so packages
+installed from those feeds are kept during the upgrade:
+
+```sh
+echo "https://my.repo/packages.adb" >> /etc/apk/repositories.d/customfeeds.list
+wget https://my.repo/my-key.pem -O /etc/apk/keys/my-key.pem
+```
+
+Only repositories allowed by the ASU server are sent, see
+`repository_allow_list` in its `/api/v1/overview`; others are listed as not
+used in the upgrade dialog and in the error report. A reference to the
+installed version or branch in a repository url is
+replaced with the target one, further adjustments can be made with the
+`repository_aliases` list in the `owut` section of
+`/etc/config/attendedsysupgrade`.
+
+The `repositories_mode` option of the same section, also editable in the
+configuration page, controls this, as in owut:
+
+- `append` (default): add the custom repositories to the build request
+- `disable`: don't read nor send any custom repository
+- `replace`: not supported here, as it needs kernel information the app
+  doesn't have; no upgrade can be requested while it is set
+
+```sh
+uci set attendedsysupgrade.owut=owut
+uci set attendedsysupgrade.owut.repositories_mode='disable'
+uci commit attendedsysupgrade
+```
+
 > [!NOTE]
 > Following the announcement of a major OpenWrt upgrade, availability of
 > ASU servers may become limited for a few days as target builds are rolled out
