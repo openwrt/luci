@@ -2,6 +2,7 @@
 // Licensed to the public under the Apache License 2.0.
 
 import { load_catalog, change_catalog, get_translations } from 'luci.core';
+import { logout as authplugin_logout } from 'luci.authplugins';
 
 const ubus_types = [
 	null,
@@ -136,15 +137,23 @@ return {
 	},
 
 	action_logout: function() {
-		const url = dispatcher.build_url();
+		let url = dispatcher.build_url();
 
 		if (ctx.authsession) {
+			// The auth plugin that created the session may send the
+			// browser elsewhere, e.g. to end an identity provider session.
+			const sdat = ubus.call('session', 'get', { ubus_rpc_session: ctx.authsession });
+			const plugin_url = authplugin_logout(http, sdat?.values);
+
 			ubus.call('session', 'destroy', { ubus_rpc_session: ctx.authsession });
 
 			if (http.getenv('HTTPS') == 'on')
 				http.header('Set-Cookie', `sysauth_https=; expires=Thu, 01 Jan 1970 01:00:00 GMT; path=${url}`);
 			else
 				http.header('Set-Cookie', `sysauth_http=; expires=Thu, 01 Jan 1970 01:00:00 GMT; path=${url}`);
+
+			if (plugin_url)
+				url = plugin_url;
 		}
 
 		http.redirect(url);
