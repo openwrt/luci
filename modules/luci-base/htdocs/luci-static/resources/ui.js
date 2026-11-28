@@ -4480,6 +4480,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		document.addEventListener('luci-loaded', this.tabs.init.bind(this.tabs));
 		document.addEventListener('luci-loaded', this.changes.init.bind(this.changes));
 		document.addEventListener('uci-loaded', this.changes.init.bind(this.changes));
+		document.addEventListener('luci-loaded', this.commandPalette.init.bind(this.commandPalette));
 	},
 
 	/**
@@ -5878,6 +5879,615 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					}, L.env.apply_display * 1000);
 				}
 			});
+		}
+	}),
+
+	/**
+	 * Command palette and quick navigation.
+	 *
+	 * Provides a fast keyboard-accessible command palette to search and
+	 * navigate menu entries, configuration views, and diagnostics.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui
+	 */
+	commandPalette: baseclass.singleton(/** @lends LuCI.ui.commandPalette.prototype */ {
+		/**
+		 * Initialize command palette shortcuts and header indicator.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		init() {
+			if (!L.env.sessionid)
+				return;
+
+			if (this.initialized)
+				return;
+
+			/* If theme provides its own dedicated search (e.g. footstrap), defer to it */
+			if (document.getElementById('fs-search-btn'))
+				return;
+
+			this.initialized = true;
+			this.recordCurrentPage();
+			this.updateIndicator();
+			this.bindShortcuts();
+			this.loadIndex();
+		},
+
+		/**
+		 * Update or display the quick search indicator in the header.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		updateIndicator() {
+			const isMac = (typeof navigator !== 'undefined' && navigator.platform && /Mac/i.test(navigator.platform));
+			const shortcutHint = isMac ? '⌘K' : 'Ctrl+K';
+			const label = '%s (%s)'.format(_('Search…'), shortcutHint);
+
+			UI.prototype.showIndicator(
+				'0-search',
+				label,
+				L.bind(this.toggle, this),
+				'inactive'
+			);
+
+			const ind = document.querySelector('span[data-indicator="0-search"]');
+			if (ind) {
+				ind.setAttribute('title', '%s (Ctrl+K, /)'.format(_('Search pages…')));
+				ind.setAttribute('aria-label', _('Search pages…'));
+			}
+		},
+
+		/**
+		 * Bind global keyboard shortcuts (Ctrl+K, Cmd+K, /).
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		bindShortcuts() {
+			document.addEventListener('keydown', (ev) => {
+				const isCmdK = (ev.ctrlKey || ev.metaKey) && !ev.altKey && (ev.key === 'k' || ev.key === 'K');
+				const isSlash = (ev.key === '/') && !ev.shiftKey && !ev.ctrlKey && !ev.metaKey && !ev.altKey;
+
+				if (isCmdK) {
+					ev.preventDefault();
+					this.toggle();
+					return;
+				}
+
+				if (isSlash) {
+					const target = ev.target;
+					if (target && target.closest && target.closest('input, textarea, select, [contenteditable], .cbi-dropdown'))
+						return;
+
+					if (!document.body.classList.contains('modal-overlay-active')) {
+						ev.preventDefault();
+						this.show();
+					}
+				}
+			});
+		},
+
+		/**
+		 * Record the current page path into session storage for recently visited list.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		recordCurrentPage() {
+			if (!Array.isArray(L.env.dispatchpath) || L.env.dispatchpath.length < 2)
+				return;
+
+			const path = L.env.dispatchpath.join('/');
+			const recents = session.getLocalData('palette-recent') || [];
+			const updated = [path].concat(recents.filter(p => p !== path)).slice(0, 8);
+			session.setLocalData('palette-recent', updated);
+		},
+
+		/**
+		 * Collect keyword aliases for a given path and menu name.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @param {string} fullPath The full path string.
+		 * @param {string} name The menu node name.
+		 * @returns {string} Space-separated lowercase keywords.
+		 */
+		getAliases(fullPath, name) {
+			const key = name.toLowerCase();
+			const segs = fullPath.toLowerCase().split('/').filter(s => s !== 'admin');
+			const aliases = [];
+
+			const DICTIONARY = {
+				'wireless': ['wifi', 'wlan', 'radio', 'ssid', '802.11', 'ap', 'channel', 'hotspot'],
+				'firewall': ['port forward', 'nat', 'dmz', 'rules', 'zones', 'nftables', 'iptables', 'security', 'open port'],
+				'network': ['interfaces', 'wan', 'lan', 'ip', 'static ip', 'gateway', 'dns', 'bridge', 'vlan', 'ethernet'],
+				'interfaces': ['wan', 'lan', 'ip', 'static ip', 'gateway', 'dns', 'bridge', 'vlan', 'ethernet'],
+				'dhcp': ['dhcp', 'dns', 'dnsmasq', 'static lease', 'hostname', 'domain', 'tftp', 'ip reservation'],
+				'routes': ['routing', 'gateway', 'static route', 'default route'],
+				'diagnostics': ['ping', 'traceroute', 'nslookup', 'dns lookup', 'network test'],
+				'package-manager': ['opkg', 'apk', 'install', 'update software', 'upgrade packages', 'software', 'plugins', 'apps', 'packages'],
+				'packages': ['opkg', 'apk', 'install', 'update software', 'upgrade packages', 'software', 'plugins', 'apps'],
+				'flash': ['backup', 'restore', 'sysupgrade', 'upgrade firmware', 'flash firmware', 'reset'],
+				'backup': ['backup', 'restore', 'sysupgrade', 'upgrade firmware', 'flash firmware', 'reset'],
+				'reboot': ['restart', 'power', 'reboot router', 'shut down'],
+				'admin': ['password', 'root password', 'ssh', 'dropbear', 'access control', 'login settings'],
+				'system': ['hostname', 'time', 'ntp', 'timezone', 'logging', 'language', 'router name'],
+				'crontab': ['cron', 'scheduled tasks', 'jobs', 'schedule', 'periodic'],
+				'startup': ['init', 'services', 'daemons', 'boot', 'enable service', 'disable service'],
+				'processes': ['top', 'cpu', 'memory', 'ram', 'ps', 'task manager', 'kill'],
+				'syslog': ['system log', 'log', 'messages', 'events'],
+				'dmesg': ['kernel log', 'boot log', 'hardware log'],
+				'realtime': ['bandwidth', 'traffic', 'load', 'graphs', 'monitoring', 'speed', 'network usage'],
+				'overview': ['dashboard', 'summary', 'uptime', 'memory', 'cpu load', 'firmware version', 'status'],
+				'mounts': ['usb', 'disk', 'drive', 'storage', 'hard drive', 'fstab', 'mount points'],
+				'leds': ['led', 'indicator lights', 'led configuration']
+			};
+
+			for (const k in DICTIONARY) {
+				if (key === k || (k !== 'network' && segs.includes(k))) {
+					aliases.push(...DICTIONARY[k]);
+				}
+			}
+
+			return aliases.join(' ').toLowerCase();
+		},
+
+		/**
+		 * Load and cache the searchable menu index.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {Promise<Array<Object>>} Resolves with searchable items.
+		 */
+		loadIndex() {
+			if (this.indexPromise)
+				return this.indexPromise;
+
+			this.indexPromise = UIMenu.load().then(tree => {
+				const items = [];
+				const seenUrls = new Set();
+
+				const walk = (node, pathSegs, trail, depth) => {
+					const children = UIMenu.getChildren(node);
+					if (!Array.isArray(children))
+						return;
+
+					for (let i = 0; i < children.length; i++) {
+						const child = children[i];
+						if (depth === 1 && child.name === 'logout')
+							continue;
+
+						const csegs = pathSegs.concat([child.name]);
+						const title = _(child.title || child.name);
+						const fullPath = csegs.join('/');
+						const url = L.url.apply(L, csegs);
+						const grandchildren = UIMenu.getChildren(child);
+
+						if (!seenUrls.has(url)) {
+							seenUrls.add(url);
+							items.push({
+								name: child.name,
+								title: title,
+								trail: trail,
+								path: fullPath,
+								segs: csegs,
+								url: url,
+								depth: depth,
+								section: trail.length ? trail[0] : title,
+								t: title.toLowerCase(),
+								p: trail.join(' ').toLowerCase(),
+								n: csegs.slice(1).join(' ').toLowerCase(),
+								aliases: this.getAliases(fullPath, child.name)
+							});
+						}
+
+						if (grandchildren.length > 0 && depth < 4)
+							walk(child, csegs, trail.concat([title]), depth + 1);
+					}
+				};
+
+				const rootChildren = UIMenu.getChildren(tree);
+				for (let i = 0; i < rootChildren.length; i++) {
+					const mode = rootChildren[i];
+					walk(mode, [mode.name], [], 1);
+				}
+
+				this.index = items;
+				return items;
+			});
+
+			return this.indexPromise;
+		},
+
+		/**
+		 * Calculate a relevance score for a search token against an item.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @param {Object} item The indexed menu item.
+		 * @param {string} tok The search token.
+		 * @returns {number} Score (lower is better, 99 for no hit).
+		 */
+		tokenScore(item, tok) {
+			if (item.t === tok)
+				return -1;
+
+			if (item.t.startsWith(tok))
+				return 0;
+
+			if (item.t.includes(tok))
+				return 1;
+
+			if (item.aliases && item.aliases.includes(tok))
+				return 2;
+
+			if (item.n.includes(tok))
+				return 3;
+
+			if (item.p.includes(tok))
+				return 4;
+
+			return 99;
+		},
+
+		/**
+		 * Search indexed menu items matching all query tokens.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @param {string} q Search query.
+		 * @param {number} [limit=15] Maximum results to return.
+		 * @returns {Array<Object>} Filtered and sorted results.
+		 */
+		search(q, limit) {
+			const toks = q.toLowerCase().split(/\s+/).filter(Boolean);
+			if (!toks.length)
+				return [];
+
+			const max = (typeof(limit) == 'number') ? limit : 15;
+			const hits = [];
+
+			for (let i = 0; i < (this.index || []).length; i++) {
+				const item = this.index[i];
+				let sum = 0;
+
+				for (let j = 0; j < toks.length; j++) {
+					const s = this.tokenScore(item, toks[j]);
+					if (s === 99) {
+						sum = 99;
+						break;
+					}
+					sum += s;
+				}
+
+				if (sum !== 99)
+					hits.push({ item: item, score: sum + (item.depth * 0.1) });
+			}
+
+			hits.sort((a, b) => a.score - b.score);
+			return hits.slice(0, max).map(h => h.item);
+		},
+
+		/**
+		 * Retrieve recently visited pages or popular default destinations.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @param {number} [limit=8] Maximum items to return.
+		 * @returns {Array<Object>} Recent or popular menu items.
+		 */
+		getRecentOrPopular(limit) {
+			const max = (typeof(limit) == 'number') ? limit : 8;
+			const recents = session.getLocalData('palette-recent') || [];
+			const byPath = new Map((this.index || []).map(item => [item.path, item]));
+			const recentItems = [];
+
+			for (let i = 0; i < recents.length; i++) {
+				const found = byPath.get(recents[i]);
+				if (found && !recentItems.includes(found))
+					recentItems.push(found);
+			}
+
+			if (recentItems.length >= 4)
+				return recentItems.slice(0, max);
+
+			const popularKeys = ['overview', 'network', 'interfaces', 'wireless', 'firewall', 'package-manager', 'packages', 'flash', 'reboot'];
+			for (let i = 0; i < popularKeys.length; i++) {
+				const key = popularKeys[i];
+				const found = (this.index || []).find(item => item.name === key || (item.path && item.path.endsWith('/' + key)));
+				if (found && !recentItems.includes(found))
+					recentItems.push(found);
+			}
+
+			return recentItems.slice(0, max);
+		},
+
+		/**
+		 * Render and build the dedicated command palette overlay dialog.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {Node} The overlay DOM node.
+		 */
+		buildOverlay() {
+			let activeIndex = 0;
+			let currentResults = [];
+
+			const searchInput = E('input', {
+				'type': 'text',
+				'class': 'cbi-input-text',
+				'role': 'combobox',
+				'aria-expanded': 'true',
+				'aria-autocomplete': 'list',
+				'aria-controls': 'palette-listbox',
+				'placeholder': _('Search pages…'),
+				'autocomplete': 'off',
+				'autocapitalize': 'off',
+				'spellcheck': 'false',
+				'style': 'flex: 1; border: none; outline: none; background: transparent; font-size: 1.1rem; color: inherit; padding: 0; box-shadow: none; margin: 0;'
+			});
+
+			const noteEl = E('div', {
+				'style': 'padding: 0.4rem 1rem 0.2rem; font-size: 0.8rem; opacity: 0.65; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;'
+			});
+
+			const resultsList = E('div', {
+				'id': 'palette-listbox',
+				'role': 'listbox',
+				'aria-label': _('Pages'),
+				'style': 'flex: 1; overflow-y: auto; padding: 0.4rem; min-height: 40px; max-height: calc(70vh - 110px);'
+			});
+
+			const closeBtn = E('button', {
+				'class': 'btn cbi-button',
+				'style': 'padding: 0.2rem 0.6rem; font-size: 0.75rem;',
+				'click': L.bind(this.hide, this)
+			}, [ _('Close') ]);
+
+			const footerEl = E('div', {
+				'style': 'display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 1rem; border-top: 1px solid var(--border-color-low, rgba(128,128,128,0.2)); font-size: 0.75rem; opacity: 0.65;'
+			}, [
+				E('span', {}, [
+					E('kbd', { 'style': 'padding: 0.1rem 0.35rem; border: 1px solid rgba(128,128,128,0.4); border-radius: 3px; font-size: 0.75rem;' }, '↑↓'), ' ', _('Navigate'), '   ',
+					E('kbd', { 'style': 'padding: 0.1rem 0.35rem; border: 1px solid rgba(128,128,128,0.4); border-radius: 3px; font-size: 0.75rem;' }, '↵'), ' ', _('Open'), '   ',
+					E('kbd', { 'style': 'padding: 0.1rem 0.35rem; border: 1px solid rgba(128,128,128,0.4); border-radius: 3px; font-size: 0.75rem;' }, 'esc'), ' ', _('Close')
+				]),
+				closeBtn
+			]);
+
+			const overlay = E('div', {
+				'id': 'luci-command-palette',
+				'role': 'dialog',
+				'aria-modal': 'true',
+				'aria-label': _('Search pages…'),
+				'style': 'position: fixed; inset: 0; z-index: 999; display: none; justify-content: center; align-items: flex-start; padding: 10vh 1rem 1rem; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(2px);'
+			}, [
+				E('div', {
+					'class': 'command-palette-box',
+					'style': 'display: flex; flex-direction: column; width: 100%; max-width: 580px; max-height: 70vh; background: var(--background-color-high, #fff); color: var(--text-color-high, #333); border: 1px solid var(--border-color-low, rgba(128,128,128,0.3)); border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); overflow: hidden;'
+				}, [
+					E('div', {
+						'style': 'display: flex; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color-low, rgba(128,128,128,0.2)); gap: 0.5rem;'
+					}, [
+						E('span', { 'style': 'opacity: 0.5; font-size: 1.1rem; line-height: 1;' }, '🔍'),
+						searchInput
+					]),
+					noteEl,
+					resultsList,
+					footerEl
+				])
+			]);
+
+			const setActive = (i, isKeyboard) => {
+				if (!currentResults.length) {
+					activeIndex = -1;
+					searchInput.removeAttribute('aria-activedescendant');
+					return;
+				}
+
+				activeIndex = (i + currentResults.length) % currentResults.length;
+				const optionNodes = resultsList.children;
+
+				for (let idx = 0; idx < optionNodes.length; idx++) {
+					const node = optionNodes[idx];
+					const isSelected = (idx === activeIndex);
+					node.classList.toggle('active', isSelected);
+					node.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+					node.style.backgroundColor = isSelected ? 'rgba(128, 128, 128, 0.25)' : 'transparent';
+					node.style.fontWeight = isSelected ? '600' : 'normal';
+				}
+
+				if (optionNodes[activeIndex]) {
+					searchInput.setAttribute('aria-activedescendant', optionNodes[activeIndex].id);
+					if (isKeyboard)
+						optionNodes[activeIndex].scrollIntoView({ block: 'nearest' });
+				}
+			};
+
+			const selectCurrent = () => {
+				if (activeIndex >= 0 && currentResults[activeIndex]) {
+					const targetUrl = currentResults[activeIndex].url;
+					this.hide();
+					if (targetUrl)
+						window.location = targetUrl;
+				}
+			};
+
+			const renderList = (q) => {
+				const query = (q || '').trim();
+				currentResults = query ? this.search(query) : this.getRecentOrPopular();
+				resultsList.innerHTML = '';
+
+				if (!currentResults.length) {
+					noteEl.textContent = _('No pages found');
+					noteEl.style.display = '';
+					setActive(-1, false);
+					return;
+				}
+
+				noteEl.textContent = query ? '' : _('Recently visited');
+				noteEl.style.display = query ? 'none' : '';
+
+				currentResults.forEach((item, i) => {
+					const optEl = E('a', {
+						'class': 'palette-item',
+						'role': 'option',
+						'id': 'palette-opt-' + i,
+						'aria-selected': 'false',
+						'href': item.url,
+						'style': 'display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0.75rem; text-decoration: none; border-radius: 4px; margin-bottom: 2px; color: inherit; cursor: pointer;'
+					}, [
+						E('div', { 'style': 'overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;' }, [
+							E('div', { 'style': 'font-size: 1rem;' }, [ item.title ]),
+							(item.trail && item.trail.length) ? E('div', { 'style': 'font-size: 0.78rem; opacity: 0.6; margin-top: 2px;' }, [ item.trail.join(' › ') ]) : ''
+						]),
+						E('span', {
+							'style': 'font-size: 0.75rem; opacity: 0.6; padding: 0.15rem 0.45rem; border-radius: 3px; border: 1px solid rgba(128, 128, 128, 0.3); margin-left: 0.75rem; white-space: nowrap;'
+						}, [ item.section || (item.segs && item.segs[0]) ])
+					]);
+
+					optEl.addEventListener('pointermove', () => {
+						if (activeIndex !== i)
+							setActive(i, false);
+					});
+
+					optEl.addEventListener('click', (ev) => {
+						ev.preventDefault();
+						selectCurrent();
+					});
+
+					resultsList.appendChild(optEl);
+				});
+
+				setActive(0, false);
+			};
+
+			searchInput.addEventListener('input', () => {
+				renderList(searchInput.value);
+			});
+
+			searchInput.addEventListener('keydown', (ev) => {
+				switch (ev.key) {
+				case 'Escape':
+					ev.preventDefault();
+					this.hide();
+					break;
+
+				case 'ArrowDown':
+					ev.preventDefault();
+					setActive(activeIndex + 1, true);
+					break;
+
+				case 'ArrowUp':
+					ev.preventDefault();
+					setActive(activeIndex - 1, true);
+					break;
+
+				case 'Home':
+					if (!searchInput.value) {
+						ev.preventDefault();
+						setActive(0, true);
+					}
+					break;
+
+				case 'End':
+					if (!searchInput.value) {
+						ev.preventDefault();
+						setActive(currentResults.length - 1, true);
+					}
+					break;
+
+				case 'Enter':
+					ev.preventDefault();
+					selectCurrent();
+					break;
+
+				case 'Tab':
+					ev.preventDefault();
+					break;
+				}
+			});
+
+			overlay.addEventListener('click', (ev) => {
+				if (ev.target === overlay)
+					this.hide();
+			});
+
+			this.overlayEl = overlay;
+			this.searchInputEl = searchInput;
+			this.renderListFn = renderList;
+
+			document.body.appendChild(overlay);
+			return overlay;
+		},
+
+		/**
+		 * Open the command palette dialog.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		show() {
+			if (this.isOpen)
+				return;
+
+			this.loadIndex().then(() => {
+				if (!this.overlayEl)
+					this.buildOverlay();
+
+				this.isOpen = true;
+				this.prevActiveEl = document.activeElement;
+				this.overlayEl.style.display = 'flex';
+				this.searchInputEl.value = '';
+				this.renderListFn('');
+
+				window.requestAnimationFrame(() => {
+					this.searchInputEl.focus();
+				});
+			});
+		},
+
+		/**
+		 * Close the command palette dialog.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		hide() {
+			if (!this.isOpen || !this.overlayEl)
+				return;
+
+			this.isOpen = false;
+			this.overlayEl.style.display = 'none';
+
+			if (this.prevActiveEl && typeof this.prevActiveEl.focus === 'function') {
+				this.prevActiveEl.focus();
+				this.prevActiveEl = null;
+			}
+		},
+
+		/**
+		 * Toggle the command palette dialog open or closed.
+		 *
+		 * @instance
+		 * @memberof LuCI.ui.commandPalette
+		 * @returns {void}
+		 */
+		toggle() {
+			if (this.isOpen)
+				this.hide();
+			else
+				this.show();
 		}
 	}),
 
