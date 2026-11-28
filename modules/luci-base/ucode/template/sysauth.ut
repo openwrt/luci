@@ -77,15 +77,7 @@
 </form>
 
 {%
-	let https_ports = uci.get('uhttpd', 'main', 'listen_https') ?? [];
-
-	https_ports = uniq(filter(
-		map(
-			(type(https_ports) == 'string') ? split(https_port, /\s+/) : https_ports,
-			e => +match(e, /\d+$/)?.[0]
-		),
-		p => (p >= 0 && p <= 65535)
-	));
+	const https_ports = ubus.call('luci', 'getHTTPSPorts')?.ports ?? [];
 %}
 
 <script>
