@@ -714,6 +714,16 @@ const UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
 		this.node = frameEl;
 
 		const input = frameEl.querySelector('input[type="checkbox"]');
+		const validate = this.options.validate;
+
+		/* The validator reads the value of the input, which is the enabled
+		   value in either state, so pass the actual value to the validation
+		   functions instead. */
+		if (validate)
+			this.options.validate = Array.isArray(validate)
+				? validate.map(fn => (typeof(fn) == 'function') ? () => fn(this.getValue()) : fn)
+				: () => validate(this.getValue());
+
 		this.setUpdateEvents(input, 'click', 'blur');
 		this.setChangeEvents(input, 'change');
 
