@@ -1,0 +1,60 @@
+{
+	"admin/services/telldus-mqtt": {
+		"title": "Telldus MQTT",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-telldus-mqtt" ]
+		}
+	},
+
+	"admin/services/telldus-mqtt/status": {
+		"title": "Status",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "telldus-mqtt/status"
+		},
+		"depends": {
+			"acl": [ "luci-app-telldus-mqtt" ]
+		}
+	},
+
+	"admin/services/telldus-mqtt/sensors": {
+		"title": "Sensors",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "telldus-mqtt/sensors"
+		},
+		"depends": {
+			"acl": [ "luci-app-telldus-mqtt" ]
+		}
+	},
+
+	"admin/services/telldus-mqtt/switches": {
+		"title": "Switches",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "telldus-mqtt/switches"
+		},
+		"depends": {
+			"acl": [ "luci-app-telldus-mqtt" ]
+		}
+	},
+
+	"admin/services/telldus-mqtt/settings": {
+		"title": "Settings",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "telldus-mqtt/settings"
+		},
+		"depends": {
+			"acl": [ "luci-app-telldus-mqtt" ]
+		}
+	}
+}
