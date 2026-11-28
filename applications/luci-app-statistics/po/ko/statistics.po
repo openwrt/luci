@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2026-11-25 01:34+0000\n"
+"PO-Revision-Date: 2026-11-27 20:02+0000\n"
 "Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/ko/>\n"
@@ -69,7 +69,7 @@ msgstr "APCUPS 플러그인 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "Absolute values"
-msgstr "절대 수치"
+msgstr "절댓값"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:69
 msgid "Add IPv4 rule selector"
@@ -81,11 +81,11 @@ msgstr "IPv6 규칙 선택기 추가"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:16
 msgid "Add command for reading values"
-msgstr ""
+msgstr "값 읽기 명령 추가"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:36
 msgid "Add notification command"
-msgstr ""
+msgstr "알림 명령 추가"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:19
 msgid "Address family"
@@ -109,7 +109,7 @@ msgstr "최대 가능 속도 상향"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:47
 msgid "Awaiting email input at %s"
-msgstr ""
+msgstr "%s에서 이메일 입력 대기 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
 msgid "Backup RRD statistics"
@@ -208,7 +208,7 @@ msgstr "Chrony 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:85
 msgid "CleanSession"
-msgstr ""
+msgstr "클린 세션"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:21
 msgid "CollectLinks"
@@ -229,7 +229,7 @@ msgstr "Collectd 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:57
 msgid "Command monitoring enabled"
-msgstr ""
+msgstr "명령 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:138
 msgid "Comment / Rule Number"
@@ -267,7 +267,7 @@ msgstr "Syslog로 전송할 알림을 제어합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:28
 msgid "Create statistics about the network plugin itself"
-msgstr ""
+msgstr "네트워크 플러그인 자체에 대한 통계를 생성합니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:7
 msgid "DF Plugin Configuration"
@@ -458,7 +458,7 @@ msgstr "1 미만의 소수점 값 입력 필요"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:33
 msgid "Expecting permssions in octal notation"
-msgstr ""
+msgstr "8진수 형식의 권한 입력 필요"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:54
 msgid "Expecting valid time range"
@@ -526,7 +526,7 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:92
 msgid ""
 "Free space, reserved space and used space is reported as relative values"
-msgstr ""
+msgstr "여유·예약·사용 공간을 상대값(%)으로 보고"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:21
 msgid "Gather compression statistics"
@@ -558,6 +558,8 @@ msgid ""
 "Here you can define external commands which will be started by collectd in "
 "order to read certain values. The values will be read from stdout."
 msgstr ""
+"특정 값을 읽기 위해 collectd가 실행할 외부 명령을 여기에서 정의할 수 "
+"있습니다. 해당 값은 stdout에서 읽습니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:37
 msgid ""
@@ -565,12 +567,16 @@ msgid ""
 "certain threshold values have been reached. The values leading to invocation "
 "will be fed to the the called programs stdin."
 msgstr ""
+"특정 임계값에 도달했을 때 collectd가 실행할 외부 명령을 여기에서 정의할 수 "
+"있습니다. 호출을 유발한 값은 호출된 프로그램의 stdin으로 전달됩니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:21
 msgid ""
 "Here you can define various criteria by which the monitored iptables rules "
 "are selected."
 msgstr ""
+"여기에서 모니터링할 iptables 규칙을 선택하는 다양한 기준을 정의할 수 "
+"있습니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
 msgid "Hide free memory"
@@ -581,6 +587,8 @@ msgid ""
 "Hiding the free memory item makes the graph to scale to actual memory usage, "
 "not to 100%."
 msgstr ""
+"여유 메모리 항목을 숨기면 100%가 아닌 실제 메모리 사용량에 맞춰 그래프 "
+"비율이 조정됩니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:29
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
@@ -597,7 +605,7 @@ msgstr "호스트 이름"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:15
 msgid "IP or hostname where to get the txtinfo output from"
-msgstr ""
+msgstr "txtinfo 출력을 가져올 IP 주소 또는 호스트 이름입니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/ipstatistics.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/ipstatistics.json:2
@@ -618,7 +626,7 @@ msgstr "IRQ 플러그인 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:22
 msgid "Ignore source addresses"
-msgstr ""
+msgstr "제외할 출발지 주소"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:71
 msgid "Instance name"
@@ -648,7 +656,7 @@ msgstr "Iptables 플러그인 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:15
 msgid "Leave unselected to automatically determine interfaces to monitor."
-msgstr ""
+msgstr "모니터링할 인터페이스를 자동으로 결정하려면 선택하지 않은 상태로 두세요."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:64
 msgid "Line Attenuation Down"
@@ -699,11 +707,11 @@ msgstr "로그 수준"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
 msgid "Match IPv4 iptables rules"
-msgstr ""
+msgstr "모니터링할 IPv4 iptables 규칙"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
 msgid "Match IPv6 iptables rules"
-msgstr ""
+msgstr "모니터링할 IPv6 iptables 규칙"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:40
 msgid ""
@@ -719,7 +727,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:38
 msgid "Maximum allowed connections"
-msgstr ""
+msgstr "최대 허용 연결 수"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:20
 msgid "Maximum packet size"
@@ -748,7 +756,7 @@ msgstr "메모리 모니터링 활성화됨"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
-msgstr "지정한 항목을 제외하고 모두 모니터링"
+msgstr "지정한 항목 외 모두 모니터링"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:14
 msgid "Monitor all local listen ports"
@@ -756,53 +764,53 @@ msgstr "모든 로컬 수신 대기 포트 모니터링"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:15
 msgid "Monitor device(s) / thermal zone(s)"
-msgstr "대상 장치 / 온도 영역"
+msgstr "모니터링할 장치 / 온도 영역"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:15
 msgid "Monitor devices"
-msgstr "대상 장치"
+msgstr "모니터링할 장치"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:15
 msgid "Monitor disks and partitions"
-msgstr "대상 디스크 및 파티션"
+msgstr "모니터링할 디스크 및 파티션"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:59
 msgid "Monitor filesystem types"
-msgstr "대상 파일 시스템 종류"
+msgstr "모니터링할 파일 시스템 유형"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:14
 msgid "Monitor host"
-msgstr "대상 호스트"
+msgstr "모니터링할 호스트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:14
 msgid "Monitor hosts"
-msgstr "대상 호스트"
+msgstr "모니터링할 호스트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:15
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:15
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:15
 msgid "Monitor interfaces"
-msgstr "대상 인터페이스"
+msgstr "모니터링할 인터페이스"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:15
 msgid "Monitor interrupts"
-msgstr "대상 인터럽트"
+msgstr "모니터링할 인터럽트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:19
 msgid "Monitor local ports"
-msgstr "대상 로컬 포트"
+msgstr "모니터링할 로컬 포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:37
 msgid "Monitor mount points"
-msgstr "대상 마운트 지점"
+msgstr "모니터링할 마운트 지점"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:14
 msgid "Monitor processes"
-msgstr "대상 프로세스"
+msgstr "모니터링할 프로세스"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:25
 msgid "Monitor remote ports"
-msgstr "대상 원격 포트"
+msgstr "모니터링할 원격 포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
 msgid "Monitoring %s and %s, %s %s"
@@ -948,7 +956,7 @@ msgstr "온도 영역 %s 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:16
 msgid "More details about frequency usage and transitions"
-msgstr ""
+msgstr "주파수 사용량 및 전환에 대한 추가 세부 정보입니다"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/mqtt.json:2
 msgid "Mqtt"
@@ -1098,7 +1106,7 @@ msgstr "포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:19
 msgid "Port for apcupsd communication"
-msgstr ""
+msgstr "apcupsd 통신 포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:20
 msgid "Port for chronyd"
@@ -1259,7 +1267,7 @@ msgstr "초"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:11
 msgid "Sends or receives data via mqtt"
-msgstr ""
+msgstr "MQTT를 통해 데이터를 송수신합니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:25
 msgid "Sensor list"
@@ -1288,7 +1296,7 @@ msgstr "서버 포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:20
 msgid "Set the maximum size for datagrams sent over the network"
-msgstr ""
+msgstr "네트워크를 통해 전송되는 데이터그램의 최대 크기를 설정합니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
 msgid "Set up collectd"
@@ -1324,7 +1332,7 @@ msgstr "신호 감쇠 상향"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:23
 msgid "Simple CPU frequency monitoring enabled"
-msgstr ""
+msgstr "간략 CPU 주파수 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/snmp6.json:2
 msgid "Snmp6"
@@ -1392,11 +1400,11 @@ msgstr "CSV 파일 저장 디렉터리"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:18
 msgid "Store data values as rates instead of absolute values"
-msgstr ""
+msgstr "절댓값 대신 변화율로 데이터 값 저장"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:65
 msgid "StoreRates"
-msgstr ""
+msgstr "변화율로 저장"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:43
 msgid "Stored timespans"
@@ -1478,7 +1486,7 @@ msgstr "APCUPS 플러그인은 APC UPS에 대한 통계 데이터를 수집합�
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:7
 msgid "The NUT plugin reads information about Uninterruptible Power Supplies."
-msgstr ""
+msgstr "NUT 플러그인은 UPS(무정전 전원 장치)에 대한 정보를 읽어옵니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:7
 msgid ""
@@ -1502,7 +1510,7 @@ msgstr "Syslog 플러그인은 데몬에서 로그 메시지를 수신하여 sys
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:133
 msgid "The chain name must not contain spaces"
-msgstr ""
+msgstr "체인 이름에는 공백을 포함할 수 없습니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:7
 msgid "The chrony plugin will monitor chrony NTP server statistics"
@@ -1510,7 +1518,7 @@ msgstr "Chrony 플러그인은 Chrony NTP 서버 통계를 모니터링합니다
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:154
 msgid "The comment to match must not contain spaces"
-msgstr ""
+msgstr "대상 주석에는 공백을 포함할 수 없습니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/conntrack.js:7
 msgid ""
@@ -1535,8 +1543,8 @@ msgid ""
 "The df plugin collects statistics about the disk space usage on different "
 "devices, mount points or filesystem types."
 msgstr ""
-"DF 플러그인은 장치, 마운트 지점, 파일 시스템별 디스크 공간 사용 통계를 "
-"수집합니다."
+"DF 플러그인은 다양한 장치, 마운트 지점, 파일 시스템 유형의 디스크 공간 "
+"사용량 통계를 수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
@@ -1547,7 +1555,7 @@ msgid ""
 "The disk plugin collects detailed usage statistics for selected partitions "
 "or whole disks."
 msgstr ""
-"디스크 플러그인은 선택한 파티션 또는 전체 디스크의 상세 사용 통계를 "
+"디스크 플러그인은 선택한 파티션 또는 전체 디스크의 상세 사용량 통계를 "
 "수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:8
@@ -1563,6 +1571,10 @@ msgid ""
 "to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can "
 "be used in other ways as well."
 msgstr ""
+"이메일 플러그인은 실행 중인 collectd 데몬에 이메일 통계를 전송하는 데 사용할 "
+"수 있는 Unix 소켓을 생성합니다. 이 플러그인은 주로 "
+"Mail::SpamAssasin::Plugin::Collectd와 함께 사용하도록 만들어졌지만 다른 "
+"방식으로도 사용할 수 있습니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
@@ -1573,32 +1585,38 @@ msgid ""
 "The exec plugin starts external commands to read values from or to notify "
 "external processes when certain threshold values have been reached."
 msgstr ""
+"Exec 플러그인은 외부 명령을 실행하여 값을 읽거나 특정 임계값에 도달했을 때 "
+"외부 프로세스에 알립니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:81
 msgid "The instance name must not contain spaces"
-msgstr ""
+msgstr "인스턴스 이름에는 공백을 포함할 수 없습니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:8
 msgid ""
 "The interface plugin collects traffic statistics on selected interfaces."
-msgstr ""
+msgstr "인터페이스 플러그인은 선택한 인터페이스의 트래픽 통계를 수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:8
 msgid ""
 "The ipstatistics plugin collects IPv4 and IPv6 statistics to compare them."
-msgstr ""
+msgstr "IP 통계 플러그인은 비교를 위해 IPv4 및 IPv6 통계를 수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:9
 msgid ""
 "The iptables plugin will monitor selected firewall rules and collect "
 "information about processed bytes and packets per rule."
 msgstr ""
+"iptables 플러그인은 선택한 방화벽 규칙을 모니터링하고 규칙별로 처리된 바이트 "
+"및 패킷 정보를 수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:8
 msgid ""
 "The irq plugin will monitor the rate of issues per second for each selected "
 "interrupt. If no interrupt is selected then all interrupts are monitored."
 msgstr ""
+"IRQ 플러그인은 선택한 각 인터럽트의 초당 발생률을 모니터링합니다. 인터럽트를 "
+"선택하지 않으면 모든 인터럽트를 모니터링합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:8
 msgid ""
@@ -1612,7 +1630,7 @@ msgstr "부하 플러그인은 시스템의 전반적인 부하 통계를 수집
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:7
 msgid "The memory plugin collects statistics about the memory usage."
-msgstr ""
+msgstr "메모리 플러그인은 메모리 사용량 통계를 수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:8
 msgid ""
@@ -1750,11 +1768,11 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:51
 msgid ""
 "This section defines to which servers the locally collected data is sent to."
-msgstr ""
+msgstr "이 섹션에서는 로컬에서 수집된 데이터를 전송할 서버를 정의합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 msgid "Timeout for polling chrony"
-msgstr ""
+msgstr "Chrony 폴링 타임아웃"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:92
 msgid "Topic"
@@ -1786,7 +1804,7 @@ msgstr "UPS 플러그인 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:12
 msgid "UPS name in NUT ups@host format"
-msgstr ""
+msgstr "NUT의 UPS 이름 (ups@host 형식)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:27
 msgid "URL"
@@ -1856,11 +1874,11 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."
-msgstr ""
+msgstr "선택하지 않으면 모든 디스크를 모니터링합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:16
 msgid "When none selected, all interfaces will be monitored."
-msgstr ""
+msgstr "선택하지 않으면 모든 인터페이스를 모니터링합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:21
 msgid "When set to true, reports per-state metric (system, user, idle)"
@@ -1868,7 +1886,7 @@ msgstr "활성화 시, 상태별 지표 (시스템, 사용자, 유휴)를 보고
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "When set to true, we request absolute values"
-msgstr ""
+msgstr "활성화 시, 절댓값을 요청합니다"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
@@ -1905,11 +1923,11 @@ msgstr "cURL 플러그인 활성화됨"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/curl.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/curl.json:2
 msgid "cUrl"
-msgstr "cUrl"
+msgstr "cURL"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
-msgstr "cUrl 플러그인 설정"
+msgstr "cURL 플러그인 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "no summary"

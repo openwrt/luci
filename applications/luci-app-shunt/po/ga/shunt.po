@@ -9,8 +9,8 @@ msgstr ""
 "luciapplicationsshunt/ga/>\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
 "6 && n<11) ? 3 : 4;\n"
-"PO-Revision-Date: 2026-11-10 03:51+0000\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"PO-Revision-Date: 2026-11-25 15:54+0000\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:420
 msgid "%d name(s) every %ds"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:48
 msgid "%d of %d shown"
-msgstr ""
+msgstr "%d as %d á thaispeáint"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:101
 msgid "%d pkt matched"
@@ -48,7 +48,7 @@ msgstr "%ds"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:132
 msgid "(limit)"
-msgstr ""
+msgstr "(teorainn)"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:257
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:127
@@ -58,7 +58,7 @@ msgstr "Gníomh"
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:62
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:48
 msgid "Action failed: %s"
-msgstr ""
+msgstr "Theip ar an ngníomh: %s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:107
 msgid "Add policy"
@@ -70,7 +70,7 @@ msgstr "Seoladh"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:300
 msgid "Address begins with …"
-msgstr ""
+msgstr "Tosaíonn an seoladh le…"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:524
 msgid ""
@@ -324,7 +324,7 @@ msgstr "Coinnigh Trácht Áitiúil"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:507
 msgid "Learned Address Limit"
-msgstr ""
+msgstr "Teorainn na Seoltaí Foglamtha"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:443
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:171
@@ -333,7 +333,7 @@ msgstr "Óráidí léannta"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:198
 msgid "Learned addresses (%d of %d shown)"
-msgstr ""
+msgstr "Seoltaí foghlamtha (%d as %d á dtaispeáint)"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/setreport.js:199
 msgid "Learned addresses (%d)"
@@ -378,6 +378,13 @@ msgid ""
 "with forged DNS answers; raise it only if a policy with a very large list "
 "reaches it."
 msgstr ""
+"Tá an chuid is mó de na seoltaí i seilbh Tacar amháin foghlamtha, in aghaidh "
+"an pholasaí agus an teaghlaigh seoltaí. Ní fhoghlaimítear seoladh thar an "
+"seoladh sin go dtí go rachaidh cinn níos sine in éag agus go nglacann siad "
+"an nasc suas gnáth idir an dá linn. Cuireann sé teorainn leis an méid is "
+"féidir le hóstach ar dheighleog breathnaithe a dhéanamh le freagraí DNS "
+"góchumtha; ní ardaítear é ach amháin má shroicheann polasaí le liosta an-"
+"mhór é."
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:152
 msgid "Name has a byte outside a-z 0-9 - _"
@@ -446,6 +453,9 @@ msgid ""
 "policy with a single interface. Point to point interfaces need no gateway at "
 "all."
 msgstr ""
+"Ní gá ach amháin nuair a bhíonn an geata a aimsítear ó netifd mícheart, agus "
+"i gcás polasaí le comhéadan aonair amháin. Ní bhíonn geata ar bith ag "
+"teastáil le haghaidh comhéadain phointe-go-pointe."
 
 #: applications/luci-app-shunt/root/usr/share/luci/menu.d/luci-app-shunt.json:23
 msgid "Overview"
@@ -665,6 +675,13 @@ msgid ""
 "and move to the next one when it goes down or, with probe targets set, stops "
 "answering; running connections stay where they started."
 msgstr ""
+"An gléas nó an comhéadan loighciúil a ndíríonn an polasaí seo trácht chuige. "
+"Réitítear ainm netifd chuig a ghléas; úsáidtear aon ainm gléis eile mar a "
+"cuireadh isteach é. Úsáidtear comhéadain éagsúla in ord: téann naisc nua "
+"chuig an gcéad cheann a oibríonn, agus aistríonn siad chuig an gcéad cheann "
+"eile má éiríonn an chéad cheann sin neamh-infhaighte, nó — má tá spriocanna "
+"tástála socraithe — má stopann sé ag freagairt; fanann naisc atá ar siúl "
+"cheana féin san áit ar thosaigh siad."
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:154
 msgid ""
@@ -736,6 +753,12 @@ msgid ""
 "Set is shown in part, the entries with the most traffic first - to find one "
 "address in it, enter how it begins."
 msgstr ""
+"Cad atá sna Tacair nftables faoi láthair. Athshocraítear na cuntair gach "
+"uair a dhéantar iontráil a athnuachan; dá bhrí sin, léiríonn siad "
+"gníomhaíocht le déanaí, seachas an t-iomlán carntha ó thús ama. I gcás tacar "
+"mór, ní thaispeántar ach cuid de, agus na hiontrálacha leis an trácht is mó "
+"ar dtús – chun seoladh ar leith a aimsiú, cuir isteach an chuid tosaigh den "
+"seoladh sin."
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:445
 msgid "across all policies"
@@ -760,7 +783,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:221
 msgid "in use"
-msgstr ""
+msgstr "in úsáid"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/policies.js:149
 msgid "interface"
@@ -768,7 +791,7 @@ msgstr "comhéadan"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:415
 msgid "limit reached: %s"
-msgstr ""
+msgstr "teorainn bainte amach: %s"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:407
 msgid "n/a"
@@ -780,7 +803,7 @@ msgstr "gan freagra ón gcúlchóras"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:231
 msgid "no answer to the health probes since %s"
-msgstr ""
+msgstr "níl aon freagra ar na seiceálacha sláinte ó %s i leith"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:333
 msgid "online documentation"

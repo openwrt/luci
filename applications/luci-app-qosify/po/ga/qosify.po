@@ -9,8 +9,8 @@ msgstr ""
 "luciapplicationsqosify/ga/>\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
 "6 && n<11) ? 3 : 4;\n"
-"PO-Revision-Date: 2026-11-10 03:51+0000\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"PO-Revision-Date: 2026-11-27 13:32+0000\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1318
 msgid "\"%s\" is not a value qosify accepts for %s."
@@ -134,6 +134,7 @@ msgstr ""
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:437
 msgid "%s is not one plain statement in this section — edit %s directly"
 msgstr ""
+"Ní ráiteas simplí amháin é %s sa rannán seo — cuir in eagar %s go díreach"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:352
 msgid ""
@@ -220,10 +221,17 @@ msgid ""
 "hyphens — qosify 143d71d (snapshots) drops it otherwise, and 24.10 and 25.12 "
 "paste it into a tc command run with sh -c as root"
 msgstr ""
+"%s: Ní féidir leis an luach %s a bheith comhdhéanta ach de litreacha, "
+"digití, spásanna, poncanna, fostí agus fleiscíní — má bhíonn carachtair eile "
+"ann, déanann qosify 143d71d iad a scriosadh; ina theannta sin, cuireann "
+"leaganacha 24.10 agus 25.12 an luach isteach i gceannas `tc` a ritheann trí "
+"`sh -c` le pribhléidí an úsáideora fhréamh"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2084
 msgid "%s: multiqueue is set, but %s has one queue, so qosify uses plain cake"
 msgstr ""
+"%s: tá 'multiqueue' socraithe, ach tá scuaine amháin ag %s; dá bhrí sin, "
+"úsáideann 'qosify' 'cake' simplí"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1215
 msgid "(alias)"
@@ -353,7 +361,7 @@ msgstr "Ábhar dénártha diúltaithe"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1631
 msgid "Bytes"
-msgstr ""
+msgstr "Bearta"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:82
 msgid "CAKE diffserv mode"
@@ -497,6 +505,12 @@ msgid ""
 "override only when the DSCP field is zero (as described from qosify c698349; "
 "24.10 and 25.12 do not honour it)."
 msgstr ""
+"Códphointí DSCP: CS0–CS7, AF11–AF43, EF, VA, NQB, LE, DF (caithfidh NQB "
+"qosify a dhéanamh ó Mheitheamh 2026; níl sé ag 24.10 agus 25.12). Glactar le "
+"luach amh idir 0 agus 63 freisin, agus is féidir le haon luach dscp_* aicme "
+"a shainaithint chomh maith. Cuir an comhartha + roimhe chun an socrú a shárú "
+"ach amháin nuair atá an réimse DSCP cothrom le nialas (mar a thuairiscítear "
+"i leagan qosify c698349; ní thacaíonn leaganacha 24.10 ná 25.12 leis seo)."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:66
 msgid "DSCP value for ICMP packets"
@@ -555,6 +569,12 @@ msgid ""
 "udp CS0, dscp_prio/dscp_bulk/dscp_icmp unset, bulk_trigger_pps/"
 "bulk_trigger_timeout/prio_max_avg_pkt_len 0 (disabled)."
 msgstr ""
+"Réamhshocruithe bíonn feidhm ag qosify nuair a bhíonn eochair as láthair — "
+"comhéadan: modh diffserv4, ingress 1, egress 1, nat 1, host_isolate 1, "
+"autorate_ingress 0, multiqueue 0. gléas: mar an gcéanna seachas nat 0. "
+"réamhshocruithe: timeout 3600, dscp_default_tcp/udp CS0, dscp_prio/dscp_bulk/"
+"dscp_icmp unset, bulk_trigger_pps/bulk_trigger_timeout/prio_max_avg_pkt_len "
+"0 (díchumasaithe)."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1415
 msgid "Description"
@@ -596,7 +616,7 @@ msgstr "Íoslódáil"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1991
 msgid "Download (ingress)"
-msgstr ""
+msgstr "Íoslódáil (iontráil)"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:823
 msgid "Download bandwidth"
@@ -730,6 +750,8 @@ msgid ""
 "Error: invalid characters in bandwidth or options fields. Use letters, "
 "digits, spaces, dots, underscores and hyphens only."
 msgstr ""
+"Earráid: carachtair neamhbhailí sna réimsí bandaleithead nó roghanna. Ná "
+"húsáid ach litreacha, digití, spásanna, poncanna, fostíreanna agus fleiscíní."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2227
 msgid "Error: name must be a device or interface name"
@@ -855,6 +877,8 @@ msgid ""
 "Match not loaded by qosify on line %s — ports 1-%d, one IPv4/IPv6 address "
 "(no CIDR or %%zone), or dns:, dns_c:, dns_q:"
 msgstr ""
+"Níor luchtú qosify an mheaitseáil ar líne %s — poirt 1-%d, seoladh IPv4/IPv6 "
+"amháin (gan CIDR ná %%zone), nó dns:, dns_c:, dns_q:"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:69
 msgid "Maximum average packet length for marking a flow as priority"
@@ -862,7 +886,7 @@ msgstr "Uasfhad meánach paicéid chun sruth a mharcáil mar shruth tosaíochta"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1629
 msgid "Measure"
-msgstr ""
+msgstr "Tomhais"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:837
 msgid "Minimum packet unit (MPU)"
@@ -888,7 +912,7 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:832
 msgid "Multiqueue CAKE"
-msgstr ""
+msgstr "CAKE ilscuaine"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:830
 msgid "NAT awareness"
@@ -918,7 +942,7 @@ msgstr "Níl aon trácht DSCP ann go fóill."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1881
 msgid "No class traffic yet."
-msgstr ""
+msgstr "Níl aon trácht ranga ann go fóill."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1213
 msgid "No classes defined in %s"
@@ -1026,11 +1050,11 @@ msgstr ""
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1631
 msgid "Packets"
-msgstr ""
+msgstr "Paicéid"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2585
 msgid "Port must be 1-%d."
-msgstr ""
+msgstr "Caithfidh an port a bheith 1-%d."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2581
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2584
@@ -1392,7 +1416,7 @@ msgstr "Uaslódáil agus Cuir i bhFeidhm"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1991
 msgid "Upload (egress)"
-msgstr ""
+msgstr "Uaslódáil (imeacht)"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2444
 msgid "Upload and apply"
@@ -1426,6 +1450,7 @@ msgstr "Am oibríochta"
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:86
 msgid "Use cake_mq instead of cake on devices with more than one queue"
 msgstr ""
+"Úsáid cake_mq in áit cake ar fheistí a bhfuil níos mó ná scuabha amháin acu"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:838
 msgid "VLAN tags"
@@ -1484,12 +1509,16 @@ msgid ""
 "bandwidth_down does not look like a tc rate (100mbit, 12MBps; leave empty "
 "for unlimited) — passing it through anyway"
 msgstr ""
+"Ní cosúil go bhfuil bandwidth_down cosúil le ráta tc (100mbit, 12MBps; fág "
+"folamh le haghaidh neamhtheoranta) — á chur tríd ar aon nós"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:2193
 msgid ""
 "bandwidth_up does not look like a tc rate (100mbit, 12MBps; leave empty for "
 "unlimited) — passing it through anyway"
 msgstr ""
+"Ní cosúil go bhfuil bandwidth_up cosúil le ráta tc (100mbit, 12MBps; fág "
+"folamh le haghaidh neamhtheoranta) — á chur tríd ar aon nós"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1117
 msgid ""
@@ -1577,6 +1606,8 @@ msgstr ""
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:340
 msgid "multiqueue is set, but this qosify.init does not pass it to qosify"
 msgstr ""
+"Tá an multiqueue socraithe, ach ní chuireann an qosify.init seo ar aghaidh "
+"chuig qosify é"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:328
 msgid ""
@@ -1704,7 +1735,7 @@ msgstr "Teimpléad pacáiste qosify"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1634
 msgid "qosify reports packets only per class."
-msgstr ""
+msgstr "Tuairiscíonn qosify paicéid de réir aicme amháin."
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1462
 msgid "qosify-status"
@@ -1763,7 +1794,7 @@ msgstr "iomlán"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/status/include/75_qosify.js:36
 msgid "unlimited"
-msgstr ""
+msgstr "gan teorainn"
 
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1267
 #: applications/luci-app-qosify/htdocs/luci-static/resources/view/qosify/main.js:1299

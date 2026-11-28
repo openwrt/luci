@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-11-11 13:57+0000\n"
+"PO-Revision-Date: 2026-11-27 20:02+0000\n"
 "Last-Translator: Hyeonjeong Lee <hayden@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnlbwmon/ko/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.11.2.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:581
 msgid "%d IPv4-only hosts"
@@ -32,15 +32,15 @@ msgstr "%s, %s, %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:93
 msgid "-1 - Restart every last day of month"
-msgstr ""
+msgstr "-1 - 매월 말일 다시 시작"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:94
 msgid "-7 - Restart a week before end of month"
-msgstr ""
+msgstr "-7 - 월말 일주일 전 다시 시작"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:92
 msgid "1 - Restart every 1st of month"
-msgstr ""
+msgstr "1 - 매월 1일 다시 시작"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:162
 msgid "10m - frequent commits at the expense of flash wear"
@@ -118,7 +118,7 @@ msgstr "업로드: <big id=\"tx-total\">0</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:63
 msgid "Accounting period"
-msgstr ""
+msgstr "집계 주기"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:60
 msgid "Advanced Settings"
@@ -193,6 +193,8 @@ msgid ""
 "Database storage directory. One file per accounting period will be placed "
 "into this directory."
 msgstr ""
+"데이터베이스 저장 디렉터리입니다. 집계 주기마다 파일 1개가 이 디렉터리에 "
+"생성됩니다."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:72
 msgid "Day of month"
@@ -204,6 +206,8 @@ msgid ""
 "towards the end of month, e.g. \"-5\" to specify the 27th of July or the "
 "24th of February."
 msgstr ""
+"집계 주기를 다시 시작할 매월 특정일입니다. 월말부터 역순으로 지정하려면 음수 "
+"값을 사용하세요. (예: \"-5\"는 7월 27일 또는 2월 24일을 의미)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:24
 msgid "Dismiss"
@@ -211,7 +215,7 @@ msgstr "닫기"
 
 #: applications/luci-app-nlbwmon/root/usr/share/luci/menu.d/luci-app-nlbwmon.json:16
 msgid "Display"
-msgstr ""
+msgstr "표시"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:647
 msgid "Down. (Bytes)"
@@ -252,7 +256,7 @@ msgstr "듀얼 스택 활성화 호스트"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:83
 msgid "Due date"
-msgstr ""
+msgstr "기준일"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:1023
 msgid "Dump (JSON)"
@@ -288,7 +292,7 @@ msgstr "체계"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:73
 msgid "Fixed interval"
-msgstr ""
+msgstr "고정 간격"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:895
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:941
@@ -344,7 +348,7 @@ msgstr "IPv6"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:111
 msgid "Interval"
-msgstr "주기"
+msgstr "간격"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:159
 msgid ""
@@ -362,7 +366,7 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:112
 msgid "Length of accounting interval in days."
-msgstr ""
+msgstr "일 단위의 집계 간격 길이입니다."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:123
 msgid "Local interfaces"
@@ -379,17 +383,19 @@ msgstr "MAC"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:92
 msgid "Malformed data received"
-msgstr ""
+msgstr "잘못된 형식의 데이터 수신"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:144
 msgid "Maximum entries"
-msgstr ""
+msgstr "최대 항목 수"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:156
 msgid ""
 "Maximum number of accounting periods to keep, use zero to keep databases "
 "forever."
 msgstr ""
+"보관할 집계 주기의 최대 수입니다. 데이터베이스를 영구 보관하려면 0을 "
+"사용하세요."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:849
 msgid "Netlink Bandwidth Monitor"
@@ -407,7 +413,7 @@ msgstr "Netlink 대역폭 모니터 - 설정"
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:437
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:560
 msgid "No data recorded yet."
-msgstr ""
+msgstr "아직 기록된 데이터 없음."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:124
 msgid "Only conntrack streams from or to any of these networks are counted."
@@ -419,7 +425,7 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:147
 msgid "Preallocate database"
-msgstr ""
+msgstr "데이터베이스 사전 할당"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:361
 msgid "Protocol"
@@ -427,7 +433,7 @@ msgstr "프로토콜"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:61
 msgid "Protocol Mapping"
-msgstr ""
+msgstr "프로토콜 매핑"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:61
 msgid ""
@@ -438,11 +444,11 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:165
 msgid "Refresh interval"
-msgstr "갱신 주기"
+msgstr "새로 고침 주기"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:106
 msgid "Require a valid date in the form \"YYYY-MM-DD\""
-msgstr ""
+msgstr "\"YYYY-MM-DD\" 형식의 올바른 날짜 입력 필요"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:57
 msgid "Restore"
@@ -458,7 +464,7 @@ msgstr "복원 완료"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:308
 msgid "Select accounting period:"
-msgstr ""
+msgstr "집계 주기 선택:"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:356
 msgid "Source IP"
@@ -466,21 +472,23 @@ msgstr "출발지 IP"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:96
 msgid "Start date"
-msgstr ""
+msgstr "시작일"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:97
 msgid "Start date of the first accounting period, e.g. begin of ISP contract."
-msgstr ""
+msgstr "첫 번째 집계 주기의 시작일입니다. (예: ISP 계약 시작일)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:155
 msgid "Stored periods"
-msgstr ""
+msgstr "보관 주기 수"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:53
 msgid ""
 "The Netlink Bandwidth Monitor (nlbwmon) is a lightweight, efficient traffic "
 "accounting program keeping track of bandwidth usage per host and protocol."
 msgstr ""
+"Netlink 대역폭 모니터 (nlbwmon)는 호스트 및 프로토콜별 대역폭 사용량을 "
+"추적하는 가볍고 효율적인 트래픽 집계 프로그램입니다."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:21
 msgid "The following database files have been restored:"
@@ -491,6 +499,8 @@ msgid ""
 "The maximum amount of entries that should be put into the database, setting "
 "the limit to 0 will allow databases to grow indefinitely."
 msgstr ""
+"데이터베이스에 저장할 최대 항목 수입니다. 제한을 0으로 설정하면 "
+"데이터베이스가 제한 없이 커집니다."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:856
 msgid "Traffic / Host"
@@ -502,7 +512,7 @@ msgstr "트래픽 분포"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:108
 msgid "Unable to fetch traffic statistic data: %s"
-msgstr ""
+msgstr "트래픽 통계 데이터를 가져올 수 없음: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:649
 msgid "Up. (Bytes)"
@@ -535,7 +545,7 @@ msgstr "업로드 / 애플리케이션"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:639
 msgid "Vendor: <big id=\"bubble-vendor\">Example Corp.</big>"
-msgstr "제조사: <big id=\"bubble-vendor\">Example Corp.</big>"
+msgstr "제조사: <big id=\"bubble-vendor\">예시 기업</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:75
 msgid "Warning"
@@ -554,6 +564,9 @@ msgid ""
 "mainly useful for memory constrained systems which might not be able to "
 "satisfy memory allocation after longer uptime periods."
 msgstr ""
+"가능한 최대 데이터베이스 크기를 메모리에 미리 할당할지 여부입니다. 주로 "
+"장시간 가동 후 메모리를 할당하지 못할 수 있는 메모리 제한 시스템에 "
+"유용합니다."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:146
 msgid "no traffic"
@@ -567,4 +580,4 @@ msgstr "트래픽 없음"
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:670
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:675
 msgid "other"
-msgstr ""
+msgstr "기타"
