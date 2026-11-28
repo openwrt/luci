@@ -3,12 +3,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language: zh_Hans\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Hosted Weblate user 54392 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"Last-Translator: Lancer907 <lancer907@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsshunt/zh_Hans/>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"PO-Revision-Date: 2026-11-22 12:33+0000\n"
+"PO-Revision-Date: 2026-11-26 14:54+0000\n"
 "X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:420
@@ -255,7 +254,7 @@ msgstr ""
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:156
 msgid "Frame ends mid-structure"
-msgstr ""
+msgstr "帧在结构尚未完成时结束"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:471
 msgid "General Settings"
@@ -340,7 +339,7 @@ msgstr "条目最长生存时间"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:147
 msgid "Message ends mid-structure"
-msgstr ""
+msgstr "消息在结构尚未完成时结束"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:148
 msgid "Message too long"
@@ -354,6 +353,11 @@ msgid ""
 "with forged DNS answers; raise it only if a policy with a very large list "
 "reaches it."
 msgstr ""
+"每个策略和地址族中，每个已学习集合最多保存指定数量的地址。超过此上限的地址不"
+"会被学习，必须等到较早学习的地址过期后才能加入；在此期间，这些地址的流量将使"
+"用常规上行链路。此限制用于约束已被监测网段上的主机利用伪造的 DNS 响应所能造成"
+"的影响。只有当某个策略包含非常庞大的地址列表，并且确实达到此上限时，才应提高"
+"该值。"
 
 #: applications/luci-app-shunt/htdocs/luci-static/resources/view/shunt/overview.js:152
 msgid "Name has a byte outside a-z 0-9 - _"

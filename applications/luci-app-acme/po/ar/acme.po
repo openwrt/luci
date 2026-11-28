@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-08-01 07:02+0000\n"
-"Last-Translator: 3laeddinebmg <3laeddinebmg@gmail.com>\n"
+"PO-Revision-Date: 2026-11-27 08:03+0000\n"
+"Last-Translator: Esam Alrawi <esam@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/ar/>\n"
 "Language: ar\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.12.dev0\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:227
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:235
@@ -18,11 +18,11 @@ msgstr "%s لتفاصيل هذه العملية."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:218
 msgid "%s for the format of credentials required by each API."
-msgstr ""
+msgstr "%s لتنسيق بيانات الاعتماد المطلوبة لكل واجهة برمجة تطبيقات(API)."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:165
 msgid "%s for the list of available APIs."
-msgstr ""
+msgstr "s% لقائمة واجهة برمجية التطبيقات(API) المتاحة."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/logread.js:4
 msgid "ACME Log"
@@ -272,13 +272,12 @@ msgid "Package is not installed"
 msgstr "ام يتم تثبيت الحزمة"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:116
-#, fuzzy
 msgid ""
 "Port where to listen for ACME challenge requests. The port will be "
 "temporarily open during validation."
 msgstr ""
-"ميناء حيث يستمع إلى طلبات الطعن المقدمة من المنظمة. وسيفتح المرفأ مؤقتاً "
-"أثناء التصديق."
+"المنفذ الذي يتم الاستماع فيه لطلبات تحدي ACME. وسيكون المنفذ مفتوحاً مؤقتاً "
+"أثناء التحقق."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:525
 msgid "Private Key"
@@ -321,7 +320,7 @@ msgstr "انظر التعليمات"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:243
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:283
 msgid "See more"
-msgstr ""
+msgstr "شاهد المزيد"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:96
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:118
@@ -341,21 +340,21 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:226
 msgid "The challenge alias to use for ALL domains."
-msgstr ""
+msgstr "الاسم المستعار للتحدي المراد استخدامه لكل النطاقات."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:217
 msgid "The credentials for the DNS API mode selected above."
-msgstr ""
+msgstr "بيانات الاعتماد لوضع DNS API المحدد أعلاه."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:407
 msgid ""
 "The domain %s in DDNS %s is already configured in %s. Please check it after "
 "the importing."
-msgstr ""
+msgstr "النطاق %s في DDNS %s مُعدّ مسبقاً في %s. يرجى التحقق منه بعد الاستيراد."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:234
 msgid "The domain alias to use for ALL domains."
-msgstr ""
+msgstr "النطاق المستعار المراد استخدامه لجميع النطاقات."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:41
 msgid ""
@@ -363,16 +362,22 @@ msgid ""
 "Simply fill out this to have the router configured with Letsencrypt-issued "
 "certificates for the web interface."
 msgstr ""
+"يقوم هذا الإعداد بتهيئة التثبيت التلقائي لشهادات ACME ‏(Let's Encrypt). ما "
+"عليك سوى ملء هذه الحقول لتهيئة الراوتر بشهادات صادرة عن Let's Encrypt لواجهة "
+"الويب."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:119
 msgid "To temporary open port you can specify your web server port e.g. 80."
 msgstr ""
+"لفتح المنفذ مؤقتاً، يمكنك تحديد منفذ خادم الويب الخاص بك، على سبيل المثال 80."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:164
 msgid ""
 "To use DNS mode to issue certificates, set this to the name of a DNS API "
 "supported by acme.sh."
 msgstr ""
+"لاستخدام وضع DNS لإصدار الشهادات، اضبط هذا الخيار على اسم DNS API مدعوم من "
+"acme.sh."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:282
 msgid "Use a custom CA instead of Let's Encrypt."
@@ -384,11 +389,11 @@ msgstr "استخدم خادم الترحيل"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:169
 msgid "Using this mode requires the acme-dnsapi package to be installed."
-msgstr ""
+msgstr "يتطلب استخدام هذا الوضع تثبيت حزمة acme-dnsapi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:93
 msgid "Validate via TLS port 443."
-msgstr ""
+msgstr "التحقق عبر منفذ TLS ‏443."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:89
 msgid "Validation method"
@@ -398,11 +403,11 @@ msgstr "طريقة التحقق من الصحة"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:99
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:120
 msgid "Validation via TLS ALPN"
-msgstr ""
+msgstr "التحقق عبر TLS ALPN."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:241
 msgid "Wait for DNS update"
-msgstr ""
+msgstr "انتظر تحديث DNS."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:82
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:97
@@ -425,7 +430,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:147
 msgid "wildcards * require Validation method: DNS"
-msgstr ""
+msgstr "تتطلب النطاقات الفرعية (*) طريقة التحقق: DNS"
 
 #~ msgid ""
 #~ "The challenge alias to use for ALL domains. See https://github.com/acmesh-"
