@@ -126,81 +126,9 @@ return view.extend({
 	render: function (result) {
 		let m, s, o;
 
-		m = new form.Map('ipsec', _('General connections configurations'),
-			_('On this page, you can configure the general settings for IPsec connections.'));
+		m = new form.Map('ipsec', _('Pools & Authorities'),
+			_('On this page, you can configure the pools, certificate authorities and shunt policies used by IPsec connections.'));
 		m.tabbed = true;
-
-		// Shunt Configuration
-		s = m.section(form.GridSection, 'shunt', _('Shunt'),
-			_('Define Shunt pass/drop policies independent of remote connections.'));
-		s.addremove = true;
-		s.nodescriptions = true;
-		s.anonymous = true;
-
-		o = s.option(form.Flag, 'enabled', _('Enabled'),
-			_('Configuration is enabled or not'));
-		o.rmempty = false;
-
-		o = s.option(form.ListValue, 'mode', _('Mode'),
-			swanctlDescr(_('Shunt policy mode'), 'connections.<conn>.children.<child>.mode'));
-		o.value('pass', _('Pass'));
-		o.value('drop', _('Drop'));
-		o.rmempty = false;
-
-		o = s.option(form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
-			swanctlDescr(_('Local traffic selectors for the shunt policy'), 'connections.<conn>.children.<child>.local_ts'));
-		o.datatype = 'list(or(cidr,ipaddr))';
-
-		o = s.option(form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
-			swanctlDescr(_('Remote traffic selectors for the shunt policy'), 'connections.<conn>.children.<child>.remote_ts'));
-		o.datatype = 'list(or(cidr,ipaddr))';
-
-		o = s.option(form.Value, 'priority', _('Priority'),
-			swanctlDescr(_('Priority of the shunt policy (lower number means higher priority)'), 'connections.<conn>.children.<child>.priority'));
-		o.datatype = 'uinteger';
-		o.modalonly = true;
-
-		o = s.option(form.Value, 'interface', _('Interface'),
-			swanctlDescr(_('Network interface to bind the shunt policy to'), 'connections.<conn>.children.<child>.interface'));
-		o.modalonly = true;
-
-		// Authority Configuration
-		s = m.section(form.GridSection, 'authority', _('Authority'),
-			_('Define Certificate Authorities that are trusted to sign and revoke peer certificates.'));
-		s.addremove = true;
-		s.nodescriptions = true;
-		s.anonymous = true;
-
-		o = s.option(form.Value, 'description', _('Description'),
-			_('An optional description of what this authority is used for.'));
-
-		o = addFileOption(s, 'cacert', 'cacert', _('CA Certificate'),
-			swanctlDescr(_('CA certificate to use as trust anchor, relative to %s.'), 'authorities.<name>.cacert'),
-			'/etc/swanctl/x509ca');
-
-		o = s.option(form.Value, 'cert_uri_base', _('Certificate Base URI'),
-			swanctlDescr(_('Base URI for the Hash and URL feature of IKEv2.') + '<br />' +
-			_('Instead of sending complete certificates, a URI that resolves to the DER encoded certificate is sent.') + '<br />' +
-			_('The certificate URIs are built by appending the SHA1 hash of the DER encoded certificate to this base URI.'),
-				'authorities.<name>.cert_uri_base'));
-		o.placeholder = 'http://certs.example.com/';
-		o.modalonly = true;
-
-		o = s.option(form.DynamicList, 'crl_uri', _('CRL URIs'),
-			swanctlDescr(_('URIs where a CRL (certificate revocation list) issued by this CA can be fetched.') + '<br />' +
-			_('Supported schemes are http, ldap and file.') + '<br />' +
-			_('A local file must be given as a file URI, e.g. %s.').format('file:///etc/swanctl/x509crl/ca.crl') + '<br />' +
-			_('CRLs stored in %s are read by swanctl when loading credentials.').format('/etc/swanctl/x509crl'),
-				'authorities.<name>.crl_uris'));
-		o.placeholder = 'http://crl.example.com/ca.crl';
-		o.modalonly = true;
-
-		o = s.option(form.DynamicList, 'ocsp_uri', _('OCSP URIs'),
-			swanctlDescr(_('URIs of OCSP responders that can be queried for the revocation status of certificates issued by this CA.') + '<br />' +
-			_('These are usually http URLs.'),
-				'authorities.<name>.ocsp_uris'));
-		o.placeholder = 'http://ocsp.example.com';
-		o.modalonly = true;
 
 		// Pool Configuration
 		// The section name is used as pool name, so it is not anonymous.
@@ -287,6 +215,78 @@ return view.extend({
 				'pools.<name>.split_exclude'));
 		o.datatype = 'cidr';
 		o.placeholder = '192.168.2.0/24';
+		o.modalonly = true;
+
+		// Authority Configuration
+		s = m.section(form.GridSection, 'authority', _('Authority'),
+			_('Define Certificate Authorities that are trusted to sign and revoke peer certificates.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.anonymous = true;
+
+		o = s.option(form.Value, 'description', _('Description'),
+			_('An optional description of what this authority is used for.'));
+
+		o = addFileOption(s, 'cacert', 'cacert', _('CA Certificate'),
+			swanctlDescr(_('CA certificate to use as trust anchor, relative to %s.'), 'authorities.<name>.cacert'),
+			'/etc/swanctl/x509ca');
+
+		o = s.option(form.Value, 'cert_uri_base', _('Certificate Base URI'),
+			swanctlDescr(_('Base URI for the Hash and URL feature of IKEv2.') + '<br />' +
+			_('Instead of sending complete certificates, a URI that resolves to the DER encoded certificate is sent.') + '<br />' +
+			_('The certificate URIs are built by appending the SHA1 hash of the DER encoded certificate to this base URI.'),
+				'authorities.<name>.cert_uri_base'));
+		o.placeholder = 'http://certs.example.com/';
+		o.modalonly = true;
+
+		o = s.option(form.DynamicList, 'crl_uri', _('CRL URIs'),
+			swanctlDescr(_('URIs where a CRL (certificate revocation list) issued by this CA can be fetched.') + '<br />' +
+			_('Supported schemes are http, ldap and file.') + '<br />' +
+			_('A local file must be given as a file URI, e.g. %s.').format('file:///etc/swanctl/x509crl/ca.crl') + '<br />' +
+			_('CRLs stored in %s are read by swanctl when loading credentials.').format('/etc/swanctl/x509crl'),
+				'authorities.<name>.crl_uris'));
+		o.placeholder = 'http://crl.example.com/ca.crl';
+		o.modalonly = true;
+
+		o = s.option(form.DynamicList, 'ocsp_uri', _('OCSP URIs'),
+			swanctlDescr(_('URIs of OCSP responders that can be queried for the revocation status of certificates issued by this CA.') + '<br />' +
+			_('These are usually http URLs.'),
+				'authorities.<name>.ocsp_uris'));
+		o.placeholder = 'http://ocsp.example.com';
+		o.modalonly = true;
+
+		// Shunt Configuration
+		s = m.section(form.GridSection, 'shunt', _('Shunt'),
+			_('Define Shunt pass/drop policies independent of remote connections.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+		s.anonymous = true;
+
+		o = s.option(form.Flag, 'enabled', _('Enabled'),
+			_('Configuration is enabled or not'));
+		o.rmempty = false;
+
+		o = s.option(form.ListValue, 'mode', _('Mode'),
+			swanctlDescr(_('Shunt policy mode'), 'connections.<conn>.children.<child>.mode'));
+		o.value('pass', _('Pass'));
+		o.value('drop', _('Drop'));
+		o.rmempty = false;
+
+		o = s.option(form.DynamicList, 'local_ts', _('Local Traffic Selectors'),
+			swanctlDescr(_('Local traffic selectors for the shunt policy'), 'connections.<conn>.children.<child>.local_ts'));
+		o.datatype = 'list(or(cidr,ipaddr))';
+
+		o = s.option(form.DynamicList, 'remote_ts', _('Remote Traffic Selectors'),
+			swanctlDescr(_('Remote traffic selectors for the shunt policy'), 'connections.<conn>.children.<child>.remote_ts'));
+		o.datatype = 'list(or(cidr,ipaddr))';
+
+		o = s.option(form.Value, 'priority', _('Priority'),
+			swanctlDescr(_('Priority of the shunt policy (lower number means higher priority)'), 'connections.<conn>.children.<child>.priority'));
+		o.datatype = 'uinteger';
+		o.modalonly = true;
+
+		o = s.option(form.Value, 'interface', _('Interface'),
+			swanctlDescr(_('Network interface to bind the shunt policy to'), 'connections.<conn>.children.<child>.interface'));
 		o.modalonly = true;
 
 		return m.render().then(function (node) {
