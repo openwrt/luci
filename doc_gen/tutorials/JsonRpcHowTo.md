@@ -53,7 +53,7 @@ The UCI-Library `/rpc/uci` offers functionality to interact with the Universal C
 
 **Exported Functions:**
 
-See [LuCI API](LuCI.uci.html)
+See [uci API](../../luci/uci)
 
 Example:
 ```sh
@@ -69,7 +69,7 @@ The Filesystem library `/rpc/fs` offers functionality to interact with the files
 
 **Exported Functions:**
 
-See [fs API](LuCI.fs.html)
+See [fs API](../../luci/fs)
 
 
 **Note:** All functions are exported as they are except for `readfile` which encodes its return value in [Base64](https://en.wikipedia.org/wiki/Base64) and `writefile` which only accepts Base64 encoded data as second argument.

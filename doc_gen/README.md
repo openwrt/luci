@@ -1,6 +1,6 @@
 # LuCI Documentation
 
-Start with the [LuCI Client side JavaScript APIs](LuCI.html)
+Start with the [LuCI Client side JavaScript APIs](luci)
 
 
 

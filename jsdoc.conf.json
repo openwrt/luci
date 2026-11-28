@@ -1,10 +1,15 @@
 {
 	"tags": {
 		"allowUnknownTags": true,
-		"dictionaries": ["jsdoc","closure"]
+		"dictionaries": [
+			"jsdoc",
+			"closure"
+		]
 	},
 	"source": {
-		"include": ["modules/luci-base/htdocs/luci-static/resources"],
+		"include": [
+			"modules/luci-base/htdocs/luci-static/resources"
+		],
 		"includePattern": ".+\\.js(doc|x)?$"
 	},
 	"plugins": [
@@ -24,40 +29,29 @@
 	},
 	"opts": {
 		"template": "node_modules/clean-jsdoc-theme",
-		"template_alt": "@alphanull/jsdoc-vision-theme",
-		"template_old": "jaguarjs-jsdoc",
 		"destination": "docs/jsapi",
-		"destination_comment": "output directory in the repo",
 		"recurse": true,
 		"readme": "doc_gen/README.md",
-		"readme_comment": "generates the index.html file",
 		"tutorials": "doc_gen/tutorials",
-		"tutorials_comment": "tutorials index. See 'sections' below. jaguarjs does not like the tutorials entry",
-		"theme_opts": {
-			"default_theme": "fallback-dark",
-			"favicon": "favicon.png",
-			"title": "LuCI Documentation",
-			"homepageTitle": "LuCI - Reference Documentation",
-			"displayModuleHeader": false,
-			"prefixModuleToSidebarItems_experimental": false,
-			"includeFilesListInHomepage": false,
-			"include_css": [
-				"doc_gen/extra.css"
-			],
-			"menu": [
-				{
-					"title": "GitHub Project Page",
-					"link": "https://github.com/openwrt/luci",
-					"class": "github-home"
-				}
-			],
-			"sections": [
-				"Tutorials",
-				"Modules",
-				"Classes",
-				"Externals"
-			]
-		}
+		"siteName": "LuCI Documentation",
+		"basePath": "/luci/jsapi",
+		"sectionOrder": [
+			"Tutorials",
+			"Modules",
+			"Classes",
+			"Externals",
+			"Globals"
+		],
+		"favicon": "doc_gen/include/favicon.png",
+		"customCssFile": "./doc_gen/extra.css",
+		"menu": [
+			{
+				"title": "GitHub Project Page",
+				"link": "https://github.com/openwrt/luci",
+				"icon": "simpleicons:github"
+			}
+		],
+		"siteUrl": "https://openwrt.github.io"
 	},
 	"markdown": {
 		"hardwrap": false,
