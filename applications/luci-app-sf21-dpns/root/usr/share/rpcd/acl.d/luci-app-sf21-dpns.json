@@ -1,0 +1,17 @@
+{
+	"luci-app-sf21-dpns": {
+		"description": "Grant access to the Siflower SF21 NPU (DPNS) status and configuration",
+		"read": {
+			"ubus": {
+				"luci.sf21-dpns": [ "getStatus" ]
+			},
+			"uci": [ "dpns-qos", "firewall", "network" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.sf21-dpns": [ "setOffload" ]
+			},
+			"uci": [ "dpns-qos" ]
+		}
+	}
+}

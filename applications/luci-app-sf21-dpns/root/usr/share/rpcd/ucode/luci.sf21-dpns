@@ -1,0 +1,261 @@
+#!/usr/bin/ucode
+// SPDX-License-Identifier: Apache-2.0
+// Status and offload settings of the Siflower SF21 NPU (DPNS) for LuCI.
+
+'use strict';
+
+import { readfile, writefile, popen, glob, readlink, rename } from 'fs';
+
+const MODULES_CONF = '/etc/modules.conf';
+
+// Module parameters that select what the NPU offloads. They are read-only at
+// runtime and are applied when the modules are loaded (after a reboot).
+const PARAMS = {
+	lf4_offload: { module: 'dpnsNat', def: false },
+	lf_offload: { module: 'dpnsNat', def: true },
+	l2_bridge_iso: { module: 'dpnsL2', def: true }
+};
+
+function trim_file(path) {
+	const s = readfile(path);
+	return (s != null) ? trim(s) : null;
+}
+
+function read_int(path) {
+	const s = trim_file(path);
+	return (s != null && match(s, /^-?[0-9]+$/)) ? +s : null;
+}
+
+function parse_bool(s) {
+	return (s == 'Y' || s == 'y' || s == '1' || s == 'true' || s == 'on');
+}
+
+// Value of each parameter in the running kernel (null: module not loaded).
+function runtime_params() {
+	const res = {};
+
+	for (let name, p in PARAMS) {
+		const s = trim_file(`/sys/module/${p.module}/parameters/${name}`);
+		res[name] = (s != null) ? parse_bool(s) : null;
+	}
+
+	return res;
+}
+
+// Value of each parameter as configured in /etc/modules.conf (default if unset).
+function configured_params() {
+	const res = {};
+
+	for (let name, p in PARAMS)
+		res[name] = p.def;
+
+	for (let line in split(readfile(MODULES_CONF) ?? '', '\n')) {
+		const hash = index(line, '#');
+		const w = split(trim((hash >= 0) ? substr(line, 0, hash) : line), /[ \t]+/);
+
+		if (length(w) < 3 || w[0] != 'options')
+			continue;
+
+		for (let i = 2; i < length(w); i++) {
+			const kv = split(w[i], '=', 2);
+			const p = PARAMS[kv[0]];
+
+			if (p && p.module == w[1])
+				res[kv[0]] = parse_bool(kv[1] ?? '1');
+		}
+	}
+
+	return res;
+}
+
+// Drop our parameters from the "options" lines of their modules and keep
+// everything else (other parameters, comments); kmodloader joins all
+// "options" lines of a module.
+function strip_params(line) {
+	const hash = index(line, '#');
+	const comment = (hash >= 0) ? substr(line, hash) : null;
+	const w = split(trim((hash >= 0) ? substr(line, 0, hash) : line), /[ \t]+/);
+
+	if (length(w) < 2 || w[0] != 'options')
+		return line;
+
+	const rest = filter(slice(w, 2), (kv) => {
+		const p = PARAMS[split(kv, '=', 2)[0]];
+		return !(p && p.module == w[1]);
+	});
+
+	if (length(rest) == length(w) - 2)
+		return line;
+
+	if (!length(rest))
+		return comment;
+
+	return join(' ', [ w[0], w[1], ...rest ]) + (comment ? ' ' + comment : '');
+}
+
+function write_params(params) {
+	const keep = [];
+
+	for (let line in split(readfile(MODULES_CONF) ?? '', '\n')) {
+		line = strip_params(line);
+
+		if (line != null)
+			push(keep, line);
+	}
+
+	while (length(keep) && keep[-1] == '')
+		pop(keep);
+
+	push(keep,
+		sprintf('options dpnsNat lf4_offload=%d lf_offload=%d',
+			params.lf4_offload ? 1 : 0, params.lf_offload ? 1 : 0),
+		sprintf('options dpnsL2 l2_bridge_iso=%d', params.l2_bridge_iso ? 1 : 0),
+		'');
+
+	const tmp = MODULES_CONF + '.tmp';
+
+	if (writefile(tmp, join('\n', keep)) == null)
+		return false;
+
+	return rename(tmp, MODULES_CONF);
+}
+
+// Connections in the conntrack table: offloaded to the NPU ([HW_OFFLOAD]),
+// in the software flowtable ([OFFLOAD]) and the total.
+function flows() {
+	const res = {
+		count: read_int('/proc/sys/net/netfilter/nf_conntrack_count'),
+		max: read_int('/proc/sys/net/netfilter/nf_conntrack_max'),
+		hw4: 0, hw6: 0, sw4: 0, sw6: 0
+	};
+
+	const fd = popen("awk '" +
+		'/\\[HW_OFFLOAD\\]/ { h[$1]++; next } ' +
+		'/\\[OFFLOAD\\]/ { s[$1]++ } ' +
+		'END { print h["ipv4"]+0, h["ipv6"]+0, s["ipv4"]+0, s["ipv6"]+0 }' +
+		"' /proc/net/nf_conntrack 2>/dev/null");
+
+	if (fd) {
+		const n = split(trim(fd.read('all') ?? ''), ' ');
+		fd.close();
+
+		if (length(n) == 4) {
+			res.hw4 = +n[0];
+			res.hw6 = +n[1];
+			res.sw4 = +n[2];
+			res.sw6 = +n[3];
+		}
+	}
+
+	return res;
+}
+
+function hwmon_dir(name) {
+	for (let d in glob('/sys/class/hwmon/hwmon*'))
+		if (trim_file(`${d}/name`) == name)
+			return d;
+
+	return null;
+}
+
+// SoC temperature (millidegrees) and the two monitored supply voltages (mV).
+// Every voltage read takes ~140 ms, so they are only read on request.
+function sensors(with_voltage) {
+	const res = {};
+	let d = hwmon_dir('pvt_temp');
+
+	if (d)
+		res.temp = read_int(`${d}/temp1_input`);
+
+	d = with_voltage ? hwmon_dir('pvt_volt') : null;
+
+	if (d) {
+		res.in1 = read_int(`${d}/in1_input`);
+		res.in2 = read_int(`${d}/in2_input`);
+	}
+
+	return res;
+}
+
+function ports() {
+	const res = [];
+
+	for (let d in glob('/sys/class/net/eth*')) {
+		const name = replace(d, /^.*\//, '');
+		const master = readlink(`${d}/master`);
+		const st = `${d}/statistics`;
+
+		push(res, {
+			name,
+			master: master ? replace(master, /^.*\//, '') : null,
+			up: trim_file(`${d}/operstate`) == 'up',
+			speed: read_int(`${d}/speed`),
+			duplex: trim_file(`${d}/duplex`),
+			rx_bytes: read_int(`${st}/rx_bytes`),
+			tx_bytes: read_int(`${st}/tx_bytes`),
+			rx_packets: read_int(`${st}/rx_packets`),
+			tx_packets: read_int(`${st}/tx_packets`)
+		});
+	}
+
+	return sort(res, (a, b) => (a.name < b.name) ? -1 : (a.name > b.name));
+}
+
+function cpu() {
+	const line = split(readfile('/proc/stat') ?? '', '\n')[0];
+	const v = map(slice(split(trim(line), /[ \t]+/), 1), x => +x);
+	let total = 0;
+
+	for (let x in v)
+		total += x;
+
+	/* idle + iowait */
+	return { total, idle: (v[3] ?? 0) + (v[4] ?? 0) };
+}
+
+const methods = {
+	getStatus: {
+		args: { voltage: false },
+		call: function(req) {
+			return {
+				loaded: trim_file('/sys/module/dpnsNat/initstate') == 'live',
+				runtime: runtime_params(),
+				configured: configured_params(),
+				flows: flows(),
+				sensors: sensors(req.args.voltage),
+				ports: ports(),
+				cpu: cpu()
+			};
+		}
+	},
+
+	setOffload: {
+		args: { lf4_offload: false, lf_offload: false, l2_bridge_iso: false },
+		call: function(req) {
+			const params = {};
+
+			for (let name in keys(PARAMS)) {
+				const v = req.args[name];
+
+				if (type(v) != 'bool')
+					return { error: `${name}: boolean required` };
+
+				params[name] = v;
+			}
+
+			if (!write_params(params))
+				return { error: `cannot write ${MODULES_CONF}` };
+
+			const rt = runtime_params();
+			let reboot = false;
+
+			for (let name in keys(PARAMS))
+				if (rt[name] != params[name])
+					reboot = true;
+
+			return { result: true, reboot };
+		}
+	}
+};
+
+return { 'luci.sf21-dpns': methods };
