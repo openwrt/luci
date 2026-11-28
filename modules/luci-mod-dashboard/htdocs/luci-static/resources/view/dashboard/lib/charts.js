@@ -37,6 +37,17 @@ function rateUnit(value) {
 }
 
 return baseclass.extend({
+	updateNodes(parent, children) {
+		const retained = new Set(children);
+		for (const child of Array.from(parent.children))
+			if (!retained.has(child))
+				child.remove();
+		children.forEach((child, index) => {
+			if (parent.children[index] !== child)
+				parent.insertBefore(child, parent.children[index] || null);
+		});
+	},
+
 	formatRate(value, targetExp) {
 		if (value == null)
 			return '-';
@@ -72,10 +83,15 @@ return baseclass.extend({
 		};
 	},
 
+	iconUrl(name) {
+		return 'url(%s)'.format(L.resource('view/dashboard/icons/' + name + '.svg'));
+	},
+
 	icon(name, className) {
 		return E('span', {
 			'class': 'dashboard-icon ' + (className || ''),
-			'style': '--dashboard-icon: url(%s)'.format(L.resource('view/dashboard/icons/' + name + '.svg'))
+			'aria-hidden': 'true',
+			'style': '--dashboard-icon: ' + this.iconUrl(name)
 		});
 	},
 
@@ -130,6 +146,14 @@ return baseclass.extend({
 		return E('em', {}, [ text ]);
 	},
 
+	keyValueTable(rows) {
+		return E('table', { 'class': 'table dashboard-key-values' }, rows.map(([ label, value ], i) =>
+			E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') }, [
+				E('th', { 'class': 'td left', 'scope': 'row' }, [ label ]),
+				E('td', { 'class': 'td left' }, [ value ])
+			])));
+	},
+
 	updateTable(table, opts) {
 		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
 		const head = opts.head || [];
@@ -138,11 +162,60 @@ return baseclass.extend({
 		const currentRows = tbody.querySelectorAll('tr:not(.table-titles):not(.table-foot):not(.placeholder)');
 		const placeholder = tbody.querySelector('tr.placeholder');
 		const foot = tbody.querySelector('tr.table-foot');
+		const keyedRows = opts.rowKeys ? new Map(Array.from(currentRows, row => [ row.dataset.rowKey, row ])) : null;
+		let cursor = currentRows[0] || placeholder || foot || null;
+		if (keyedRows) {
+			const wanted = new Set(opts.rowKeys.map(String));
+			cursor = null;
+			// Remove departed clients before reconciling order, so a preceding
+			// departure does not move (and blur) otherwise unchanged rows.
+			currentRows.forEach(row => {
+				if (!wanted.has(row.dataset.rowKey)) {
+					keyedRows.delete(row.dataset.rowKey);
+					tbody.removeChild(row);
+				}
+				else if (!cursor) {
+					cursor = row;
+				}
+			});
+			cursor ||= placeholder || foot || null;
+		}
 
 		for (let i = 0; i < rows.length; i++) {
-			const tr = E('tr', { 'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') },
-				rows[i].map((content, n) => cell('td', content, head[n])));
-			if (currentRows[i])
+			const attrs = opts.rowAttrs?.[i] || {};
+			const attributes = Object.assign({}, attrs, {
+				'class': 'tr ' + (i % 2 ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1') + (attrs.class ? ' ' + attrs.class : '')
+			});
+			const cells = rows[i].map((content, n) => cell('td', content, head[n]));
+			let tr = keyedRows?.get(String(opts.rowKeys[i]));
+			if (tr) {
+				// Preserve stable client controls and their focus across samples.
+				Object.keys(attributes).forEach(name => {
+					if (attributes[name] == null)
+						tr.removeAttribute(name);
+					else if (tr.getAttribute(name) !== String(attributes[name]))
+						tr.setAttribute(name, attributes[name]);
+				});
+				cells.forEach((td, n) => {
+					if (!tr.children[n])
+						tr.appendChild(td);
+					else if (!tr.children[n].isEqualNode(td))
+						tr.replaceChild(td, tr.children[n]);
+				});
+				while (tr.children.length > cells.length)
+					tr.removeChild(tr.lastChild);
+			}
+			else {
+				tr = E('tr', attributes, cells);
+			}
+			if (keyedRows) {
+				tr.dataset.rowKey = String(opts.rowKeys[i]);
+				if (tr === cursor)
+					cursor = cursor.nextSibling;
+				else
+					tbody.insertBefore(tr, cursor);
+			}
+			else if (currentRows[i])
 				tbody.replaceChild(tr, currentRows[i]);
 			else if (foot)
 				tbody.insertBefore(tr, foot);
@@ -150,8 +223,9 @@ return baseclass.extend({
 				tbody.appendChild(tr);
 		}
 
-		for (let i = rows.length; i < currentRows.length; i++)
-			tbody.removeChild(currentRows[i]);
+		if (!keyedRows)
+			for (let i = rows.length; i < currentRows.length; i++)
+				tbody.removeChild(currentRows[i]);
 
 		if (!rows.length && opts.emptyText) {
 			if (!placeholder) {
@@ -162,6 +236,11 @@ return baseclass.extend({
 					tbody.insertBefore(tr, foot);
 				else
 					tbody.appendChild(tr);
+			}
+			else {
+				const label = placeholder.querySelector('em');
+				if (label && label.textContent !== opts.emptyText)
+					label.textContent = opts.emptyText;
 			}
 		}
 		else if (placeholder) {
@@ -181,6 +260,9 @@ return baseclass.extend({
 				foot.lastChild.setAttribute('colspan', head.length - opts.foot.length + 1);
 			}
 		}
+		else if (foot) {
+			foot.remove();
+		}
 
 		return table;
 	},
@@ -192,10 +274,9 @@ return baseclass.extend({
 		if (existing && existing.parentNode)
 			return this.updateTable(existing, opts);
 
-		const cell = (tag, content, title) => E(tag, { 'class': tag, 'data-title': title || null }, [ content ?? '' ]);
 		const head = opts.head || [];
 		const table = E('table', { 'id': opts.id || null, 'class': 'table ' + (opts.className || '') }, [
-			E('tr', { 'class': 'tr table-titles' }, head.map(title => cell('th', title)))
+			E('tr', { 'class': 'tr table-titles' }, head.map(title => E('th', { 'class': 'th', 'scope': 'col' }, [ title ])))
 		]);
 
 		return this.updateTable(table, opts);

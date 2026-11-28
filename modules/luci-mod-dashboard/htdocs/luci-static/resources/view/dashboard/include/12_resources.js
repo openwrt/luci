@@ -181,10 +181,7 @@ return baseclass.extend({
 		if (swap && swap.total > 0)
 			rows.push([ _('Swap used'), bytes(swap.total - swap.free, swap.total) ]);
 
-		return E('table', { 'class': 'table' }, rows.map(row => E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td left', 'width': '33%' }, [ row[0] ]),
-			E('td', { 'class': 'td left' }, [ row[1] ])
-		])));
+		return charts.keyValueTable(rows);
 	},
 
 	render([info]) {

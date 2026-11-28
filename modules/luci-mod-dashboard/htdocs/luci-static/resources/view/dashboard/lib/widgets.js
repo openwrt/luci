@@ -37,24 +37,46 @@ return baseclass.extend({
 		return this.list(includes, slot).filter(widget => !widget.hidden).map(widget => widget.id);
 	},
 
+	// Navigation from a visible widget must not depend on the saved tab list.
+	// Only add destinations supplied by includes available on this device;
+	// rendering still omits tabs whose data could not be loaded.
+	requiredTabs(includes, layout) {
+		const knownTabs = new Set(this.list(includes, 'tabs').map(widget => widget.id));
+		const required = new Set();
+		for (const include of includes)
+			for (const widget of include.widgets || [])
+				if (layout[widget.slot]?.includes(widget.id))
+					for (const id of widget.detailTabs || [])
+						if (knownTabs.has(id))
+							required.add(id);
+		return required;
+	},
+
+	resolveLayout(includes, layout) {
+		const resolved = Object.fromEntries(SLOTS.map(slot => [ slot, layout[slot].slice() ]));
+		for (const id of this.requiredTabs(includes, layout))
+			if (!resolved.tabs.includes(id))
+				resolved.tabs.push(id);
+		return resolved;
+	},
+
 	// The ids to show in each slot, in display order. A slot that is not
 	// configured shows its defaults: UCI cannot store an empty list, so
 	// emptying one brings them back. Ids this device does not know, from
 	// a restored config or typed by hand, are ignored.
-	layout(includes) {
+	configuredLayout(includes) {
 		const layout = {};
-
-		return L.resolveDefault(uci.load('dashboard')).then(() => {
-			SLOTS.forEach(slot => {
-				const known = this.list(includes, slot).map(widget => widget.id);
-				const ids = L.toArray(uci.get('dashboard', 'layout', slot)).filter((id, i, list) => {
-					return known.includes(id) && list.indexOf(id) == i;
-				});
-
-				layout[slot] = ids.length ? ids : this.defaults(includes, slot);
+		SLOTS.forEach(slot => {
+			const known = this.list(includes, slot).map(widget => widget.id);
+			const ids = L.toArray(uci.get('dashboard', 'layout', slot)).filter((id, i, list) => {
+				return known.includes(id) && list.indexOf(id) == i;
 			});
-
-			return layout;
+			layout[slot] = ids.length ? ids : this.defaults(includes, slot);
 		});
+		return layout;
+	},
+
+	layout(includes) {
+		return L.resolveDefault(uci.load('dashboard')).then(() => this.resolveLayout(includes, this.configuredLayout(includes)));
 	}
 });
